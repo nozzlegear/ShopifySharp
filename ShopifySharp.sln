@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopifySharp", "ShopifySharp\ShopifySharp.csproj", "{833EC12B-956D-427B-A598-2F12B84589EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopifySharp.Tests", "ShopifySharp.Tests\ShopifySharp.Tests.csproj", "{B1391793-75FA-43D1-8D8C-0DF405D80DB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{833EC12B-956D-427B-A598-2F12B84589EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{833EC12B-956D-427B-A598-2F12B84589EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{833EC12B-956D-427B-A598-2F12B84589EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{833EC12B-956D-427B-A598-2F12B84589EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -210,3 +210,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# Ignore private configuration files
+*.private.config
