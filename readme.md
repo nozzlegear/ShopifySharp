@@ -4,7 +4,7 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 
 ## How to contact me
 
-If you want to get in touch with me, the best way to do that is by sending an email to [joshua@nozzlegear.com] (mailto:joshua@nozzlegear.com), or by following me on Twitter at [@nozzlegear](https://twitter.com/nozzlegear). **If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, **I'm available for hire**!  Get in touch at [joshua@nozzlegaer.com](mailto:joshua@nozzlegear.com).
+If you want to get in touch with me, the best way to do that is by sending an email to [joshua@nozzlegear.com] (mailto:joshua@nozzlegear.com), or by following me on Twitter at [@nozzlegear](https://twitter.com/nozzlegear). **If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, **I'm available for hire**!  Get in touch at [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com).
 
 ## A work-in-progress
 
@@ -24,7 +24,7 @@ Finally, we'll get a NuGet package set up for this library soon.
 //NOTE: shopAccessToken is NOT your Shopify API key. It's the token returned after authenticating with a user's shop.
 ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 
-ShopifyShopService shop = await service.GetShopInformationAsync();
+ShopifyShop shop = await service.GetShopInformationAsync();
 ```
 
 ## Tests
