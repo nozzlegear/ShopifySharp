@@ -184,13 +184,14 @@ namespace ShopifySharp
         public string Source { get; set; }
 
         /// <summary>
-        /// Specifies wether or not taxes were charged for shipping. Valid values are: "true" or "false."
+        /// Specifies whether or not taxes were charged for shipping.
         /// </summary>
+        /// <remarks>Although the Shopify docs don't indicate this, it's possible for the value to be null.</remarks>
         [JsonProperty("tax_shipping")]
-        public bool TaxShipping { get; set; }
+        public bool? TaxShipping { get; set; }
 
         /// <summary>
-        /// The setting for whether applicable taxes are included in product prices. Valid values are: "true" or "null."
+        /// The setting for whether applicable taxes are included in product prices. 
         /// </summary>
         [JsonProperty("taxes_included")]
         public bool? TaxesIncluded { get; set; }

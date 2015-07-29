@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// Returns the shop's <see cref="ShopifyShop"/> information.
         /// </summary>
         /// <returns></returns>
-        public async Task<ShopifyShop> GetShopInformationAsync()
+        public async Task<ShopifyShop> GetAsync()
         {
             RestRequest request = new RestRequest("shop.json", Method.GET)
             {
