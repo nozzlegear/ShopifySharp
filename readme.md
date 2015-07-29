@@ -24,7 +24,7 @@ Finally, we'll get a NuGet package set up for this library soon.
 //NOTE: shopAccessToken is NOT your Shopify API key. It's the token returned after authenticating with a user's shop.
 ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 
-ShopifyShop shop = await service.GetShopInformationAsync();
+ShopifyShop shop = await service.GetAsync();
 ```
 
 ## Tests
