@@ -11,9 +11,10 @@ namespace ShopifySharp.Tests
             _Service = new ShopifyShopService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
-        Because of = async () =>
+        Because of = () =>
         {
-            _Shop = await _Service.GetShopInformationAsync();
+            //MSpec test suite does not support async/await
+            _Shop = _Service.GetShopInformationAsync().Await();
         };
 
         It should_retrieve_a_shop = () =>
