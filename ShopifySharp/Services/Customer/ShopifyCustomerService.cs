@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Humanizer;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -53,9 +54,25 @@ namespace ShopifySharp
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
         }
 
-        public async Task<ShopifyCustomer> GetAsync()
+        /// <summary>
+        /// Retrieves the <see cref="ShopifyCustomer"/> with the given id.
+        /// </summary>
+        /// <param name="customerId">The id of the customer to retrieve.</param>
+        /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <returns>The <see cref="ShopifyCustomer"/>.</returns>
+        public async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
         {
-            throw new NotImplementedException();
+            RestRequest req = new RestRequest("customers/{0}.json".FormatWith(customerId))
+            {
+                RootElement = "customer"
+            };
+
+            if(string.IsNullOrEmpty(fields) == false)
+            {
+                req.AddParameter("fields", fields);
+            }
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
 
         public async Task<IEnumerable<ShopifyCustomer>> SearchAsync()
