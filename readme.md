@@ -4,7 +4,7 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 
 ## How to contact me
 
-If you want to get in touch with me, the best way to do that is by sending an email to [joshua@nozzlegear.com] (mailto:joshua@nozzlegear.com), or by following me on Twitter at [@nozzlegear](https://twitter.com/nozzlegear). **If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, **I'm available for hire**!  Get in touch at [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com).
+**If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, **I'm available for hire**. Send an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com) and we'll discuss your project. If you just want to get in touch with me, the best way to do that is by sending an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com), or by following me on Twitter at [@nozzlegear](https://twitter.com/nozzlegear).
 
 ## A work-in-progress
 
@@ -29,6 +29,6 @@ ShopifyShop shop = await service.GetShopInformationAsync();
 
 ## Tests
 
-The test suite relies on your own Shopify data, including your Shopify API key, a shop's *.myshopify.com URL, and an access token for that shop. Right now this library doesn't have the proper OAuth authentication method to generate an access token, so you'll need to grab it yourself by manually going through the REST API's OAuth flow. 
+The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) will show you exactly what you need to do to get a shop access token with full permissions.
 
-Once you have that data, place it inside of the `AppSettings.example.config` file and **rename that file** to `AppSettings.private.config`. That will ensure your private API key and access token don't accidentally get uploaded to public source control.
+Once you have those credentials, place them inside of the `AppSettings.example.config` file and **rename that file** to `AppSettings.private.config`. That will ensure your private API key and access token don't accidentally get uploaded to public source control.
