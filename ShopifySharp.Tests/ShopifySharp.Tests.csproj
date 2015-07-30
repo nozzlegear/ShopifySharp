@@ -63,7 +63,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ShopifyCustomerService\Test_Data\CustomerCreation.cs" />
     <Compile Include="ShopifyCustomerService\When_counting_customers.cs" />
+    <Compile Include="ShopifyCustomerService\When_creating_a_customer.cs" />
     <Compile Include="ShopifyCustomerService\When_listing_customers.cs" />
     <Compile Include="ShopifyCustomerService\When_listing_customers_with_options.cs" />
     <Compile Include="ShopifyCustomerService\When_retrieving_a_customer.cs" />

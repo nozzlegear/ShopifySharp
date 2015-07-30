@@ -21,6 +21,8 @@ namespace ShopifySharp
         /// <returns>The <see cref="JToken"/> to be queried.</returns>
         public static async Task<JToken> ExecuteRequestAsync(RestClient client, IRestRequest request)
         {
+            // TODO: Override request's json serializer. RestSharp default ignores JsonProperty attributes.
+
             //Make request
             IRestResponse response = await client.ExecuteTaskAsync(request);
 
@@ -39,9 +41,11 @@ namespace ShopifySharp
         /// <returns>The data.</returns>
         public static async Task<T> ExecuteRequestAsync<T>(RestClient client, IRestRequest request) where T : new()
         {
+            // TODO: Override request's json serializer. RestSharp default ignores JsonProperty attributes.
+            
             //Make request
             IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
-
+            
             //Check for and throw exception when necessary.
             CheckResponseExceptions(response);
 
@@ -54,19 +58,41 @@ namespace ShopifySharp
         /// <param name="response">The response.</param>
         private static void CheckResponseExceptions(IRestResponse response)
         {
-            if (response.ErrorException != null)
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
-                throw response.ErrorException;
-            }
-            else if (response.StatusCode != HttpStatusCode.OK)
-            {
+                string json = Encoding.UTF8.GetString(response.RawBytes);
+                JToken parsed = JToken.Parse(json);
+                ShopifyError error = new ShopifyError();
+
+                if(parsed.Any(x => x.Path == "errors"))
+                {
+                    if(parsed["errors"].Type == JTokenType.String)
+                    {
+                        error.Errors = parsed.Value<string>("errors");
+                    }
+                    else
+                    {
+                        error.Errors = parsed["errors"].ToString(Formatting.Indented);
+                    }
+                }
+                else
+                {
+                    error.Errors = "Unhandled error: " + json;
+                }
+
                 HttpStatusCode code = response.StatusCode;
-                ShopifyError error = JsonConvert.DeserializeObject<ShopifyError>(Encoding.UTF8.GetString(response.RawBytes));
                 string message = string.IsNullOrEmpty(error.Errors) ?
                     "Response did not indicate success. Status: {0} {1}.".FormatWith((int)code, response.StatusDescription) :
                     error.Errors;
 
                 throw new ShopifyException(code, error, message);
+            }
+            else if (response.ErrorException != null)
+            {
+                //Checking this second, because Shopify errors sometimes return incomplete objects along with errors, 
+                //which cause Json deserialization to throw an exception. Parsing the Shopify error is more important 
+                //than throwing this deserialization exception.
+                throw response.ErrorException;
             }
         }
     }

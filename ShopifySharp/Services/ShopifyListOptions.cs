@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class ShopifyListOptions
+    public class ShopifyListOptions : Parameterizable
     {
         /// <summary>
         /// Restrict results to after the specified ID.
@@ -58,33 +58,5 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at_max")]
         public string UpdatedAtMax { get; set; }
-
-        /// <summary>
-        /// Converts the object to an array of RestSharp parameters.
-        /// </summary>
-        /// <returns>The array of RestSharp parameters.</returns>
-        public IEnumerable<Parameter> ToParameters(ParameterType type)
-        {
-            List<Parameter> output = new List<Parameter>();
-
-            //Inspiration for this code from https://github.com/jaymedavis/stripe.net
-            foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            {
-                object value = property.GetValue(this, null);
-                if (value == null) continue;
-
-                //Get the JsonPropertyAttribute for this property, which will give us its JSON name
-                JsonPropertyAttribute attribute = property.GetCustomAttributes(typeof(JsonPropertyAttribute), false).Cast<JsonPropertyAttribute>().FirstOrDefault();
-
-                output.Add(new Parameter()
-                {
-                    Name = attribute != null ? attribute.PropertyName : property.Name,
-                    Value = value,
-                    Type = type
-                });
-            }
-
-            return output;
-        }
     }
 }

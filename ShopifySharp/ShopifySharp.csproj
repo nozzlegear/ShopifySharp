@@ -59,9 +59,11 @@
     <Compile Include="Entities\ShopifyObject.cs" />
     <Compile Include="Entities\ShopifyShop.cs" />
     <Compile Include="Infrastructure\CommonResponse.cs" />
+    <Compile Include="Infrastructure\Parameterizable.cs" />
     <Compile Include="Infrastructure\RequestEngine.cs" />
     <Compile Include="Infrastructure\ShopifyError.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
+    <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
     <Compile Include="Services\ShopifyService.cs" />

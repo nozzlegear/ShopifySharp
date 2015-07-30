@@ -48,7 +48,7 @@ namespace ShopifySharp
                 RootElement = "customers"
             };
 
-            //Add querystring parameters to request
+            //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
@@ -80,9 +80,29 @@ namespace ShopifySharp
             throw new NotImplementedException();
         }
 
-        public async Task<ShopifyCustomer> CreateAsync()
+        /// <summary>
+        /// Creates a new <see cref="ShopifyCustomer"/> on the store.
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="options"></param>
+        /// <returns>The new <see cref="ShopifyCustomer"/>.</returns>
+        public async Task<ShopifyCustomer> CreateAsync(ShopifyCustomer customer, ShopifyCustomerCreateOptions options = null)
         {
-            throw new NotImplementedException();
+            RestRequest req = new RestRequest("customers.json", Method.POST)
+            {
+                RootElement = "customer",
+                RequestFormat = DataFormat.Json,
+            };
+
+            //Build the request body
+            Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
+            {
+                { "customer", customer }
+            };
+
+            req.AddJsonBody(body);
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
 
         public async Task<ShopifyCustomer> UpdateAsync()
