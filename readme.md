@@ -8,9 +8,9 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 
 ### A work-in-progress
 
-Currently, the only other .NET library for Shopify is [](), which hasn't been updated in over 3 years and only deals with authenticating with Shopify. It doesn't have the functionality for pulling in or manipulating Shops, Orders, Customers, and more. That's why I'm building ShopifySharp — .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
+Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with creating your own entity classes for each resource. That's why I'm building ShopifySharp â€” .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, this library is brand new. It currently only supports retrieving shop information, but more features will be added each week until it reachs full parity with Shopify's REST API.
+With that said, this library is brand new. It currently only supports the **Customers** resource and the **Shop** resource, but more functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
 
