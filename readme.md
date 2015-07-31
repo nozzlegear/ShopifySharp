@@ -96,6 +96,7 @@ customer = await service.UpdateAsync(customer);
 ```
 
 ### Deleting a customer
+
 ```
 ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 
@@ -103,6 +104,7 @@ await service.DeleteAsync(customerId);
 ```
 
 ### Counting customers
+
 ```
 ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 int customerCount = await service.CountAsync();
@@ -112,6 +114,17 @@ int customerCount = await service.CountAsync();
 ```
 ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyCustomer> customers = await Service.ListAsync();
+```
+
+### Searching customers
+
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+IEnumerable<ShopifyCustomer> customers = await Service.SearchAsync("Jane country:United States");
+
+//Searches for a customer from the United States with a name like 'Jane'. 
+//There is a noticeable 3-30 second delay between creating a customer and Shopify 
+//indexing it for a search.
 ```
 
 # Tests

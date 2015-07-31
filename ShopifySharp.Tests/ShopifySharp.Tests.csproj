@@ -72,6 +72,7 @@
     <Compile Include="ShopifyCustomerService\When_listing_customers_with_options.cs" />
     <Compile Include="ShopifyCustomerService\When_retrieving_a_customer.cs" />
     <Compile Include="ShopifyCustomerService\When_retrieving_a_customer_with_fields.cs" />
+    <Compile Include="ShopifyCustomerService\When_searching_for_a_customer.cs" />
     <Compile Include="ShopifyCustomerService\When_updating_a_customer.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService\When_getting_a_shop.cs" />

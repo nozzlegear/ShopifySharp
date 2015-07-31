@@ -65,6 +65,7 @@
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
+    <Compile Include="Services\ShopifyFilterOptions.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
     <Compile Include="Services\ShopifyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

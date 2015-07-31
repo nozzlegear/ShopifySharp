@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class Parameterizable
+    public abstract class Parameterizable
     {
         /// <summary>
         /// Converts the object to a dictionary. Ideal for <see cref="RestRequest.AddJsonBody(object)"./>

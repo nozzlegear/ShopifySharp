@@ -69,9 +69,22 @@ namespace ShopifySharp
             return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
 
-        public async Task<IEnumerable<ShopifyCustomer>> SearchAsync()
+        /// <summary>
+        /// Searches through a shop's customers for the given search query. 
+        /// </summary>
+        /// <param name="query">The search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
+        /// <param name="order">An optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
+        /// <param name="options">Options for filtering the results.</param>
+        /// <returns>A list of matching customers.</returns>
+        public async Task<IEnumerable<ShopifyCustomer>> SearchAsync(string query, string order = null, ShopifyFilterOptions options = null)
         {
-            throw new NotImplementedException();
+            IRestRequest req = RequestEngine.CreateRequest("customers/search.json", Method.GET, "customers");
+            req.AddQueryParameter("query", query);
+
+            if (string.IsNullOrEmpty(order) == false) req.AddQueryParameter("order", order);
+            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.QueryString));
+
+            return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
         }
 
         /// <summary>
