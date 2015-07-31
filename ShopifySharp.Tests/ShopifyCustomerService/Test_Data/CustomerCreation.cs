@@ -14,7 +14,7 @@ namespace ShopifySharp.Tests.Test_Data
             {
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "john.doe@example.com",
+                Email = Guid.NewGuid().ToString() + "@example.com",
                 Addresses = new List<ShopifyAddress>()
                 {
                     new ShopifyAddress()
