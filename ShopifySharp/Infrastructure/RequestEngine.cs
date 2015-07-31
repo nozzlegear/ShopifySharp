@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,32 @@ namespace ShopifySharp
     internal static class RequestEngine
     {
         /// <summary>
-        /// Executes a <see cref="IRestRequest"/> and returns a JToken for querying, or throws an exception when the response is invalid. Use this method when the expected response is a single line or simple object that doesn't warrant creating its own class.
+        /// Creates an <see cref="IRestRequest"/> by setting the method and the necessary Json.Net serializer.
+        /// </summary>
+        /// <param name="path">The request's path.</param>
+        /// <param name="method">The HTTP <see cref="Method"/> to use for the request.</param>
+        /// <param name="rootElement">The root element to deserialize. Default is null.</param>
+        /// <returns>The prepared <see cref="IRestRequest"/>.</returns>
+        /// <remarks>We've created this method to ensure every request uses our custom <see cref="JsonNetSerializer"/>, which ensures 
+        /// that each class serializes with the proper <see cref="JsonPropertyAttribute"/></remarks>
+        public static IRestRequest CreateRequest(string path, Method method, string rootElement = null)
+        {
+            return new RestRequest(path, method)
+            {
+                JsonSerializer = new JsonNetSerializer(),
+                RootElement = rootElement
+            };
+        }
+
+        /// <summary>
+        /// Executes a <see cref="IRestRequest"/> and returns a JToken for querying, or throws an exception when the response is invalid. 
+        /// Use this method when the expected response is a single line or simple object that doesn't warrant creating its own class.
         /// </summary>
         /// <param name="client">A <see cref="RestClient"/>.</param>
         /// <param name="request">An <see cref="IRestRequest"/>.</param>
         /// <returns>The <see cref="JToken"/> to be queried.</returns>
         public static async Task<JToken> ExecuteRequestAsync(RestClient client, IRestRequest request)
         {
-            // TODO: Override request's json serializer. RestSharp default ignores JsonProperty attributes.
-
             //Make request
             IRestResponse response = await client.ExecuteTaskAsync(request);
 
@@ -41,8 +59,6 @@ namespace ShopifySharp
         /// <returns>The data.</returns>
         public static async Task<T> ExecuteRequestAsync<T>(RestClient client, IRestRequest request) where T : new()
         {
-            // TODO: Override request's json serializer. RestSharp default ignores JsonProperty attributes.
-            
             //Make request
             IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
             

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests
 {
     [Subject(typeof(ShopifyCustomerService))]
-    public class When_creating_a_customer
+    public class When_creating_a_customer_with_options
     {
         Establish context = () =>
         {
@@ -18,10 +18,16 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            _Result = _Service.CreateAsync(CustomerCreation.CreateValidCustomer(), null).Await().AsTask.Result;
+            _Result = _Service.CreateAsync(CustomerCreation.CreateValidCustomer(), new ShopifyCustomerCreateOptions()
+            {
+                Password = "loktarogar",
+                PasswordConfirmation = "loktarogar",
+                SendEmailInvite = true,
+                SendWelcomeEmail = true
+            }).Await().AsTask.Result;
         };
 
-        It should_create_a_customer = () =>
+        It should_create_a_customer_with_options = () =>
         {
             _Result.ShouldNotBeNull();
         };

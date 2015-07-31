@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Tests.Test_Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,8 @@ namespace ShopifySharp.Tests
         {
             _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-            //Get a random customer ID
-            _Id = _Service.ListAsync().Await().AsTask.Result.FirstOrDefault().Id;
-
-            // # # #
-            // TODO: Create a customer to ensure this test always has a customer to retrieve.
-            // # # #
+            //Create a customer to ensure this test always has a customer to retrieve.
+            _Id = _Service.CreateAsync(CustomerCreation.CreateValidCustomer()).Await().AsTask.Result.Id.Value;
         };
 
         Because of = () =>
@@ -34,7 +31,7 @@ namespace ShopifySharp.Tests
 
         Cleanup after = () =>
         {
-
+            _Service.DeleteAsync(_Id).Await();
         };
 
         static long _Id;

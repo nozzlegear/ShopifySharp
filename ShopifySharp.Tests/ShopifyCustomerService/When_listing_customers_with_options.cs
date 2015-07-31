@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Tests.Test_Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,11 @@ namespace ShopifySharp.Tests
                 Limit = _Limit
             };
 
-            // # # #
-            // TODO: Create 4 customers to ensure we can always properly limit in this test. Delete them during cleanup.
-            // # # #
+            // Create 4 customers to ensure this test always has customers to retrieve. Delete them during cleanup.
+            for (int i = 0; i < 4; i++)
+            {
+                _CreatedCustomers.Add(_Service.CreateAsync(CustomerCreation.CreateValidCustomer()).Await().AsTask.Result);
+            }
         };
 
         Because of = () =>
@@ -35,9 +38,13 @@ namespace ShopifySharp.Tests
 
         Cleanup after = () =>
         {
-
+            foreach (ShopifyCustomer customer in _CreatedCustomers)
+            {
+                _Service.DeleteAsync(customer.Id.Value).Await();
+            }
         };
 
+        static List<ShopifyCustomer> _CreatedCustomers = new List<ShopifyCustomer>();
         static int _Limit = 1;
         static ShopifyCustomerService _Service;
         static ShopifyListOptions _Options;

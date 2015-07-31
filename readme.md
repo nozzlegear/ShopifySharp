@@ -2,11 +2,11 @@
 
 ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify using this library.
 
-## How to contact me
+### How to contact me
 
 **If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, **I'm available for hire**. Send an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com) and we'll discuss your project. If you just want to get in touch with me, the best way to do that is by sending an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com), or by following me on Twitter at [@nozzlegear](https://twitter.com/nozzlegear).
 
-## A work-in-progress
+### A work-in-progress
 
 Currently, the only other .NET library for Shopify is [](), which hasn't been updated in over 3 years and only deals with authenticating with Shopify. It doesn't have the functionality for pulling in or manipulating Shops, Orders, Customers, and more. That's why I'm building ShopifySharp — .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
 
@@ -16,18 +16,105 @@ With that said, this library is brand new. It currently only supports retrieving
 
 Finally, we'll get a NuGet package set up for this library soon.
 
-## Usage
+# Usage
+
+**Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**. An access token is the token returned after authenticating and authorizing a Shopify app installation with a real Shopify store. 
+
+If you just need an access token for a private Shopify app, or for running the tests in this library, refer to the **Tests** section below.
+
+## Shops
 
 ### Retrieving shop information
 
 ```
-//NOTE: shopAccessToken is NOT your Shopify API key. It's the token returned after authenticating with a user's shop.
 ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 
 ShopifyShop shop = await service.GetAsync();
 ```
 
-## Tests
+## Customers
+
+### Creating a customer
+
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomer customer = new ShopifyCustomer()
+{
+    FirstName = "John",
+    LastName = "Doe",
+    Email = "john.doe@example.com",
+    Addresses = new List<ShopifyAddress>()
+    {
+        new ShopifyAddress()
+        {
+            Address1 = "123 4th Street",
+            City = "Minneapolis",
+            Province = "Minnesota",
+            ProvinceCode = "MN",
+            Zip = "55401",
+            Phone = "555-555-5555",
+            FirstName = "John",
+            LastName = "Doe",
+            Company = "Tomorrow Corporation",
+            Country = "United States",
+            CountryCode = "US",
+            Default = true,
+        }
+    },
+    VerifiedEmail = true,
+    Note = "Test note about the customer.",
+    State = "enabled"
+}
+
+customer = await service.CreateAsync(customer);
+```
+
+### Retrieving a customer
+
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomer customer = await service.GetAsync(customerId);
+```
+
+### Retrieving a customer with certain fields
+
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomer customer = await service.GetAsync(customerId, "first_name,last_name,email"); 
+
+//Returns a customer with only FirstName, LastName and Email fields. All other fields are null.
+```
+
+### Updating a customer
+
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomer customer = await service.GetAsync(customerId);
+
+customer.Email = "test-update@example.com";
+customer = await service.UpdateAsync(customer);
+```
+
+### Deleting a customer
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(customerId);
+```
+
+### Counting customers
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+int customerCount = await service.CountAsync();
+```
+
+### Listing customers
+```
+ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+IEnumerable<ShopifyCustomer> customers = await Service.ListAsync();
+```
+
+# Tests
 
 The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) will show you exactly what you need to do to get a shop access token with full permissions.
 

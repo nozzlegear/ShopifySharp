@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Deserializers\JsonNetDeserializer.cs" />
+    <Compile Include="Serializers\JsonNetSerializer.cs" />
     <Compile Include="Entities\ShopifyAddress.cs" />
     <Compile Include="Entities\ShopifyCustomer.cs" />
     <Compile Include="Entities\ShopifyMetaField.cs" />

@@ -1,6 +1,9 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Tests.Test_Data;
 using System;
 using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
 
 namespace ShopifySharp.Tests
 {
@@ -11,9 +14,11 @@ namespace ShopifySharp.Tests
         {
             _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-            // # # #
-            // TODO: Create 4 customers to ensure this test always has customers to retrieve. Delete them during cleanup.
-            // # # #
+            // Create 4 customers to ensure this test always has customers to retrieve. Delete them during cleanup.
+            for(int i = 0; i < 4; i++)
+            {
+                _CreatedCustomers.Add(_Service.CreateAsync(CustomerCreation.CreateValidCustomer()).Await().AsTask.Result);
+            }
         };
 
         Because of = () =>
@@ -25,13 +30,18 @@ namespace ShopifySharp.Tests
         It should_retrieve_a_list_of_customers = () =>
         {
             _Result.ShouldNotBeNull();
+            _Result.Count().ShouldBeGreaterThanOrEqualTo(_CreatedCustomers.Count);
         };
 
         Cleanup after = () =>
         {
-
+            foreach(ShopifyCustomer customer in _CreatedCustomers)
+            {
+                _Service.DeleteAsync(customer.Id.Value).Await();
+            }
         };
 
+        static List<ShopifyCustomer> _CreatedCustomers = new List<ShopifyCustomer>();
         static ShopifyCustomerService _Service;
         static IEnumerable<ShopifyCustomer> _Result;
     }

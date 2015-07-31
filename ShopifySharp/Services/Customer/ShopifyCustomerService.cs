@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// <returns>The count of all customers for the shop.</returns>
         public async Task<int> CountAsync()
         {
-            RestRequest req = new RestRequest("customers/count.json", Method.GET);
+            IRestRequest req = RequestEngine.CreateRequest("customers/count.json", Method.GET);
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 
             //Response looks like { "count" : 123 }. Does not warrant its own class.
@@ -43,10 +43,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public async Task<IEnumerable<ShopifyCustomer>> ListAsync(ShopifyListOptions options = null)
         {
-            RestRequest req = new RestRequest("customers.json", Method.GET)
-            {
-                RootElement = "customers"
-            };
+            IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.GET, "customers");
 
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
@@ -62,10 +59,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyCustomer"/>.</returns>
         public async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
         {
-            RestRequest req = new RestRequest("customers/{0}.json".FormatWith(customerId))
-            {
-                RootElement = "customer"
-            };
+            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customerId), Method.GET, "customer");
 
             if(string.IsNullOrEmpty(fields) == false)
             {
@@ -83,16 +77,12 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a new <see cref="ShopifyCustomer"/> on the store.
         /// </summary>
-        /// <param name="customer"></param>
-        /// <param name="options"></param>
+        /// <param name="customer">A new <see cref="ShopifyCustomer"/>. Id should be set to null.</param>
+        /// <param name="options">Options for creating the customer.</param>
         /// <returns>The new <see cref="ShopifyCustomer"/>.</returns>
         public async Task<ShopifyCustomer> CreateAsync(ShopifyCustomer customer, ShopifyCustomerCreateOptions options = null)
         {
-            RestRequest req = new RestRequest("customers.json", Method.POST)
-            {
-                RootElement = "customer",
-                RequestFormat = DataFormat.Json,
-            };
+            IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.POST, "customer");
 
             //Build the request body
             Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
@@ -105,14 +95,29 @@ namespace ShopifySharp
             return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
 
-        public async Task<ShopifyCustomer> UpdateAsync()
+        /// <summary>
+        /// Updates the given <see cref="ShopifyCustomer"/>. Id must not be null.
+        /// </summary>
+        /// <param name="customer">The <see cref="ShopifyCustomer"/> to update.</param>
+        /// <returns>The updated <see cref="ShopifyCustomer"/>.</returns>
+        public async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer)
         {
-            throw new NotImplementedException();
+            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customer.Id.Value), Method.PUT, "customer");
+
+            req.AddJsonBody(new { customer = customer });
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
 
-        public async Task DeleteAsync()
+        /// <summary>
+        /// Deletes a customer with the given Id.
+        /// </summary>
+        /// <param name="customerId">The customer object's Id.</param>
+        public async Task DeleteAsync(long customerId)
         {
-            throw new NotImplementedException();
+            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customerId), Method.DELETE);
+
+            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
 
         #endregion

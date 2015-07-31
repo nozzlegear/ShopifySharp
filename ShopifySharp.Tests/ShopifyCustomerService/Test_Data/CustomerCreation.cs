@@ -8,29 +8,35 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class CustomerCreation
     {
-        public static ShopifyCustomer ValidCustomer = new ShopifyCustomer()
+        public static ShopifyCustomer CreateValidCustomer()
         {
-            FirstName = "Josh",
-            LastName = "Harms",
-            Email = "nozzlegear@outlook.com",
-            DefaultAddress = new ShopifyAddress()
+            return new ShopifyCustomer()
             {
-                Address1 = "123 4th Street",
-                Address2 = "Building 5",
-                City = "Minneapolis",
-                Province = "Minnesota",
-                ProvinceCode = "MN",
-                Phone = "555-555-5555",
-                FirstName = "Josh",
-                LastName = "Harms",
-                Company = "Nozzlegear Software",
-                Country = "United States",
-                CountryCode = "US",
-                Default = true,
-            },
-            VerifiedEmail = true,
-            Note = "Test note about the customer.",
-            State = "enabled"
-        };
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                Addresses = new List<ShopifyAddress>()
+                {
+                    new ShopifyAddress()
+                    {
+                        Address1 = "123 4th Street",
+                        City = "Minneapolis",
+                        Province = "Minnesota",
+                        ProvinceCode = "MN",
+                        Zip = "55401",
+                        Phone = "555-555-5555",
+                        FirstName = "John",
+                        LastName = "Doe",
+                        Company = "Tomorrow Corporation",
+                        Country = "United States",
+                        CountryCode = "US",
+                        Default = true,
+                    }
+                },
+                VerifiedEmail = true,
+                Note = "Test note about the customer.",
+                State = "enabled"
+            };
+        }
     }
 }
