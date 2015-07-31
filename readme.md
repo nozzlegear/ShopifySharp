@@ -37,7 +37,7 @@ ShopifyShop shop = await service.GetAsync();
 ### Creating a customer
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 ShopifyCustomer customer = new ShopifyCustomer()
 {
     FirstName = "John",
@@ -72,14 +72,14 @@ customer = await service.CreateAsync(customer);
 ### Retrieving a customer
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 ShopifyCustomer customer = await service.GetAsync(customerId);
 ```
 
 ### Retrieving a customer with certain fields
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 ShopifyCustomer customer = await service.GetAsync(customerId, "first_name,last_name,email"); 
 
 //Returns a customer with only FirstName, LastName and Email fields. All other fields are null.
@@ -88,7 +88,7 @@ ShopifyCustomer customer = await service.GetAsync(customerId, "first_name,last_n
 ### Updating a customer
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 ShopifyCustomer customer = await service.GetAsync(customerId);
 
 customer.Email = "test-update@example.com";
@@ -98,7 +98,7 @@ customer = await service.UpdateAsync(customer);
 ### Deleting a customer
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(customerId);
 ```
@@ -106,20 +106,20 @@ await service.DeleteAsync(customerId);
 ### Counting customers
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 int customerCount = await service.CountAsync();
 ```
 
 ### Listing customers
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyCustomer> customers = await Service.ListAsync();
 ```
 
 ### Searching customers
 
 ```
-ShopifyShopService service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+ShopifyCustomerService service = new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyCustomer> customers = await Service.SearchAsync("Jane country:United States");
 
 //Searches for a customer from the United States with a name like 'Jane'. 
