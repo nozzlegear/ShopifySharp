@@ -1,6 +1,6 @@
 ﻿using Humanizer;
 using RestSharp;
-using ShopifySharp.Deserializers;
+using ShopifySharp.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace ShopifySharp
             _RestClient = new RestClient(_ShopUri);
 
             //Set up the JSON.NET deserializer for the RestSharp client
-            JsonNetDeserializer deserializer = new JsonNetDeserializer();
+            JsonNetSerializer deserializer = new JsonNetSerializer();
             _RestClient.AddHandler("application/json", deserializer);
             _RestClient.AddHandler("text/json", deserializer);
 

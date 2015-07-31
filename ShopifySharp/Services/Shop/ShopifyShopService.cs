@@ -26,12 +26,9 @@ namespace ShopifySharp
         /// Returns the shop's <see cref="ShopifyShop"/> information.
         /// </summary>
         /// <returns></returns>
-        public async Task<ShopifyShop> GetShopInformationAsync()
+        public async Task<ShopifyShop> GetAsync()
         {
-            RestRequest request = new RestRequest("shop.json", Method.GET)
-            {
-                RootElement = "shop"
-            };
+            IRestRequest request = RequestEngine.CreateRequest("shop.json", Method.GET, "shop");
 
             //Make request
             return await RequestEngine.ExecuteRequestAsync<ShopifyShop>(_RestClient, request);
