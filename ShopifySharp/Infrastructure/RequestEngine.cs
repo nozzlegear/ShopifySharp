@@ -15,6 +15,53 @@ namespace ShopifySharp
     internal static class RequestEngine
     {
         /// <summary>
+        /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
+        /// </summary>
+        /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
+        /// <exception cref="ShopifyException">Thrown if the given URL cannot be converted into a well-formed URI.</exception>
+        /// <returns>The shop's API <see cref="Uri"/>.</returns>
+        public static Uri BuildShopUri(string myShopifyUrl)
+        {
+            if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
+            {
+                throw new ShopifyException("The given {0} cannot be converted into a well-formed URI.".FormatWith(nameof(myShopifyUrl)));
+            }
+
+            UriBuilder builder = new UriBuilder(myShopifyUrl)
+            {
+                Path = "admin/",
+                Scheme = Uri.UriSchemeHttps,
+                Port = 443 //SSL port
+            };
+
+            return builder.Uri;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="RestClient"/> configured for use with ShopifySharp.
+        /// </summary>
+        /// <param name="shopUri">The base shop <see cref="Uri"/>.</param>
+        /// <param name="shopAccessToken">An optional shop access token. If present, the token will be set as a default X-Shopify-Access-Token for every request.</param>
+        /// <returns>The configured <see cref="RestClient"/>.</returns>
+        public static RestClient CreateClient(Uri shopUri, string shopAccessToken = null)
+        {
+            RestClient client = new RestClient(shopUri);
+
+            //Set up the JSON.NET deserializer for the RestSharp client
+            JsonNetSerializer deserializer = new JsonNetSerializer();
+            client.AddHandler("application/json", deserializer);
+            client.AddHandler("text/json", deserializer);
+
+            if (string.IsNullOrEmpty(shopAccessToken) == false)
+            {
+                //Configure default access token header
+                client.AddDefaultHeader("X-Shopify-Access-Token", shopAccessToken);
+            }
+
+            return client;
+        }
+
+        /// <summary>
         /// Creates an <see cref="IRestRequest"/> by setting the method and the necessary Json.Net serializer.
         /// </summary>
         /// <param name="path">The request's path.</param>

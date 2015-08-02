@@ -14,6 +14,8 @@ namespace ShopifySharp.Tests
     {
         public static string ApiKey { get; } = ConfigurationManager.AppSettings.Get("ApiKey");
 
+        public static string SecretKey { get; } = ConfigurationManager.AppSettings.Get("SecretKey");
+
         public static string AccessToken { get; } = ConfigurationManager.AppSettings.Get("AccessToken");
 
         public static string MyShopifyUrl { get; } = ConfigurationManager.AppSettings.Get("MyShopifyUrl");
