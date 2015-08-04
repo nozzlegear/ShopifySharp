@@ -10,7 +10,7 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 
 Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, this library is brand new. It currently only supports the **Customers** resource and the **Shop** resource, but more functionality will be added each week until it reachs full parity with Shopify's REST API.
+With that said, this library is brand new. It currently only supports **OAuth authentication**, the **Customers** resource and the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
 
@@ -21,6 +21,27 @@ Finally, we'll get a NuGet package set up for this library soon.
 **Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**. An access token is the token returned after authenticating and authorizing a Shopify app installation with a real Shopify store. 
 
 If you just need an access token for a private Shopify app, or for running the tests in this library, refer to the **Tests** section below.
+
+## Authentication
+
+### Build an authorization URL
+
+Redirect your users to this authorization URL, where they'll be prompted to install your app to their Shopify store.
+
+```
+//This is the user's store URL.
+string usersMyShopifyUrl = "https://example.myshopify.com";
+
+//An array of the Shopify access scopes your application needs to run.
+IEnumerable<ShopifyAuthorizationScope> scopes = new List<ShopifyAuthorizationScope>()
+{
+    ShopifyAuthorizationScope.ReadCustomers,
+    ShopifyAuthorizationScope.WriteCustomers
+};
+
+//All ShopifyAuthorizationService methods are static.
+string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey);
+```
 
 ## Shops
 
