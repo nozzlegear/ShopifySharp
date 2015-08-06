@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,6 +64,8 @@
     <Compile Include="Infrastructure\RequestEngine.cs" />
     <Compile Include="Infrastructure\ShopifyError.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
+    <Compile Include="Services\Authorization\ShopifyAuthorizationScope.cs" />
+    <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />

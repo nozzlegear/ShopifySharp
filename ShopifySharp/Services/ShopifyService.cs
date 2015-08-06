@@ -18,28 +18,8 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
-            if(Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
-            {
-                throw new ShopifyException("Service constructor: {0} is invalid.".FormatWith(nameof(myShopifyUrl)));
-            }
-
-            UriBuilder builder = new UriBuilder(myShopifyUrl)
-            {
-                Path = "admin/",
-                Scheme = Uri.UriSchemeHttps,
-                Port = 443 //SSL port
-            };
-
-            _ShopUri = builder.Uri;
-            _RestClient = new RestClient(_ShopUri);
-
-            //Set up the JSON.NET deserializer for the RestSharp client
-            JsonNetSerializer deserializer = new JsonNetSerializer();
-            _RestClient.AddHandler("application/json", deserializer);
-            _RestClient.AddHandler("text/json", deserializer);
-
-            //Configure default access token header
-            _RestClient.AddDefaultHeader("X-Shopify-Access-Token", shopAccessToken);
+            _ShopUri = RequestEngine.BuildShopUri(myShopifyUrl);
+            _RestClient = RequestEngine.CreateClient(_ShopUri, shopAccessToken);
         }
 
         #region Private Properties
