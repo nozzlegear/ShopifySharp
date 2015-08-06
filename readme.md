@@ -22,7 +22,7 @@ Finally, we'll get a NuGet package set up for this library soon.
 
 If you just need an access token for a private Shopify app, or for running the tests in this library, refer to the **Tests** section below.
 
-## Authentication
+## Authorization and authentication
 
 ### Build an authorization URL
 
@@ -31,6 +31,10 @@ Redirect your users to this authorization URL, where they'll be prompted to inst
 ```
 //This is the user's store URL.
 string usersMyShopifyUrl = "https://example.myshopify.com";
+
+//An optional URL to redirect the user to after they've confirmed app installation.
+//If you don't specify a redirect url, Shopify will redirect to your app's default URL.
+string redirectUrl = "https://example.com/my/redirect/url";
 
 //An array of the Shopify access scopes your application needs to run.
 IEnumerable<ShopifyAuthorizationScope> scopes = new List<ShopifyAuthorizationScope>()
@@ -41,6 +45,85 @@ IEnumerable<ShopifyAuthorizationScope> scopes = new List<ShopifyAuthorizationSco
 
 //All ShopifyAuthorizationService methods are static.
 string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey);
+```
+
+### Authorize an installation and generate an access token
+
+Once you've sent a user to the authorization URL and they've confirmed your app installation, they'll be redirected back to your application at either the default app URL, or the redirect URL you passed in when building the authorization URL.
+
+The access token you receive after authorizing should be stored in your database. You'll need it to access the shop's resources (e.g. orders, customers, fulfillments, etc.)
+
+```
+//The querystring will have several parameters you need for authorization.
+string code = Request.QueryString["code"];
+string myShopifyUrl = Request.QueryString["shop"];
+
+string accessToken = await ShopifyAuthorizationService.Authorize(code, myShopifyUrl, shopifyApiKey, shopifySecretKey);
+```
+
+### Determine if a request is authentic
+
+Any (non-webhook) request coming from Shopify will have a querystring paramater called 'signature' that you can use to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's secret key. 
+
+Pass the entire querystring to `ShopifyAuthorizationService` to verify the request.
+
+```
+NameValueCollection queryString = Request.QueryString;
+
+if(ShopifyAuthorizationService.IsAuthenticRequest(queryString, shopifySecretKey))
+{
+    //Request is authentic.
+}
+else
+{
+    //Request is not authentic and should not be acted on.
+}
+```
+
+### Determine if a webhook request is authentic
+
+Any webhook request coming from Shopify will have a header called 'X-Shopify-Hmac-SHA256' that you can use to verify that the webhook is authentic. The header is a hash of the entire request body and your app's secret key.
+
+Pass the entire header collection and the request's input stream to `ShopifyAuthorizationService` to verify the request.
+
+```
+NameValueCollection requestHeaders = Request.Headers;
+Stream inputStream = Request.InputStream;
+
+if(ShopifyAuthorizationService.IsAuthenticWebhook(requestHeaders, inputStream, shopifySecretKey))
+{
+    //Webhook is authentic.
+}
+else
+{
+    //Webhook is not authentic and should not be acted on.
+}
+```
+
+You can also pass in the request body as a string, rather than using the input stream. However, the request body string needs to be identical to the way it was sent from Shopify. If it has been modified, the verification will fail.
+
+```
+NameValueCollection requestHeaders = Request.Headers;
+string requestBody = null;
+
+//Reset the input stream. MVC controllers often read the stream to determine which parameters to pass to an action.
+Request.InputStream.Position = 0;
+
+//Read the stream into a string
+using(StreamReader reader = new StreamReader(Request.InputStream))
+{
+    requestBody = await reader.ReadToEndAsync();
+}
+
+if(ShopifyAuthorizationService.IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey))
+{
+    //Webhook is authentic.
+}
+else
+{
+    //Webhook is not authentic and should not be acted on.
+}
+
 ```
 
 ## Shops
