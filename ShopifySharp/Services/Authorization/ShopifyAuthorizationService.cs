@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.IO;
 using RestSharp;
 using Newtonsoft.Json.Linq;
+using ShopifySharp.Enums;
 
 namespace ShopifySharp
 {

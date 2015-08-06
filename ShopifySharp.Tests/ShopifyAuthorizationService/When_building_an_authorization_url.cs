@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Humanizer;
+using ShopifySharp.Enums;
 
 namespace ShopifySharp.Tests
 {

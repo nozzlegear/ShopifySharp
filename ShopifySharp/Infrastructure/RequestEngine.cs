@@ -129,14 +129,7 @@ namespace ShopifySharp
 
                 if(parsed.Any(x => x.Path == "errors"))
                 {
-                    if(parsed["errors"].Type == JTokenType.String)
-                    {
-                        error.Errors = parsed.Value<string>("errors");
-                    }
-                    else
-                    {
-                        error.Errors = parsed["errors"].ToString(Formatting.Indented);
-                    }
+                    error.Errors = parsed["errors"].Type == JTokenType.String ? parsed.Value<string>("errors") : parsed["errors"].ToString(Formatting.Indented);
                 }
                 else
                 {
