@@ -70,9 +70,12 @@ namespace ShopifySharp
 
             //We do not dispose the input stream ourselves, as it can cause major headaches if we 
             //close a controller's request stream.
-            string requestBody = await new StreamReader(inputStream).ReadToEndAsync();
+            using (StreamReader reader = new StreamReader(inputStream))
+            {
+                string requestBody = await reader.ReadToEndAsync();
 
-            return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
+                return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
+            }
         }
 
         /// <summary>
@@ -121,11 +124,11 @@ namespace ShopifySharp
                 new KeyValuePair<string, string>("scope", string.Join(",", scopes.Select(s => s.Humanize()))),
             };
 
-            if(string.IsNullOrEmpty(redirectUrl) == false)
+            if (string.IsNullOrEmpty(redirectUrl) == false)
             {
                 qs.Add(new KeyValuePair<string, string>("redirect_uri", redirectUrl));
             }
-            
+
             builder.Path = "admin/oauth/authorize";
             builder.Query = string.Join("&", qs.Select(s => "{0}={1}".FormatWith(s.Key, s.Value)));
 
@@ -148,7 +151,7 @@ namespace ShopifySharp
             JToken response;
 
             //Build request body
-            req.AddJsonBody(new { client_id = shopifyApiKey, client_secret = shopifySecretKey, code = code });
+            req.AddJsonBody(new { client_id = shopifyApiKey, client_secret = shopifySecretKey, code });
 
             response = await RequestEngine.ExecuteRequestAsync(client, req);
 
