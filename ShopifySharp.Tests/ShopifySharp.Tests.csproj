@@ -80,6 +80,7 @@
     <Compile Include="ShopifyCustomerService\When_retrieving_a_customer_with_fields.cs" />
     <Compile Include="ShopifyCustomerService\When_searching_for_a_customer.cs" />
     <Compile Include="ShopifyCustomerService\When_updating_a_customer.cs" />
+    <Compile Include="ShopifyOrderService\Test_Data\OrderCreation.cs" />
     <Compile Include="ShopifyOrderService\When_counting_orders.cs" />
     <Compile Include="ShopifyOrderService\When_creating_an_order.cs" />
     <Compile Include="ShopifyOrderService\When_listing_orders.cs" />
@@ -103,7 +104,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ShopifyOrderService\Test_Data\" />
     <Folder Include="ShopifyShopService\Test_Data\" />
   </ItemGroup>
   <Choose>

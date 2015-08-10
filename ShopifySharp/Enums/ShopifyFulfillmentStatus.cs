@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using ShopifySharp.Converters;
+using System.Runtime.Serialization;
 
 namespace ShopifySharp.Enums
 {
@@ -18,19 +19,19 @@ namespace ShopifySharp.Enums
         /// <summary>
         /// Every line item in the order has been fulfilled.
         /// </summary>
-        [JsonProperty("fulfilled")]
+        [EnumMember(Value = "fulfilled")]
         Fulfilled,
 
         /// <summary>
         /// None of the line items in the order have been fulfilled.
         /// </summary>
-        [JsonProperty("none")]
+        [EnumMember(Value = "none")]
         None,
 
         /// <summary>
         /// At least one line item in the order has been fulfilled.
         /// </summary>
-        [JsonProperty("partial")]
+        [EnumMember(Value = "partial")]
         Partial
     }
 }

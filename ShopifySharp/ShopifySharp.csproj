@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,6 +69,7 @@
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
     <Compile Include="Enums\ShopifyOrderStatus.cs" />
     <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
     <Compile Include="Entities\ShopifyAddress.cs" />

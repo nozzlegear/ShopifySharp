@@ -4,27 +4,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using Newtonsoft.Json.Converters;
 
 namespace ShopifySharp.Enums
 {
     /// <summary>
     /// The type of payment processing method
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ShopifyProcessingMethod
     {
-        [JsonProperty("checkout")]
+        [EnumMember(Value = "checkout")]
         Checkout,
 
-        [JsonProperty("direct")]
+        [EnumMember(Value = "direct")]
         Direct,
 
-        [JsonProperty("manual")]
+        [EnumMember(Value = "manual")]
         Manual,
 
-        [JsonProperty("offsite")]
+        [EnumMember(Value = "offsite")]
         Offsite,
 
-        [JsonProperty("express")]
-        Express
+        [EnumMember(Value = "express")]
+        Express,
+
+        [EnumMember(Value = "none")]
+        None
     }
 }

@@ -1,60 +1,64 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ShopifyAuthorizationScope
     {
-        [Description("read_content")]
+        [EnumMember(Value = "read_content")]
         ReadContent,
 
-        [Description("write_content")]
+        [EnumMember(Value = "write_content")]
         WriteContent,
 
-        [Description("read_themes")]
+        [EnumMember(Value = "read_themes")]
         ReadThemes,
 
-        [Description("write_themes")]
+        [EnumMember(Value = "write_themes")]
         WriteThemes,
 
-        [Description("read_products")]
+        [EnumMember(Value = "read_products")]
         ReadProducts,
 
-        [Description("write_products")]
+        [EnumMember(Value = "write_products")]
         WriteProducts,
 
-        [Description("read_customers")]
+        [EnumMember(Value = "read_customers")]
         ReadCustomers,
 
-        [Description("write_customers")]
+        [EnumMember(Value = "write_customers")]
         WriteCustomers,
 
-        [Description("read_orders")]
+        [EnumMember(Value = "read_orders")]
         ReadOrders,
 
-        [Description("write_orders")]
+        [EnumMember(Value = "write_orders")]
         WriteOrders,
 
-        [Description("read_script_tags")]
+        [EnumMember(Value = "read_script_tags")]
         ReadScriptTags,
 
-        [Description("write_script_tags")]
+        [EnumMember(Value = "write_script_tags")]
         WriteScriptTags,
 
-        [Description("read_fulfillments")]
+        [EnumMember(Value = "read_fulfillments")]
         ReadFulfillments,
 
-        [Description("write_fulfillments")]
+        [EnumMember(Value = "write_fulfillments")]
         WriteFulfillments,
 
-        [Description("read_shipping")]
+        [EnumMember(Value = "read_shipping")]
         ReadShipping,
 
-        [Description("write_shipping")]
+        [EnumMember(Value = "write_shipping")]
         WriteShipping
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,42 +12,43 @@ namespace ShopifySharp.Enums
     /// <summary>
     /// A standardized error code, independent of the payment provider.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum ShopifyTransactionError
     {
-        [JsonProperty("incorrect_number")]
+        [EnumMember(Value = "incorrect_number")]
         IncorrectNumber,
 
-        [JsonProperty("invalid_number")]
+        [EnumMember(Value = "invalid_number")]
         InvalidNumber,
 
-        [JsonProperty("invalid_expiry_date")]
+        [EnumMember(Value = "invalid_expiry_date")]
         InvalidExpiryDate,
 
-        [JsonProperty("invalid_cvc")]
+        [EnumMember(Value = "invalid_cvc")]
         InvalidCvc,
 
-        [JsonProperty("expired_card")]
+        [EnumMember(Value = "expired_card")]
         ExpiredCard,
 
-        [JsonProperty("incorrect_cvc")]
+        [EnumMember(Value = "incorrect_cvc")]
         IncorrectCvc,
 
-        [JsonProperty("incorrect_zip")]
+        [EnumMember(Value = "incorrect_zip")]
         IncorrectZip,
 
-        [JsonProperty("incorrect_address")]
+        [EnumMember(Value = "incorrect_address")]
         IncorrectAddress,
 
-        [JsonProperty("card_declined")]
+        [EnumMember(Value = "card_declined")]
         CardDeclined,
 
-        [JsonProperty("processing_error")]
+        [EnumMember(Value = "processing_error")]
         ProcesingError,
         
-        [JsonProperty("call_issuer")]
+        [EnumMember(Value = "call_issuer")]
         CallIssuer,
 
-        [JsonProperty("pick_up_card")]
+        [EnumMember(Value = "pick_up_card")]
         PickUpCard
     }
 }

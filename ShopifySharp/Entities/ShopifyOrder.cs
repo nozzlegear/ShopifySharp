@@ -163,7 +163,7 @@ namespace ShopifySharp
         /// The type of payment processing method
         /// </summary>
         [JsonProperty("processing_method")]
-        public ShopifyProcessingMethod ProcessingMethod { get; set; }
+        public ShopifyProcessingMethod? ProcessingMethod { get; set; }
 
         /// <summary>
         /// The website that the customer clicked on to come to the shop.
