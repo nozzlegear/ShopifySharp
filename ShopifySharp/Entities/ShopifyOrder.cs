@@ -102,10 +102,10 @@ namespace ShopifySharp
         public IEnumerable<ShopifyFulfillment> Fulfillments { get; set; }
 
         /// <summary>
-        /// The fulfillment status for this order.
+        /// The fulfillment status for this order. Will be null if none of the line items in the order have been fulfilled.
         /// </summary>
         [JsonProperty("fulfillment_status")]
-        public ShopifyFulfillmentStatus FulfillmentStatus { get; set; }
+        public ShopifyFulfillmentStatus? FulfillmentStatus { get; set; }
 
         /// <summary>
         /// Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values.

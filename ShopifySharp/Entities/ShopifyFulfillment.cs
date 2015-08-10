@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// A textfield with information about the receipt.
         /// </summary>
         [JsonProperty("receipt")]
-        public string Receipt { get; set; }
+        public object Receipt { get; set; }
 
         /// <summary>
         /// The status of the fulfillment.

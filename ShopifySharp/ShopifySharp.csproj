@@ -64,7 +64,11 @@
     <Compile Include="Entities\ShopifyTransaction.cs" />
     <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
     <Compile Include="Enums\ShopifyFulfillmentStatus.cs" />
+    <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
+    <Compile Include="Enums\ShopifyOrderStatus.cs" />
+    <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
     <Compile Include="Entities\ShopifyAddress.cs" />
     <Compile Include="Entities\ShopifyCustomer.cs" />
@@ -81,6 +85,8 @@
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
     <Compile Include="Enums\ShopifyOrderCancelReason.cs" />
+    <Compile Include="Services\Order\ShopifyOrderCreateOptions.cs" />
+    <Compile Include="Services\Order\ShopifyOrderFilterOptions.cs" />
     <Compile Include="Services\Order\ShopifyOrderService.cs" />
     <Compile Include="Enums\ShopifyProcessingMethod.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />

@@ -117,7 +117,7 @@ namespace ShopifySharp
         {
             IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customer.Id.Value), Method.PUT, "customer");
 
-            req.AddJsonBody(new { customer = customer });
+            req.AddJsonBody(new { customer });
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }

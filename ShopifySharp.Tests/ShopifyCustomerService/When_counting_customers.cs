@@ -21,7 +21,7 @@ namespace ShopifySharp.Tests
             _Count = _Service.CountAsync().Await().AsTask.Result;
         };
 
-        It should_retrieve_a_count = () =>
+        It should_retrieve_a_count_of_customers = () =>
         {
             _Count.ShouldNotBeNull();
         };

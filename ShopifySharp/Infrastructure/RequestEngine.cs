@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    internal static class RequestEngine
+    static class RequestEngine
     {
         /// <summary>
         /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
@@ -119,7 +119,7 @@ namespace ShopifySharp
         /// Checks an <see cref="IRestResponse" /> for exceptions or invalid responses. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        private static void CheckResponseExceptions(IRestResponse response)
+        static void CheckResponseExceptions(IRestResponse response)
         {
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
