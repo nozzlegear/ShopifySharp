@@ -14,7 +14,13 @@ With that said, this library is brand new. It currently only supports **OAuth au
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
 
-Finally, we'll get a NuGet package set up for this library soon.
+# Installation
+
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager console in Visual Studio to install it:
+
+```
+Install-Package ShopifySharp 
+```
 
 # Usage
 

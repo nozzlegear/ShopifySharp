@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>ShopifySharp</title>
+    <authors>Nozzlegear Software</authors>
+    <owners>Nozzlegear Software</owners>
+    <licenseUrl>https://github.com/nozzlegear/ShopifySharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/nozzlegear/shopifysharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
+    <releaseNotes>Initial release for NuGet.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Shopify</tags>
+  </metadata>
+</package>
