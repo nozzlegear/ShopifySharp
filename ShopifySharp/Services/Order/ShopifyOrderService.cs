@@ -105,7 +105,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Opens an order.
+        /// Opens a closed order.
         /// </summary>
         /// <param name="id">The order's id.</param>
         public async Task OpenAsync(long id)

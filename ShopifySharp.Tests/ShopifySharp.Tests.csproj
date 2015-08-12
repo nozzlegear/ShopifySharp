@@ -81,10 +81,15 @@
     <Compile Include="ShopifyCustomerService\When_searching_for_a_customer.cs" />
     <Compile Include="ShopifyCustomerService\When_updating_a_customer.cs" />
     <Compile Include="ShopifyOrderService\Test_Data\OrderCreation.cs" />
+    <Compile Include="ShopifyOrderService\When_closing_an_order.cs" />
     <Compile Include="ShopifyOrderService\When_counting_orders.cs" />
     <Compile Include="ShopifyOrderService\When_creating_an_order.cs" />
+    <Compile Include="ShopifyOrderService\When_deleting_an_order.cs" />
+    <Compile Include="ShopifyOrderService\When_getting_an_order.cs" />
     <Compile Include="ShopifyOrderService\When_listing_orders.cs" />
     <Compile Include="ShopifyOrderService\When_listing_orders_with_options.cs" />
+    <Compile Include="ShopifyOrderService\When_opening_an_order.cs" />
+    <Compile Include="ShopifyOrderService\When_updating_an_order.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
