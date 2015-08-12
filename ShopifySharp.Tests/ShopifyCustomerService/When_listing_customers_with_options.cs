@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
             _Result = _Service.ListAsync(_Options).Await().AsTask.Result;
         };
 
-        It should_only_retrieve_a_limited_number_of_customers = () =>
+        It should_only_list_1_customer = () =>
         {
             _Result.Count().ShouldBeLessThanOrEqualTo(_Limit);
         };

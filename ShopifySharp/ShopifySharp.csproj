@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +54,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\ShopifyClientDetails.cs" />
+    <Compile Include="Entities\ShopifyDiscountCode.cs" />
+    <Compile Include="Entities\ShopifyFulfillment.cs" />
+    <Compile Include="Entities\ShopifyLineItem.cs" />
+    <Compile Include="Entities\ShopifyOrder.cs" />
+    <Compile Include="Entities\ShopifyPaymentDetails.cs" />
+    <Compile Include="Entities\ShopifyShippingLine.cs" />
+    <Compile Include="Entities\ShopifyTaxLine.cs" />
+    <Compile Include="Entities\ShopifyTransaction.cs" />
+    <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
+    <Compile Include="Enums\ShopifyFulfillmentStatus.cs" />
+    <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
+    <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
+    <Compile Include="Enums\ShopifyOrderStatus.cs" />
+    <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
     <Compile Include="Entities\ShopifyAddress.cs" />
     <Compile Include="Entities\ShopifyCustomer.cs" />
@@ -64,20 +82,29 @@
     <Compile Include="Infrastructure\RequestEngine.cs" />
     <Compile Include="Infrastructure\ShopifyError.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
-    <Compile Include="Services\Authorization\ShopifyAuthorizationScope.cs" />
+    <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
+    <Compile Include="Enums\ShopifyOrderCancelReason.cs" />
+    <Compile Include="Services\Order\ShopifyOrderCreateOptions.cs" />
+    <Compile Include="Services\Order\ShopifyOrderFilterOptions.cs" />
+    <Compile Include="Services\Order\ShopifyOrderService.cs" />
+    <Compile Include="Enums\ShopifyProcessingMethod.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
     <Compile Include="Services\ShopifyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Shop\ShopifyShopService.cs" />
+    <Compile Include="Enums\ShopifyTransactionError.cs" />
+    <Compile Include="Enums\ShopifyTransactionKind.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\Transaction\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

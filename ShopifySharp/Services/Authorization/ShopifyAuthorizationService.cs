@@ -10,6 +10,8 @@ using System.Security.Cryptography;
 using System.IO;
 using RestSharp;
 using Newtonsoft.Json.Linq;
+using ShopifySharp.Enums;
+using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
@@ -121,7 +123,7 @@ namespace ShopifySharp
             List<KeyValuePair<string, string>> qs = new List<KeyValuePair<string, string>>()
             {
                 new KeyValuePair<string, string>("client_id", shopifyApiKey),
-                new KeyValuePair<string, string>("scope", string.Join(",", scopes.Select(s => s.Humanize()))),
+                new KeyValuePair<string, string>("scope", string.Join(",", scopes.Select(s => s.ToSerializedString()))),
             };
 
             if (string.IsNullOrEmpty(redirectUrl) == false)

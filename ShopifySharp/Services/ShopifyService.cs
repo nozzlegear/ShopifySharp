@@ -16,7 +16,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public ShopifyService(string myShopifyUrl, string shopAccessToken)
+        protected ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
             _ShopUri = RequestEngine.BuildShopUri(myShopifyUrl);
             _RestClient = RequestEngine.CreateClient(_ShopUri, shopAccessToken);

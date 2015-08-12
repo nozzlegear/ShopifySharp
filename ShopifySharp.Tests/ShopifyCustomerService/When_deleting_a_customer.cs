@@ -24,17 +24,16 @@ namespace ShopifySharp.Tests
             try
             {
                 _Service.DeleteAsync(_CustomerId).Await();
-                _ThrewException = false;
             }
             catch (ShopifyException e)
             {
-                _ThrewException = true;
-            };
+                _Exception = e;
+            }
         };
 
         It should_delete_a_customer = () =>
         {
-            _ThrewException.ShouldBeFalse();
+            _Exception.ShouldBeNull();
         };
 
         Cleanup after = () =>
@@ -43,7 +42,9 @@ namespace ShopifySharp.Tests
         };
 
         static long _CustomerId;
-        static bool _ThrewException = false;
+        
         static ShopifyCustomerService _Service;
+
+        static ShopifyException _Exception;
     }
 }

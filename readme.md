@@ -231,6 +231,109 @@ IEnumerable<ShopifyCustomer> customers = await Service.SearchAsync("Jane country
 //indexing it for a search.
 ```
 
+## Orders
+
+### Creating an order
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+ShopifyOrder order = new ShopifyOrder()
+{
+    CreatedAt = DateTime.UtcNow,
+    BillingAddress = new ShopifyAddress()
+    {
+        Address1 = "123 4th Street",
+        City = "Minneapolis",
+        Province = "Minnesota",
+        ProvinceCode = "MN",
+        Zip = "55401",
+        Phone = "555-555-5555",
+        FirstName = "John",
+        LastName = "Doe",
+        Company = "Tomorrow Corporation",
+        Country = "United States",
+        CountryCode = "US",
+        Default = true,
+    },
+    LineItems = new List<ShopifyLineItem>()
+    {
+        new ShopifyLineItem()
+        {
+            Name = "Test Line Item",
+            Title = "Test Line Item Title"
+        }
+    },
+    FinancialStatus = Enums.ShopifyOrderFinancialStatus.Paid,
+    TotalPrice = 5.00,
+    Email = Guid.NewGuid().ToString() + "@example.com",
+    Note = "Test note about the customer.",
+};
+
+order = await service.CreateAsync(order);
+```
+
+### Retrieving an order
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+ShopifyOrder order = await service.GetAsync(orderId);
+```
+
+### Updating an order
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+ShopifyOrder order = await service.GetAsync(orderId);
+
+order.Notes = "Test notes.";
+order = await service.UpdateAsync(order);
+```
+
+### Deleting an order
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(orderId);
+```
+
+### Counting orders
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+int orderCount = await service.CountAsync();
+```
+
+### Listing orders
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+IEnumerable<ShopifyOrder> orders = await service.ListAsync();
+```
+
+### List orders for a certain customer
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+IEnumerable<ShopifyOrder> orders = await service.ListForCustomerAsync(customerId);
+```
+
+### Close an order
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+
+await service.CloseAsync(orderId);
+```
+
+### Reopen a closed order
+
+```
+ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+
+await service.OpenAsync(orderId);
+```
+
 # Tests
 
 The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) will show you exactly what you need to do to get a shop access token with full permissions.
