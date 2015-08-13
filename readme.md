@@ -30,6 +30,15 @@ If you just need an access token for a private Shopify app, or for running the t
 
 ## Authorization and authentication
 
+### Ensure a given URL is a valid *myshopify.com URL
+
+This is a convenience method that validates whether a given URL is a valid Shopify shop. It's great for ensuring you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is ideally used in conjuction with `ShopifyAuthorizationService.BuildAuthorizationUrl`.
+
+```
+string urlFromUser = "https://example.myshopify.com";
+bool isValidUrl = await ShopifyAuthorizationService.IsValidMyShopifyUrl(urlFromUser).
+```
+
 ### Build an authorization URL
 
 Redirect your users to this authorization URL, where they'll be prompted to install your app to their Shopify store.

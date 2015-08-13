@@ -107,6 +107,24 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// A convenience function that tries to ensure that a given URL is a valid Shopify store by checking the response headers for X-ShopId.
+        /// </summary>
+        /// <param name="url">The URL of the shop to check.</param>
+        /// <returns>A boolean indicating whether the URL is valid.</returns>
+        public static async Task<bool> IsValidMyShopifyUrl(string url)
+        {
+            Uri uri = RequestEngine.BuildShopUri(url);
+            RestClient client = RequestEngine.CreateClient(uri);
+
+            //Make request
+            RestRequest request = new RestRequest("admin", Method.GET);
+            IRestResponse response = await client.ExecuteTaskAsync(request);
+
+            //Valid Shopify stores will have an X-ShopId header
+            return response.Headers.Any(h => h.Name == "X-ShopId");
+        }
+
+        /// <summary>
         /// Builds an authorization URL for Shopify OAuth integration.
         /// </summary>
         /// <param name="scopes">An array of <see cref="ShopifyAuthorizationScope"/> — the permissions that your app needs to run.</param>

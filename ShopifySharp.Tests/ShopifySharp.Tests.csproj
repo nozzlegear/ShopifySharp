@@ -90,6 +90,7 @@
     <Compile Include="ShopifyOrderService\When_listing_orders_with_options.cs" />
     <Compile Include="ShopifyOrderService\When_opening_an_order.cs" />
     <Compile Include="ShopifyOrderService\When_updating_an_order.cs" />
+    <Compile Include="ShopifyAuthorizationService\When_validating_shop_url.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

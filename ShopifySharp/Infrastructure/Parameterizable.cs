@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Data.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,12 +24,23 @@ namespace ShopifySharp
             foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 object value = property.GetValue(this, null);
+                string propName = property.Name;
                 if (value == null) continue;
 
-                //Get the JsonPropertyAttribute for this property, which will give us its JSON name
-                JsonPropertyAttribute attribute = property.GetCustomAttributes(typeof(JsonPropertyAttribute), false).Cast<JsonPropertyAttribute>().FirstOrDefault();
+                if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
+                {
+                    //Get the JsonPropertyAttribute for this property, which will give us its JSON name
+                    JsonPropertyAttribute attribute = property.GetCustomAttributes(typeof(JsonPropertyAttribute), false).Cast<JsonPropertyAttribute>().FirstOrDefault();
 
-                output.Add(attribute != null ? attribute.PropertyName : property.Name, value);
+                    propName = attribute != null ? attribute.PropertyName : property.Name;
+                }
+
+                if (value.GetType().IsEnum)
+                {
+                    value = ((Enum)value).ToSerializedString();
+                }
+
+                output.Add(propName, value);
             }
 
             return output;
@@ -46,14 +58,25 @@ namespace ShopifySharp
             foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 object value = property.GetValue(this, null);
+                string propName = property.Name;
                 if (value == null) continue;
 
-                //Get the JsonPropertyAttribute for this property, which will give us its JSON name
-                JsonPropertyAttribute attribute = property.GetCustomAttributes(typeof(JsonPropertyAttribute), false).Cast<JsonPropertyAttribute>().FirstOrDefault();
+                if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
+                {
+                    //Get the JsonPropertyAttribute for this property, which will give us its JSON name
+                    JsonPropertyAttribute attribute = property.GetCustomAttributes(typeof(JsonPropertyAttribute), false).Cast<JsonPropertyAttribute>().FirstOrDefault();
+
+                    propName = attribute != null ? attribute.PropertyName : property.Name;
+                }
+
+                if(value.GetType().IsEnum)
+                {
+                    value = ((Enum)value).ToSerializedString();
+                }
 
                 output.Add(new Parameter()
                 {
-                    Name = attribute != null ? attribute.PropertyName : property.Name,
+                    Name = propName,
                     Value = value,
                     Type = type
                 });

@@ -156,6 +156,12 @@ namespace ShopifySharp
         [JsonProperty("order_number")]
         public int OrderNumber { get; set; }
 
+        /// <summary>
+        /// Payment details for this order. May be null if the order was created via API without payment details.
+        /// </summary>
+        [JsonProperty("payment_details")]
+        public ShopifyPaymentDetails PaymentDetails { get; set; }
+
         [JsonProperty("processed_at")]
         public DateTime? ProcessedAt { get; set; }
 
@@ -228,10 +234,16 @@ namespace ShopifySharp
         public double TotalLineItemsPrice { get; set; }
 
         /// <summary>
-        /// The sum of all the prices of all the items in the order, taxes and discounts included (must be positive).
+        /// The sum of all the prices of all the items in the order, with taxes and discounts included (must be positive).
         /// </summary>
         [JsonProperty("total_price")]
         public double TotalPrice { get; set; }
+
+        /// <summary>
+        /// The sum of all the prices of all the items in the order, in USD, with taxes and discounts included (must be positive).
+        /// </summary>
+        [JsonProperty("total_price_usd")]
+        public double TotalPriceUsd { get; set; }
 
         /// <summary>
         /// The sum of all the taxes applied to the order (must be positive).
