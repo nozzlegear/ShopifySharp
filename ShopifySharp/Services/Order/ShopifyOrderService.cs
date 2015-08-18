@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// A service for manipulating Shopify orders.
+    /// </summary>
     public class ShopifyOrderService : ShopifyService
     {
         #region Constructor
