@@ -52,6 +52,18 @@ namespace ShopifySharp
         public string TrackingNumber { get; set; }
 
         /// <summary>
+        /// The tracking url, provided by the shipping company. May be null.
+        /// </summary>
+        [JsonProperty("tracking_url")]
+        public string TrackingUrl { get; set; }
+
+        /// <summary>
+        /// An array of one or more tracking urls, provided by the shipping company. May be null.
+        /// </summary>
+        [JsonProperty("tracking_urls")]
+        public IEnumerable<string> TrackingUrls { get; set; }
+
+        /// <summary>
         /// The date and time when the fulfillment was last modified.
         /// </summary>
         [JsonProperty("updated_at")]
