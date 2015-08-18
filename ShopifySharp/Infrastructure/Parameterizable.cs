@@ -10,10 +10,13 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// An abstract class for parameterizing certain objects.
+    /// </summary>
     public abstract class Parameterizable
     {
         /// <summary>
-        /// Converts the object to a dictionary. Ideal for <see cref="RestRequest.AddJsonBody(object)"./>
+        /// Converts the object to a dictionary. Ideal for <see cref="RestRequest.AddJsonBody(object)"/>
         /// </summary>
         /// <returns>The object as a <see cref="IDictionary{String, Object}"/>.</returns>
         public IDictionary<string, object> ToDictionary()

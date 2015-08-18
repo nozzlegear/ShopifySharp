@@ -65,12 +65,14 @@
     <Compile Include="Entities\ShopifyShippingLine.cs" />
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
+    <Compile Include="Entities\ShopifyWebhook.cs" />
     <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
     <Compile Include="Enums\ShopifyFulfillmentStatus.cs" />
     <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
     <Compile Include="Enums\ShopifyOrderStatus.cs" />
     <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
+    <Compile Include="Enums\ShopifyWebhookTopic.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
@@ -99,6 +101,8 @@
     <Compile Include="Services\Shop\ShopifyShopService.cs" />
     <Compile Include="Enums\ShopifyTransactionError.cs" />
     <Compile Include="Enums\ShopifyTransactionKind.cs" />
+    <Compile Include="Services\Webhook\ShopifyWebhookFilterOptions.cs" />
+    <Compile Include="Services\Webhook\ShopifyWebhookService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
