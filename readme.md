@@ -10,7 +10,7 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 
 Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, this library is brand new. It currently only supports **OAuth authentication**, the **Customers** resource, the **Orders** resource, and the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
+With that said, this library is brand new. It currently only supports **OAuth authentication**, the **Customers** resource, the **Orders** resource, the **Webhooks** resource, and the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
 
@@ -347,6 +347,64 @@ await service.CloseAsync(orderId);
 ShopifyOrderService service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 
 await service.OpenAsync(orderId);
+```
+
+## Webhooks
+
+### Creating a webhook
+
+```
+ShopifyWebhookService service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
+ShopifyWebhook hook = new ShopifyWebhook()
+{
+    Address = "https://my.webhook.url.com/path",
+    CreatedAt = DateTime.Now,
+    Fields = new List<string>() { "field1", "field2" },
+    Format = "json",
+    MetafieldNamespaces = new List<string>() { "metafield1", "metafield2" },
+    Topic = topic,
+};
+
+hook = await service.CreateAsync(hook);
+```
+
+### Retrieving a webhook
+
+```
+ShopifyWebhookService service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
+ShopifyWebhook webhook = await service.GetAsync(webhookId);
+```
+
+### Updating a webhook
+
+```
+ShopifyWebhookService service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
+ShopifyWebhook webhook = await service.GetAsync(webhookId);
+
+webhook.Address = "https://my.webhook.url.com/new/path";
+webhook = await service.UpdateAsync(webhook);
+```
+
+### Deleting a webhook
+
+```
+ShopifyWebhookService service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(webhookId);
+```
+
+### Counting webhooks
+
+```
+ShopifyWebhookService service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
+int webhookCount = await service.CountAsync();
+```
+
+### Listing webhooks
+
+```
+ShopifyWebhookService service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
+IEnumerable<ShopifyWebhook> webhooks = await service.ListAsync();
 ```
 
 # Tests

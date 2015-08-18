@@ -16,14 +16,13 @@ namespace ShopifySharp.Tests
         {
             Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-            //Create one webhook with the original address
+            //Create one webhook with the original topic
             Webhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook()).Await().AsTask.Result);
 
             //Create 5 other webhooks with a different topic
             for(int i  = 0; i < 5; i++)
             {
-                //Webhooks need a unique address
-                Webhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook("counting-with-filter-" + i, FilterTopic)).Await().AsTask.Result);
+                Webhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook(topic: FilterTopic)).Await().AsTask.Result);
             }
         };
 

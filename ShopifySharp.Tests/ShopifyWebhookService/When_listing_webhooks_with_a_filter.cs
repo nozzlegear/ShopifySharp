@@ -18,13 +18,13 @@ namespace ShopifySharp.Tests
             // Create 4 normal webhooks to retrieve
             for (int i = 0; i < 4; i++)
             {
-                CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook("listing-customers-with-filter-" + i)).Await().AsTask.Result);
+                CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook()).Await().AsTask.Result);
             }
 
             // Create 4 distinct webhooks to retrieve
             for (int i = 0; i < 4; i++)
             {
-                CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook("listing-customers-with-filter-" + i, FilterTopic)).Await().AsTask.Result);
+                CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook(topic: FilterTopic)).Await().AsTask.Result);
             }
 
             Options = new ShopifyWebhookFilterOptions()

@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests
             // Create 4 webhooks to retrieve
             for(int i = 0; i < 4; i++)
             {
-                CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook("listing-customers-" + i)).Await().AsTask.Result);
+                CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook()).Await().AsTask.Result);
             }
         };
 

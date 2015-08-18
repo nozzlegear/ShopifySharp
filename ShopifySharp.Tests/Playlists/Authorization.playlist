@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="ShopifySharp.Tests.When_building_an_authorization_url::should_build_an_authorization_url" /><Add Test="ShopifySharp.Tests.When_validating_shop_url::should_validate_shop_url" /></Playlist>
