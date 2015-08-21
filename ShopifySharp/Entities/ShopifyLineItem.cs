@@ -96,7 +96,7 @@ namespace ShopifySharp
         public string Vendor { get; set; }
 
         /// <summary>
-        /// The name of the product variant.
+        /// States whether the order used a gift card.
         /// </summary>
         [JsonProperty("gift_card")]
         public bool GiftCard { get; set; }

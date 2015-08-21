@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.3.4
+	=====
+	- Service constructors now attempt to add a URI scheme before determining that the myShopifyUrl string is invalid.
+
 	1.3.3
 	=====
 	- Implemented ShopifyWebhookService, which which enables creating, retrieving, deleting, updating, listing, and counting a shop's webhooks.

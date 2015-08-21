@@ -24,7 +24,16 @@ namespace ShopifySharp
         {
             if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
             {
-                throw new ShopifyException("The given {0} cannot be converted into a well-formed URI.".FormatWith(nameof(myShopifyUrl)));
+                //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.
+                //Try to fix that by adding a scheme and checking again.
+                if (Uri.IsWellFormedUriString(Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl, UriKind.Absolute) == false)
+                {
+                    throw new ShopifyException("The given {0} cannot be converted into a well-formed URI.".FormatWith(nameof(myShopifyUrl)));
+                }
+                else
+                {
+                    myShopifyUrl = Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl;
+                }
             }
 
             UriBuilder builder = new UriBuilder(myShopifyUrl)
@@ -108,7 +117,7 @@ namespace ShopifySharp
         {
             //Make request
             IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
-            
+
             //Check for and throw exception when necessary.
             CheckResponseExceptions(response);
 
@@ -127,7 +136,7 @@ namespace ShopifySharp
                 JToken parsed = JToken.Parse(json);
                 ShopifyError error = new ShopifyError();
 
-                if(parsed.Any(x => x.Path == "errors"))
+                if (parsed.Any(x => x.Path == "errors"))
                 {
                     error.Errors = parsed["errors"].Type == JTokenType.String ? parsed.Value<string>("errors") : parsed["errors"].ToString(Formatting.Indented);
                 }
