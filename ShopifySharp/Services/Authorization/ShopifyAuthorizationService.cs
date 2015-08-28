@@ -61,7 +61,8 @@ namespace ShopifySharp
         /// Determines if an incoming webhook request is authentic.
         /// </summary>
         /// <param name="requestHeaders">The request's headers. Hint: use Request.Headers if you're calling this from an ASP.NET MVC controller.</param>
-        /// <param name="inputStream">The request's input stream. Hint: use Request.InputStream if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="inputStream">The request's input stream. This method does NOT dispose the stream. 
+        /// Hint: use Request.InputStream if you're calling this from an ASP.NET MVC controller.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static async Task<bool> IsAuthenticWebhook(NameValueCollection requestHeaders, Stream inputStream, string shopifySecretKey)
@@ -70,14 +71,12 @@ namespace ShopifySharp
             //pass to an action. Reset position to 0.
             inputStream.Position = 0;
 
-            //We do not dispose the input stream ourselves, as it can cause major headaches if we 
-            //close a controller's request stream.
-            using (StreamReader reader = new StreamReader(inputStream))
-            {
-                string requestBody = await reader.ReadToEndAsync();
+            //We do not dispose the StreamReader because disposing it will also dispose the input stream,
+            //and disposing a request's input stream can cause major headaches for the developer.
+            string requestBody = await new StreamReader(inputStream).ReadToEndAsync();
 
-                return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
-            }
+            return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
+
         }
 
         /// <summary>
