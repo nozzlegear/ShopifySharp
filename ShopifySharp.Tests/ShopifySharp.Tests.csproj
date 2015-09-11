@@ -51,6 +51,10 @@
       <HintPath>..\packages\Machine.Specifications.Should.0.7.2\lib\net45\Machine.Specifications.Should.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
   </ItemGroup>
@@ -67,41 +71,50 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FalseToNullConverter Tests\TestObject.cs" />
+    <Compile Include="FalseToNullConverter Tests\When_serializing_true.cs" />
+    <Compile Include="FalseToNullConverter Tests\When_serialzing_false.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="ShopifyAuthorizationService\When_building_an_authorization_url.cs" />
-    <Compile Include="ShopifyCustomerService\Test_Data\CustomerCreation.cs" />
-    <Compile Include="ShopifyCustomerService\When_counting_customers.cs" />
-    <Compile Include="ShopifyCustomerService\When_creating_a_customer.cs" />
-    <Compile Include="ShopifyCustomerService\When_creating_a_customer_with_options.cs" />
-    <Compile Include="ShopifyCustomerService\When_deleting_a_customer.cs" />
-    <Compile Include="ShopifyCustomerService\When_listing_customers.cs" />
-    <Compile Include="ShopifyCustomerService\When_listing_customers_with_options.cs" />
-    <Compile Include="ShopifyCustomerService\When_retrieving_a_customer.cs" />
-    <Compile Include="ShopifyCustomerService\When_retrieving_a_customer_with_fields.cs" />
-    <Compile Include="ShopifyCustomerService\When_searching_for_a_customer.cs" />
-    <Compile Include="ShopifyCustomerService\When_updating_a_customer.cs" />
-    <Compile Include="ShopifyOrderService\Test_Data\OrderCreation.cs" />
-    <Compile Include="ShopifyOrderService\When_closing_an_order.cs" />
-    <Compile Include="ShopifyOrderService\When_counting_orders.cs" />
-    <Compile Include="ShopifyOrderService\When_creating_an_order.cs" />
-    <Compile Include="ShopifyOrderService\When_deleting_an_order.cs" />
-    <Compile Include="ShopifyOrderService\When_getting_an_order.cs" />
-    <Compile Include="ShopifyOrderService\When_listing_orders.cs" />
-    <Compile Include="ShopifyOrderService\When_listing_orders_with_options.cs" />
-    <Compile Include="ShopifyOrderService\When_opening_an_order.cs" />
-    <Compile Include="ShopifyOrderService\When_updating_an_order.cs" />
-    <Compile Include="ShopifyAuthorizationService\When_validating_shop_url.cs" />
-    <Compile Include="ShopifyWebhookService\Test_Data\WebhookCreation.cs" />
-    <Compile Include="ShopifyWebhookService\When_counting_webhooks.cs" />
-    <Compile Include="ShopifyWebhookService\When_counting_webhooks_with_a_filter.cs" />
-    <Compile Include="ShopifyWebhookService\When_creating_a_webhook.cs" />
-    <Compile Include="ShopifyWebhookService\When_deleting_a_webhook.cs" />
-    <Compile Include="ShopifyWebhookService\When_getting_a_webhook.cs" />
-    <Compile Include="ShopifyWebhookService\When_listing_webhooks.cs" />
-    <Compile Include="ShopifyWebhookService\When_listing_webhooks_with_a_filter.cs" />
-    <Compile Include="ShopifyWebhookService\When_updating_a_webhook.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
+    <Compile Include="ShopifyBillingService Tests\When_activating_a_charge.cs" />
+    <Compile Include="ShopifyBillingService Tests\When_creating_a_charge_with_no_trial.cs" />
+    <Compile Include="ShopifyBillingService Tests\When_creating_a_charge_with_trial.cs" />
+    <Compile Include="ShopifyBillingService Tests\When_deleting_a_charge.cs" />
+    <Compile Include="ShopifyBillingService Tests\When_listing_charges.cs" />
+    <Compile Include="ShopifyBillingService Tests\When_retrieving_a_charge.cs" />
+    <Compile Include="ShopifyCustomerService Tests\Test_Data\CustomerCreation.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_counting_customers.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_creating_a_customer.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_creating_a_customer_with_options.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_deleting_a_customer.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_listing_customers.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_listing_customers_with_options.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_retrieving_a_customer.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_retrieving_a_customer_with_fields.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_searching_for_a_customer.cs" />
+    <Compile Include="ShopifyCustomerService Tests\When_updating_a_customer.cs" />
+    <Compile Include="ShopifyOrderService Tests\Test_Data\OrderCreation.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_closing_an_order.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_counting_orders.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_creating_an_order.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_deleting_an_order.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_getting_an_order.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_listing_orders.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_options.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_opening_an_order.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_updating_an_order.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_validating_shop_url.cs" />
+    <Compile Include="ShopifyWebhookService Tests\Test_Data\WebhookCreation.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks_with_a_filter.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_creating_a_webhook.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_deleting_a_webhook.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_getting_a_webhook.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks_with_a_filter.cs" />
+    <Compile Include="ShopifyWebhookService Tests\When_updating_a_webhook.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="ShopifyShopService\When_getting_a_shop.cs" />
+    <Compile Include="ShopifyShopService Tests\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -119,7 +132,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ShopifyShopService\Test_Data\" />
+    <Folder Include="ShopifyShopService Tests\Test_Data\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

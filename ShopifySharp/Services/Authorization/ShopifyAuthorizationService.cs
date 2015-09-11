@@ -76,7 +76,6 @@ namespace ShopifySharp
             string requestBody = await new StreamReader(inputStream).ReadToEndAsync();
 
             return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
-
         }
 
         /// <summary>
