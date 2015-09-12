@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\FalseToNullConverter.cs" />
     <Compile Include="Converters\ShopifyDiscountCodeConverter.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Entities\ShopifyLineItem.cs" />
     <Compile Include="Entities\ShopifyOrder.cs" />
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
+    <Compile Include="Entities\ShopifyRecurringCharge.cs" />
     <Compile Include="Entities\ShopifyShippingLine.cs" />
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
+    <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
     <Compile Include="Enums\ShopifyOrderCancelReason.cs" />

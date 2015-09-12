@@ -103,7 +103,12 @@ namespace ShopifySharp
             //Check for and throw exception when necessary.
             CheckResponseExceptions(response);
 
-            return JToken.Parse(Encoding.UTF8.GetString(response.RawBytes));
+            //Get the raw response string
+            string respString = Encoding.UTF8.GetString(response.RawBytes);
+
+            //Parse the string if it exists, else parse an empty object. The empty object is expected when
+            //Shopify returns a 0-byte body in it's response (e.g. when deleting a charge). 
+            return JToken.Parse(string.IsNullOrEmpty(respString) ? "{}" : respString);
         }
 
         /// <summary>
