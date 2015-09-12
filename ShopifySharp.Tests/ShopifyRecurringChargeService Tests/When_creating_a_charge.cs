@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Tests.ShopifyBillingService_Tests
+namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
-    [Subject(typeof(ShopifyBillingService))]
-    class When_creating_a_charge_with_trial
+    [Subject(typeof(ShopifyRecurringChargeService))]
+    class When_creating_a_charge
     {
         Establish context = () =>
         {
-            Service = new ShopifyBillingService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             Charge = new ShopifyRecurringCharge()
             {
-                Name = "Super Duper Charge With Trial",
+                Name = "Lorem Ipsum Plan",
                 Price = 123.45,
                 TrialDays = 21,
                 Test = true
@@ -30,23 +30,20 @@ namespace ShopifySharp.Tests.ShopifyBillingService_Tests
             Charge = Service.CreateAsync(Charge).Await().AsTask.Result;
         };
 
-        It should_create_a_charge_with_trial = () =>
+        It should_create_a_charge = () =>
         {
             Charge.ConfirmationUrl.ShouldNotBeNull();
             Charge.Price.ShouldEqual(123.45);
             Charge.Test.ShouldBeTrue();
-            Charge.TrialEndsOn.ShouldNotBeNull();
         };
 
         Cleanup after = () =>
         {
-            if (Charge.Id.HasValue)
-            {
-                Service.DeleteAsync(Charge.Id.Value).Await();
-            }
+            //Charges must have an active status before they can be deleted. Shopify will automatically delete an inactive charge after 48 hours.
         };
 
-        static ShopifyBillingService Service;
+        static ShopifyRecurringChargeService Service;
+
         static ShopifyRecurringCharge Charge;
     }
 }

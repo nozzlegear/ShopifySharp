@@ -66,7 +66,6 @@
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
     <Compile Include="Entities\ShopifyRecurringCharge.cs" />
     <Compile Include="Entities\ShopifyShippingLine.cs" />
-    <Compile Include="Entities\ShopifySingleCharge.cs" />
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
     <Compile Include="Entities\ShopifyWebhook.cs" />
@@ -91,7 +90,7 @@
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
-    <Compile Include="Services\Billing\ShopifyBillingService.cs" />
+    <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
     <Compile Include="Enums\ShopifyOrderCancelReason.cs" />

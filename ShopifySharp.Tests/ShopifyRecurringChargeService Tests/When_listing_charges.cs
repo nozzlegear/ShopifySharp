@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Tests.ShopifyBillingService_Tests
+namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
-    [Subject(typeof(ShopifyBillingService))]
+    [Subject(typeof(ShopifyRecurringChargeService))]
     class When_listing_charges
     {
         Establish context = () =>
@@ -15,11 +15,12 @@ namespace ShopifySharp.Tests.ShopifyBillingService_Tests
             // NOTE: Creating a charge will fail if the access token used is for a private app. 
             // Only real apps can use the Shopify billing API.
 
-            Service = new ShopifyBillingService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
             {
-                Name = "Super Duper Charge",
-                Price = 123.45
+                Name = "Lorem Ipsum Plan",
+                Price = 123.45,
+                Test = true,
             }).Await().AsTask.Result.Id.Value;
         };
 
@@ -28,7 +29,7 @@ namespace ShopifySharp.Tests.ShopifyBillingService_Tests
             Charges = Service.ListAsync().Await().AsTask.Result;
         };
 
-        It should_retrieve_a_charge = () =>
+        It should_retrieve_a_list_of_charges = () =>
         {
             Charges.ShouldNotBeNull();
             Charges.Count().ShouldBeGreaterThanOrEqualTo(1);
@@ -36,10 +37,10 @@ namespace ShopifySharp.Tests.ShopifyBillingService_Tests
 
         Cleanup after = () =>
         {
-            Service.DeleteAsync(ChargeId).Await();
+            //Charges must have an active status before they can be deleted. Shopify will automatically delete an inactive charge after 48 hours.
         };
 
-        static ShopifyBillingService Service;
+        static ShopifyRecurringChargeService Service;
 
         static IEnumerable<ShopifyRecurringCharge> Charges;
 

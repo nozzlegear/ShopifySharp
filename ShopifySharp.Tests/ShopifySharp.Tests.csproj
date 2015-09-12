@@ -76,12 +76,11 @@
     <Compile Include="FalseToNullConverter Tests\When_serialzing_false.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
-    <Compile Include="ShopifyBillingService Tests\When_activating_a_charge.cs" />
-    <Compile Include="ShopifyBillingService Tests\When_creating_a_charge_with_no_trial.cs" />
-    <Compile Include="ShopifyBillingService Tests\When_creating_a_charge_with_trial.cs" />
-    <Compile Include="ShopifyBillingService Tests\When_deleting_a_charge.cs" />
-    <Compile Include="ShopifyBillingService Tests\When_listing_charges.cs" />
-    <Compile Include="ShopifyBillingService Tests\When_retrieving_a_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_deleting_a_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_listing_charges.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_retrieving_a_charge.cs" />
     <Compile Include="ShopifyCustomerService Tests\Test_Data\CustomerCreation.cs" />
     <Compile Include="ShopifyCustomerService Tests\When_counting_customers.cs" />
     <Compile Include="ShopifyCustomerService Tests\When_creating_a_customer.cs" />

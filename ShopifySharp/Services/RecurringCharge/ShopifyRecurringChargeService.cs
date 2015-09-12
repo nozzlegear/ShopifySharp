@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 namespace ShopifySharp
 {
     /// <summary>
-    /// A service for manipulating Shopify's ApplicationCharge and RecurringApplicationCharge API.
+    /// A service for manipulating Shopify's RecurringApplicationCharge API.
     /// </summary>
-    public class ShopifyBillingService:ShopifyService
+    public class ShopifyRecurringChargeService:ShopifyService
     {
         #region Constructor
 
         /// <summary>
-        /// Creates a new instance of <see cref="ShopifyBillingService" />.
+        /// Creates a new instance of <see cref="ShopifyRecurringChargeService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public ShopifyBillingService(string myShopifyUrl, string shopAccessToken): base (myShopifyUrl, shopAccessToken) { }
+        public ShopifyRecurringChargeService(string myShopifyUrl, string shopAccessToken): base (myShopifyUrl, shopAccessToken) { }
 
         #endregion
 
@@ -86,12 +86,11 @@ namespace ShopifySharp
         /// Activates a <see cref="ShopifyRecurringCharge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
-        /// <returns>The activated <see cref="ShopifyRecurringCharge"/>.</returns>
-        public async Task<ShopifyRecurringCharge> ActivateAsync(long id)
+        public async Task ActivateAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges/{0}/activate.json".FormatWith(id), Method.POST, "recurring_application_charge");
+            IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges/{0}/activate.json".FormatWith(id), Method.POST);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyRecurringCharge>(_RestClient, req);
+            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
 
         /// <summary>

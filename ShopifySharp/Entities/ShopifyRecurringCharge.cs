@@ -78,10 +78,10 @@ namespace ShopifySharp
         public int TrialDays { get; set; }
 
         /// <summary>
-        /// The date and time when the free trial ends. 
+        /// The date and time when the free trial ends. Will be null if the charge has not been accepted.
         /// </summary>
         [JsonProperty("trial_ends_on")]
-        public DateTime TrialEndsOn { get; set; }
+        public DateTime? TrialEndsOn { get; set; }
 
         /// <summary>
         /// The date and time when the recurring application charge was last updated.

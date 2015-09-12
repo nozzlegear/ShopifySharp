@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.FalseToNullConverter_Tests
 {
-    [Subject(typeof(ShopifyBillingService))]
+    [Subject(typeof(ShopifyRecurringChargeService))]
     class When_serializing_false
     {
         Establish context = () =>

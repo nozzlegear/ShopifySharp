@@ -5,49 +5,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Tests.ShopifyBillingService_Tests
+namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
-    [Subject(typeof(ShopifyBillingService))]
-    class When_deleting_a_charge
+    [Subject(typeof(ShopifyRecurringChargeService))]
+    class When_retrieving_a_charge
     {
         Establish context = () =>
         {
             // NOTE: Creating a charge will fail if the access token used is for a private app. 
             // Only real apps can use the Shopify billing API.
 
-            Service = new ShopifyBillingService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
             {
-                Name = "Super Duper Charge",
-                Price = 123.45
+                Name = "Lorem Ipsum Plan",
+                Price = 123.45,
+                Test = true,
             }).Await().AsTask.Result.Id.Value;
         };
 
         Because of = () =>
         {
-            try
-            {
-                Service.DeleteAsync(ChargeId).Await();
-            }
-            catch (Exception e)
-            {
-                Exception = e;
-            }
+            Charge = Service.GetAsync(ChargeId).Await().AsTask.Result;
         };
 
-        It should_delete_a_charge = () =>
+        It should_retrieve_a_charge = () =>
         {
-            Exception.ShouldBeNull();
+            Charge.ShouldNotBeNull();
         };
 
         Cleanup after = () =>
         {
-
+            Service.DeleteAsync(ChargeId).Await();
         };
 
-        static ShopifyBillingService Service;
+        static ShopifyRecurringChargeService Service;
 
-        static Exception Exception;
+        static ShopifyRecurringCharge Charge;
 
         static long ChargeId;
     }
