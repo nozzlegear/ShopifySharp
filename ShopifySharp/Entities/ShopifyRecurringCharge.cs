@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using ShopifySharp.Converters;
+using ShopifySharp.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("return_url")]
         public string ReturnUrl { get; set; }
+
+        /// <summary>
+        /// The status of the charged.
+        /// </summary>
+        [JsonProperty("status"), JsonConverter(typeof(ShopifyRecurringChargeConverter))]
+        public ShopifyRecurringChargeStatus Status { get; set; } = ShopifyRecurringChargeStatus.Pending;
 
         /// <summary>
         /// States whether or not the application charge is a test transaction.

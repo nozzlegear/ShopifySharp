@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.5.0
+	=====
+	- Added a ShopifyRecurringChargeStatus enum to the ShopifyRecurringCharge object.
+	
 	1.4.0
 	=====
 	- New feature: ShopifyRecurringChargeService. Create, retrieve, list, activate and delete recurring application charges.

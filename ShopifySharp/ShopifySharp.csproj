@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\FalseToNullConverter.cs" />
+    <Compile Include="Converters\ShopifyRecurringChargeConverter.cs" />
     <Compile Include="Converters\ShopifyDiscountCodeConverter.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
     <Compile Include="Enums\ShopifyOrderStatus.cs" />
     <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
+    <Compile Include="Enums\ShopifyRecurringChargeStatus.cs" />
     <Compile Include="Enums\ShopifyWebhookTopic.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
