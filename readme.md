@@ -34,7 +34,7 @@ If you just need an access token for a private Shopify app, or for running the t
 
 This is a convenience method that validates whether a given URL is a valid Shopify shop. It's great for ensuring you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is ideally used in conjuction with `ShopifyAuthorizationService.BuildAuthorizationUrl`.
 
-```
+```c#
 string urlFromUser = "https://example.myshopify.com";
 bool isValidUrl = await ShopifyAuthorizationService.IsValidMyShopifyUrl(urlFromUser).
 ```
@@ -43,7 +43,7 @@ bool isValidUrl = await ShopifyAuthorizationService.IsValidMyShopifyUrl(urlFromU
 
 Redirect your users to this authorization URL, where they'll be prompted to install your app to their Shopify store.
 
-```
+```c#
 //This is the user's store URL.
 string usersMyShopifyUrl = "https://example.myshopify.com";
 
@@ -68,7 +68,7 @@ Once you've sent a user to the authorization URL and they've confirmed your app 
 
 The access token you receive after authorizing should be stored in your database. You'll need it to access the shop's resources (e.g. orders, customers, fulfillments, etc.)
 
-```
+```c#
 //The querystring will have several parameters you need for authorization.
 string code = Request.QueryString["code"];
 string myShopifyUrl = Request.QueryString["shop"];
@@ -82,7 +82,7 @@ Any (non-webhook) request coming from Shopify will have a querystring paramater 
 
 Pass the entire querystring to `ShopifyAuthorizationService` to verify the request.
 
-```
+```c#
 NameValueCollection queryString = Request.QueryString;
 
 if(ShopifyAuthorizationService.IsAuthenticRequest(queryString, shopifySecretKey))
@@ -101,7 +101,7 @@ Any webhook request coming from Shopify will have a header called 'X-Shopify-Hma
 
 Pass the entire header collection and the request's input stream to `ShopifyAuthorizationService` to verify the request.
 
-```
+```c#
 NameValueCollection requestHeaders = Request.Headers;
 Stream inputStream = Request.InputStream;
 
@@ -117,7 +117,7 @@ else
 
 You can also pass in the request body as a string, rather than using the input stream. However, the request body string needs to be identical to the way it was sent from Shopify. If it has been modified, the verification will fail.
 
-```
+```c#
 NameValueCollection requestHeaders = Request.Headers;
 string requestBody = null;
 
@@ -151,7 +151,7 @@ I've put together a small guide called ***Shopify Billing 101: A Developer's Gui
 
 ### Create a recurring charge
 
-```
+```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
 var charge = new ShopifyRecurringCharge()
 {
@@ -166,7 +166,7 @@ charge = await service.CreateAsync(charge);
 
 ### Retrieve a recurring charge
 
-```
+```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
 
 var charge = await service.GetAsync(chargeId);
@@ -174,7 +174,7 @@ var charge = await service.GetAsync(chargeId);
 
 ### Listing recurring charges
 
-```
+```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
 
 IEnumerable<ShopifyRecurringCharge> charges = await service.ListAsync();
@@ -184,7 +184,7 @@ IEnumerable<ShopifyRecurringCharge> charges = await service.ListAsync();
 
 Creating a charge does not actually charge the shop owner or even start their free trial. You need to send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
-```
+```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
 
 await service.ActivateAsync(chargeId);
@@ -194,7 +194,7 @@ await service.ActivateAsync(chargeId);
 
 Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges after 48 hours pass without activation.
 
-```
+```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(chargeId);
@@ -204,7 +204,7 @@ await service.DeleteAsync(chargeId);
 
 ### Retrieving shop information
 
-```
+```c#
 var service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 
 var shop =  = await service.GetAsync();
@@ -214,7 +214,7 @@ var shop =  = await service.GetAsync();
 
 ### Creating a customer
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 var customer = new ShopifyCustomer()
 {
@@ -249,14 +249,14 @@ customer = await service.CreateAsync(customer);
 
 ### Retrieving a customer
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 var customer = await service.GetAsync(customerId);
 ```
 
 ### Retrieving a customer with certain fields
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 var customer = await service.GetAsync(customerId, "first_name,last_name,email"); 
 
@@ -265,7 +265,7 @@ var customer = await service.GetAsync(customerId, "first_name,last_name,email");
 
 ### Updating a customer
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 var customer = await service.GetAsync(customerId);
 
@@ -275,7 +275,7 @@ customer = await service.UpdateAsync(customer);
 
 ### Deleting a customer
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(customerId);
@@ -283,20 +283,21 @@ await service.DeleteAsync(customerId);
 
 ### Counting customers
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 int customerCount = await service.CountAsync();
 ```
 
 ### Listing customers
-```
+
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyCustomer> customers = await Service.ListAsync();
 ```
 
 ### Searching customers
 
-```
+```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyCustomer> customers = await Service.SearchAsync("Jane country:United States");
 
@@ -309,7 +310,7 @@ IEnumerable<ShopifyCustomer> customers = await Service.SearchAsync("Jane country
 
 ### Creating an order
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 var order = new ShopifyOrder()
 {
@@ -348,14 +349,14 @@ order = await service.CreateAsync(order);
 
 ### Retrieving an order
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 var order = await service.GetAsync(orderId);
 ```
 
 ### Updating an order
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 var order = await service.GetAsync(orderId);
 
@@ -365,7 +366,7 @@ order = await service.UpdateAsync(order);
 
 ### Deleting an order
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(orderId);
@@ -373,28 +374,28 @@ await service.DeleteAsync(orderId);
 
 ### Counting orders
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 int orderCount = await service.CountAsync();
 ```
 
 ### Listing orders
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyOrder> orders = await service.ListAsync();
 ```
 
 ### List orders for a certain customer
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyOrder> orders = await service.ListForCustomerAsync(customerId);
 ```
 
 ### Close an order
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 
 await service.CloseAsync(orderId);
@@ -402,7 +403,7 @@ await service.CloseAsync(orderId);
 
 ### Reopen a closed order
 
-```
+```c#
 var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 
 await service.OpenAsync(orderId);
@@ -412,7 +413,7 @@ await service.OpenAsync(orderId);
 
 ### Creating a webhook
 
-```
+```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 ShopifyWebhook hook = new ShopifyWebhook()
 {
@@ -429,14 +430,14 @@ hook = await service.CreateAsync(hook);
 
 ### Retrieving a webhook
 
-```
+```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 var webhook = await service.GetAsync(webhookId);
 ```
 
 ### Updating a webhook
 
-```
+```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 var webhook = await service.GetAsync(webhookId);
 
@@ -446,7 +447,7 @@ webhook = await service.UpdateAsync(webhook);
 
 ### Deleting a webhook
 
-```
+```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(webhookId);
@@ -454,14 +455,14 @@ await service.DeleteAsync(webhookId);
 
 ### Counting webhooks
 
-```
+```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 int webhookCount = await service.CountAsync();
 ```
 
 ### Listing webhooks
 
-```
+```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyWebhook> webhooks = await service.ListAsync();
 ```
