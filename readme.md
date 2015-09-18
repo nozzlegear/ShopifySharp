@@ -147,7 +147,7 @@ The Shopify billing API lets you create a recurring charge on a shop owner's acc
 
 I've put together a small guide called ***Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps***, and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course for building Shopify apps with C# and ASP.NET). 
 
-[Just head over here to get your free guide to the Shopify billing API.](http://eepurl.com/bwiP7T)
+[Just head over here to get your free guide to the Shopify billing API.](https://app.convertkit.com/landing_pages/3772)
 
 ### Create a recurring charge
 
