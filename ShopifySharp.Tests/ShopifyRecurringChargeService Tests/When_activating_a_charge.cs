@@ -22,6 +22,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
                 Price = 123.45,
                 Test = true,
                 TrialDays = 21,
+                ReturnUrl = "http://localhost:5445/shopify/chargeresult/?attemptedChargeId=" + Guid.NewGuid().ToString()
             }).Await().AsTask.Result;
         };
 

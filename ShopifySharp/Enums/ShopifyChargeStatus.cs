@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
-    // TODO: Merge this enum with ShopifyChargeStatus in v2.0
-
     /// <summary>
-    /// An enum that indicates the status of a <see cref="ShopifyRecurringCharge"/> object.
+    /// An enum that indicates the status of a <see cref="ShopifyCharge"/> object.
     /// </summary>
-    [JsonConverter(typeof(ShopifyRecurringChargeConverter))]
-    public enum ShopifyRecurringChargeStatus
+    [JsonConverter(typeof(ShopifyChargeConverter))]
+    public enum ShopifyChargeStatus
     {
         /// <summary>
         /// The charge is pending and has not been accepted or declined by the user.

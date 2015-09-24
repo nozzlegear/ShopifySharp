@@ -10,50 +10,38 @@ using System.Threading.Tasks;
 namespace ShopifySharp
 {
     /// <summary>
-    /// An object representing a recurring application charge (i.e. a monthly subscription to your Shopify application).
+    /// An object representing an application charge.
     /// </summary>
-    public class ShopifyRecurringCharge: ShopifyObject
+    public class ShopifyCharge : ShopifyObject
     {
         /// <summary>
-        /// The date and time when the customer activated the <see cref="ShopifyRecurringCharge"/>. Will be null if the charge
+        /// The date and time when the customer activated the <see cref="ShopifyCharge"/>. Will be null if the charge
         /// has not been activated.
         /// </summary>
+        /// <remarks>According to Shopify's API docs, this property doesn't exist on <see cref="ShopifyCharge"/> objects. Will test.</remarks>
         [JsonProperty("activated_on")]
         public DateTime? ActivatedOn { get; set; }
 
         /// <summary>
-        /// The date and time when the customer will be billed. Will be null if the charge has not been activated by the customer.
-        /// </summary>
-        [JsonProperty("billing_on")]
-        public DateTime? BillingOn { get; set; }
-
-        /// <summary>
-        /// The date and time when the customer cancelled their recurring application charge. Will be null if the charge has not
-        /// been cancelled.
-        /// </summary>
-        [JsonProperty("cancelled_on")]
-        public DateTime? CancelledOn { get; set; }
-
-        /// <summary>
-        /// The URL that the customer should be sent to, to accept or decline the recurring application charge.
+        /// The URL that the customer should be sent to, to accept or decline the application charge.
         /// </summary>
         [JsonProperty("confirmation_url")]
         public string ConfirmationUrl { get; set; }
 
         /// <summary>
-        /// The date and time when the recurring application charge was created.
+        /// The date and time when the application charge was created.
         /// </summary>
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// The name of the recurring application charge.
+        /// The name of the application charge.
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// The price of the recurring application charge.
+        /// The price of the application charge.
         /// </summary>
         /// <remarks>Shopify returns this as a string, but JSON.net should be able to convert it to a double.</remarks>
         [JsonProperty("price")]
@@ -69,7 +57,7 @@ namespace ShopifySharp
         /// The status of the charged.
         /// </summary>
         [JsonProperty("status"), JsonConverter(typeof(ShopifyChargeConverter))]
-        public ShopifyRecurringChargeStatus Status { get; set; } = ShopifyRecurringChargeStatus.Pending;
+        public ShopifyChargeStatus Status { get; set; } = ShopifyChargeStatus.Pending;
 
         /// <summary>
         /// States whether or not the application charge is a test transaction.
@@ -77,18 +65,6 @@ namespace ShopifySharp
         /// <remarks>Valid values are 'true' or null. Needs a special converter to convert null to false and vice-versa.</remarks>
         [JsonProperty("test"), JsonConverter(typeof(FalseToNullConverter))]
         public bool Test { get; set; }
-
-        /// <summary>
-        /// Number of days that the customer is eligible for a free trial.
-        /// </summary>
-        [JsonProperty("trial_days")]
-        public int TrialDays { get; set; }
-
-        /// <summary>
-        /// The date and time when the free trial ends. Will be null if the charge has not been accepted.
-        /// </summary>
-        [JsonProperty("trial_ends_on")]
-        public DateTime? TrialEndsOn { get; set; }
 
         /// <summary>
         /// The date and time when the recurring application charge was last updated.
