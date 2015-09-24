@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's products.
         /// </summary>
         /// <returns>The count of all products for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyOrderFilterOptions options = null)
+        public async Task<int> CountAsync(ShopifyProductFilterOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("products/count.json", Method.GET);
 
@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyProduct>> ListAsync(ShopifyOrderFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyProduct>> ListAsync(ShopifyProductFilterOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("products.json", Method.GET, "products");
 

@@ -16,21 +16,82 @@ namespace ShopifySharp
         public IEnumerable<long> Ids { get; set; }
 
         /// <summary>
-        /// The status of orders to retrieve. Default is <see cref="ShopifyOrderStatus.Any"/>.
+        /// Restrict results to after the specified ID.
         /// </summary>
-        [JsonProperty("status")]
-        public ShopifyOrderStatus? Status { get; set; } = ShopifyOrderStatus.Any;
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; } = null;
 
         /// <summary>
-        /// The financial status of orders to retrieve. Leave this null to retrieve orders with any financial status.
+        /// Filter by product title.
         /// </summary>
-        [JsonProperty("financial_status")]
-        public ShopifyOrderFinancialStatus? FinancialStatus { get; set; }
+        [JsonProperty("title")]
+        public long? Title { get; set; } = null;
 
         /// <summary>
-        /// The fulfillment status of orders to retrieve. Leave this null to retrieve orders with any fulfillment status.
+        /// Filter by product vendor.
         /// </summary>
-        [JsonProperty("fulfillment_status")]
-        public ShopifyFulfillmentStatus? FulfillmentStatus { get; set; }
+        [JsonProperty("vendor")]
+        public long? Vendor { get; set; } = null;
+
+        /// <summary>
+        /// Filter by product handle.
+        /// </summary>
+        [JsonProperty("handle")]
+        public long? Handle { get; set; } = null;
+
+        /// <summary>
+        /// Filter by product type.
+        /// </summary>
+        [JsonProperty("product_type")]
+        public long? ProductType { get; set; } = null;
+
+        /// <summary>
+        /// Filter by collection id.
+        /// </summary>
+        [JsonProperty("collecion_id")]
+        public long? CollectionId { get; set; } = null;
+
+        /// <summary>
+        /// Show products created after date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("created_at_min")]
+        public DateTime? CreatedAtMin { get; set; } = null;
+
+        /// <summary>
+        /// Show products created before date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("created_at_max")]
+        public DateTime? CreateAtMax { get; set; } = null;
+
+        /// <summary>
+        /// Show products last updated after date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("updated_at_min")]
+        public DateTime? UpdateAtMin { get; set; } = null;
+
+        /// <summary>
+        /// Show products last updated before date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("updated_at_max")]
+        public DateTime? UpdateAtMax { get; set; } = null;
+
+        /// <summary>
+        /// Show products published after date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("published_at_min")]
+        public DateTime? PublishedAtMin { get; set; } = null;
+
+        /// <summary>
+        /// Show products published before date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("published_at_max")]
+        public DateTime? PublishedAtMax { get; set; } = null;
+
+        /// <summary>
+        /// Puublished Status.
+        /// published - Show only published products, unpublished - Show only unpublished products, any - Show all products(default)
+        /// </summary>
+        [JsonProperty("published_status")]
+        public string PublishedStatus { get; set; } = null;
     }
 }
