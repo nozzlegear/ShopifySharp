@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace ShopifySharp
+namespace ShopifySharp.Enums
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ShopifyProductFulfillmentService

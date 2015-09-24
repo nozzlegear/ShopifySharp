@@ -66,10 +66,10 @@
     <Compile Include="Entities\ShopifyLineItem.cs" />
     <Compile Include="Entities\ShopifyOrder.cs" />
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
-    <Compile Include="Entities\ShopifyProductFulfillmentService.cs" />
+    <Compile Include="Enums\ShopifyProductFulfillmentService.cs" />
     <Compile Include="Entities\ShopifyProductImage.cs" />
-    <Compile Include="Entities\ShopifyProductInventoryManagement.cs" />
-    <Compile Include="Entities\ShopifyProductInventoryPolicy.cs" />
+    <Compile Include="Enums\ShopifyProductInventoryManagement.cs" />
+    <Compile Include="Enums\ShopifyProductInventoryPolicy.cs" />
     <Compile Include="Entities\ShopifyProductOption.cs" />
     <Compile Include="Entities\ShopifyProductVariant.cs" />
     <Compile Include="Entities\ShopifyRecurringCharge.cs" />
