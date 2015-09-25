@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
-    // TODO: Merge this enum with ShopifyChargeStatus in v2.0
-
     /// <summary>
-    /// An enum that indicates the status of a <see cref="ShopifyRecurringCharge"/> object.
+    /// An enum that indicates the status of a <see cref="ShopifyCharge"/> object.
     /// </summary>
-    [JsonConverter(typeof(ShopifyRecurringChargeConverter))]
-    public enum ShopifyRecurringChargeStatus
+    [JsonConverter(typeof(ShopifyChargeConverter))]
+    public enum ShopifyChargeStatus
     {
         /// <summary>
         /// The charge is pending and has not been accepted or declined by the user.
@@ -36,22 +34,10 @@ namespace ShopifySharp.Enums
         Active,
 
         /// <summary>
-        /// The charge has been cancelled.
-        /// </summary>
-        [EnumMember(Value ="cancelled")]
-        Cancelled,
-
-        /// <summary>
         /// The charge has been declined by the user and cannot be activated.
         /// </summary>
         [EnumMember(Value = "declined")]
         Declined,
-
-        /// <summary>
-        /// The charge has expired.
-        /// </summary>
-        [EnumMember(Value = "expired")]
-        Expired,
 
         /// <summary>
         /// The status of the charge is unknown. This is an invalid value. If possible, submit a 

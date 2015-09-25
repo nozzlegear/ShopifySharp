@@ -8,31 +8,33 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
     [Subject(typeof(ShopifyRecurringChargeService))]
-    class When_listing_charges
+    class When_creating_a_recurring_charge
     {
         Establish context = () =>
         {
-            // NOTE: Creating a charge will fail if the access token used is for a private app. 
-            // Only real apps can use the Shopify billing API.
-
             Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
+            Charge = new ShopifyRecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
                 Price = 123.45,
-                Test = true,
-            }).Await().AsTask.Result.Id.Value;
+                TrialDays = 21,
+                Test = true
+            };
         };
 
         Because of = () =>
         {
-            Charges = Service.ListAsync().Await().AsTask.Result;
+            // NOTE: Creating a charge will fail if the access token used is for a private app. 
+            // Only real apps can use the Shopify billing API.
+
+            Charge = Service.CreateAsync(Charge).Await().AsTask.Result;
         };
 
-        It should_retrieve_a_list_of_charges = () =>
+        It should_create_a_recurring_charge = () =>
         {
-            Charges.ShouldNotBeNull();
-            Charges.Count().ShouldBeGreaterThanOrEqualTo(1);
+            Charge.ConfirmationUrl.ShouldNotBeNull();
+            Charge.Price.ShouldEqual(123.45);
+            Charge.Test.ShouldBeTrue();
         };
 
         Cleanup after = () =>
@@ -42,8 +44,6 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 
         static ShopifyRecurringChargeService Service;
 
-        static IEnumerable<ShopifyRecurringCharge> Charges;
-
-        static long ChargeId;
+        static ShopifyRecurringCharge Charge;
     }
 }

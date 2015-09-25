@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
+namespace ShopifySharp.Tests.ShopifyChargeService_Tests
 {
-    [Subject(typeof(ShopifyRecurringChargeService))]
+    [Subject(typeof(ShopifyChargeService))]
     class When_retrieving_a_charge
     {
         Establish context = () =>
@@ -15,10 +15,10 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             // NOTE: Creating a charge will fail if the access token used is for a private app. 
             // Only real apps can use the Shopify billing API.
 
-            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
+            Service = new ShopifyChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
+            ChargeId = Service.CreateAsync(new ShopifyCharge()
             {
-                Name = "Lorem Ipsum Plan",
+                Name = "Lorem Ipsum Single Charge",
                 Price = 123.45,
                 Test = true,
             }).Await().AsTask.Result.Id.Value;
@@ -36,12 +36,12 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 
         Cleanup after = () =>
         {
-            Service.DeleteAsync(ChargeId).Await();
+            //Charges cannot be deleted.
         };
 
-        static ShopifyRecurringChargeService Service;
+        static ShopifyChargeService Service;
 
-        static ShopifyRecurringCharge Charge;
+        static ShopifyCharge Charge;
 
         static long ChargeId;
     }

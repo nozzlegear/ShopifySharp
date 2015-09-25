@@ -25,7 +25,7 @@ namespace ShopifySharp
 
         #endregion
 
-        #region Public, non-static RecurringCharge methods
+        #region Public, non-static methods
 
         /// <summary>
         /// Creates a <see cref="ShopifyRecurringCharge"/>. 
@@ -103,10 +103,6 @@ namespace ShopifySharp
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
-
-        #endregion
-
-        #region Public, non-static SingleCharge methods
 
         #endregion
     }
