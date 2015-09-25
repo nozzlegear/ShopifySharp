@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
     [Subject(typeof(ShopifyRecurringChargeService))]
-    class When_activating_a_charge
+    class When_activating_a_recurring_charge
     {
         Establish context = () =>
         {
@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             Charge = Service.GetAsync(Charge.Id.Value).Await().AsTask.Result;
         };
 
-        It should_activate_a_charge = () =>
+        It should_activate_a_recurring_charge = () =>
         {
             // NOTE: This test will require you to set a break point after creating the charge but before activating it, 
             // grab the confirmation url and manually accept it, then continue the test.

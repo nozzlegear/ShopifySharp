@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
     [Subject(typeof(ShopifyRecurringChargeService))]
-    class When_listing_charges
+    class When_deleting_a_recurring_charge
     {
         Establish context = () =>
         {
@@ -16,34 +16,44 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             // Only real apps can use the Shopify billing API.
 
             Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
+            Charge = Service.CreateAsync(new ShopifyRecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
                 Price = 123.45,
                 Test = true,
-            }).Await().AsTask.Result.Id.Value;
+            }).Await().AsTask.Result;
         };
 
         Because of = () =>
         {
-            Charges = Service.ListAsync().Await().AsTask.Result;
+            try
+            {
+                Service.ActivateAsync(Charge.Id.Value).Await();
+                Service.DeleteAsync(Charge.Id.Value).Await();
+            }
+            catch (Exception e)
+            {
+                Exception = e;
+            }
         };
 
-        It should_retrieve_a_list_of_charges = () =>
+        It should_delete_a_recurring_charge = () =>
         {
-            Charges.ShouldNotBeNull();
-            Charges.Count().ShouldBeGreaterThanOrEqualTo(1);
+            // A charge cannot be deleted unless it has been activated. This test will fail unless you manually 
+            // accept the charge, then activate it, then let the test delete it.
+
+            Exception.ShouldBeNull();
         };
 
         Cleanup after = () =>
         {
-            //Charges must have an active status before they can be deleted. Shopify will automatically delete an inactive charge after 48 hours.
+
         };
 
         static ShopifyRecurringChargeService Service;
 
-        static IEnumerable<ShopifyRecurringCharge> Charges;
+        static Exception Exception;
 
-        static long ChargeId;
+        static ShopifyRecurringCharge Charge;
     }
 }

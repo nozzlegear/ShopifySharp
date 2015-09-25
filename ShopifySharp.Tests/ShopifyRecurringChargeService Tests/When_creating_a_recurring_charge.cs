@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
     [Subject(typeof(ShopifyRecurringChargeService))]
-    class When_creating_a_charge
+    class When_creating_a_recurring_charge
     {
         Establish context = () =>
         {
@@ -30,7 +30,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             Charge = Service.CreateAsync(Charge).Await().AsTask.Result;
         };
 
-        It should_create_a_charge = () =>
+        It should_create_a_recurring_charge = () =>
         {
             Charge.ConfirmationUrl.ShouldNotBeNull();
             Charge.Price.ShouldEqual(123.45);

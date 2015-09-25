@@ -19,10 +19,14 @@ namespace ShopifySharp.Converters
     {
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (string.IsNullOrEmpty(reader.Value?.ToString()))
-                return ShopifyRecurringChargeStatus.Unknown;
+            ShopifyRecurringChargeStatus parsed;
 
-            return base.ReadJson(reader, objectType, existingValue, serializer);
+            if (!Enum.TryParse(reader.Value?.ToString() ?? "", true, out parsed))
+            {
+                return ShopifyRecurringChargeStatus.Unknown;
+            }
+
+            return parsed;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

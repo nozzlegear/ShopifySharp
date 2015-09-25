@@ -15,14 +15,6 @@ namespace ShopifySharp
     public class ShopifyCharge : ShopifyObject
     {
         /// <summary>
-        /// The date and time when the customer activated the <see cref="ShopifyCharge"/>. Will be null if the charge
-        /// has not been activated.
-        /// </summary>
-        /// <remarks>According to Shopify's API docs, this property doesn't exist on <see cref="ShopifyCharge"/> objects. Will test.</remarks>
-        [JsonProperty("activated_on")]
-        public DateTime? ActivatedOn { get; set; }
-
-        /// <summary>
         /// The URL that the customer should be sent to, to accept or decline the application charge.
         /// </summary>
         [JsonProperty("confirmation_url")]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
     [Subject(typeof(ShopifyRecurringChargeService))]
-    class When_deleting_a_charge
+    class When_retrieving_a_recurring_charge
     {
         Establish context = () =>
         {
@@ -16,44 +16,33 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             // Only real apps can use the Shopify billing API.
 
             Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            Charge = Service.CreateAsync(new ShopifyRecurringCharge()
+            ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
                 Price = 123.45,
                 Test = true,
-            }).Await().AsTask.Result;
+            }).Await().AsTask.Result.Id.Value;
         };
 
         Because of = () =>
         {
-            try
-            {
-                Service.ActivateAsync(Charge.Id.Value).Await();
-                Service.DeleteAsync(Charge.Id.Value).Await();
-            }
-            catch (Exception e)
-            {
-                Exception = e;
-            }
+            Charge = Service.GetAsync(ChargeId).Await().AsTask.Result;
         };
 
-        It should_delete_a_charge = () =>
+        It should_retrieve_a_recurring_charge = () =>
         {
-            // A charge cannot be deleted unless it has been activated. This test will fail unless you manually 
-            // accept the charge, then activate it, then let the test delete it.
-
-            Exception.ShouldBeNull();
+            Charge.ShouldNotBeNull();
         };
 
         Cleanup after = () =>
         {
-
+            Service.DeleteAsync(ChargeId).Await();
         };
 
         static ShopifyRecurringChargeService Service;
 
-        static Exception Exception;
-
         static ShopifyRecurringCharge Charge;
+
+        static long ChargeId;
     }
 }

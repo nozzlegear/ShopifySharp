@@ -192,12 +192,56 @@ await service.ActivateAsync(chargeId);
 
 ### Deleting a charge
 
-Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges after 48 hours pass without activation.
+Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges after 48 hours pass without activation. 
 
 ```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(chargeId);
+```
+
+## One-time application charges
+
+Just like with the above recurring charges, the Shopify billing API lets you create a one-time application charge on the shop owner's account. One-time charges cannot be deleted.
+
+### Create a one-time charge
+
+```c#
+var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+var charge = new ShopifyCharge()
+{
+    Name = "Lorem Ipsum Charge",
+    Price = 12.34,
+    Test = true, //Marks this charge as a test, meaning it won't charge the shop owner.
+}
+
+charge = await service.CreateAsync(charge);
+```
+
+### Retrieve a one-time charge
+
+```c#
+var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+
+var charge = await service.GetAsync(chargeId);
+```
+
+### Listing one-time charges
+
+```c#
+var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+
+IEnumerable<ShopifyCharge> charges = await service.ListAsync();
+```
+
+### Activating a charge
+
+Just like recurring charges, creating a one-time charge does not actually charge the shop owner. You need to send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
+
+```c#
+var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
+
+await service.ActivateAsync(chargeId);
 ```
 
 ## Shops

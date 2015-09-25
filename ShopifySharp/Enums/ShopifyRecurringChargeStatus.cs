@@ -36,10 +36,22 @@ namespace ShopifySharp.Enums
         Active,
 
         /// <summary>
+        /// The charge has been cancelled.
+        /// </summary>
+        [EnumMember(Value ="cancelled")]
+        Cancelled,
+
+        /// <summary>
         /// The charge has been declined by the user and cannot be activated.
         /// </summary>
         [EnumMember(Value = "declined")]
         Declined,
+
+        /// <summary>
+        /// The charge has expired.
+        /// </summary>
+        [EnumMember(Value = "expired")]
+        Expired,
 
         /// <summary>
         /// The status of the charge is unknown. This is an invalid value. If possible, submit a 
