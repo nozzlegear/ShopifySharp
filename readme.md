@@ -10,7 +10,7 @@ ShopifySharp is a .NET library that enables you to authenticate and make API cal
 
 Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, this library is brand new. It currently only supports **OAuth authentication**, the **billing** API, the **Customers** resource, the **Orders** resource, the **Webhooks** resource, and the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
+With that said, this library is brand new. It currently only supports **OAuth authentication**, the **billing** API, the **Customers** resource, the **Orders** resource, the **Webhooks** resource, the **Script Tags** resource, and the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
 
@@ -509,6 +509,70 @@ int webhookCount = await service.CountAsync();
 ```c#
 var service = new ShopifyWebhookService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyWebhook> webhooks = await service.ListAsync();
+```
+
+## Script Tags
+
+Script tags let you add remote javascript tags that are loaded into the pages of a shop's storefront, letting you dynamically change the functionality of their shop without manually editing their store's template.
+
+### Creating a script tag
+
+```c#
+var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
+var tag = new ShopifyScriptTag()
+{
+    Event = ShopifyScriptTagEvent.Onload,
+    Src  = "https://example.com/my-javascript-file.js"
+}
+
+tag = await service.CreateAsync(tag);
+```
+
+### Retrieving a script tag
+
+```c#
+var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
+var tag = await service.GetAsync(tagId);
+```
+
+### Updating a script tag
+
+```c#
+var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
+var tag = await service.GetAsync(tagId);
+
+tag.Src = "https://example.com/my-new-javascript-file.js";
+tag = await service.UpdateAsync(tag);
+```
+
+### Deleting a script tag
+
+```c#
+var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(tagId);
+```
+
+### Counting script tags
+
+```c#
+var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
+int tagCount = await service.CountAsync();
+
+//Optionally filter the count to only those tags with a specific Src
+int filteredTagCount = await service.CountAsync("https://example.com/my-filtered-url.js");
+```
+
+### Listing script tags
+
+```c#
+var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
+var tags = await service.ListAsync();
+
+//Optionally filter the list to only those tags with a specific Src
+var filteredTags = await service.ListAsync(new ShopifyScriptTagListOptions() {
+    Src = FilteredSrc
+});
 ```
 
 # Tests
