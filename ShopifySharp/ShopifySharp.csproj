@@ -69,6 +69,7 @@
     <Compile Include="Entities\ShopifyOrder.cs" />
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
     <Compile Include="Entities\ShopifyRecurringCharge.cs" />
+    <Compile Include="Entities\ShopifyScriptTag.cs" />
     <Compile Include="Entities\ShopifyShippingLine.cs" />
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
     <Compile Include="Enums\ShopifyChargeStatus.cs" />
     <Compile Include="Enums\ShopifyRecurringChargeStatus.cs" />
+    <Compile Include="Enums\ShopifyScriptTagEvent.cs" />
     <Compile Include="Enums\ShopifyWebhookTopic.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Services\Order\ShopifyOrderFilterOptions.cs" />
     <Compile Include="Services\Order\ShopifyOrderService.cs" />
     <Compile Include="Enums\ShopifyProcessingMethod.cs" />
+    <Compile Include="Services\ScriptTag\ShopifyScriptTagListOptions.cs" />
+    <Compile Include="Services\ScriptTag\ShopifyScriptTagService.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
     <Compile Include="Services\ShopifyService.cs" />

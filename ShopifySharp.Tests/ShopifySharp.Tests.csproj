@@ -107,6 +107,12 @@
     <Compile Include="ShopifyOrderService Tests\When_opening_an_order.cs" />
     <Compile Include="ShopifyOrderService Tests\When_updating_an_order.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_validating_shop_url.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_counting_script_tags.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_deleting_a_script_tag.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_creating_a_script_tag.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_getting_a_script_tag.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_listing_script_tags.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_updating_a_script_tag.cs" />
     <Compile Include="ShopifyWebhookService Tests\Test_Data\WebhookCreation.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks_with_a_filter.cs" />
@@ -129,6 +135,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Playlists\Authorization.playlist" />
+    <None Include="Playlists\Charges.playlist" />
+    <None Include="Playlists\Customers.playlist" />
+    <None Include="Playlists\FalseToNullConverter.playlist" />
+    <None Include="Playlists\Orders.playlist" />
+    <None Include="Playlists\RecurringCharges.playlist" />
+    <None Include="Playlists\Webhooks.playlist" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj">
