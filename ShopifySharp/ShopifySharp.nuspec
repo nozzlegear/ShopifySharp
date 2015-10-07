@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  1.6.1
+  =====
+  - Bugfix: ShopifySharp.Enums.ShopifyProcessingMethod did not contain 'free' value, threw exception on deserialization. Fixed by adding 'free' value and a converter that will set any future unknown values to 'Unknown'. Next release will apply this to all enums, owing to the fact that Shopify does not document all valid enums, making it impossible to include them all without trial and error.
+  
 	1.6.0
 	=====
 	- New feature: ShopifyChargeService. Create, retrieve, list and activate a one-time application charge.

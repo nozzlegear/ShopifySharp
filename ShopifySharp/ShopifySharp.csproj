@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Converters\FalseToNullConverter.cs" />
     <Compile Include="Converters\ShopifyChargeConverter.cs" />
+    <Compile Include="Converters\UnknownEnumConverter.cs" />
     <Compile Include="Converters\ShopifyRecurringChargeConverter.cs" />
     <Compile Include="Converters\ShopifyDiscountCodeConverter.cs" />
     <Compile Include="Entities\ShopifyCharge.cs" />

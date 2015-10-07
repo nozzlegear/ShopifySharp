@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Converters;
+using ShopifySharp.Converters;
 
 namespace ShopifySharp.Enums
 {
     /// <summary>
     /// The type of payment processing method
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(UnknownEnumConverter<ShopifyProcessingMethod>))]
     public enum ShopifyProcessingMethod
     {
         [EnumMember(Value = "checkout")]
@@ -30,7 +31,13 @@ namespace ShopifySharp.Enums
         [EnumMember(Value = "express")]
         Express,
 
+        [EnumMember(Value = "free")]
+        Free,
+
         [EnumMember(Value = "none")]
-        None
+        None,
+
+        [EnumMember(Value = "unknown")]
+        Unknown,
     }
 }
