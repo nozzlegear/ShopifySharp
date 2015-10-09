@@ -255,7 +255,7 @@ namespace ShopifySharp
         /// The sum of all the weights of the line items in the order, in grams.
         /// </summary>
         [JsonProperty("total_weight")]
-        public int TotalWeight { get; set; }
+        public int? TotalWeight { get; set; }
 
         /// <summary>
         /// The date and time when the order was last modified.
