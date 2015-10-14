@@ -63,6 +63,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the customer's orders.
         /// </summary>
+        /// <param name="customerId">The id of the customer to list orders for.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
         public async Task<IEnumerable<ShopifyOrder>> ListForCustomerAsync(long customerId, ShopifyOrderFilterOptions options = null)

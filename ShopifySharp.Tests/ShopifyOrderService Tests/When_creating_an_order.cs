@@ -26,6 +26,7 @@ namespace ShopifySharp.Tests
         {
             Order.ShouldNotBeNull();
             Order.Id.HasValue.ShouldBeTrue();
+            Order.ContactEmail.ShouldNotBeNull();
         };
 
         Cleanup after = () =>

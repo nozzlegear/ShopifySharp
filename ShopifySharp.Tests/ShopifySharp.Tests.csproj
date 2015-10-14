@@ -134,7 +134,9 @@
     <None Include="AppSettings.private.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Playlists\Authorization.playlist" />
     <None Include="Playlists\Charges.playlist" />
     <None Include="Playlists\Customers.playlist" />
