@@ -9,21 +9,19 @@ using ShopifySharp.Enums;
 
 namespace ShopifySharp.Converters
 {
-    // TODO: Merge this converter with ShopifyChargeConverter in v2.0
-
     /// <summary>
-    /// A custom enum converter for <see cref="ShopifyRecurringChargeStatus"/> enums which sets the default value 
-    /// to <see cref="ShopifyRecurringChargeStatus.Unknown"/> when the value is null or does not exist.
+    /// A custom enum converter for <see cref="ShopifyChargeStatus"/> enums which sets the default value 
+    /// to <see cref="ShopifyChargeStatus.Unknown"/> when the value is null or does not exist.
     /// </summary>
-    public class ShopifyRecurringChargeConverter : StringEnumConverter
+    public class ShopifyChargeConverter : StringEnumConverter
     {
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            ShopifyRecurringChargeStatus parsed;
+            ShopifyChargeStatus parsed;
 
             if (!Enum.TryParse(reader.Value?.ToString() ?? "", true, out parsed))
             {
-                return ShopifyRecurringChargeStatus.Unknown;
+                return ShopifyChargeStatus.Unknown;
             }
 
             return parsed;
@@ -32,8 +30,8 @@ namespace ShopifySharp.Converters
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value == null || 
-                !Enum.IsDefined(typeof(ShopifyRecurringChargeStatus), value) || 
-                (Enum.IsDefined(typeof(ShopifyRecurringChargeStatus), value) && ((ShopifyRecurringChargeStatus)value) == ShopifyRecurringChargeStatus.Unknown))
+                !Enum.IsDefined(typeof(ShopifyChargeStatus), value) || 
+                (Enum.IsDefined(typeof(ShopifyChargeStatus), value) && ((ShopifyChargeStatus)value) == ShopifyChargeStatus.Unknown))
             {
                 writer.WriteNull();
             }

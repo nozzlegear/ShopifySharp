@@ -11,6 +11,28 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.7.3
+	=====
+	- New property: ShopifyOrder.ContactEmail. See this announcement thread for important information about ShopifyOrder.ContactEmail and ShopifyOrder.Email: https://ecommerce.shopify.com/c/api-announcements/t/changes-to-order-email-address-294544
+	
+	1.7.2
+	=====
+	- Bugfix: ShopifyOrder.TotalWeight can be null. Changed from "int" to "int?".
+      
+	1.7.1
+	=====
+	- Bugfix: ShopifySharp.Enums.ShopifyProcessingMethod did not contain 'free' value, threw exception on deserialization. Fixed by adding 'free' value and a converter that will set any future unknown values to 'Unknown'. Next release will apply this to all enums, owing to the fact that Shopify does not document all valid enums, making it impossible to include them all without trial and error.
+
+	1.7.0
+	=====
+	- New feature: ShopifyScriptTagService. Script tags let you add remote javascript tags that are loaded into the page's of a shop's storefront, letting you dynamically change the functionality of their shop without editing the store's template.
+
+	1.6.0
+	=====
+	- New feature: ShopifyChargeService. Create, retrieve, list and activate a one-time application charge.
+	- Added "expired" and "cancelled" to ShopifyRecurringChargeStatus enum.
+	- Bugfix: ShopifyRecurringChargeConverter did not properly convert unknown enums to ShopifyRecurringChargeStatus.Unknown. Caused exceptions when receiving charges with previously undocumented "expired" and "cancelled" statuses.
+	
 	1.5.0
 	=====
 	- Added a ShopifyRecurringChargeStatus enum to the ShopifyRecurringCharge object.

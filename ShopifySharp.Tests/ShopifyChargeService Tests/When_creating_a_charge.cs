@@ -5,19 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
+namespace ShopifySharp.Tests.ShopifyChargeService_Tests
 {
-    [Subject(typeof(ShopifyRecurringChargeService))]
+    [Subject(typeof(ShopifyChargeService))]
     class When_creating_a_charge
     {
         Establish context = () =>
         {
-            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            Charge = new ShopifyRecurringCharge()
+            Service = new ShopifyChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
+            Charge = new ShopifyCharge()
             {
-                Name = "Lorem Ipsum Plan",
+                Name = "Lorem Ipsum Single Charge",
                 Price = 123.45,
-                TrialDays = 21,
                 Test = true
             };
         };
@@ -39,11 +38,11 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 
         Cleanup after = () =>
         {
-            //Charges must have an active status before they can be deleted. Shopify will automatically delete an inactive charge after 48 hours.
+            //Charges cannot be deleted.
         };
 
-        static ShopifyRecurringChargeService Service;
+        static ShopifyChargeService Service;
 
-        static ShopifyRecurringCharge Charge;
+        static ShopifyCharge Charge;
     }
 }

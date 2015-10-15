@@ -76,11 +76,15 @@
     <Compile Include="FalseToNullConverter Tests\When_serialzing_false.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
-    <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_charge.cs" />
-    <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_charge.cs" />
-    <Compile Include="ShopifyRecurringChargeService Tests\When_deleting_a_charge.cs" />
-    <Compile Include="ShopifyRecurringChargeService Tests\When_listing_charges.cs" />
-    <Compile Include="ShopifyRecurringChargeService Tests\When_retrieving_a_charge.cs" />
+    <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
+    <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
+    <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />
+    <Compile Include="ShopifyChargeService Tests\When_retrieving_a_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_recurring_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_recurring_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_deleting_a_recurring_charge.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_listing_recurring_charges.cs" />
+    <Compile Include="ShopifyRecurringChargeService Tests\When_retrieving_a_recurring_charge.cs" />
     <Compile Include="ShopifyCustomerService Tests\Test_Data\CustomerCreation.cs" />
     <Compile Include="ShopifyCustomerService Tests\When_counting_customers.cs" />
     <Compile Include="ShopifyCustomerService Tests\When_creating_a_customer.cs" />
@@ -103,6 +107,12 @@
     <Compile Include="ShopifyOrderService Tests\When_opening_an_order.cs" />
     <Compile Include="ShopifyOrderService Tests\When_updating_an_order.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_validating_shop_url.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_counting_script_tags.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_deleting_a_script_tag.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_creating_a_script_tag.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_getting_a_script_tag.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_listing_script_tags.cs" />
+    <Compile Include="ShopifyScriptTagService Tests\When_updating_a_script_tag.cs" />
     <Compile Include="ShopifyWebhookService Tests\Test_Data\WebhookCreation.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks_with_a_filter.cs" />
@@ -112,6 +122,8 @@
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks_with_a_filter.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_updating_a_webhook.cs" />
+    <Compile Include="UnknownEnumConverter Tests\TestObject.cs" />
+    <Compile Include="UnknownEnumConverter Tests\When_using_unknownenumconverter.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService Tests\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -122,7 +134,16 @@
     <None Include="AppSettings.private.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Playlists\Authorization.playlist" />
+    <None Include="Playlists\Charges.playlist" />
+    <None Include="Playlists\Customers.playlist" />
+    <None Include="Playlists\FalseToNullConverter.playlist" />
+    <None Include="Playlists\Orders.playlist" />
+    <None Include="Playlists\RecurringCharges.playlist" />
+    <None Include="Playlists\Webhooks.playlist" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj">

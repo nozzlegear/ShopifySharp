@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
     [Subject(typeof(ShopifyRecurringChargeService))]
-    class When_deleting_a_charge
+    class When_deleting_a_recurring_charge
     {
         Establish context = () =>
         {
@@ -37,7 +37,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             }
         };
 
-        It should_delete_a_charge = () =>
+        It should_delete_a_recurring_charge = () =>
         {
             // A charge cannot be deleted unless it has been activated. This test will fail unless you manually 
             // accept the charge, then activate it, then let the test delete it.

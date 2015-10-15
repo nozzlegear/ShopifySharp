@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// An object representing a Shopify order.
+    /// </summary>
     public class ShopifyOrder : ShopifyObject
     {
         /// <summary>
@@ -60,6 +63,12 @@ namespace ShopifySharp
         public DateTime? ClosedAt { get; set; }
 
         /// <summary>
+        /// The customer's contact email address.
+        /// </summary>
+        [JsonProperty("contact_email")]
+        public string ContactEmail { get; set; }
+
+        /// <summary>
         /// The date and time when the order was created in Shopify.
         /// </summary>
         [JsonProperty("created_at")]
@@ -84,7 +93,10 @@ namespace ShopifySharp
         public IEnumerable<ShopifyDiscountCode> DiscountCodes { get; set; }
 
         /// <summary>
-        /// The customer's email address. Required when a billing address is present.
+        /// The order's email address. Note: On and after 2015-11-03, you should be using <see cref="ContactEmail"/> to refer to the customer's email address. 
+        /// Between 2015-11-03 and 2015-12-03, updates to an order's email will also update the customer's email. This is temporary so apps can be migrated over to 
+        /// doing customer updates rather than order updates to change the contact email. After 2015-12-03, updating updating an order's email will no longer update 
+        /// the customer's email and apps will have to use the customer update endpoint to do so.
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }
@@ -162,6 +174,9 @@ namespace ShopifySharp
         [JsonProperty("payment_details")]
         public ShopifyPaymentDetails PaymentDetails { get; set; }
 
+        /// <summary>
+        /// The date that the order was processed at.
+        /// </summary>
         [JsonProperty("processed_at")]
         public DateTime? ProcessedAt { get; set; }
 
@@ -255,7 +270,7 @@ namespace ShopifySharp
         /// The sum of all the weights of the line items in the order, in grams.
         /// </summary>
         [JsonProperty("total_weight")]
-        public int TotalWeight { get; set; }
+        public int? TotalWeight { get; set; }
 
         /// <summary>
         /// The date and time when the order was last modified.

@@ -57,8 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\FalseToNullConverter.cs" />
+    <Compile Include="Converters\ShopifyChargeConverter.cs" />
+    <Compile Include="Converters\UnknownEnumConverter.cs" />
     <Compile Include="Converters\ShopifyRecurringChargeConverter.cs" />
     <Compile Include="Converters\ShopifyDiscountCodeConverter.cs" />
+    <Compile Include="Entities\ShopifyCharge.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
     <Compile Include="Entities\ShopifyProduct.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="Entities\ShopifyProductOption.cs" />
     <Compile Include="Entities\ShopifyProductVariant.cs" />
     <Compile Include="Entities\ShopifyRecurringCharge.cs" />
+    <Compile Include="Entities\ShopifyScriptTag.cs" />
     <Compile Include="Entities\ShopifyShippingLine.cs" />
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
@@ -83,7 +87,9 @@
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
     <Compile Include="Enums\ShopifyOrderStatus.cs" />
     <Compile Include="Converters\ShopifyFulfillmentStatusConverter.cs" />
+    <Compile Include="Enums\ShopifyChargeStatus.cs" />
     <Compile Include="Enums\ShopifyRecurringChargeStatus.cs" />
+    <Compile Include="Enums\ShopifyScriptTagEvent.cs" />
     <Compile Include="Enums\ShopifyWebhookTopic.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -110,6 +116,8 @@
     <Compile Include="Services\Order\ShopifyOrderFilterOptions.cs" />
     <Compile Include="Services\Order\ShopifyOrderService.cs" />
     <Compile Include="Enums\ShopifyProcessingMethod.cs" />
+    <Compile Include="Services\ScriptTag\ShopifyScriptTagListOptions.cs" />
+    <Compile Include="Services\ScriptTag\ShopifyScriptTagService.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
     <Compile Include="Services\ShopifyService.cs" />
@@ -117,6 +125,7 @@
     <Compile Include="Services\Shop\ShopifyShopService.cs" />
     <Compile Include="Enums\ShopifyTransactionError.cs" />
     <Compile Include="Enums\ShopifyTransactionKind.cs" />
+    <Compile Include="Services\Charge\ShopifyChargeService.cs" />
     <Compile Include="Services\Webhook\ShopifyWebhookFilterOptions.cs" />
     <Compile Include="Services\Webhook\ShopifyWebhookService.cs" />
   </ItemGroup>
