@@ -32,8 +32,8 @@ namespace ShopifySharp
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// The path to the asset within a shop. For example, the asset bg-body-green.gif is located 
-        /// in the assets folder.
+        /// The path to the asset within a shop, prefixed with the asset's 'bucket' type,
+       ///  e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.
         /// </summary>
         [JsonProperty("key")]
         public string Key { get; set; }
@@ -51,7 +51,8 @@ namespace ShopifySharp
         public long Size { get; set; }
 
         /// <summary>
-        /// The source key copies an asset.
+        /// When set in an asset and used in <see cref="ShopifyAssetService.CreateOrUpdateAsync(long, ShopifyAsset)"/>, 
+        /// a new asset will be created and copied from an asset with the key matching this source key.
         /// </summary>
         [JsonProperty("source_key")]
         public string SourceKey { get; set; }

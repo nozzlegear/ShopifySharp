@@ -575,6 +575,30 @@ var filteredTags = await service.ListAsync(new ShopifyScriptTagListOptions() {
 });
 ```
 
+## Assets
+
+The `ShopifyAssetService` lets you create, update and delete a store theme's asset files. Unlike other API services in ShopifySharp, the `ShopifyAssetService` has a single `.CreateOrUpdateAsync` method due to the way Shopify's API handles assets. If an asset has a unique `Key` value, it will be created. If not, it will be updated. You can copy an asset by setting the new asset's `SourceKey` to the target's `Key` value.
+
+Shopify asset's do not have an id, but rather a key string; they're also organized into type 'buckets'. For a liquid template, it's full key would be `templates/liquid.index`; for an image, its key would be `assets/my-image.png`.
+
+Finally, all assets are tied to a specific theme, and you need that theme's id to interact with assets. However, ShopifySharp does not currently support the `ShopifyThemeService` yet (it's coming in a day or two).
+
+### Creating an asset
+
+```cs
+var service = new ShopifyAssetService(myShopifyUrl, shopAccessToken);
+var asset = new ShopifyAsset()
+{
+    ContentType = "text/x-liquid",
+    Key = "templates/test.liquid"
+    Value  = "<h1>Hello, world!</h1>"
+}
+
+//Note: Creating an asset does not return it's 'Value' property. 
+//You must specifically refresh it with service.GetAsync
+asset = await service.CreateAsync(themeId, asset);
+```
+
 # Tests
 
 The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) will show you exactly what you need to do to get a shop access token with full permissions.

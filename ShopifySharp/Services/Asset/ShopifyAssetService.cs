@@ -32,16 +32,15 @@ namespace ShopifySharp
         /// Retrieves the <see cref="ShopifyAsset"/> with the given id.
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to. Assets themselves do not have ids.</param>
-        /// <param name="type">The type of asset bucket that this asset belongs to.</param>
-        /// <param name="key">The key value of the asset, e.g. 'index.liquid' or 'bg-body.gif'.</param>
+        /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyAsset"/>.</returns>
-        public async Task<ShopifyAsset> GetAsync(long themeId, ShopifyAssetType type, string key, string fields = null)
+        public async Task<ShopifyAsset> GetAsync(long themeId, string key, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.GET, "asset");
 
             //Add the proper asset querystring
-            req = SetAssetQuerystring(req, type, key, themeId);
+            req = SetAssetQuerystring(req, key, themeId);
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -52,8 +51,10 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Retrieves a list of all <see cref="ShopifyAsset"/> objects.
+        /// Retrieves a list of all <see cref="ShopifyAsset"/> objects. Listing theme assets only returns metadata about each asset. 
+        /// You need to request assets individually in order to get their contents. 
         /// </summary>
+        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShopifyAsset"/> objects.</returns>
         public async Task<IEnumerable<ShopifyAsset>> ListAsync(long themeId, string fields = null)
@@ -73,10 +74,12 @@ namespace ShopifySharp
         /// way Shopify API handles assets. If an asset has a unique <see cref="ShopifyAsset.Key"/> value,
         /// it will be created. If not, it will be updated. Copy an asset by setting the 
         /// <see cref="ShopifyAsset.SourceKey"/> to the target's <see cref="ShopifyAsset.Key"/> value.
+        /// Note: This will not return the asset's <see cref="ShopifyAsset.Value"/> property. You should
+        /// use <see cref="GetAsync(long, string, string)"/> to refresh the value after creating or updating.
         /// </summary>
-        /// <param name="themeId"></param>
-        /// <param name="asset"></param>
-        /// <returns></returns>
+        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
+        /// <param name="asset">The asset.</param>
+        /// <returns>The created or updated asset.</returns>
         public async Task<ShopifyAsset> CreateOrUpdateAsync(long themeId, ShopifyAsset asset)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.PUT, "asset");
@@ -87,14 +90,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Deletes a <see cref="ShopifyAsset"/> with the given id.
+        /// Deletes a <see cref="ShopifyAsset"/> with the given key.
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
-        public async Task DeleteAsync(long themeId, ShopifyAssetType type, string key)
+        /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
+        public async Task DeleteAsync(long themeId, string key)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.DELETE);
 
-            req = SetAssetQuerystring(req, type, key, themeId);
+            req = SetAssetQuerystring(req, key, themeId);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
@@ -106,16 +110,15 @@ namespace ShopifySharp
         /// <summary>
         /// Sets the proper querystring for getting or deleting a single asset.
         /// </summary>
-        /// <param name="req"></param>
-        /// <param name="type"></param>
-        /// <param name="key"></param>
-        /// <param name="themeId"></param>
-        /// <returns></returns>
-        IRestRequest SetAssetQuerystring(IRestRequest req, ShopifyAssetType type, string key, long themeId)
+        /// <param name="req">The request to modify.</param>
+        /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
+        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
+        /// <returns>The request with the proper querystring.</returns>
+        IRestRequest SetAssetQuerystring(IRestRequest req, string key, long themeId)
         {
             //QS should look like:
-            //?asset[key]=templates/{key}&theme_id={themeId}
-            req.AddQueryParameter("asset[key]", "{0}/{1}".FormatWith(type, key));
+            //?asset[key]={key}&theme_id={themeId}
+            req.AddQueryParameter("asset[key]", key);
             req.AddQueryParameter("theme_id", themeId.ToString());
 
             return req;

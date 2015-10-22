@@ -10,6 +10,7 @@ namespace ShopifySharp.Enums
     /// <summary>
     /// An enum representing the type or "bucket" of a <see cref="ShopifyAsset"/>.
     /// </summary>
+    /// <remarks>This enum is never serialized or deserialized.</remarks>
     public enum ShopifyAssetType
     {
         /// <summary>
