@@ -20,7 +20,7 @@ creating your own entity classes for each resource. That's why I'm building Shop
 fully-featured library for interacting with Shopify and building Shopify apps.
 
 With that said, this library is brand new. It currently only supports **OAuth authentication**, the **billing** API, 
-the **Customers** resource, the **Orders** resource, the **Webhooks** resource, the **Script Tags** resource, and 
+the **Customers** resource, the **Orders** resource, the **Webhooks** resource, the **Script Tags** resource, the **Assets** resource, and 
 the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
