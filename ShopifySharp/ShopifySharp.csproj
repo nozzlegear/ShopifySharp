@@ -61,6 +61,7 @@
     <Compile Include="Converters\UnknownEnumConverter.cs" />
     <Compile Include="Converters\ShopifyRecurringChargeConverter.cs" />
     <Compile Include="Converters\ShopifyDiscountCodeConverter.cs" />
+    <Compile Include="Entities\ShopifyAsset.cs" />
     <Compile Include="Entities\ShopifyCharge.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
     <Compile Include="Entities\ShopifyWebhook.cs" />
+    <Compile Include="Enums\ShopifyAssetType.cs" />
     <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
     <Compile Include="Enums\ShopifyFulfillmentStatus.cs" />
     <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Infrastructure\ShopifyError.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
+    <Compile Include="Services\Asset\ShopifyAssetService.cs" />
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
     <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />

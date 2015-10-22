@@ -138,16 +138,20 @@ namespace ShopifySharp
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
                 string json = Encoding.UTF8.GetString(response.RawBytes);
-                JToken parsed = JToken.Parse(json);
-                ShopifyError error = new ShopifyError();
+                var error = new ShopifyError();
 
-                if (parsed.Any(x => x.Path == "errors"))
+                if (string.IsNullOrEmpty(json) == false)
                 {
-                    error.Errors = parsed["errors"].Type == JTokenType.String ? parsed.Value<string>("errors") : parsed["errors"].ToString(Formatting.Indented);
-                }
-                else
-                {
-                    error.Errors = "Unhandled error: " + json;
+                    var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
+
+                    if (parsed.Any(x => x.Path == "errors"))
+                    {
+                        error.Errors = parsed["errors"].Type == JTokenType.String ? parsed.Value<string>("errors") : parsed["errors"].ToString(Formatting.Indented);
+                    }
+                    else
+                    {
+                        error.Errors = "Unhandled error: " + json;
+                    }
                 }
 
                 HttpStatusCode code = response.StatusCode;
@@ -157,7 +161,8 @@ namespace ShopifySharp
 
                 throw new ShopifyException(code, error, message);
             }
-            else if (response.ErrorException != null)
+
+            if (response.ErrorException != null)
             {
                 //Checking this second, because Shopify errors sometimes return incomplete objects along with errors, 
                 //which cause Json deserialization to throw an exception. Parsing the Shopify error is more important 

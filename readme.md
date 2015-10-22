@@ -1,22 +1,34 @@
 ﻿# ShopifySharp: A .NET library for Shopify.
 
-ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify using this library.
+ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for 
+building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify 
+using this library.
 
 ### How to contact me
 
-**If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, **I'm available for hire**. Send an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com) and we'll discuss your project. If you just want to get in touch with me, the best way to do that is by sending an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com), or by following me on Twitter at [@nozzlegear](https://twitter.com/nozzlegear).
+**If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, 
+**I'm available for hire**. Send an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com) and we'll discuss 
+your project. If you just want to get in touch with me, the best way to do that is by sending an email to 
+[joshua@nozzlegear.com](mailto:joshua@nozzlegear.com), or by following me on Twitter at 
+[@nozzlegear](https://twitter.com/nozzlegear).
 
 ### A work-in-progress
 
-Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps.
+Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which 
+hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with 
+creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a 
+fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, this library is brand new. It currently only supports **OAuth authentication**, the **billing** API, the **Customers** resource, the **Orders** resource, the **Webhooks** resource, the **Script Tags** resource, and the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
+With that said, this library is brand new. It currently only supports **OAuth authentication**, the **billing** API, 
+the **Customers** resource, the **Orders** resource, the **Webhooks** resource, the **Script Tags** resource, the **Assets** resource, and 
+the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 ![imgur](http://i.imgur.com/WJKJI9D.png)
 
 # Installation
 
-ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager console in Visual Studio to install it:
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager 
+console in Visual Studio to install it:
 
 ```
 Install-Package ShopifySharp 
@@ -24,15 +36,20 @@ Install-Package ShopifySharp
 
 # Usage
 
-**Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**. An access token is the token returned after authenticating and authorizing a Shopify app installation with a real Shopify store. 
+**Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**. 
+An access token is the token returned after authenticating and authorizing a Shopify app installation with a 
+real Shopify store. 
 
-If you just need an access token for a private Shopify app, or for running the tests in this library, refer to the **Tests** section below.
+If you just need an access token for a private Shopify app, or for running the tests in this library, refer 
+to the **Tests** section below.
 
 ## Authorization and authentication
 
 ### Ensure a given URL is a valid *myshopify.com URL
 
-This is a convenience method that validates whether a given URL is a valid Shopify shop. It's great for ensuring you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is ideally used in conjuction with `ShopifyAuthorizationService.BuildAuthorizationUrl`.
+This is a convenience method that validates whether a given URL is a valid Shopify shop. It's great for ensuring 
+you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is 
+ideally used in conjuction with `ShopifyAuthorizationService.BuildAuthorizationUrl`.
 
 ```c#
 string urlFromUser = "https://example.myshopify.com";
@@ -64,9 +81,12 @@ string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, users
 
 ### Authorize an installation and generate an access token
 
-Once you've sent a user to the authorization URL and they've confirmed your app installation, they'll be redirected back to your application at either the default app URL, or the redirect URL you passed in when building the authorization URL.
+Once you've sent a user to the authorization URL and they've confirmed your app installation, they'll be redirected 
+back to your application at either the default app URL, or the redirect URL you passed in when building the 
+authorization URL.
 
-The access token you receive after authorizing should be stored in your database. You'll need it to access the shop's resources (e.g. orders, customers, fulfillments, etc.)
+The access token you receive after authorizing should be stored in your database. You'll need it to access the 
+shop's resources (e.g. orders, customers, fulfillments, etc.)
 
 ```c#
 //The querystring will have several parameters you need for authorization.
@@ -78,7 +98,9 @@ string accessToken = await ShopifyAuthorizationService.Authorize(code, myShopify
 
 ### Determine if a request is authentic
 
-Any (non-webhook) request coming from Shopify will have a querystring paramater called 'signature' that you can use to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's secret key. 
+Any (non-webhook) request coming from Shopify will have a querystring paramater called 'signature' that you can use 
+to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's 
+secret key. 
 
 Pass the entire querystring to `ShopifyAuthorizationService` to verify the request.
 
@@ -97,9 +119,12 @@ else
 
 ### Determine if a webhook request is authentic
 
-Any webhook request coming from Shopify will have a header called 'X-Shopify-Hmac-SHA256' that you can use to verify that the webhook is authentic. The header is a hash of the entire request body and your app's secret key.
+Any webhook request coming from Shopify will have a header called 'X-Shopify-Hmac-SHA256' that you can use 
+to verify that the webhook is authentic. The header is a hash of the entire request body and your app's 
+secret key.
 
-Pass the entire header collection and the request's input stream to `ShopifyAuthorizationService` to verify the request.
+Pass the entire header collection and the request's input stream to `ShopifyAuthorizationService` to verify 
+the request.
 
 ```c#
 NameValueCollection requestHeaders = Request.Headers;
@@ -115,7 +140,9 @@ else
 }
 ```
 
-You can also pass in the request body as a string, rather than using the input stream. However, the request body string needs to be identical to the way it was sent from Shopify. If it has been modified, the verification will fail.
+You can also pass in the request body as a string, rather than using the input stream. However, the request 
+body string needs to be identical to the way it was sent from Shopify. If it has been modified, the 
+verification will fail.
 
 ```c#
 NameValueCollection requestHeaders = Request.Headers;
@@ -143,9 +170,13 @@ else
 
 ## Recurring Application Charges (charge shop owners to use your app)
 
-The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you for using your application. There are pros and cons to using the Shopify billing API versus a service like Stripe, BrainTree or PayPal. 
+The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you 
+for using your application. There are pros and cons to using the Shopify billing API versus a service like 
+Stripe, BrainTree or PayPal. 
 
-I've put together a small guide called ***Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps***, and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course for building Shopify apps with C# and ASP.NET). 
+I've put together a small guide called ***Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps***, 
+and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course 
+for building Shopify apps with C# and ASP.NET). 
 
 [Just head over here to get your free guide to the Shopify billing API.](https://app.convertkit.com/landing_pages/3772)
 
@@ -182,7 +213,8 @@ IEnumerable<ShopifyRecurringCharge> charges = await service.ListAsync();
 
 ### Activating a charge
 
-Creating a charge does not actually charge the shop owner or even start their free trial. You need to send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
+Creating a charge does not actually charge the shop owner or even start their free trial. You need to 
+send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
 ```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
@@ -192,7 +224,8 @@ await service.ActivateAsync(chargeId);
 
 ### Deleting a charge
 
-Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges after 48 hours pass without activation. 
+Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges 
+after 48 hours pass without activation. 
 
 ```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
@@ -202,7 +235,8 @@ await service.DeleteAsync(chargeId);
 
 ## One-time application charges
 
-Just like with the above recurring charges, the Shopify billing API lets you create a one-time application charge on the shop owner's account. One-time charges cannot be deleted.
+Just like with the above recurring charges, the Shopify billing API lets you create a one-time application 
+charge on the shop owner's account. One-time charges cannot be deleted.
 
 ### Create a one-time charge
 
@@ -236,7 +270,8 @@ IEnumerable<ShopifyCharge> charges = await service.ListAsync();
 
 ### Activating a charge
 
-Just like recurring charges, creating a one-time charge does not actually charge the shop owner. You need to send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
+Just like recurring charges, creating a one-time charge does not actually charge the shop owner. You need to 
+send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
 ```c#
 var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
@@ -513,7 +548,8 @@ IEnumerable<ShopifyWebhook> webhooks = await service.ListAsync();
 
 ## Script Tags
 
-Script tags let you add remote javascript tags that are loaded into the pages of a shop's storefront, letting you dynamically change the functionality of their shop without manually editing their store's template.
+Script tags let you add remote javascript tags that are loaded into the pages of a shop's storefront, letting you 
+dynamically change the functionality of their shop without manually editing their store's template.
 
 ### Creating a script tag
 
@@ -575,17 +611,101 @@ var filteredTags = await service.ListAsync(new ShopifyScriptTagListOptions() {
 });
 ```
 
+## Assets
+
+The `ShopifyAssetService` lets you create, update and delete a store theme's asset files. Unlike other API services in 
+ShopifySharp, the `ShopifyAssetService` has a single `.CreateOrUpdateAsync` method due to the way Shopify's API handles
+ assets. If an asset has a unique `Key` value, it will be created. If not, it will be updated. You can copy an asset by 
+setting the new asset's `SourceKey` to the target's `Key` value.
+
+Shopify asset's do not have an id, but rather a key string; they're also organized into type 'buckets'. For a liquid 
+template, it's full key would be `templates/liquid.index`; for an image, its key would be `assets/my-image.png`.
+
+Finally, all assets are tied to a specific theme, and you need that theme's id to interact with assets. However, 
+ShopifySharp does not currently support the `ShopifyThemeService` yet (it's coming in a day or two).
+
+### Creating an asset
+
+```cs
+var service = new ShopifyAssetService(myShopifyUrl, shopAccessToken);
+var asset = new ShopifyAsset()
+{
+    ContentType = "text/x-liquid",
+    Key = "templates/test.liquid",
+    Value  = "<h1>Hello, world!</h1>"
+}
+
+//Note: Creating an asset does not return it's 'Value' property. 
+//You must specifically refresh it with service.GetAsync
+asset = await service.CreateAsync(themeId, asset);
+```
+
+### Retrieving an asset
+
+```cs
+var service = new ShopifyAssetService(myShopifyUrl, shopAccessToken);
+var key = "templates/index.liquid";
+
+var asset = await service.GetAsync(themeId, key);
+```
+
+### Listing assets
+
+```cs
+var service = new ShopifyAssetService(myShopifyUrl, shopAccessToken);
+
+var assets = await service.ListAsync(themeId);
+```
+
+### Updating assets
+
+```cs
+var service = new ShopifyAssetService(myShopifyUrl, shopAccessToken);
+var key = "templates/test.liquid";
+var asset = await service.GetAsync(themeId, key);
+
+asset.Value = "<h1>Hello, world! I've been updated.</h1>";
+
+//Note: Updating an asset does not return it's 'Value' property. 
+//You must specifically refresh it with service.GetAsync
+asset = await service.UpdateAsync(themeId, asset);
+```
+
+### Copying an asset
+
+You can create a new asset by copying an already existing one. Just set the new asset's `SourceKey` property to 
+match the target's `Key` property.
+
+```cs
+var service = new ShopifyAssetService(myShopifyUrl, shopAccessToken);
+var originalAsset = await service.GetAsync(themeId, "templates/index.liquid");
+var asset = new ShopifyAsset()
+{
+    Key = "templates/test.liquid",
+    SourceKey = originalAsset.Key
+};
+
+//Note: Creating an asset does not return it's 'Value' property. 
+//You must specifically refresh it with service.GetAsync
+asset = await service.UpdateAsync(themeId, asset);
+```
+
 # Tests
 
-The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) will show you exactly what you need to do to get a shop access token with full permissions.
+The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access 
+token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) 
+will show you exactly what you need to do to get a shop access token with full permissions.
 
-Once you have those credentials, place them inside of the `AppSettings.example.config` file and **rename that file** to `AppSettings.private.config`. That will ensure your private API key and access token don't accidentally get uploaded to public source control.
+Once you have those credentials, place them inside of the `AppSettings.example.config` file and **rename that file** 
+to `AppSettings.private.config`. That will ensure your private API key and access token don't accidentally get uploaded 
+to public source control.
 
 ---
 
 With all of that said, the `ShopifyRecurringChargeService` tests require a little bit of manual intervention to pass.
 
-First, the service requires a real app, a real shop, and a real access token for that shop, because private apps cannot use the Shopify billing API. 
+First, the service requires a real app, a real shop, and a real access token for that shop, because private apps cannot 
+use the Shopify billing API. 
 
 Second, when testing the `service.ActivateAsync` and `service.DeleteAsync` methods, you'll need to do the following: 
 
