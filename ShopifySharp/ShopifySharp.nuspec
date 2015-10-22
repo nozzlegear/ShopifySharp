@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.8.0
+	=====
+	- New feature: ShopifyAssetService. Create, retrieve, list, update and copy a store theme's assets.
+
 	1.7.3
 	=====
 	- New property: ShopifyOrder.ContactEmail. See this announcement thread for important information about ShopifyOrder.ContactEmail and ShopifyOrder.Email: https://ecommerce.shopify.com/c/api-announcements/t/changes-to-order-email-address-294544
