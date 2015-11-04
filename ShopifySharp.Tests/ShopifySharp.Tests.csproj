@@ -89,6 +89,7 @@
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
+    <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_a_product.cs" />
