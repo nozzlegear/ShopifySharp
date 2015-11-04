@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// The date and time when the product was published. The API returns this value in ISO 8601 format. 
         /// </summary>
         [JsonProperty("published_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public DateTime PublishedAt { get; set; }
+        public DateTime? PublishedAt { get; set; }
 
         /// <summary>
         /// The name of the vendor of the product.

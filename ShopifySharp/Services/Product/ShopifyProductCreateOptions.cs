@@ -9,5 +9,9 @@ namespace ShopifySharp
 {
     public class ShopifyProductCreateOptions : Parameterizable
     {
+
+        [JsonProperty("published")]
+        public bool? Published { get; set; }
+
     }
 }
