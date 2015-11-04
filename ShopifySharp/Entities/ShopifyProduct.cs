@@ -25,19 +25,19 @@ namespace ShopifySharp
         /// <summary>
         /// The date and time when the product was created. The API returns this value in ISO 8601 format.
         /// </summary>
-        [JsonProperty("created_at")]
+        [JsonProperty("created_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time when the product was last modified. The API returns this value in ISO 8601 format.
         /// </summary>
-        [JsonProperty("updated_at")]
+        [JsonProperty("updated_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DateTime UpdatedAt { get; set; }
 
         /// <summary>
         /// The date and time when the product was published. The API returns this value in ISO 8601 format. 
         /// </summary>
-        [JsonProperty("published_at")]
+        [JsonProperty("published_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DateTime PublishedAt { get; set; }
 
         /// <summary>

@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// Specifies whether or not Shopify tracks the number of items in stock for this product variant.
         /// </summary>
         [JsonProperty("inventory_management")]
-        public ShopifyProductInventoryManagement InventoryManagement { get; set; }
+        public ShopifyProductInventoryManagement? InventoryManagement { get; set; }
 
         /// <summary>
         /// The price of the product variant.
@@ -64,8 +64,8 @@ namespace ShopifySharp
         /// <summary>
         /// The competitors prices for the same item.
         /// </summary>
-        [JsonProperty("compare_at_price")]
-        public double CompareAtPrice { get; set; }
+        [JsonProperty("compare_at_price", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public double? CompareAtPrice { get; set; }
 
         /// <summary>
         /// Custom properties that a shop owner can use to define product variants.
@@ -88,13 +88,13 @@ namespace ShopifySharp
         /// <summary>
         /// The date and time when the product variant was created. The API returns this value in ISO 8601 format.
         /// </summary>
-        [JsonProperty("created_at")]
+        [JsonProperty("created_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time when the product variant was last modified. The API returns this value in ISO 8601 format.
         /// </summary>
-        [JsonProperty("updated_at")]
+        [JsonProperty("updated_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DateTime UpdatedAt { get; set; }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace ShopifySharp
         /// <summary>
         /// The unique numeric identifier for one of the product's images.
         /// </summary>
-        [JsonProperty("image_id")]
-        public long ImageId { get; set; }
+        [JsonProperty("image_id", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public long? ImageId { get; set; }
 
         /// <summary>
         /// The weight of the product variant in the unit system specified with weight_unit.
