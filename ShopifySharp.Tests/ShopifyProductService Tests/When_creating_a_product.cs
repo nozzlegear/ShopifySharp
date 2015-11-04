@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Humanizer;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests.Product
 {
     [Subject(typeof(ShopifyProductService))]
     public class When_creating_a_product
