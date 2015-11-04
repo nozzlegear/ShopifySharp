@@ -23,13 +23,7 @@ namespace ShopifySharp.Tests
             Product = Service.GetAsync(Product.Id.Value).Await().AsTask.Result;
         };
 
-        It should_create_an_order = () =>
-        {
-            Product.ShouldNotBeNull();
-            Product.Id.HasValue.ShouldBeTrue();
-            Product.Title.ShouldNotBeNull();
-            Product.PublishedAt.ShouldBeNull();
-        };
+        It should_not_be_null = () => Product.ShouldNotBeNull();
 
         Cleanup after = () =>
         {

@@ -22,20 +22,17 @@ namespace ShopifySharp.Tests
             Product = Service.CreateAsync(ProductCreation.CreateValidProducts()).Await().AsTask.Result;
         };
 
-        It should_create_an_order = () =>
-        {
-            Product.ShouldNotBeNull();
-            Product.Id.HasValue.ShouldBeTrue();
-            Product.Title.ShouldNotBeNull();
-        };
+        It should_not_be_null = () => Product.ShouldNotBeNull();
+        It should_have_a_title = () => Product.Title.ShouldNotBeNull();
+        It should_have_an_id = () => Product.Id.HasValue.ShouldBeTrue();
 
         Cleanup after = () =>
-        {
-            if (Product != null)
             {
-                Service.DeleteAsync(Product.Id.Value).Await();
-            }
-        };
+                if (Product != null)
+                {
+                    Service.DeleteAsync(Product.Id.Value).Await();
+                }
+            };
 
         static ShopifyProductService Service;
 
