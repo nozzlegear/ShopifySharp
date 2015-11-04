@@ -26,6 +26,8 @@ namespace ShopifySharp.Tests.Product
 
         It should_have_one_item_in_the_list = () => Products.Count().ShouldEqual(1);
 
+        It should_have_the_correct_product_id = () => Products.Single().Id.ShouldEqual(ProductId);
+
         Cleanup after = () =>
         {
             if (Products != null)
