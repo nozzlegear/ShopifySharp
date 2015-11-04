@@ -66,7 +66,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyProduct"/>.</returns>
         public async Task<ShopifyProduct> GetAsync(long productId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(productId), Method.GET, "products");
+            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(productId), Method.GET, "product");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -84,7 +84,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="ShopifyProduct"/>.</returns>
         public async Task<ShopifyProduct> CreateAsync(ShopifyProduct product, ShopifyProductCreateOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products.json", Method.POST, "products");
+            IRestRequest req = RequestEngine.CreateRequest("products.json", Method.POST, "product");
 
             //Build the request body
             Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
@@ -104,7 +104,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyProduct"/>.</returns>
         public async Task<ShopifyProduct> UpdateAsync(ShopifyProduct product)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(product.Id.Value), Method.PUT, "products");
+            IRestRequest req = RequestEngine.CreateRequest("products/{0}.json".FormatWith(product.Id.Value), Method.PUT, "product");
 
             req.AddJsonBody(new { product });
 
