@@ -19,11 +19,19 @@ hasn't been updated in over 3 years and requires that you know the exact URL pat
 creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a 
 fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, this library is brand new. It currently only supports **OAuth authentication**, the **billing** API, 
-the **Customers** resource, the **Orders** resource, the **Webhooks** resource, the **Script Tags** resource, the **Assets** resource, and 
-the **Shop** resource. More functionality will be added each week until it reachs full parity with Shopify's REST API.
+With that said, this library is still pretty new. It currently suppports the following Shopify APIs:
 
-![imgur](http://i.imgur.com/WJKJI9D.png)
+- OAuth authentication.
+- Application charges (in-app purchases)
+- Recurring application charges (subscriptions)
+- Customers
+- Orders
+- Products
+- Webhooks
+- Assets
+- Shop
+
+More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
 # Installation
 
