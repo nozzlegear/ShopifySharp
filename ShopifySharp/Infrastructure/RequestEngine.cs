@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    static class RequestEngine
+    public static class RequestEngine
     {
         /// <summary>
         /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
