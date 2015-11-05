@@ -498,7 +498,7 @@ await service.OpenAsync(orderId);
 
 ## Products
 
-The `ShopifyProductService`, tests and all related models where built by [Yitzchok](https://github.com/yitzchok). Thank you for contributing!
+The `ShopifyProductService`, tests and all related models were built by [Yitzchok](https://github.com/yitzchok). Thank you for contributing!
 
 ### Creating a product
 
@@ -561,14 +561,15 @@ var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyOrder> products = await service.ListAsync();
 
 //Optionally filter the results
-var filter = new ShopifyProductFilterOptions() { 
+var filter = new ShopifyProductFilterOptions() 
+{ 
     Ids = new[] 
     { 
         productId1,
         productId2,
         productId3
     } 
-}
+};
 products = await service.ListAsync(filter);
 ```
 
