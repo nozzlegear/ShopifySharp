@@ -150,11 +150,13 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Playlists\Assets.playlist" />
     <None Include="Playlists\Authorization.playlist" />
     <None Include="Playlists\Charges.playlist" />
     <None Include="Playlists\Customers.playlist" />
     <None Include="Playlists\FalseToNullConverter.playlist" />
     <None Include="Playlists\Orders.playlist" />
+    <None Include="Playlists\Products.playlist" />
     <None Include="Playlists\RecurringCharges.playlist" />
     <None Include="Playlists\Webhooks.playlist" />
   </ItemGroup>

@@ -488,6 +488,82 @@ var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 await service.OpenAsync(orderId);
 ```
 
+## Products
+
+The `ShopifyProductService`, tests and all related models where built by [Yitzchok](https://github.com/yitzchok). Thank you for contributing!
+
+### Creating a product
+
+```c#
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+var product = new ShopifyProduct()
+{
+    Title = "Burton Custom Freestlye 151",
+    Vendor = "Burton",
+    BodyHtml = "<strong>Good snowboard!</strong>",
+    ProductType = "Snowboard",
+    Images = new List<ShopifyProductImage> 
+    { 
+        new ShopifyProductImage 
+        { 
+            Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
+        }
+    },
+};
+
+product = await service.CreateAsync(product);
+```
+
+### Retrieving a product
+
+```c#
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+var product = await service.GetAsync(productId);
+```
+
+### Updating a product
+
+```c#
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+var product = await service.GetAsync(productId);
+
+product.Title = "New product title";
+product = await service.UpdateAsync(product);
+```
+
+### Deleting a product
+
+```c#
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(productId);
+```
+
+### Counting products
+
+```c#
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+int productCount = await service.CountAsync();
+```
+
+### Listing products
+
+```c#
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+IEnumerable<ShopifyOrder> products = await service.ListAsync();
+
+//Optionally filter the results
+var filter = new ShopifyProductFilterOptions() { 
+    Ids = new[] 
+    { 
+        productId1,
+        productId2,
+        productId3
+    } 
+}
+products = await service.ListAsync(filter);
+```
+
 ## Webhooks
 
 ### Creating a webhook

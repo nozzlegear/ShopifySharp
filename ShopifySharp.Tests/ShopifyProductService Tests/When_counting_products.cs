@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests.Product
             Result = Service.CountAsync().Await().AsTask.Result;
         };
 
-        It should_be_greater_than_zero = () => Result.ShouldBeGreaterThan(0);
+        It should_count_products = () => Result.ShouldBeGreaterThanOrEqualTo(1);
 
         Cleanup after = () =>
         {
@@ -34,7 +34,8 @@ namespace ShopifySharp.Tests.Product
         };
 
         static ShopifyProductService Service;
-        static int Result = 0;
+
+        static int Result;
 
         static ShopifyProduct Product;
     }

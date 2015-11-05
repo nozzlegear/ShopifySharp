@@ -23,9 +23,9 @@ namespace ShopifySharp.Tests.Product
             Service.DeleteAsync(Product.Id.Value).Await();
         };
 
-        It should_not_throw_an_error = () =>
+        It should_delete_a_product = () =>
         {
-
+            //Passes if no exception was thrown.
         };
 
         static ShopifyProductService Service;

@@ -24,8 +24,7 @@ namespace ShopifySharp.Tests.Product
             Product = Service.UpdateAsync(Product).Await().AsTask.Result;
         };
 
-        It should_not_be_null = () => Product.ShouldNotBeNull();
-        It should_have_the_new_title = () => Product.Title.ShouldEqual("Changed");
+        It should_update_a_product = () => Product.Title.ShouldEqual("Changed");
 
         Cleanup after = () =>
         {

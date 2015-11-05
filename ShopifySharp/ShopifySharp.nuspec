@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.9.0
+	=====
+	- New feature: ShopifyProductService. Create, retrieve, count, list, update and delete a store's products.
+	
 	1.8.0
 	=====
 	- New feature: ShopifyAssetService. Create, retrieve, list, update and copy a store theme's assets.
