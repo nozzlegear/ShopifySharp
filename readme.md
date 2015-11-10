@@ -1,16 +1,31 @@
-﻿# ShopifySharp: A .NET library for Shopify.
+# ShopifySharp: A .NET library for Shopify.
 
 ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for 
 building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify 
 using this library.
 
-### How to contact me
+# The Shopify Development Handbook
 
-**If you're looking for a Shopify consultant** to build your next app or integrate your shop with your own custom software, 
-**I'm available for hire**. Send an email to [joshua@nozzlegear.com](mailto:joshua@nozzlegear.com) and we'll discuss 
-your project. If you just want to get in touch with me, the best way to do that is by sending an email to 
-[joshua@nozzlegear.com](mailto:joshua@nozzlegear.com), or by following me on Twitter at 
-[@nozzlegear](https://twitter.com/nozzlegear).
+[![Learn how to build rock-solid Shopify apps with C# and ASP.NET](https://i.imgur.com/9GgDjK0.png)](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
+
+Building an app or integration for the Shopify store is hard work. There are a ton of things you need to keep in mind when stitching together all of the API calls, redirect URLs and app settings that you'll need to use.
+
+You're going to be asking yourself all of these questions when you try to build an app for the Shopify store:
+
+- How can I charge my users when they use my app?
+- What in the world is an embedded app?
+- How should I be using Shopify's redirect URLs?
+- When should I be using a proxy page?
+- Am I dealing with webhooks the right way?
+- How can I let my user's actual customers interact with the app?
+- Can I add custom scripts to their website, and what can those scripts even do?
+- How the heck do I go about testing my app?
+
+It's difficult to find blog posts or tutorials about building Shopify apps, and downright impossible if you're trying to build them with C# and ASP.NET. Shopify's own partner blog puts a huge focus on designing themes over building real, functional apps, and their API docs only go so far if you don't know what you're looking for.
+
+[The Shopify Development Handbook](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp) is a premium educational course that distills the experience of building Shopify applications and integrations into one concise and comprehensive course.
+
+[Click here to learn more about The Shopify Development Handbook, **and get a FREE sample chapter** on integrating a merchant's Shopify store with your app.](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
 
 ### A work-in-progress
 
@@ -186,7 +201,7 @@ I've put together a small guide called ***Shopify Billing 101: A Developer's Gui
 and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course 
 for building Shopify apps with C# and ASP.NET). 
 
-[Just head over here to get your free guide to the Shopify billing API.](https://app.convertkit.com/landing_pages/3772)
+[Just head over here to get your free guide to the Shopify billing API.](https://nozzlegear.com/landing/shopify-billing-101?ref=ShopifySharp)
 
 ### Create a recurring charge
 
