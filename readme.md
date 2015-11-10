@@ -27,6 +27,15 @@ It's difficult to find blog posts or tutorials about building Shopify apps, and 
 
 [Click here to learn more about The Shopify Development Handbook, **and get a FREE sample chapter** on integrating a merchant's Shopify store with your app.](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
 
+# Installation
+
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager 
+console in Visual Studio to install it:
+
+```
+Install-Package ShopifySharp 
+```
+
 ### A work-in-progress
 
 Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which 
@@ -47,15 +56,6 @@ With that said, this library is still pretty new. It currently suppports the fol
 - Shop
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
-
-# Installation
-
-ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager 
-console in Visual Studio to install it:
-
-```
-Install-Package ShopifySharp 
-```
 
 # Usage
 
