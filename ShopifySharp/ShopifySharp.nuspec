@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.10.0
+	======
+	- New feature: ShopifyThemeService: Create, retrieve, list, update and delete a store's themes.
+	- This version marks the first use of NullableEnumConverter, which is the final solution for Shopify's undocumented, sometimes-null-sometimes-not enum values. Nullable enums are not backwards-compatible, though, so we'll have to wait until version 2.0 to apply the changes to older enums.
+	
 	1.9.0
 	=====
 	- New feature: ShopifyProductService. Create, retrieve, count, list, update and delete a store's products.
