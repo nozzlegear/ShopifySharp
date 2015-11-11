@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Data.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,23 +8,20 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    /// <summary>
-    /// An abstract class for parameterizing certain objects.
-    /// </summary>
-    public abstract class Parameterizable
+    public static class ObjectExtensions
     {
         /// <summary>
-        /// Converts the object to an array of RestSharp parameters.
+        /// Converts the object to a dictionary./>
         /// </summary>
-        /// <returns>The array of RestSharp parameters.</returns>
-        public IEnumerable<Parameter> ToParameters(ParameterType type)
+        /// <returns>The object as a <see cref="IDictionary{String, Object}"/>.</returns>
+        public static IDictionary<string, object> ToDictionary(this object obj)
         {
-            List<Parameter> output = new List<Parameter>();
+            IDictionary<string, object> output = new Dictionary<string, object>();
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
-            foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (PropertyInfo property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                object value = property.GetValue(this, null);
+                object value = property.GetValue(obj, null);
                 string propName = property.Name;
                 if (value == null) continue;
 
@@ -38,17 +33,12 @@ namespace ShopifySharp
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
 
-                if(value.GetType().IsEnum)
+                if (value.GetType().IsEnum)
                 {
                     value = ((Enum)value).ToSerializedString();
                 }
 
-                output.Add(new Parameter()
-                {
-                    Name = propName,
-                    Value = value,
-                    Type = type
-                });
+                output.Add(propName, value);
             }
 
             return output;

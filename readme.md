@@ -713,16 +713,11 @@ var filteredTags = await service.ListAsync(new ShopifyScriptTagListOptions() {
 
 ## Assets
 
-The `ShopifyAssetService` lets you create, update and delete a store theme's asset files. Unlike other API services in 
-ShopifySharp, the `ShopifyAssetService` has a single `.CreateOrUpdateAsync` method due to the way Shopify's API handles
- assets. If an asset has a unique `Key` value, it will be created. If not, it will be updated. You can copy an asset by 
-setting the new asset's `SourceKey` to the target's `Key` value.
+The `ShopifyAssetService` lets you create, update and delete a store theme's asset files. Unlike other API services in ShopifySharp, the `ShopifyAssetService` has a single `.CreateOrUpdateAsync` method due to the way Shopify's API handles assets. If an asset has a unique `Key` value, it will be created. If not, it will be updated. You can copy an asset by setting the new asset's `SourceKey` to the target's `Key` value.
 
-Shopify asset's do not have an id, but rather a key string; they're also organized into type 'buckets'. For a liquid 
-template, it's full key would be `templates/liquid.index`; for an image, its key would be `assets/my-image.png`.
+Shopify asset's do not have an id, but rather a key string; they're also organized into type 'buckets'. For a liquid template, it's full key would be `templates/liquid.index`; for an image, its key would be `assets/my-image.png`.
 
-Finally, all assets are tied to a specific theme, and you need that theme's id to interact with assets. However, 
-ShopifySharp does not currently support the `ShopifyThemeService` yet (it's coming in a day or two).
+Finally, all assets are tied to a specific theme, and you need that theme's id to interact with assets. You can use the [`ShopifyThemeService`](#Themes) to get a list of the shop's themes, or the `ShopifyShopService` to get the currently active theme's id.
 
 ### Creating an asset
 
@@ -789,6 +784,78 @@ var asset = new ShopifyAsset()
 //You must specifically refresh it with service.GetAsync
 asset = await service.UpdateAsync(themeId, asset);
 ```
+
+## Themes
+
+The `ShopifyThemeService` lets you create, update, list, get and delete a store's themes.
+
+### Creating a theme
+
+When you create a theme, you can optionally pass in a URL that points to a .zip file containing all of the new theme's files. Shopify will then copy those files into the theme. Be aware that copying files is not instant, and the theme's `Processing` flag will be set to `true` until it's done. 
+
+You cannot update or delete a theme that is still processing.
+
+```c#
+var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
+var theme = new ShopifyTheme()
+{
+    Name = "My new theme.",
+    Role = ShopifyThemeRole.Unpublished
+}
+
+theme = await service.CreateAsync(theme);
+
+//Or, create a theme and copy its files from a .zip file URL
+theme = await service.CreateAsync(theme, 'https://my-domain.com/my-theme-files.zip');
+```
+
+### Retrieving a theme
+
+```c#
+var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
+var theme = await service.GetAsync(themeId);
+```
+
+### Updating a theme
+
+Remember, you can't update a theme if its `Processing` flag is set to `true`. Shopify will automatically set it to `false` once it's done processing. Additionally, you cannot set a theme's role from `ShopifyThemeRole.Main` to `ShopifyThemeRole.Unpublished`. Instead, you need to set a different theme's role to `ShopifyThemeRole.Main`.
+
+```c#
+var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
+var theme = await service.GetAsync(themeId);
+
+theme.Name = "My updated theme.";
+theme.Role = ShopifyThemeRole.Main;
+
+theme = await service.UpdateAsync(theme);
+```
+
+### Deleting a theme
+
+```c#
+var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(themeId);
+```
+
+### Listing themes
+
+```c#
+var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
+var themes = await service.ListAsync();
+```
+
+# A note on enums
+
+When I first started building ShopifySharp, I didn't realize how much of a mess Shopify's enum documentation really is. That's partially my fault, because Shopify sends their enum values as strings and I wanted to make life easier by converting those strings to real C# enums.
+
+The problem is that Shopify rarely documents all of their enum values, and sometimes they send null values too. That's fine for them in dynamic ruby-land, but it breaks things when you're using a strongly-typed language like C#. 
+
+Trying to deserialize an unknown or null enum value, of course, throws an exception. At first I tried to get around that by creating a new enum deserializer that would try to convert unknown or null values to a `MyEnumName.Unknown`. While that worked, it was more work than I would prefer to set up each enum with a `.Unknown` value and make sure it serializes and deserializes properly.
+
+[From this point on, all new enums will be nullable](https://github.com/nozzlegear/ShopifySharp/issues/10). It takes the same amount of effort to check if an enum is null as it does to check if it's `Unknown`. However, nullable enums have the added benefit of not requiring their own special `.Unknown` member and dedicated serializer. If the value doesn't exist, or if it's null, the enum field will just be null. No exceptions will be thrown, nobody's app will break.
+
+Unfortunately, it won't be possible to convert previous enums to nullable without breaking builds. Instead, they'll be converted to nullables in the next major release: version 2.0.0. 
 
 # Tests
 
