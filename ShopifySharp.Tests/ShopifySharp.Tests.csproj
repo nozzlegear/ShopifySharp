@@ -126,6 +126,13 @@
     <Compile Include="ShopifyScriptTagService Tests\When_getting_a_script_tag.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_listing_script_tags.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_updating_a_script_tag.cs" />
+    <Compile Include="ShopifyThemeService Tests\Test_Data\ThemeCreation.cs" />
+    <Compile Include="ShopifyThemeService Tests\When_creating_a_theme.cs" />
+    <Compile Include="ShopifyThemeService Tests\When_deleting_a_theme.cs" />
+    <Compile Include="ShopifyThemeService Tests\When_deserializing_a_theme.cs" />
+    <Compile Include="ShopifyThemeService Tests\When_getting_a_theme.cs" />
+    <Compile Include="ShopifyThemeService Tests\When_listing_themes.cs" />
+    <Compile Include="ShopifyThemeService Tests\When_updating_a_theme.cs" />
     <Compile Include="ShopifyWebhookService Tests\Test_Data\WebhookCreation.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks_with_a_filter.cs" />
