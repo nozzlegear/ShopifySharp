@@ -53,6 +53,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - Products
 - Webhooks
 - Assets
+- Themes
 - Shop
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
