@@ -45,16 +45,17 @@ fully-featured library for interacting with Shopify and building Shopify apps.
 
 With that said, this library is still pretty new. It currently suppports the following Shopify APIs:
 
-- OAuth authentication.
-- Application charges (in-app purchases)
-- Recurring application charges (subscriptions)
-- Customers
-- Orders
-- Products
-- Webhooks
-- Assets
-- Themes
-- Shop
+- [OAuth authentication](#authorization-and-authentication).
+- [Application charges (in-app purchases)](#one-time-application-charges)
+- [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
+- [Shops](#shops)
+- [Customers](#customers)
+- [Orders](#orders)
+- [Products](#products)
+- [Webhooks](#webhooks)
+- [Script Tags](#script-tags)
+- [Assets](#assets)
+- [Themes](#themes)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -718,7 +719,7 @@ The `ShopifyAssetService` lets you create, update and delete a store theme's ass
 
 Shopify asset's do not have an id, but rather a key string; they're also organized into type 'buckets'. For a liquid template, it's full key would be `templates/liquid.index`; for an image, its key would be `assets/my-image.png`.
 
-Finally, all assets are tied to a specific theme, and you need that theme's id to interact with assets. You can use the [`ShopifyThemeService`](#Themes) to get a list of the shop's themes, or the `ShopifyShopService` to get the currently active theme's id.
+Finally, all assets are tied to a specific theme, and you need that theme's id to interact with assets. You can use the [`ShopifyThemeService`](#themes) to get a list of the shop's themes, or the `ShopifyShopService` to get the currently active theme's id.
 
 ### Creating an asset
 
