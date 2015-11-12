@@ -71,6 +71,7 @@
     <Compile Include="Entities\ShopifyLineItem.cs" />
     <Compile Include="Entities\ShopifyOrder.cs" />
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
+    <Compile Include="Entities\ShopifyRedirect.cs" />
     <Compile Include="Entities\ShopifyTheme.cs" />
     <Compile Include="Enums\ShopifyProductFulfillmentService.cs" />
     <Compile Include="Entities\ShopifyProductImage.cs" />
@@ -123,10 +124,12 @@
     <Compile Include="Services\Order\ShopifyOrderFilterOptions.cs" />
     <Compile Include="Services\Order\ShopifyOrderService.cs" />
     <Compile Include="Enums\ShopifyProcessingMethod.cs" />
+    <Compile Include="Services\Redirect\ShopifyRedirectFilterOptions.cs" />
     <Compile Include="Services\ScriptTag\ShopifyScriptTagListOptions.cs" />
     <Compile Include="Services\ScriptTag\ShopifyScriptTagService.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
+    <Compile Include="Services\Redirect\ShopifyRedirectService.cs" />
     <Compile Include="Services\ShopifyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Shop\ShopifyShopService.cs" />

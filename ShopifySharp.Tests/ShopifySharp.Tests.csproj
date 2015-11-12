@@ -120,6 +120,14 @@
     <Compile Include="ShopifyOrderService Tests\When_opening_an_order.cs" />
     <Compile Include="ShopifyOrderService Tests\When_updating_an_order.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_validating_shop_url.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_counting_redirects.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_counting_redirects_with_a_filter.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_creating_a_redirect.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_deleting_a_redirect.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_getting_a_redirect.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_listing_redirects.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_listing_redirects_with_a_filter.cs" />
+    <Compile Include="ShopifyRedirectService Tests\When_updating_a_redirect.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_counting_script_tags.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_deleting_a_script_tag.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_creating_a_script_tag.cs" />

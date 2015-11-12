@@ -56,6 +56,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Script Tags](#script-tags)
 - [Assets](#assets)
 - [Themes](#themes)
+- [Redirects](#redirects)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -845,6 +846,73 @@ await service.DeleteAsync(themeId);
 ```c#
 var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
 var themes = await service.ListAsync();
+```
+
+## Redirects
+
+A `ShopifyRedirect` lets you create URL redirects on a Shopify store. When a store visitor navigates to a redirect's `Path`, they'll be redirected to the redirect's `Target`.
+
+### Creating a redirect
+
+```c#
+var service = new ShopifyRedirectService(myShopifyUrl, shopAccessToken);
+var redirect = new ShopifyRedirect()
+{
+    Path = "/ipod",
+    Target  = "https://apple.com/ipod"
+}
+
+redirect = await service.CreateAsync(redirect);
+```
+
+### Retrieving a redirect
+
+```c#
+var service = new ShopifyRedirectService(myShopifyUrl, shopAccessToken);
+var redirect = await service.GetAsync(redirectId);
+```
+
+### Updating a redirect
+
+```c#
+var service = new ShopifyRedirectService(myShopifyUrl, shopAccessToken);
+var redirect = await service.GetAsync(redirectId);
+
+redirect.Path = "/ipad";
+redirect.Target = "https://apple.com/ipad";
+
+redirect = await service.UpdateAsync(redirect);
+```
+
+### Deleting a redirect
+
+```c#
+var service = new ShopifyRedirectService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(redirectId);
+```
+
+### Counting redirects
+
+```c#
+var service = new ShopifyRedirectService(myShopifyUrl, shopAccessToken);
+int redirectCount = await service.CountAsync();
+
+//Optionally filter the count to only those redirects with a specific path or target
+int filteredRedirectCount = await service.CountAsync(path: "/ipod", target: "https://apple.com/ipod/");
+```
+
+### Listing redirects
+
+```c#
+var service = new ShopifyRedirectService(myShopifyUrl, shopAccessToken);
+var redirects = await service.ListAsync();
+
+//Optionally filter the list to only those redirects with a specific path or target
+var filteredRedirects = await service.ListAsync(new ShopifyRedirectListOptions() {
+    Path = "/ipod",
+    Target = "https://apple.com/ipod"
+});
 ```
 
 # A note on enums
