@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.11.1 
+	======
+	- Validate proxy page requests with ShopifyAuthorizationService.IsAuthenticProxyRequest.
+	
 	1.11.0
 	======
 	- New feature: ShopifyRedirectService. Create, retrieve, list, update, count and delete a store's redirects.
