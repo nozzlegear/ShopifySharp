@@ -124,16 +124,33 @@ string accessToken = await ShopifyAuthorizationService.Authorize(code, myShopify
 
 ### Determine if a request is authentic
 
-Any (non-webhook) request coming from Shopify will have a querystring paramater called 'signature' that you can use 
+Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring paramater called 'signature' that you can use 
 to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's 
 secret key. 
 
 Pass the entire querystring to `ShopifyAuthorizationService` to verify the request.
 
 ```c#
-NameValueCollection queryString = Request.QueryString;
+var qs = Request.QueryString;
 
-if(ShopifyAuthorizationService.IsAuthenticRequest(queryString, shopifySecretKey))
+if(ShopifyAuthorizationService.IsAuthenticRequest(qs, shopifySecretKey))
+{
+    //Request is authentic.
+}
+else
+{
+    //Request is not authentic and should not be acted on.
+}
+```
+
+### Determine if a proxy page request is authentic
+
+Nearly identical to authenticating normal requests, a proxy page request only differs in that the algorithm uses HMACSHA256 rather than MD5. All proxy page requests coming from Shopify will have a querystring parameter named `signature` that you can use to verify the request. This signature is a hash of all querystring parameters and your app's secret key.
+
+```cs
+var qs = Request.QueryString;
+
+if(ShopifyAuthorizationService.IsAuthenticProxyRequest(qs, shopifySecretKey))
 {
     //Request is authentic.
 }

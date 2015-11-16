@@ -58,6 +58,37 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
+        /// except that proxy requests use HMACSHA256 rather than MD5.
+        /// </summary>
+        /// <param name="querystring">The collection of querystring parameters from the request. Hint: use Request.QueryString if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="shopifySecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
+        public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string shopifySecretKey)
+        {
+            string signature = querystring.Get("signature");
+
+            // To calculate signature, order all querystring parameters by alphabetical (exclude the 
+            // signature itself). Then, hash it with the secret key.
+            var parameters = querystring
+                .Cast<string>()
+                .Select(s => new { Key = s, Value = querystring[s] })
+                .ToDictionary(d => d.Key, d => d.Value)
+                .Where(x => x.Key != "signature")
+                .OrderBy(x => x.Key)
+                .Select(x => string.Format("{0}={1}", x.Key, x.Value));
+
+            var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(string.Join(null, parameters)));
+
+            //Convert bytes back to string, replacing dashes, to get the final signature.
+            var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");
+
+            //Request is valid if the calculated signature matches the signature from the querystring.
+            return calculatedSignature.ToUpper() == signature.ToUpper();
+        }
+
+        /// <summary>
         /// Determines if an incoming webhook request is authentic.
         /// </summary>
         /// <param name="requestHeaders">The request's headers. Hint: use Request.Headers if you're calling this from an ASP.NET MVC controller.</param>
