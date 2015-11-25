@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Humanizer;
 
 namespace ShopifySharp.Tests.Product
 {
     [Subject(typeof(ShopifyProductService))]
-    public class When_getting_a_list_of_products
+    public class When_getting_a_list_of_filtered_products
     {
         Establish context = () =>
         {
@@ -29,12 +28,13 @@ namespace ShopifySharp.Tests.Product
 
         Because of = () =>
         {
-            Products = Service.ListAsync().Await().AsTask.Result;
+            Products = Service.ListAsync(new ShopifyProductFilterOptions() { Ids = ProductIds }).Await().AsTask.Result;
         };
 
-        It should_list_products = () =>
+        It should_list_products_with_specific_ids = () =>
         {
-            Products.Count().ShouldBeGreaterThanOrEqualTo(ProductIds.Count);
+            Products.Count().ShouldEqual(ProductIds.Count);
+            Products.All(p => ProductIds.Contains(p.Id.Value)).ShouldBeTrue();
         };
 
         Cleanup after = () =>

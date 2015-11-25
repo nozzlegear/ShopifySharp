@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Tests.Test_Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,17 @@ namespace ShopifySharp.Tests
         {
             Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-            // TODO: Create three orders
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
+                var order = Service.CreateAsync(OrderCreation.CreateValidOrder()).Await().AsTask.Result;
 
+                CreatedIds.Add(order.Id.Value);
             }
+
+            Options = new ShopifyOrderFilterOptions()
+            {
+                Ids = CreatedIds
+            };
         };
 
         Because of = () =>
@@ -26,25 +33,26 @@ namespace ShopifySharp.Tests
             Result = Service.ListAsync(Options).Await().AsTask.Result;
         };
 
-        It should_only_list_2_orders = () =>
+        It should_list_orders_with_specific_ids = () =>
         {
             Result.ShouldNotBeNull();
-            Result.Count().Equals(2).ShouldBeTrue();
+            Result.All(order => CreatedIds.Contains(order.Id.Value));
+            Result.Count().ShouldEqual(CreatedIds.Count);
         };
 
         Cleanup after = () =>
         {
-            // TODO: Delete orders
+            foreach (var id in CreatedIds)
+            {
+                Service.DeleteAsync(id).Await();
+            }
         };
 
         static ShopifyOrderService Service;
 
         static IEnumerable<ShopifyOrder> Result;
 
-        static ShopifyOrderFilterOptions Options = new ShopifyOrderFilterOptions()
-        {
-            Limit = 2
-        };
+        static ShopifyOrderFilterOptions Options;
 
         static List<long> CreatedIds = new List<long>();
     }

@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.11.2
+	======
+	- Fixed a bug ShopifyOrderService.ListAsync and ShopifyProductService.ListAsync where filtering the results to specific ids was broken. 
+		- https://github.com/nozzlegear/shopifysharp/issues/17
+	
 	1.11.1 
 	======
 	- Validate proxy page requests with ShopifyAuthorizationService.IsAuthenticProxyRequest.
