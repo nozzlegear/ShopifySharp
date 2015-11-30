@@ -139,7 +139,7 @@ namespace ShopifySharp
         /// Indicates whether the Storefront password protection is enabled.
         /// </summary>
         [JsonProperty("password_enabled")]
-        public bool PasswordEnabled { get; set; }
+        public bool? PasswordEnabled { get; set; }
 
         /// <summary>
         /// The contact phone number for the shop.
