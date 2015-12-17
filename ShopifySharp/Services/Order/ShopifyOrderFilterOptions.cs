@@ -19,6 +19,12 @@ namespace ShopifySharp
         public IEnumerable<long> Ids { get; set; }
 
         /// <summary>
+        /// Restrict results to after the specified ID.
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; };
+
+        /// <summary>
         /// The status of orders to retrieve. Default is <see cref="ShopifyOrderStatus.Any"/>.
         /// </summary>
         [JsonProperty("status")]
