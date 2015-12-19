@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// Restrict results to after the specified ID.
         /// </summary>
         [JsonProperty("since_id")]
-        public long? SinceId { get; set; };
+        public long? SinceId { get; set; }
 
         /// <summary>
         /// The status of orders to retrieve. Default is <see cref="ShopifyOrderStatus.Any"/>.

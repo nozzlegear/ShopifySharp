@@ -40,8 +40,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -65,6 +65,7 @@
     <Compile Include="Entities\ShopifyAsset.cs" />
     <Compile Include="Entities\ShopifyCharge.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
+    <Compile Include="Entities\ShopifyCollect.cs" />
     <Compile Include="Entities\ShopifyProduct.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
     <Compile Include="Entities\ShopifyFulfillment.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
     <Compile Include="Services\Asset\ShopifyAssetService.cs" />
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
+    <Compile Include="Services\Collect\ShopifyCollectFilterOptions.cs" />
+    <Compile Include="Services\Collect\ShopifyCollectService.cs" />
     <Compile Include="Services\Product\ShopifyProductFilterOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />
