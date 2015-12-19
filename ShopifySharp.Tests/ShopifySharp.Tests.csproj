@@ -87,6 +87,7 @@
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />
     <Compile Include="ShopifyChargeService Tests\When_retrieving_a_charge.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products - Copy.cs" />
