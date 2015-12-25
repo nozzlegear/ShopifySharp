@@ -69,7 +69,13 @@ namespace ShopifySharp
             {
                 value = ((Enum)value).ToSerializedString();
             }
-            
+
+            if (valueType == typeof(DateTime))
+            {
+                //Dates must be serialized in YYYY-MM-DD HH:MM format.
+                value = ((DateTime)value).ToString("o");
+            }
+
             return new Parameter()
             {
                 Name = propName,

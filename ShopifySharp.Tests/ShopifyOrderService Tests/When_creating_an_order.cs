@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            Order = Service.CreateAsync(OrderCreation.CreateValidOrder()).Await().AsTask.Result;
+            Order = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result;
         };
 
         It should_create_an_order = () =>

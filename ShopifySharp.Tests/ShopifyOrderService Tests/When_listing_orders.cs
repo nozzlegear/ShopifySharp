@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests
             //Ensure there are some orders to list.
             for (int i = 0; i < 3; i++)
             {
-                var order = OrderCreation.CreateValidOrder();
+                var order = OrderCreation.GenerateOrder();
 
                 order = Service.CreateAsync(order).Await().AsTask.Result;
 
