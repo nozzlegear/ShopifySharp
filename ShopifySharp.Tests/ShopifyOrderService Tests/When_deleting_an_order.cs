@@ -14,7 +14,7 @@ namespace ShopifySharp.Tests
         Establish context = () =>
         {
             Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Order = Service.CreateAsync(OrderCreation.CreateValidOrder()).Await().AsTask.Result;
+            Order = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result;
         };
 
         Because of = () =>

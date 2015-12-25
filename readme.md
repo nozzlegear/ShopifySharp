@@ -58,6 +58,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Themes](#themes)
 - [Redirects](#redirects)
 - [Collects](#collects)
+- [Fulfillments](#fulfillments)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -993,6 +994,123 @@ var filteredCollects = await service.CountAsync(new ShopifyCollectFilterOptions(
     ProductId = productId,
     CollectionId = collectionId
 });
+```
+
+## Fulfillments
+
+A fulfillment represents a shipment of one or more items in an order. All fulfillments are tied to a single order.
+
+### Creating a fulfillment
+
+This will completely fulfill all of the line items in the order.
+
+```c#
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+var fulfillment = new ShopifyFulfillment()
+{
+    TrackingCompany = "Jack Black's Pack, Stack and Track",
+    TrackingUrl = "https://example.com/123456789",
+    TrackingNumber = "123456789",
+}
+
+fulfillment = await service.CreateAsync(orderId, fulfillment);
+```
+
+### Creating a partial fulfillment
+
+This will partially fulfill the given line items, dependent on the line item's quantity. 
+
+```cs
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+var fulfillment = new ShopifyFulfillment()
+{
+    TrackingCompany = "Jack Black's Pack, Stack and Track",
+    TrackingUrl = "https://example.com/123456789",
+    TrackingNumber = "123456789",
+    LineItems = new List<ShopifyLineItem>()
+    {
+        new ShopifyLineItem()
+        {
+            Id = lineItemId,
+            Quantity = 1 //Fulfills 1 qty of this line item.
+        }
+    }
+}
+
+fulfillment = await service.CreateAsync(orderId, fulfillment);
+```
+
+### Creating a single fulfillment
+
+This will completely fulfill the given line items.
+
+```cs
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+var fulfillment = new ShopifyFulfillment()
+{
+    TrackingCompany = "Jack Black's Pack, Stack and Track",
+    TrackingUrl = "https://example.com/123456789",
+    TrackingNumber = "123456789",
+    LineItems = new List<ShopifyLineItem>()
+    {
+        new ShopifyLineItem()
+        {
+            Id = lineItemId
+        }
+    }
+}
+
+fulfillment = await service.CreateAsync(orderId, fulfillment);
+```
+
+### Retrieving a fulfillment
+
+```c#
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+var fulfillment = await service.GetAsync(orderId, fulfillmentId);
+```
+
+### Updating a fulfillment
+
+```cs
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+var fulfillment = await service.GetAsync(orderId, fulfillmentId);
+
+fulfillment.TrackingCompany = "John Doe's Tracking Company";
+
+await service.UpdateAsync(orderId, fulfillment);
+```
+
+### Counting fulfillments
+
+```c#
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+int fulfillmentCount = await service.CountAsync(orderId);
+```
+
+### Listing fulfillments
+
+```c#
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+var fulfillments = await service.ListAsync(orderId);
+```
+
+### Completing a fulfillment
+
+Fulfillments can only be completed if their `Status` is `pending`.
+
+```cs
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+await service.CompleteAsync(orderId, fulfillmentId)
+```
+
+### Cancelling a fulfillment
+
+Fulfillments can only be cancelled if their `Status` is `pending`.
+
+```cs
+var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
+await service.CancelAsync(orderId, fulfillmentId)
 ```
 
 # A note on enums

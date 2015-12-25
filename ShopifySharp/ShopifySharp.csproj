@@ -116,6 +116,7 @@
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
     <Compile Include="Services\Collect\ShopifyCollectFilterOptions.cs" />
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
+    <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
     <Compile Include="Services\Product\ShopifyProductFilterOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />
@@ -130,7 +131,9 @@
     <Compile Include="Services\Redirect\ShopifyRedirectFilterOptions.cs" />
     <Compile Include="Services\ScriptTag\ShopifyScriptTagListOptions.cs" />
     <Compile Include="Services\ScriptTag\ShopifyScriptTagService.cs" />
+    <Compile Include="Services\ShopifyCountFilter.cs" />
     <Compile Include="Services\ShopifyFilterOptions.cs" />
+    <Compile Include="Services\ShopifyListFilter.cs" />
     <Compile Include="Services\ShopifyListOptions.cs" />
     <Compile Include="Services\Redirect\ShopifyRedirectService.cs" />
     <Compile Include="Services\ShopifyService.cs" />

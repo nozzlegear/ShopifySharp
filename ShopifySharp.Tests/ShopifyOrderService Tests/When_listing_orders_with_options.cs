@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests
 
             for (int i = 0; i < 3; i++)
             {
-                var order = Service.CreateAsync(OrderCreation.CreateValidOrder()).Await().AsTask.Result;
+                var order = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result;
 
                 CreatedIds.Add(order.Id.Value);
             }

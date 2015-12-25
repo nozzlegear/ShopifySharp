@@ -8,7 +8,10 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class OrderCreation
     {
-        public static ShopifyOrder CreateValidOrder()
+        /// <summary>
+        /// Generates a valid <see cref="ShopifyOrder"/> for testing the Order API.
+        /// </summary>
+        public static ShopifyOrder GenerateOrder()
         {
             return new ShopifyOrder()
             {
@@ -33,7 +36,14 @@ namespace ShopifySharp.Tests.Test_Data
                     new ShopifyLineItem()
                     {
                         Name = "Test Line Item",
-                        Title = "Test Line Item Title"
+                        Title = "Test Line Item Title",
+                        Quantity = 2
+                    },
+                    new ShopifyLineItem()
+                    {
+                        Name = "Test Line Item 2",
+                        Title = "Test Line Item Title 2",
+                        Quantity = 2
                     }
                 },
                 FinancialStatus = Enums.ShopifyOrderFinancialStatus.Paid,

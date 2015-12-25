@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+	1.13.0
+	======
+	- New feature: ShopifyFulfillmentService. Create, retrieve, update, list, count, complete and cancel an order's fulfillments.
+	
 	1.12.0
 	======
 	- New feature: ShopifyCollectService. Create, retrieve, list, count and delete a store's Collects.

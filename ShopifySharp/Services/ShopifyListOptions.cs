@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// A class for filtering lists and counts. Note for ShopifySharp contributors: this class will 
+    /// be obsolete in v2.0 in favor of the <see cref="ShopifyListFilter"/> or 
+    /// <see cref="ShopifyCountFilter"/>. Please use those instead. 
+    /// </summary>
     public class ShopifyListOptions : ShopifyFilterOptions
     {
         /// <summary>

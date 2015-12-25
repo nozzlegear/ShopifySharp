@@ -1,19 +1,18 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
     /// <summary>
-    /// A class for filtering lists and counts. Note for ShopifySharp contributors: this class will 
-    /// be obsolete in v2.0 in favor of the <see cref="ShopifyListFilter"/> or 
-    /// <see cref="ShopifyCountFilter"/>. Please use those instead. 
+    /// A generic class for filtering the results of a .ListAsync command.
     /// </summary>
-    public class ShopifyFilterOptions: Parameterizable
+    public class ShopifyListFilter : ShopifyCountFilter
     {
+        /// <summary>
+        /// Restrict results to after the specified ID.
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+
         /// <summary>
         /// Limit the amount of results. Default is 50, max is 250.
         /// </summary>
