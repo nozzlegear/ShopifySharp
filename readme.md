@@ -57,6 +57,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Assets](#assets)
 - [Themes](#themes)
 - [Redirects](#redirects)
+- [Collects](#collects)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -929,6 +930,68 @@ var redirects = await service.ListAsync();
 var filteredRedirects = await service.ListAsync(new ShopifyRedirectListOptions() {
     Path = "/ipod",
     Target = "https://apple.com/ipod"
+});
+```
+
+## Collects
+
+A `ShopifyCollect` is an object that connects a product to a custom collection.
+
+The `ShopifyCollectService` and models were built by [stepankobzey](https://github.com/stepankobzey). Thank you for contributing!
+
+### Creating a collect
+
+```c#
+var service = new ShopifyCollectService(myShopifyUrl, shopAccessToken);
+var collect = new ShopifyCollect()
+{
+    CollectionId = collectionId,
+    ProductId = productId
+}
+
+collect = await service.CreateAsync(collect);
+```
+
+### Retrieving a collect
+
+```c#
+var service = new ShopifyCollectService(myShopifyUrl, shopAccessToken);
+var collect = await service.GetAsync(collectId);
+```
+
+### Deleting a collect
+
+```c#
+var service = new ShopifyCollectService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(collectId);
+```
+
+### Counting collects
+
+```c#
+var service = new ShopifyCollectService(myShopifyUrl, shopAccessToken);
+int collectCount = await service.CountAsync();
+
+//Optionally filter the count to only those collects for a certain product or collection
+int filteredCollectCount = await service.CountAsync(new ShopifyCollectFilterOptions()
+{
+    ProductId = productId,
+    CollectionId = collectionId
+});
+```
+
+### Listing collects
+
+```c#
+var service = new ShopifyCollectService(myShopifyUrl, shopAccessToken);
+var collects = await service.ListAsync();
+
+//Optionally filter the list to only those collects for a certain product or collection
+var filteredCollects = await service.CountAsync(new ShopifyCollectFilterOptions()
+{
+    ProductId = productId,
+    CollectionId = collectionId
 });
 ```
 

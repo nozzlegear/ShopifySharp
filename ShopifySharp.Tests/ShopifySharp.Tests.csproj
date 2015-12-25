@@ -87,6 +87,13 @@
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />
     <Compile Include="ShopifyChargeService Tests\When_retrieving_a_charge.cs" />
+    <Compile Include="ShopifyCollectService Tests\Test_Data\CollectCreation.cs" />
+    <Compile Include="ShopifyCollectService Tests\When_counting_collects.cs" />
+    <Compile Include="ShopifyCollectService Tests\When_creating_a_collect.cs" />
+    <Compile Include="ShopifyCollectService Tests\When_deleting_a_collect.cs" />
+    <Compile Include="ShopifyCollectService Tests\When_getting_a_collect.cs" />
+    <Compile Include="ShopifyCollectService Tests\When_listing_collects.cs" />
+    <Compile Include="ShopifyCollectService Tests\When_listing_collects_with_a_filter.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
@@ -162,6 +169,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="AppSettings.example.config" />
+    <None Include="AppSettings.private.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -182,7 +192,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ShopifyCollectService Tests\" />
     <Folder Include="ShopifyShopService Tests\Test_Data\" />
   </ItemGroup>
   <Choose>

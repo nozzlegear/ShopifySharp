@@ -24,13 +24,14 @@ namespace ShopifySharp
         #endregion Constructor
 
         #region Public, non-static methods
+
         /// <summary>
         /// Gets a count of all of the collects (product-collection mappings).
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
         public async Task<int> CountAsync(ShopifyCollectFilterOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("collects/count.json", Method.GET);
+            IRestRequest req = RequestEngine.CreateRequest("collects/count.json", Method.GET, "count");
 
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
@@ -45,12 +46,11 @@ namespace ShopifySharp
         /// <returns></returns>
         public async Task<IEnumerable<ShopifyCollect>> ListAsync(ShopifyCollectFilterOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("collects.json", Method.GET, "collect");
+            IRestRequest req = RequestEngine.CreateRequest("collects.json", Method.GET, "collects");
 
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCollect>>(_RestClient, req);
-
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="ShopifyCollect"/>.</returns>
         public async Task<ShopifyCollect> CreateAsync(ShopifyCollect collect)
         {
-            IRestRequest req = RequestEngine.CreateRequest("collects.json", RestSharp.Method.POST);
+            IRestRequest req = RequestEngine.CreateRequest("collects.json", RestSharp.Method.POST, "collect");
 
             Dictionary<string, object> body = new Dictionary<string, object>()
             {
@@ -95,10 +95,11 @@ namespace ShopifySharp
         /// Deletes a collect with the given Id.
         /// </summary>
         /// <param name="collectId">The product object's Id.</param>
-        public async Task Delete(long collectId)
+        public async Task DeleteAsync(long collectId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"collects/{collectId}.json", Method.DELETE);
-                        await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+
+            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
 
         #endregion Public, non-static methods

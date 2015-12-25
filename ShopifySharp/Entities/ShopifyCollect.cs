@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// An object representing a Shopify collect.
+    /// </summary>
     public class ShopifyCollect : ShopifyObject
     {
         /// <summary>
