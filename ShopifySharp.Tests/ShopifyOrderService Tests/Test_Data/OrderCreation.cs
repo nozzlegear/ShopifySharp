@@ -37,17 +37,29 @@ namespace ShopifySharp.Tests.Test_Data
                     {
                         Name = "Test Line Item",
                         Title = "Test Line Item Title",
-                        Quantity = 2
+                        Quantity = 2,
+                        Price = 5
                     },
                     new ShopifyLineItem()
                     {
                         Name = "Test Line Item 2",
                         Title = "Test Line Item Title 2",
-                        Quantity = 2
+                        Quantity = 2,
+                        Price = 5
                     }
                 },
                 FinancialStatus = Enums.ShopifyOrderFinancialStatus.Paid,
                 TotalPrice = 5.00,
+                Transactions = new List<ShopifyTransaction>()
+                {
+                    new ShopifyTransaction()
+                    {
+                        Amount = 20.00,
+                        Status = "success",
+                        Kind = Enums.ShopifyTransactionKind.Authorization,
+                        Test = true,
+                    }
+                },
                 Email = Guid.NewGuid().ToString() + "@example.com",
                 Note = "Test note about the customer.",
             };

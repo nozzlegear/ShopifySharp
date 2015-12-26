@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace ShopifySharp.Enums
     /// <summary>
     /// The kind of transaction.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyTransactionKind>))]
     public enum ShopifyTransactionKind
     {
         /// <summary>

@@ -279,9 +279,10 @@ namespace ShopifySharp
         public DateTime UpdatedAt { get; set; }
 
         /// <summary>
-        /// An array of <see cref="ShopifyTransaction"/> objects that detail all of the transactions in this order.
+        /// An array of <see cref="ShopifyTransaction"/> objects that detail all of the transactions in 
+        /// this order.
         /// </summary>
-        [JsonProperty("transactions")]
+        [JsonProperty("transactions"), Obsolete("This property is not documented in Shopify's API docs. Attempting to create an order with transactions often throws an error — use with caution.")]
         public IEnumerable<ShopifyTransaction> Transactions { get; set; }
     }
 }
