@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace ShopifySharp.Enums
     /// <summary>
     /// A standardized error code, independent of the payment provider.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyTransactionError>))]
     public enum ShopifyTransactionError
     {
         [EnumMember(Value = "incorrect_number")]

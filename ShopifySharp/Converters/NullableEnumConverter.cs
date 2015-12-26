@@ -18,10 +18,16 @@ namespace ShopifySharp.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             T parsed;
-
+            
             if (!Enum.TryParse(reader.Value?.ToString() ?? "", true, out parsed))
             {
-                return null;
+                //Despite using EnumMember, any enum with an '_' value fails the TryParse and IsDefined
+                //checks. Remove underscores and try to match again before returning null.
+
+                if (!Enum.TryParse(reader.Value?.ToString().Replace("_", "") ?? "", true, out parsed))
+                {
+                    return null;
+                }
             }
 
             return parsed;

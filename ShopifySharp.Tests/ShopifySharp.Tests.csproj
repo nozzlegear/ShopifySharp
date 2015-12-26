@@ -164,6 +164,16 @@
     <Compile Include="ShopifyThemeService Tests\When_getting_a_theme.cs" />
     <Compile Include="ShopifyThemeService Tests\When_listing_themes.cs" />
     <Compile Include="ShopifyThemeService Tests\When_updating_a_theme.cs" />
+    <Compile Include="ShopifyTransactionService Tests\Test_Data\Setup.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_counting_transactions.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_creating_a_partial_transaction_capture.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_creating_a_refund_transaction.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_creating_a_transaction.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_creating_a_void_transaction.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_deserializing_a_transaction.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_getting_a_transaction.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_listing_transactions.cs" />
+    <Compile Include="ShopifyTransactionService Tests\When_listing_transactions_with_a_filter.cs" />
     <Compile Include="ShopifyWebhookService Tests\Test_Data\WebhookCreation.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_counting_webhooks_with_a_filter.cs" />
@@ -191,11 +201,16 @@
     <None Include="Playlists\Assets.playlist" />
     <None Include="Playlists\Authorization.playlist" />
     <None Include="Playlists\Charges.playlist" />
+    <None Include="Playlists\Collects.playlist" />
     <None Include="Playlists\Customers.playlist" />
     <None Include="Playlists\FalseToNullConverter.playlist" />
+    <None Include="Playlists\Fulfillments.playlist" />
     <None Include="Playlists\Orders.playlist" />
     <None Include="Playlists\Products.playlist" />
     <None Include="Playlists\RecurringCharges.playlist" />
+    <None Include="Playlists\Redirects.playlist" />
+    <None Include="Playlists\Themes.playlist" />
+    <None Include="Playlists\Transactions.playlist" />
     <None Include="Playlists\Webhooks.playlist" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +220,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="NewFolder1\" />
     <Folder Include="ShopifyShopService Tests\Test_Data\" />
   </ItemGroup>
   <Choose>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ShopifySharp.Converters;
 using ShopifySharp.Enums;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,18 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class ShopifyTransaction
+    /// <summary>
+    /// An object representing a Shopify transaction.
+    /// </summary>
+    public class ShopifyTransaction : ShopifyObject
     {
         /// <summary>
         /// The amount of money that the transaction was for.
         /// </summary>
-        /// <remarks>Like a lot of the Shopify API, the number is actually a string. Json.Net should be able to convert it to a double.</remarks>
+        /// <remarks>Like a lot of the Shopify API, the number is actually a string. Json.Net should be 
+        /// able to convert it to a double.</remarks>
         [JsonProperty("amount")]
-        public double Amount { get; set; }
+        public double? Amount { get; set; }
 
         /// <summary>
         /// The authorization code associated with the transaction.
@@ -27,7 +32,7 @@ namespace ShopifySharp
         /// The date and time when the transaction was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         /// <summary>
         /// The unique identifier for the device.
@@ -57,7 +62,7 @@ namespace ShopifySharp
         /// The kind of transaction.
         /// </summary>
         [JsonProperty("kind")]
-        public ShopifyTransactionKind Kind { get; set; }
+        public ShopifyTransactionKind? Kind { get; set; }
 
         /// <summary>
         /// A unique numeric identifier for the order.
@@ -75,7 +80,7 @@ namespace ShopifySharp
         /// A standardized error code, independent of the payment provider. Value can be null. 
         /// </summary>
         [JsonProperty("error_code")]
-        public ShopifyTransactionError ErrorCode { get; set; }
+        public ShopifyTransactionError? ErrorCode { get; set; }
 
         /// <summary>
         /// The status of the transaction. Valid values are: pending, failure, success or error.

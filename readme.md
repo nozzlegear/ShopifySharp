@@ -59,6 +59,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Redirects](#redirects)
 - [Collects](#collects)
 - [Fulfillments](#fulfillments)
+- [Transactions](#transactions)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -1111,6 +1112,103 @@ Fulfillments can only be cancelled if their `Status` is `pending`.
 ```cs
 var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
 await service.CancelAsync(orderId, fulfillmentId)
+```
+
+## Transactions
+
+Transactions are created for every order that results in an exchange of money. All transactions are tied to a single order.
+
+### Creating a full capture transaction
+
+By omitting an `Amount` value, this transaction will capture the full amount. 
+
+**Note**: to create a `Capture` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created. 
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var transaction = new ShopifyTransaction()
+{
+    Kind = ShopifyTransactionKind.Capture
+};
+
+await service.CreateAsync(orderId, transaction);
+```
+
+### Creating a partial capture transaction
+
+This method will capture a specified amount on a previously authorized order. 
+
+**Note**: to create a `Capture` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created. 
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var transaction = new ShopifyTransaction()
+{
+    Kind = ShopifyTransactionKind.Capture,
+    Amount = 5.00
+};
+
+await service.CreateAsync(orderId, transaction);
+```
+
+### Creating a refund transaction
+
+This method will create a refund on a previously authorized order. Like the last two examples, you can either refund a partial amount by setting the `Amount` value, or refund the full amount by omitting that value.
+
+**Note**: to create a `Refund` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created. 
+
+**Additionally**, it seems you can't create a `Refund` transaction for any order that was created via the API. (I can't find any documentation about this behavior. Let me know if this is wrong.)
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var transaction = new ShopifyTransaction()
+{
+    Kind = ShopifyTransactionKind.Refund,
+    Amount = 5.00
+};
+
+await service.CreateAsync(orderId, transaction);
+```
+
+### Creating a cancel transaction
+
+This method is supposed to cancel a previously authorized order's payment. **However**, the Shopify API will throw an error whenever you try to do this. It may be that, like the refund transaction, you can't cancel an order that was created via the API. Again, there's no documentation for this behavior, let me know if you have any information.
+
+That in mind, I'm including this example for posterity.
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var transaction = new ShopifyTransaction()
+{
+    Kind = ShopifyTransactionKind.Void
+};
+
+//Throws an error.
+await service.CreateAsync(orderId, transaction);
+```
+
+### Getting a transaction
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var transaction = await service.GetAsync(orderId, transactionId);
+```
+
+### Counting transactions
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(orderId);
+```
+
+### Listing transactions
+
+```cs
+var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
+var transactions = await service.ListAsync(orderId);
+
+//Optionally filter the list to those after the given id
+var transactions = await service.ListAsync(orderId, sinceId);
 ```
 
 # A note on enums
