@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -66,7 +67,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -107,10 +110,18 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\Test_Data\MetaFieldCreation.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_counting_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_creating_a_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_deleting_a_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_filtered_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_one_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_updating_a_metafield.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products - Copy.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_filtered_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
@@ -205,6 +216,7 @@
     <None Include="Playlists\Customers.playlist" />
     <None Include="Playlists\FalseToNullConverter.playlist" />
     <None Include="Playlists\Fulfillments.playlist" />
+    <None Include="Playlists\MetaField.playlist" />
     <None Include="Playlists\Orders.playlist" />
     <None Include="Playlists\Products.playlist" />
     <None Include="Playlists\RecurringCharges.playlist" />

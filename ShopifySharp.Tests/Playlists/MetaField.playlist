@@ -1,0 +1,24 @@
+<Playlist Version="1.0">
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_a_list_of_metafields::should_have_the_correct_metafield_id" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_creating_a_metafield::should_not_be_null" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_one_metafield::should_not_be_null" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_deleting_a_metafield::should_not_throw_an_error" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_creating_a_metafield::should_have_an_id" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_updating_a_metafield::should_have_the_new_key" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_updating_a_metafield::should_not_be_null" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_counting_metafields::should_be_greater_than_zero" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_creating_a_metafield::should_have_a_value" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_a_list_of_metafields::should_have_one_item_in_the_list" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_a_list_of_metafields::should_retrieve_a_list_of_metafields_with_the_correct_id" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_deleting_a_metafield::should_delete_a_metafield" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_updating_a_metafield::should_update_a_metafield" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_a_list_of_metafields::should_retrieve_a_list_of_metafields" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_creating_a_metafield::should_create_a_metafield" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_creating_a_metafield::should_create_a_metafield_with_a_key" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_counting_metafields::should_retrieve_a_count_of_metafields" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_creating_a_metafield::should_create_a_metafield_with_an_id" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_one_metafield::should_retrieve_a_metafield" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_counting_metafields::should_count_metafields" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_a_list_of_metafields::should_list_metafields" />
+    <Add Test="ShopifySharp.Tests.MetaField.When_getting_a_list_of_filtered_metafields::should_list_metafields_with_specific_namespace" />
+</Playlist>
