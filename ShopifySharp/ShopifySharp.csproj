@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\ShopifySharp.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -117,6 +118,8 @@
     <Compile Include="Services\Collect\ShopifyCollectFilterOptions.cs" />
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
+    <Compile Include="Services\MetaField\ShopifyMetaFieldFilterOptions.cs" />
+    <Compile Include="Services\MetaField\ShopifyMetaFieldService.cs" />
     <Compile Include="Services\Product\ShopifyProductFilterOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />

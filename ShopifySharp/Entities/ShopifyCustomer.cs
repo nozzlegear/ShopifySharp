@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +47,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// Additional metadata about the customer. Note: This should only be used when creating or updating a <see cref="ShopifyCustomer"/>, as
-        /// Shopify will never return <see cref="ShopifyCustomer"/> metafields. Instead, you need to query metafields with <see cref="ShopifyMetafieldService"/>.
+        /// Shopify will never return <see cref="ShopifyCustomer"/> metafields. Instead, you need to query metafields with <see cref="ShopifyMetaFieldService"/>.
         /// </summary>
         [JsonProperty("metafields")]
         public IEnumerable<ShopifyMetaField> Metafields { get; set; }

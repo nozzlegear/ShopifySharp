@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp
 {
     /// <summary>
-    /// Filters the results of <see cref="ShopifyScriptTagService.ListAsync()"/>.
+    /// Filters the results of <see cref="ShopifyScriptTagService.ListAsync(ShopifyScriptTagListOptions)"/>.
     /// </summary>
     public class ShopifyScriptTagListOptions : ShopifyListOptions
     {

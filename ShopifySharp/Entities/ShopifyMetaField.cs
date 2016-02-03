@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
+using ShopifySharp.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class ShopifyMetaField
+    public class ShopifyMetaField : ShopifyObject
     {
         /// <summary>
         /// Identifier for the metafield (maximum of 30 characters).
@@ -38,5 +39,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        /// <summary>
+        /// The Id of the Shopify Resource that the metafield is associated with. This value could be the id of things like product, order, variant, collection.
+        /// </summary>
+        [JsonProperty("owner_id")]
+        public long? OwnerId { get; set; }
+
+        /// <summary>
+        /// The name of the Shopify Resource that the metafield is associated with. This could be things like product, order, variant, collection.
+        /// </summary>
+        [JsonProperty("owner_resource")]
+        public string OwnerResource { get; set; }
     }
 }

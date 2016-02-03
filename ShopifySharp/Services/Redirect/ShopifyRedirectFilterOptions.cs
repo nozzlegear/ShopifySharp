@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShopifySharp
 {
     /// <summary>
-    /// Filters <see cref="ShopifyRedirectService.ListAsync(ShopifyListOptions)"/> results.
+    /// Filters <see cref="ShopifyRedirectService.ListAsync(ShopifyRedirectFilterOptions)"/> results.
     /// </summary>
     public class ShopifyRedirectFilterOptions : ShopifyFilterOptions
     {
