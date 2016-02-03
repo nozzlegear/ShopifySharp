@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class ShopifyMetaField
+    public class ShopifyMetaField : ShopifyObject
     {
         /// <summary>
         /// Identifier for the metafield (maximum of 30 characters).

@@ -1,0 +1,47 @@
+﻿using Machine.Specifications;
+using ShopifySharp.Tests.Test_Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Humanizer;
+
+namespace ShopifySharp.Tests.Page
+{
+    [Subject(typeof(ShopifyPageService))]
+    public class When_updating_a_page_add_metafields
+    {
+        Establish context = () =>
+        {
+            Service = new ShopifyPageService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Page = Service.CreateAsync(PageCreation.CreateValidPages()).Await().AsTask.Result;
+        };
+
+        Because of = () =>
+        {
+            MetaField = Service.UpdateMetafieldAsync(Page.Id.Value, PageCreation.CreateValidPageMetafield()).Await().AsTask.Result; 
+
+        };
+
+        It should_create_a_page = () =>
+        {
+            MetaField.Id.HasValue.ShouldBeTrue();
+            Page.Id.HasValue.ShouldBeTrue();
+        };
+
+        Cleanup after = () =>
+        {
+            if (Page != null)
+            {
+                Service.DeleteAsync(Page.Id.Value).Await();
+            }
+        };
+
+        static ShopifyPageService Service;
+
+        static ShopifyPage Page;
+
+        static ShopifyMetaField MetaField;
+    }
+}

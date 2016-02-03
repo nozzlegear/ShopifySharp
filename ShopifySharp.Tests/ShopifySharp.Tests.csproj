@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -108,14 +109,23 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
+    <Compile Include="ShopifyPageService_Tests\Test_Data\PageCreation.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_counting_pages.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_creating_a_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page_add_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_deleting_a_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_getting_a_list_of_pages.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_getting_one_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_creating_a_page_with_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
-    <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products - Copy.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
-    <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_deleting_a_recurring_charge.cs" />

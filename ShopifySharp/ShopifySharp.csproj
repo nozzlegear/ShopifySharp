@@ -66,6 +66,7 @@
     <Compile Include="Entities\ShopifyCharge.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
     <Compile Include="Entities\ShopifyCollect.cs" />
+    <Compile Include="Entities\ShopifyPage.cs" />
     <Compile Include="Entities\ShopifyProduct.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
     <Compile Include="Entities\ShopifyFulfillment.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="Services\Collect\ShopifyCollectFilterOptions.cs" />
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
+    <Compile Include="Services\Page\ShopifyPageService.cs" />
+    <Compile Include="Services\Page\ShopifyPageFilterOptions.cs" />
+    <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductFilterOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />
