@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using RestSharp;
+﻿using RestSharp;
 using ShopifySharp.Enums;
 using System;
 using System.Collections;
@@ -37,7 +36,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyAsset"/>.</returns>
         public async Task<ShopifyAsset> GetAsync(long themeId, string key, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.GET, "asset");
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.GET, "asset");
 
             //Add the proper asset querystring
             req = SetAssetQuerystring(req, key, themeId);
@@ -59,7 +58,7 @@ namespace ShopifySharp
         /// <returns>The list of <see cref="ShopifyAsset"/> objects.</returns>
         public async Task<IEnumerable<ShopifyAsset>> ListAsync(long themeId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.GET, "assets");
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.GET, "assets");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -82,7 +81,7 @@ namespace ShopifySharp
         /// <returns>The created or updated asset.</returns>
         public async Task<ShopifyAsset> CreateOrUpdateAsync(long themeId, ShopifyAsset asset)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.PUT, "asset");
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.PUT, "asset");
 
             req.AddJsonBody(new { asset = asset });
 
@@ -96,7 +95,7 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         public async Task DeleteAsync(long themeId, string key)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}/assets.json".FormatWith(themeId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.DELETE);
 
             req = SetAssetQuerystring(req, key, themeId);
 

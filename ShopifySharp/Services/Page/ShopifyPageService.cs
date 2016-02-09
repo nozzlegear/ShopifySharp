@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -66,7 +65,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyPage"/>.</returns>
         public async Task<ShopifyPage> GetAsync(long pageId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages/{0}.json".FormatWith(pageId), Method.GET, "page");
+            IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.GET, "page");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -104,7 +103,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyPage"/>.</returns>
         public async Task<ShopifyPage> UpdateAsync(ShopifyPage page)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages/{0}.json".FormatWith(page.Id.Value), Method.PUT, "page");
+            IRestRequest req = RequestEngine.CreateRequest($"pages/{page.Id.Value}.json", Method.PUT, "page");
 
             req.AddJsonBody(new { page });
 
@@ -117,7 +116,7 @@ namespace ShopifySharp
         /// <param name="pageId">The page object's Id.</param>
         public async Task DeleteAsync(long pageId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages/{0}.json".FormatWith(pageId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
@@ -130,12 +129,12 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyMetaField"/>.</returns>
         public async Task<ShopifyMetaField> UpdateMetafieldAsync(long pageId, ShopifyMetaField metafield)
         {
-            var requestPath = "pages/{0}/metafields.json".FormatWith(pageId);
+            var requestPath = $"pages/{pageId}/metafields.json";
             var method = Method.POST;
 
             if (metafield.Id.HasValue)
             {
-                requestPath = "pages/{0}/metafields/{1}.json".FormatWith(pageId, metafield.Id.Value);
+                requestPath = $"pages/{pageId}/metafields/{metafield.Id.Value}.json";
                 method = Method.PUT;
             }
 
@@ -154,7 +153,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyPage"/>.</returns>
         public async Task<List<ShopifyMetaField>> GetMetaFieldsAsync(long pageId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages/{0}/metafields.json".FormatWith(pageId), Method.GET,"metafields");
+            IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}/metafields.json", Method.GET,"metafields");
 
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyMetaField>>(_RestClient, req);

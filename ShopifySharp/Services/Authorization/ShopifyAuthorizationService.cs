@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using System.Threading.Tasks;
-using Humanizer;
 using System.Security.Cryptography;
 using System.IO;
 using RestSharp;
@@ -179,7 +178,7 @@ namespace ShopifySharp
             }
 
             builder.Path = "admin/oauth/authorize";
-            builder.Query = string.Join("&", qs.Select(s => "{0}={1}".FormatWith(s.Key, s.Value)));
+            builder.Query = string.Join("&", qs.Select(s => $"{s.Key}={s.Value}"));
 
             return builder.Uri;
         }

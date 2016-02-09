@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -68,7 +67,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyScriptTag"/>.</returns>
         public async Task<ShopifyScriptTag> GetAsync(long tagId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/{0}.json".FormatWith(tagId), Method.GET, "script_tag");
+            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.GET, "script_tag");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -105,7 +104,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyScriptTag"/>.</returns>
         public async Task<ShopifyScriptTag> UpdateAsync(ShopifyScriptTag tag)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/{0}.json".FormatWith(tag.Id.Value), Method.PUT, "script_tag");
+            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tag.Id.Value}.json", Method.PUT, "script_tag");
 
             req.AddJsonBody(new { script_tag = tag });
 
@@ -118,7 +117,7 @@ namespace ShopifySharp
         /// <param name="tagId">The tag's Id.</param>
         public async Task DeleteAsync(long tagId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/{0}.json".FormatWith(tagId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

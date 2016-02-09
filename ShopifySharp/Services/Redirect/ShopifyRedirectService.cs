@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -76,7 +75,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyRedirect"/>.</returns>
         public async Task<ShopifyRedirect> GetAsync(long redirectId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("redirects/{0}.json".FormatWith(redirectId), Method.GET, "redirect");
+            IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.GET, "redirect");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -109,7 +108,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyRedirect"/>.</returns>
         public async Task<ShopifyRedirect> UpdateAsync(ShopifyRedirect redirect)
         {
-            IRestRequest req = RequestEngine.CreateRequest("redirects/{0}.json".FormatWith(redirect.Id.Value), Method.PUT, "redirect");
+            IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirect.Id.Value}.json", Method.PUT, "redirect");
 
             req.AddJsonBody(new { redirect });
 
@@ -122,7 +121,7 @@ namespace ShopifySharp
         /// <param name="redirectId">The redirect object's Id.</param>
         public async Task DeleteAsync(long redirectId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("redirects/{0}.json".FormatWith(redirectId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
