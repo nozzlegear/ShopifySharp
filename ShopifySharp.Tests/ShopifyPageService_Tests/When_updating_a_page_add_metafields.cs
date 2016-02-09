@@ -24,7 +24,7 @@ namespace ShopifySharp.Tests.Page
 
         };
 
-        It should_create_a_page = () =>
+        It should_update_a_page_with_new_metafield = () =>
         {
             MetaField.Id.HasValue.ShouldBeTrue();
             Page.Id.HasValue.ShouldBeTrue();

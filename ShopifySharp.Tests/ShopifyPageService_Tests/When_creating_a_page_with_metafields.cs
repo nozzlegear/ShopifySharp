@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests.Page
             Page.Metafields = Service.GetMetaFieldsAsync(Page.Id.Value).Await().AsTask.Result;
         };
 
-        It should_create_a_page = () =>
+        It should_create_a_page_with_metafields = () =>
         {
             Page.Metafields.ShouldNotBeEmpty();
             Page.Title.ShouldNotBeNull();

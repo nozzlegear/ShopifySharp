@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests.Page
 
         };
 
-        It should_create_a_page = () =>
+        It should_update_a_pages_metafields = () =>
         {
             Page.Metafields.ShouldNotBeEmpty();
             MetaField.Value.ShouldEqual("updated value!");
