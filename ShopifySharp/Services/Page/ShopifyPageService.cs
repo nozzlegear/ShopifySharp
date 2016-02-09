@@ -138,10 +138,9 @@ namespace ShopifySharp
                 method = Method.PUT;
             }
 
-            IRestRequest req = RequestEngine.CreateRequest(requestPath, method,
-                    "metafield");
+            IRestRequest req = RequestEngine.CreateRequest(requestPath, method, "metafield");
 
-             req.AddJsonBody(new {metafield});
+            req.AddJsonBody(new {metafield});
             
             return await RequestEngine.ExecuteRequestAsync<ShopifyMetaField>(_RestClient, req);
         }
@@ -154,8 +153,7 @@ namespace ShopifySharp
         public async Task<List<ShopifyMetaField>> GetMetaFieldsAsync(long pageId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}/metafields.json", Method.GET,"metafields");
-
-
+            
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyMetaField>>(_RestClient, req);
         }
 

@@ -227,7 +227,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="ShopifyShopService Tests\Test_Data\" />
   </ItemGroup>
   <Choose>
