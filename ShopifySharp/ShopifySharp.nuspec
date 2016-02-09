@@ -13,7 +13,7 @@
     <releaseNotes> 
   1.15.0
   ======
-  - New feature: ShopifyPageService. Create, get, list, count, update and delete a shop's web pages. ([#25](https://github.com/nozzlegear/ShopifySharp/pull/25)
+  - New feature: ShopifyPageService. Create, get, list, count, update and delete a shop's web pages. ([#25](https://github.com/nozzlegear/ShopifySharp/pull/25))
   - Enhancement: Removed Humanizer dependency in favor of C# 6.0's native string interpolation. ([#23](https://github.com/nozzlegear/ShopifySharp/issues/23))
   - Enhancement: Added additional filter options to `ShopifyOrderFilterOptions`. ([#27](https://github.com/nozzlegear/ShopifySharp/pull/27))
   - Bugfix: Changed the `Title`, `Vendor`, `Handle` and `ProductType` properties in `ShopifyProductFilterOptions` from long to string. ([#29](https://github.com/nozzlegear/ShopifySharp/issues/29))
