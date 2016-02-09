@@ -43,6 +43,30 @@ namespace ShopifySharp
         public ShopifyFulfillmentStatus? FulfillmentStatus { get; set; }
 
         /// <summary>
+        /// Show orders created after date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("created_at_min")]
+        public DateTime? CreatedAtMin { get; set; } = null;
+
+        /// <summary>
+        /// Show orders created before date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("created_at_max")]
+        public DateTime? CreatedAtMax { get; set; } = null;
+
+        /// <summary>
+        /// Show orders last updated after date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("updated_at_min")]
+        public DateTime? UpdatedAtMin { get; set; } = null;
+
+        /// <summary>
+        /// Show orders last updated before date (format: 2008-12-31 03:00).
+        /// </summary>
+        [JsonProperty("updated_at_max")]
+        public DateTime? UpdatedAtMax { get; set; } = null;
+
+        /// <summary>
         /// Parameterizes this <see cref="ShopifyOrderFilterOptions"/> class, with special handling for <see cref="Ids"/>.
         /// </summary>
         /// <param name="propName">The name of the property. Will match the property's <see cref="JsonPropertyAttribute"/> name — 

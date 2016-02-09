@@ -28,25 +28,25 @@ namespace ShopifySharp
         /// Filter by product title.
         /// </summary>
         [JsonProperty("title")]
-        public long? Title { get; set; } = null;
+        public string Title { get; set; } = null;
 
         /// <summary>
         /// Filter by product vendor.
         /// </summary>
         [JsonProperty("vendor")]
-        public long? Vendor { get; set; } = null;
+        public string Vendor { get; set; } = null;
 
         /// <summary>
         /// Filter by product handle.
         /// </summary>
         [JsonProperty("handle")]
-        public long? Handle { get; set; } = null;
+        public string Handle { get; set; } = null;
 
         /// <summary>
         /// Filter by product type.
         /// </summary>
         [JsonProperty("product_type")]
-        public long? ProductType { get; set; } = null;
+        public string ProductType { get; set; } = null;
 
         /// <summary>
         /// Filter by collection id.
