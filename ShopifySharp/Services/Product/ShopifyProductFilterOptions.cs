@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// <summary>
         /// Filter by collection id.
         /// </summary>
-        [JsonProperty("collecion_id")]
+        [JsonProperty("collection_id")]
         public long? CollectionId { get; set; } = null;
 
         /// <summary>
