@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using RestSharp;
+﻿using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,7 +48,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyRecurringCharge"/>.</returns>
         public async Task<ShopifyRecurringCharge> GetAsync(long id, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges/{0}.json".FormatWith(id), Method.GET, "recurring_application_charge");
+            IRestRequest req = RequestEngine.CreateRequest($"recurring_application_charges/{id}.json", Method.GET, "recurring_application_charge");
 
             if(string.IsNullOrEmpty(fields) == false)
             {
@@ -88,7 +87,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to activate.</param>
         public async Task ActivateAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges/{0}/activate.json".FormatWith(id), Method.POST);
+            IRestRequest req = RequestEngine.CreateRequest($"recurring_application_charges/{id}/activate.json", Method.POST);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
@@ -99,7 +98,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to delete.</param>
         public async Task DeleteAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges/{0}.json".FormatWith(id), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"recurring_application_charges/{id}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

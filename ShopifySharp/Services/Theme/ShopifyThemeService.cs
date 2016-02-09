@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -49,7 +48,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyTheme"/>.</returns>
         public async Task<ShopifyTheme> GetAsync(long themeId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}.json".FormatWith(themeId), Method.GET, "theme");
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.GET, "theme");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -91,7 +90,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyTheme"/>.</returns>
         public async Task<ShopifyTheme> UpdateAsync(ShopifyTheme theme)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}.json".FormatWith(theme.Id.Value), Method.PUT, "theme");
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{theme.Id.Value}.json", Method.PUT, "theme");
 
             req.AddJsonBody(new { theme });
 
@@ -104,7 +103,7 @@ namespace ShopifySharp
         /// <param name="themeId">The Theme object's Id.</param>
         public async Task DeleteAsync(long themeId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes/{0}.json".FormatWith(themeId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

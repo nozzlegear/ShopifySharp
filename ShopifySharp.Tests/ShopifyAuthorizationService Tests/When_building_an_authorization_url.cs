@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Humanizer;
 using ShopifySharp.Enums;
 
 namespace ShopifySharp.Tests
@@ -28,7 +27,7 @@ namespace ShopifySharp.Tests
 
         It should_build_an_authorization_url = () =>
         {
-            _Result.ToString().ShouldContain("/admin/oauth/authorize?client_id={0}&scope=read_customers,write_customers".FormatWith(Utils.ApiKey));
+            _Result.ToString().ShouldContain($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers");
         };
 
         Cleanup after = () =>

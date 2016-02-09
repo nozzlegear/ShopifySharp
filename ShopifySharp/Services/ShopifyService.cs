@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using RestSharp;
+﻿using RestSharp;
 using ShopifySharp.Serializers;
 using System;
 using System.Collections.Generic;
