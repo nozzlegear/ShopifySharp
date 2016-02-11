@@ -117,6 +117,7 @@
     <Compile Include="Services\Collect\ShopifyCollectFilterOptions.cs" />
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
     <Compile Include="Services\CustomCollection\ShopifyCustomCollectionFilterOptions.cs" />
+    <Compile Include="Services\CustomCollection\ShopifyCustomCollectionService.cs" />
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
     <Compile Include="Services\Page\ShopifyPageService.cs" />
     <Compile Include="Services\Page\ShopifyPageFilterOptions.cs" />
@@ -146,6 +147,8 @@
     <Compile Include="Enums\ShopifyTransactionError.cs" />
     <Compile Include="Enums\ShopifyTransactionKind.cs" />
     <Compile Include="Services\Charge\ShopifyChargeService.cs" />
+    <Compile Include="Services\SmartCollection\ShopifySmartCollectionFilterOptions.cs" />
+    <Compile Include="Services\SmartCollection\ShopifySmartCollectionService.cs" />
     <Compile Include="Services\Theme\ShopifyThemeService.cs" />
     <Compile Include="Services\Transaction\ShopifyTransactionService.cs" />
     <Compile Include="Services\Webhook\ShopifyWebhookFilterOptions.cs" />
