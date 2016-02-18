@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -66,6 +62,8 @@
     <Compile Include="Entities\ShopifyCharge.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
     <Compile Include="Entities\ShopifyCollect.cs" />
+    <Compile Include="Entities\ShopifyCustomCollection.cs" />
+    <Compile Include="Entities\ShopifyPage.cs" />
     <Compile Include="Entities\ShopifyProduct.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
     <Compile Include="Entities\ShopifyFulfillment.cs" />
@@ -73,6 +71,8 @@
     <Compile Include="Entities\ShopifyOrder.cs" />
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
     <Compile Include="Entities\ShopifyRedirect.cs" />
+    <Compile Include="Entities\ShopifySmartCollection.cs" />
+    <Compile Include="Entities\ShopifySmartCollectionRules.cs" />
     <Compile Include="Entities\ShopifyTheme.cs" />
     <Compile Include="Enums\ShopifyProductFulfillmentService.cs" />
     <Compile Include="Entities\ShopifyProductImage.cs" />
@@ -116,7 +116,11 @@
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
     <Compile Include="Services\Collect\ShopifyCollectFilterOptions.cs" />
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
+    <Compile Include="Services\CustomCollection\ShopifyCustomCollectionFilterOptions.cs" />
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
+    <Compile Include="Services\Page\ShopifyPageService.cs" />
+    <Compile Include="Services\Page\ShopifyPageFilterOptions.cs" />
+    <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductFilterOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />

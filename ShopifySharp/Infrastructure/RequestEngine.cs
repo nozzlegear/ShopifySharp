@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShopifySharp.Serializers;
@@ -28,7 +27,7 @@ namespace ShopifySharp
                 //Try to fix that by adding a scheme and checking again.
                 if (Uri.IsWellFormedUriString(Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl, UriKind.Absolute) == false)
                 {
-                    throw new ShopifyException("The given {0} cannot be converted into a well-formed URI.".FormatWith(nameof(myShopifyUrl)));
+                    throw new ShopifyException($"The given {nameof(myShopifyUrl)} cannot be converted into a well-formed URI.");
                 }
                 else
                 {
@@ -156,7 +155,7 @@ namespace ShopifySharp
 
                 HttpStatusCode code = response.StatusCode;
                 string message = string.IsNullOrEmpty(error.Errors) ?
-                    "Response did not indicate success. Status: {0} {1}.".FormatWith((int)code, response.StatusDescription) :
+                    $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}." :
                     error.Errors;
 
                 throw new ShopifyException(code, error, message);

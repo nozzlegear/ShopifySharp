@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -62,7 +61,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyCustomer"/>.</returns>
         public async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customerId), Method.GET, "customer");
+            IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.GET, "customer");
 
             if(string.IsNullOrEmpty(fields) == false)
             {
@@ -118,7 +117,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ShopifyCustomer"/>.</returns>
         public async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customer.Id.Value), Method.PUT, "customer");
+            IRestRequest req = RequestEngine.CreateRequest($"customers/{customer.Id.Value}.json", Method.PUT, "customer");
 
             req.AddJsonBody(new { customer });
 
@@ -131,7 +130,7 @@ namespace ShopifySharp
         /// <param name="customerId">The customer object's Id.</param>
         public async Task DeleteAsync(long customerId)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/{0}.json".FormatWith(customerId), Method.DELETE);
+            IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

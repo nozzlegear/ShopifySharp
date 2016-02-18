@@ -60,8 +60,22 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Collects](#collects)
 - [Fulfillments](#fulfillments)
 - [Transactions](#transactions)
+- [Pages](#pages)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
+
+### Contributors
+
+These generous people have contributed their own hard work and time to improving ShopifySharp:
+
+- [Yitzchok](https://github.com/yitzchok)
+- [Shannan Finley](https://github.com/squallop)
+- [stepankobzey](https://github.com/stepankobzey)
+- [Cathy Pank](https://github.com/Panksy)
+- [mooglegiant](https://github.com/mooglegiant)
+- [ishahrier](https://github.com/ishahrier)
+
+Thank you!
 
 # Usage
 
@@ -536,8 +550,6 @@ await service.OpenAsync(orderId);
 
 ## Products
 
-The `ShopifyProductService`, tests and all related models were built by [Yitzchok](https://github.com/yitzchok). Thank you for contributing!
-
 ### Creating a product
 
 ```c#
@@ -939,8 +951,6 @@ var filteredRedirects = await service.ListAsync(new ShopifyRedirectListOptions()
 
 A `ShopifyCollect` is an object that connects a product to a custom collection.
 
-The `ShopifyCollectService` and models were built by [stepankobzey](https://github.com/stepankobzey). Thank you for contributing!
-
 ### Creating a collect
 
 ```c#
@@ -1209,6 +1219,64 @@ var transactions = await service.ListAsync(orderId);
 
 //Optionally filter the list to those after the given id
 var transactions = await service.ListAsync(orderId, sinceId);
+```
+
+## Pages
+
+A `ShopifyPage` represents a web page on the merchant's Shopify storefront.
+
+### Creating a page
+
+```cs
+var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
+var page = new ShopifyPage()
+{
+    CreatedAt = DateTime.UtcNow,
+    Title = "Burton Custom Freestlye 151",
+    BodyHtml = "<strong>Good snowboard!</strong>",
+};
+
+page = await service.CreateAsync(page);
+```
+
+### Counting a page
+
+```cs
+var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
+```
+
+### Listing pages
+
+```cs
+var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
+var pages = await service.ListAsync();
+```
+
+### Retrieving a page
+
+```cs
+var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
+var page = await service.GetAsync(pageId);
+```
+
+### Updating a page
+
+```cs
+var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
+var page = await service.GetAsync(pageId);
+
+page.Title = "My New Page Title",
+
+page = await service.UpdateAsync(page);
+```
+
+### Deleting a page
+
+```c#
+var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(pageId);
 ```
 
 # A note on enums

@@ -35,10 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
       <Private>True</Private>
@@ -57,6 +53,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -108,14 +105,23 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
+    <Compile Include="ShopifyPageService_Tests\Test_Data\PageCreation.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_counting_pages.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_creating_a_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page_add_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_deleting_a_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_getting_a_list_of_pages.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_getting_one_page.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_creating_a_page_with_metafields.cs" />
+    <Compile Include="ShopifyPageService_Tests\When_updating_a_page.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
-    <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products - Copy.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
-    <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
-    <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
+    <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_deleting_a_recurring_charge.cs" />
@@ -206,6 +212,7 @@
     <None Include="Playlists\FalseToNullConverter.playlist" />
     <None Include="Playlists\Fulfillments.playlist" />
     <None Include="Playlists\Orders.playlist" />
+    <None Include="Playlists\Pages.playlist" />
     <None Include="Playlists\Products.playlist" />
     <None Include="Playlists\RecurringCharges.playlist" />
     <None Include="Playlists\Redirects.playlist" />
@@ -220,7 +227,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="ShopifyShopService Tests\Test_Data\" />
   </ItemGroup>
   <Choose>

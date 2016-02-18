@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace ShopifySharp
 {
-    public class ShopifyProductFilterOptions : ShopifyFilterOptions
+    public class ShopifyPageFilterOptions : ShopifyFilterOptions
     {
         /// <summary>
         /// An optional array of order ids to retrieve. 
@@ -25,34 +25,16 @@ namespace ShopifySharp
         public long? SinceId { get; set; } = null;
 
         /// <summary>
-        /// Filter by product title.
+        /// Filter by page title.
         /// </summary>
         [JsonProperty("title")]
-        public string Title { get; set; } = null;
+        public long? Title { get; set; } = null;
 
         /// <summary>
-        /// Filter by product vendor.
-        /// </summary>
-        [JsonProperty("vendor")]
-        public string Vendor { get; set; } = null;
-
-        /// <summary>
-        /// Filter by product handle.
+        /// Filter by page handle.
         /// </summary>
         [JsonProperty("handle")]
-        public string Handle { get; set; } = null;
-
-        /// <summary>
-        /// Filter by product type.
-        /// </summary>
-        [JsonProperty("product_type")]
-        public string ProductType { get; set; } = null;
-
-        /// <summary>
-        /// Filter by collection id.
-        /// </summary>
-        [JsonProperty("collection_id")]
-        public long? CollectionId { get; set; } = null;
+        public long? Handle { get; set; } = null;    
 
         /// <summary>
         /// Show products created after date (format: 2008-12-31 03:00).
