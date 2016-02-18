@@ -39,8 +39,9 @@ namespace ShopifySharp
 
         /// <summary>
         /// The date and time when the product was published. The API returns this value in ISO 8601 format. 
+        /// Set to NULL to unpublish a product
         /// </summary>
-        [JsonProperty("published_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty("published_at", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
         public DateTime? PublishedAt { get; set; }
 
         /// <summary>
