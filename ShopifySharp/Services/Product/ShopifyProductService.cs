@@ -129,6 +129,48 @@ namespace ShopifySharp
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }
 
+        /// <summary>
+        /// Publishes an unpublished <see cref="ShopifyProduct"/>.
+        /// </summary>
+        /// <param name="id">The product's id.</param>
+        /// <returns>The published <see cref="ShopifyProduct"/></returns>
+        public async Task<ShopifyProduct> PublishAsync(long id)
+        {
+            IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
+
+            req.AddJsonBody(new
+            {
+                product = new
+                {
+                    id = id,
+                    published = true
+                }
+            });
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+        }
+
+        /// <summary>
+        /// Unpublishes an published <see cref="ShopifyProduct"/>.
+        /// </summary>
+        /// <param name="id">The product's id.</param>
+        /// <returns>The unpublished <see cref="ShopifyProduct"/></returns>
+        public async Task<ShopifyProduct> UnpublishAsync(long id)
+        {
+            IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
+
+            req.AddJsonBody(new
+            {
+                product = new
+                {
+                    id = id,
+                    published = false
+                }
+            });
+
+            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+        }
+
         #endregion
     }
 }

@@ -117,10 +117,13 @@
     <Compile Include="ShopifyPageService_Tests\When_updating_a_page.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
+    <Compile Include="ShopifyProductService Tests\When_creating_an_unpublished_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_a_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_deleting_a_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_getting_a_list_of_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_getting_one_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_publishing_a_product.cs" />
+    <Compile Include="ShopifyProductService Tests\When_unpublishing_a_product.cs" />
     <Compile Include="ShopifyProductService Tests\When_updating_a_product.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_activating_a_recurring_charge.cs" />
     <Compile Include="ShopifyRecurringChargeService Tests\When_creating_a_recurring_charge.cs" />
