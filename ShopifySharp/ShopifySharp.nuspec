@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  1.15.1
+  ======
+  - Support for publishing and unpublishing a Shopify product.
+  - Bugfix: Creating an unpublished product was broken and would create it as published.
+      
   1.15.0
   ======
   - New feature: ShopifyPageService. Create, get, list, count, update and delete a shop's web pages. ([#25](https://github.com/nozzlegear/ShopifySharp/pull/25))
