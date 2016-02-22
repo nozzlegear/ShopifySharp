@@ -570,6 +570,10 @@ var product = new ShopifyProduct()
 };
 
 product = await service.CreateAsync(product);
+
+//By default, creating a product will publish it. To create an unpublished product:+1:
+product = await service.CreateAsync(product, new ShopifyProductCreateOptions() { Published = false });
+
 ```
 
 ### Retrieving a product
@@ -621,6 +625,20 @@ var filter = new ShopifyProductFilterOptions()
     } 
 };
 products = await service.ListAsync(filter);
+```
+
+### Publishing a product
+
+```cs
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+var product = await service.PublishAsync(productId);
+```
+
+### Unpublishing a product
+
+```cs
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+var product = await service.UnpublishAsync(productId);
 ```
 
 ## Webhooks
