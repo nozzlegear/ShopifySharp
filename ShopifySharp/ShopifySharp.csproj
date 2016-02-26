@@ -118,6 +118,8 @@
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
     <Compile Include="Services\CustomCollection\ShopifyCustomCollectionFilterOptions.cs" />
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
+    <Compile Include="Services\MetaField\ShopifyMetaFieldFilterOptions.cs" />
+    <Compile Include="Services\MetaField\ShopifyMetaFieldService.cs" />
     <Compile Include="Services\Page\ShopifyPageService.cs" />
     <Compile Include="Services\Page\ShopifyPageFilterOptions.cs" />
     <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />
