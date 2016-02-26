@@ -75,6 +75,7 @@ These generous people have contributed their own hard work and time to improving
 - [Cathy Pank](https://github.com/Panksy)
 - [mooglegiant](https://github.com/mooglegiant)
 - [ishahrier](https://github.com/ishahrier)
+- [darkstar74](https://github.com/darkstar74)
 
 Thank you!
 
