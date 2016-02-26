@@ -61,6 +61,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Fulfillments](#fulfillments)
 - [Transactions](#transactions)
 - [Pages](#pages)
+- [Metafields](#metafields)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -1296,6 +1297,65 @@ var service = new ShopifyPageService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(pageId);
 ```
+
+## Metafields
+
+### Creating a metafield
+
+```cs
+var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
+var metafield = new ShopifyMetaField()
+{
+    Namespace = "myNamespace",
+    Key = "myKey",
+    Value = "5",
+    ValueType = "integer",
+    Description = "This is a test meta field. It is an integer value."  
+};
+
+//Create a new metafield on a product
+metafield = await service.CreateAsync(metafield, productId, "products");
+```
+
+### Counting metafields
+
+```cs
+var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(productId, "products");
+```
+
+### Listing metafields
+
+```cs
+var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
+var metafields = await service.ListAsync(productId, "products");
+```
+
+### Getting a metafield
+
+```cs
+var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
+var metafield = await service.GetAsync(metafieldId);
+```
+
+### Updating a metafield
+
+```cs
+var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
+var metafield = await service.GetAsync(metafieldId);
+
+metafield.Value = "45";
+
+metafield = await service.UpdateAsync(metafield);
+```
+
+### Deleting a metafield
+
+```cs
+var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
+await service.DeleteAsync(metafieldId);
+```
+
 
 # A note on enums
 
