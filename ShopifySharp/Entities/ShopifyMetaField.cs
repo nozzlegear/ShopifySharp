@@ -38,5 +38,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("description")]
         public string Description { get; set; }
+		
+		/// <summary>
+        /// The Id of the Shopify Resource that the metafield is associated with. This value could be the id of things like product, order, variant, collection.
+        /// </summary>
+        [JsonProperty("owner_id")]
+        public long? OwnerId { get; set; }
+
+        /// <summary>
+        /// The name of the Shopify Resource that the metafield is associated with. This could be things like product, order, variant, collection.
+        /// </summary>
+        [JsonProperty("owner_resource")]
+        public string OwnerResource { get; set; }
     }
 }

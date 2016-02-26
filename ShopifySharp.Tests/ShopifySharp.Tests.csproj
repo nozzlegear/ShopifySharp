@@ -104,6 +104,14 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
+	<Compile Include="ShopifyMetaFieldService Tests\Test_Data\MetaFieldCreation.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_counting_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_creating_a_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_deleting_a_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_filtered_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_metafields.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_getting_one_metafield.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\When_updating_a_metafield.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
     <Compile Include="ShopifyPageService_Tests\Test_Data\PageCreation.cs" />
     <Compile Include="ShopifyPageService_Tests\When_counting_pages.cs" />
@@ -214,6 +222,7 @@
     <None Include="Playlists\Customers.playlist" />
     <None Include="Playlists\FalseToNullConverter.playlist" />
     <None Include="Playlists\Fulfillments.playlist" />
+	<None Include="Playlists\MetaField.playlist" />
     <None Include="Playlists\Orders.playlist" />
     <None Include="Playlists\Pages.playlist" />
     <None Include="Playlists\Products.playlist" />
