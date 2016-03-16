@@ -80,5 +80,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
+
+
+        /// <summary>
+        /// The collection of collects associated to this custom collection
+        /// </summary>
+        [JsonProperty("collects")]
+        public IEnumerable<ShopifyCollect> Collects { get; set; }
     }
 }
