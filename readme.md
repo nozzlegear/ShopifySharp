@@ -62,6 +62,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Transactions](#transactions)
 - [Pages](#pages)
 - [Metafields](#metafields)
+- [Custom Collections](#custom-collections)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -76,14 +77,29 @@ These generous people have contributed their own hard work and time to improving
 - [mooglegiant](https://github.com/mooglegiant)
 - [ishahrier](https://github.com/ishahrier)
 - [darkstar74](https://github.com/darkstar74)
+- [Angel Arriaga](https://github.com/damazoarriaga)
 
 Thank you!
 
-# Usage
+# Using ShopifySharp with a public Shopify app
 
 **Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**. 
 An access token is the token returned after authenticating and authorizing a Shopify app installation with a 
 real Shopify store. 
+
+All instances of `myShopifyUrl` refer to your users' `*.myshopify.com` URL (although their custom domain should work too).
+
+```cs
+var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
+```
+
+# Using ShopifySharp with a private Shopify app
+
+ShopifySharp should work out of the box with your private Shopify application, all you need to do is replace the `shopAccessToken` with your private app's password when initializing a ShopifyService:
+
+```cs
+var service = new ShopifyProductService(myShopifyUrl, privateAppPassword)
+```
 
 If you just need an access token for a private Shopify app, or for running the tests in this library, refer 
 to the **Tests** section below.
@@ -1357,6 +1373,65 @@ var service = new ShopifyMetaFieldService(myShopifyUrl, shopAccessToken);
 await service.DeleteAsync(metafieldId);
 ```
 
+## Custom Collections
+
+A custom collection is a grouping of products that a shop owner can create to make their shops easier to browse. A shop owner creates a custom collection and then selects the products that will go into it. 
+
+### Creating a custom collection
+
+```cs
+var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
+var collection = await service.CreateAsync(new ShopifyCustomCollection()
+{
+    Title = "My Custom Collection",
+    Published = true,
+    PublishedAt = DateTime.UtcNow,
+    Image = new ShopifyCustomCollectionImage()
+    {
+        Src = "http://placehold.it/250x250"
+    }
+});
+```
+
+### Getting a custom collection
+
+```cs
+var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
+var collection = await service.GetAsync(collectionId);
+```
+
+### Counting custom collections
+
+```cs
+var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
+```
+
+### Listing custom collections
+
+```cs
+var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
+var collections = await service.ListAsync();
+```
+
+### Updating a custom collection
+
+```cs
+var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
+var collection = await service.GetAsync(collectionId);
+
+collection.Title = "My new collection title";
+
+collection = await service.UpdateAsync(collection);
+```
+
+### Deleting a custom collection
+
+```cs
+var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(collectionId);
+```
 
 # A note on enums
 

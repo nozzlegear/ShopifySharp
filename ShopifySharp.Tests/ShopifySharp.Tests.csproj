@@ -91,6 +91,13 @@
     <Compile Include="ShopifyCollectService Tests\When_getting_a_collect.cs" />
     <Compile Include="ShopifyCollectService Tests\When_listing_collects.cs" />
     <Compile Include="ShopifyCollectService Tests\When_listing_collects_with_a_filter.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\Utils.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_counting_custom_collections.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_creating_a_custom_collection.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_deleting_custom_collections.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_listing_custom_collections.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_publishing_a_custom_collection.cs" />
+    <Compile Include="ShopifyCustomCollectionService Tests\When_updating_a_custom_collection.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\Test_Data\FulfillmentCreation.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_cancelling_a_fulfillment.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_completing_a_fulfillment.cs" />
@@ -104,7 +111,7 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
-	<Compile Include="ShopifyMetaFieldService Tests\Test_Data\MetaFieldCreation.cs" />
+    <Compile Include="ShopifyMetaFieldService Tests\Test_Data\MetaFieldCreation.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_counting_metafields.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_creating_a_metafield.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_deleting_a_metafield.cs" />
@@ -222,7 +229,7 @@
     <None Include="Playlists\Customers.playlist" />
     <None Include="Playlists\FalseToNullConverter.playlist" />
     <None Include="Playlists\Fulfillments.playlist" />
-	<None Include="Playlists\MetaField.playlist" />
+    <None Include="Playlists\MetaField.playlist" />
     <None Include="Playlists\Orders.playlist" />
     <None Include="Playlists\Pages.playlist" />
     <None Include="Playlists\Products.playlist" />

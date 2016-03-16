@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class ShopifyCustomCollectionFilterOptions : ShopifyFilterOptions
+    /// <summary>
+    /// Options for filtering <see cref="ShopifyCustomCollectionService"/> requests.
+    /// </summary>
+    public class ShopifyCustomCollectionFilterOptions : ShopifyListFilter
     {
-
-        /// <summary>
-        /// Restrict results to after the specified ID.
-        /// </summary>
-        [JsonProperty("since_id")]
-        public long? SinceId { get; set; }
-
         /// <summary>
         /// Show smart collections with given title 
         /// </summary>
@@ -27,25 +23,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("product_id")]
         public long? ProductId { get; set; }
-
-
+        
         /// <summary>
         /// Filter by smart collection handle
         /// </summary>
         [JsonProperty("handle")]
         public string Handle { get; set; }
-
-        /// <summary>
-        /// Show products last updated after date (format: 2008-12-31 03:00).
-        /// </summary>
-        [JsonProperty("updated_at_min")]
-        public DateTime? UpdateAtMin { get; set; } = null;
-
-        /// <summary>
-        /// Show products last updated before date (format: 2008-12-31 03:00).
-        /// </summary>
-        [JsonProperty("updated_at_max")]
-        public DateTime? UpdateAtMax { get; set; } = null;
 
         /// <summary>
         /// Show products published after date (format: 2008-12-31 03:00).

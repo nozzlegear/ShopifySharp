@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// The collection image.
         /// </summary>
         [JsonProperty("image")]
-        public string Image { get; set; }
+        public ShopifyCustomCollectionImage Image { get; set; }
 
         /// <summary>
         /// The collection image.

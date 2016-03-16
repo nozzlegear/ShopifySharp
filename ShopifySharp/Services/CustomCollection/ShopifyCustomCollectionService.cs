@@ -1,31 +1,22 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Services.CustomCollection
+namespace ShopifySharp
 {
     /// <summary>
     /// A service for manipulating mapping between custom collections and collections
     /// </summary>
-    public class ShopifyCustomCollectionServices : ShopifyService
+    public class ShopifyCustomCollectionService : ShopifyService
     {
-
-        #region Constructor
         /// <summary>
-        /// Creates a new instance of <see cref="ShopifyCustomCollectionServices" />.
+        /// Creates a new instance of <see cref="ShopifyCustomCollectionService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public ShopifyCustomCollectionServices(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion Constructor
-
-        #region Public, non-static methods
-
+        public ShopifyCustomCollectionService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
+        
         /// <summary>
         /// default: 50
         /// Gets a list of up to 250 custom collections for the corresponding productId
@@ -40,7 +31,6 @@ namespace ShopifySharp.Services.CustomCollection
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomCollection>>(_RestClient, req);
-
         }
 
         /// <summary>
@@ -128,7 +118,5 @@ namespace ShopifySharp.Services.CustomCollection
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyCustomCollection>(_RestClient, req);
         }
-
-        #endregion Public, non-static methods
     }
 }
