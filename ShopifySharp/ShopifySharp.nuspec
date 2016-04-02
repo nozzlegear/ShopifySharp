@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  1.17.1
+  ======
+  - Bugfix: ShopifyAuthorizationService.IsAuthentic* methods threw an exception when signature was null, rather than returning false.
+  
   1.17.0
   ======
   - New feature: ShopifyCustomCollectionService. Create, get, list, count, update and delete custom collections.

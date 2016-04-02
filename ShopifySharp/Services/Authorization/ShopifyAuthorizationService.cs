@@ -27,6 +27,11 @@ namespace ShopifySharp
         public static bool IsAuthenticRequest(NameValueCollection querystring, string shopifySecretKey)
         {
             string signature = querystring.Get("signature");
+            
+            if (string.IsNullOrEmpty(signature))
+            { 
+                return false;
+            }
 
             //Convert the querystring to a dictionary, which lets us query it with LINQ
             IDictionary<string, string> parameters = querystring
@@ -66,6 +71,11 @@ namespace ShopifySharp
         public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string shopifySecretKey)
         {
             string signature = querystring.Get("signature");
+            
+            if (string.IsNullOrEmpty(signature))
+            { 
+                return false;
+            }
 
             // To calculate signature, order all querystring parameters by alphabetical (exclude the 
             // signature itself). Then, hash it with the secret key.
@@ -123,15 +133,13 @@ namespace ShopifySharp
             {
                 return false;
             }
-            else
-            {
-                //Compute a hash from the apiKey and the request body
-                HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
-                string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
 
-                //Webhook is valid if computed hash matches the header hash
-                return hash == hmacHeader;
-            }
+            //Compute a hash from the apiKey and the request body
+            HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+            string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
+
+            //Webhook is valid if computed hash matches the header hash
+            return hash == hmacHeader; 
         }
 
         /// <summary>
