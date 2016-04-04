@@ -81,6 +81,7 @@
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_proxy_page_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_checking_if_a_shopify_url_is_valid.cs" />
     <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />

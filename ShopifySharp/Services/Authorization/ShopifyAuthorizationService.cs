@@ -178,7 +178,7 @@ namespace ShopifySharp
             RestClient client = RequestEngine.CreateClient(uri);
 
             //Make request
-            RestRequest request = new RestRequest("admin", Method.GET);
+            RestRequest request = new RestRequest("", Method.GET);
             IRestResponse response = await client.ExecuteTaskAsync(request);
 
             //Valid Shopify stores will have an X-ShopId header
