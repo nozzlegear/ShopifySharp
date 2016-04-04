@@ -26,39 +26,52 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the request is authentic or not.</returns>
         public static bool IsAuthenticRequest(NameValueCollection querystring, string shopifySecretKey)
         {
-            string signature = querystring.Get("signature");
-            
-            if (string.IsNullOrEmpty(signature))
-            { 
+            string hmac = querystring.Get("hmac");
+
+            if (string.IsNullOrEmpty(hmac))
+            {
                 return false;
             }
 
-            //Convert the querystring to a dictionary, which lets us query it with LINQ
-            IDictionary<string, string> parameters = querystring
-                .Cast<string>()
-                .Select(s => new { Key = s, Value = querystring[s] })
-                .ToDictionary(d => d.Key, d => d.Value);
+            // To calculate HMAC signature:
+            // 1. Cast querystring to KVP pairs.
+            // 2. Remove `signature` and `hmac` keys.
+            // 3. Replace & with %26, % with %25 in keys and values.
+            // 4. Replace = with %3D in keys only.
+            // 5. Join each key and value with = (key=value).
+            // 6. Sorty kvps alphabetically.
+            // 7. Join kvps together with & (key=value&key=value&key=value).
+            // 8. Compute the kvps with an HMAC-SHA256 using the secret key.
+            // 9. Request is authentic if the computed string equals the `hash` in query string.
+            // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
 
-            //To calculate signature, order all querystring parameters by alphabetical (exclude the signature itself), and append it to the secret key.
-            string calculatedSignature = shopifySecretKey + string.Join(null, parameters
-                .Where(x => x.Key != "signature")
-                .OrderBy(x => x.Key)
-                .Select(x => string.Format("{0}={1}", x.Key, x.Value)));
-
-            //Convert calculated signature to bytes
-            Byte[] sigBytes = Encoding.UTF8.GetBytes(calculatedSignature);
-
-            //Runt hose bytes through an MD5 hash
-            using (MD5 md5 = MD5.Create())
+            Func<string, bool, string> replaceChars = (string s, bool isKey) =>
             {
-                sigBytes = md5.ComputeHash(sigBytes);
-            }
+                //Important: Replace % before replacing &. Else second replace will replace those %25s.
+                string output = (s?.Replace("%", "%25").Replace("&", "%26")) ?? "";
+
+                if (isKey)
+                {
+                    output = output.Replace("=", "%3D");
+                }
+
+                return output;
+            };
+
+            var kvps = querystring.Cast<string>()
+                .Select(s => new { Key = replaceChars(s, true), Value = replaceChars(querystring[s], false) })
+                .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
+                .OrderBy(kvp => kvp.Key)
+                .Select(kvp => $"{kvp.Key}={kvp.Value}");
+
+            var hmacHasher = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+            var hash = hmacHasher.ComputeHash(Encoding.UTF8.GetBytes(string.Join("&", kvps)));
 
             //Convert bytes back to string, replacing dashes, to get the final signature.
-            calculatedSignature = BitConverter.ToString(sigBytes).Replace("-", "");
+            var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");
 
             //Request is valid if the calculated signature matches the signature from the querystring.
-            return calculatedSignature.ToUpper() == signature.ToUpper();
+            return calculatedSignature.ToUpper() == hmac.ToUpper();
         }
 
         /// <summary>
@@ -71,24 +84,36 @@ namespace ShopifySharp
         public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string shopifySecretKey)
         {
             string signature = querystring.Get("signature");
-            
+
             if (string.IsNullOrEmpty(signature))
-            { 
+            {
                 return false;
             }
 
             // To calculate signature, order all querystring parameters by alphabetical (exclude the 
             // signature itself). Then, hash it with the secret key.
-            var parameters = querystring
-                .Cast<string>()
-                .Select(s => new { Key = s, Value = querystring[s] })
-                .ToDictionary(d => d.Key, d => d.Value)
-                .Where(x => x.Key != "signature")
-                .OrderBy(x => x.Key)
-                .Select(x => string.Format("{0}={1}", x.Key, x.Value));
+
+            Func<string, bool, string> replaceChars = (string s, bool isKey) =>
+            {
+                //Important: Replace % before replacing &. Else second replace will replace those %25s.
+                string output = (s?.Replace("%", "%25").Replace("&", "%26")) ?? "";
+
+                if (isKey)
+                {
+                    output = output.Replace("=", "%3D");
+                }
+
+                return output;
+            };
+
+            var kvps = querystring.Cast<string>()
+                .Select(s => new { Key = replaceChars(s, true), Value = replaceChars(querystring[s], false) })
+                .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
+                .OrderBy(kvp => kvp.Key)
+                .Select(kvp => $"{kvp.Key}={kvp.Value}");
 
             var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(string.Join(null, parameters)));
+            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(string.Join(null, kvps)));
 
             //Convert bytes back to string, replacing dashes, to get the final signature.
             var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");

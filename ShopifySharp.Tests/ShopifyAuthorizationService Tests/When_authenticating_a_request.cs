@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyAuthorizationService_Tests
 {
     [Subject(typeof(ShopifyAuthorizationService))]
-    class When_authenticating_a_proxy_page_request
+    class When_authenticating_a_request
     {
         Establish context = () =>
         {
             //Configure querystring
             RequestQuerystring = new NameValueCollection();
+            RequestQuerystring.Add("hmac", "134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746");
             RequestQuerystring.Add("shop", "stages-test-shop-2.myshopify.com");
-            RequestQuerystring.Add("path_prefix", "/apps/stages-order-tracker");
-            RequestQuerystring.Add("timestamp", "1459781841");
-            RequestQuerystring.Add("signature", "239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a");
+            RequestQuerystring.Add("signature", "f477a85f3ed6027735589159f9da74da");
+            RequestQuerystring.Add("timestamp", "1459779785");
         };
 
         Because of = () =>
         {
-            IsValid = ShopifyAuthorizationService.IsAuthenticProxyRequest(RequestQuerystring, Utils.SecretKey);
+            IsValid = ShopifyAuthorizationService.IsAuthenticRequest(RequestQuerystring, Utils.SecretKey);
         };
 
-        It should_authenticate_a_proxy_page_request = () =>
+        It should_authenticate_a_request = () =>
         {
             IsValid.ShouldBeTrue();
         };

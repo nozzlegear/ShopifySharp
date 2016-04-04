@@ -79,6 +79,7 @@
     <Compile Include="ShopifyAssetService Tests\When_retrieving_an_asset.cs" />
     <Compile Include="ShopifyAssetService Tests\When_updating_an_asset.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_proxy_page_request.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
     <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
