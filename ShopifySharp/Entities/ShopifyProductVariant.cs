@@ -44,10 +44,10 @@ namespace ShopifySharp
         public ShopifyProductInventoryPolicy InventoryPolicy { get; set; }
 
         /// <summary>
-        /// Service who is doing the fulfillment. Valid values are: manual.
+        /// Service that is doing the fulfillment. Can be 'manual' or any custom string.
         /// </summary>
         [JsonProperty("fulfillment_service")]
-        public ShopifyProductFulfillmentService FulfillmentService { get; set; }
+        public string FulfillmentService { get; set; }
 
         /// <summary>
         /// Specifies whether or not Shopify tracks the number of items in stock for this product variant.
