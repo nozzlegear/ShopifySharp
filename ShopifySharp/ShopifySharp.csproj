@@ -109,7 +109,6 @@
     <Compile Include="Entities\ShopifyShop.cs" />
     <Compile Include="Infrastructure\Parameterizable.cs" />
     <Compile Include="Infrastructure\RequestEngine.cs" />
-    <Compile Include="Infrastructure\ShopifyError.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
     <Compile Include="Services\Asset\ShopifyAssetService.cs" />

@@ -51,6 +51,7 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Web.Extensions" />
@@ -100,6 +101,10 @@
     <Compile Include="ShopifyCustomCollectionService Tests\When_listing_custom_collections.cs" />
     <Compile Include="ShopifyCustomCollectionService Tests\When_publishing_a_custom_collection.cs" />
     <Compile Include="ShopifyCustomCollectionService Tests\When_updating_a_custom_collection.cs" />
+    <Compile Include="ShopifyException Tests\ShopifyExceptionService.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_array.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_object.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_string.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\Test_Data\FulfillmentCreation.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_cancelling_a_fulfillment.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_completing_a_fulfillment.cs" />
