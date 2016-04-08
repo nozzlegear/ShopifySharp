@@ -18,7 +18,13 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            Order = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result;
+            var newOrder = OrderCreation.GenerateOrder();
+            newOrder.NoteAttributes = new List<ShopifyNoteAttribute>()
+            {
+                new ShopifyNoteAttribute() { Name = "Test Name", Value = "Test Value" }
+            };
+
+            Order = Service.CreateAsync(newOrder).Await().AsTask.Result;
         };
 
         It should_create_an_order = () =>
@@ -26,6 +32,8 @@ namespace ShopifySharp.Tests
             Order.ShouldNotBeNull();
             Order.Id.HasValue.ShouldBeTrue();
             Order.ContactEmail.ShouldNotBeNull();
+            Order.NoteAttributes.Count().ShouldBeGreaterThanOrEqualTo(1);
+            Order.NoteAttributes.Any(n => n.Name == "Test Name" && n.Value as string == "Test Value").ShouldBeTrue();
         };
 
         Cleanup after = () =>
