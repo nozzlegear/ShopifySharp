@@ -188,6 +188,7 @@
     <Compile Include="ShopifyScriptTagService Tests\When_getting_a_script_tag.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_listing_script_tags.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_updating_a_script_tag.cs" />
+    <Compile Include="ShopifyShopService Tests\When_uninstalling_an_app.cs" />
     <Compile Include="ShopifyThemeService Tests\Test_Data\ThemeCreation.cs" />
     <Compile Include="ShopifyThemeService Tests\When_creating_a_theme.cs" />
     <Compile Include="ShopifyThemeService Tests\When_deleting_a_theme.cs" />
