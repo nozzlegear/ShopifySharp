@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShopifySharp.Enums;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,14 +51,14 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's webhooks.
         /// </summary>
-        /// <param name="options">Options for filtering the list.</param>
+        /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of webhooks matching the filter.</returns>
-        public async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.GET, "webhooks");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyWebhook>>(_RestClient, req);
         }

@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Filters;
 using ShopifySharp.Tests.Test_Data;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace ShopifySharp.Tests
         Establish context = () =>
         {
             _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
-            _Options = new ShopifyListOptions()
+            _Options = new ShopifyListFilter()
             {
                 Limit = _Limit
             };
@@ -47,7 +48,7 @@ namespace ShopifySharp.Tests
         static List<ShopifyCustomer> _CreatedCustomers = new List<ShopifyCustomer>();
         static int _Limit = 1;
         static ShopifyCustomerService _Service;
-        static ShopifyListOptions _Options;
+        static ShopifyListFilter _Options;
         static IEnumerable<ShopifyCustomer> _Result;
     }
 }

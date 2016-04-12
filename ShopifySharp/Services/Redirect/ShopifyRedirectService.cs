@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,14 +56,14 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
-        /// <param name="options">An optional filter that restricts the results.</param>
+        /// <param name="filter">An optional filter that restricts the results.</param>
         /// <returns>The list of <see cref="ShopifyRedirect"/>.</returns>
-        public async Task<IEnumerable<ShopifyRedirect>> ListAsync(ShopifyRedirectFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyRedirect>> ListAsync(ShopifyRedirectFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.GET, "redirects");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyRedirect>>(_RestClient, req);
         }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,14 +25,14 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's fulfillments.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="options">Options for filtering the count.</param>
+        /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all fulfillments for the shop.</returns>
-        public async Task<int> CountAsync(long orderId, ShopifyCountFilter options = null)
+        public async Task<int> CountAsync(long orderId, ShopifyCountFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/count.json", Method.GET);
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             var responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 

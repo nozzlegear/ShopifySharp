@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Filters;
 using ShopifySharp.Tests.ShopifyCollectService_Tests.Test_Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 
         Because of = () =>
         {
-            Result = Service.ListAsync(new ShopifyCollectFilterOptions()
+            Result = Service.ListAsync(new ShopifyCollectFilter()
             {
                 ProductId = Products[0].Id.Value
             }).Await().AsTask.Result;

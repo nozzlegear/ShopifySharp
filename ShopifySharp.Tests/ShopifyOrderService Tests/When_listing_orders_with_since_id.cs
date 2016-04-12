@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Filters;
 using ShopifySharp.Tests.Test_Data;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace ShopifySharp.Tests
 
             SinceId = CreatedIds[2];
 
-            Options = new ShopifyOrderFilterOptions()
+            Options = new ShopifyOrderFilter()
             {
                 SinceId = SinceId
             };            
@@ -55,7 +56,7 @@ namespace ShopifySharp.Tests
 
         static IEnumerable<ShopifyOrder> Result;
 
-        static ShopifyOrderFilterOptions Options;
+        static ShopifyOrderFilter Options;
 
         static List<long> CreatedIds = new List<long>();
     }

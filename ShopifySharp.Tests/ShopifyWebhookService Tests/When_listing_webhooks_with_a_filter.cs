@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using ShopifySharp.Enums;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp.Tests
 {
@@ -27,7 +28,7 @@ namespace ShopifySharp.Tests
                 CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook(topic: FilterTopic)).Await().AsTask.Result);
             }
 
-            Options = new ShopifyWebhookFilterOptions()
+            Options = new ShopifyWebhookFilter()
             {
                 Topic = FilterTopic
             };
@@ -57,6 +58,6 @@ namespace ShopifySharp.Tests
         static IEnumerable<ShopifyWebhook> Result;
         static ShopifyWebhookTopic FilterTopic = ShopifyWebhookTopic.ShopUpdated;
         static List<ShopifyWebhook> CreatedWebhooks = new List<ShopifyWebhook>();
-        static ShopifyWebhookFilterOptions Options;
+        static ShopifyWebhookFilter Options;
     }
 }

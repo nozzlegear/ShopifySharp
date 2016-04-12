@@ -186,7 +186,7 @@ namespace ShopifySharp
                     }
                     catch (Exception e)
                     {
-                        errors.Add("Parse Error", new List<string>() { json });
+                        errors.Add(e.Message, new List<string>() { json });
                     }
                 }
                 
