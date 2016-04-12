@@ -23,8 +23,8 @@ namespace ShopifySharp
         /// <summary>
         /// DOM event which triggers the loading of the script. Valid values are: <see cref="ShopifyScriptTagEvent.Onload"/>.
         /// </summary>
-        [JsonProperty("event"), JsonConverter(typeof(StringEnumConverter))]
-        public ShopifyScriptTagEvent Event { get; set; }
+        [JsonProperty("event")]
+        public ShopifyScriptTagEvent? Event { get; set; }
 
         /// <summary>
         /// Specifies the location of the ScriptTag.

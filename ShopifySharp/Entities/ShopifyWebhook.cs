@@ -47,7 +47,7 @@ namespace ShopifySharp
         /// The event that will trigger the webhook.
         /// </summary>
         [JsonProperty("topic")]
-        public ShopifyWebhookTopic Topic { get; set; }
+        public ShopifyWebhookTopic? Topic { get; set; }
 
         /// <summary>
         /// The date and time when the webhook was updated.

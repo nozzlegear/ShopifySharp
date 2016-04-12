@@ -1435,15 +1435,15 @@ await service.DeleteAsync(collectionId);
 
 # A note on enums
 
-When I first started building ShopifySharp, I didn't realize how much of a mess Shopify's enum documentation really is. That's partially my fault, because Shopify sends their enum values as strings and I wanted to make life easier by converting those strings to real C# enums.
+I'm a big fan of using enums to make things easier for C# devs, because it removes a lot of the headache that comes with trying to remember all the valid string options for certain properties. With enums, we get those options hardcoded by default. We can easily scroll up and down the list of known values and select the one we need, without having to worry about typos.
 
-The problem is that Shopify rarely documents all of their enum values, and sometimes they send null values too. That's fine for them in dynamic ruby-land, but it breaks things when you're using a strongly-typed language like C#. 
+Many Shopify objects have string properties that only accept a predetermined list of values, and hese properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest. 
 
-Trying to deserialize an unknown or null enum value, of course, throws an exception. At first I tried to get around that by creating a new enum deserializer that would try to convert unknown or null values to a `MyEnumName.Unknown`. While that worked, it was more work than I would prefer to set up each enum with a `.Unknown` value and make sure it serializes and deserializes properly.
+That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks.
 
-[From this point on, all new enums will be nullable](https://github.com/nozzlegear/ShopifySharp/issues/10). It takes the same amount of effort to check if an enum is null as it does to check if it's `Unknown`. However, nullable enums have the added benefit of not requiring their own special `.Unknown` member and dedicated serializer. If the value doesn't exist, or if it's null, the enum field will just be null. No exceptions will be thrown, nobody's app will break.
+To maintain the benefits of enums while also preventing exceptions from undocumented values, all enums in ShopifySharp are nullable and implement a `NullableEnumConverter<EnumType>` JSON converter. If an unknown value is received, the enum will just be converted to null rather than throw an exception.
 
-Unfortunately, it won't be possible to convert previous enums to nullable without breaking builds. Instead, they'll be converted to nullables in the next major release: version 2.0.0. 
+I strongly encourage you to file an issue if you receive or need to use an undocumented enum; or even better: create a pull request.
 
 # Tests
 

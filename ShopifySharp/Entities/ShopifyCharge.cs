@@ -48,8 +48,8 @@ namespace ShopifySharp
         /// <summary>
         /// The status of the charged.
         /// </summary>
-        [JsonProperty("status"), JsonConverter(typeof(ShopifyChargeConverter))]
-        public ShopifyChargeStatus Status { get; set; } = ShopifyChargeStatus.Pending;
+        [JsonProperty("status")]
+        public ShopifyChargeStatus? Status { get; set; }
 
         /// <summary>
         /// States whether or not the application charge is a test transaction.

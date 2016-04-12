@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+using ShopifySharp.Converters;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyAuthorizationScope>))]
     public enum ShopifyAuthorizationScope
     {
         [EnumMember(Value = "read_content")]

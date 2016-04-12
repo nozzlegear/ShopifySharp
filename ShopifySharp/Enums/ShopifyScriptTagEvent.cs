@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using ShopifySharp.Converters;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
     /// <summary>
     /// An enum representing the type of <see cref="ShopifyScriptTag.Event"/>.
     /// </summary>
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyScriptTagEvent>))]
     public enum ShopifyScriptTagEvent
     {
         /// <summary>

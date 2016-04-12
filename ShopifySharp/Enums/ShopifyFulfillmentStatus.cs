@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json;
 using ShopifySharp.Converters;
 using System.Runtime.Serialization;
 
@@ -13,7 +7,7 @@ namespace ShopifySharp.Enums
     /// <summary>
     /// The status of a fulfillment.
     /// </summary>
-    [JsonConverter(typeof(ShopifyFulfillmentStatusConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyFulfillmentStatus>))]
     public enum ShopifyFulfillmentStatus
     {
         /// <summary>

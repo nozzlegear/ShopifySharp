@@ -105,7 +105,7 @@ namespace ShopifySharp
         /// The financial status of an order.
         /// </summary>
         [JsonProperty("financial_status")]
-        public ShopifyOrderFinancialStatus FinancialStatus { get; set; }
+        public ShopifyOrderFinancialStatus? FinancialStatus { get; set; }
 
         /// <summary>
         /// An array of <see cref="ShopifyFulfillment"/> objects for this order.

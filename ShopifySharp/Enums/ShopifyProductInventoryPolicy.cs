@@ -1,10 +1,10 @@
 ﻿using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using ShopifySharp.Converters;
 
 namespace ShopifySharp.Enums
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyProductInventoryPolicy>))]
     public enum ShopifyProductInventoryPolicy
     {
         /// <summary>

@@ -26,6 +26,6 @@ namespace ShopifySharp
         /// The type of discount.
         /// </summary>
         [JsonProperty("type")]
-        public ShopifyDiscountCodeType Type { get; set; }
+        public ShopifyDiscountCodeType? Type { get; set; }
     }
 }

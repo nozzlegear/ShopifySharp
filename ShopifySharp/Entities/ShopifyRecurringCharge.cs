@@ -68,8 +68,8 @@ namespace ShopifySharp
         /// <summary>
         /// The status of the charged.
         /// </summary>
-        [JsonProperty("status"), JsonConverter(typeof(ShopifyRecurringChargeConverter))]
-        public ShopifyRecurringChargeStatus Status { get; set; } = ShopifyRecurringChargeStatus.Pending;
+        [JsonProperty("status")]
+        public ShopifyChargeStatus? Status { get; set; }
 
         /// <summary>
         /// States whether or not the application charge is a test transaction.

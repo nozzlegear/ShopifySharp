@@ -1,11 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
-using Newtonsoft.Json.Converters;
 using ShopifySharp.Converters;
 
 namespace ShopifySharp.Enums
@@ -13,7 +7,7 @@ namespace ShopifySharp.Enums
     /// <summary>
     /// The type of payment processing method
     /// </summary>
-    [JsonConverter(typeof(UnknownEnumConverter<ShopifyProcessingMethod>))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyProcessingMethod>))]
     public enum ShopifyProcessingMethod
     {
         [EnumMember(Value = "checkout")]
@@ -35,9 +29,6 @@ namespace ShopifySharp.Enums
         Free,
 
         [EnumMember(Value = "none")]
-        None,
-
-        [EnumMember(Value = "unknown")]
-        Unknown,
+        None
     }
 }

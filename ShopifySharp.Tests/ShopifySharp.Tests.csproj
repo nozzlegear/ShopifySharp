@@ -214,8 +214,6 @@
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks_with_a_filter.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_updating_a_webhook.cs" />
-    <Compile Include="UnknownEnumConverter Tests\TestObject.cs" />
-    <Compile Include="UnknownEnumConverter Tests\When_using_unknownenumconverter.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService Tests\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

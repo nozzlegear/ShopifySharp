@@ -1,15 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using ShopifySharp.Converters;
 
 namespace ShopifySharp.Enums
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyOrderStatus>))]
     public enum ShopifyOrderStatus
     {
         [EnumMember(Value = "open")]

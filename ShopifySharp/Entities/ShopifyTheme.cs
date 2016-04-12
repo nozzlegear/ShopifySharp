@@ -28,9 +28,6 @@ namespace ShopifySharp
         /// <summary>
         /// Specifies how the theme is being used within the shop.
         /// </summary>
-        /// <remarks>Because Shopify often fails to document all available enum values, and occasionally 
-        /// sends null values, all enums in ShopifySharp will eventually be nullable to avoid throwing 
-        /// exceptions when trying to deserializing.</remarks>
         [JsonProperty("role")]
         public ShopifyThemeRole? Role { get; set; }
 
