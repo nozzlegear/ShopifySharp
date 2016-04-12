@@ -13,13 +13,13 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            _Service.GetAsync().Await();
+            _Service.UninstallAppAsync().Await();
         };
 
         [Ignore("This test cannot be completed because private apps (the kind used to test this library) cannot be uninstalled.")]
         It should_uninstall_the_app = () =>
         {
-            _Shop.ShouldNotBeNull();
+
         };
 
         Cleanup after = () =>
@@ -28,6 +28,5 @@ namespace ShopifySharp.Tests
         };
 
         static ShopifyShopService _Service;
-        static ShopifyShop _Shop;
     }
 }

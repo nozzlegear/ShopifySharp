@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// </summary>
         public async Task UninstallAppAsync()
         {
-            var request = RequestEngine.CreateRequest("shop.json", Method.DELETE);
+            var request = RequestEngine.CreateRequest("api_permissions/current.json", Method.DELETE);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, request);
         }
