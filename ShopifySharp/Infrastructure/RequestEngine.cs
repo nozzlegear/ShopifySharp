@@ -194,12 +194,12 @@ namespace ShopifySharp
 
                 // KVPs are structs and can never be null. Instead, check if the firstError equals the default kvp value.
                 // If so, firstError is null.
-                var firstErrorIsNull = firstError.Equals(default(KeyValuePair<string, string>));
+                var firstErrorIsNull = firstError.Equals(default(KeyValuePair<string, IEnumerable<string>>));
 
                 HttpStatusCode code = response.StatusCode;
                 string message = firstErrorIsNull ?
                     $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}." :
-                    $"{firstError.Key}: {firstError.Value}";
+                    $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
 
                 throw new ShopifyException(code, errors, message, json);
             }
