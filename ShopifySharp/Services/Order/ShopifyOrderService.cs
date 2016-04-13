@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,14 +30,14 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all of the shop's orders.
         /// </summary>
-        /// <param name="options">Options for filtering the count.</param>
+        /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all orders for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyOrderFilterOptions options = null)
+        public async Task<int> CountAsync(ShopifyOrderFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders/count.json", Method.GET);
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public async Task<IEnumerable<ShopifyOrder>> ListAsync(ShopifyOrderFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyOrder>> ListAsync(ShopifyOrderFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.GET, "orders");
 
@@ -65,7 +66,7 @@ namespace ShopifySharp
         /// <param name="customerId">The id of the customer to list orders for.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public async Task<IEnumerable<ShopifyOrder>> ListForCustomerAsync(long customerId, ShopifyOrderFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyOrder>> ListForCustomerAsync(long customerId, ShopifyOrderFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.GET, "orders");
 

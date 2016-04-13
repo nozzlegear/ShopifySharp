@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,14 +22,14 @@ namespace ShopifySharp
         /// default: 50
         /// Gets a list of up to 250 custom collections for the corresponding productId
         /// </summary>
-        /// <param name="options">The <see cref="ShopifyCustomCollection"/>. used to filter results</param>
+        /// <param name="filter">The <see cref="ShopifyCustomCollection"/>. used to filter results</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyCustomCollection>> ListAsync(ShopifyCustomCollectionFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyCustomCollection>> ListAsync(ShopifyCustomCollectionFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("/custom_collections.json", Method.GET, "custom_collections");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomCollection>>(_RestClient, req);
         }
@@ -59,7 +60,7 @@ namespace ShopifySharp
         /// Gets a count of all of the custom collections
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyCustomCollectionFilterOptions options = null)
+        public async Task<int> CountAsync(ShopifyCustomCollectionFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("custom_collections/count.json", Method.GET, "count");
 

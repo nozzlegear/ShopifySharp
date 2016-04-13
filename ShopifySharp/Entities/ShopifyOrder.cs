@@ -105,7 +105,7 @@ namespace ShopifySharp
         /// The financial status of an order.
         /// </summary>
         [JsonProperty("financial_status")]
-        public ShopifyOrderFinancialStatus FinancialStatus { get; set; }
+        public ShopifyOrderFinancialStatus? FinancialStatus { get; set; }
 
         /// <summary>
         /// An array of <see cref="ShopifyFulfillment"/> objects for this order.
@@ -150,10 +150,10 @@ namespace ShopifySharp
         public string Note { get; set; }
 
         /// <summary>
-        /// Extra information that is added to the order. Each array entry must contain a hash with "name" and "value" keys.
+        /// Extra information that is added to the order.
         /// </summary>
         [JsonProperty("note_attributes")]
-        public IEnumerable<KeyValuePair<string, string>> NoteAttributes { get; set; }
+        public IEnumerable<ShopifyNoteAttribute> NoteAttributes { get; set; }
 
         /// <summary>
         /// Numerical identifier unique to the shop. A number is sequential and starts at 1000.

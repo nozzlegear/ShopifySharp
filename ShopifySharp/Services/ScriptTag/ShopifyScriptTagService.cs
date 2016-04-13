@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,12 +50,12 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's <see cref="ShopifyScriptTag"/>s.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyScriptTag>> ListAsync(ShopifyScriptTagListOptions options = null)
+        public async Task<IEnumerable<ShopifyScriptTag>> ListAsync(ShopifyScriptTagFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.GET, "script_tags");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyScriptTag>>(_RestClient, req);
         }

@@ -1,23 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShopifySharp
+namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Filters <see cref="ShopifyRedirectService.ListAsync(ShopifyListOptions)"/> results.
+    /// Options for filtering <see cref="ShopifyRedirectService.ListAsync(ShopifyRedirectFilter)"/> results.
     /// </summary>
-    public class ShopifyRedirectFilterOptions : ShopifyFilterOptions
+    public class ShopifyRedirectFilter : ShopifyListFilter
     {
-        /// <summary>
-        /// Restrict results to after the given id.
-        /// </summary>
-        [JsonProperty("since_id")]
-        public long? SinceId {get; set;}
-
         /// <summary>
         /// An optional parameter that filters the result to redirects with the given path.
         /// </summary>

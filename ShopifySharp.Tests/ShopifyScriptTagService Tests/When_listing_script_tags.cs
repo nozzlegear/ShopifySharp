@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
         Because of = () =>
         {
             Tags = Service.ListAsync().Await().AsTask.Result;
-            FilteredTags = Service.ListAsync(new ShopifyScriptTagListOptions() {
+            FilteredTags = Service.ListAsync(new ShopifyScriptTagFilter() {
                 Src = FilteredSrc
             }).Await().AsTask.Result;
         };

@@ -1,18 +1,13 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ShopifySharp.Converters;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
     /// <summary>
     /// A topic for a <see cref="ShopifyWebhook"/>
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyWebhookTopic>))]
     public enum ShopifyWebhookTopic
     {
         /// <summary>

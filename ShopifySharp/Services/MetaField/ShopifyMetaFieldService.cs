@@ -1,5 +1,6 @@
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
-        /// <param name="options">The <see cref="ShopifyMetaFieldFilterOptions"/> used to filter results</param>
+        /// <param name="filter">The <see cref="ShopifyMetaFieldFilter"/> used to filter results</param>
         /// <returns>The count of all metafields for the given entity and filter options.</returns>
-        public async Task<int> CountAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilterOptions options = null)
+        public async Task<int> CountAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter filter = null)
         {
             string reqPath = "metafields/count.json";
             if (resourceType != null && resourceId != null)
@@ -43,7 +44,7 @@ namespace ShopifySharp
             IRestRequest req = RequestEngine.CreateRequest(reqPath, Method.GET);
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 
@@ -56,9 +57,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
-        /// <param name="options">The <see cref="ShopifyMetaFieldFilterOptions"/> used to filter results</param>
+        /// <param name="options">The <see cref="ShopifyMetaFieldFilter"/> used to filter results</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyMetaField>> ListAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyMetaField>> ListAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter options = null)
         {
             string reqPath = "metafields.json";
             if (resourceType != null && resourceId != null)

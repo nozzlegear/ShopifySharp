@@ -1,18 +1,13 @@
 ﻿using Newtonsoft.Json;
 using ShopifySharp.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
     /// <summary>
-    /// An enum that indicates the status of a <see cref="ShopifyCharge"/> object.
+    /// An enum that indicates the status of <see cref="ShopifyCharge"/> and <see cref="ShopifyRecurringCharge"/> objects.
     /// </summary>
-    [JsonConverter(typeof(ShopifyChargeConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyChargeStatus>))]
     public enum ShopifyChargeStatus
     {
         /// <summary>
@@ -34,16 +29,22 @@ namespace ShopifySharp.Enums
         Active,
 
         /// <summary>
+        /// The charge has been cancelled.
+        /// </summary>
+        [EnumMember(Value = "cancelled")]
+        Cancelled,
+
+        /// <summary>
         /// The charge has been declined by the user and cannot be activated.
         /// </summary>
         [EnumMember(Value = "declined")]
         Declined,
 
         /// <summary>
-        /// The status of the charge is unknown. This is an invalid value. If possible, submit a 
-        /// pull request to https://github.com/nozzlegear/shopifysharp with the correct value.
+        /// The charge has expired.
         /// </summary>
-        [EnumMember(Value = "")]
-        Unknown
+        [EnumMember(Value = "expired")]
+        Expired,
+
     }
 }

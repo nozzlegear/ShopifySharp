@@ -12,9 +12,17 @@ namespace ShopifySharp
         #region Public properties
 
         public HttpStatusCode HttpStatusCode { get; set; }
+        
+        /// <remarks>
+        /// Dictionary is always initialized to ensure null reference errors won't be thrown when trying to check error messages.
+        /// </remarks>
+        public Dictionary<string, IEnumerable<string>> Errors { get; set; } = new Dictionary<string, IEnumerable<string>>();
 
-        public ShopifyError ShopifyError { get; set; }
-
+        /// <summary>
+        /// The raw, JSON-serialized error returned by Shopify.
+        /// </summary>
+        public string JsonError { get; set; }
+        
         #endregion
 
         #region Constructors
@@ -23,10 +31,11 @@ namespace ShopifySharp
 
         public ShopifyException(string message): base(message) { }
 
-        public ShopifyException(HttpStatusCode httpStatusCode, ShopifyError shopifyError, string message) : base(message)
+        public ShopifyException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string jsonError) : base(message)
         {
             HttpStatusCode = httpStatusCode;
-            ShopifyError = shopifyError;
+            Errors = errors;
+            JsonError = jsonError;
         }
 
         #endregion

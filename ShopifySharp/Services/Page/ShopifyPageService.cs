@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +31,12 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's pages.
         /// </summary>
         /// <returns>The count of all pages for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyPageFilterOptions options = null)
+        public async Task<int> CountAsync(ShopifyPageFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages/count.json", Method.GET);
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 
@@ -47,7 +48,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyPage>> ListAsync(ShopifyPageFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyPage>> ListAsync(ShopifyPageFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.GET, "pages");
 

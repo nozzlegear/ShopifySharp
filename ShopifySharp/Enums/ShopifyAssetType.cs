@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using ShopifySharp.Converters;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp.Enums
 {
@@ -11,6 +8,7 @@ namespace ShopifySharp.Enums
     /// An enum representing the type or "bucket" of a <see cref="ShopifyAsset"/>.
     /// </summary>
     /// <remarks>This enum is never serialized or deserialized.</remarks>
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyAssetType>))]
     public enum ShopifyAssetType
     {
         /// <summary>

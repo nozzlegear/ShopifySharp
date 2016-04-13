@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +31,12 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyTheme>> ListAsync(ShopifyListOptions options = null)
+        public async Task<IEnumerable<ShopifyTheme>> ListAsync(ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.GET, "themes");
 
             //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyTheme>>(_RestClient, req);
         }

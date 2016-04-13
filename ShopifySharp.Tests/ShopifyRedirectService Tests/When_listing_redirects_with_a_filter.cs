@@ -1,4 +1,5 @@
 ﻿using Machine.Specifications;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +31,12 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
         Because of = () =>
         {
-            TargetResult = Service.ListAsync(new ShopifyRedirectFilterOptions()
+            TargetResult = Service.ListAsync(new ShopifyRedirectFilter()
             {
                 Target = FilteredTarget
             }).Await().AsTask.Result;
 
-            PathResult = Service.ListAsync(new ShopifyRedirectFilterOptions()
+            PathResult = Service.ListAsync(new ShopifyRedirectFilter()
             {
                 Path = FilteredPath
             }).Await().AsTask.Result;

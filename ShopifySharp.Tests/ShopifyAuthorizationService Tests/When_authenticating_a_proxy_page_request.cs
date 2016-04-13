@@ -15,15 +15,15 @@ namespace ShopifySharp.Tests.ShopifyAuthorizationService_Tests
         {
             //Configure querystring
             RequestQuerystring = new NameValueCollection();
-            RequestQuerystring.Add("shop", "iron-stages-beta-test-shop.myshopify.com");
-            RequestQuerystring.Add("path_prefix", "%2fapps%2fauntiedot-proxy-page-3");
-            RequestQuerystring.Add("timestamp", "1447706366");
-            RequestQuerystring.Add("signature", "8b0062c022124d3c27c459fda841852d24a4424ee81612ee0fabdba1880d3150");            
+            RequestQuerystring.Add("shop", "stages-test-shop-2.myshopify.com");
+            RequestQuerystring.Add("path_prefix", "/apps/stages-order-tracker");
+            RequestQuerystring.Add("timestamp", "1459781841");
+            RequestQuerystring.Add("signature", "239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a");
         };
 
         Because of = () =>
         {
-            IsValid = ShopifyAuthorizationService.IsAuthenticProxyRequest(RequestQuerystring, "This-Is-A-Test-Secret-Key");
+            IsValid = ShopifyAuthorizationService.IsAuthenticProxyRequest(RequestQuerystring, Utils.SecretKey);
         };
 
         It should_authenticate_a_proxy_page_request = () =>

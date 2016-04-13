@@ -41,13 +41,13 @@ namespace ShopifySharp
         /// Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock.
         /// </summary>
         [JsonProperty("inventory_policy")]
-        public ShopifyProductInventoryPolicy InventoryPolicy { get; set; }
+        public ShopifyProductInventoryPolicy? InventoryPolicy { get; set; }
 
         /// <summary>
-        /// Service who is doing the fulfillment. Valid values are: manual.
+        /// Service that is doing the fulfillment. Can be 'manual' or any custom string.
         /// </summary>
         [JsonProperty("fulfillment_service")]
-        public ShopifyProductFulfillmentService FulfillmentService { get; set; }
+        public string FulfillmentService { get; set; }
 
         /// <summary>
         /// Specifies whether or not Shopify tracks the number of items in stock for this product variant.

@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ShopifySharp.Enums;
+using System.Runtime.Serialization;
 
 namespace ShopifySharp.Converters
 {
@@ -21,13 +18,30 @@ namespace ShopifySharp.Converters
             
             if (!Enum.TryParse(reader.Value?.ToString() ?? "", true, out parsed))
             {
-                //Despite using EnumMember, any enum with an '_' value fails the TryParse and IsDefined
-                //checks. Remove underscores and try to match again before returning null.
+                // Some EnumMember values have an '_', '-' or '/' in their value and will fail the TryParse or IsDefined checks.
+                // Use reflection to pull all of the enums values, get their EnumMember value and check if there's a match.
 
-                if (!Enum.TryParse(reader.Value?.ToString().Replace("_", "") ?? "", true, out parsed))
+                var enumType = typeof(T);
+                var enumVals = Enum.GetValues(enumType);
+
+                foreach (var enumVal in enumVals)
                 {
-                    return null;
+                    var valInfo = enumType.GetMember(enumVal.ToString());
+                    var enumMember = valInfo[0].GetCustomAttributes(typeof(EnumMemberAttribute), false);
+
+                    if (enumMember.Length == 0)
+                    {
+                        continue;
+                    }
+
+                    if (((EnumMemberAttribute)enumMember[0]).Value?.ToString() == reader.Value?.ToString())
+                    {
+                        return (T) enumVal;
+                    }
                 }
+
+                //No match found. Return null.
+                return null;
             }
 
             return parsed;

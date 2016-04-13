@@ -1,17 +1,12 @@
 ﻿using Newtonsoft.Json;
 using ShopifySharp.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShopifySharp
+namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering results from certain <see cref="ShopifyWebhookService"/> methods.
+    /// Options for filtering <see cref="ShopifyWebhookService.ListAsync(ShopifyWebhookFilter)" /> results.
     /// </summary>
-    public class ShopifyWebhookFilterOptions : ShopifyFilterOptions
+    public class ShopifyWebhookFilter : ShopifyListFilter
     {
         /// <summary>
         /// An optional filter for the address property. When used, the method will only return webhooks with the given address.

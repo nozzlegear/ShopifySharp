@@ -51,6 +51,7 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Web.Extensions" />
@@ -79,7 +80,9 @@
     <Compile Include="ShopifyAssetService Tests\When_retrieving_an_asset.cs" />
     <Compile Include="ShopifyAssetService Tests\When_updating_an_asset.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_proxy_page_request.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_authenticating_a_request.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
+    <Compile Include="ShopifyAuthorizationService Tests\When_checking_if_a_shopify_url_is_valid.cs" />
     <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />
@@ -98,6 +101,10 @@
     <Compile Include="ShopifyCustomCollectionService Tests\When_listing_custom_collections.cs" />
     <Compile Include="ShopifyCustomCollectionService Tests\When_publishing_a_custom_collection.cs" />
     <Compile Include="ShopifyCustomCollectionService Tests\When_updating_a_custom_collection.cs" />
+    <Compile Include="ShopifyException Tests\ShopifyExceptionService.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_array.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_object.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_error_string.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\Test_Data\FulfillmentCreation.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_cancelling_a_fulfillment.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_completing_a_fulfillment.cs" />
@@ -181,6 +188,7 @@
     <Compile Include="ShopifyScriptTagService Tests\When_getting_a_script_tag.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_listing_script_tags.cs" />
     <Compile Include="ShopifyScriptTagService Tests\When_updating_a_script_tag.cs" />
+    <Compile Include="ShopifyShopService Tests\When_uninstalling_an_app.cs" />
     <Compile Include="ShopifyThemeService Tests\Test_Data\ThemeCreation.cs" />
     <Compile Include="ShopifyThemeService Tests\When_creating_a_theme.cs" />
     <Compile Include="ShopifyThemeService Tests\When_deleting_a_theme.cs" />
@@ -207,8 +215,6 @@
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_listing_webhooks_with_a_filter.cs" />
     <Compile Include="ShopifyWebhookService Tests\When_updating_a_webhook.cs" />
-    <Compile Include="UnknownEnumConverter Tests\TestObject.cs" />
-    <Compile Include="UnknownEnumConverter Tests\When_using_unknownenumconverter.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ShopifyShopService Tests\When_getting_a_shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

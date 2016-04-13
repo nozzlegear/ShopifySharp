@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
-using RestSharp;
-using System.Reflection;
-using Newtonsoft.Json.Converters;
 
-namespace ShopifySharp
+namespace ShopifySharp.Filters
 {
     /// <summary>
     /// A generic class for filtering the results of a .CountAsync command.

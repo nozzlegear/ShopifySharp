@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +30,11 @@ namespace ShopifySharp
         /// Gets a count of all of the collects (product-collection mappings).
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyCollectFilterOptions options = null)
+        public async Task<int> CountAsync(ShopifyCollectFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("collects/count.json", Method.GET, "count");
 
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 
@@ -44,7 +45,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyCollect>> ListAsync(ShopifyCollectFilterOptions options = null)
+        public async Task<IEnumerable<ShopifyCollect>> ListAsync(ShopifyCollectFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("collects.json", Method.GET, "collects");
 

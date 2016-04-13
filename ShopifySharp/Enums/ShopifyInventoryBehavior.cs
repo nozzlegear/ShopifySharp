@@ -1,15 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ShopifySharp.Converters;
 using System.Runtime.Serialization;
 
 namespace ShopifySharp.Enums
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(NullableEnumConverter<ShopifyInventoryBehavior>))]
     public enum ShopifyInventoryBehavior
     {
         /// <summary>

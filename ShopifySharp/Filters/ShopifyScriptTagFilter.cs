@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShopifySharp
+namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Filters the results of <see cref="ShopifyScriptTagService.ListAsync()"/>.
+    /// Options for filtering <see cref="ShopifyScriptTagService.ListAsync(ShopifyScriptTagFilter)"/> results.
     /// </summary>
-    public class ShopifyScriptTagListOptions : ShopifyListOptions
+    public class ShopifyScriptTagFilter : ShopifyListFilter
     {
         /// <summary>
         /// Returns only those <see cref="ShopifyScriptTag"/>s with the given <see cref="ShopifyScriptTag.Src"/> value.
