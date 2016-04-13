@@ -1,7 +1,7 @@
 # ShopifySharp: A .NET library for Shopify.
 
-ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for 
-building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify 
+ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for
+building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify
 using this library.
 
 # The Shopify Development Handbook
@@ -29,18 +29,29 @@ It's difficult to find blog posts or tutorials about building Shopify apps, and 
 
 # Installation
 
-ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager 
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager
 console in Visual Studio to install it:
 
 ```
-Install-Package ShopifySharp 
+Install-Package ShopifySharp
 ```
+
+# Version 2.0.0
+
+Version 2.0.0 is a major update to ShopifySharp, it contains some breaking changes. We strongly recommend updating to 2.0.0+ **before** June 1st, 2016. Shopify will completely deprecate the method for verifying authentic requests used in `ShopifyAuthorizationService.IsAuthenticRequest` on June 1st, 2016. After that date, this method will always return false in v1 builds.
+
+**Breaking changes**:
+
+- `ShopifyException.Error.Errors` is now a `Dictionary<string, IEnumerable<string>>` on the ShopifyException itself. To maintain some back compat, `ShopifyException.JsonError` is the raw JSON-serialized error returned by Shopify. It's functionally identical to the old ex.Error.Errors, which was also the raw JSON string.
+- Any enums that previously had a `.Unknown` default value are now nullable and have had those values removed. Instead of checking if `Enum == Enum.Unknown`, you should instead check if `Enum == null` or `Enum != Enum.Value`.
+- `ShopifyRecurringChargeStatus` has been merged into `ShopifyChargeStatus`.
+- All `*FilterOptions` and `*ListOptions` (used in many Service.ListAsync and Service.CountAsync calls) have been renamed to `*Filter` and moved into the `ShopifySharp.Filters` namespace.
 
 ### A work-in-progress
 
-Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which 
-hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with 
-creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a 
+Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which
+hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with
+creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a
 fully-featured library for interacting with Shopify and building Shopify apps.
 
 With that said, this library is still pretty new. It currently suppports the following Shopify APIs:
@@ -83,9 +94,9 @@ Thank you!
 
 # Using ShopifySharp with a public Shopify app
 
-**Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**. 
-An access token is the token returned after authenticating and authorizing a Shopify app installation with a 
-real Shopify store. 
+**Note**: All instances of `shopAccessToken` in the examples below **do not refer to your Shopify API key**.
+An access token is the token returned after authenticating and authorizing a Shopify app installation with a
+real Shopify store.
 
 All instances of `myShopifyUrl` refer to your users' `*.myshopify.com` URL (although their custom domain should work too).
 
@@ -101,16 +112,20 @@ ShopifySharp should work out of the box with your private Shopify application, a
 var service = new ShopifyProductService(myShopifyUrl, privateAppPassword)
 ```
 
-If you just need an access token for a private Shopify app, or for running the tests in this library, refer 
+If you just need an access token for a private Shopify app, or for running the tests in this library, refer
 to the **Tests** section below.
 
 ## Authorization and authentication
 
 ### Ensure a given URL is a valid *myshopify.com URL
 
-This is a convenience method that validates whether a given URL is a valid Shopify shop. It's great for ensuring 
-you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is 
+This is a convenience method that validates whether a given URL is a valid Shopify shop. It's great for ensuring
+you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is
 ideally used in conjuction with `ShopifyAuthorizationService.BuildAuthorizationUrl`.
+
+ShopifySharp will call the given URL and check for an `X-ShopId` header in the response. That header is present on all Shopify shops and its existence signals that the URL is indeed a Shopify URL.
+
+**Note**, however, that this feature is undocumented by Shopify and may break at any time. Use at your own discretion.
 
 ```c#
 string urlFromUser = "https://example.myshopify.com";
@@ -142,11 +157,11 @@ string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, users
 
 ### Authorize an installation and generate an access token
 
-Once you've sent a user to the authorization URL and they've confirmed your app installation, they'll be redirected 
-back to your application at either the default app URL, or the redirect URL you passed in when building the 
+Once you've sent a user to the authorization URL and they've confirmed your app installation, they'll be redirected
+back to your application at either the default app URL, or the redirect URL you passed in when building the
 authorization URL.
 
-The access token you receive after authorizing should be stored in your database. You'll need it to access the 
+The access token you receive after authorizing should be stored in your database. You'll need it to access the
 shop's resources (e.g. orders, customers, fulfillments, etc.)
 
 ```c#
@@ -159,9 +174,9 @@ string accessToken = await ShopifyAuthorizationService.Authorize(code, myShopify
 
 ### Determine if a request is authentic
 
-Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring paramater called 'signature' that you can use 
-to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's 
-secret key. 
+Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring paramater called 'signature' that you can use
+to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's
+secret key.
 
 Pass the entire querystring to `ShopifyAuthorizationService` to verify the request.
 
@@ -197,11 +212,11 @@ else
 
 ### Determine if a webhook request is authentic
 
-Any webhook request coming from Shopify will have a header called 'X-Shopify-Hmac-SHA256' that you can use 
-to verify that the webhook is authentic. The header is a hash of the entire request body and your app's 
+Any webhook request coming from Shopify will have a header called 'X-Shopify-Hmac-SHA256' that you can use
+to verify that the webhook is authentic. The header is a hash of the entire request body and your app's
 secret key.
 
-Pass the entire header collection and the request's input stream to `ShopifyAuthorizationService` to verify 
+Pass the entire header collection and the request's input stream to `ShopifyAuthorizationService` to verify
 the request.
 
 ```c#
@@ -218,8 +233,8 @@ else
 }
 ```
 
-You can also pass in the request body as a string, rather than using the input stream. However, the request 
-body string needs to be identical to the way it was sent from Shopify. If it has been modified, the 
+You can also pass in the request body as a string, rather than using the input stream. However, the request
+body string needs to be identical to the way it was sent from Shopify. If it has been modified, the
 verification will fail.
 
 ```c#
@@ -248,13 +263,13 @@ else
 
 ## Recurring Application Charges (charge shop owners to use your app)
 
-The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you 
-for using your application. There are pros and cons to using the Shopify billing API versus a service like 
-Stripe, BrainTree or PayPal. 
+The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you
+for using your application. There are pros and cons to using the Shopify billing API versus a service like
+Stripe, BrainTree or PayPal.
 
-I've put together a small guide called ***Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps***, 
-and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course 
-for building Shopify apps with C# and ASP.NET). 
+I've put together a small guide called ***Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps***,
+and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course
+for building Shopify apps with C# and ASP.NET).
 
 [Just head over here to get your free guide to the Shopify billing API.](https://nozzlegear.com/landing/shopify-billing-101?ref=ShopifySharp)
 
@@ -267,7 +282,7 @@ var charge = new ShopifyRecurringCharge()
     Name = "Lorem Ipsum Plan",
     Price = 12.34,
     Test = true, //Marks this charge as a test, meaning it won't charge the shop owner.
-    TrialDays = 21    
+    TrialDays = 21
 }
 
 charge = await service.CreateAsync(charge);
@@ -291,7 +306,7 @@ IEnumerable<ShopifyRecurringCharge> charges = await service.ListAsync();
 
 ### Activating a charge
 
-Creating a charge does not actually charge the shop owner or even start their free trial. You need to 
+Creating a charge does not actually charge the shop owner or even start their free trial. You need to
 send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
 ```c#
@@ -302,8 +317,8 @@ await service.ActivateAsync(chargeId);
 
 ### Deleting a charge
 
-Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges 
-after 48 hours pass without activation. 
+Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges
+after 48 hours pass without activation.
 
 ```c#
 var service = new ShopifyRecurringChargeService(myShopifyUrl, shopAccessToken);
@@ -313,7 +328,7 @@ await service.DeleteAsync(chargeId);
 
 ## One-time application charges
 
-Just like with the above recurring charges, the Shopify billing API lets you create a one-time application 
+Just like with the above recurring charges, the Shopify billing API lets you create a one-time application
 charge on the shop owner's account. One-time charges cannot be deleted.
 
 ### Create a one-time charge
@@ -348,7 +363,7 @@ IEnumerable<ShopifyCharge> charges = await service.ListAsync();
 
 ### Activating a charge
 
-Just like recurring charges, creating a one-time charge does not actually charge the shop owner. You need to 
+Just like recurring charges, creating a one-time charge does not actually charge the shop owner. You need to
 send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
 
 ```c#
@@ -364,7 +379,21 @@ await service.ActivateAsync(chargeId);
 ```c#
 var service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
 
-var shop =  = await service.GetAsync();
+var shop = await service.GetAsync();
+```
+
+### Uninstalling your app
+
+In cases where user intervention is not required, you can send a request to a Shopify shop to force it to uninstall your application. After sending this request, your shop access token will be immediately revoked and invalidated.
+
+Uninstalling an application is an irreversible operation. Be entirely sure that you no longer need to make API calls for the shop in which the application has been installed.
+
+Uninstalling an application also performs various cleanup tasks within Shopify. Registered Webhooks, ScriptTags and App Links will be destroyed as part of this operation. Also if an application is uninstalled during key rotation, both the old and new Access Tokens will be rendered useless.
+
+```cs
+var service = new ShopifyShopService(myShopifyUrl, shopAccessToken);
+
+var shop = await service.UninstallAppAsync()
 ```
 
 ## Customers
@@ -415,7 +444,7 @@ var customer = await service.GetAsync(customerId);
 
 ```c#
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
-var customer = await service.GetAsync(customerId, "first_name,last_name,email"); 
+var customer = await service.GetAsync(customerId, "first_name,last_name,email");
 
 //Returns a customer with only FirstName, LastName and Email fields. All other fields are null.
 ```
@@ -458,8 +487,8 @@ IEnumerable<ShopifyCustomer> customers = await Service.ListAsync();
 var service =  new ShopifyCustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyCustomer> customers = await Service.SearchAsync("Jane country:United States");
 
-//Searches for a customer from the United States with a name like 'Jane'. 
-//There is a noticeable 3-30 second delay between creating a customer and Shopify 
+//Searches for a customer from the United States with a name like 'Jane'.
+//There is a noticeable 3-30 second delay between creating a customer and Shopify
 //indexing it for a search.
 ```
 
@@ -578,11 +607,11 @@ var product = new ShopifyProduct()
     Vendor = "Burton",
     BodyHtml = "<strong>Good snowboard!</strong>",
     ProductType = "Snowboard",
-    Images = new List<ShopifyProductImage> 
-    { 
-        new ShopifyProductImage 
-        { 
-            Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
+    Images = new List<ShopifyProductImage>
+    {
+        new ShopifyProductImage
+        {
+            Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
         }
     },
 };
@@ -633,14 +662,14 @@ var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
 IEnumerable<ShopifyOrder> products = await service.ListAsync();
 
 //Optionally filter the results
-var filter = new ShopifyProductFilterOptions() 
-{ 
-    Ids = new[] 
-    { 
+var filter = new ShopifyProductFilterOptions()
+{
+    Ids = new[]
+    {
         productId1,
         productId2,
         productId3
-    } 
+    }
 };
 products = await service.ListAsync(filter);
 ```
@@ -719,7 +748,7 @@ IEnumerable<ShopifyWebhook> webhooks = await service.ListAsync();
 
 ## Script Tags
 
-Script tags let you add remote javascript tags that are loaded into the pages of a shop's storefront, letting you 
+Script tags let you add remote javascript tags that are loaded into the pages of a shop's storefront, letting you
 dynamically change the functionality of their shop without manually editing their store's template.
 
 ### Creating a script tag
@@ -801,7 +830,7 @@ var asset = new ShopifyAsset()
     Value  = "<h1>Hello, world!</h1>"
 }
 
-//Note: Creating an asset does not return it's 'Value' property. 
+//Note: Creating an asset does not return it's 'Value' property.
 //You must specifically refresh it with service.GetAsync
 asset = await service.CreateAsync(themeId, asset);
 ```
@@ -832,14 +861,14 @@ var asset = await service.GetAsync(themeId, key);
 
 asset.Value = "<h1>Hello, world! I've been updated.</h1>";
 
-//Note: Updating an asset does not return it's 'Value' property. 
+//Note: Updating an asset does not return it's 'Value' property.
 //You must specifically refresh it with service.GetAsync
 asset = await service.UpdateAsync(themeId, asset);
 ```
 
 ### Copying an asset
 
-You can create a new asset by copying an already existing one. Just set the new asset's `SourceKey` property to 
+You can create a new asset by copying an already existing one. Just set the new asset's `SourceKey` property to
 match the target's `Key` property.
 
 ```cs
@@ -851,7 +880,7 @@ var asset = new ShopifyAsset()
     SourceKey = originalAsset.Key
 };
 
-//Note: Creating an asset does not return it's 'Value' property. 
+//Note: Creating an asset does not return it's 'Value' property.
 //You must specifically refresh it with service.GetAsync
 asset = await service.UpdateAsync(themeId, asset);
 ```
@@ -862,7 +891,7 @@ The `ShopifyThemeService` lets you create, update, list, get and delete a store'
 
 ### Creating a theme
 
-When you create a theme, you can optionally pass in a URL that points to a .zip file containing all of the new theme's files. Shopify will then copy those files into the theme. Be aware that copying files is not instant, and the theme's `Processing` flag will be set to `true` until it's done. 
+When you create a theme, you can optionally pass in a URL that points to a .zip file containing all of the new theme's files. Shopify will then copy those files into the theme. Be aware that copying files is not instant, and the theme's `Processing` flag will be set to `true` until it's done.
 
 You cannot update or delete a theme that is still processing.
 
@@ -1065,7 +1094,7 @@ fulfillment = await service.CreateAsync(orderId, fulfillment);
 
 ### Creating a partial fulfillment
 
-This will partially fulfill the given line items, dependent on the line item's quantity. 
+This will partially fulfill the given line items, dependent on the line item's quantity.
 
 ```cs
 var service = new ShopifyFulfillmentService(myShopifyUrl, shopAccessToken);
@@ -1166,9 +1195,9 @@ Transactions are created for every order that results in an exchange of money. A
 
 ### Creating a full capture transaction
 
-By omitting an `Amount` value, this transaction will capture the full amount. 
+By omitting an `Amount` value, this transaction will capture the full amount.
 
-**Note**: to create a `Capture` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created. 
+**Note**: to create a `Capture` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created.
 
 ```cs
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
@@ -1182,9 +1211,9 @@ await service.CreateAsync(orderId, transaction);
 
 ### Creating a partial capture transaction
 
-This method will capture a specified amount on a previously authorized order. 
+This method will capture a specified amount on a previously authorized order.
 
-**Note**: to create a `Capture` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created. 
+**Note**: to create a `Capture` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created.
 
 ```cs
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
@@ -1201,7 +1230,7 @@ await service.CreateAsync(orderId, transaction);
 
 This method will create a refund on a previously authorized order. Like the last two examples, you can either refund a partial amount by setting the `Amount` value, or refund the full amount by omitting that value.
 
-**Note**: to create a `Refund` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created. 
+**Note**: to create a `Refund` transaction, the order must have an `Authorization` transaction on it. However, an `Authorization` transaction can only be created at the time the order was created.
 
 **Additionally**, it seems you can't create a `Refund` transaction for any order that was created via the API. (I can't find any documentation about this behavior. Let me know if this is wrong.)
 
@@ -1327,7 +1356,7 @@ var metafield = new ShopifyMetaField()
     Key = "myKey",
     Value = "5",
     ValueType = "integer",
-    Description = "This is a test meta field. It is an integer value."  
+    Description = "This is a test meta field. It is an integer value."
 };
 
 //Create a new metafield on a product
@@ -1375,7 +1404,7 @@ await service.DeleteAsync(metafieldId);
 
 ## Custom Collections
 
-A custom collection is a grouping of products that a shop owner can create to make their shops easier to browse. A shop owner creates a custom collection and then selects the products that will go into it. 
+A custom collection is a grouping of products that a shop owner can create to make their shops easier to browse. A shop owner creates a custom collection and then selects the products that will go into it.
 
 ### Creating a custom collection
 
@@ -1437,7 +1466,7 @@ await service.DeleteAsync(collectionId);
 
 I'm a big fan of using enums to make things easier for C# devs, because it removes a lot of the headache that comes with trying to remember all the valid string options for certain properties. With enums, we get those options hardcoded by default. We can easily scroll up and down the list of known values and select the one we need, without having to worry about typos.
 
-Many Shopify objects have string properties that only accept a predetermined list of values, and hese properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest. 
+Many Shopify objects have string properties that only accept a predetermined list of values, and hese properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest.
 
 That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks.
 
@@ -1447,22 +1476,22 @@ I strongly encourage you to file an issue if you receive or need to use an undoc
 
 # Tests
 
-The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access 
-token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials) 
+The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access
+token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials)
 will show you exactly what you need to do to get a shop access token with full permissions.
 
-Once you have those credentials, place them inside of the `AppSettings.example.config` file and **rename that file** 
-to `AppSettings.private.config`. That will ensure your private API key and access token don't accidentally get uploaded 
+Once you have those credentials, place them inside of the `AppSettings.example.config` file and **rename that file**
+to `AppSettings.private.config`. That will ensure your private API key and access token don't accidentally get uploaded
 to public source control.
 
 ---
 
 With all of that said, the `ShopifyRecurringChargeService` tests require a little bit of manual intervention to pass.
 
-First, the service requires a real app, a real shop, and a real access token for that shop, because private apps cannot 
-use the Shopify billing API. 
+First, the service requires a real app, a real shop, and a real access token for that shop, because private apps cannot
+use the Shopify billing API.
 
-Second, when testing the `service.ActivateAsync` and `service.DeleteAsync` methods, you'll need to do the following: 
+Second, when testing the `service.ActivateAsync` and `service.DeleteAsync` methods, you'll need to do the following:
 
 1. Insert a breakpoint after creating a charge.
 2. Copy the charge's `ConfirmationUrl` into your browser and navigate to it.
