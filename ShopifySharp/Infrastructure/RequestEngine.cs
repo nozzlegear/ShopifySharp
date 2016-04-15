@@ -132,11 +132,11 @@ namespace ShopifySharp
         /// Checks an <see cref="IRestResponse" /> for exceptions or invalid responses. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        static void CheckResponseExceptions(IRestResponse response)
+        public static void CheckResponseExceptions(IRestResponse response)
         {
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
-                string json = Encoding.UTF8.GetString(response.RawBytes);
+                string json = Encoding.UTF8.GetString(response.RawBytes ?? new byte[] { });
                 var errors = new Dictionary<string, IEnumerable<string>>();
 
                 if (string.IsNullOrEmpty(json) == false)
@@ -197,10 +197,18 @@ namespace ShopifySharp
                 var firstErrorIsNull = firstError.Equals(default(KeyValuePair<string, IEnumerable<string>>));
 
                 HttpStatusCode code = response.StatusCode;
-                string message = firstErrorIsNull ?
-                    $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}." :
-                    $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                string message = $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}.";
 
+                if (firstErrorIsNull)
+                {
+                    //Add the generic response message to errors list
+                    errors.Add($"{(int)code} {response.StatusDescription}", new string[] { message });
+                }
+                else
+                {
+                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                }
+                
                 throw new ShopifyException(code, errors, message, json);
             }
 

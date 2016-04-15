@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.0.1
+  ======
+  - Fixed a bug where ShopifySharp would throw an `ArgumentNullException` while trying to deserialize an empty response error from Shopify. #46
+  
   2.0.0
   ======
   Version 2.0.0 is a major update to ShopifySharp, it contains some breaking changes. We strongly recommend updating to 2.0.0+ **before** June 1st, 2016. Shopify will completely deprecate the method for verifying authentic requests used in `ShopifyAuthorizationService.IsAuthenticRequest` on June 1st, 2016. After that date, this method will always return false in v1 builds.

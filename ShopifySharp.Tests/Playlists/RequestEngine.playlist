@@ -1,0 +1,1 @@
+<Playlist Version="1.0"><Add Test="ShopifySharp.Tests.RequestEngine_Tests.When_checking_a_null_response_for_exceptions::should_return_a_message_about_the_statuscode" /></Playlist>
