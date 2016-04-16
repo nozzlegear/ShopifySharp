@@ -9,7 +9,7 @@ namespace ShopifySharp.Converters
 {
     class NullToZeroConverter:JsonConverter
     {/// <summary>
-     /// A custom integer converter that converts null to to zero 
+     /// A custom integer converter that converts null to zero 
      /// </summary>
         public override bool CanConvert(Type objectType)
         {
