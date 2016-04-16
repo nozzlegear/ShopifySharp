@@ -227,6 +227,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="AppSettings.example.config" />
+    <None Include="AppSettings.private.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
