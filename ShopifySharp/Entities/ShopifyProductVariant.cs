@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using ShopifySharp.Enums;
+using ShopifySharp.Converters;
 
 namespace ShopifySharp
 {
@@ -34,7 +35,7 @@ namespace ShopifySharp
         /// <summary>
         /// The weight of the product variant in grams.
         /// </summary>
-        [JsonProperty("grams")]
+        [JsonProperty("grams"),JsonConverter(typeof(NullToZeroConverter))]
         public int Grams { get; set; }
 
         /// <summary>

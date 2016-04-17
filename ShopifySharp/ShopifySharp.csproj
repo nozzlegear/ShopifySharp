@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Converters\FalseToNullConverter.cs" />
     <Compile Include="Converters\NullableEnumConverter.cs" />
+    <Compile Include="Converters\NullToZeroConverter.cs" />
     <Compile Include="Entities\ShopifyAsset.cs" />
     <Compile Include="Entities\ShopifyCharge.cs" />
     <Compile Include="Entities\ShopifyClientDetails.cs" />
