@@ -77,6 +77,8 @@
     <Compile Include="FalseToNullConverter Tests\When_serializing_true.cs" />
     <Compile Include="FalseToNullConverter Tests\When_serialzing_false.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="NullToZeroConverter Tests\TestObject.cs" />
+    <Compile Include="NullToZeroConverter Tests\When_deserializing_null_int.cs" />
     <Compile Include="RequestEngine Tests\When_checking_a_null_response_for_exceptions.cs" />
     <Compile Include="ShopifyAssetService Tests\AssetUtils.cs" />
     <Compile Include="ShopifyAssetService Tests\When_copying_an_asset.cs" />
