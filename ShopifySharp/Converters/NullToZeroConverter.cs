@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Converters
 {
-    class NullToZeroConverter:JsonConverter
-    {/// <summary>
-     /// A custom integer converter that converts null to zero 
-     /// </summary>
+    /// <summary>
+    /// A custom integer converter that converts null to zero 
+    /// </summary>
+    public class NullToZeroConverter:JsonConverter
+    {
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(int);
@@ -18,7 +19,7 @@ namespace ShopifySharp.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.Value == null) return 0;
+            if (reader.Value == null || string.IsNullOrEmpty(reader.Value?.ToString())) return 0;
             return Convert.ToInt32(reader.Value);
         }
 
