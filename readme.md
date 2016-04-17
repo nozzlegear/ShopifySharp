@@ -89,6 +89,7 @@ These generous people have contributed their own hard work and time to improving
 - [ishahrier](https://github.com/ishahrier)
 - [darkstar74](https://github.com/darkstar74)
 - [Angel Arriaga](https://github.com/damazoarriaga)
+- [Shaju Mohammed](https://github.com/shajumohamed)
 
 Thank you!
 

@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.0.2
+  ======
+  - Bugfix: ShopifyProductVariant.Grams field could occasionally be null, throwing a deserialization exception. Null value now defaults to 0. #48
+  
   2.0.1
   ======
   - Fixed a bug where ShopifySharp would throw an `ArgumentNullException` while trying to deserialize an empty response error from Shopify. #46
