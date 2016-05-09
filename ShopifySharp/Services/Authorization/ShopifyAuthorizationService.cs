@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
 using RestSharp;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Enums;
-using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
@@ -192,8 +190,9 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopifyApiKey">Your app's public API key.</param>
         /// <param name="redirectUrl">An optional URL to redirect the user to after integration. Overrides the Shopify app's default redirect URL.</param>
+        /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
         /// <returns>The authorization url.</returns>
-        public static Uri BuildAuthorizationUrl(IEnumerable<ShopifyAuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null)
+        public static Uri BuildAuthorizationUrl(IEnumerable<ShopifyAuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null)
         {
             //Prepare a uri builder for the shop URL
             UriBuilder builder = new UriBuilder(RequestEngine.BuildShopUri(myShopifyUrl));
@@ -208,6 +207,11 @@ namespace ShopifySharp
             if (string.IsNullOrEmpty(redirectUrl) == false)
             {
                 qs.Add(new KeyValuePair<string, string>("redirect_uri", redirectUrl));
+            }
+
+            if (string.IsNullOrEmpty(state) == false)
+            {
+                qs.Add(new KeyValuePair<string, string>("state", state));
             }
 
             builder.Path = "admin/oauth/authorize";
