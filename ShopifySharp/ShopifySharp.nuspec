@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.0.3
+  =====
+  - Added an optional state parameter to OAuth installation URL built with ShopifyAuthorizationService.BuildAuthorizationUrl. #51
+  - Added ThemePublished webhook, which gets fired when a Shopify shop changes its current published theme. #47.
+  
   2.0.2
   ======
   - Bugfix: ShopifyProductVariant.Grams field could occasionally be null, throwing a deserialization exception. Null value now defaults to 0. #48
