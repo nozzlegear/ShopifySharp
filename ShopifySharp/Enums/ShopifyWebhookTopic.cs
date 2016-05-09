@@ -212,6 +212,12 @@ namespace ShopifySharp.Enums
         /// When an app has been uninstalled.
         /// </summary>
         [EnumMember(Value = "app/uninstalled")]
-        AppUninstalled
+        AppUninstalled,
+
+        /// <summary>
+        /// When a Shopify store's published theme has been changed.
+        /// </summary>
+        [EnumMember(Value = "themes/publish")]
+        ThemePublished
     }
 }
