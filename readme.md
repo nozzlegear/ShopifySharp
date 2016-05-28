@@ -74,6 +74,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Pages](#pages)
 - [Metafields](#metafields)
 - [Custom Collections](#custom-collections)
+- [Product Images](#product-images)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -1462,6 +1463,71 @@ var service = new ShopifyCustomCollectionService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(collectionId);
 ```
+
+## Product Images
+
+Product Images represent the various different images for a product. All product images are tied to an owner product, and therefore you'll need to pass that product's id to each product image method.
+
+### Creating a product image
+
+```cs
+var service = new ShopifyProductImageService(myShopifyUrl, shopAccessToken);
+var image = await service.CreateAsync(productId, new ShopifyProductImage()
+{
+    Metafields = new List<ShopifyMetaField>()
+    {
+        new ShopifyMetaField()
+        {
+            Key = "alt",
+            Value = "new alt tag content",
+            ValueType = "string",
+            Namespace = "tags"
+        }
+    },
+    Src = "http://placehold.it/200/300"
+});
+```
+
+### Getting a product image
+
+```cs
+var service = new ShopifyProductImageService(myShopifyUrl, shopAccessToken);
+var image = await service.GetAsync(productId, imageId);
+```
+
+### Counting product images
+
+```cs
+var service = new ShopifyProductImageService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(productId);
+```
+
+### Listing product images
+
+```cs
+var service = new ShopifyProductImageService(myShopifyUrl, shopAccessToken);
+var images = await service.ListAsync(productId);
+```
+
+### Updating a product image
+
+```cs
+var service = new ShopifyProductImageService(myShopifyUrl, shopAccessToken);
+var image = await service.GetAsync(productId);
+
+image.Position = 2;
+
+image = await service.UpdateAsync(productId, image);
+```
+
+### Deleting a product image
+
+```cs
+var service = new ShopifyProductImageService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(productId, imageId);
+```
+
 
 # A note on enums
 
