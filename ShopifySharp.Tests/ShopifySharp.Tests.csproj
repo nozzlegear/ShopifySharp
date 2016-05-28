@@ -145,6 +145,13 @@
     <Compile Include="ShopifyPageService_Tests\When_getting_one_page.cs" />
     <Compile Include="ShopifyPageService_Tests\When_creating_a_page_with_metafields.cs" />
     <Compile Include="ShopifyPageService_Tests\When_updating_a_page.cs" />
+    <Compile Include="ShopifyProductImageService Tests\Test_Data\ProductImageTests.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_counting_product_images.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_getting_a_product_image.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_listing_product_images.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_updating_product_images.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_creating_a_product_image.cs" />
+    <Compile Include="ShopifyProductImageService Tests\When_deleting_a_product_image.cs" />
     <Compile Include="ShopifyProductService Tests\Test_Data\ProductCreation.cs" />
     <Compile Include="ShopifyProductService Tests\When_counting_products.cs" />
     <Compile Include="ShopifyProductService Tests\When_creating_an_unpublished_product.cs" />
