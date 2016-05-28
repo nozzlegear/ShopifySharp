@@ -76,6 +76,11 @@ namespace ShopifySharp
         public string Email { get; set; }
 
         /// <summary>
+        /// Indicates whether the shop forces requests made to its resources to be made over SSL, using the HTTPS protocol. If true, HTTP requests will be redirected to HTTPS.
+        /// </summary>
+        public bool? ForceSSL { get; set; }
+
+        /// <summary>
         /// Present when a shop has a google app domain. It will be returned as a URL, else null.
         /// </summary>
         [JsonProperty("google_apps_domain")]
