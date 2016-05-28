@@ -17,12 +17,6 @@ namespace ShopifySharp.Filters
         public IEnumerable<long> Ids { get; set; }
 
         /// <summary>
-        /// Restrict results to after the specified ID.
-        /// </summary>
-        [JsonProperty("since_id")]
-        public long? SinceId { get; set; }
-
-        /// <summary>
         /// Limit the amount of results. Default is 50, max is 250.
         /// </summary>
         [JsonProperty("limit")]

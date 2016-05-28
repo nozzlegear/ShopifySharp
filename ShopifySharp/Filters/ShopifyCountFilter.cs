@@ -31,5 +31,11 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("updated_at_max")]
         public DateTime? UpdatedAtMax { get; set; }
+
+        /// <summary>
+        /// Restrict results to after the specified ID. Note: this field may not have an effect on certain resources.
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
     }
 }
