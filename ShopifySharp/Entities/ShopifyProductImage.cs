@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
+    /// <summary>
+    /// An object representing a product image.
+    /// </summary>
     public class ShopifyProductImage : ShopifyObject
     {
         /// <summary>
@@ -35,9 +38,9 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("src")]
         public string Src { get; set; }
-
+        
         /// <summary>
-        /// Image data for uploading an image for a product encoded with base64 encoding.
+        /// A base64 image attachment. Only used when creating a <see cref="ShopifyProductImage"/>, where it's then converted into the <see cref="Src"/>.
         /// </summary>
         [JsonProperty("attachment")]
         public string Attachment { get; set; }
