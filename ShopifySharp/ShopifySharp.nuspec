@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.1.0
+  =====
+  - New feature: ShopifyProductImage. Create, get, count, list, update and delete a product's images.
+  - New property: ShopifyShop.ForceSSL.
+  
   2.0.3
   =====
   - Added an optional state parameter to OAuth installation URL built with ShopifyAuthorizationService.BuildAuthorizationUrl. #51
