@@ -78,6 +78,7 @@ namespace ShopifySharp
         /// <summary>
         /// Indicates whether the shop forces requests made to its resources to be made over SSL, using the HTTPS protocol. If true, HTTP requests will be redirected to HTTPS.
         /// </summary>
+        [JsonProperty("force_ssl")]
         public bool? ForceSSL { get; set; }
 
         /// <summary>

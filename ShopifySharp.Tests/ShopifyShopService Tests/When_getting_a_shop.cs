@@ -20,6 +20,7 @@ namespace ShopifySharp.Tests
         It should_retrieve_a_shop = () =>
         {
             _Shop.ShouldNotBeNull();
+            _Shop.ForceSSL.HasValue.ShouldBeTrue();
         };
 
         Cleanup after = () =>
