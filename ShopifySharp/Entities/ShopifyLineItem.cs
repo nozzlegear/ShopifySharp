@@ -118,5 +118,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_discount")]
         public double TotalDiscount { get; set; }
+
+        /// <summary>
+        /// An array of custom information for an item that has been added to the cart.
+        /// Often used to provide product customization options.
+        /// An array of <see cref="ShopifyTaxLine"/> objects, each of which details the taxes applicable to this <see cref="ShopifyLineItem"/>.
+        /// </summary>
+        [JsonProperty("properties")]
+        public IEnumerable<ShopifyLineItemProperty> Properties { get; set; }
     }
 }
