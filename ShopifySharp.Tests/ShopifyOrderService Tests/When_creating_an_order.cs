@@ -39,16 +39,12 @@ namespace ShopifySharp.Tests
             Order.ContactEmail.ShouldNotBeNull();
             Order.NoteAttributes.Count().ShouldBeGreaterThanOrEqualTo(1);
             Order.NoteAttributes.Any(n => n.Name == "Test Name" && n.Value as string == "Test Value").ShouldBeTrue();
-        };
 
-        It should_have_properties_set = () =>
-        {
             var properties = Order.LineItems.First().Properties;
             properties.Count().ShouldBeGreaterThanOrEqualTo(1);
             properties.Any(n => n.Name == "Test Name" && n.Value as string == "Test Value").ShouldBeTrue();
-
         };
-
+        
         Cleanup after = () =>
         {
             if(Order != null)

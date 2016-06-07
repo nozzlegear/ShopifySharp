@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.1.2
+  =====
+  - New `ShopifyLineItem.Properties` property. #55.
+  
   2.1.1
   =====
   - Bugfix: `ShopifyShop.ForceSSL` wasn't serializing or deserializing properly.
