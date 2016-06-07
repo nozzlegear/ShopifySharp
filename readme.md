@@ -1,5 +1,8 @@
 # ShopifySharp: A .NET library for Shopify.
 
+[![NuGet](https://img.shields.io/nuget/v/ShopifySharp.svg?maxAge=3600)](https://www.nuget.org/packages/ShopifySharp/)
+[![license](https://img.shields.io/github/license/nozzlegear/shopifysharp.svg?maxAge=3600)](https://github.com/nozzlegear/shopifysharp/blob/master/LICENSE)
+
 ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for
 building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify
 using this library.
