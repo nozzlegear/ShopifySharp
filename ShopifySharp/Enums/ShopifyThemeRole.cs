@@ -17,6 +17,12 @@ namespace ShopifySharp.Enums
         Main,
 
         /// <summary>
+        /// This theme can be seen by customers when visiting the shop in a mobile browser.
+        /// </summary>
+        [EnumMember(Value = "mobile")]
+        Mobile,
+
+        /// <summary>
         /// This theme cannot currently be seen by customers.
         /// </summary>
         [EnumMember(Value = "unpublished")]
