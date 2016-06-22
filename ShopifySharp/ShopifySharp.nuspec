@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.1.4
+  =====
+  - New ShopifyAuthorizationScopes: `WriteShipping`, `ReadAnalytics`, `ReadUsers`, `WriteUsers`.
+  - New ShopifyThemeRole: `Mobile`.
+
   2.1.3
   =====
   - Bugfix: `ShopifyOrder.TotalWeight` is now a long number. #56.
