@@ -53,6 +53,15 @@ namespace ShopifySharp.Enums
         ReadShipping,
 
         [EnumMember(Value = "write_shipping")]
-        WriteShipping
+        WriteShipping,
+
+        [EnumMember(Value = "read_analytics")]
+        ReadAnalytics,
+
+        [EnumMember(Value = "read_users")]
+        ReadUsers,
+
+        [EnumMember(Value = "write_users")]
+        WriteUsers
     }
 }
