@@ -75,6 +75,7 @@
     <Compile Include="Entities\ShopifySmartCollectionRules.cs" />
     <Compile Include="Entities\ShopifyTheme.cs" />
     <Compile Include="Entities\ShopifyProductImage.cs" />
+    <Compile Include="Entities\ShopifyUsageCharge.cs" />
     <Compile Include="Enums\ShopifyProductInventoryManagement.cs" />
     <Compile Include="Enums\ShopifyProductInventoryPolicy.cs" />
     <Compile Include="Entities\ShopifyProductOption.cs" />
