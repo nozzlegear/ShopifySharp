@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <param name="description">The name or description of the usage charge.</param>
         /// <param name="price">The price of the usage charge.</param>
         /// <returns>The new <see cref="ShopifyUsageCharge"/>.</returns>
-        public async Task<ShopifyUsageCharge> CreateAsync(long recurringChargeId, string description, decimal price)
+        public async Task<ShopifyUsageCharge> CreateAsync(long recurringChargeId, string description, double price)
         {
             var req = RequestEngine.CreateRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json", Method.POST, "usage_charge");
             
