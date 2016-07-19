@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace ShopifySharp.Entities
+namespace ShopifySharp
 {
     /// <summary>
     /// Represents a variable monthly fee for an app or a service.
