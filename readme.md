@@ -62,6 +62,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [OAuth authentication](#authorization-and-authentication).
 - [Application charges (in-app purchases)](#one-time-application-charges)
 - [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
+- [Useage charges](#usage-charges)
 - [Shops](#shops)
 - [Customers](#customers)
 - [Orders](#orders)
@@ -376,6 +377,41 @@ var service = new ShopifyChargeService(myShopifyUrl, shopAccessToken);
 
 await service.ActivateAsync(chargeId);
 ```
+
+## Usage charges
+
+Shopify's Usage Charges let you set a capped amount on a recurring application charge, and only charge for usage. For example, you can create a charge that's capped at $100.00 per month, and then charge e.g. $1.00 for every 1000 emails your user sends using your app.
+
+To create a ShopifyUsageCharge, you first need to create a ShopifyRecurringCharge with a `CappedAmount` value and a `Terms` string. Your customers will see the terms when activating the recurring charge, so set it to something they can read like "$1.00 per 1000 emails".
+
+### Create a usage charge
+
+```cs
+var service = new ShopifyUsageChargeService(myShopifyUrl, shopAccessToken);
+
+string description = "Used 1000 emails";
+double price = 1.00;
+
+var usageCharge = await service.CreateAsync(recurringChargeId, description, price);
+```
+
+### Get a usage charge
+
+```cs
+var service = new ShopifyUsageChargeService(myShopifyUrl, shopAccessToken);
+
+var usageCharge = await service.GetAsync(recurringChargeId, usageChargeId);
+```
+
+### List usage charges
+
+```cs
+var service = new ShopifyUsageChargeService(myShopifyUrl, shopAccessToken);
+
+var usageCharges = await service.ListAsync(recurringChargeId);
+```
+
+### Creating a usage charge
 
 ## Shops
 
