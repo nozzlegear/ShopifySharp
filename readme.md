@@ -62,7 +62,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [OAuth authentication](#authorization-and-authentication).
 - [Application charges (in-app purchases)](#one-time-application-charges)
 - [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
-- [Useage charges](#usage-charges)
+- [Usage charges](#usage-charges)
 - [Shops](#shops)
 - [Customers](#customers)
 - [Orders](#orders)
@@ -82,6 +82,34 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Locations](#locations)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
+
+### Unimplemented APIs
+
+The following APIs are not yet implemented by ShopifySharp, but I'm slowly working through the list to reach 100% API parity. APIs are implemented in random order (mostly based on how much I need them in a personal project). **Need one of these APIs right now?** Please open an issue or make a pull request! I'm happy to offer guidance or help with writing tests.
+
+| API | Notes |
+|-----|-------|
+| [AbandonedCheckouts](https://help.shopify.com/api/reference/abandoned_checkouts) | |
+| [Articles](https://help.shopify.com/api/reference/article) | |
+| [Blogs](https://help.shopify.com/api/reference/blog) | |
+| [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
+| [Comments](https://help.shopify.com/api/reference/comment) | |
+| [Country](https://help.shopify.com/api/reference/country) | |
+| [CustomerAddress](https://help.shopify.com/api/reference/customeraddress) | Object is implemented. |
+| [CustomerSavedSearch](https://help.shopify.com/api/reference/customersavedsearch) | |
+| [Discount](https://help.shopify.com/api/reference/discount) | Requires Shopify Plus. |
+| [Event](https://help.shopify.com/api/reference/event) | |
+| [FulfillmentEvent](https://help.shopify.com/api/reference/fulfillmentevent) | Object is implemented. |
+| [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [ShopifyFulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/ShopifyFulfillmentService.cs). |
+| [GiftCard](https://help.shopify.com/api/reference/gift_card) | Requires Shopify Plus. |
+| [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
+| [OrderRisks](https://help.shopify.com/api/reference/order_risks) | |
+| [Policy](https://help.shopify.com/api/reference/policy) | |
+| [Province](https://help.shopify.com/api/reference/province) | |
+| [Refund](https://help.shopify.com/api/reference/refund) | |
+| [ShippingZone](https://help.shopify.com/api/reference/shipping_zone) | |
+| [Transaction](https://help.shopify.com/api/reference/transaction) | Object is implemented. |
+| [User](https://help.shopify.com/api/reference/user) | Requires Shopify Plus. |
 
 ### Contributors
 
