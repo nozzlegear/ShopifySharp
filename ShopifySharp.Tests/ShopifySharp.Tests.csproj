@@ -126,6 +126,8 @@
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_listing_fulfillments_with_a_filter.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_updating_a_fulfillment.cs" />
+    <Compile Include="ShopifyLocationService Tests\When_getting_a_location.cs" />
+    <Compile Include="ShopifyLocationService Tests\When_listing_locations.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\Test_Data\MetaFieldCreation.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_counting_metafields.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_creating_a_metafield.cs" />

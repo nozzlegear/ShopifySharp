@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  2.3.0
+  =====
+  - New ShopifyLocationService: List and get Shopify store locations.
+  
   2.2.0
   =====
   - New ShopifyUsageChargeService: Create, get and list usage charges.
