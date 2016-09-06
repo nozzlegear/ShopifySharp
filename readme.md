@@ -729,7 +729,7 @@ int productCount = await service.CountAsync();
 
 ```c#
 var service = new ShopifyProductService(myShopifyUrl, shopAccessToken);
-IEnumerable<ShopifyOrder> products = await service.ListAsync();
+IEnumerable<ShopifyProduct> products = await service.ListAsync();
 
 //Optionally filter the results
 var filter = new ShopifyProductFilterOptions()
