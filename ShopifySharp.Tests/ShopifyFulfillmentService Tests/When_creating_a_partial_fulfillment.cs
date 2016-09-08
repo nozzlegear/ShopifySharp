@@ -33,11 +33,6 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
             Fulfillment.ShouldNotBeNull();
             Fulfillment.Id.HasValue.ShouldBeTrue();
             Fulfillment.Status.Equals("success", System.StringComparison.OrdinalIgnoreCase).ShouldBeTrue();
-
-            Fulfillment
-                .LineItems
-                .Count(f => f.FulfillmentStatus == Enums.ShopifyFulfillmentStatus.Partial)
-                .ShouldEqual(1);
         };
 
         Cleanup after = () =>

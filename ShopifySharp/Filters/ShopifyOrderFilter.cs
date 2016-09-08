@@ -25,6 +25,6 @@ namespace ShopifySharp.Filters
         /// The fulfillment status of orders to retrieve. Leave this null to retrieve orders with any fulfillment status.
         /// </summary>
         [JsonProperty("fulfillment_status")]
-        public ShopifyFulfillmentStatus? FulfillmentStatus { get; set; }
+        public string FulfillmentStatus { get; set; }
     }
 }

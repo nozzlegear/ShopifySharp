@@ -89,7 +89,6 @@
     <Compile Include="Entities\ShopifyWebhook.cs" />
     <Compile Include="Enums\ShopifyAssetType.cs" />
     <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
-    <Compile Include="Enums\ShopifyFulfillmentStatus.cs" />
     <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
     <Compile Include="Enums\ShopifyOrderStatus.cs" />

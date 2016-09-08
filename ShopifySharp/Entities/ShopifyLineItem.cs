@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// The fulfillment status of this line item. Will be null if the line item has not been fulfilled or partially fulfilled.
         /// </summary>
         [JsonProperty("fulfillment_status")]
-        public ShopifyFulfillmentStatus? FulfillmentStatus { get; set; }
+        public string FulfillmentStatus { get; set; }
 
         /// <summary>
         /// The weight of the item in grams.
