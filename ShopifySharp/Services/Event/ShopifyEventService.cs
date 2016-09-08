@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
-using ShopifySharp.Entities;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -50,7 +49,7 @@ namespace ShopifySharp
         /// <returns>Site events.</returns>
         public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventCountFilter options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("events.json", Method.GET, "products");
+            IRestRequest req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
 
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));

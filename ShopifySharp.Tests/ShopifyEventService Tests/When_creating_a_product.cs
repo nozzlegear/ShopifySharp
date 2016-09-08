@@ -1,5 +1,4 @@
 ﻿using Machine.Specifications;
-using ShopifySharp.Entities;
 using ShopifySharp.Tests.Test_Data;
 using System.Collections.Generic;
 using System.Linq;
