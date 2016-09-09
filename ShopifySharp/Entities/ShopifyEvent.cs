@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// The date and time when the event was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for the event.
@@ -58,13 +58,13 @@ namespace ShopifySharp
         /// The type of the resource that generated the event.
         /// </summary>
         [JsonProperty("subject_type")]
-        public ShopifyEventSubjectType SubjectType { get; set; }
+        public ShopifyEventSubjectType? SubjectType { get; set; }
 
         /// <summary>
         /// The type of event that took place.
         /// </summary>
         [JsonProperty("verb")]
-        public ShopifyEventVerb Verb { get; set; }
+        public ShopifyEventVerb? Verb { get; set; }
 
         /// <summary>
         /// Undocumented by Shopify
