@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShopifySharp.Converters;
+using ShopifySharp.Enums;
 using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
@@ -67,12 +68,46 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets the site events.
+        /// Returns a list of Events
         /// </summary>
-        /// <returns>Site events.</returns>
+        /// <param name="options">(optional) Filters</param>
+        /// <returns></returns>
         public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
+            return await ListAsync(options, null, null);
+        }
+
+        /// <summary>
+        /// Returns a list of Events on a paticular item eg. all events on a product
+        /// </summary>
+        /// <param name="subjectType">Resticts resluts to just one subject type</param>
+        /// <param name="subjectId">Restics results to just one subject id</param>
+        /// <param name="options">(optional) Filters</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventSubjectType subjectType, long subjectId, ShopifyEventListFilter options = null)
+        {
+            return await ListAsync(options, subjectType, subjectId);
+        }
+
+        /// <summary>
+        /// Returns a list of Events
+        /// </summary>
+        /// <param name="options">(optional) Filters</param>
+        /// <param name="subjectType">(optional) Resticts resluts to just one subject type</param>
+        /// <param name="subjectId">(optional) Restics results to just one subject item eg.all changes on a product (subjectType must not be null for this to work)</param>
+        /// <returns></returns>
+        private async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null, ShopifyEventSubjectType? subjectType = null, long? subjectId = null)
+        {
+            IRestRequest req;
+            if (subjectType == null)
+            {
+                req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
+            }
+            else
+            {
+                var subjectTypeName = EnumExtensions.ToSerializedString(subjectType as Enum).ToLower();
+                req = RequestEngine.CreateRequest(string.Format("{0}s/#{1}/events.json", subjectTypeName, subjectId), Method.GET, "events");
+            }
 
             //Add optional parameters to request
             if (options != null)
@@ -80,44 +115,16 @@ namespace ShopifySharp
                 req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
                 if (options.Filters != null && options.Filters.Any())
                 {
-                    req.AddParameter("filters", EnumListToString(options.Filters));
+                    req.AddParameter("filter", EnumExtensions.EnumListToString(options.Filters));
                 }
                 if (options.Verbs != null && options.Verbs.Any())
                 {
-                    req.AddParameter("verbs", EnumListToString(options.Verbs));
+                    req.AddParameter("verb", EnumExtensions.EnumListToString(options.Verbs));
                 }
             }
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyEvent>>(_RestClient, req);
         }
         #endregion
-
-        private string EnumListToString<T>(IEnumerable<T> enumList)
-        {
-            var list = new List<string>();
-
-            if (enumList != null && enumList.Any())
-            {
-                var enumType = typeof(T);
-
-                foreach (var enumItem in enumList)
-                {
-                    FieldInfo fi = enumItem.GetType().GetField(enumItem.ToString());
-
-                    EnumMemberAttribute[] attributes = (EnumMemberAttribute[])fi.GetCustomAttributes(
-                        typeof(EnumMemberAttribute), false);
-
-                    if (attributes != null && attributes.Length > 0)
-                    {
-                        list.Add(attributes[0].Value);
-                    }
-                    else
-                    {
-                        list.Add(enumItem.ToString());
-                    }
-                }
-            }
-            return string.Join(",", list);
-        }
     }
 }
