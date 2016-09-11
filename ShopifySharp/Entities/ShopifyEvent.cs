@@ -58,13 +58,13 @@ namespace ShopifySharp
         /// The type of the resource that generated the event.
         /// </summary>
         [JsonProperty("subject_type")]
-        public ShopifyEventSubjectType? SubjectType { get; set; }
+        public string SubjectType { get; set; }
 
         /// <summary>
         /// The type of event that took place.
         /// </summary>
         [JsonProperty("verb")]
-        public ShopifyEventVerb? Verb { get; set; }
+        public string Verb { get; set; }
 
         /// <summary>
         /// Undocumented by Shopify

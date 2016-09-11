@@ -77,6 +77,8 @@ namespace ShopifySharp
             return await ListAsync(options, null, null);
         }
 
+        /*
+         * I have implemented the API as best as I can but this method keeps returning nothing
         /// <summary>
         /// Returns a list of Events on a paticular item eg. all events on a product
         /// </summary>
@@ -84,10 +86,11 @@ namespace ShopifySharp
         /// <param name="subjectId">Restics results to just one subject id</param>
         /// <param name="options">(optional) Filters</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventSubjectType subjectType, long subjectId, ShopifyEventListFilter options = null)
+        public async Task<IEnumerable<ShopifyEvent>> ListAsync(string subjectType, long subjectId, ShopifyEventListFilter options = null)
         {
             return await ListAsync(options, subjectType, subjectId);
         }
+        */
 
         /// <summary>
         /// Returns a list of Events
@@ -96,7 +99,7 @@ namespace ShopifySharp
         /// <param name="subjectType">(optional) Resticts resluts to just one subject type</param>
         /// <param name="subjectId">(optional) Restics results to just one subject item eg.all changes on a product (subjectType must not be null for this to work)</param>
         /// <returns></returns>
-        private async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null, ShopifyEventSubjectType? subjectType = null, long? subjectId = null)
+        private async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null, string subjectType = null, long? subjectId = null)
         {
             IRestRequest req;
             if (subjectType == null)
@@ -105,7 +108,8 @@ namespace ShopifySharp
             }
             else
             {
-                var subjectTypeName = EnumExtensions.ToSerializedString(subjectType as Enum).ToLower();
+                // As noted above this is currently always returing nothing I am unsure why
+                var subjectTypeName = subjectType.ToLower();
                 req = RequestEngine.CreateRequest(string.Format("{0}s/#{1}/events.json", subjectTypeName, subjectId), Method.GET, "events");
             }
 
@@ -113,14 +117,6 @@ namespace ShopifySharp
             if (options != null)
             {
                 req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
-                if (options.Filters != null && options.Filters.Any())
-                {
-                    req.AddParameter("filter", EnumExtensions.EnumListToString(options.Filters));
-                }
-                if (options.Verbs != null && options.Verbs.Any())
-                {
-                    req.AddParameter("verb", EnumExtensions.EnumListToString(options.Verbs));
-                }
             }
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyEvent>>(_RestClient, req);

@@ -40,16 +40,16 @@ namespace ShopifySharp.Filters
         public DateTime? CreatedAtMax { get; set; }
 
         /// <summary>
-        /// Only show events specified in filter
+        /// Only show events specified in filter (comma , seperated)
         /// </summary>
-        [JsonIgnore]
-        public ShopifyEventSubjectType[] Filters { get; set; }
+        [JsonProperty("filter")]
+        public string Filters { get; set; }
 
         /// <summary>
-        /// Only show events of a certain kind
+        /// Only show events of a certain kind (comma , seperated)
         /// </summary>
-        [JsonIgnore]
-        public ShopifyEventVerb[] Verbs { get; set; }
+        [JsonProperty("verb")]
+        public string Verbs { get; set; }
 
         /// <summary>
         /// comma-separated list of fields to include in the response.
