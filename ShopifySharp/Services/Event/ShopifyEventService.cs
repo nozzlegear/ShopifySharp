@@ -35,8 +35,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all site events.
         /// </summary>
+        /// <param name="filter">Supports CreatedAtMin and CreatedAtMax Properties</param>
         /// <returns>The count of all site events.</returns>
-        public async Task<int> CountAsync(ShopifyEventCountFilter filter = null)
+        public async Task<int> CountAsync(ShopifyCountFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("events/count.json", Method.GET);
 

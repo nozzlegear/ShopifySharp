@@ -101,7 +101,6 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Filters\ShopifyEventListFilter.cs" />
-    <Compile Include="Filters\ShopifyEventCountFilter.cs" />
     <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
