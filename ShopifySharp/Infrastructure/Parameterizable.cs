@@ -41,11 +41,6 @@ namespace ShopifySharp
 
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
-                else if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonIgnoreAttribute)))
-                {
-                    // Skip this property if the JsonIgnoreAttribute has been specified for this property
-                    continue;
-                }
 
                 var parameter = ToSingleParameter(propName, value, property, type);
 
