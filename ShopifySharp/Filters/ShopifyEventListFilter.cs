@@ -40,13 +40,13 @@ namespace ShopifySharp.Filters
         public DateTime? CreatedAtMax { get; set; }
 
         /// <summary>
-        /// Only show events specified in filter (comma , seperated). A full list of events can be found at https://help.shopify.com/api/reference/event
+        /// Only show events specified in filter (comma , separated). A full list of events can be found at https://help.shopify.com/api/reference/event
         /// </summary>
         [JsonProperty("filter")]
         public string Filters { get; set; }
 
         /// <summary>
-        /// Only show events of a certain kind (comma , seperated). A full list of events can be found at https://help.shopify.com/api/reference/event
+        /// Only show events of a certain kind (comma , separated). A full list of events can be found at https://help.shopify.com/api/reference/event
         /// </summary>
         [JsonProperty("verb")]
         public string Verbs { get; set; }
