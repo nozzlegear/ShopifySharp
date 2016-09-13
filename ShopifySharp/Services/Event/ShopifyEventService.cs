@@ -1,13 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
-using ShopifySharp.Converters;
-using ShopifySharp.Enums;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -18,7 +12,6 @@ namespace ShopifySharp
     /// </summary>
     public class ShopifyEventService : ShopifyService
     {
-
         #region Constructor
 
         /// <summary>
