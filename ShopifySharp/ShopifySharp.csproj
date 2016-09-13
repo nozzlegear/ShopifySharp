@@ -130,7 +130,6 @@
     <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
-    <Compile Include="Enums\ShopifyOrderCancelReason.cs" />
     <Compile Include="Services\Order\ShopifyOrderCreateOptions.cs" />
     <Compile Include="Filters\ShopifyOrderFilter.cs" />
     <Compile Include="Services\Order\ShopifyOrderService.cs" />

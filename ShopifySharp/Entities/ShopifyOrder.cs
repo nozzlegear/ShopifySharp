@@ -33,10 +33,10 @@ namespace ShopifySharp
         public bool BuyerAcceptsMarketing { get; set; }
 
         /// <summary>
-        /// The reason why the order was cancelled. If the order was not cancelled, this value is null.
+        /// The reason why the order was cancelled. If the order was not cancelled, this value is null. Known values are "customer", "fraud", "inventory" and "other".
         /// </summary>
         [JsonProperty("cancel_reason")]
-        public ShopifyOrderCancelReason? CancelReason { get; set; }
+        public string CancelReason { get; set; }
 
         /// <summary>
         /// The date and time when the order was cancelled. If the order was not cancelled, this value is null.
