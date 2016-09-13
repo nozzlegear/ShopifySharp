@@ -6,7 +6,7 @@ using System.Linq;
 namespace ShopifySharp.Tests.ShopifyEventService_Tests
 {
     [Subject(typeof(ShopifyEventService))]
-    class When_listing_events
+    class When_listing_events_for_a_subject_type
     {
         Establish context = () =>
         {
@@ -15,13 +15,13 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
 
         Because of = () =>
         {
-            Events = Service.ListAsync().Await().AsTask.Result;
+            Events = Service.ListAsync(OrderId, Subject).Await().AsTask.Result;
         };
-        
-        It should_list_events = () =>
+
+        It should_list_events_for_a_subject_type = () =>
         {
             Events.ShouldNotBeNull();
-            Events.Count().ShouldBeGreaterThanOrEqualTo(1);
+            Events.All(e => e.SubjectType.Equals(Subject) && e.SubjectId.Equals(OrderId)).ShouldBeTrue();
         };
 
         Cleanup after = () =>
@@ -29,7 +29,11 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
 
         };
 
-        static ShopifyEventService Service;        
+        static string Subject = "Order";
+
+        static long OrderId = 3062278019;
+
+        static ShopifyEventService Service;
 
         static IEnumerable<ShopifyEvent> Events;
     }

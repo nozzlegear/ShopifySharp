@@ -112,6 +112,7 @@
     <Compile Include="ShopifyEventService Tests\When_getting_an_event.cs" />
     <Compile Include="ShopifyEventService Tests\When_listing_events.cs" />
     <Compile Include="ShopifyEventService Tests\When_counting_events.cs" />
+    <Compile Include="ShopifyEventService Tests\When_listing_events_for_a_subject_type.cs" />
     <Compile Include="ShopifyException Tests\ShopifyExceptionService.cs" />
     <Compile Include="ShopifyException Tests\When_receiving_an_error_array.cs" />
     <Compile Include="ShopifyException Tests\When_receiving_an_error_object.cs" />
