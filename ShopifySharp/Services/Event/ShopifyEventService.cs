@@ -69,12 +69,11 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Returns a list of events for the given subject and subject type.
+        /// Returns a list of events for the given subject and subject type. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event
         /// </summary>
         /// <param name="options">Options for filtering the result.</param>
-        /// <param name="subjectType">(optional) Resticts results to just one subject type.</param>
-        /// <param name="subjectId">(optional) Restricts results to just one subject item, e.g. all changes on a product (subjectType must not be null for this to work)</param>
-        /// <returns></returns>
+        /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
+        /// <param name="subjectType">Restricts results to the given subject type. Required when listing results for a single <paramref name="subjectId"/>. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event </param>
         public async Task<IEnumerable<ShopifyEvent>> ListAsync(long subjectId, string subjectType, ShopifyEventListFilter options = null)
         {
             var req = RequestEngine.CreateRequest($"{subjectType?.ToLower()}s/#{subjectId}/events.json", Method.GET, "events");
@@ -92,7 +91,6 @@ namespace ShopifySharp
         /// Returns a list of events.
         /// </summary>
         /// <param name="options">Options for filtering the result.</param>
-        /// <returns></returns>
         public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null)
         {
             var req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
