@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json;
-using ShopifySharp.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {    /// <summary>
      /// An object representing a Shopify event.
      /// </summary>
-    public class ShopifyEvent
+    public class ShopifyEvent : ShopifyObject
     {
         /// <summary>
         /// Refers to a certain event and its resources.
@@ -28,13 +23,7 @@ namespace ShopifySharp
         /// The date and time when the event was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime? CreatedAt { get; set; }
-
-        /// <summary>
-        /// The unique numeric identifier for the event.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; set; }
+        public DateTime? CreatedAt { get; set; }        
 
         /// <summary>
         /// A relative URL to the resource the event is for (may be null)
