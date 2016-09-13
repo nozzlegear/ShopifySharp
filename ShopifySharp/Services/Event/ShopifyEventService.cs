@@ -66,10 +66,16 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the result.</param>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
-        /// <param name="subjectType">Restricts results to the given subject type. Required when listing results for a single <paramref name="subjectId"/>. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event </param>
+        /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
         public async Task<IEnumerable<ShopifyEvent>> ListAsync(long subjectId, string subjectType, ShopifyEventListFilter options = null)
         {
-            var req = RequestEngine.CreateRequest($"{subjectType?.ToLower()}s/#{subjectId}/events.json", Method.GET, "events");
+            // Ensure the subject type is plural
+            if (! subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
+            {
+                subjectType = subjectType + "s";
+            }
+
+            var req = RequestEngine.CreateRequest($"{subjectType?.ToLower()}/{subjectId}/events.json", Method.GET, "events");
 
             //Add optional parameters to request
             if (options != null)
