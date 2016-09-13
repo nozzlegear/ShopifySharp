@@ -69,50 +69,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Returns a list of Events
+        /// Returns a list of events for the given subject and subject type.
         /// </summary>
-        /// <param name="options">(optional) Filters</param>
+        /// <param name="options">Options for filtering the result.</param>
+        /// <param name="subjectType">(optional) Resticts results to just one subject type.</param>
+        /// <param name="subjectId">(optional) Restricts results to just one subject item, e.g. all changes on a product (subjectType must not be null for this to work)</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null)
+        public async Task<IEnumerable<ShopifyEvent>> ListAsync(long subjectId, string subjectType, ShopifyEventListFilter options = null)
         {
-            return await ListAsync(options, null, null);
-        }
-
-        /*
-         * I have implemented the API as best as I can but this method keeps returning nothing
-        /// <summary>
-        /// Returns a list of Events on a paticular item eg. all events on a product
-        /// </summary>
-        /// <param name="subjectType">Resticts resluts to just one subject type</param>
-        /// <param name="subjectId">Restics results to just one subject id</param>
-        /// <param name="options">(optional) Filters</param>
-        /// <returns></returns>
-        public async Task<IEnumerable<ShopifyEvent>> ListAsync(string subjectType, long subjectId, ShopifyEventListFilter options = null)
-        {
-            return await ListAsync(options, subjectType, subjectId);
-        }
-        */
-
-        /// <summary>
-        /// Returns a list of Events
-        /// </summary>
-        /// <param name="options">(optional) Filters</param>
-        /// <param name="subjectType">(optional) Resticts resluts to just one subject type</param>
-        /// <param name="subjectId">(optional) Restics results to just one subject item eg.all changes on a product (subjectType must not be null for this to work)</param>
-        /// <returns></returns>
-        private async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null, string subjectType = null, long? subjectId = null)
-        {
-            IRestRequest req;
-            if (subjectType == null)
-            {
-                req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
-            }
-            else
-            {
-                // As noted above this is currently always returing nothing I am unsure why
-                var subjectTypeName = subjectType.ToLower();
-                req = RequestEngine.CreateRequest(string.Format("{0}s/#{1}/events.json", subjectTypeName, subjectId), Method.GET, "events");
-            }
+            var req = RequestEngine.CreateRequest($"{subjectType?.ToLower()}s/#{subjectId}/events.json", Method.GET, "events");
 
             //Add optional parameters to request
             if (options != null)
@@ -122,6 +87,26 @@ namespace ShopifySharp
 
             return await RequestEngine.ExecuteRequestAsync<List<ShopifyEvent>>(_RestClient, req);
         }
+
+        /// <summary>
+        /// Returns a list of events.
+        /// </summary>
+        /// <param name="options">Options for filtering the result.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null)
+        {
+            var req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
+            
+            //Add optional parameters to request
+            if (options != null)
+            {
+                req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            }
+
+            return await RequestEngine.ExecuteRequestAsync<List<ShopifyEvent>>(_RestClient, req);
+        }
+
+
         #endregion
     }
 }
