@@ -1,10 +1,11 @@
 ﻿using Machine.Specifications;
 using ShopifySharp.Tests.Test_Data;
+using System.Collections.Generic;
 
 namespace ShopifySharp.Tests.ShopifyEventService_Tests
 {
     [Subject(typeof(ShopifyEventService))]
-    class When_counting_events
+    class When_listing_events
     {
         Establish context = () =>
         {
@@ -13,12 +14,12 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
 
         Because of = () =>
         {
-            Count = Service.CountAsync().Await().AsTask.Result;
+            Events = Service.ListAsync().Await().AsTask.Result;
         };
-
-        It should_count_events = () =>
+        
+        It should_list_events = () =>
         {
-            Count.ShouldBeGreaterThanOrEqualTo(1);
+            Events.ShouldNotBeEmpty();
         };
 
         Cleanup after = () =>
@@ -28,6 +29,6 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
 
         static ShopifyEventService Service;        
 
-        static int Count;
+        static IEnumerable<ShopifyEvent> Events;
     }
 }
