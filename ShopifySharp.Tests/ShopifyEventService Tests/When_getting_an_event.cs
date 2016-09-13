@@ -11,33 +11,29 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
         Establish context = () =>
         {
             Service = new ShopifyEventService(Utils.MyShopifyUrl, Utils.AccessToken);
-
             var list = Service.ListAsync(new ShopifyEventListFilter()
             {
                 Limit = 1
-            }).Await().AsTask.Result;
-           
-            if (list != null)
-            {
-                Id = list.FirstOrDefault()?.Id;
-            }
+            }).Await().AsTask.Result;           
+            Id = list.FirstOrDefault()?.Id;            
         };
 
         Because of = () =>
         {
-            if (Id.HasValue)
-            {
-                Event = Service.GetAsync(Id.Value).Await().AsTask.Result;
-            }
+            Event = Service.GetAsync(Id.Value).Await().AsTask.Result;            
         };
 
         It should_get_an_event = () =>
         {
-            if (Id.HasValue)
-            {
-                Event.ShouldNotBeNull();
-                Event.Id.ShouldEqual(Id);
-            }
+            Event.ShouldNotBeNull();
+            Event.Id.ShouldEqual(Id);
+            Event.Author.ShouldNotBeNull();
+            Event.CreatedAt.HasValue.ShouldBeTrue();
+            Event.Message.ShouldNotBeNull();
+            Event.Path.ShouldNotBeNull();
+            Event.SubjectId.ShouldBeGreaterThan(0);
+            Event.SubjectType.ShouldNotBeNull();
+            Event.Verb.ShouldNotBeNull();
         };
 
         Cleanup after = () =>

@@ -1,6 +1,7 @@
 ﻿using Machine.Specifications;
 using ShopifySharp.Tests.Test_Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyEventService_Tests
 {
@@ -20,6 +21,7 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
         It should_list_events = () =>
         {
             Events.ShouldNotBeEmpty();
+            Events.Count().ShouldBeGreaterThanOrEqualTo(1);
         };
 
         Cleanup after = () =>
