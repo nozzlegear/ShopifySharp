@@ -16,10 +16,10 @@ namespace ShopifySharp.Filters
         public string Status { get; set; } = "any";
 
         /// <summary>
-        /// The financial status of orders to retrieve. Leave this null to retrieve orders with any financial status.
+        /// The financial status of orders to retrieve. Known values are "authorized", "paid", "pending", "partially_paid", "partially_refunded", "refunded" and "voided".
         /// </summary>
         [JsonProperty("financial_status")]
-        public ShopifyOrderFinancialStatus? FinancialStatus { get; set; }
+        public string FinancialStatus { get; set; }
 
         /// <summary>
         /// The fulfillment status of orders to retrieve. Leave this null to retrieve orders with any fulfillment status.

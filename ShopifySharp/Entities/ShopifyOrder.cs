@@ -102,10 +102,10 @@ namespace ShopifySharp
         public string Email { get; set; }
 
         /// <summary>
-        /// The financial status of an order.
+        /// The financial status of an order. Known values are "authorized", "paid", "pending", "partially_paid", "partially_refunded", "refunded" and "voided".
         /// </summary>
         [JsonProperty("financial_status")]
-        public ShopifyOrderFinancialStatus? FinancialStatus { get; set; }
+        public string FinancialStatus { get; set; }
 
         /// <summary>
         /// An array of <see cref="ShopifyFulfillment"/> objects for this order.
