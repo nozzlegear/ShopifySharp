@@ -92,7 +92,6 @@
     <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
     <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
     <Compile Include="Enums\ShopifyOrderFinancialStatus.cs" />
-    <Compile Include="Enums\ShopifyOrderStatus.cs" />
     <Compile Include="Enums\ShopifyChargeStatus.cs" />
     <Compile Include="Enums\ShopifyScriptTagEvent.cs" />
     <Compile Include="Enums\ShopifyThemeRole.cs" />

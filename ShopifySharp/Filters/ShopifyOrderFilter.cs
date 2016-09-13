@@ -10,10 +10,10 @@ namespace ShopifySharp.Filters
     public class ShopifyOrderFilter : ShopifyListFilter
     {
         /// <summary>
-        /// The status of orders to retrieve. Default is <see cref="ShopifyOrderStatus.Any"/>.
+        /// The status of orders to retrieve. Known values are "open", "closed", "cancelled" and "any" (default).
         /// </summary>
         [JsonProperty("status")]
-        public ShopifyOrderStatus? Status { get; set; } = ShopifyOrderStatus.Any;
+        public string Status { get; set; } = "any";
 
         /// <summary>
         /// The financial status of orders to retrieve. Leave this null to retrieve orders with any financial status.
