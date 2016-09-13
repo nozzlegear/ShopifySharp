@@ -61,6 +61,7 @@
     <Compile Include="Entities\ShopifyCollect.cs" />
     <Compile Include="Entities\ShopifyCustomCollection.cs" />
     <Compile Include="Entities\ShopifyCustomCollectionImage.cs" />
+    <Compile Include="Entities\ShopifyEvent.cs" />
     <Compile Include="Entities\ShopifyLineItemProperty.cs" />
     <Compile Include="Entities\ShopifyLocation.cs" />
     <Compile Include="Entities\ShopifyNoteAttribute.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Enums\ShopifyWebhookTopic.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Filters\ShopifyEventListFilter.cs" />
     <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="Services\Collect\ShopifyCollectService.cs" />
     <Compile Include="Filters\ShopifyCustomCollectionFilter.cs" />
     <Compile Include="Services\CustomCollection\ShopifyCustomCollectionService.cs" />
+    <Compile Include="Services\Event\ShopifyEventService.cs" />
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
     <Compile Include="Filters\ShopifyMetaFieldFilter.cs" />
     <Compile Include="Services\MetaField\ShopifyMetaFieldService.cs" />
