@@ -37,12 +37,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("grams"),JsonConverter(typeof(NullToZeroConverter))]
         public int Grams { get; set; }
-
+        
         /// <summary>
-        /// Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock.
+        /// Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock. Known values are 'deny' and 'continue'.
         /// </summary>
         [JsonProperty("inventory_policy")]
-        public ShopifyProductInventoryPolicy? InventoryPolicy { get; set; }
+        public string InventoryPolicy { get; set; }
 
         /// <summary>
         /// Service that is doing the fulfillment. Can be 'manual' or any custom string.
