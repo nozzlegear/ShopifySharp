@@ -10,10 +10,10 @@ namespace ShopifySharp.Filters
     public class ShopifyOrderFilter : ShopifyListFilter
     {
         /// <summary>
-        /// The status of orders to retrieve. Known values are "open", "closed", "cancelled" and "any" (default).
+        /// The status of orders to retrieve. Known values are "open", "closed", "cancelled" and "any".
         /// </summary>
         [JsonProperty("status")]
-        public string Status { get; set; } = "any";
+        public string Status { get; set; }
 
         /// <summary>
         /// The financial status of orders to retrieve. Known values are "authorized", "paid", "pending", "partially_paid", "partially_refunded", "refunded" and "voided".
