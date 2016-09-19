@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests.Test_Data
             return new ShopifyTheme()
             {
                 Name = "My new theme.",
-                Role = Enums.ShopifyThemeRole.Unpublished
+                Role = "unpublished"
             };
         }
     }

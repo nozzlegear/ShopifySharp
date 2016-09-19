@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
             Theme2.Role.ShouldBeNull();
 
-            Theme3.Role.ShouldEqual(Enums.ShopifyThemeRole.Main);
+            Theme3.Role.ShouldEqual("main");
         };
 
         Cleanup after = () =>
