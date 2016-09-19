@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
         {
             // NOTE: This test will require you to set a break point after creating the charge but before activating it, 
             // grab the confirmation url and manually accept it, then continue the test.
-            Charge.Status.ShouldEqual(Enums.ShopifyChargeStatus.Active);
+            Charge.Status.ShouldEqual("active");
         };
 
         Cleanup after = () =>

@@ -46,10 +46,10 @@ namespace ShopifySharp
         public string ReturnUrl { get; set; }
 
         /// <summary>
-        /// The status of the charged.
+        /// The status of the charged. Known values are 'pending', 'accepted', 'active', 'cancelled', 'declined' and 'expired'.
         /// </summary>
         [JsonProperty("status")]
-        public ShopifyChargeStatus? Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// States whether or not the application charge is a test transaction.

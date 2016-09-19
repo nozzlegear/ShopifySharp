@@ -90,7 +90,6 @@
     <Compile Include="Entities\ShopifyWebhook.cs" />
     <Compile Include="Enums\ShopifyDiscountCodeType.cs" />
     <Compile Include="Enums\ShopifyInventoryBehavior.cs" />
-    <Compile Include="Enums\ShopifyChargeStatus.cs" />
     <Compile Include="Enums\ShopifyScriptTagEvent.cs" />
     <Compile Include="Enums\ShopifyThemeRole.cs" />
     <Compile Include="Enums\ShopifyWebhookTopic.cs" />
