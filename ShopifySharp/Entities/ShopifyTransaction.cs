@@ -77,10 +77,10 @@ namespace ShopifySharp
         public object Receipt { get; set; }
 
         /// <summary>
-        /// A standardized error code, independent of the payment provider. Value can be null. 
+        /// A standardized error code, e.g. 'incorrect_number', independent of the payment provider. Value can be null. A full list of known values can be found at https://help.shopify.com/api/reference/transaction.
         /// </summary>
         [JsonProperty("error_code")]
-        public ShopifyTransactionError? ErrorCode { get; set; }
+        public string ErrorCode { get; set; }
 
         /// <summary>
         /// The status of the transaction. Valid values are: pending, failure, success or error.

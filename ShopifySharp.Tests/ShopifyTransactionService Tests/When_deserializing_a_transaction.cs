@@ -30,13 +30,13 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
         It should_deserialize_a_transaction = () =>
         {
             Transaction1.Kind.ShouldEqual("capture");
-            Transaction1.ErrorCode.ShouldEqual(ShopifyTransactionError.CardDeclined);
+            Transaction1.ErrorCode.ShouldEqual("card_declined");
 
             Transaction2.Kind.ShouldBeNull();
             Transaction2.ErrorCode.ShouldBeNull();
 
             Transaction3.Kind.ShouldEqual("void");
-            Transaction3.ErrorCode.ShouldEqual(ShopifyTransactionError.IncorrectAddress);
+            Transaction3.ErrorCode.ShouldEqual("incorrect_address");
         };
 
         Cleanup after = () =>

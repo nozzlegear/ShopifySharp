@@ -135,7 +135,6 @@
     <Compile Include="Services\ShopifyService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Shop\ShopifyShopService.cs" />
-    <Compile Include="Enums\ShopifyTransactionError.cs" />
     <Compile Include="Services\Charge\ShopifyChargeService.cs" />
     <Compile Include="Services\Theme\ShopifyThemeService.cs" />
     <Compile Include="Services\Transaction\ShopifyTransactionService.cs" />
