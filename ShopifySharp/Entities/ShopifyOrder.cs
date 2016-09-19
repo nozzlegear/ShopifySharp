@@ -181,10 +181,10 @@ namespace ShopifySharp
         public DateTime? ProcessedAt { get; set; }
 
         /// <summary>
-        /// The type of payment processing method
+        /// The type of payment processing method. Known values are 'checkout', 'direct', 'manual', 'offsite', 'express', 'free' and 'none'.
         /// </summary>
         [JsonProperty("processing_method")]
-        public ShopifyProcessingMethod? ProcessingMethod { get; set; }
+        public string ProcessingMethod { get; set; }
 
         /// <summary>
         /// The website that the customer clicked on to come to the shop.

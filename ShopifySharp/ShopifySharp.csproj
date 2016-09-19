@@ -129,7 +129,6 @@
     <Compile Include="Services\Order\ShopifyOrderCreateOptions.cs" />
     <Compile Include="Filters\ShopifyOrderFilter.cs" />
     <Compile Include="Services\Order\ShopifyOrderService.cs" />
-    <Compile Include="Enums\ShopifyProcessingMethod.cs" />
     <Compile Include="Filters\ShopifyRedirectFilter.cs" />
     <Compile Include="Filters\ShopifyScriptTagFilter.cs" />
     <Compile Include="Services\ScriptTag\ShopifyScriptTagService.cs" />
