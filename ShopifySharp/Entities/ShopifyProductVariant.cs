@@ -51,10 +51,10 @@ namespace ShopifySharp
         public string FulfillmentService { get; set; }
 
         /// <summary>
-        /// Specifies whether or not Shopify tracks the number of items in stock for this product variant.
+        /// Specifies whether or not Shopify tracks the number of items in stock for this product variant. Known values are 'blank' and 'shopify'.
         /// </summary>
         [JsonProperty("inventory_management")]
-        public ShopifyProductInventoryManagement? InventoryManagement { get; set; }
+        public string InventoryManagement { get; set; }
 
         /// <summary>
         /// The price of the product variant.
