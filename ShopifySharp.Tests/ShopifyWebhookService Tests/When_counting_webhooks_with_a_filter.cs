@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests
         static ShopifyWebhookService Service;
         static int? AllCount;
         static int? FilteredCount;
-        static ShopifyWebhookTopic FilterTopic = ShopifyWebhookTopic.ShopUpdated;
+        static string FilterTopic = "shop/update";
         static List<ShopifyWebhook> Webhooks = new List<ShopifyWebhook>();
     }
 }

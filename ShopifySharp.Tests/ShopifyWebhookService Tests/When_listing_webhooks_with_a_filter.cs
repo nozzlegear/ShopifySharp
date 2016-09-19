@@ -56,7 +56,7 @@ namespace ShopifySharp.Tests
 
         static ShopifyWebhookService Service;
         static IEnumerable<ShopifyWebhook> Result;
-        static ShopifyWebhookTopic FilterTopic = ShopifyWebhookTopic.ShopUpdated;
+        static string FilterTopic = "shop/update";
         static List<ShopifyWebhook> CreatedWebhooks = new List<ShopifyWebhook>();
         static ShopifyWebhookFilter Options;
     }
