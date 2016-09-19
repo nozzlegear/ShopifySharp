@@ -56,7 +56,7 @@ namespace ShopifySharp.Tests.Test_Data
                     {
                         Amount = 20.00,
                         Status = "success",
-                        Kind = Enums.ShopifyTransactionKind.Authorization,
+                        Kind = "authorization",
                         Test = true,
                     }
                 },

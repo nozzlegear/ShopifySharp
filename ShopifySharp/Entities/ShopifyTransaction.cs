@@ -59,10 +59,10 @@ namespace ShopifySharp
         public ShopifyPaymentDetails PaymentDetails { get; set; }
 
         /// <summary>
-        /// The kind of transaction.
+        /// The kind of transaction. Known values are 'authorization', 'capture', 'sale', 'void' and 'refund'.
         /// </summary>
         [JsonProperty("kind")]
-        public ShopifyTransactionKind? Kind { get; set; }
+        public string Kind { get; set; }
 
         /// <summary>
         /// A unique numeric identifier for the order.

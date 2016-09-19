@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
             for (var i = 0; i < 2; i++)
             {
                 Service
-                .CreateAsync(Order.Id.Value, Setup.GenerateTransaction(ShopifyTransactionKind.Capture, 5.00))
+                .CreateAsync(Order.Id.Value, Setup.GenerateTransaction("capture", 5.00))
                 .Await();
             }
         };

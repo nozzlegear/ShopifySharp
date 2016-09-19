@@ -20,7 +20,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
         Because of = () =>
         {
             Transaction = Service
-                .CreateAsync(Order.Id.Value, Setup.GenerateTransaction(ShopifyTransactionKind.Refund))
+                .CreateAsync(Order.Id.Value, Setup.GenerateTransaction("refund"))
                 .Await()
                 .AsTask
                 .Result;
@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
             Transaction.ShouldNotBeNull();
             Transaction.Status.ShouldEqual("success");
             Transaction.ErrorCode.ShouldBeNull();
-            Transaction.Kind.ShouldEqual(Enums.ShopifyTransactionKind.Refund);
+            Transaction.Kind.ShouldEqual("refund");
         };
 
         Cleanup after = () =>
