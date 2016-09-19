@@ -86,7 +86,6 @@
     <Compile Include="Entities\ShopifyTaxLine.cs" />
     <Compile Include="Entities\ShopifyTransaction.cs" />
     <Compile Include="Entities\ShopifyWebhook.cs" />
-    <Compile Include="Enums\ShopifyScriptTagEvent.cs" />
     <Compile Include="Enums\ShopifyWebhookTopic.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

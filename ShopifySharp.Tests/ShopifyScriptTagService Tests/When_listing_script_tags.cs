@@ -21,7 +21,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 
                 Service.CreateAsync(new ShopifyScriptTag()
                 {
-                    Event = Enums.ShopifyScriptTagEvent.Onload,
+                    Event = "onload",
                     Src = src
                 }).Await();
             }
