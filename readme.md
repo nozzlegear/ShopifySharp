@@ -174,11 +174,18 @@ string usersMyShopifyUrl = "https://example.myshopify.com";
 string redirectUrl = "https://example.com/my/redirect/url";
 
 //An array of the Shopify access scopes your application needs to run.
-IEnumerable<ShopifyAuthorizationScope> scopes = new List<ShopifyAuthorizationScope>()
+var scopes = new List<ShopifyAuthorizationScope>()
 {
     ShopifyAuthorizationScope.ReadCustomers,
     ShopifyAuthorizationScope.WriteCustomers
 };
+
+//Or, use an array of string permissions
+var scopes = new List<string>()
+{
+    "read_customers",
+    "write_customers"
+}
 
 //All ShopifyAuthorizationService methods are static.
 string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey);
@@ -434,8 +441,6 @@ var service = new ShopifyUsageChargeService(myShopifyUrl, shopAccessToken);
 var usageCharges = await service.ListAsync(recurringChargeId);
 ```
 
-### Creating a usage charge
-
 ## Shops
 
 ### Retrieving shop information
@@ -588,7 +593,7 @@ var order = new ShopifyOrder()
             Title = "Test Line Item Title"
         }
     },
-    FinancialStatus = Enums.ShopifyOrderFinancialStatus.Paid,
+    FinancialStatus = "paid",
     TotalPrice = 5.00,
     Email = Guid.NewGuid().ToString() + "@example.com",
     Note = "Test note about the customer.",
@@ -765,7 +770,7 @@ ShopifyWebhook hook = new ShopifyWebhook()
     Fields = new List<string>() { "field1", "field2" },
     Format = "json",
     MetafieldNamespaces = new List<string>() { "metafield1", "metafield2" },
-    Topic = topic,
+    Topic = "app/uninstalled",
 };
 
 hook = await service.CreateAsync(hook);
@@ -821,7 +826,7 @@ dynamically change the functionality of their shop without manually editing thei
 var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
 var tag = new ShopifyScriptTag()
 {
-    Event = ShopifyScriptTagEvent.Onload,
+    Event = "onload",
     Src  = "https://example.com/my-javascript-file.js"
 }
 
@@ -964,7 +969,7 @@ var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
 var theme = new ShopifyTheme()
 {
     Name = "My new theme.",
-    Role = ShopifyThemeRole.Unpublished
+    Role = "unpublished"
 }
 
 theme = await service.CreateAsync(theme);
@@ -982,7 +987,7 @@ var theme = await service.GetAsync(themeId);
 
 ### Updating a theme
 
-Remember, you can't update a theme if its `Processing` flag is set to `true`. Shopify will automatically set it to `false` once it's done processing. Additionally, you cannot set a theme's role from `ShopifyThemeRole.Main` to `ShopifyThemeRole.Unpublished`. Instead, you need to set a different theme's role to `ShopifyThemeRole.Main`.
+Remember, you can't update a theme if its `Processing` flag is set to `true`. Shopify will automatically set it to `false` once it's done processing. Additionally, you cannot set a theme's role from `"main"` to `"unpublished"`. Instead, you need to set a different theme's role to `"main"`.
 
 ```c#
 var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
@@ -1267,7 +1272,7 @@ By omitting an `Amount` value, this transaction will capture the full amount.
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Capture
+    Kind = "capture"
 };
 
 await service.CreateAsync(orderId, transaction);
@@ -1283,7 +1288,7 @@ This method will capture a specified amount on a previously authorized order.
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Capture,
+    Kind = "capture",
     Amount = 5.00
 };
 
@@ -1302,7 +1307,7 @@ This method will create a refund on a previously authorized order. Like the last
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Refund,
+    Kind = "refund",
     Amount = 5.00
 };
 
@@ -1319,7 +1324,7 @@ That in mind, I'm including this example for posterity.
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Void
+    Kind = "void"
 };
 
 //Throws an error.
