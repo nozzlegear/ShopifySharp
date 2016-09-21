@@ -39,16 +39,9 @@ console in Visual Studio to install it:
 Install-Package ShopifySharp
 ```
 
-# Version 2.0.0
+# Version 3.0.0
 
-Version 2.0.0 is a major update to ShopifySharp, it contains some breaking changes. We strongly recommend updating to 2.0.0+ **before** June 1st, 2016. Shopify will completely deprecate the method for verifying authentic requests used in `ShopifyAuthorizationService.IsAuthenticRequest` on June 1st, 2016. After that date, this method will always return false in v1 builds.
-
-**Breaking changes**:
-
-- `ShopifyException.Error.Errors` is now a `Dictionary<string, IEnumerable<string>>` on the ShopifyException itself. To maintain some back compat, `ShopifyException.JsonError` is the raw JSON-serialized error returned by Shopify. It's functionally identical to the old ex.Error.Errors, which was also the raw JSON string.
-- Any enums that previously had a `.Unknown` default value are now nullable and have had those values removed. Instead of checking if `Enum == Enum.Unknown`, you should instead check if `Enum == null` or `Enum != Enum.Value`.
-- `ShopifyRecurringChargeStatus` has been merged into `ShopifyChargeStatus`.
-- All `*FilterOptions` and `*ListOptions` (used in many Service.ListAsync and Service.CountAsync calls) have been renamed to `*Filter` and moved into the `ShopifySharp.Filters` namespace.
+Version 3.0.0 is a major update to ShopifySharp, it contains breaking changes by [removing almost all enums](#why_dont_you_use_enums) from the library. We recommend updating to 3.0.0+ if you're using any of the enums from 2.x in production. These enums are brittle, and [Shopify can change them without warning, thereby breaking your app](https://github.com/nozzlegear/ShopifySharp/issues/64).
 
 ### A work-in-progress
 
@@ -1654,17 +1647,19 @@ var subjectType = "Order";
 var orderEvents = await service.ListAsync(orderId, subjectType);
 ```
 
-# A note on enums
+# "Why don't you use enums?"
 
 I'm a big fan of using enums to make things easier for C# devs, because it removes a lot of the headache that comes with trying to remember all the valid string options for certain properties. With enums, we get those options hardcoded by default. We can easily scroll up and down the list of known values and select the one we need, without having to worry about typos.
 
-Many Shopify objects have string properties that only accept a predetermined list of values, and hese properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest.
+Many Shopify objects have string properties that only accept a predetermined list of values, and these properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest. On top of that, they sometimes change those enums completely, [such as this case where they changed the enums used for filtering orders without announcing it](https://github.com/nozzlegear/ShopifySharp/issues/64).
 
-That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks.
+That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks. 
 
-To maintain the benefits of enums while also preventing exceptions from undocumented values, all enums in ShopifySharp are nullable and implement a `NullableEnumConverter<EnumType>` JSON converter. If an unknown value is received, the enum will just be converted to null rather than throw an exception.
+On top of that, if there's an enum value that you need to send but isn't in ShopifySharp, you'll need to wait until a new version of the lib is released before you can use it. 
 
-I strongly encourage you to file an issue if you receive or need to use an undocumented enum; or even better: create a pull request.
+Enums would be much better suited to ShopifySharp if Shopify themselves used API versioning, but sadly that isn't the case. After struggling with undocumented values and unannounced changes that break apps through two major releases of ShopifySharp, I've made the decision to pull the plug on almost all enums in the lib.
+
+What were previously enums in ShopifySharp 1.x and 2.x are now string properties. This change will prevent breaking your app when an enum value changes, and will allow you to quickly update your app when a new enum value is released without waiting on an update to ShopifySharp first.
 
 # Tests
 
