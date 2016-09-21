@@ -114,7 +114,7 @@ namespace ShopifySharp
         public IEnumerable<ShopifyFulfillment> Fulfillments { get; set; }
 
         /// <summary>
-        /// The fulfillment status for this order. Will be null if none of the line items in the order have been fulfilled.
+        /// The fulfillment status for this order. Known values are 'fulfilled', 'null' and 'partial'.
         /// </summary>
         [JsonProperty("fulfillment_status")]
         public string FulfillmentStatus { get; set; }
