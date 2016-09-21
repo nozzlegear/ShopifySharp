@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests
         Establish context = () =>
         {
             Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
-            ExampleWebhook = WebhookCreation.CreateValidWebhook(topic: ShopifyWebhookTopic.ThemePublished);
+            ExampleWebhook = WebhookCreation.CreateValidWebhook(topic: "themes/publish");
         };
 
         Because of = () =>

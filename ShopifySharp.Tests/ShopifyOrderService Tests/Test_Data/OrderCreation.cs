@@ -48,7 +48,7 @@ namespace ShopifySharp.Tests.Test_Data
                         Price = 5
                     }
                 },
-                FinancialStatus = Enums.ShopifyOrderFinancialStatus.Paid,
+                FinancialStatus = "paid",
                 TotalPrice = 5.00,
                 Transactions = new List<ShopifyTransaction>()
                 {
@@ -56,7 +56,7 @@ namespace ShopifySharp.Tests.Test_Data
                     {
                         Amount = 20.00,
                         Status = "success",
-                        Kind = Enums.ShopifyTransactionKind.Authorization,
+                        Kind = "authorization",
                         Test = true,
                     }
                 },

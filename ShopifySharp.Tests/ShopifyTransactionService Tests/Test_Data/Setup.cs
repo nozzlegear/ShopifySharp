@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
         /// <summary>
         /// Generates a valid <see cref="ShopifyTransaction"/> for testing the Transaction API.
         /// </summary>
-        public static ShopifyTransaction GenerateTransaction(ShopifyTransactionKind kind = ShopifyTransactionKind.Authorization , double? amount = null)
+        public static ShopifyTransaction GenerateTransaction(string kind = "authorization", double? amount = null)
         {
             return new ShopifyTransaction()
             {

@@ -24,12 +24,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
-
+        
         /// <summary>
-        /// Specifies how the theme is being used within the shop.
+        /// Specifies how the theme is being used within the shop. Known values are 'main', 'mobile' and 'unpublished'.
         /// </summary>
         [JsonProperty("role")]
-        public ShopifyThemeRole? Role { get; set; }
+        public string Role { get; set; }
 
         /// <summary>
         /// The date and time when the theme was last updated.

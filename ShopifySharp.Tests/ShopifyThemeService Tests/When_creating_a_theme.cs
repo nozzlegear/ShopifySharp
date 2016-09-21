@@ -24,7 +24,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
         It should_create_a_theme = () =>
         {
             Theme.Id.HasValue.ShouldBeTrue();
-            Theme.Role.ShouldEqual(Enums.ShopifyThemeRole.Unpublished);
+            Theme.Role.ShouldEqual("unpublished");
         };
 
         Cleanup after = () =>

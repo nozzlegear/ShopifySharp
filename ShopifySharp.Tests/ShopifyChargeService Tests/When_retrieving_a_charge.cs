@@ -29,6 +29,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
             Charge = Service.GetAsync(ChargeId).Await().AsTask.Result;
         };
 
+        [Ignore("Charge tests cannot be run automatically; they require manual confirmation.")]
         It should_retrieve_a_charge = () =>
         {
             Charge.ShouldNotBeNull();

@@ -44,10 +44,10 @@ namespace ShopifySharp
         public IEnumerable<string> MetafieldNamespaces { get; set; }
 
         /// <summary>
-        /// The event that will trigger the webhook.
+        /// The event that will trigger the webhook, e.g. 'orders/create' or 'app/uninstalled'. A full list of webhook topics can be found at https://help.shopify.com/api/reference/webhook.
         /// </summary>
         [JsonProperty("topic")]
-        public ShopifyWebhookTopic? Topic { get; set; }
+        public string Topic { get; set; }
 
         /// <summary>
         /// The date and time when the webhook was updated.

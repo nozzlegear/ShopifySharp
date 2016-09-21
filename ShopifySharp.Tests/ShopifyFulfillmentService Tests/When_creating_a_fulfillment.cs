@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
         Because of = () =>
         {
             Fulfillment = Service
-                .CreateAsync(Order.Id.Value, FulfillmentCreation.GenerateFulfillment(), true)
+                .CreateAsync(Order.Id.Value, FulfillmentCreation.GenerateFulfillment(), false)
                 .Await()
                 .AsTask
                 .Result;

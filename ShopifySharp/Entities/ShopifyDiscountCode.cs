@@ -23,9 +23,9 @@ namespace ShopifySharp
         public string Code { get; set; }
 
         /// <summary>
-        /// The type of discount.
+        /// The type of discount. Known values are 'percentage', 'shipping', 'fixed_amount' and 'none'.
         /// </summary>
         [JsonProperty("type")]
-        public ShopifyDiscountCodeType? Type { get; set; }
+        public string Type { get; set; }
     }
 }

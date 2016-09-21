@@ -9,7 +9,7 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class WebhookCreation
     {
-        public static ShopifyWebhook CreateValidWebhook(string path = null, ShopifyWebhookTopic topic = ShopifyWebhookTopic.OrderCreated)
+        public static ShopifyWebhook CreateValidWebhook(string path = null, string topic = "orders/create")
         {
             if (string.IsNullOrEmpty(path))
             {

@@ -33,10 +33,10 @@ namespace ShopifySharp
         public bool BuyerAcceptsMarketing { get; set; }
 
         /// <summary>
-        /// The reason why the order was cancelled. If the order was not cancelled, this value is null.
+        /// The reason why the order was cancelled. If the order was not cancelled, this value is null. Known values are "customer", "fraud", "inventory" and "other".
         /// </summary>
         [JsonProperty("cancel_reason")]
-        public ShopifyOrderCancelReason? CancelReason { get; set; }
+        public string CancelReason { get; set; }
 
         /// <summary>
         /// The date and time when the order was cancelled. If the order was not cancelled, this value is null.
@@ -102,10 +102,10 @@ namespace ShopifySharp
         public string Email { get; set; }
 
         /// <summary>
-        /// The financial status of an order.
+        /// The financial status of an order. Known values are "authorized", "paid", "pending", "partially_paid", "partially_refunded", "refunded" and "voided".
         /// </summary>
         [JsonProperty("financial_status")]
-        public ShopifyOrderFinancialStatus? FinancialStatus { get; set; }
+        public string FinancialStatus { get; set; }
 
         /// <summary>
         /// An array of <see cref="ShopifyFulfillment"/> objects for this order.
@@ -114,10 +114,10 @@ namespace ShopifySharp
         public IEnumerable<ShopifyFulfillment> Fulfillments { get; set; }
 
         /// <summary>
-        /// The fulfillment status for this order. Will be null if none of the line items in the order have been fulfilled.
+        /// The fulfillment status for this order. Known values are 'fulfilled', 'null' and 'partial'.
         /// </summary>
         [JsonProperty("fulfillment_status")]
-        public ShopifyFulfillmentStatus? FulfillmentStatus { get; set; }
+        public string FulfillmentStatus { get; set; }
 
         /// <summary>
         /// Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values.
@@ -181,10 +181,10 @@ namespace ShopifySharp
         public DateTime? ProcessedAt { get; set; }
 
         /// <summary>
-        /// The type of payment processing method
+        /// The type of payment processing method. Known values are 'checkout', 'direct', 'manual', 'offsite', 'express', 'free' and 'none'.
         /// </summary>
         [JsonProperty("processing_method")]
-        public ShopifyProcessingMethod? ProcessingMethod { get; set; }
+        public string ProcessingMethod { get; set; }
 
         /// <summary>
         /// The website that the customer clicked on to come to the shop.

@@ -22,7 +22,6 @@ namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
         It should_publish_a_custom_collection = () =>
         {
             Collection.ShouldNotBeNull();
-            Collection.PublishedAt.ShouldNotBeNull();
         };
 
         Cleanup after = () =>

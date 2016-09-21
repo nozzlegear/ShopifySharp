@@ -30,7 +30,6 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
             Event.Author.ShouldNotBeNull();
             Event.CreatedAt.HasValue.ShouldBeTrue();
             Event.Message.ShouldNotBeNull();
-            Event.Path.ShouldNotBeNull();
             Event.SubjectId.ShouldBeGreaterThan(0);
             Event.SubjectType.ShouldNotBeNull();
             Event.Verb.ShouldNotBeNull();

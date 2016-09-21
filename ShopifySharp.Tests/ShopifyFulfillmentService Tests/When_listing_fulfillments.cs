@@ -20,7 +20,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
                 var items = Order.LineItems.Skip(i).Take(1);
                 var fulfillment = FulfillmentCreation.GenerateFulfillment(items: items);
 
-                Service.CreateAsync(Order.Id.Value, fulfillment, true).Await();
+                Service.CreateAsync(Order.Id.Value, fulfillment, false).Await();
             }
         };
 

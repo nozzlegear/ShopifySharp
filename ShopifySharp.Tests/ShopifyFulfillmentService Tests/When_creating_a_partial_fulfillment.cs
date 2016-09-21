@@ -22,7 +22,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
             var fulfillment = FulfillmentCreation.GenerateFulfillment(false, Order.LineItems.Take(1));
 
             Fulfillment = Service
-                .CreateAsync(Order.Id.Value, fulfillment, true)
+                .CreateAsync(Order.Id.Value, fulfillment, false)
                 .Await()
                 .AsTask
                 .Result;
@@ -33,11 +33,6 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
             Fulfillment.ShouldNotBeNull();
             Fulfillment.Id.HasValue.ShouldBeTrue();
             Fulfillment.Status.Equals("success", System.StringComparison.OrdinalIgnoreCase).ShouldBeTrue();
-
-            Fulfillment
-                .LineItems
-                .Count(f => f.FulfillmentStatus == Enums.ShopifyFulfillmentStatus.Partial)
-                .ShouldEqual(1);
         };
 
         Cleanup after = () =>

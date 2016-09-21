@@ -39,16 +39,9 @@ console in Visual Studio to install it:
 Install-Package ShopifySharp
 ```
 
-# Version 2.0.0
+# Version 3.0.0
 
-Version 2.0.0 is a major update to ShopifySharp, it contains some breaking changes. We strongly recommend updating to 2.0.0+ **before** June 1st, 2016. Shopify will completely deprecate the method for verifying authentic requests used in `ShopifyAuthorizationService.IsAuthenticRequest` on June 1st, 2016. After that date, this method will always return false in v1 builds.
-
-**Breaking changes**:
-
-- `ShopifyException.Error.Errors` is now a `Dictionary<string, IEnumerable<string>>` on the ShopifyException itself. To maintain some back compat, `ShopifyException.JsonError` is the raw JSON-serialized error returned by Shopify. It's functionally identical to the old ex.Error.Errors, which was also the raw JSON string.
-- Any enums that previously had a `.Unknown` default value are now nullable and have had those values removed. Instead of checking if `Enum == Enum.Unknown`, you should instead check if `Enum == null` or `Enum != Enum.Value`.
-- `ShopifyRecurringChargeStatus` has been merged into `ShopifyChargeStatus`.
-- All `*FilterOptions` and `*ListOptions` (used in many Service.ListAsync and Service.CountAsync calls) have been renamed to `*Filter` and moved into the `ShopifySharp.Filters` namespace.
+Version 3.0.0 is a major update to ShopifySharp, it contains breaking changes by [removing almost all enums](#why_dont_you_use_enums) from the library. We recommend updating to 3.0.0+ if you're using any of the enums from 2.x in production. These enums are brittle, and [Shopify can change them without warning, thereby breaking your app](https://github.com/nozzlegear/ShopifySharp/issues/64).
 
 ### A work-in-progress
 
@@ -181,11 +174,18 @@ string usersMyShopifyUrl = "https://example.myshopify.com";
 string redirectUrl = "https://example.com/my/redirect/url";
 
 //An array of the Shopify access scopes your application needs to run.
-IEnumerable<ShopifyAuthorizationScope> scopes = new List<ShopifyAuthorizationScope>()
+var scopes = new List<ShopifyAuthorizationScope>()
 {
     ShopifyAuthorizationScope.ReadCustomers,
     ShopifyAuthorizationScope.WriteCustomers
 };
+
+//Or, use an array of string permissions
+var scopes = new List<string>()
+{
+    "read_customers",
+    "write_customers"
+}
 
 //All ShopifyAuthorizationService methods are static.
 string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey);
@@ -441,8 +441,6 @@ var service = new ShopifyUsageChargeService(myShopifyUrl, shopAccessToken);
 var usageCharges = await service.ListAsync(recurringChargeId);
 ```
 
-### Creating a usage charge
-
 ## Shops
 
 ### Retrieving shop information
@@ -595,7 +593,7 @@ var order = new ShopifyOrder()
             Title = "Test Line Item Title"
         }
     },
-    FinancialStatus = Enums.ShopifyOrderFinancialStatus.Paid,
+    FinancialStatus = "paid",
     TotalPrice = 5.00,
     Email = Guid.NewGuid().ToString() + "@example.com",
     Note = "Test note about the customer.",
@@ -772,7 +770,7 @@ ShopifyWebhook hook = new ShopifyWebhook()
     Fields = new List<string>() { "field1", "field2" },
     Format = "json",
     MetafieldNamespaces = new List<string>() { "metafield1", "metafield2" },
-    Topic = topic,
+    Topic = "app/uninstalled",
 };
 
 hook = await service.CreateAsync(hook);
@@ -828,7 +826,7 @@ dynamically change the functionality of their shop without manually editing thei
 var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
 var tag = new ShopifyScriptTag()
 {
-    Event = ShopifyScriptTagEvent.Onload,
+    Event = "onload",
     Src  = "https://example.com/my-javascript-file.js"
 }
 
@@ -971,7 +969,7 @@ var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
 var theme = new ShopifyTheme()
 {
     Name = "My new theme.",
-    Role = ShopifyThemeRole.Unpublished
+    Role = "unpublished"
 }
 
 theme = await service.CreateAsync(theme);
@@ -989,7 +987,7 @@ var theme = await service.GetAsync(themeId);
 
 ### Updating a theme
 
-Remember, you can't update a theme if its `Processing` flag is set to `true`. Shopify will automatically set it to `false` once it's done processing. Additionally, you cannot set a theme's role from `ShopifyThemeRole.Main` to `ShopifyThemeRole.Unpublished`. Instead, you need to set a different theme's role to `ShopifyThemeRole.Main`.
+Remember, you can't update a theme if its `Processing` flag is set to `true`. Shopify will automatically set it to `false` once it's done processing. Additionally, you cannot set a theme's role from `"main"` to `"unpublished"`. Instead, you need to set a different theme's role to `"main"`.
 
 ```c#
 var service = new ShopifyThemeService(myShopifyUrl, shopAccessToken);
@@ -1274,7 +1272,7 @@ By omitting an `Amount` value, this transaction will capture the full amount.
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Capture
+    Kind = "capture"
 };
 
 await service.CreateAsync(orderId, transaction);
@@ -1290,7 +1288,7 @@ This method will capture a specified amount on a previously authorized order.
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Capture,
+    Kind = "capture",
     Amount = 5.00
 };
 
@@ -1309,7 +1307,7 @@ This method will create a refund on a previously authorized order. Like the last
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Refund,
+    Kind = "refund",
     Amount = 5.00
 };
 
@@ -1326,7 +1324,7 @@ That in mind, I'm including this example for posterity.
 var service = new ShopifyTransactionService(myShopifyUrl, shopAccessToken);
 var transaction = new ShopifyTransaction()
 {
-    Kind = ShopifyTransactionKind.Void
+    Kind = "void"
 };
 
 //Throws an error.
@@ -1654,17 +1652,19 @@ var subjectType = "Order";
 var orderEvents = await service.ListAsync(orderId, subjectType);
 ```
 
-# A note on enums
+# "Why don't you use enums?"
 
 I'm a big fan of using enums to make things easier for C# devs, because it removes a lot of the headache that comes with trying to remember all the valid string options for certain properties. With enums, we get those options hardcoded by default. We can easily scroll up and down the list of known values and select the one we need, without having to worry about typos.
 
-Many Shopify objects have string properties that only accept a predetermined list of values, and hese properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest.
+Many Shopify objects have string properties that only accept a predetermined list of values, and these properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest. On top of that, they sometimes change those enums completely, [such as this case where they changed the enums used for filtering orders without announcing it](https://github.com/nozzlegear/ShopifySharp/issues/64).
 
-That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks.
+That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks. 
 
-To maintain the benefits of enums while also preventing exceptions from undocumented values, all enums in ShopifySharp are nullable and implement a `NullableEnumConverter<EnumType>` JSON converter. If an unknown value is received, the enum will just be converted to null rather than throw an exception.
+On top of that, if there's an enum value that you need to send but isn't in ShopifySharp, you'll need to wait until a new version of the lib is released before you can use it. 
 
-I strongly encourage you to file an issue if you receive or need to use an undocumented enum; or even better: create a pull request.
+Enums would be much better suited to ShopifySharp if Shopify themselves used API versioning, but sadly that isn't the case. After struggling with undocumented values and unannounced changes that break apps through two major releases of ShopifySharp, I've made the decision to pull the plug on almost all enums in the lib.
+
+What were previously enums in ShopifySharp 1.x and 2.x are now string properties. This change will prevent breaking your app when an enum value changes, and will allow you to quickly update your app when a new enum value is released without waiting on an update to ShopifySharp first.
 
 # Tests
 

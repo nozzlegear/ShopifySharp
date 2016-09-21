@@ -15,9 +15,9 @@ namespace ShopifySharp.Filters
         public string Address { get; set; }
 
         /// <summary>
-        /// An optional filter for the topic property. When used, the method will only return webhooks with the given topic.
+        /// An optional filter for the topic property. When used, the method will only return webhooks with the given topic. A full list of topics can be found at https://help.shopify.com/api/reference/webhook.
         /// </summary>
         [JsonProperty("topic")]
-        public ShopifyWebhookTopic? Topic { get; set; }
+        public string Topic { get; set; }
     }
 }

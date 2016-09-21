@@ -34,7 +34,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
             }
 
             Theme.Name = UpdatedThemeName;
-            Theme.Role = Enums.ShopifyThemeRole.Main;
+            Theme.Role = "main";
         };
 
         Because of = () =>
@@ -45,7 +45,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
         It should_update_a_themes = () =>
         {
             Theme.Name.ShouldEqual(UpdatedThemeName);
-            Theme.Role.ShouldEqual(Enums.ShopifyThemeRole.Main);
+            Theme.Role.ShouldEqual("main");
         };
 
         Cleanup after = () =>

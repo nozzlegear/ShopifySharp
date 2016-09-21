@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
             var fulfillment = FulfillmentCreation.GenerateFulfillment(true);
 
             Fulfillment = Service
-                .CreateAsync(Order.Id.Value, fulfillment, true)
+                .CreateAsync(Order.Id.Value, fulfillment, false)
                 .Await()
                 .AsTask
                 .Result;

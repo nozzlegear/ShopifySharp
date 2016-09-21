@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
         Because of = () =>
         {
             Transaction = Service
-                .CreateAsync(Order.Id.Value, Setup.GenerateTransaction(ShopifyTransactionKind.Capture))
+                .CreateAsync(Order.Id.Value, Setup.GenerateTransaction("capture"))
                 .Await()
                 .AsTask
                 .Result;
@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
             Transaction.ShouldNotBeNull();
             Transaction.Status.ShouldEqual("success");
             Transaction.ErrorCode.ShouldBeNull();
-            Transaction.Kind.ShouldEqual(ShopifyTransactionKind.Capture);
+            Transaction.Kind.ShouldEqual("capture");
         };
 
         Cleanup after = () =>

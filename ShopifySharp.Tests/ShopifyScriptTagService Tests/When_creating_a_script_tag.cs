@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
         {
             Tag = Service.CreateAsync(new ShopifyScriptTag()
             {
-                Event = Enums.ShopifyScriptTagEvent.Onload,
+                Event = "onload",
                 Src  = "https://nozzlegear.com/test.js"
             }).Await().AsTask.Result;
         };

@@ -34,14 +34,9 @@ namespace ShopifySharp
         public object Receipt { get; set; }
 
         /// <summary>
-        /// The status of the fulfillment. Valid values are 'pending', 'success', 'cancelled', 
+        /// The status of the fulfillment. Valid values are 'pending', 'open', 'success', 'cancelled', 
         /// 'error' and 'failure'.
         /// </summary>
-        /// <remarks>
-        /// This class and property were created before the 
-        /// <see cref="ShopifySharp.Converters.NullableEnumConverter{T}"/>. It should be converted to an 
-        /// enum in v2.0.
-        /// </remarks>
         [JsonProperty("status")]
         public string Status { get; set; }
 

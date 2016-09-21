@@ -32,15 +32,15 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's webhooks.
         /// </summary>
         /// <param name="address">An optional filter for the address property. When used, this method will only count webhooks with the given address.</param>
-        /// <param name="topic">An optional filter for the topic property. When used, this method will only count webhooks with the given topic.</param>
+        /// <param name="topic">An optional filter for the topic property. When used, this method will only count webhooks with the given topic. A full list of topics can be found at https://help.shopify.com/api/reference/webhook. </param>
         /// <returns>The count of all webhooks for the shop.</returns>
-        public async Task<int> CountAsync(string address = null, ShopifyWebhookTopic? topic = null)
+        public async Task<int> CountAsync(string address = null, string topic = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks/count.json", Method.GET);
 
             //Add optional parameters to request
             if (string.IsNullOrEmpty(address) == false) req.AddParameter("address", address);
-            if (topic != null && topic.HasValue) req.AddParameter("topic", topic.ToSerializedString());
+            if (!string.IsNullOrEmpty(topic)) req.AddParameter("topic", topic);
 
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
 

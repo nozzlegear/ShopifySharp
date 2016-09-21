@@ -32,11 +32,12 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             Charge = Service.GetAsync(Charge.Id.Value).Await().AsTask.Result;
         };
 
+        [Ignore("Charge tests cannot be run automatically; they require manual confirmation.")]
         It should_activate_a_recurring_charge = () =>
         {
             // NOTE: This test will require you to set a break point after creating the charge but before activating it, 
             // grab the confirmation url and manually accept it, then continue the test.
-            Charge.Status.ShouldEqual(Enums.ShopifyChargeStatus.Active);
+            Charge.Status.ShouldEqual("active");
             Charge.ActivatedOn.ShouldNotBeNull();
             Charge.TrialEndsOn.ShouldNotBeNull();
         };
