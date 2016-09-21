@@ -41,7 +41,7 @@ Install-Package ShopifySharp
 
 # Version 3.0.0
 
-Version 3.0.0 is a major update to ShopifySharp, it contains breaking changes by [removing almost all enums](#why_dont_you_use_enums) from the library. We recommend updating to 3.0.0+ if you're using any of the enums from 2.x in production. These enums are brittle, and [Shopify can change them without warning, thereby breaking your app](https://github.com/nozzlegear/ShopifySharp/issues/64).
+Version 3.0.0 is a major update to ShopifySharp, it contains breaking changes by [removing almost all enums](#why-dont-you-use-enums) from the library. We recommend updating to 3.0.0+ if you're using any of the enums from 2.x in production. These enums are brittle, and [Shopify can change them without warning, thereby breaking your app](https://github.com/nozzlegear/ShopifySharp/issues/64).
 
 ### A work-in-progress
 

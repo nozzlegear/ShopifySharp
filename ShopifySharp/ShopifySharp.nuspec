@@ -13,7 +13,7 @@
     <releaseNotes> 
   3.0.0
   =====
-  - Breaking release: all enums have been removed and replaced with strings to avoid unannounced changes from Shopify breaking your apps.
+  - Breaking release: all enums have been removed and replaced with strings to avoid unannounced changes from Shopify breaking your apps. Reasoning for this change is documented at https://github.com/nozzlegear/ShopifySharp/pull/65.
 
   2.4.0
   =====
