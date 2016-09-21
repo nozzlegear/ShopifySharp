@@ -20,7 +20,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
                 var items = Order.LineItems.Skip(i).Take(1);
                 var fulfillment = FulfillmentCreation.GenerateFulfillment(items: items);
 
-                Created.Add(Service.CreateAsync(Order.Id.Value, fulfillment, true).Await().AsTask.Result);
+                Created.Add(Service.CreateAsync(Order.Id.Value, fulfillment, false).Await().AsTask.Result);
 
                 //Wait 1 second so created fulfillments have differing times.
                 Thread.Sleep(1000);
