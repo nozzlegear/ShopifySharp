@@ -37,6 +37,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             }
         };
 
+        [Ignore("Charge tests cannot be run automatically; they require manual confirmation.")]
         It should_delete_a_recurring_charge = () =>
         {
             // A charge cannot be deleted unless it has been activated. This test will fail unless you manually 
