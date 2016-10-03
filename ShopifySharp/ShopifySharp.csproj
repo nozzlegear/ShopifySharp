@@ -65,6 +65,7 @@
     <Compile Include="Entities\ShopifyLineItemProperty.cs" />
     <Compile Include="Entities\ShopifyLocation.cs" />
     <Compile Include="Entities\ShopifyNoteAttribute.cs" />
+    <Compile Include="Entities\ShopifyOrderRisk.cs" />
     <Compile Include="Entities\ShopifyPage.cs" />
     <Compile Include="Entities\ShopifyProduct.cs" />
     <Compile Include="Entities\ShopifyDiscountCode.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
     <Compile Include="Filters\ShopifyMetaFieldFilter.cs" />
     <Compile Include="Services\MetaField\ShopifyMetaFieldService.cs" />
+    <Compile Include="Services\OrderRisk\ShopifyOrderService.cs" />
     <Compile Include="Services\Page\ShopifyPageService.cs" />
     <Compile Include="Filters\ShopifyPageFilter.cs" />
     <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />

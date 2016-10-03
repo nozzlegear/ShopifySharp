@@ -142,6 +142,12 @@
     <Compile Include="ShopifyMetaFieldService Tests\When_getting_a_list_of_metafields.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_getting_one_metafield.cs" />
     <Compile Include="ShopifyMetaFieldService Tests\When_updating_a_metafield.cs" />
+    <Compile Include="ShopifyOrderRiskService Tests\Utils.cs" />
+    <Compile Include="ShopifyOrderRiskService Tests\When_creating_a_risk.cs" />
+    <Compile Include="ShopifyOrderRiskService Tests\When_deleting_a_risk.cs" />
+    <Compile Include="ShopifyOrderRiskService Tests\When_getting_a_risk.cs" />
+    <Compile Include="ShopifyOrderRiskService Tests\When_listing_order_risks.cs" />
+    <Compile Include="ShopifyOrderRiskService Tests\When_updating_a_risk.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
     <Compile Include="ShopifyPageService_Tests\Test_Data\PageCreation.cs" />
     <Compile Include="ShopifyPageService_Tests\When_counting_pages.cs" />
