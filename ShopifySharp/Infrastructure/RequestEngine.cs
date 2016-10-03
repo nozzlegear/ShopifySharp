@@ -158,6 +158,12 @@ namespace ShopifySharp
 
                     message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
                 }
+
+                // If the error was caused by reaching the API rate limit, throw a rate limit exception.
+                if ((int) code == 429 /* Too many requests */)
+                {
+                    throw new ShopifyRateLimitException(code, errors, message, json);
+                }
                 
                 throw new ShopifyException(code, errors, message, json);
             }

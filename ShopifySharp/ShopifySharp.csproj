@@ -91,6 +91,7 @@
     <Compile Include="Filters\ShopifyEventListFilter.cs" />
     <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Infrastructure\ShopifyRateLimitException.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
     <Compile Include="Entities\ShopifyAddress.cs" />
     <Compile Include="Entities\ShopifyCustomer.cs" />
