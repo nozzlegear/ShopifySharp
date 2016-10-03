@@ -40,7 +40,7 @@ namespace ShopifySharp
         public string Message { get; set; }
 
         /// <summary>
-        /// WARNING: This is an undocumented field returned by the Shopify API. Use at your own risk.
+        /// WARNING: This is an undocumented field returned by the Shopify API. Use at your own risk. This value cannot be set via API. This message is shown in the merchant's admin dashboard if different from <see cref="Message" />.
         /// </summary>
         [JsonProperty("merchant_message"), Obsolete("This is an undocumented field returned by the Shopify API. Use at your own risk.")]
         public string MerchantMessage { get; set; }
@@ -58,7 +58,7 @@ namespace ShopifySharp
         public decimal Score { get; set; }
 
         /// <summary>
-        /// This indicates the source of the risk assessment. Only known value is 'External'.
+        /// This indicates the source of the risk assessment. Known values are 'External', 'Internal' and 'Gateway'.
         /// </summary>
         [JsonProperty("source")]
         public string Source { get; set; }
