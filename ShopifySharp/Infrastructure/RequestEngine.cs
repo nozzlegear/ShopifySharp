@@ -136,76 +136,26 @@ namespace ShopifySharp
         {
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
-                string json = Encoding.UTF8.GetString(response.RawBytes ?? new byte[] { });
-                var errors = new Dictionary<string, IEnumerable<string>>();
+                var json = Encoding.UTF8.GetString(response.RawBytes ?? new byte[] { });
+                Dictionary<string, IEnumerable<string>> errors = ParseErrorJson(json);
 
-                if (string.IsNullOrEmpty(json) == false)
+                var code = response.StatusCode;
+                var message = $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}.";
+
+                if (errors == null)
                 {
-                    try
+                    errors = new Dictionary<string, IEnumerable<string>>()
                     {
-                        var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
-
-                        if (parsed.Any(x => x.Path == "errors"))
                         {
-                            var parsedErrors = parsed["errors"];
-
-                            // Errors can be any of the following: 
-                            // 1. { errors: "some error message"}
-                            // 2. { errors: { "order" : "some error message" } }
-                            // 3. { errors: { "order" : [ "some error message" ] } }
-
-                            //errors can be either a single string, or an array of other errors
-                            if (parsedErrors.Type == JTokenType.String)
-                            {
-                                //errors is type #1
-
-                                errors.Add("Error", new List<string>() { parsedErrors.Value<string>() });
-                            }
-                            else
-                            {
-                                //errors is type #2 or #3
-
-                                foreach (var val in parsedErrors.Values())
-                                {
-                                    string name = val.Path.Split('.').Last();
-                                    var list = new List<string>();
-
-                                    if (val.Type == JTokenType.String)
-                                    {
-                                        list.Add(val.Value<string>());
-                                    }
-                                    else if (val.Type == JTokenType.Array)
-                                    {
-                                        list = val.Values<string>().ToList();
-                                    }
-
-                                    errors.Add(name, list);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        errors.Add(e.Message, new List<string>() { json });
-                    }
-                }
-                
-                var firstError = errors.FirstOrDefault();
-
-                // KVPs are structs and can never be null. Instead, check if the firstError equals the default kvp value.
-                // If so, firstError is null.
-                var firstErrorIsNull = firstError.Equals(default(KeyValuePair<string, IEnumerable<string>>));
-
-                HttpStatusCode code = response.StatusCode;
-                string message = $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}.";
-
-                if (firstErrorIsNull)
-                {
-                    //Add the generic response message to errors list
-                    errors.Add($"{(int)code} {response.StatusDescription}", new string[] { message });
+                            $"{(int)code} {response.StatusDescription}",
+                            new string[] { message }
+                        },
+                    };
                 }
                 else
                 {
+                    var firstError = errors.First();
+
                     message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
                 }
                 
@@ -219,6 +169,88 @@ namespace ShopifySharp
                 //than throwing this deserialization exception.
                 throw response.ErrorException;
             }
+        }
+        
+        /// <summary>
+        /// Parses a JSON string for Shopify API errors.
+        /// </summary>
+        /// <returns>Returns null if the JSON could not be parsed into an error.</returns>
+        public static Dictionary<string, IEnumerable<string>> ParseErrorJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+
+            var errors = new Dictionary<string, IEnumerable<string>>();
+
+            try
+            {
+                var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
+
+                // Errors can be any of the following: 
+                // 1. { errors: "some error message"}
+                // 2. { errors: { "order" : "some error message" } }
+                // 3. { errors: { "order" : [ "some error message" ] } }
+                // 4. { error: "invalid_request", error_description:"The authorization code was not found or was already used" }
+
+                if (parsed.Any(p => p.Path == "error") && parsed.Any(p => p.Path == "error_description"))
+                {
+                    // Error is type #4
+                    var description = parsed["error_description"];
+
+                    errors.Add("invalid_request", new List<string>() { description.Value<string>() });
+                }
+                else if (parsed.Any(x => x.Path == "errors"))
+                {
+                    var parsedErrors = parsed["errors"];
+                    
+                    //errors can be either a single string, or an array of other errors
+                    if (parsedErrors.Type == JTokenType.String)
+                    {
+                        //errors is type #1
+
+                        errors.Add("Error", new List<string>() { parsedErrors.Value<string>() });
+                    }
+                    else
+                    {
+                        //errors is type #2 or #3
+
+                        foreach (var val in parsedErrors.Values())
+                        {
+                            string name = val.Path.Split('.').Last();
+                            var list = new List<string>();
+
+                            if (val.Type == JTokenType.String)
+                            {
+                                list.Add(val.Value<string>());
+                            }
+                            else if (val.Type == JTokenType.Array)
+                            {
+                                list = val.Values<string>().ToList();
+                            }
+
+                            errors.Add(name, list);
+                        }
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                errors.Add(e.Message, new List<string>() { json });
+            }
+
+            // KVPs are structs and can never be null. Instead, check if the first error equals the default kvp value.
+            if (errors.FirstOrDefault().Equals(default(KeyValuePair<string, IEnumerable<string>>)))
+            {
+                return null;
+            }
+
+            return errors;
         }
     }
 }

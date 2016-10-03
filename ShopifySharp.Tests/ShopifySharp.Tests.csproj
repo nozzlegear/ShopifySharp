@@ -117,6 +117,7 @@
     <Compile Include="ShopifyException Tests\When_receiving_an_error_array.cs" />
     <Compile Include="ShopifyException Tests\When_receiving_an_error_object.cs" />
     <Compile Include="ShopifyException Tests\When_receiving_an_error_string.cs" />
+    <Compile Include="ShopifyException Tests\When_receiving_an_oauth_code_used_error.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\Test_Data\FulfillmentCreation.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_cancelling_a_fulfillment.cs" />
     <Compile Include="ShopifyFulfillmentService Tests\When_completing_a_fulfillment.cs" />

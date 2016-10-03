@@ -1,7 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +18,22 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ShopifyExceptionService(string myShopifyUrl, string shopAccessToken): base(myShopifyUrl, shopAccessToken) { }
+
+        /// <summary>
+        /// A method that will throw an exception which looks like {"error":"invalid_request","error_description":"The authorization code was not found or was already used"}
+        /// This error is thrown when trying to authorize an OAuth code that has already been used.
+        /// </summary>
+        public void ThrowOAuthCodeUsedException()
+        {
+            var response = new RestResponse()
+            {
+                RawBytes = Encoding.UTF8.GetBytes("{\"error\":\"invalid_request\",\"error_description\":\"The authorization code was not found or was already used\"}"),
+                StatusCode = HttpStatusCode.NotAcceptable,
+                StatusDescription = "Not Acceptable"
+            };
+
+            RequestEngine.CheckResponseExceptions(response);
+        }
 
         /// <summary>
         /// A method that will throw an exception which looks like { errors: "some error message"}
