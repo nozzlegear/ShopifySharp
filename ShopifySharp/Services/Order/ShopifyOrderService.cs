@@ -101,22 +101,22 @@ namespace ShopifySharp
         /// Closes an order.
         /// </summary>
         /// <param name="id">The order's id.</param>
-        public async Task CloseAsync(long id)
+        public async Task<ShopifyOrder> CloseAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"orders/{id}/close.json", Method.POST);
+            var req = RequestEngine.CreateRequest($"orders/{id}/close.json", Method.POST, "order");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
         }
 
         /// <summary>
         /// Opens a closed order.
         /// </summary>
         /// <param name="id">The order's id.</param>
-        public async Task OpenAsync(long id)
+        public async Task<ShopifyOrder> OpenAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"orders/{id}/open.json", Method.POST);
+            var req = RequestEngine.CreateRequest($"orders/{id}/open.json", Method.POST, "order");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
         }
 
         /// <summary>
