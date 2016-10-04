@@ -113,7 +113,7 @@
     <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
     <Compile Include="Filters\ShopifyMetaFieldFilter.cs" />
     <Compile Include="Services\MetaField\ShopifyMetaFieldService.cs" />
-    <Compile Include="Services\OrderRisk\ShopifyOrderService.cs" />
+    <Compile Include="Services\OrderRisk\ShopifyOrderRiskService.cs" />
     <Compile Include="Services\Page\ShopifyPageService.cs" />
     <Compile Include="Filters\ShopifyPageFilter.cs" />
     <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />
