@@ -1,9 +1,4 @@
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -12,7 +7,6 @@ namespace ShopifySharp
     /// </summary>
     public class ShopifySmartCollectionRules
     {
-
         /// <summary>
         /// The relationship between the column choice, and the condition.
         /// </summary>

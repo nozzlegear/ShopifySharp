@@ -75,6 +75,7 @@
     <Compile Include="Entities\ShopifyPaymentDetails.cs" />
     <Compile Include="Entities\ShopifyRedirect.cs" />
     <Compile Include="Entities\ShopifySmartCollection.cs" />
+    <Compile Include="Entities\ShopifySmartCollectionImage.cs" />
     <Compile Include="Entities\ShopifySmartCollectionRules.cs" />
     <Compile Include="Entities\ShopifyTheme.cs" />
     <Compile Include="Entities\ShopifyProductImage.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Filters\ShopifyEventListFilter.cs" />
     <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
+    <Compile Include="Filters\ShopifySmartCollectionFilter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Infrastructure\ShopifyRateLimitException.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Shop\ShopifyShopService.cs" />
     <Compile Include="Services\Charge\ShopifyChargeService.cs" />
+    <Compile Include="Services\SmartCollection\ShopifySmartCollectionService.cs" />
     <Compile Include="Services\Theme\ShopifyThemeService.cs" />
     <Compile Include="Services\Transaction\ShopifyTransactionService.cs" />
     <Compile Include="Filters\ShopifyWebhookFilter.cs" />
