@@ -121,6 +121,7 @@
     <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />
     <Compile Include="Filters\ShopifyProductFilter.cs" />
     <Compile Include="Services\ProductImage\ShopifyProductImageService.cs" />
+    <Compile Include="Services\ProductVariant\ShopifyProductVariantService.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />
     <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />

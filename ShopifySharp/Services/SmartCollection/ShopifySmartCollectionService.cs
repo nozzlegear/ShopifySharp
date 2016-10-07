@@ -11,7 +11,7 @@ namespace ShopifySharp
     public class ShopifySmartCollectionService : ShopifyService
     {
         /// <summary>
-        /// Creates a new instance of <see cref="ShopifyOrderRiskService" />.
+        /// Creates a new instance of <see cref="ShopifySmartCollectionService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
@@ -76,7 +76,7 @@ namespace ShopifySharp
         /// <summary>
         /// Updates the given <see cref="ShopifySmartCollection"/>. Id must not be null.
         /// </summary>
-        /// <param name="collection">The risk to update.</param>
+        /// <param name="collection">The smart collection to update.</param>
         public async Task<ShopifySmartCollection> UpdateAsync(ShopifySmartCollection collection)
         {
             var req = RequestEngine.CreateRequest($"smart_collections/{collection.Id.Value}.json", Method.PUT, "smart_collection");

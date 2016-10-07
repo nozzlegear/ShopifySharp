@@ -3,7 +3,7 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// An object for filtering the results of <see cref="ShopifySmartCollectionService.CountAsync(object)"/> and <see cref="ShopifySmartCollectionService.ListAsync(object)"/>.
+    /// An object for filtering the results of <see cref="ShopifySmartCollectionService.CountAsync(ShopifySmartCollectionFilter)"/> and <see cref="ShopifySmartCollectionService.ListAsync(ShopifySmartCollectionFilter)"/>.
     /// </summary>
     public class ShopifySmartCollectionFilter : ShopifyPublishableListFilter
     {
