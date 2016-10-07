@@ -74,6 +74,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Product Images](#product-images)
 - [Locations](#locations)
 - [Events](#events)
+- [Order Risks](#order-risks)
 - [Smart Collections](#smart-collections)
 - [Product Variants](#product-variants)
 
@@ -98,7 +99,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [ShopifyFulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/ShopifyFulfillmentService.cs). |
 | [GiftCard](https://help.shopify.com/api/reference/gift_card) | Requires Shopify Plus. |
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
-| [OrderRisks](https://help.shopify.com/api/reference/order_risks) | |
 | [Policy](https://help.shopify.com/api/reference/policy) | |
 | [Province](https://help.shopify.com/api/reference/province) | |
 | [Refund](https://help.shopify.com/api/reference/refund) | |
@@ -1652,6 +1652,58 @@ Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', '
 var service = new ShopifyEventService(myShopifyUrl, shopAccessToken);
 var subjectType = "Order";
 var orderEvents = await service.ListAsync(orderId, subjectType);
+```
+
+## Order Risks
+
+The Order risk assessment is used to indicate to a merchant the fraud checks that have been done on an order. 
+
+### Create an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risk = await service.CreateAsync(orderId, new ShopifyOrderRisk()
+{
+    Message = "This looks risk!",
+    Score = (decimal)0.85,
+    Recommendation = "cancel",
+    Source = "External",
+    CauseCancel = false,
+    Display = true,
+});
+```
+
+### Get an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risk = await service.GetAsync(orderId, riskId);
+```
+
+### Update an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risk = await service.GetAsync(orderId, riskId);
+
+risk.Message = "An updated risk message";
+
+risk = await service.UpdateAsync(orderId, risk);
+```
+
+### List Order Risks
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risks = await service.ListAsync(orderId);
+```
+
+### Delete an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(orderId, riskId);
 ```
 
 ## Smart Collections
