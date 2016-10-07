@@ -14,29 +14,31 @@ namespace ShopifySharp.Tests
         Establish context = () =>
         {
             Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Order = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result;
+            Id = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result.Id.Value;
+            Service.CloseAsync(Id).Await();
         };
 
         Because of = () =>
         {
-            Service.CloseAsync(Order.Id.Value).Await();
-            Service.OpenAsync(Order.Id.Value).Await();
+            Order = Service.OpenAsync(Id).Await().AsTask.Result;
         };
 
         It should_open_an_order = () =>
         {
-            //Update the order from Shopify
-            Order = Service.GetAsync(Order.Id.Value).Await().AsTask.Result;
-
+            Order.ShouldNotBeNull();
+            Order.Id.ShouldEqual(Id);
             Order.ClosedAt.HasValue.ShouldBeFalse();
         };
 
         Cleanup after = () =>
         {
-            Service.DeleteAsync(Order.Id.Value).Await();
+            Service.DeleteAsync(Id).Await();
         };
 
         static ShopifyOrderService Service;
+
         static ShopifyOrder Order;
+
+        static long Id;
     }
 }

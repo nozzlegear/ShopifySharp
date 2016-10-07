@@ -74,6 +74,9 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Product Images](#product-images)
 - [Locations](#locations)
 - [Events](#events)
+- [Order Risks](#order-risks)
+- [Smart Collections](#smart-collections)
+- [Product Variants](#product-variants)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -96,7 +99,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [ShopifyFulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/ShopifyFulfillmentService.cs). |
 | [GiftCard](https://help.shopify.com/api/reference/gift_card) | Requires Shopify Plus. |
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
-| [OrderRisks](https://help.shopify.com/api/reference/order_risks) | |
 | [Policy](https://help.shopify.com/api/reference/policy) | |
 | [Province](https://help.shopify.com/api/reference/province) | |
 | [Refund](https://help.shopify.com/api/reference/refund) | |
@@ -1650,6 +1652,174 @@ Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', '
 var service = new ShopifyEventService(myShopifyUrl, shopAccessToken);
 var subjectType = "Order";
 var orderEvents = await service.ListAsync(orderId, subjectType);
+```
+
+## Order Risks
+
+The Order risk assessment is used to indicate to a merchant the fraud checks that have been done on an order. 
+
+### Create an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risk = await service.CreateAsync(orderId, new ShopifyOrderRisk()
+{
+    Message = "This looks risk!",
+    Score = (decimal)0.85,
+    Recommendation = "cancel",
+    Source = "External",
+    CauseCancel = false,
+    Display = true,
+});
+```
+
+### Get an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risk = await service.GetAsync(orderId, riskId);
+```
+
+### Update an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risk = await service.GetAsync(orderId, riskId);
+
+risk.Message = "An updated risk message";
+
+risk = await service.UpdateAsync(orderId, risk);
+```
+
+### List Order Risks
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+var risks = await service.ListAsync(orderId);
+```
+
+### Delete an Order Risk
+
+```cs
+var service = new ShopifyOrderRiskService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(orderId, riskId);
+```
+
+## Smart Collections
+
+A smart collection is a grouping of products defined by simple rules set by shop owners. A shop owner creates a smart collection and then sets the rules that determine which products go in them. Shopify automatically changes the contents of smart collections based on their rules.
+
+### Creating a Smart Collection
+
+```cs
+var service = new ShopifySmartCollectionService(myShopifyUrl, shopAccessToken);
+var smartCollection = await service.CreateAsync(new ShopifySmartCollection()
+{
+   Title = "My Smart Collection",
+   Handle = "my-url-slug",
+   BodyHtml = "\<h1\>Hello world!\</h1\>",
+   Image = new ShopifySmartCollectionImage()
+   {
+       // Base-64 image attachment
+       Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
+   } 
+});
+```
+
+### Updating a Smart Collection
+
+```cs
+var service = new ShopifySmartCollectionService(myShopifyUrl, shopAccessToken);
+var smartCollection = await service.GetAsync(smartCollectionId);
+
+smartCollection.Title = "My Updated Title";
+
+smartCollection = await service.UpdateAsync(smartCollection);
+```
+
+### Getting a Smart Collection
+
+```cs
+var service = new ShopifySmartCollectionService(myShopifyUrl, shopAccessToken);
+var smartCollection = await service.GetAsync(smartCollectionId);
+```
+
+### Counting Smart Collections
+
+```cs
+var service = new ShopifySmartCollectionService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
+```
+
+### Listing Smart Collections
+
+```cs
+var service = new ShopifySmartCollectionService(myShopifyUrl, shopAccessToken);
+var smartCollections = await service.ListAsync();
+```
+
+### Deleting a Smart Collection
+
+```cs
+var service = new ShopifySmartCollectionService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(smartCollectionId);
+```
+
+## Product Variants
+
+A product variant is a different version of a product, such as differing sizes or differing colors. Without product variants, you would have to treat the small, medium and large versions of a t-shirt as three separate products; product variants let you treat the small, medium and large versions of a t-shirt as variations of the same product.
+
+### Creating a Product Variant
+
+```cs
+var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
+var variant = await service.CreateAsync(productId, new ShopifyProductVariant()
+{
+    Option1 = "blue",
+    Price = 123.45,
+});
+```
+
+### Getting a Product Variant
+
+```cs
+var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
+var variant = await service.GetAsync(variantId);
+```
+
+### Updating a Product Variant
+
+```cs
+var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
+var variant = await service.GetAsync(variantId);
+
+variant.Price = 543.21;
+
+variant = await service.UpdateAsync(variant);
+```
+
+### Listing Product Variants
+
+```cs
+var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
+var variants = await service.ListAsync(productId);
+```
+
+### Counting Product Variants
+
+```cs
+var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(productId);
+```
+
+### Deleting a Product Variant
+
+```cs
+var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(productId, variantId);
 ```
 
 # "Why don't you use enums?"

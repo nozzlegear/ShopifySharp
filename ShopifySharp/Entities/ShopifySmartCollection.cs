@@ -1,9 +1,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -17,8 +14,7 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("body_html")]
         public string BodyHtml { get; set; }
-
-
+        
         /// <summary>
         /// A human-friendly unique string for the smart collection automatically generated from its title. This is used in shop themes by the Liquid templating language to refer to the smart collection. Limit of 255 characters.
         /// </summary>
@@ -29,7 +25,7 @@ namespace ShopifySharp
         /// The collection image.
         /// </summary>
         [JsonProperty("image")]
-        public string Image { get; set; }
+        public ShopifySmartCollectionImage Image { get; set; }
 
         /// <summary>
         /// This can have two different types of values, depending on whether the smart collection has been published (i.e., made visible to customers):
@@ -40,7 +36,7 @@ namespace ShopifySharp
         public DateTime? PublishedAt { get; set; }
 
         /// <summary>
-        /// The sales channels in which the smart collection is visible.
+        /// The sales channels in which the smart collection is visible. The only currently known value is 'global'.
         /// </summary>
         [JsonProperty("published_scope")]
         public string PublishedScope { get; set; }
@@ -58,7 +54,7 @@ namespace ShopifySharp
         public bool Disjunctive { get; set; }
 
         /// <summary>
-        /// The order in which products in the smart collection appear
+        /// The order in which products in the smart collection appear. Known values are 'alpha-asc', 'alpha-desc', 'best-selling', 'created', 'created-desc', 'manual', 'price-asc', 'price-desc'.
         /// </summary>
         [JsonProperty("sort_order")]
         public string SortOrder { get; set; }

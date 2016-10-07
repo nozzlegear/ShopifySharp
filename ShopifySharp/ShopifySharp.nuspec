@@ -11,6 +11,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  3.1.0
+  =====
+  - New ShopifyProductVariantService: Create, get, update, count, list and delete a product's variants [(#73)](https://github.com/nozzlegear/ShopifySharp/issues/73).
+  - New ShopifySmartCollectionService: Create, get, update, count, list and delete smart collections [(#72)](https://github.com/nozzlegear/ShopifySharp/issues/72).
+  - New ShopifyOrderRiskService: Create, get, update, list and delete order risks [(#71)](https://github.com/nozzlegear/ShopifySharp/issues/71).
+  - When an API call reaches Shopify's rate limit, a ShopifyRateLimitException will now be thrown. This exception inherits from the base ShopifyException, so previous code will still catch the exception [(#67)](https://github.com/nozzlegear/ShopifySharp/issues/67).
+  - Bugfix: ShopifySharp will not properly parse the "authorization code was not found or was already used" error when trying to reuse an OAuth code [(#70)](https://github.com/nozzlegear/ShopifySharp/issues/70).
+  - Bugfix: Closing and opening an order should return the ShopifyOrder object [(#76)](https://github.com/nozzlegear/ShopifySharp/issues/76).
   3.0.0
   =====
   - Breaking release: all enums have been removed and replaced with strings to avoid unannounced changes from Shopify breaking your apps. Reasoning for this change is documented at https://github.com/nozzlegear/ShopifySharp/pull/65.
