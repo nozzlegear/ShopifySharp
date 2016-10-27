@@ -77,6 +77,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Order Risks](#order-risks)
 - [Smart Collections](#smart-collections)
 - [Product Variants](#product-variants)
+- [Blogs](#blogs)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -88,7 +89,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 |-----|-------|
 | [AbandonedCheckouts](https://help.shopify.com/api/reference/abandoned_checkouts) | |
 | [Articles](https://help.shopify.com/api/reference/article) | |
-| [Blogs](https://help.shopify.com/api/reference/blog) | |
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
@@ -1820,6 +1820,59 @@ var count = await service.CountAsync(productId);
 var service = new ShopifyProductVariantService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(productId, variantId);
+```
+
+## Blogs
+
+In addition to an online storefront, Shopify shops come with a built-in blogging engine, allowing a shop to have one or more blogs. **This service is for interacting with blogs themselves, not blog posts**.
+
+### Creating a Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blog = await service.CreateAsync(new ShopifyBlog()
+{
+    Title = "My new blog"
+});
+```
+
+### Getting a Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blog = await service.GetAsync(blogId);
+```
+
+### Updating a Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blog = await service.GetAsync(blogId);
+
+blog.Comments = "moderate";
+blog = await service.UpdateAsync(blog);
+```
+
+### Listing Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var blogs = await service.ListAsync();
+```
+
+### Counting Blogs
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
+```
+
+### Deleting a Blog
+
+```cs
+var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(blogId);
 ```
 
 # "Why don't you use enums?"

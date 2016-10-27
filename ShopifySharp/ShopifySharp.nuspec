@@ -11,9 +11,13 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  3.2.0
+  =====
+  - New ShopifyBlogService: Create, get, update, count, list and delete a shop's blogs [(#80)](https://github.com/nozzlegear/ShopifySharp/issues/80).
+
   3.1.1
   =====
-  - Bugfix: ShopifyMetaFieldService.GetAsync was returning null due to bad deserialization.
+  - Bugfix: ShopifyMetaFieldService.GetAsync was returning null due to bad deserialization [(#81)](https://github.com/nozzlegear/ShopifySharp/issues/81).
   3.1.0
   =====
   - New ShopifyProductVariantService: Create, get, update, count, list and delete a product's variants [(#73)](https://github.com/nozzlegear/ShopifySharp/issues/73).

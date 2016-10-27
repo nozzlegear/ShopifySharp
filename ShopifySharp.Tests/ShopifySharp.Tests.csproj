@@ -91,6 +91,13 @@
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_building_an_authorization_url_with_random_state_param.cs" />
     <Compile Include="ShopifyAuthorizationService Tests\When_checking_if_a_shopify_url_is_valid.cs" />
+    <Compile Include="ShopifyBlogService Tests\Utils.cs" />
+    <Compile Include="ShopifyBlogService Tests\When_counting_blogs.cs" />
+    <Compile Include="ShopifyBlogService Tests\When_creating_a_blog.cs" />
+    <Compile Include="ShopifyBlogService Tests\When_deleting_a_blog.cs" />
+    <Compile Include="ShopifyBlogService Tests\When_getting_a_blog.cs" />
+    <Compile Include="ShopifyBlogService Tests\When_listing_blogs.cs" />
+    <Compile Include="ShopifyBlogService Tests\When_updating_a_blog.cs" />
     <Compile Include="ShopifyChargeService Tests\When_activating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_creating_a_charge.cs" />
     <Compile Include="ShopifyChargeService Tests\When_listing_charges.cs" />
