@@ -25,7 +25,11 @@ namespace ShopifySharp.Tests.MetaField
             MetaField = Service.GetAsync(MetaField.Id.Value).Await().AsTask.Result;
         };
 
-        It should_retrieve_a_product = () => MetaField.ShouldNotBeNull();
+        It should_get_a_metafield = () =>
+        {
+            MetaField.ShouldNotBeNull();
+            MetaField.Id.HasValue.ShouldBeTrue();
+        };
 
         Cleanup after = () =>
         {

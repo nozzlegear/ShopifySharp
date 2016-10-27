@@ -82,7 +82,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyMetaField"/>.</returns>
         public async Task<ShopifyMetaField> GetAsync(long metafieldId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.GET, "metafields");
+            IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.GET, "metafield");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
