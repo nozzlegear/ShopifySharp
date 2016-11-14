@@ -55,6 +55,7 @@
     <Compile Include="Converters\FalseToNullConverter.cs" />
     <Compile Include="Converters\NullableEnumConverter.cs" />
     <Compile Include="Converters\NullToZeroConverter.cs" />
+    <Compile Include="Entities\ShopifyApplicationCredit.cs" />
     <Compile Include="Entities\ShopifyAsset.cs" />
     <Compile Include="Entities\ShopifyBlog.cs" />
     <Compile Include="Entities\ShopifyCharge.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Infrastructure\RequestEngine.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
+    <Compile Include="Services\ApplicationCredit\ShopifyApplicationCreditService.cs" />
     <Compile Include="Services\Asset\ShopifyAssetService.cs" />
     <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
     <Compile Include="Filters\ShopifyCollectFilter.cs" />
