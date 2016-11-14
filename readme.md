@@ -121,6 +121,7 @@ These generous people have contributed their own hard work and time to improving
 - [Angel Arriaga](https://github.com/damazoarriaga)
 - [Shaju Mohammed](https://github.com/shajumohamed)
 - [Jono](https://github.com/mrjono1)
+- [Tommy Holm Jakobsen](https://github.com/thj-dk)
 
 Thank you!
 
