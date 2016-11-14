@@ -666,6 +666,14 @@ var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
 await service.OpenAsync(orderId);
 ```
 
+### Cancel an order
+
+```cs
+var service = new ShopifyOrderService(myShopifyUrl, shopAccessToken);
+
+await service.CancelAsync(orderId);
+```
+
 ## Products
 
 ### Creating a product
