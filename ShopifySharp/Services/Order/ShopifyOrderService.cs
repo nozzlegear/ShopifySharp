@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -161,6 +158,20 @@ namespace ShopifySharp
         public async Task DeleteAsync(long orderId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"orders/{orderId}.json", Method.DELETE);
+
+            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+        }
+
+        /// <summary>
+        /// Cancels an order.
+        /// </summary>
+        /// <param name="orderId">The order's id.</param>
+        /// <returns>The cancelled <see cref="ShopifyOrder"/>.</returns>
+        public async Task CancelAsync(long orderId, ShopifyOrderCancelOptions options = null)
+        {
+            IRestRequest req = RequestEngine.CreateRequest($"orders/{orderId}/cancel.json", Method.POST);
+
+            req.AddJsonBody(options);
 
             await RequestEngine.ExecuteRequestAsync(_RestClient, req);
         }

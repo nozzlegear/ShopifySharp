@@ -155,6 +155,8 @@
     <Compile Include="ShopifyOrderRiskService Tests\When_getting_a_risk.cs" />
     <Compile Include="ShopifyOrderRiskService Tests\When_listing_order_risks.cs" />
     <Compile Include="ShopifyOrderRiskService Tests\When_updating_a_risk.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_cancelling_an_order_with_options.cs" />
+    <Compile Include="ShopifyOrderService Tests\When_cancelling_an_order.cs" />
     <Compile Include="ShopifyOrderService Tests\When_listing_orders_with_since_id.cs" />
     <Compile Include="ShopifyPageService_Tests\Test_Data\PageCreation.cs" />
     <Compile Include="ShopifyPageService_Tests\When_counting_pages.cs" />
