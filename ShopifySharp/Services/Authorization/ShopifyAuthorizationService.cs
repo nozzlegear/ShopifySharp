@@ -191,10 +191,11 @@ namespace ShopifySharp
         /// <param name="shopifyApiKey">Your app's public API key.</param>
         /// <param name="redirectUrl">An optional URL to redirect the user to after integration. Overrides the Shopify app's default redirect URL.</param>
         /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
+        /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion. Only known grant type is "per-user", which will give an access token restricted to the permissions of the user accepting OAuth integration and will expire when that user logs out. Leave the grants array empty or null to receive a full access token that doesn't expire.</param>
         /// <returns>The authorization url.</returns>
-        public static Uri BuildAuthorizationUrl(IEnumerable<ShopifyAuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null)
+        public static Uri BuildAuthorizationUrl(IEnumerable<ShopifyAuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
         {
-            return BuildAuthorizationUrl(scopes.Select(s => s.ToSerializedString()), myShopifyUrl, shopifyApiKey, redirectUrl, state);
+            return BuildAuthorizationUrl(scopes.Select(s => s.ToSerializedString()), myShopifyUrl, shopifyApiKey, redirectUrl, state, grants);
         }
 
         /// <summary>
@@ -205,8 +206,9 @@ namespace ShopifySharp
         /// <param name="shopifyApiKey">Your app's public API key.</param>
         /// <param name="redirectUrl">An optional URL to redirect the user to after integration. Overrides the Shopify app's default redirect URL.</param>
         /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
+        /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion. Only known grant type is "per-user", which will give an access token restricted to the permissions of the user accepting OAuth integration and will expire when that user logs out. Leave the grants array empty or null to receive a full access token that doesn't expire.</param>
         /// <returns>The authorization url.</returns>
-        public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null)
+        public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
         {
             //Prepare a uri builder for the shop URL
             var builder = new UriBuilder(RequestEngine.BuildShopUri(myShopifyUrl));
@@ -226,6 +228,14 @@ namespace ShopifySharp
             if (string.IsNullOrEmpty(state) == false)
             {
                 qs.Add(new KeyValuePair<string, string>("state", state));
+            }
+
+            if (grants != null && grants.Count() > 0)
+            {
+                foreach (var grant in grants)
+                {
+                    qs.Add(new KeyValuePair<string, string>("grant_options[]", grant));
+                }
             }
 
             builder.Path = "admin/oauth/authorize";
