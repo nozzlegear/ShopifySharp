@@ -11,6 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  3.3.0
+  =====
+  - New ShopifyApplicationCreditService: Create, list and get Application Credits [(#84)](https://github.com/nozzlegear/ShopifySharp/issues/84).
+  - Support for "Offline Access" and "Online Access" tokens when creating an authorization URL for OAuth integration [(#83)](https://github.com/nozzlegear/ShopifySharp/issues/83).
+  - Support for canceling an order [(#85)](https://github.com/nozzlegear/ShopifySharp/issues/85).
+
   3.2.0
   =====
   - New ShopifyBlogService: Create, get, update, count, list and delete a shop's blogs [(#80)](https://github.com/nozzlegear/ShopifySharp/issues/80).
