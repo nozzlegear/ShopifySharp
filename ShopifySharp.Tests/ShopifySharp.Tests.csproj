@@ -84,6 +84,15 @@
     <Compile Include="ShopifyApplicationCreditService Tests\When_creating_an_application_credit.cs" />
     <Compile Include="ShopifyApplicationCreditService Tests\When_getting_an_application_credit.cs" />
     <Compile Include="ShopifyApplicationCreditService Tests\When_listing_application_charges.cs" />
+    <Compile Include="ShopifyArticleService Tests\Utils.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_counting_articles.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_creating_an_article.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_deleting_an_article.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_listing_articles.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_listing_authors.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_listing_tags.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_listing_tags_for_a_blog.cs" />
+    <Compile Include="ShopifyArticleService Tests\When_updating_an_article.cs" />
     <Compile Include="ShopifyAssetService Tests\AssetUtils.cs" />
     <Compile Include="ShopifyAssetService Tests\When_copying_an_asset.cs" />
     <Compile Include="ShopifyAssetService Tests\When_creating_an_asset.cs" />

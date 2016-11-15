@@ -79,6 +79,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Product Variants](#product-variants)
 - [Blogs](#blogs)
 - [Application Credits](#application-credits)
+- [Articles](#articles)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -89,7 +90,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | API | Notes |
 |-----|-------|
 | [AbandonedCheckouts](https://help.shopify.com/api/reference/abandoned_checkouts) | |
-| [Articles](https://help.shopify.com/api/reference/article) | |
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
@@ -1834,7 +1834,7 @@ await service.DeleteAsync(productId, variantId);
 
 ## Blogs
 
-In addition to an online storefront, Shopify shops come with a built-in blogging engine, allowing a shop to have one or more blogs. **This service is for interacting with blogs themselves, not blog posts**.
+In addition to an online storefront, Shopify shops come with a built-in blogging engine, allowing a shop to have one or more blogs. **This service is for interacting with blogs themselves, not [blog posts](#articles)**.
 
 ### Creating a Blogs
 
@@ -1846,14 +1846,14 @@ var blog = await service.CreateAsync(new ShopifyBlog()
 });
 ```
 
-### Getting a Blogs
+### Getting a Blog
 
 ```cs
 var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
 var blog = await service.GetAsync(blogId);
 ```
 
-### Updating a Blogs
+### Updating a Blog
 
 ```cs
 var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
@@ -1883,6 +1883,87 @@ var count = await service.CountAsync();
 var service = new ShopifyBlogService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(blogId);
+```
+
+## Articles
+
+Articles are objects representing a blog post. Each article belongs to a [Blog](#blogs).
+
+### Creating an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var article = await service.CreateAsync(blogId, new ShopifyArticle()
+{
+    Title = "My new Article title",
+    Author = "John Smith",
+    Tags = "This Post, Has Been Tagged",
+    BodyHtml = "<h1>Hello world!</h1>",
+    Image = new ShopifyArticleImage()
+    {
+        Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
+    }
+});
+```
+
+### Getting an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var article = await service.GetAsync(blogId, articleId);
+```
+
+### Updating an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var article = await service.GetAsync(blogId, articleId);
+
+article.Title = "My new title";
+article = await service.UpdateAsync(blogId, articleId);
+```
+
+### Listing Articles
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var articles = await service.ListAsync(blogId);
+```
+
+### Counting Articles
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(blogId);
+```
+
+### Deleting an Article
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(blogId, articleId);
+```
+
+### Listing all Article authors
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+IEnumerable<string> authors = await service.ListAuthorsAsync();
+```
+
+### Listing all Article tags
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+IEnumerable<string> tags = await service.ListTagsAsync();
+```
+
+### Listing all Article tags for a single Blog
+
+```cs
+var service = new ShopifyArticleService(myShopifyUrl, shopAccessToken);
+IEnumerable<string> tags = await service.ListTagsForBlogAsync(blogId);
 ```
 
 ## Application Credits
