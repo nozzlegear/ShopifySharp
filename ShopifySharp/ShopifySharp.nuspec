@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes> 
+  3.4.1
+  =====
+  - Added the new `DisplayScope` property to ShopifyScriptTag. Known values are 'online_store', 'order_status' and 'all'. Defaults to 'all'.
+
   3.4.0
   =====
   - New ShopifyArticleService: Create, get, update, list, count, and delete articles, in addition to listing authors and listing tags.

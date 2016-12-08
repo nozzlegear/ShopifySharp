@@ -839,7 +839,8 @@ var service = new ShopifyScriptTagService(myShopifyUrl, shopAccessToken);
 var tag = new ShopifyScriptTag()
 {
     Event = "onload",
-    Src  = "https://example.com/my-javascript-file.js"
+    Src  = "https://example.com/my-javascript-file.js",
+    DisplayScope = 'all'
 }
 
 tag = await service.CreateAsync(tag);
