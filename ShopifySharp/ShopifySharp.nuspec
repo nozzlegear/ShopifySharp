@@ -10,7 +10,11 @@
     <projectUrl>https://github.com/nozzlegear/shopifysharp</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
-    <releaseNotes> 
+    <releaseNotes>
+  3.4.2
+  =====
+  - Bugfix: ShopifyOrderRisk.CauseCancel should be nullable [(#88)](https://github.com/nozzlegear/shopifysharp/issues/88).
+
   3.4.1
   =====
   - Added the new `DisplayScope` property to ShopifyScriptTag. Known values are 'online_store', 'order_status' and 'all'. Defaults to 'all'.

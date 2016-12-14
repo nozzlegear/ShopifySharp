@@ -13,7 +13,7 @@ namespace ShopifySharp
         /// Note: Setting this parameter does not cancel the order. This must be done by the Orders API.
         /// </summary>
         [JsonProperty("cause_cancel")]
-        public bool CauseCancel { get; set; }
+        public bool? CauseCancel { get; set; }
 
         /// <summary>
         /// WARNING: This is an undocumented value returned by the Shopify API. Use at your own risk.
