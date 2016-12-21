@@ -100,13 +100,19 @@ namespace ShopifySharp
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.POST, "customer");
 
-            //Build the request body
-            Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
-            {
-                { "customer", customer }
-            };
+            var customerBody = customer.ToDictionary();
 
-            req.AddJsonBody(body);
+            if (options != null)
+            {
+                foreach (var keyValuePair in options.ToDictionary())
+                {
+                    customerBody.Add(keyValuePair);
+                }
+            }
+
+            var requestBody = new { customer = customerBody };
+
+            req.AddJsonBody(requestBody);
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
