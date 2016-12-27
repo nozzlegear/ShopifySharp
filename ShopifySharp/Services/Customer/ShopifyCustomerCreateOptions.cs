@@ -2,7 +2,10 @@
 
 namespace ShopifySharp
 {
-    public class ShopifyCustomerCreateOptions : Parameterizable
+    /// <summary>
+    /// Options for creating a <see cref="ShopifyCustomer"/>.
+    /// </summary>
+    public class ShopifyCustomerCreateOptions : ShopifyCustomerUpdateOptions
     {
         /// <summary>
         /// Whether an email invite should be sent to the new customer. Default is null.
@@ -15,17 +18,5 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("send_email_welcome")]
         public bool? SendWelcomeEmail { get; set; }
-
-        /// <summary>
-        /// An optional password for the user. Default is null.
-        /// </summary>
-        [JsonProperty("password")]
-        public string Password { get; set; }
-
-        /// <summary>
-        /// Should match <see cref="Password"/>. Documentation is unclear as to whether this field is actually required when setting <see cref="Password"/>. Default is null.
-        /// </summary>
-        [JsonProperty("password_confirmation")]
-        public string PasswordConfirmation { get; set; }
     }
 }

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
-    public class ShopifyCustomerUpdateOptions
+    /// <summary>
+    /// Options for updating a <see cref="ShopifyCustomer"/>. 
+    /// </summary>
+    public class ShopifyCustomerUpdateOptions : Parameterizable
     {
         /// <summary>
         /// An optional password for the user. Default is null.
