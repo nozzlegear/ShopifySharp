@@ -121,12 +121,25 @@ namespace ShopifySharp
         /// Updates the given <see cref="ShopifyCustomer"/>. Id must not be null.
         /// </summary>
         /// <param name="customer">The <see cref="ShopifyCustomer"/> to update.</param>
+        /// <param name="options">Options for updating the customer.</param>
         /// <returns>The updated <see cref="ShopifyCustomer"/>.</returns>
-        public async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer)
+        public async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer, ShopifyCustomerUpdateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"customers/{customer.Id.Value}.json", Method.PUT, "customer");
 
-            req.AddJsonBody(new { customer });
+            var customerBody = customer.ToDictionary();
+
+            if (options != null)
+            {
+                foreach (var keyValuePair in options.ToDictionary())
+                {
+                    customerBody.Add(keyValuePair);
+                }
+            }
+
+            var requestBody = new { customer = customerBody };
+
+            req.AddJsonBody(requestBody);
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
         }
