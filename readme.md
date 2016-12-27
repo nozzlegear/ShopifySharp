@@ -122,6 +122,7 @@ These generous people have contributed their own hard work and time to improving
 - [Shaju Mohammed](https://github.com/shajumohamed)
 - [Jono](https://github.com/mrjono1)
 - [Tommy Holm Jakobsen](https://github.com/thj-dk)
+- [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
 
 Thank you!
 

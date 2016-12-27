@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.4.4
+  =====
+  - New ShopifyCustomerUpdateOptions: Update a customer's password during ShopifyCustomerService.UpdateAsync [(#92)](https://github.com/nozzlegear/shopifysharp/pull/92).
+
   3.4.3
   =====
   - Bugfix: ShopifyCustomerService.CreateAsync wasn't properly serializing the CustomerCreateOptions class.
