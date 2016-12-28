@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <param name="address">An optional filter for the address property. When used, this method will only count webhooks with the given address.</param>
         /// <param name="topic">An optional filter for the topic property. When used, this method will only count webhooks with the given topic. A full list of topics can be found at https://help.shopify.com/api/reference/webhook. </param>
         /// <returns>The count of all webhooks for the shop.</returns>
-        public async Task<int> CountAsync(string address = null, string topic = null)
+        public virtual async Task<int> CountAsync(string address = null, string topic = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks/count.json", Method.GET);
 
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of webhooks matching the filter.</returns>
-        public async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilter filter = null)
+        public virtual async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.GET, "webhooks");
 
@@ -69,7 +69,7 @@ namespace ShopifySharp
         /// <param name="webhookId">The id of the webhook to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyWebhook"/>.</returns>
-        public async Task<ShopifyWebhook> GetAsync(long webhookId, string fields = null)
+        public virtual async Task<ShopifyWebhook> GetAsync(long webhookId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.GET, "webhook");
 
@@ -86,7 +86,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="webhook">A new <see cref="ShopifyWebhook"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="ShopifyWebhook"/>.</returns>
-        public async Task<ShopifyWebhook> CreateAsync(ShopifyWebhook webhook)
+        public virtual async Task<ShopifyWebhook> CreateAsync(ShopifyWebhook webhook)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.POST, "webhook");
 
@@ -101,7 +101,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="webhook">The <see cref="ShopifyWebhook"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyWebhook"/>.</returns>
-        public async Task<ShopifyWebhook> UpdateAsync(ShopifyWebhook webhook)
+        public virtual async Task<ShopifyWebhook> UpdateAsync(ShopifyWebhook webhook)
         {
             IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhook.Id.Value}.json", Method.PUT, "webhook");
 
@@ -114,7 +114,7 @@ namespace ShopifySharp
         /// Deletes the webhook with the given Id.
         /// </summary>
         /// <param name="webhookId">The order object's Id.</param>
-        public async Task DeleteAsync(long webhookId)
+        public virtual async Task DeleteAsync(long webhookId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.DELETE);
 

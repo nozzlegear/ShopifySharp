@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <param name="description">The name or description of the usage charge.</param>
         /// <param name="price">The price of the usage charge.</param>
         /// <returns>The new <see cref="ShopifyUsageCharge"/>.</returns>
-        public async Task<ShopifyUsageCharge> CreateAsync(long recurringChargeId, string description, double price)
+        public virtual async Task<ShopifyUsageCharge> CreateAsync(long recurringChargeId, string description, double price)
         {
             var req = RequestEngine.CreateRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json", Method.POST, "usage_charge");
             
@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyUsageCharge"/>.</returns>
-        public async Task<ShopifyUsageCharge> GetAsync(long recurringChargeId, long id, string fields = null)
+        public virtual async Task<ShopifyUsageCharge> GetAsync(long recurringChargeId, long id, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"recurring_application_charges/{recurringChargeId}/usage_charges/{id}.json", Method.GET, "usage_charge");
 
@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShopifyUsageCharge"/> objects.</returns>
-        public async Task<IEnumerable<ShopifyUsageCharge>> ListAsync(long recurringChargeId, string fields = null)
+        public virtual async Task<IEnumerable<ShopifyUsageCharge>> ListAsync(long recurringChargeId, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json", Method.GET, "usage_charges");
 

@@ -20,7 +20,7 @@ namespace ShopifySharp
         /// Gets a list of all order risks for an order.
         /// </summary>
         /// <param name="orderId">The order the risks belong to.</param>
-        public async Task<IEnumerable<ShopifyOrderRisk>> ListAsync(long orderId)
+        public virtual async Task<IEnumerable<ShopifyOrderRisk>> ListAsync(long orderId)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/risks.json", Method.GET, "risks");
             
@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="riskId">The id of the risk to retrieve.</param>
-        public async Task<ShopifyOrderRisk> GetAsync(long orderId, long riskId)
+        public virtual async Task<ShopifyOrderRisk> GetAsync(long orderId, long riskId)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/risks/{riskId}.json", Method.GET, "risk");
             
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="risk">A new <see cref="ShopifyOrderRisk"/>. Id should be set to null.</param>
-        public async Task<ShopifyOrderRisk> CreateAsync(long orderId, ShopifyOrderRisk risk)
+        public virtual async Task<ShopifyOrderRisk> CreateAsync(long orderId, ShopifyOrderRisk risk)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/risks.json", Method.POST, "risk");
 
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="risk">The risk to update.</param>
-        public async Task<ShopifyOrderRisk> UpdateAsync(long orderId, ShopifyOrderRisk risk)
+        public virtual async Task<ShopifyOrderRisk> UpdateAsync(long orderId, ShopifyOrderRisk risk)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/risks/{risk.Id.Value}.json", Method.PUT, "risk");
 
@@ -72,7 +72,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="riskId">The risk's id.</param>
-        public async Task DeleteAsync(long orderId, long riskId)
+        public virtual async Task DeleteAsync(long orderId, long riskId)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/risks/{riskId}.json", Method.DELETE);
 

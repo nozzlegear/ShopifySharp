@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <returns>The count of all fulfillments for the shop.</returns>
-        public async Task<int> CountAsync(long orderId)
+        public virtual async Task<int> CountAsync(long orderId)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions/count.json", Method.GET);
             var responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="sinceId">Filters the results to after the specified id.</param>
         /// <returns>The list of transactions.</returns>
-        public async Task<IEnumerable<ShopifyTransaction>> ListAsync(long orderId, long? sinceId = null)
+        public virtual async Task<IEnumerable<ShopifyTransaction>> ListAsync(long orderId, long? sinceId = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions.json", Method.GET, "transactions");
 
@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyTransaction"/>.</returns>
-        public async Task<ShopifyTransaction> GetAsync(long orderId, long transactionId, string fields = null)
+        public virtual async Task<ShopifyTransaction> GetAsync(long orderId, long transactionId, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions/{transactionId}.json", Method.GET, "transaction");
 
@@ -80,7 +80,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="transaction">The transaction.</param>
         /// <returns>The new <see cref="ShopifyTransaction"/>.</returns>
-        public async Task<ShopifyTransaction> CreateAsync(long orderId, ShopifyTransaction transaction)
+        public virtual async Task<ShopifyTransaction> CreateAsync(long orderId, ShopifyTransaction transaction)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions.json", Method.POST, "transaction");
 

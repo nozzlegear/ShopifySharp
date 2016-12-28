@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// Gets a count of all of the collects (product-collection mappings).
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyCollectFilter filter = null)
+        public virtual async Task<int> CountAsync(ShopifyCollectFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("collects/count.json", Method.GET, "count");
 
@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyCollect>> ListAsync(ShopifyCollectFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyCollect>> ListAsync(ShopifyCollectFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("collects.json", Method.GET, "collects");
 
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// <param name="collectId">The id of the collect to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyCollect"/>.</returns>
-        public async Task<ShopifyCollect> GetAsync(long collectId, string fields = null)
+        public virtual async Task<ShopifyCollect> GetAsync(long collectId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"collects/{collectId}.json", Method.GET, "collect");
 
@@ -78,7 +78,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="collect">A new <see cref="ShopifyCollect"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="ShopifyCollect"/>.</returns>
-        public async Task<ShopifyCollect> CreateAsync(ShopifyCollect collect)
+        public virtual async Task<ShopifyCollect> CreateAsync(ShopifyCollect collect)
         {
             IRestRequest req = RequestEngine.CreateRequest("collects.json", RestSharp.Method.POST, "collect");
 
@@ -96,7 +96,7 @@ namespace ShopifySharp
         /// Deletes a collect with the given Id.
         /// </summary>
         /// <param name="collectId">The product object's Id.</param>
-        public async Task DeleteAsync(long collectId)
+        public virtual async Task DeleteAsync(long collectId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"collects/{collectId}.json", Method.DELETE);
 

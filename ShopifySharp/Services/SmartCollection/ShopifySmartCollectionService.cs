@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// Gets a count of all smart collections on the store.
         /// </summary>
         /// <param name="filterOptions">Options for filtering the count.</param>
-        public async Task<int> CountAsync(ShopifySmartCollectionFilter filterOptions = null)
+        public virtual async Task<int> CountAsync(ShopifySmartCollectionFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest("smart_collections/count.json", Method.GET, "count");
 
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 smart collections.
         /// </summary>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public async Task<IEnumerable<ShopifySmartCollection>> ListAsync(ShopifySmartCollectionFilter filterOptions = null)
+        public virtual async Task<IEnumerable<ShopifySmartCollection>> ListAsync(ShopifySmartCollectionFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest($"smart_collections.json", Method.GET, "smart_collections");
 
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="ShopifySmartCollection"/> with the given id.
         /// </summary>
         /// <param name="collectionId">The id of the smart collection to retrieve.</param>
-        public async Task<ShopifySmartCollection> GetAsync(long collectionId)
+        public virtual async Task<ShopifySmartCollection> GetAsync(long collectionId)
         {
             var req = RequestEngine.CreateRequest($"smart_collections/{collectionId}.json", Method.GET, "smart_collection");
             
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="ShopifySmartCollection"/>.
         /// </summary>
         /// <param name="collection">A new <see cref="ShopifySmartCollection"/>. Id should be set to null.</param>
-        public async Task<ShopifySmartCollection> CreateAsync(ShopifySmartCollection collection)
+        public virtual async Task<ShopifySmartCollection> CreateAsync(ShopifySmartCollection collection)
         {
             var req = RequestEngine.CreateRequest($"smart_collections.json", Method.POST, "smart_collection");
 
@@ -77,7 +77,7 @@ namespace ShopifySharp
         /// Updates the given <see cref="ShopifySmartCollection"/>. Id must not be null.
         /// </summary>
         /// <param name="collection">The smart collection to update.</param>
-        public async Task<ShopifySmartCollection> UpdateAsync(ShopifySmartCollection collection)
+        public virtual async Task<ShopifySmartCollection> UpdateAsync(ShopifySmartCollection collection)
         {
             var req = RequestEngine.CreateRequest($"smart_collections/{collection.Id.Value}.json", Method.PUT, "smart_collection");
 
@@ -90,7 +90,7 @@ namespace ShopifySharp
         /// Deletes a smart collection with the given Id.
         /// </summary>
         /// <param name="collectionId">The smart collection's id.</param>
-        public async Task DeleteAsync(long collectionId)
+        public virtual async Task DeleteAsync(long collectionId)
         {
             var req = RequestEngine.CreateRequest($"smart_collections/{collectionId}.json", Method.DELETE);
 

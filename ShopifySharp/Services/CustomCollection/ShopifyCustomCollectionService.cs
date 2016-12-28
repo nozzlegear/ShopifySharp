@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">The <see cref="ShopifyCustomCollection"/>. used to filter results</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyCustomCollection>> ListAsync(ShopifyCustomCollectionFilter filter = null)
+        public virtual async Task<IEnumerable<ShopifyCustomCollection>> ListAsync(ShopifyCustomCollectionFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("/custom_collections.json", Method.GET, "custom_collections");
 
@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customCollection">A new <see cref="ShopifyCustomCollection"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="ShopifyCustomCollection"/>.</returns>
-        public async Task<ShopifyCustomCollection> CreateAsync(ShopifyCustomCollection customCollection)
+        public virtual async Task<ShopifyCustomCollection> CreateAsync(ShopifyCustomCollection customCollection)
         {
             string reqPath = "custom_collections.json";
 
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// Gets a count of all of the custom collections
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyCustomCollectionFilter options = null)
+        public virtual async Task<int> CountAsync(ShopifyCustomCollectionFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("custom_collections/count.json", Method.GET, "count");
 
@@ -77,7 +77,7 @@ namespace ShopifySharp
         /// <param name="customCollectionId">The id of the custom collection to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyCustomCollection"/>.</returns>
-        public async Task<ShopifyCustomCollection> GetAsync(long customCollectionId, string fields = null)
+        public virtual async Task<ShopifyCustomCollection> GetAsync(long customCollectionId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"custom_collections/{customCollectionId}.json", Method.GET, "custom_collection");
 
@@ -93,7 +93,7 @@ namespace ShopifySharp
         /// Deletes a custom collection with the given Id.
         /// </summary>
         /// <param name="customCollectionId">The custom collection's Id.</param>
-        public async Task DeleteAsync(long customCollectionId)
+        public virtual async Task DeleteAsync(long customCollectionId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"custom_collections/{customCollectionId}.json", Method.DELETE);
 
@@ -105,7 +105,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customCollection">The <see cref="ShopifyCustomCollection"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyCustomCollection"/>.</returns>
-        public async Task<ShopifyCustomCollection> UpdateAsync(ShopifyCustomCollection customCollection)
+        public virtual async Task<ShopifyCustomCollection> UpdateAsync(ShopifyCustomCollection customCollection)
         {
             IRestRequest req = RequestEngine.CreateRequest($"custom_collections/{customCollection.Id.Value}.json", Method.PUT, "custom_collection");
 

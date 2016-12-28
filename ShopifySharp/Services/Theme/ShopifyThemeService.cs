@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyTheme>> ListAsync(ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<ShopifyTheme>> ListAsync(ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.GET, "themes");
 
@@ -47,7 +47,7 @@ namespace ShopifySharp
         /// <param name="themeId">The id of the theme to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyTheme"/>.</returns>
-        public async Task<ShopifyTheme> GetAsync(long themeId, string fields = null)
+        public virtual async Task<ShopifyTheme> GetAsync(long themeId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.GET, "theme");
 
@@ -67,7 +67,7 @@ namespace ShopifySharp
         /// <param name="theme">The new <see cref="ShopifyTheme"/>.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
         /// <returns>The new <see cref="ShopifyTheme"/>.</returns>
-        public async Task<ShopifyTheme> CreateAsync(ShopifyTheme theme, string sourceUrl)
+        public virtual async Task<ShopifyTheme> CreateAsync(ShopifyTheme theme, string sourceUrl)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.POST, "theme");
 
@@ -89,7 +89,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="theme">The <see cref="ShopifyTheme"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyTheme"/>.</returns>
-        public async Task<ShopifyTheme> UpdateAsync(ShopifyTheme theme)
+        public virtual async Task<ShopifyTheme> UpdateAsync(ShopifyTheme theme)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{theme.Id.Value}.json", Method.PUT, "theme");
 
@@ -102,7 +102,7 @@ namespace ShopifySharp
         /// Deletes a Theme with the given Id.
         /// </summary>
         /// <param name="themeId">The Theme object's Id.</param>
-        public async Task DeleteAsync(long themeId)
+        public virtual async Task DeleteAsync(long themeId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.DELETE);
 

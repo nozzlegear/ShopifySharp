@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's pages.
         /// </summary>
         /// <returns>The count of all pages for the shop.</returns>
-        public async Task<int> CountAsync(ShopifyPageFilter filter = null)
+        public virtual async Task<int> CountAsync(ShopifyPageFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages/count.json", Method.GET);
 
@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyPage>> ListAsync(ShopifyPageFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyPage>> ListAsync(ShopifyPageFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.GET, "pages");
 
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// <param name="pageId">The id of the page to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyPage"/>.</returns>
-        public async Task<ShopifyPage> GetAsync(long pageId, string fields = null)
+        public virtual async Task<ShopifyPage> GetAsync(long pageId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.GET, "page");
 
@@ -82,7 +82,7 @@ namespace ShopifySharp
         /// <param name="page">A new <see cref="ShopifyPage"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the page.</param>
         /// <returns>The new <see cref="ShopifyPage"/>.</returns>
-        public async Task<ShopifyPage> CreateAsync(ShopifyPage page, ShopifyPageCreateOptions options = null)
+        public virtual async Task<ShopifyPage> CreateAsync(ShopifyPage page, ShopifyPageCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.POST, "page");
 
@@ -102,7 +102,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="page">The <see cref="ShopifyPage"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyPage"/>.</returns>
-        public async Task<ShopifyPage> UpdateAsync(ShopifyPage page)
+        public virtual async Task<ShopifyPage> UpdateAsync(ShopifyPage page)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{page.Id.Value}.json", Method.PUT, "page");
 
@@ -115,7 +115,7 @@ namespace ShopifySharp
         /// Deletes a page with the given Id.
         /// </summary>
         /// <param name="pageId">The page object's Id.</param>
-        public async Task DeleteAsync(long pageId)
+        public virtual async Task DeleteAsync(long pageId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.DELETE);
 
@@ -128,7 +128,7 @@ namespace ShopifySharp
         /// <param name="pageId">The <see cref="ShopifyPage"/> pageId to update.</param>
         /// <param name="metafield">The <see cref="ShopifyMetaField"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyMetaField"/>.</returns>
-        public async Task<ShopifyMetaField> UpdateMetafieldAsync(long pageId, ShopifyMetaField metafield)
+        public virtual async Task<ShopifyMetaField> UpdateMetafieldAsync(long pageId, ShopifyMetaField metafield)
         {
             var requestPath = $"pages/{pageId}/metafields.json";
             var method = Method.POST;
@@ -151,7 +151,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="pageId">The id of the page to retrieve.</param>
         /// <returns>The <see cref="ShopifyPage"/>.</returns>
-        public async Task<List<ShopifyMetaField>> GetMetaFieldsAsync(long pageId)
+        public virtual async Task<List<ShopifyMetaField>> GetMetaFieldsAsync(long pageId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}/metafields.json", Method.GET,"metafields");
             

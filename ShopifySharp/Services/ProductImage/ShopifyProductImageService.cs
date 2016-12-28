@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="filter">An optional filter that restricts the results.</param>
         /// <returns>The count of all ProductImages for the shop.</returns>
-        public async Task<int> CountAsync(long productId, ShopifyPublishableCountFilter filter = null)
+        public virtual async Task<int> CountAsync(long productId, ShopifyPublishableCountFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images/count.json", Method.GET);
 
@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// <remarks>
         /// Unlike most list commands, this one only accepts the since_id and fields filters.
         /// </remarks>
-        public async Task<IEnumerable<ShopifyProductImage>> ListAsync(long productId, long? sinceId = null, string fields = null)
+        public virtual async Task<IEnumerable<ShopifyProductImage>> ListAsync(long productId, long? sinceId = null, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images.json", Method.GET, "images");
 
@@ -87,7 +87,7 @@ namespace ShopifySharp
         /// <param name="imageId">The id of the ProductImage to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyProductImage"/>.</returns>
-        public async Task<ShopifyProductImage> GetAsync(long productId, long imageId, string fields = null)
+        public virtual async Task<ShopifyProductImage> GetAsync(long productId, long imageId, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images/{imageId}.json", Method.GET, "image");
 
@@ -105,7 +105,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="image">The new <see cref="ShopifyProductImage"/>.</param>
         /// <returns>The new <see cref="ShopifyProductImage"/>.</returns>
-        public async Task<ShopifyProductImage> CreateAsync(long productId, ShopifyProductImage image)
+        public virtual async Task<ShopifyProductImage> CreateAsync(long productId, ShopifyProductImage image)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images.json", Method.POST, "image");
 
@@ -120,7 +120,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="image">The <see cref="ShopifyProductImage"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyProductImage"/>.</returns>
-        public async Task<ShopifyProductImage> UpdateAsync(long productId, ShopifyProductImage image)
+        public virtual async Task<ShopifyProductImage> UpdateAsync(long productId, ShopifyProductImage image)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images/{image.Id.Value}.json", Method.PUT, "image");
 
@@ -134,7 +134,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="imageId">The ProductImage object's Id.</param>
-        public async Task DeleteAsync(long productId, long imageId)
+        public virtual async Task DeleteAsync(long productId, long imageId)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images/{imageId}.json", Method.DELETE);
 
