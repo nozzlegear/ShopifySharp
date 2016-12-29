@@ -99,6 +99,10 @@
     <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
     <Compile Include="Filters\ShopifySmartCollectionFilter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Infrastructure\Policies\IRequestExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\Policies\RetryExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\Policies\DefaultRequestExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\RequestResult.cs" />
     <Compile Include="Infrastructure\ShopifyRateLimitException.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />
     <Compile Include="Entities\ShopifyAddress.cs" />
