@@ -103,7 +103,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="JToken"/> to be queried.</returns>
         public static async Task<JToken> ExecuteRequestAsync(RestClient client, IRestRequest request)
         {
-            return await _executionPolicy.Run(async () =>
+            return await _executionPolicy.Run(client, request, async() =>
             {
                 //Make request
                 IRestResponse response = await client.ExecuteTaskAsync(request);
@@ -117,7 +117,7 @@ namespace ShopifySharp
                 //Parse the string if it exists, else parse an empty object. The empty object is expected when
                 //Shopify returns a 0-byte body in it's response (e.g. when deleting a charge). 
                 var result = JToken.Parse(string.IsNullOrEmpty(respString) ? "{}" : respString);
-                return new RequestResult<JToken>(request, response, result);
+                return new RequestResult<JToken>(response, result);
             });
         }
 
@@ -130,7 +130,7 @@ namespace ShopifySharp
         /// <returns>The data.</returns>
         public static async Task<T> ExecuteRequestAsync<T>(RestClient client, IRestRequest request) where T : new()
         {
-            return await _executionPolicy.Run(async () =>
+            return await _executionPolicy.Run(client, request, async () =>
             {
                 //Make request
                 IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
@@ -139,7 +139,7 @@ namespace ShopifySharp
                 CheckResponseExceptions(response);
 
                 var result = response.Data;
-                return new RequestResult<T>(request, response, result);
+                return new RequestResult<T>(response, result);
             });
         }
 

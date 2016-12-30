@@ -1,4 +1,4 @@
-﻿using System;
+﻿using RestSharp;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -11,6 +11,6 @@ namespace ShopifySharp
     /// </summary>
     public interface IRequestExecutionPolicy
     {
-        Task<T> Run<T>(ExecuteRequestAsync<T> executeRequestAsync);
+        Task<T> Run<T>(IRestClient client, IRestRequest request, ExecuteRequestAsync<T> executeRequestAsync);
     }
 }

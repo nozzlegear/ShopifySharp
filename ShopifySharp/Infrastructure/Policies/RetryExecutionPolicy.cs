@@ -1,5 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using RestSharp;
+using System;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -11,7 +11,7 @@ namespace ShopifySharp
     {
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(500);
 
-        public async Task<T> Run<T>(ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IRestClient client, IRestRequest request, ExecuteRequestAsync<T> executeRequestAsync)
         {
             Start:
             try
