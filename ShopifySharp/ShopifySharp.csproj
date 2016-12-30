@@ -102,6 +102,8 @@
     <Compile Include="Infrastructure\Policies\IRequestExecutionPolicy.cs" />
     <Compile Include="Infrastructure\Policies\RetryExecutionPolicy.cs" />
     <Compile Include="Infrastructure\Policies\DefaultRequestExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\Policies\SmartRetryExecutionPolicy.LeakyBucket.cs" />
+    <Compile Include="Infrastructure\Policies\SmartRetryExecutionPolicy.cs" />
     <Compile Include="Infrastructure\RequestResult.cs" />
     <Compile Include="Infrastructure\ShopifyRateLimitException.cs" />
     <Compile Include="Serializers\JsonNetSerializer.cs" />

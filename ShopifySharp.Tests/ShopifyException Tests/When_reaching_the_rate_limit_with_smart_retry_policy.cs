@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace ShopifySharp.Tests.ShopifyException_Tests
 {
     [Subject(typeof(ShopifyRateLimitException))]
-    class When_reaching_the_rate_limit_with_retry_policy
+    class When_reaching_the_rate_limit_with_smart_retry_policy
     {
         Establish context = () =>
         {
-            RequestEngine.SetExecutionPolicy(new RetryExecutionPolicy());
+            RequestEngine.SetExecutionPolicy(new SmartRetryExecutionPolicy());
         };
 
         Because of = () =>
