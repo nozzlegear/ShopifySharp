@@ -50,10 +50,12 @@ namespace ShopifySharp
             {
                 var requestResult = await executeRequestAsync();
                 int? bucketContentSize = this.GetBucketContentSize(requestResult.Response);
+
                 if (bucketContentSize != null)
                 {
                     bucket?.SetContentSize(bucketContentSize.Value);
                 }
+
                 return requestResult.Result;
             }
             catch (ShopifyRateLimitException)
@@ -72,26 +74,28 @@ namespace ShopifySharp
         private string GetAccessToken(IRestClient client)
         {
             return client.DefaultParameters
-                        .SingleOrDefault(p => p.Type == ParameterType.HttpHeader &&
-                                              p.Name == REQUEST_HEADER_ACCESS_TOKEN)
-                        ?.Value
-                        ?.ToString();
+                .SingleOrDefault(p => p.Type == ParameterType.HttpHeader && p.Name == REQUEST_HEADER_ACCESS_TOKEN)
+                ?.Value
+                ?.ToString();
         }
 
         private int? GetBucketContentSize(IRestResponse response)
         {
             string apiCallLimitHeaderValue = response.Headers
-                                                     .FirstOrDefault(p => p.Name == RESPONSE_HEADER_API_CALL_LIMIT)
-                                                     ?.Value
-                                                     ?.ToString();
+                .FirstOrDefault(p => p.Name == RESPONSE_HEADER_API_CALL_LIMIT)
+                ?.Value
+                ?.ToString();
+
             if (apiCallLimitHeaderValue != null)
             {
                 int bucketContentSize;
+
                 if (int.TryParse(apiCallLimitHeaderValue.Split('/').First(), out bucketContentSize))
                 {
                     return bucketContentSize;
                 }
             }
+
             return null;
         }
     }

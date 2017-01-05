@@ -32,6 +32,7 @@ namespace ShopifySharp
                 //Shopify may also think that the remaining capacity is more than we know, but we do not ever empty the bucket because Shopify is not
                 //considering requests that we know are already in flight.
                 int grantCapacity = BUCKET_MAX_SIZE - contentSize;
+
                 while (_semaphore.CurrentCount > grantCapacity)
                 {
                     //We refill the virtual bucket accordingly.
