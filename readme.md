@@ -124,6 +124,7 @@ These generous people have contributed their own hard work and time to improving
 - [Tommy Holm Jakobsen](https://github.com/thj-dk)
 - [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
 - [clement911](https://github.com/clement911)
+- [mchandschuh](https://github.com/mchandschuh)
 
 Thank you!
 
