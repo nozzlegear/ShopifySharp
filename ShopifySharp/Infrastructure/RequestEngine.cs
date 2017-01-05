@@ -13,6 +13,13 @@ namespace ShopifySharp
 {
     public static class RequestEngine
     {
+        private static IRequestExecutionPolicy _executionPolicy = new DefaultRequestExecutionPolicy();
+
+        public static void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
+        {
+            _executionPolicy = executionPolicy;
+        }
+
         /// <summary>
         /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
         /// </summary>
@@ -96,18 +103,22 @@ namespace ShopifySharp
         /// <returns>The <see cref="JToken"/> to be queried.</returns>
         public static async Task<JToken> ExecuteRequestAsync(RestClient client, IRestRequest request)
         {
-            //Make request
-            IRestResponse response = await client.ExecuteTaskAsync(request);
+            return await _executionPolicy.Run(client, request, async() =>
+            {
+                //Make request
+                IRestResponse response = await client.ExecuteTaskAsync(request);
 
-            //Check for and throw exception when necessary.
-            CheckResponseExceptions(response);
+                //Check for and throw exception when necessary.
+                CheckResponseExceptions(response);
 
-            //Get the raw response string
-            string respString = Encoding.UTF8.GetString(response.RawBytes);
+                //Get the raw response string
+                string respString = Encoding.UTF8.GetString(response.RawBytes);
 
-            //Parse the string if it exists, else parse an empty object. The empty object is expected when
-            //Shopify returns a 0-byte body in it's response (e.g. when deleting a charge). 
-            return JToken.Parse(string.IsNullOrEmpty(respString) ? "{}" : respString);
+                //Parse the string if it exists, else parse an empty object. The empty object is expected when
+                //Shopify returns a 0-byte body in it's response (e.g. when deleting a charge). 
+                var result = JToken.Parse(string.IsNullOrEmpty(respString) ? "{}" : respString);
+                return new RequestResult<JToken>(response, result);
+            });
         }
 
         /// <summary>
@@ -119,13 +130,17 @@ namespace ShopifySharp
         /// <returns>The data.</returns>
         public static async Task<T> ExecuteRequestAsync<T>(RestClient client, IRestRequest request) where T : new()
         {
-            //Make request
-            IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
+            return await _executionPolicy.Run(client, request, async () =>
+            {
+                //Make request
+                IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
 
-            //Check for and throw exception when necessary.
-            CheckResponseExceptions(response);
+                //Check for and throw exception when necessary.
+                CheckResponseExceptions(response);
 
-            return response.Data;
+                var result = response.Data;
+                return new RequestResult<T>(response, result);
+            });
         }
 
         /// <summary>
