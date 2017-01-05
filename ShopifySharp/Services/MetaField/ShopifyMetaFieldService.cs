@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">The <see cref="ShopifyMetaFieldFilter"/> used to filter results</param>
         /// <returns>The count of all metafields for the given entity and filter options.</returns>
-        public async Task<int> CountAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter filter = null)
+        public virtual async Task<int> CountAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter filter = null)
         {
             string reqPath = "metafields/count.json";
             if (resourceType != null && resourceId != null)
@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="options">The <see cref="ShopifyMetaFieldFilter"/> used to filter results</param>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyMetaField>> ListAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyMetaField>> ListAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter options = null)
         {
             string reqPath = "metafields.json";
             if (resourceType != null && resourceId != null)
@@ -80,7 +80,7 @@ namespace ShopifySharp
         /// <param name="metafieldId">The id of the metafield to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyMetaField"/>.</returns>
-        public async Task<ShopifyMetaField> GetAsync(long metafieldId, string fields = null)
+        public virtual async Task<ShopifyMetaField> GetAsync(long metafieldId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.GET, "metafield");
 
@@ -99,7 +99,7 @@ namespace ShopifySharp
         /// <param name="resourceId">The Id of the resource the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <returns>The new <see cref="ShopifyMetaField"/>.</returns>
-        public async Task<ShopifyMetaField> CreateAsync(ShopifyMetaField metafield, long? resourceId, string resourceType = null)
+        public virtual async Task<ShopifyMetaField> CreateAsync(ShopifyMetaField metafield, long? resourceId, string resourceType = null)
         {
             string reqPath = "metafields.json";
             if (resourceType != null && resourceId != null)
@@ -124,7 +124,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="metafield">The <see cref="ShopifyMetaField"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyMetaField"/>.</returns>
-        public async Task<ShopifyMetaField> UpdateAsync(ShopifyMetaField metafield)
+        public virtual async Task<ShopifyMetaField> UpdateAsync(ShopifyMetaField metafield)
         {
             IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafield.Id.Value}.json", Method.PUT, "metafield");
 
@@ -137,7 +137,7 @@ namespace ShopifySharp
         /// Deletes a metafield with the given Id.
         /// </summary>
         /// <param name="metafieldId">The metafield object's Id.</param>
-        public async Task DeleteAsync(long metafieldId)
+        public virtual async Task DeleteAsync(long metafieldId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.DELETE);
 

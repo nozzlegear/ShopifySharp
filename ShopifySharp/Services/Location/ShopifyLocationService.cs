@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <returns>The <see cref="ShopifyLocation"/>.</returns>
-        public async Task<ShopifyLocation> GetAsync(long id)
+        public virtual async Task<ShopifyLocation> GetAsync(long id)
         {
             var req = RequestEngine.CreateRequest($"locations/{id}.json", Method.GET, "location");           
 
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// Retrieves a list of all <see cref="ShopifyLocation"/> objects.
         /// </summary>
         /// <returns>The list of <see cref="ShopifyLocation"/> objects.</returns>
-        public async Task<IEnumerable<ShopifyLocation>> ListAsync()
+        public virtual async Task<IEnumerable<ShopifyLocation>> ListAsync()
         {
             var req = RequestEngine.CreateRequest($"locations.json", Method.GET, "locations");
 

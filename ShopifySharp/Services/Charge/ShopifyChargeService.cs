@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="charge">The <see cref="ShopifyCharge"/> to create.</param>
         /// <returns>The new <see cref="ShopifyCharge"/>.</returns>
-        public async Task<ShopifyCharge> CreateAsync(ShopifyCharge charge)
+        public virtual async Task<ShopifyCharge> CreateAsync(ShopifyCharge charge)
         {
             IRestRequest req = RequestEngine.CreateRequest("application_charges.json", Method.POST, "application_charge");
 
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyCharge"/>.</returns>
-        public async Task<ShopifyCharge> GetAsync(long id, string fields = null)
+        public virtual async Task<ShopifyCharge> GetAsync(long id, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"application_charges/{id}.json", Method.GET, "application_charge");
 
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// <param name="sinceId">Restricts results to any charge after the given id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShopifyCharge"/> objects.</returns>
-        public async Task<IEnumerable<ShopifyCharge>> ListAsync(long? sinceId = null, string fields = null)
+        public virtual async Task<IEnumerable<ShopifyCharge>> ListAsync(long? sinceId = null, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("application_charges.json", Method.GET, "application_charges");
 
@@ -85,7 +85,7 @@ namespace ShopifySharp
         /// Activates a <see cref="ShopifyCharge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
-        public async Task ActivateAsync(long id)
+        public virtual async Task ActivateAsync(long id)
         {
             IRestRequest req = RequestEngine.CreateRequest($"application_charges/{id}/activate.json", Method.POST);
 

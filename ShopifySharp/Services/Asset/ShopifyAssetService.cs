@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyAsset"/>.</returns>
-        public async Task<ShopifyAsset> GetAsync(long themeId, string key, string fields = null)
+        public virtual async Task<ShopifyAsset> GetAsync(long themeId, string key, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.GET, "asset");
 
@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShopifyAsset"/> objects.</returns>
-        public async Task<IEnumerable<ShopifyAsset>> ListAsync(long themeId, string fields = null)
+        public virtual async Task<IEnumerable<ShopifyAsset>> ListAsync(long themeId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.GET, "assets");
 
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="asset">The asset.</param>
         /// <returns>The created or updated asset.</returns>
-        public async Task<ShopifyAsset> CreateOrUpdateAsync(long themeId, ShopifyAsset asset)
+        public virtual async Task<ShopifyAsset> CreateOrUpdateAsync(long themeId, ShopifyAsset asset)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.PUT, "asset");
 
@@ -93,7 +93,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
-        public async Task DeleteAsync(long themeId, string key)
+        public virtual async Task DeleteAsync(long themeId, string key)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.DELETE);
 

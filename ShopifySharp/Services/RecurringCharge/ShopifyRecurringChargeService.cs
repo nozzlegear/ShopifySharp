@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="charge">The <see cref="ShopifyRecurringCharge"/> to create.</param>
         /// <returns>The new <see cref="ShopifyRecurringCharge"/>.</returns>
-        public async Task<ShopifyRecurringCharge> CreateAsync(ShopifyRecurringCharge charge)
+        public virtual async Task<ShopifyRecurringCharge> CreateAsync(ShopifyRecurringCharge charge)
         {
             IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges.json", Method.POST, "recurring_application_charge");
 
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyRecurringCharge"/>.</returns>
-        public async Task<ShopifyRecurringCharge> GetAsync(long id, string fields = null)
+        public virtual async Task<ShopifyRecurringCharge> GetAsync(long id, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"recurring_application_charges/{id}.json", Method.GET, "recurring_application_charge");
 
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// <param name="sinceId">Restricts results to any charge after the given id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShopifyRecurringCharge"/> objects.</returns>
-        public async Task<IEnumerable<ShopifyRecurringCharge>> ListAsync(long? sinceId = null, string fields = null)
+        public virtual async Task<IEnumerable<ShopifyRecurringCharge>> ListAsync(long? sinceId = null, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("recurring_application_charges.json", Method.GET, "recurring_application_charges");
 
@@ -85,7 +85,7 @@ namespace ShopifySharp
         /// Activates a <see cref="ShopifyRecurringCharge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
-        public async Task ActivateAsync(long id)
+        public virtual async Task ActivateAsync(long id)
         {
             IRestRequest req = RequestEngine.CreateRequest($"recurring_application_charges/{id}/activate.json", Method.POST);
 
@@ -96,7 +96,7 @@ namespace ShopifySharp
         /// Deletes a <see cref="ShopifyRecurringCharge"/>.
         /// </summary>
         /// <param name="id">The id of the charge to delete.</param>
-        public async Task DeleteAsync(long id)
+        public virtual async Task DeleteAsync(long id)
         {
             IRestRequest req = RequestEngine.CreateRequest($"recurring_application_charges/{id}.json", Method.DELETE);
 
