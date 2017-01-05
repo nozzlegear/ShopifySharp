@@ -9,20 +9,17 @@ namespace ShopifySharp
     /// <summary>
     /// A retry policy that attemps to pro-actively limit the number of requests that will result in a ShopifyRateLimitException
     /// by implementing the leaky bucket algorithm.
-    /// For example, if a 100 requests are created in parallel, only 40 should be immediately sent, and the subsequent 60 requests
+    /// For example: if 100 requests are created in parallel, only 40 should be immediately sent, and the subsequent 60 requests
     /// should be throttled at 1 per 500ms.
-    /// 
+    /// </summary>
+    /// <remarks>
     /// In comparison, the naive retry policy will issue the 100 requests immediately:
-    /// -60 requests will fail and be retried after 500ms
-    /// -59 requests will fail and be retried after 500ms
-    /// -58 requests will fail and be retried after 500ms
-    /// etc...
-    /// The number may be different in practice, but this will certainly result in a very high number of failed requests that 
-    /// can be proactively throttled instead.
-    /// 
+    /// 60 requests will fail and be retried after 500ms,
+    /// 59 requests will fail and be retried after 500ms,
+    /// 58 requests will fail and be retried after 500ms.
     /// See https://help.shopify.com/api/guides/api-call-limit
     /// https://en.wikipedia.org/wiki/Leaky_bucket
-    /// </summary>
+    /// </remarks>
     public partial class SmartRetryExecutionPolicy : IRequestExecutionPolicy
     {
         private const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
