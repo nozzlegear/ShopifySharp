@@ -38,6 +38,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("src")]
         public string Src { get; set; }
+
+        /// <summary>
+        /// Specifies the file name of the image when creating a <see cref="ShopifyProductImage"/>, where it's then converted into the <see cref="Src"/> path
+        /// </summary>
+        [JsonProperty("filename", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Filename { get; set; }
         
         /// <summary>
         /// A base64 image attachment. Only used when creating a <see cref="ShopifyProductImage"/>, where it's then converted into the <see cref="Src"/>.

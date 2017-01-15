@@ -22,6 +22,7 @@ namespace ShopifySharp.Tests.ShopifyProductImageService_Tests
         {
             Image.ShouldNotBeNull();
             Image.Src.ShouldNotBeNull();
+            Image.Src.ShouldContain(ProductImageTests.ImageFileName);
         };
 
         Cleanup after = () =>
