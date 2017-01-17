@@ -65,7 +65,7 @@ namespace ShopifySharp
         /// <summary>
         /// The customer's contact email address.
         /// </summary>
-        [JsonProperty("contact_email")]
+        [JsonProperty("contact_email"), Obsolete("ContactEmail is not documented by Shopify and will be removed in a future release.")]
         public string ContactEmail { get; set; }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace ShopifySharp
         /// <summary>
         /// Payment details for this order. May be null if the order was created via API without payment details.
         /// </summary>
-        [JsonProperty("payment_details")]
+        [JsonProperty("payment_details"), Obsolete("PaymentDetails has been deprecated and will be removed in a future release. This data is now available via the Transaction API.")]
         public ShopifyPaymentDetails PaymentDetails { get; set; }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace ShopifySharp
         /// <summary>
         /// The sum of all the prices of all the items in the order, in USD, with taxes and discounts included (must be positive).
         /// </summary>
-        [JsonProperty("total_price_usd")]
+        [JsonProperty("total_price_usd"), Obsolete("TotalPriceUsd is not documented by Shopify and will be removed in a future release.")]
         public double TotalPriceUsd { get; set; }
 
         /// <summary>
