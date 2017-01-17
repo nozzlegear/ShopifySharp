@@ -138,6 +138,12 @@ namespace ShopifySharp
         public IEnumerable<ShopifyLineItem> LineItems { get; set; }
 
         /// <summary>
+        /// The unique numeric identifier for the physical location at which the order was processed. Only present on orders processed at point of sale.
+        /// </summary>
+        [JsonProperty("location_id")]
+        public long? LocationId { get; set; }
+
+        /// <summary>
         /// The customer's order name as represented by a number, e.g. '#1001'.
         /// </summary>
         [JsonProperty("name")]
@@ -167,6 +173,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("order_number")]
         public int OrderNumber { get; set; }
+
+        /// <summary>
+        /// The URL pointing to the order status web page. The URL will be null unless the order was created from a checkout.
+        /// </summary>
+        [JsonProperty("order_status_url")]
+        public string OrderStatusUrl { get; set; }
 
         /// <summary>
         /// Payment details for this order. May be null if the order was created via API without payment details.
@@ -277,6 +289,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
+
+        /// <summary>
+        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale. 
+        /// </summary>
+        [JsonProperty("user_id")]
+        public long? UserId { get; set; }
 
         /// <summary>
         /// An array of <see cref="ShopifyTransaction"/> objects that detail all of the transactions in 
