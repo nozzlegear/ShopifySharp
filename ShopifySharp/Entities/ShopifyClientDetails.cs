@@ -34,10 +34,16 @@ namespace ShopifySharp
         public string BrowserWidth { get; set; }
 
         /// <summary>
+        /// Obsolete: This property is incorrect and will be removed in a future release.
+        /// </summary>
+        [JsonProperty("session_height"), Obsolete("This property is incorrect and will be removed in a future release.")]
+        public string SessionHeight { get; set; }
+
+        /// <summary>
         /// A hash of the session.
         /// </summary>
-        [JsonProperty("session_height")]
-        public string SessionHeight { get; set; }
+        [JsonProperty("session_hash")]
+        public string SessionHash { get; set; }
 
         /// <summary>
         /// The browser's user agent string.
