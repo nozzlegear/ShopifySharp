@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all fulfillments for the shop.</returns>
-        public async Task<int> CountAsync(long orderId, ShopifyCountFilter filter = null)
+        public virtual async Task<int> CountAsync(long orderId, ShopifyCountFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/count.json", Method.GET);
 
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of fulfillments matching the filter.</returns>
-        public async Task<IEnumerable<ShopifyFulfillment>> ListAsync(long orderId, ShopifyListFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyFulfillment>> ListAsync(long orderId, ShopifyListFilter options = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments.json", Method.GET, "fulfillments");
 
@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <param name="fulfillmentId">The id of the Fulfillment to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyFulfillment"/>.</returns>
-        public async Task<ShopifyFulfillment> GetAsync(long orderId, long fulfillmentId, string fields = null)
+        public virtual async Task<ShopifyFulfillment> GetAsync(long orderId, long fulfillmentId, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json", Method.GET, "fulfillment");
 
@@ -83,7 +83,7 @@ namespace ShopifySharp
         /// <param name="notifyCustomer">Whether the customer should be notified that the fulfillment 
         /// has been created.</param>
         /// <returns>The new <see cref="ShopifyFulfillment"/>.</returns>
-        public async Task<ShopifyFulfillment> CreateAsync(long orderId, ShopifyFulfillment fulfillment, bool notifyCustomer)
+        public virtual async Task<ShopifyFulfillment> CreateAsync(long orderId, ShopifyFulfillment fulfillment, bool notifyCustomer)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments.json", Method.POST, "fulfillment");
             
@@ -102,7 +102,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillment">The <see cref="ShopifyFulfillment"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyFulfillment"/>.</returns>
-        public async Task<ShopifyFulfillment> UpdateAsync(long orderId, ShopifyFulfillment fulfillment)
+        public virtual async Task<ShopifyFulfillment> UpdateAsync(long orderId, ShopifyFulfillment fulfillment)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/{fulfillment.Id.Value}.json", Method.PUT, "fulfillment");
 
@@ -116,7 +116,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillmentId">The fulfillment's id.</param>
-        public async Task<ShopifyFulfillment> CompleteAsync(long orderId, long fulfillmentId)
+        public virtual async Task<ShopifyFulfillment> CompleteAsync(long orderId, long fulfillmentId)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/complete.json", Method.POST, "fulfillment");
 
@@ -128,7 +128,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillmentId">The fulfillment's id.</param>
-        public async Task<ShopifyFulfillment> CancelAsync(long orderId, long fulfillmentId)
+        public virtual async Task<ShopifyFulfillment> CancelAsync(long orderId, long fulfillmentId)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel.json", Method.POST, "fulfillment");
 

@@ -123,6 +123,8 @@ These generous people have contributed their own hard work and time to improving
 - [Jono](https://github.com/mrjono1)
 - [Tommy Holm Jakobsen](https://github.com/thj-dk)
 - [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
+- [clement911](https://github.com/clement911)
+- [mchandschuh](https://github.com/mchandschuh)
 
 Thank you!
 
@@ -2003,6 +2005,47 @@ var charge = await service.GetAsync(creditId);
 var service = new ShopifyApplicationCreditService(myShopifyUrl, shopAccessToken);
 var charges = await service.ListAsync();
 ```
+
+# Handling Shopify's API rate limit
+
+The Shopify API allows for an average of 2 API calls per second, with a burst limit of up to 40 API calls. Once you hit that 40 burst limit, Shopify will return a 429 Too Many Requests result. The limit is there to prevent you and thousands of other developers from overloading Shopify's servers by going hard in the paint with hundreds of requests every second. Unfortunately, it's pretty easy to write a `for` loop while trying to close a list of orders, and then start getting exceptions after closing the first 40.
+
+By default, ShopifySharp will **not** retry requests that get throttled by the rate limit, and instead this package will throw a `ShopifyRateLimitException` that you can catch and decide to retry:
+
+```cs
+foreach (var order in listOfOrders)
+{
+	try
+	{
+		await orderService.CloseAsync(order.Id.Value);
+	}
+	catch (ShopifyRateLimitException e)
+	{
+		//Wait for 10 seconds before trying again.
+		await Task.Delay(10000);
+		
+		//If this throws an exception again, loop will break and the exception will be thrown.
+		await orderService.CloseAsync(order.Id.Value);
+	}
+}
+```
+
+However, ShopifySharp also has a global request execution policy that you can use to implement a retry strategy. Currently there are three execution policies bundled with the library:
+
+1. `DefaultRequestExecutionPolicy`: This is the default policy, which will throw a `ShopifyRateLimitException` when the API rate limit has been reached.
+2. `RetryExecutionPolicy`: If a request throws a `ShopifyRateLimitException`, this policy will keep retrying it until it is successful. 
+3. `SmartRetryExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
+
+To set a global policy, call `RequestEngine.SetExecutionPolicy` once in your application. Remember, this is a *global* retry policy, so calling this more than once will replace the last policy.
+
+```cs
+RequestEngine.SetExecutionPolicy(new RetryExecutionPolicy());
+```
+
+Keep in mind that the `RetryExecutionPolicy` and the `SmartRetryExecutionPolicy` will keep retrying your requests – potentially until the end of time – until they are successful. It's up to you to ensure that such a strategy won't impact the performance of your applications.
+
+If you need a custom policy to do something more complicated or to e.g. implement request logging, you can create your own request policy that extends the `ShopifySharp.IRequestExecutionPolicy` interface. [Check here](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Infrastructure/Policies/RetryExecutionPolicy.cs) for an example.
+
 
 # "Why don't you use enums?"
 

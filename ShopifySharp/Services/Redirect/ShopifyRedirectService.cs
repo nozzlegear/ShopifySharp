@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// <param name="path">An optional parameter that filters the result to redirects with the given path.</param>
         /// <param name="target">An optional parameter that filters the result to redirects with the given target.</param>
         /// <returns>The count of all redirects for the shop.</returns>
-        public async Task<int> CountAsync(string path = null, string target = null)
+        public virtual async Task<int> CountAsync(string path = null, string target = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("redirects/count.json", Method.GET);
 
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">An optional filter that restricts the results.</param>
         /// <returns>The list of <see cref="ShopifyRedirect"/>.</returns>
-        public async Task<IEnumerable<ShopifyRedirect>> ListAsync(ShopifyRedirectFilter filter = null)
+        public virtual async Task<IEnumerable<ShopifyRedirect>> ListAsync(ShopifyRedirectFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.GET, "redirects");
 
@@ -74,7 +74,7 @@ namespace ShopifySharp
         /// <param name="redirectId">The id of the redirect to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyRedirect"/>.</returns>
-        public async Task<ShopifyRedirect> GetAsync(long redirectId, string fields = null)
+        public virtual async Task<ShopifyRedirect> GetAsync(long redirectId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.GET, "redirect");
 
@@ -93,7 +93,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="redirect">The new <see cref="ShopifyRedirect"/>.</param>
         /// <returns>The new <see cref="ShopifyRedirect"/>.</returns>
-        public async Task<ShopifyRedirect> CreateAsync(ShopifyRedirect redirect)
+        public virtual async Task<ShopifyRedirect> CreateAsync(ShopifyRedirect redirect)
         {
             IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.POST, "redirect");
 
@@ -107,7 +107,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="redirect">The <see cref="ShopifyRedirect"/> to update.</param>
         /// <returns>The updated <see cref="ShopifyRedirect"/>.</returns>
-        public async Task<ShopifyRedirect> UpdateAsync(ShopifyRedirect redirect)
+        public virtual async Task<ShopifyRedirect> UpdateAsync(ShopifyRedirect redirect)
         {
             IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirect.Id.Value}.json", Method.PUT, "redirect");
 
@@ -120,7 +120,7 @@ namespace ShopifySharp
         /// Deletes a redirect with the given Id.
         /// </summary>
         /// <param name="redirectId">The redirect object's Id.</param>
-        public async Task DeleteAsync(long redirectId)
+        public virtual async Task DeleteAsync(long redirectId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.DELETE);
 

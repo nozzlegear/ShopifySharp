@@ -22,7 +22,7 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
 
         It should_parse_an_array_error = () =>
         {
-            ex.ShouldBeOfExactType<ShopifyException>();
+            ex.ShouldBeAssignableTo<ShopifyException>();
 
             var e = (ShopifyException)ex;
 

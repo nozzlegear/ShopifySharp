@@ -65,7 +65,7 @@ namespace ShopifySharp
         /// <summary>
         /// The customer's contact email address.
         /// </summary>
-        [JsonProperty("contact_email")]
+        [JsonProperty("contact_email"), Obsolete("ContactEmail is not documented by Shopify and will be removed in a future release.")]
         public string ContactEmail { get; set; }
 
         /// <summary>
@@ -138,6 +138,12 @@ namespace ShopifySharp
         public IEnumerable<ShopifyLineItem> LineItems { get; set; }
 
         /// <summary>
+        /// The unique numeric identifier for the physical location at which the order was processed. Only present on orders processed at point of sale.
+        /// </summary>
+        [JsonProperty("location_id")]
+        public long? LocationId { get; set; }
+
+        /// <summary>
         /// The customer's order name as represented by a number, e.g. '#1001'.
         /// </summary>
         [JsonProperty("name")]
@@ -169,9 +175,15 @@ namespace ShopifySharp
         public int OrderNumber { get; set; }
 
         /// <summary>
+        /// The URL pointing to the order status web page. The URL will be null unless the order was created from a checkout.
+        /// </summary>
+        [JsonProperty("order_status_url")]
+        public string OrderStatusUrl { get; set; }
+
+        /// <summary>
         /// Payment details for this order. May be null if the order was created via API without payment details.
         /// </summary>
-        [JsonProperty("payment_details")]
+        [JsonProperty("payment_details"), Obsolete("PaymentDetails has been deprecated and will be removed in a future release. This data is now available via the Transaction API.")]
         public ShopifyPaymentDetails PaymentDetails { get; set; }
 
         /// <summary>
@@ -257,7 +269,7 @@ namespace ShopifySharp
         /// <summary>
         /// The sum of all the prices of all the items in the order, in USD, with taxes and discounts included (must be positive).
         /// </summary>
-        [JsonProperty("total_price_usd")]
+        [JsonProperty("total_price_usd"), Obsolete("TotalPriceUsd is not documented by Shopify and will be removed in a future release.")]
         public double TotalPriceUsd { get; set; }
 
         /// <summary>
@@ -277,6 +289,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
+
+        /// <summary>
+        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale. 
+        /// </summary>
+        [JsonProperty("user_id")]
+        public long? UserId { get; set; }
 
         /// <summary>
         /// An array of <see cref="ShopifyTransaction"/> objects that detail all of the transactions in 

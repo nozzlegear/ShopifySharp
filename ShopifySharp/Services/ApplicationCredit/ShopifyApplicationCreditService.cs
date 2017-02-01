@@ -20,7 +20,7 @@ namespace ShopifySharp
         /// Gets a list of all past and present application credits. 
         /// </summary>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public async Task<IEnumerable<ShopifyApplicationCredit>> ListAsync(string fields = null)
+        public virtual async Task<IEnumerable<ShopifyApplicationCredit>> ListAsync(string fields = null)
         {
             var req = RequestEngine.CreateRequest($"application_credits.json", Method.GET, "application_credits");
 
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The application credit's id.</param>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public async Task<ShopifyApplicationCredit> GetAsync(long id, string fields = null)
+        public virtual async Task<ShopifyApplicationCredit> GetAsync(long id, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"application_credits/{id}.json", Method.GET, "application_credit");
 
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="ShopifyApplicationCredit"/>.
         /// </summary>
         /// <param name="credit">A new <see cref="ShopifyApplicationCredit"/>. Id should be set to null.</param>
-        public async Task<ShopifyApplicationCredit> CreateAsync(ShopifyApplicationCredit credit)
+        public virtual async Task<ShopifyApplicationCredit> CreateAsync(ShopifyApplicationCredit credit)
         {
             var req = RequestEngine.CreateRequest($"application_credits.json", Method.POST, "application_credit");
 

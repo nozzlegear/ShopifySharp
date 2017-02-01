@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's customers.
         /// </summary>
         /// <returns>The count of all customers for the shop.</returns>
-        public async Task<int> CountAsync()
+        public virtual async Task<int> CountAsync()
         {
             IRestRequest req = RequestEngine.CreateRequest("customers/count.json", Method.GET);
             JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<ShopifyCustomer>> ListAsync(ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<ShopifyCustomer>> ListAsync(ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.GET, "customers");
 
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// <param name="customerId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ShopifyCustomer"/>.</returns>
-        public async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
+        public virtual async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.GET, "customer");
 
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <param name="order">An optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
         /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
-        public async Task<IEnumerable<ShopifyCustomer>> SearchAsync(string query, string order = null, ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<ShopifyCustomer>> SearchAsync(string query, string order = null, ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers/search.json", Method.GET, "customers");
             req.AddQueryParameter("query", query);
@@ -96,7 +96,7 @@ namespace ShopifySharp
         /// <param name="customer">A new <see cref="ShopifyCustomer"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the customer.</param>
         /// <returns>The new <see cref="ShopifyCustomer"/>.</returns>
-        public async Task<ShopifyCustomer> CreateAsync(ShopifyCustomer customer, ShopifyCustomerCreateOptions options = null)
+        public virtual async Task<ShopifyCustomer> CreateAsync(ShopifyCustomer customer, ShopifyCustomerCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.POST, "customer");
 
@@ -123,7 +123,7 @@ namespace ShopifySharp
         /// <param name="customer">The <see cref="ShopifyCustomer"/> to update.</param>
         /// <param name="options">Options for updating the customer.</param>
         /// <returns>The updated <see cref="ShopifyCustomer"/>.</returns>
-        public async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer, ShopifyCustomerUpdateOptions options = null)
+        public virtual async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer, ShopifyCustomerUpdateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"customers/{customer.Id.Value}.json", Method.PUT, "customer");
 
@@ -148,7 +148,7 @@ namespace ShopifySharp
         /// Deletes a customer with the given Id.
         /// </summary>
         /// <param name="customerId">The customer object's Id.</param>
-        public async Task DeleteAsync(long customerId)
+        public virtual async Task DeleteAsync(long customerId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.DELETE);
 

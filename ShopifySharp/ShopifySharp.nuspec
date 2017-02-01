@@ -11,6 +11,18 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.5.1
+  =====
+  - Add `UserId`, `LocationId`, `OrderStatusUrl` to ShopifyOrder. [(#98)](https://github.com/nozzlegear/shopifysharp/issues/98)
+  - Add `SessionHash` to ShopifyClientDetails and mark `SessionHeight` as obsolete to be removed in a future release. ([#99])(https://github.com/nozzlegear/shopifysharp/issues/99)
+  - Mark ShopifyOrder's `PaymentDetails`, `TotalPriceUsd` and `ContactEmail` as obsolete to be removed in a future release. [(#100)](https://github.com/nozzlegear/shopifysharp/issues/98)
+  - Add `Filename` property to ShopifyProductImage. [(#103)](https://github.com/nozzlegear/shopifysharp/pull/103)
+
+  3.5.0
+  =====
+  - New `RequestEngine.SetExecutionPolicy`: Set a global execution policy to be used by the service for every API call. This can be used to implement a retry policy via the `RetryExecutionPolicy` and `SmartRetryExecutionPolicy`. [(#94)](https://github.com/nozzlegear/ShopifySharp/pull/94)
+  - Made all service methods virtual so they can be overridden, making e.g. unit tests easier via a proxy. [(#93)](https://github.com/nozzlegear/ShopifySharp/pull/93)
+
   3.4.4
   =====
   - New ShopifyCustomerUpdateOptions: Update a customer's password during ShopifyCustomerService.UpdateAsync [(#92)](https://github.com/nozzlegear/shopifysharp/pull/92).
