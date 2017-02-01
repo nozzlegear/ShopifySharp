@@ -205,6 +205,12 @@ namespace ShopifySharp
         public string ReferringSite { get; set; }
 
         /// <summary>
+        /// The list of <see cref="ShopifyRefund"/> objects applied to the order
+        /// </summary>
+        [JsonProperty("refunds")]
+        public IEnumerable<ShopifyRefund> Refunds { get; set; }
+
+        /// <summary>
         /// The mailing address to where the order will be shipped. This address is optional and will not be available on orders that do not require one.
         /// </summary>
         [JsonProperty("shipping_address")]
