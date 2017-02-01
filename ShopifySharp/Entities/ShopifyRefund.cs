@@ -15,6 +15,13 @@ namespace ShopifySharp
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
+
+        /// <summary>
+        /// The list of <see cref="ShopifyRefundOrderAdjustment"/> objects
+        /// </summary>
+        [JsonProperty("order_adjustments")]
+        public IEnumerable<ShopifyRefundOrderAdjustment> OrderAdjustments { get; set; }
+
         /// <summary>
         /// The date and time when the refund was imported.
         /// </summary>
@@ -31,7 +38,7 @@ namespace ShopifySharp
         public string Note { get; set; }
 
         /// <summary>
-        /// The list of <see cref="ShopifyTransaction"/> returned line items
+        /// The list of <see cref="ShopifyRefundLineItem"/> objects
         /// </summary>
         [JsonProperty("refund_line_items")]
         public IEnumerable<ShopifyRefundLineItem> RefundLineItems { get; set; }
@@ -43,7 +50,7 @@ namespace ShopifySharp
         public bool? Restock { get; set; }
 
         /// <summary>
-        /// The list of <see cref="ShopifyTransaction"/> involved in the refund.
+        /// The list of <see cref="ShopifyTransaction"/> objects
         /// </summary>
         [JsonProperty("transactions")]
         public IEnumerable<ShopifyTransaction> Transactions { get; set; }
