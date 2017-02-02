@@ -51,6 +51,12 @@ namespace ShopifySharp
         public string Country { get; set; }
 
         /// <summary>
+        /// The name of the country the location is in.
+        /// </summary>
+        [JsonProperty("country_name")]
+        public string CountryName { get; set; }
+
+        /// <summary>
         /// The phone number of the location. Can contain special chars like - and +.
         /// </summary>
         [JsonProperty("phone")]
