@@ -12,12 +12,12 @@ namespace ShopifySharp.Filters
         /// Filter by page title.
         /// </summary>
         [JsonProperty("title")]
-        public long? Title { get; set; } = null;
+        public string Title { get; set; } = null;
 
         /// <summary>
         /// Filter by page handle.
         /// </summary>
         [JsonProperty("handle")]
-        public long? Handle { get; set; } = null;
+        public string Handle { get; set; } = null;
     }
 }
