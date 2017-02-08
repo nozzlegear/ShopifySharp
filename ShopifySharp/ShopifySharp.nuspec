@@ -11,6 +11,15 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.5.3
+  =====
+  - Bugfix: ShopifyPageFilter's .Title and .Handle properties are now strings.
+
+  3.5.2
+  =====
+  - Added the `Refunds` property to ShopifyOrder objects.
+  - Added the `CountryName` property to ShopifyLocation objects.
+
   3.5.1
   =====
   - Add `UserId`, `LocationId`, `OrderStatusUrl` to ShopifyOrder. [(#98)](https://github.com/nozzlegear/shopifysharp/issues/98)
