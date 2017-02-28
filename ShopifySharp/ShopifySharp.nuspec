@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.5.4
+  =====
+  - Add `order` property to ShopifyListFilter.
+  - Add `payment_gateway_names` to ShopifyOrder.
+ 
   3.5.3
   =====
   - Bugfix: ShopifyPageFilter's .Title and .Handle properties are now strings.
