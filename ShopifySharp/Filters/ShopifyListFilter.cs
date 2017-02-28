@@ -35,6 +35,14 @@ namespace ShopifySharp.Filters
         public string Fields { get; set; }
 
         /// <summary>
+        /// An optional field name to order by, followed by either ' asc' or ' desc'.
+        /// For example, 'created_at asc'
+        /// Not all fields are supported...
+        /// </summary>
+        [JsonProperty("order")]
+        public string Order { get; set; }
+
+        /// <summary>
         /// Parameterizes this class, with special handling for <see cref="Ids"/>.
         /// </summary>
         /// <param name="propName">The name of the property. Will match the property's <see cref="JsonPropertyAttribute"/> name — 
