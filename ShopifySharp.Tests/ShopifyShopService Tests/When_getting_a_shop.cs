@@ -1,9 +1,10 @@
 ﻿using Machine.Specifications;
 using System;
+using Machine.Specifications.Sdk;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyShopService))]
+    [Subject(typeof(ShopifyShopService), "Shop"), Tags("Shop")]
     public class When_getting_a_shop
     {
         Establish context = () =>
@@ -21,6 +22,7 @@ namespace ShopifySharp.Tests
         {
             _Shop.ShouldNotBeNull();
             _Shop.ForceSSL.HasValue.ShouldBeTrue();
+            string.IsNullOrEmpty(_Shop.DisplayPlanName).ShouldBeFalse();
         };
 
         Cleanup after = () =>
