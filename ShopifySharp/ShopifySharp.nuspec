@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.5.5
+  =====
+  - Bugfix: ShopifySharp.DisplayPlanName wasn't deserializing due to a bad property name.
+  
   3.5.4
   =====
   - Add `order` property to ShopifyListFilter.
