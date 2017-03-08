@@ -186,6 +186,13 @@ namespace ShopifySharp
         [JsonProperty("payment_details"), Obsolete("PaymentDetails has been deprecated and will be removed in a future release. This data is now available via the Transaction API.")]
         public ShopifyPaymentDetails PaymentDetails { get; set; }
 
+
+        /// <summary>
+        /// The list of all payment gateways used for the order.
+        /// </summary>
+        [JsonProperty("payment_gateway_names")]
+        public IEnumerable<string> PaymentGatewayNames { get; set; }
+
         /// <summary>
         /// The date that the order was processed at.
         /// </summary>
