@@ -138,7 +138,7 @@ namespace ShopifySharp
         /// <summary>
         /// The display name of the Shopify plan the shop is on.
         /// </summary>
-        [JsonProperty("display_plan_name")]
+        [JsonProperty("plan_display_name")]
         public string DisplayPlanName { get; set; }
 
         /// <summary>
