@@ -31,9 +31,9 @@ namespace ShopifySharp
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(IFlurlClient request, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
-            var accessToken = GetAccessToken(request);
+            var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;
 
             if (accessToken != null)
@@ -42,6 +42,7 @@ namespace ShopifySharp
             }
 
             while (true)
+            using (var request = baseRequest.Clone())
             {
                 if (accessToken != null)
                 {
@@ -50,7 +51,7 @@ namespace ShopifySharp
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(request.Clone(), bodyContent);
+                    var fullResult = await executeRequestAsync(request, bodyContent);
                     int? bucketContentSize = this.GetBucketContentSize(fullResult.Response);
 
                     if (bucketContentSize != null)

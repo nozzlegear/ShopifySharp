@@ -12,9 +12,10 @@ namespace ShopifySharp
     {
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(500);
 
-        public async Task<T> Run<T>(IFlurlClient request, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
             while (true)
+            using (var request = baseRequest.Clone())
             {
                 try
                 {
