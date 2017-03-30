@@ -14,9 +14,9 @@ namespace ShopifySharp.Tests.ShopifyBlogService_Tests
         Because of = () =>
         {
             Blog.Commentable = "yes";
-            Blog = BlogUtils.Service.UpdateAsync(Blog, new List<ShopifyMetaField>()
+            Blog = BlogUtils.Service.UpdateAsync(Blog, new List<MetaField>()
             {
-                new ShopifyMetaField()
+                new MetaField()
                 {
                     Key = "new-field",
                     Value = "new-field-value",
@@ -42,6 +42,6 @@ namespace ShopifySharp.Tests.ShopifyBlogService_Tests
             }
         };
 
-        static ShopifyBlog Blog;
+        static Blog Blog;
     }
 }

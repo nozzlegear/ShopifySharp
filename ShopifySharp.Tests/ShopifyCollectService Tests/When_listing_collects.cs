@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
             for (var i = 0; i < 3; i++)
             {
                 var product = CollectCreation.CreateProduct().Await().AsTask.Result;
-                var collect = Service.CreateAsync(new ShopifyCollect()
+                var collect = Service.CreateAsync(new Collect()
                 {
                     CollectionId = CollectCreation.CollectionId,
                     ProductId = product.Id.Value
@@ -56,10 +56,10 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 
         static ShopifyCollectService Service;
 
-        static List<ShopifyCollect> Created = new List<ShopifyCollect>();
+        static List<Collect> Created = new List<Collect>();
 
-        static List<ShopifyProduct> Products = new List<ShopifyProduct>();
+        static List<ShopifySharp.Product> Products = new List<ShopifySharp.Product>();
 
-        static IEnumerable<ShopifyCollect> Result;
+        static IEnumerable<Collect> Result;
     }
 }

@@ -48,23 +48,23 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyProduct>> ListAsync(ShopifyProductFilter options = null)
+        public virtual async Task<IEnumerable<Product>> ListAsync(ShopifyProductFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("products.json", Method.GET, "products");
 
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyProduct>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Product>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyProduct"/> with the given id.
+        /// Retrieves the <see cref="Product"/> with the given id.
         /// </summary>
         /// <param name="productId">The id of the product to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyProduct"/>.</returns>
-        public virtual async Task<ShopifyProduct> GetAsync(long productId, string fields = null)
+        /// <returns>The <see cref="Product"/>.</returns>
+        public virtual async Task<Product> GetAsync(long productId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"products/{productId}.json", Method.GET, "product");
 
@@ -73,16 +73,16 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyProduct"/> on the store.
+        /// Creates a new <see cref="Product"/> on the store.
         /// </summary>
-        /// <param name="product">A new <see cref="ShopifyProduct"/>. Id should be set to null.</param>
+        /// <param name="product">A new <see cref="Product"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the product.</param>
-        /// <returns>The new <see cref="ShopifyProduct"/>.</returns>
-        public virtual async Task<ShopifyProduct> CreateAsync(ShopifyProduct product, ShopifyProductCreateOptions options = null)
+        /// <returns>The new <see cref="Product"/>.</returns>
+        public virtual async Task<Product> CreateAsync(Product product, ShopifyProductCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("products.json", Method.POST, "product");
 
@@ -102,21 +102,21 @@ namespace ShopifySharp
 
             req.AddJsonBody(requestBody);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyProduct"/>. Id must not be null.
+        /// Updates the given <see cref="Product"/>. Id must not be null.
         /// </summary>
-        /// <param name="product">The <see cref="ShopifyProduct"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyProduct"/>.</returns>
-        public virtual async Task<ShopifyProduct> UpdateAsync(ShopifyProduct product)
+        /// <param name="product">The <see cref="Product"/> to update.</param>
+        /// <returns>The updated <see cref="Product"/>.</returns>
+        public virtual async Task<Product> UpdateAsync(Product product)
         {
             IRestRequest req = RequestEngine.CreateRequest($"products/{product.Id.Value}.json", Method.PUT, "product");
 
             req.AddJsonBody(new { product });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
         }
 
         /// <summary>
@@ -131,11 +131,11 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Publishes an unpublished <see cref="ShopifyProduct"/>.
+        /// Publishes an unpublished <see cref="Product"/>.
         /// </summary>
         /// <param name="id">The product's id.</param>
-        /// <returns>The published <see cref="ShopifyProduct"/></returns>
-        public virtual async Task<ShopifyProduct> PublishAsync(long id)
+        /// <returns>The published <see cref="Product"/></returns>
+        public virtual async Task<Product> PublishAsync(long id)
         {
             IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
 
@@ -148,15 +148,15 @@ namespace ShopifySharp
                 }
             });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
         }
 
         /// <summary>
-        /// Unpublishes an published <see cref="ShopifyProduct"/>.
+        /// Unpublishes an published <see cref="Product"/>.
         /// </summary>
         /// <param name="id">The product's id.</param>
-        /// <returns>The unpublished <see cref="ShopifyProduct"/></returns>
-        public virtual async Task<ShopifyProduct> UnpublishAsync(long id)
+        /// <returns>The unpublished <see cref="Product"/></returns>
+        public virtual async Task<Product> UnpublishAsync(long id)
         {
             IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
 
@@ -169,7 +169,7 @@ namespace ShopifySharp
                 }
             });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProduct>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
         }
 
         #endregion

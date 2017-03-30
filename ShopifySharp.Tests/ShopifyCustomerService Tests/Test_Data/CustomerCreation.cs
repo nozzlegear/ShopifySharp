@@ -8,9 +8,9 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class CustomerCreation
     {
-        public static ShopifyCustomer CreateValidCustomer()
+        public static Customer CreateValidCustomer()
         {
-            return new ShopifyCustomer()
+            return new Customer()
             {
                 FirstName = "John",
                 LastName = "Doe",

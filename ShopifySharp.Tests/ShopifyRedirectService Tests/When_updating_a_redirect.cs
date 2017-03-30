@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
         Establish context = () =>
         {
             Service = new ShopifyRedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Result = Service.CreateAsync(new ShopifyRedirect()
+            Result = Service.CreateAsync(new Redirect()
             {
                 Path = Guid.NewGuid().ToString(),
                 Target = "https://example.com"
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
         static ShopifyRedirectService Service;
 
-        static ShopifyRedirect Result;
+        static Redirect Result;
 
         static string NewTarget;
     }

@@ -10,11 +10,11 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
     public static class Setup
     {
         /// <summary>
-        /// Generates a valid <see cref="ShopifyTransaction"/> for testing the Transaction API.
+        /// Generates a valid <see cref="Transaction"/> for testing the Transaction API.
         /// </summary>
-        public static ShopifyTransaction GenerateTransaction(string kind = "authorization", double? amount = null)
+        public static Transaction GenerateTransaction(string kind = "authorization", double? amount = null)
         {
-            return new ShopifyTransaction()
+            return new Transaction()
             {
                 Amount = amount ?? null,
                 Currency = "USD",
@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
         /// Creates a new order that can be used to test the Transaction API.
         /// </summary>
         /// <returns>The new product.</returns>
-        public static async Task<ShopifyOrder> CreateOrder()
+        public static async Task<Order> CreateOrder()
         {
             var order = Test_Data.OrderCreation.GenerateOrder();
             var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);

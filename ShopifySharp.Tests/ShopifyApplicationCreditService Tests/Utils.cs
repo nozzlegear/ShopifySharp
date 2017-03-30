@@ -4,9 +4,9 @@
     {
         public static ShopifyApplicationCreditService Service = new ShopifyApplicationCreditService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public static ShopifyApplicationCredit CreateCredit()
+        public static ApplicationCredit CreateCredit()
         {
-            return new ShopifyApplicationCredit()
+            return new ApplicationCredit()
             {
                 Description = "Refund for Foo",
                 Amount = 10.00m,

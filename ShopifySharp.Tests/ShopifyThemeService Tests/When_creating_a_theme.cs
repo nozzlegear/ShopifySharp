@@ -34,6 +34,6 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         static ShopifyThemeService Service;
 
-        static ShopifyTheme Theme;
+        static Theme Theme;
     }
 }

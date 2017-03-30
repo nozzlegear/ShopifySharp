@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
         Establish context = () =>
         {
             Service = new ShopifyScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Tag = Service.CreateAsync(new ShopifyScriptTag()
+            Tag = Service.CreateAsync(new ScriptTag()
             {
                 Event = "onload",
                 Src = "https://nozzlegear.com/test.js"
@@ -44,7 +44,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 
         static ShopifyScriptTagService Service;
 
-        static ShopifyScriptTag Tag;
+        static ScriptTag Tag;
 
         static Exception Ex;
     }

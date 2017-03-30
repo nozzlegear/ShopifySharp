@@ -28,6 +28,6 @@ namespace ShopifySharp.Tests.ShopifyArticleService_Tests
 
         };
 
-        static IEnumerable<ShopifyArticle> Articles;
+        static IEnumerable<Article> Articles;
     }
 }

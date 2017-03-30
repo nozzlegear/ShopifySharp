@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
             OriginalAsset = Service.GetAsync(ThemeId, "templates/index.liquid").Await().AsTask.Result;
             AssetKey = "templates/test-index-copy.liquid";
 
-            Asset = new ShopifyAsset()
+            Asset = new Asset()
             {
                 Key = AssetKey,
                 SourceKey = OriginalAsset.Key
@@ -52,8 +52,8 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 
         static string AssetKey;
 
-        static ShopifyAsset OriginalAsset;
+        static Asset OriginalAsset;
 
-        static ShopifyAsset Asset;
+        static Asset Asset;
     }
 }

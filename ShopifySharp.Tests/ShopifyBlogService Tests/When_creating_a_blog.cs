@@ -31,6 +31,6 @@ namespace ShopifySharp.Tests.ShopifyBlogService_Tests
             }
         };
 
-        static ShopifyBlog Blog;
+        static Blog Blog;
     }
 }

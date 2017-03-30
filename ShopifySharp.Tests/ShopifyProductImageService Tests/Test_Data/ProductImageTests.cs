@@ -11,23 +11,23 @@ namespace ShopifySharp.Tests.Test_Data
 
         public static ShopifyProductImageService Service = new ShopifyProductImageService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public static Task<ShopifyProduct> CreateParentProduct()
+        public static Task<ShopifySharp.Product> CreateParentProduct()
         {
             return ProductService.CreateAsync(ProductCreation.CreateValidProducts());
         }
 
-        public static async Task DeleteParentProduct(ShopifyProduct p)
+        public static async Task DeleteParentProduct(ShopifySharp.Product p)
         {
             await ProductService.DeleteAsync(p.Id.Value);
         }
 
-        public static ShopifyProductImage CreateValidImage()
+        public static ProductImage CreateValidImage()
         {
-            return new ShopifyProductImage()
+            return new ProductImage()
             {
-                Metafields = new List<ShopifyMetaField>()
+                Metafields = new List<ShopifySharp.MetaField>()
                 {
-                    new ShopifyMetaField()
+                    new ShopifySharp.MetaField()
                     {
                         Key = "alt",
                         Value = "new alt tag content",

@@ -48,16 +48,16 @@ namespace ShopifySharp.Tests
 
         Cleanup after = () =>
         {
-            foreach (ShopifyWebhook webhook in CreatedWebhooks)
+            foreach (Webhook webhook in CreatedWebhooks)
             {
                 Service.DeleteAsync(webhook.Id.Value).Await();
             }
         };
 
         static ShopifyWebhookService Service;
-        static IEnumerable<ShopifyWebhook> Result;
+        static IEnumerable<Webhook> Result;
         static string FilterTopic = "shop/update";
-        static List<ShopifyWebhook> CreatedWebhooks = new List<ShopifyWebhook>();
+        static List<Webhook> CreatedWebhooks = new List<Webhook>();
         static ShopifyWebhookFilter Options;
     }
 }

@@ -55,7 +55,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         static ShopifyThemeService Service;
 
-        static ShopifyTheme Theme;
+        static Theme Theme;
 
         static string UpdatedThemeName = "Updated theme name.";
     }

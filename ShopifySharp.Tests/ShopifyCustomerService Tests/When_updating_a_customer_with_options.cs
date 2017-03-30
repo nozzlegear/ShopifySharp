@@ -42,6 +42,6 @@ namespace ShopifySharp.Tests
         };
 
         static ShopifyCustomerService _Service;
-        static ShopifyCustomer _Customer;
+        static Customer _Customer;
     }
 }

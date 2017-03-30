@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ShopifyProductVariant>> ListAsync(long productId, ShopifyListFilter filterOptions = null)
+        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ShopifyListFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/variants.json", Method.GET, "variants");
 
@@ -42,45 +42,45 @@ namespace ShopifySharp
                 req.Parameters.AddRange(filterOptions.ToParameters(ParameterType.GetOrPost));
             }
             
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyProductVariant>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<ProductVariant>>(_RestClient, req);
         }
         
         /// <summary>
-        /// Retrieves the <see cref="ShopifyProductVariant"/> with the given id.
+        /// Retrieves the <see cref="ProductVariant"/> with the given id.
         /// </summary>
         /// <param name="variantId">The id of the product variant to retrieve.</param>
-        public virtual async Task<ShopifyProductVariant> GetAsync(long variantId)
+        public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
             var req = RequestEngine.CreateRequest($"variants/{variantId}.json", Method.GET, "variant");
             
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProductVariant>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ProductVariant>(_RestClient, req);
         }
         
         /// <summary>
-        /// Creates a new <see cref="ShopifyProductVariant"/>.
+        /// Creates a new <see cref="ProductVariant"/>.
         /// </summary>
         /// <param name="productId">The product that the new variant will belong to.</param>
-        /// <param name="variant">A new <see cref="ShopifyProductVariant"/>. Id should be set to null.</param>
-        public virtual async Task<ShopifyProductVariant> CreateAsync(long productId, ShopifyProductVariant variant)
+        /// <param name="variant">A new <see cref="ProductVariant"/>. Id should be set to null.</param>
+        public virtual async Task<ProductVariant> CreateAsync(long productId, ProductVariant variant)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/variants.json", Method.POST, "variant");
 
             req.AddJsonBody(new { variant });
             
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProductVariant>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ProductVariant>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyProductVariant"/>. Id must not be null.
+        /// Updates the given <see cref="ProductVariant"/>. Id must not be null.
         /// </summary>
         /// <param name="variant">The variant to update.</param>
-        public virtual async Task<ShopifyProductVariant> UpdateAsync(ShopifyProductVariant variant)
+        public virtual async Task<ProductVariant> UpdateAsync(ProductVariant variant)
         {
             var req = RequestEngine.CreateRequest($"variants/{variant.Id.Value}.json", Method.PUT, "variant");
 
             req.AddJsonBody(new { variant });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyProductVariant>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ProductVariant>(_RestClient, req);
         }
 
         /// <summary>

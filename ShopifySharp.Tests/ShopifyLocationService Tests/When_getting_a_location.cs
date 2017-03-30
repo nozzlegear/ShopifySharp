@@ -49,7 +49,7 @@ namespace ShopifySharp.Tests.ShopifyLocationService_Tests
 
         static ShopifyLocationService Service;
 
-        static ShopifyLocation Result;
+        static Location Result;
 
         static long? Id;
     }

@@ -57,24 +57,24 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
         /// <param name="filter">An optional filter that restricts the results.</param>
-        /// <returns>The list of <see cref="ShopifyRedirect"/>.</returns>
-        public virtual async Task<IEnumerable<ShopifyRedirect>> ListAsync(ShopifyRedirectFilter filter = null)
+        /// <returns>The list of <see cref="Redirect"/>.</returns>
+        public virtual async Task<IEnumerable<Redirect>> ListAsync(ShopifyRedirectFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.GET, "redirects");
 
             //Add optional parameters to request
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyRedirect>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Redirect>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyRedirect"/> with the given id.
+        /// Retrieves the <see cref="Redirect"/> with the given id.
         /// </summary>
         /// <param name="redirectId">The id of the redirect to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyRedirect"/>.</returns>
-        public virtual async Task<ShopifyRedirect> GetAsync(long redirectId, string fields = null)
+        /// <returns>The <see cref="Redirect"/>.</returns>
+        public virtual async Task<Redirect> GetAsync(long redirectId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.GET, "redirect");
 
@@ -83,37 +83,37 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyRedirect>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Redirect>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyRedirect"/> on the store. The redirect always starts out with a role of 
+        /// Creates a new <see cref="Redirect"/> on the store. The redirect always starts out with a role of 
         /// "unpublished." If the redirect has a different role, it will be assigned that only after all of its 
         /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
         /// </summary>
-        /// <param name="redirect">The new <see cref="ShopifyRedirect"/>.</param>
-        /// <returns>The new <see cref="ShopifyRedirect"/>.</returns>
-        public virtual async Task<ShopifyRedirect> CreateAsync(ShopifyRedirect redirect)
+        /// <param name="redirect">The new <see cref="Redirect"/>.</param>
+        /// <returns>The new <see cref="Redirect"/>.</returns>
+        public virtual async Task<Redirect> CreateAsync(Redirect redirect)
         {
             IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.POST, "redirect");
 
             req.AddJsonBody(new { redirect });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyRedirect>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Redirect>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyRedirect"/>. Id must not be null.
+        /// Updates the given <see cref="Redirect"/>. Id must not be null.
         /// </summary>
-        /// <param name="redirect">The <see cref="ShopifyRedirect"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyRedirect"/>.</returns>
-        public virtual async Task<ShopifyRedirect> UpdateAsync(ShopifyRedirect redirect)
+        /// <param name="redirect">The <see cref="Redirect"/> to update.</param>
+        /// <returns>The updated <see cref="Redirect"/>.</returns>
+        public virtual async Task<Redirect> UpdateAsync(Redirect redirect)
         {
             IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirect.Id.Value}.json", Method.PUT, "redirect");
 
             req.AddJsonBody(new { redirect });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyRedirect>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Redirect>(_RestClient, req);
         }
 
         /// <summary>

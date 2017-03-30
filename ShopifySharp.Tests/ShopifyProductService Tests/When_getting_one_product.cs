@@ -34,6 +34,6 @@ namespace ShopifySharp.Tests.Product
 
         static ShopifyProductService Service;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
     }
 }

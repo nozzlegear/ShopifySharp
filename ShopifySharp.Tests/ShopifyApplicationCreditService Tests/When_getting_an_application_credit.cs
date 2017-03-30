@@ -32,6 +32,6 @@ namespace ShopifySharp.Tests.ShopifyApplicationCreditService_Tests
 
         static long? CreatedId;
 
-        static ShopifyApplicationCredit Credit;
+        static ApplicationCredit Credit;
     }
 }

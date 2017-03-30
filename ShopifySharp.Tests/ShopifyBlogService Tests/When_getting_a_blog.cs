@@ -33,6 +33,6 @@ namespace ShopifySharp.Tests.ShopifyBlogService_Tests
 
         static long? Id;
 
-        static ShopifyBlog Blog;
+        static Blog Blog;
     }
 }

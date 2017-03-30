@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests.ShopifyProductImageService_Tests
             ProductImageTests.DeleteParentProduct(Product).Await();
         };
         
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
 
         static int Count;
     }

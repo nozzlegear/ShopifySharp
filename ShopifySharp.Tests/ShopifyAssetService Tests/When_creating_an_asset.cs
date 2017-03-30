@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
             ThemeId = AssetUtils.GetValidThemeId();
             AssetKey = "templates/test.liquid";
             AssetValue = "<h1>Hello, world!</h1>";
-            Asset = new ShopifyAsset()
+            Asset = new Asset()
             {
                 ContentType = "text/x-liquid",
                 Value = AssetValue,
@@ -53,6 +53,6 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 
         static string AssetValue;
 
-        static ShopifyAsset Asset;
+        static Asset Asset;
     }
 }

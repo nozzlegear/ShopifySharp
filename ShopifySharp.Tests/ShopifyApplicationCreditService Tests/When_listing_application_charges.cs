@@ -27,6 +27,6 @@ namespace ShopifySharp.Tests.ShopifyApplicationCreditService_Tests
 
         };
         
-        static IEnumerable<ShopifyApplicationCredit> Credits;
+        static IEnumerable<ApplicationCredit> Credits;
     }
 }

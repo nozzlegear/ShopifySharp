@@ -22,24 +22,24 @@ namespace ShopifySharp
         /// default: 50
         /// Gets a list of up to 250 custom collections for the corresponding productId
         /// </summary>
-        /// <param name="filter">The <see cref="ShopifyCustomCollection"/>. used to filter results</param>
+        /// <param name="filter">The <see cref="CustomCollection"/>. used to filter results</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyCustomCollection>> ListAsync(ShopifyCustomCollectionFilter filter = null)
+        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(ShopifyCustomCollectionFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("/custom_collections.json", Method.GET, "custom_collections");
 
             //Add optional parameters to request
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomCollection>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<CustomCollection>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyCustomCollection"/> Custom Collection
+        /// Creates a new <see cref="CustomCollection"/> Custom Collection
         /// </summary>
-        /// <param name="customCollection">A new <see cref="ShopifyCustomCollection"/>. Id should be set to null.</param>
-        /// <returns>The new <see cref="ShopifyCustomCollection"/>.</returns>
-        public virtual async Task<ShopifyCustomCollection> CreateAsync(ShopifyCustomCollection customCollection)
+        /// <param name="customCollection">A new <see cref="CustomCollection"/>. Id should be set to null.</param>
+        /// <returns>The new <see cref="CustomCollection"/>.</returns>
+        public virtual async Task<CustomCollection> CreateAsync(CustomCollection customCollection)
         {
             string reqPath = "custom_collections.json";
 
@@ -53,7 +53,7 @@ namespace ShopifySharp
 
             req.AddJsonBody(body);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomCollection>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<CustomCollection>(_RestClient, req);
         }
 
         /// <summary>
@@ -72,12 +72,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyCustomCollection"/> with the given id.
+        /// Retrieves the <see cref="CustomCollection"/> with the given id.
         /// </summary>
         /// <param name="customCollectionId">The id of the custom collection to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyCustomCollection"/>.</returns>
-        public virtual async Task<ShopifyCustomCollection> GetAsync(long customCollectionId, string fields = null)
+        /// <returns>The <see cref="CustomCollection"/>.</returns>
+        public virtual async Task<CustomCollection> GetAsync(long customCollectionId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"custom_collections/{customCollectionId}.json", Method.GET, "custom_collection");
 
@@ -86,7 +86,7 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomCollection>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<CustomCollection>(_RestClient, req);
         }
 
         /// <summary>
@@ -101,11 +101,11 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyCustomCollection"/>. Id must not be null.
+        /// Updates the given <see cref="CustomCollection"/>. Id must not be null.
         /// </summary>
-        /// <param name="customCollection">The <see cref="ShopifyCustomCollection"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyCustomCollection"/>.</returns>
-        public virtual async Task<ShopifyCustomCollection> UpdateAsync(ShopifyCustomCollection customCollection)
+        /// <param name="customCollection">The <see cref="CustomCollection"/> to update.</param>
+        /// <returns>The updated <see cref="CustomCollection"/>.</returns>
+        public virtual async Task<CustomCollection> UpdateAsync(CustomCollection customCollection)
         {
             IRestRequest req = RequestEngine.CreateRequest($"custom_collections/{customCollection.Id.Value}.json", Method.PUT, "custom_collection");
 
@@ -117,7 +117,7 @@ namespace ShopifySharp
 
             req.AddJsonBody(body);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomCollection>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<CustomCollection>(_RestClient, req);
         }
     }
 }

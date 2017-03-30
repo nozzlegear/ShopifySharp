@@ -43,10 +43,10 @@ namespace ShopifySharp.Tests.MetaField
 
         static ShopifyMetaFieldService Service;
 
-        static ShopifyMetaField MetaField;
+        static ShopifySharp.MetaField MetaField;
 
         static ShopifyProductService ProductService;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
     }
 }

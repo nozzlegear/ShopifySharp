@@ -48,23 +48,23 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyPage>> ListAsync(ShopifyPageFilter options = null)
+        public virtual async Task<IEnumerable<Page>> ListAsync(ShopifyPageFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.GET, "pages");
 
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyPage>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Page>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyPage"/> with the given id.
+        /// Retrieves the <see cref="Page"/> with the given id.
         /// </summary>
         /// <param name="pageId">The id of the page to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyPage"/>.</returns>
-        public virtual async Task<ShopifyPage> GetAsync(long pageId, string fields = null)
+        /// <returns>The <see cref="Page"/>.</returns>
+        public virtual async Task<Page> GetAsync(long pageId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.GET, "page");
 
@@ -73,16 +73,16 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyPage>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Page>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyPage"/> on the store.
+        /// Creates a new <see cref="Page"/> on the store.
         /// </summary>
-        /// <param name="page">A new <see cref="ShopifyPage"/>. Id should be set to null.</param>
+        /// <param name="page">A new <see cref="Page"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the page.</param>
-        /// <returns>The new <see cref="ShopifyPage"/>.</returns>
-        public virtual async Task<ShopifyPage> CreateAsync(ShopifyPage page, ShopifyPageCreateOptions options = null)
+        /// <returns>The new <see cref="Page"/>.</returns>
+        public virtual async Task<Page> CreateAsync(Page page, ShopifyPageCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.POST, "page");
 
@@ -94,21 +94,21 @@ namespace ShopifySharp
 
             req.AddJsonBody(body);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyPage>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Page>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyPage"/>. Id must not be null.
+        /// Updates the given <see cref="Page"/>. Id must not be null.
         /// </summary>
-        /// <param name="page">The <see cref="ShopifyPage"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyPage"/>.</returns>
-        public virtual async Task<ShopifyPage> UpdateAsync(ShopifyPage page)
+        /// <param name="page">The <see cref="Page"/> to update.</param>
+        /// <returns>The updated <see cref="Page"/>.</returns>
+        public virtual async Task<Page> UpdateAsync(Page page)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{page.Id.Value}.json", Method.PUT, "page");
 
             req.AddJsonBody(new { page });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyPage>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Page>(_RestClient, req);
         }
 
         /// <summary>
@@ -123,12 +123,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyPage"/>. Id must not be null.
+        /// Updates the given <see cref="Page"/>. Id must not be null.
         /// </summary>
-        /// <param name="pageId">The <see cref="ShopifyPage"/> pageId to update.</param>
-        /// <param name="metafield">The <see cref="ShopifyMetaField"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyMetaField"/>.</returns>
-        public virtual async Task<ShopifyMetaField> UpdateMetafieldAsync(long pageId, ShopifyMetaField metafield)
+        /// <param name="pageId">The <see cref="Page"/> pageId to update.</param>
+        /// <param name="metafield">The <see cref="MetaField"/> to update.</param>
+        /// <returns>The updated <see cref="MetaField"/>.</returns>
+        public virtual async Task<MetaField> UpdateMetafieldAsync(long pageId, MetaField metafield)
         {
             var requestPath = $"pages/{pageId}/metafields.json";
             var method = Method.POST;
@@ -143,19 +143,19 @@ namespace ShopifySharp
 
             req.AddJsonBody(new {metafield});
             
-            return await RequestEngine.ExecuteRequestAsync<ShopifyMetaField>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the collection of <see cref="ShopifyMetaField"/> for the given page id.
+        /// Retrieves the collection of <see cref="MetaField"/> for the given page id.
         /// </summary>
         /// <param name="pageId">The id of the page to retrieve.</param>
-        /// <returns>The <see cref="ShopifyPage"/>.</returns>
-        public virtual async Task<List<ShopifyMetaField>> GetMetaFieldsAsync(long pageId)
+        /// <returns>The <see cref="Page"/>.</returns>
+        public virtual async Task<List<MetaField>> GetMetaFieldsAsync(long pageId)
         {
             IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}/metafields.json", Method.GET,"metafields");
             
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyMetaField>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<MetaField>>(_RestClient, req);
         }
 
         #endregion

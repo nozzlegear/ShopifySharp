@@ -42,6 +42,6 @@ namespace ShopifySharp.Tests.ShopifyLocationService_Tests
 
         static ShopifyLocationService Service;
 
-        static IEnumerable<ShopifyLocation> Result;
+        static IEnumerable<Location> Result;
     }
 }

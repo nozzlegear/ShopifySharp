@@ -17,9 +17,9 @@ namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 
         public static bool Display = true;
 
-        public static ShopifyOrderRisk CreateRisk()
+        public static OrderRisk CreateRisk()
         {
-            return new ShopifyOrderRisk()
+            return new OrderRisk()
             {
                 Message = Message,
                 Score = Score,

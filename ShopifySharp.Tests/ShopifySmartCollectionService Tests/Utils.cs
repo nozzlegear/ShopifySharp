@@ -8,9 +8,9 @@
 
         public static string Title { get; } = "ShopifySharp Test Smart Collection";
 
-        public static ShopifySmartCollection CreateCollection()
+        public static SmartCollection CreateCollection()
         {
-            return new ShopifySmartCollection()
+            return new SmartCollection()
             {
                 BodyHtml = BodyHtml,
                 Handle = Handle,

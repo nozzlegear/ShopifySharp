@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
             // Only real apps can use the Shopify billing API.
 
             Service = new ShopifyChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            Charge = Service.CreateAsync(new ShopifyCharge()
+            Charge = Service.CreateAsync(new Charge()
             {
                 Name = "Lorem Ipsum Single Charge",
                 Price = 123.45,
@@ -46,6 +46,6 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
 
         static ShopifyChargeService Service;
 
-        static ShopifyCharge Charge;
+        static Charge Charge;
     }
 }

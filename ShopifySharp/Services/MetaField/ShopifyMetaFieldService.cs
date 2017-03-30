@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="options">The <see cref="ShopifyMetaFieldFilter"/> used to filter results</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyMetaField>> ListAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter options = null)
+        public virtual async Task<IEnumerable<MetaField>> ListAsync(long? resourceId, string resourceType = null, ShopifyMetaFieldFilter options = null)
         {
             string reqPath = "metafields.json";
             if (resourceType != null && resourceId != null)
@@ -71,16 +71,16 @@ namespace ShopifySharp
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyMetaField>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<MetaField>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyMetaField"/> with the given id.
+        /// Retrieves the <see cref="MetaField"/> with the given id.
         /// </summary>
         /// <param name="metafieldId">The id of the metafield to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyMetaField"/>.</returns>
-        public virtual async Task<ShopifyMetaField> GetAsync(long metafieldId, string fields = null)
+        /// <returns>The <see cref="MetaField"/>.</returns>
+        public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.GET, "metafield");
 
@@ -89,17 +89,17 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyMetaField>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyMetaField"/> associated with the provided resource and resource id. Leave both resourceType and resourceId null for shop metafields.
+        /// Creates a new <see cref="MetaField"/> associated with the provided resource and resource id. Leave both resourceType and resourceId null for shop metafields.
         /// </summary>
-        /// <param name="metafield">A new <see cref="ShopifyMetaField"/>. Id should be set to null.</param>
+        /// <param name="metafield">A new <see cref="MetaField"/>. Id should be set to null.</param>
         /// <param name="resourceId">The Id of the resource the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
-        /// <returns>The new <see cref="ShopifyMetaField"/>.</returns>
-        public virtual async Task<ShopifyMetaField> CreateAsync(ShopifyMetaField metafield, long? resourceId, string resourceType = null)
+        /// <returns>The new <see cref="MetaField"/>.</returns>
+        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long? resourceId, string resourceType = null)
         {
             string reqPath = "metafields.json";
             if (resourceType != null && resourceId != null)
@@ -116,21 +116,21 @@ namespace ShopifySharp
 
             req.AddJsonBody(body);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyMetaField>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyMetaField"/>. Id must not be null.
+        /// Updates the given <see cref="MetaField"/>. Id must not be null.
         /// </summary>
-        /// <param name="metafield">The <see cref="ShopifyMetaField"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyMetaField"/>.</returns>
-        public virtual async Task<ShopifyMetaField> UpdateAsync(ShopifyMetaField metafield)
+        /// <param name="metafield">The <see cref="MetaField"/> to update.</param>
+        /// <returns>The updated <see cref="MetaField"/>.</returns>
+        public virtual async Task<MetaField> UpdateAsync(MetaField metafield)
         {
             IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafield.Id.Value}.json", Method.PUT, "metafield");
 
             req.AddJsonBody(new { metafield });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyMetaField>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
         }
 
         /// <summary>

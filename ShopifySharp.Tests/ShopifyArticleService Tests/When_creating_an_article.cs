@@ -34,6 +34,6 @@ namespace ShopifySharp.Tests.ShopifyArticleService_Tests
             }
         };
 
-        static ShopifyArticle Article;
+        static Article Article;
     }
 }

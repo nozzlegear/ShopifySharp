@@ -30,7 +30,7 @@ namespace ShopifySharp.Tests.ShopifyProductImageService_Tests
 
         static Exception Ex;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
 
         static long? Id;
     }

@@ -32,15 +32,15 @@ namespace ShopifySharp.Tests.ShopifyArticleService_Tests
             return BlogId.Value;
         }
 
-        public static ShopifyArticle CreateArticle()
+        public static Article CreateArticle()
         {
-            return new ShopifyArticle()
+            return new Article()
             {
                 Title = Title + Guid.NewGuid(),
                 Author = Author,
                 Tags = Tags,
                 BodyHtml = BodyHtml,
-                Image = new ShopifyArticleImage()
+                Image = new ArticleImage()
                 {
                     Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
                 }

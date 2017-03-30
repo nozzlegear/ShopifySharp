@@ -48,6 +48,6 @@ namespace ShopifySharp.Tests.Product
 
         static List<long> ProductIds = new List<long>();
 
-        static IEnumerable<ShopifyProduct> Products;
+        static IEnumerable<ShopifySharp.Product> Products;
     }
 }

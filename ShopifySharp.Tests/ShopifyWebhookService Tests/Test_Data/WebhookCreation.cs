@@ -9,14 +9,14 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class WebhookCreation
     {
-        public static ShopifyWebhook CreateValidWebhook(string path = null, string topic = "orders/create")
+        public static Webhook CreateValidWebhook(string path = null, string topic = "orders/create")
         {
             if (string.IsNullOrEmpty(path))
             {
                 path = Guid.NewGuid().ToString();
             }
 
-            return new ShopifyWebhook()
+            return new Webhook()
             {
                 Address = "https://requestb.in/" + path,
                 CreatedAt = DateTime.Now,

@@ -28,6 +28,6 @@ namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
 
         static ShopifyCustomCollectionService Service;
 
-        static ShopifyCustomCollection Collection;
+        static CustomCollection Collection;
     }
 }

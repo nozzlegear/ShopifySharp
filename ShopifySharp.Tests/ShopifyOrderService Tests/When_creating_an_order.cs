@@ -19,14 +19,14 @@ namespace ShopifySharp.Tests
         Because of = () =>
         {
             var newOrder = OrderCreation.GenerateOrder();
-            newOrder.NoteAttributes = new List<ShopifyNoteAttribute>()
+            newOrder.NoteAttributes = new List<NoteAttribute>()
             {
-                new ShopifyNoteAttribute() { Name = "Test Name", Value = "Test Value" }
+                new NoteAttribute() { Name = "Test Name", Value = "Test Value" }
             };
 
-            newOrder.LineItems.First().Properties = new List<ShopifyLineItemProperty>
+            newOrder.LineItems.First().Properties = new List<LineItemProperty>
             {
-                new ShopifyLineItemProperty() { Name = "Test Name", Value = "Test Value" }
+                new LineItemProperty() { Name = "Test Name", Value = "Test Value" }
             };
 
             Order = Service.CreateAsync(newOrder).Await().AsTask.Result;
@@ -55,6 +55,6 @@ namespace ShopifySharp.Tests
 
         static ShopifyOrderService Service;
 
-        static ShopifyOrder Order;
+        static Order Order;
     }
 }

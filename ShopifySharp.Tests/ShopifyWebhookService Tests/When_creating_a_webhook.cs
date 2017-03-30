@@ -38,7 +38,7 @@ namespace ShopifySharp.Tests
         };
 
         static ShopifyWebhookService Service;
-        static ShopifyWebhook ExampleWebhook;
-        static ShopifyWebhook Webhook;
+        static Webhook ExampleWebhook;
+        static Webhook Webhook;
     }
 }

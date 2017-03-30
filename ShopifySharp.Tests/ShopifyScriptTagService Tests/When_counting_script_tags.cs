@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
             {
                 string src = i % 2 == 0 ? FilteredSrc : "https://nozzlegear.com/odd.js";
 
-                Tags.Add(Service.CreateAsync(new ShopifyScriptTag()
+                Tags.Add(Service.CreateAsync(new ScriptTag()
                 {
                     Event = "onload",
                     Src = src
@@ -55,6 +55,6 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 
         static ShopifyScriptTagService Service;
 
-        static List<ShopifyScriptTag> Tags = new List<ShopifyScriptTag>();
+        static List<ScriptTag> Tags = new List<ScriptTag>();
     }
 }

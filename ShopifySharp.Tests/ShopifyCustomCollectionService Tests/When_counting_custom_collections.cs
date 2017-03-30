@@ -40,6 +40,6 @@ namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
 
         static int Count;
 
-        static List<ShopifyCustomCollection> CreatedCollections = new List<ShopifyCustomCollection>();
+        static List<CustomCollection> CreatedCollections = new List<CustomCollection>();
     }
 }

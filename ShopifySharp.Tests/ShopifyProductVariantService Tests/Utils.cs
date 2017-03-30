@@ -14,15 +14,15 @@ namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
         
         public static double Price { get; } = 123.45;
 
-        public static ShopifyProductVariant CreateVariant()
+        public static ProductVariant CreateVariant()
         {
-            return new ShopifyProductVariant()
+            return new ProductVariant()
             {
                 Option1 = Option1,
                 Price = Price,
-                Metafields = new List<ShopifyMetaField>()
+                Metafields = new List<ShopifySharp.MetaField>()
                 {
-                    new ShopifyMetaField()
+                    new ShopifySharp.MetaField()
                     {
                         Key = "new",
                         Value = "newvalue",

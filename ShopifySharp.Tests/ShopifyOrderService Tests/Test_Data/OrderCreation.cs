@@ -9,11 +9,11 @@ namespace ShopifySharp.Tests.Test_Data
     public static class OrderCreation
     {
         /// <summary>
-        /// Generates a valid <see cref="ShopifyOrder"/> for testing the Order API.
+        /// Generates a valid <see cref="Order"/> for testing the Order API.
         /// </summary>
-        public static ShopifyOrder GenerateOrder()
+        public static Order GenerateOrder()
         {
-            return new ShopifyOrder()
+            return new Order()
             {
                 CreatedAt = DateTime.UtcNow,
                 BillingAddress = new ShopifyAddress()
@@ -31,16 +31,16 @@ namespace ShopifySharp.Tests.Test_Data
                     CountryCode = "US",
                     Default = true,
                 },
-                LineItems = new List<ShopifyLineItem>()
+                LineItems = new List<LineItem>()
                 {
-                    new ShopifyLineItem()
+                    new LineItem()
                     {
                         Name = "Test Line Item",
                         Title = "Test Line Item Title",
                         Quantity = 2,
                         Price = 5
                     },
-                    new ShopifyLineItem()
+                    new LineItem()
                     {
                         Name = "Test Line Item 2",
                         Title = "Test Line Item Title 2",
@@ -50,9 +50,9 @@ namespace ShopifySharp.Tests.Test_Data
                 },
                 FinancialStatus = "paid",
                 TotalPrice = 5.00,
-                Transactions = new List<ShopifyTransaction>()
+                Transactions = new List<Transaction>()
                 {
-                    new ShopifyTransaction()
+                    new Transaction()
                     {
                         Amount = 20.00,
                         Status = "success",

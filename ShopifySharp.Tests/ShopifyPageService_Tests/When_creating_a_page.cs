@@ -38,6 +38,6 @@ namespace ShopifySharp.Tests.Page
 
         static ShopifyPageService Service;
 
-        static ShopifyPage Page;
+        static ShopifySharp.Page Page;
     }
 }

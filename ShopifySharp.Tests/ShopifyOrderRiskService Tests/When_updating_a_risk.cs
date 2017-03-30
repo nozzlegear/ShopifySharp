@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 
         static long OrderId;
 
-        static ShopifyOrderRisk Risk;
+        static OrderRisk Risk;
 
         static string UpdatedMessage = "An updated risk message.";
 

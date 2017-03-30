@@ -27,26 +27,26 @@ namespace ShopifySharp
         #region Public, non-static Charge methods
 
         /// <summary>
-        /// Creates a <see cref="ShopifyCharge"/>. 
+        /// Creates a <see cref="Charge"/>. 
         /// </summary>
-        /// <param name="charge">The <see cref="ShopifyCharge"/> to create.</param>
-        /// <returns>The new <see cref="ShopifyCharge"/>.</returns>
-        public virtual async Task<ShopifyCharge> CreateAsync(ShopifyCharge charge)
+        /// <param name="charge">The <see cref="Charge"/> to create.</param>
+        /// <returns>The new <see cref="Charge"/>.</returns>
+        public virtual async Task<Charge> CreateAsync(Charge charge)
         {
             IRestRequest req = RequestEngine.CreateRequest("application_charges.json", Method.POST, "application_charge");
 
             req.AddJsonBody(new { application_charge = charge });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCharge>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Charge>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyCharge"/> with the given id.
+        /// Retrieves the <see cref="Charge"/> with the given id.
         /// </summary>
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyCharge"/>.</returns>
-        public virtual async Task<ShopifyCharge> GetAsync(long id, string fields = null)
+        /// <returns>The <see cref="Charge"/>.</returns>
+        public virtual async Task<Charge> GetAsync(long id, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"application_charges/{id}.json", Method.GET, "application_charge");
 
@@ -55,16 +55,16 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCharge>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Charge>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves a list of all past and present <see cref="ShopifyCharge"/> objects.
+        /// Retrieves a list of all past and present <see cref="Charge"/> objects.
         /// </summary>
         /// <param name="sinceId">Restricts results to any charge after the given id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="ShopifyCharge"/> objects.</returns>
-        public virtual async Task<IEnumerable<ShopifyCharge>> ListAsync(long? sinceId = null, string fields = null)
+        /// <returns>The list of <see cref="Charge"/> objects.</returns>
+        public virtual async Task<IEnumerable<Charge>> ListAsync(long? sinceId = null, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("application_charges.json", Method.GET, "application_charges");
 
@@ -78,11 +78,11 @@ namespace ShopifySharp
                 req.AddParameter("since_id", sinceId);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyCharge>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Charge>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Activates a <see cref="ShopifyCharge"/> that the shop owner has accepted.
+        /// Activates a <see cref="Charge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
         public virtual async Task ActivateAsync(long id)

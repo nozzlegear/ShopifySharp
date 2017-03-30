@@ -37,6 +37,6 @@ namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
 
         static ShopifySmartCollectionService Service = new ShopifySmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        static ShopifySmartCollection Collection;
+        static SmartCollection Collection;
     }
 }

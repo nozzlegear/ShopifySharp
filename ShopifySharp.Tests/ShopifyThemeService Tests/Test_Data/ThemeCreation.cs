@@ -13,9 +13,9 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests.Test_Data
         /// </summary>
         public static string ZipUrl = "https://ironstorage.blob.core.windows.net/public-downloads/ShopifySharp/shopify_test_theme_for_shopifysharp.zip";
 
-        public static ShopifyTheme CreateValidTheme()
+        public static Theme CreateValidTheme()
         {
-            return new ShopifyTheme()
+            return new Theme()
             {
                 Name = "My new theme.",
                 Role = "unpublished"

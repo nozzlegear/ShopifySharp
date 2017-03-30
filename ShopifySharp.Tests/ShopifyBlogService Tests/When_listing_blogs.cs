@@ -34,6 +34,6 @@ namespace ShopifySharp.Tests.ShopifyBlogService_Tests
 
         static long? Id;
 
-        static IEnumerable<ShopifyBlog> Blogs;
+        static IEnumerable<Blog> Blogs;
     }
 }

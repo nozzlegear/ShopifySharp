@@ -39,6 +39,6 @@ namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 
         static ShopifyOrderRiskService Service = new ShopifyOrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        static IEnumerable<ShopifyOrderRisk> Risks;
+        static IEnumerable<OrderRisk> Risks;
     }
 }

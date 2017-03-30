@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
         Establish context = () =>
         {
             Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            Charge = new ShopifyRecurringCharge()
+            Charge = new RecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
                 Price = 123.45,
@@ -45,6 +45,6 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 
         static ShopifyRecurringChargeService Service;
 
-        static ShopifyRecurringCharge Charge;
+        static RecurringCharge Charge;
     }
 }

@@ -52,7 +52,7 @@ namespace ShopifySharp.Tests
         };
 
         static ShopifyWebhookService Service;
-        static ShopifyWebhook Webhook;
+        static Webhook Webhook;
         static string OriginalAddress;
         static string NewPath = "/updated-address";
         static string NewMetaField = "UpdatedMetaField";

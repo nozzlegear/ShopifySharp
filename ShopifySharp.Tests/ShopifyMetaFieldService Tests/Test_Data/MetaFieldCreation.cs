@@ -8,9 +8,9 @@ namespace ShopifySharp.Tests.Test_Data
 {
     class MetaFieldCreation
     {
-        public static ShopifyMetaField CreateValidMetaField1()
+        public static MetaField CreateValidMetaField1()
         {
-            return new ShopifyMetaField()
+            return new ShopifySharp.MetaField()
             {
                 Namespace = "testing",
                 Key = "test_key1",
@@ -20,9 +20,9 @@ namespace ShopifySharp.Tests.Test_Data
             };
         }
 
-        public static ShopifyMetaField CreateValidMetaField2()
+        public static MetaField CreateValidMetaField2()
         {
-            return new ShopifyMetaField()
+            return new ShopifySharp.MetaField()
             {
                 Namespace = "testing",
                 Key = "test_key2",
@@ -32,9 +32,9 @@ namespace ShopifySharp.Tests.Test_Data
             };
         }
 
-        public static ShopifyMetaField CreateValidMetaField3()
+        public static MetaField CreateValidMetaField3()
         {
-            return new ShopifyMetaField()
+            return new ShopifySharp.MetaField()
             {
                 Namespace = "testing",
                 Key = "test_key3",

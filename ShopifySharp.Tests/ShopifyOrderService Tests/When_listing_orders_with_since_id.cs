@@ -54,7 +54,7 @@ namespace ShopifySharp.Tests
 
         static ShopifyOrderService Service;
 
-        static IEnumerable<ShopifyOrder> Result;
+        static IEnumerable<Order> Result;
 
         static ShopifyOrderFilter Options;
 

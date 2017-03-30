@@ -53,23 +53,23 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of webhooks matching the filter.</returns>
-        public virtual async Task<IEnumerable<ShopifyWebhook>> ListAsync(ShopifyWebhookFilter filter = null)
+        public virtual async Task<IEnumerable<Webhook>> ListAsync(ShopifyWebhookFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.GET, "webhooks");
 
             //Add optional parameters to request
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyWebhook>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Webhook>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyWebhook"/> with the given id.
+        /// Retrieves the <see cref="Webhook"/> with the given id.
         /// </summary>
         /// <param name="webhookId">The id of the webhook to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyWebhook"/>.</returns>
-        public virtual async Task<ShopifyWebhook> GetAsync(long webhookId, string fields = null)
+        /// <returns>The <see cref="Webhook"/>.</returns>
+        public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.GET, "webhook");
 
@@ -78,36 +78,36 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyWebhook>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Webhook>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyWebhook"/> on the store.
+        /// Creates a new <see cref="Webhook"/> on the store.
         /// </summary>
-        /// <param name="webhook">A new <see cref="ShopifyWebhook"/>. Id should be set to null.</param>
-        /// <returns>The new <see cref="ShopifyWebhook"/>.</returns>
-        public virtual async Task<ShopifyWebhook> CreateAsync(ShopifyWebhook webhook)
+        /// <param name="webhook">A new <see cref="Webhook"/>. Id should be set to null.</param>
+        /// <returns>The new <see cref="Webhook"/>.</returns>
+        public virtual async Task<Webhook> CreateAsync(Webhook webhook)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.POST, "webhook");
 
             //Build the request body
             req.AddJsonBody(new { webhook });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyWebhook>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Webhook>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyWebhook"/>. Id must not be null.
+        /// Updates the given <see cref="Webhook"/>. Id must not be null.
         /// </summary>
-        /// <param name="webhook">The <see cref="ShopifyWebhook"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyWebhook"/>.</returns>
-        public virtual async Task<ShopifyWebhook> UpdateAsync(ShopifyWebhook webhook)
+        /// <param name="webhook">The <see cref="Webhook"/> to update.</param>
+        /// <returns>The updated <see cref="Webhook"/>.</returns>
+        public virtual async Task<Webhook> UpdateAsync(Webhook webhook)
         {
             IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhook.Id.Value}.json", Method.PUT, "webhook");
 
             req.AddJsonBody(new { webhook });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyWebhook>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Webhook>(_RestClient, req);
         }
 
         /// <summary>

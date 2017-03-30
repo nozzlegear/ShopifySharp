@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests.ShopifyArticleService_Tests
             }
         };
 
-        static ShopifyArticle Article;
+        static Article Article;
 
         static string Html = "<h1>Updated!</h1>";
     }

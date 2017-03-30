@@ -14,7 +14,7 @@ namespace ShopifySharp.Tests
         Establish context = () =>
         {
             Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            CreatedOrders = new List<ShopifyOrder>();
+            CreatedOrders = new List<Order>();
             
             //Ensure there are some orders to list.
             for (int i = 0; i < 3; i++)
@@ -48,9 +48,9 @@ namespace ShopifySharp.Tests
 
         static ShopifyOrderService Service;
 
-        static IEnumerable<ShopifyOrder> Result;
+        static IEnumerable<Order> Result;
 
-        static List<ShopifyOrder> CreatedOrders;
+        static List<Order> CreatedOrders;
 
         static List<long> CreatedIds = new List<long>();
     }

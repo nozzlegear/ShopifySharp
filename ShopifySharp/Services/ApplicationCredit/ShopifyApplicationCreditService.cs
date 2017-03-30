@@ -20,7 +20,7 @@ namespace ShopifySharp
         /// Gets a list of all past and present application credits. 
         /// </summary>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public virtual async Task<IEnumerable<ShopifyApplicationCredit>> ListAsync(string fields = null)
+        public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(string fields = null)
         {
             var req = RequestEngine.CreateRequest($"application_credits.json", Method.GET, "application_credits");
 
@@ -29,7 +29,7 @@ namespace ShopifySharp
                 req.AddQueryParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyApplicationCredit>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<ApplicationCredit>>(_RestClient, req);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The application credit's id.</param>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public virtual async Task<ShopifyApplicationCredit> GetAsync(long id, string fields = null)
+        public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"application_credits/{id}.json", Method.GET, "application_credit");
 
@@ -46,20 +46,20 @@ namespace ShopifySharp
                 req.AddQueryParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyApplicationCredit>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ApplicationCredit>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyApplicationCredit"/>.
+        /// Creates a new <see cref="ApplicationCredit"/>.
         /// </summary>
-        /// <param name="credit">A new <see cref="ShopifyApplicationCredit"/>. Id should be set to null.</param>
-        public virtual async Task<ShopifyApplicationCredit> CreateAsync(ShopifyApplicationCredit credit)
+        /// <param name="credit">A new <see cref="ApplicationCredit"/>. Id should be set to null.</param>
+        public virtual async Task<ApplicationCredit> CreateAsync(ApplicationCredit credit)
         {
             var req = RequestEngine.CreateRequest($"application_credits.json", Method.POST, "application_credit");
 
             req.AddJsonBody(new { application_credit = credit });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyApplicationCredit>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ApplicationCredit>(_RestClient, req);
         }        
     }
 }

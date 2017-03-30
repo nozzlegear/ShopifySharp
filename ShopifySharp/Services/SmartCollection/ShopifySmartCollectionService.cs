@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 smart collections.
         /// </summary>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ShopifySmartCollection>> ListAsync(ShopifySmartCollectionFilter filterOptions = null)
+        public virtual async Task<IEnumerable<SmartCollection>> ListAsync(ShopifySmartCollectionFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest($"smart_collections.json", Method.GET, "smart_collections");
 
@@ -46,44 +46,44 @@ namespace ShopifySharp
                 req.Parameters.AddRange(filterOptions.ToParameters(ParameterType.GetOrPost));
             }
             
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifySmartCollection>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<SmartCollection>>(_RestClient, req);
         }
         
         /// <summary>
-        /// Retrieves the <see cref="ShopifySmartCollection"/> with the given id.
+        /// Retrieves the <see cref="SmartCollection"/> with the given id.
         /// </summary>
         /// <param name="collectionId">The id of the smart collection to retrieve.</param>
-        public virtual async Task<ShopifySmartCollection> GetAsync(long collectionId)
+        public virtual async Task<SmartCollection> GetAsync(long collectionId)
         {
             var req = RequestEngine.CreateRequest($"smart_collections/{collectionId}.json", Method.GET, "smart_collection");
             
-            return await RequestEngine.ExecuteRequestAsync<ShopifySmartCollection>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<SmartCollection>(_RestClient, req);
         }
         
         /// <summary>
-        /// Creates a new <see cref="ShopifySmartCollection"/>.
+        /// Creates a new <see cref="SmartCollection"/>.
         /// </summary>
-        /// <param name="collection">A new <see cref="ShopifySmartCollection"/>. Id should be set to null.</param>
-        public virtual async Task<ShopifySmartCollection> CreateAsync(ShopifySmartCollection collection)
+        /// <param name="collection">A new <see cref="SmartCollection"/>. Id should be set to null.</param>
+        public virtual async Task<SmartCollection> CreateAsync(SmartCollection collection)
         {
             var req = RequestEngine.CreateRequest($"smart_collections.json", Method.POST, "smart_collection");
 
             req.AddJsonBody(new { smart_collection = collection });
             
-            return await RequestEngine.ExecuteRequestAsync<ShopifySmartCollection>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<SmartCollection>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifySmartCollection"/>. Id must not be null.
+        /// Updates the given <see cref="SmartCollection"/>. Id must not be null.
         /// </summary>
         /// <param name="collection">The smart collection to update.</param>
-        public virtual async Task<ShopifySmartCollection> UpdateAsync(ShopifySmartCollection collection)
+        public virtual async Task<SmartCollection> UpdateAsync(SmartCollection collection)
         {
             var req = RequestEngine.CreateRequest($"smart_collections/{collection.Id.Value}.json", Method.PUT, "smart_collection");
 
             req.AddJsonBody(new { smart_collection = collection });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifySmartCollection>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<SmartCollection>(_RestClient, req);
         }
 
         /// <summary>

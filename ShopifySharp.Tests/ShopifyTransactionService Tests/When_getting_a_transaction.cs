@@ -48,9 +48,9 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
 
         static ShopifyTransactionService Service;
 
-        static ShopifyOrder Order;
+        static Order Order;
 
-        static ShopifyTransaction Transaction;
+        static Transaction Transaction;
 
         static long Id;
     }

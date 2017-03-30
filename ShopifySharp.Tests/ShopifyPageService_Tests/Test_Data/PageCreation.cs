@@ -8,9 +8,9 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class PageCreation
     {
-        public static ShopifyPage CreateValidPages()
+        public static Page CreateValidPages()
         {
-            return new ShopifyPage()
+            return new ShopifySharp.Page()
             {
                 CreatedAt = DateTime.UtcNow,
                 Title = "Burton Custom Freestlye 151",
@@ -18,20 +18,20 @@ namespace ShopifySharp.Tests.Test_Data
             };
         }
 
-        public static ShopifyPage CreateValidPagesWithMetafield()
+        public static Page CreateValidPagesWithMetafield()
         {
-            return new ShopifyPage()
+            return new ShopifySharp.Page()
             {
                 CreatedAt = DateTime.UtcNow,
                 Title = "Burton Custom Freestlye 151",
                 BodyHtml = "<strong>Good snowboard!</strong>",
-                Metafields = new List<ShopifyMetaField>() { PageCreation.CreateValidPageMetafield() }
+                Metafields = new List<ShopifySharp.MetaField>() { PageCreation.CreateValidPageMetafield() }
             };
         }
 
-        public static ShopifyMetaField CreateValidPageMetafield()
+        public static MetaField CreateValidPageMetafield()
         {
-            return new ShopifyMetaField()
+            return new ShopifySharp.MetaField()
             {
                Namespace = "SSUnitTests",
                Key = "UnitText1",

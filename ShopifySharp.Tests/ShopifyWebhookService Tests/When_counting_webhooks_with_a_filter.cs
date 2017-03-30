@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests
 
         Cleanup after = () =>
         {
-            foreach(ShopifyWebhook hooks in Webhooks)
+            foreach(Webhook hooks in Webhooks)
             {
                 Service.DeleteAsync(hooks.Id.Value).Await();
             }
@@ -52,6 +52,6 @@ namespace ShopifySharp.Tests
         static int? AllCount;
         static int? FilteredCount;
         static string FilterTopic = "shop/update";
-        static List<ShopifyWebhook> Webhooks = new List<ShopifyWebhook>();
+        static List<Webhook> Webhooks = new List<Webhook>();
     }
 }

@@ -30,6 +30,6 @@ namespace ShopifySharp.Tests.ShopifyApplicationCreditService_Tests
 
         };
         
-        static ShopifyApplicationCredit Credit;
+        static ApplicationCredit Credit;
     }
 }

@@ -8,16 +8,16 @@ namespace ShopifySharp.Tests.Test_Data
 {
     public static class ProductCreation
     {
-        public static ShopifyProduct CreateValidProducts()
+        public static Product CreateValidProducts()
         {
-            return new ShopifyProduct()
+            return new ShopifySharp.Product()
             {
                 CreatedAt = DateTime.UtcNow,
                 Title = "Burton Custom Freestlye 151",
                 Vendor = "Burton",
                 BodyHtml = "<strong>Good snowboard!</strong>",
                 ProductType = "Snowboard",
-                Images = new List<ShopifyProductImage> { new ShopifyProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
+                Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
             };
         }
     }

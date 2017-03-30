@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
             }
         };
 
-        static ShopifyProductVariant Variant;
+        static ProductVariant Variant;
 
         static long ProductId;
         

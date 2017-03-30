@@ -45,8 +45,8 @@ namespace ShopifySharp.Tests.MetaField
 
         static int Result;
 
-        static ShopifyMetaField MetaField;
+        static ShopifySharp.MetaField MetaField;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
     }
 }

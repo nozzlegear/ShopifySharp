@@ -40,6 +40,6 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 
         static string AssetKey;
 
-        static ShopifyAsset Asset;
+        static Asset Asset;
     }
 }

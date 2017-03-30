@@ -30,9 +30,9 @@ namespace ShopifySharp.Tests.ShopifyProductImageService_Tests
             ProductImageTests.DeleteParentProduct(Product).Await();
         };
 
-        static ShopifyProductImage Image;
+        static ProductImage Image;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
 
         static long? Id;
     }

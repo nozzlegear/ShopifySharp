@@ -3,7 +3,7 @@
 namespace ShopifySharp
 {
     /// <summary>
-    /// Options for updating a <see cref="ShopifyCustomer"/>. 
+    /// Options for updating a <see cref="Customer"/>. 
     /// </summary>
     public class ShopifyCustomerUpdateOptions : Parameterizable
     {

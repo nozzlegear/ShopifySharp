@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests
             _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             //Create a customer named jane
-            ShopifyCustomer customer = CustomerCreation.CreateValidCustomer();
+            Customer customer = CustomerCreation.CreateValidCustomer();
             customer.FirstName = "Jane5532";
 
             _Id = _Service.CreateAsync(customer).Await().AsTask.Result.Id.Value;
@@ -51,6 +51,6 @@ namespace ShopifySharp.Tests
 
         static long _Id;
         static ShopifyCustomerService _Service;
-        static IEnumerable<ShopifyCustomer> _Result;
+        static IEnumerable<Customer> _Result;
     }
 }

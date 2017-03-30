@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
             Service = new ShopifyCollectService(Utils.MyShopifyUrl, Utils.AccessToken);
             Product = CollectCreation.CreateProduct().Await().AsTask.Result;
 
-            Id = Service.CreateAsync(new ShopifyCollect()
+            Id = Service.CreateAsync(new Collect()
             {
                 CollectionId = CollectCreation.CollectionId,
                 ProductId = Product.Id.Value
@@ -45,6 +45,6 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 
         static int Count;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
     }
 }

@@ -2,13 +2,13 @@
 {
     public static class SubjectUtils
     {
-        public static ShopifyCustomCollection CreateValidObject()
+        public static CustomCollection CreateValidObject()
         {
-            var output = new ShopifyCustomCollection()
+            var output = new CustomCollection()
             {
                 Title = "Things",
                 Published = false,
-                Image = new ShopifyCustomCollectionImage()
+                Image = new CustomCollectionImage()
                 {
                     Src = "http://placehold.it/250x250"
                 }

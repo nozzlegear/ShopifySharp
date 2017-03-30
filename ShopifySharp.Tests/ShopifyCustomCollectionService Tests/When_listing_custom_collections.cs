@@ -38,8 +38,8 @@ namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
 
         static ShopifyCustomCollectionService Service;
         
-        static IEnumerable<ShopifyCustomCollection> Collections;
+        static IEnumerable<CustomCollection> Collections;
 
-        static List<ShopifyCustomCollection> CreatedCollections = new List<ShopifyCustomCollection>();
+        static List<CustomCollection> CreatedCollections = new List<CustomCollection>();
     }
 }

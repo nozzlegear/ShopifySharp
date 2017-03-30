@@ -44,23 +44,23 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyCustomer>> ListAsync(ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> ListAsync(ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.GET, "customers");
 
             //Add optional parameters to request
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Customer>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyCustomer"/> with the given id.
+        /// Retrieves the <see cref="Customer"/> with the given id.
         /// </summary>
         /// <param name="customerId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyCustomer"/>.</returns>
-        public virtual async Task<ShopifyCustomer> GetAsync(long customerId, string fields = null)
+        /// <returns>The <see cref="Customer"/>.</returns>
+        public virtual async Task<Customer> GetAsync(long customerId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.GET, "customer");
 
@@ -69,7 +69,7 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Customer>(_RestClient, req);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <param name="order">An optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
         /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
-        public virtual async Task<IEnumerable<ShopifyCustomer>> SearchAsync(string query, string order = null, ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers/search.json", Method.GET, "customers");
             req.AddQueryParameter("query", query);
@@ -87,16 +87,16 @@ namespace ShopifySharp
             if (string.IsNullOrEmpty(order) == false) req.AddQueryParameter("order", order);
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.QueryString));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyCustomer>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Customer>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyCustomer"/> on the store.
+        /// Creates a new <see cref="Customer"/> on the store.
         /// </summary>
-        /// <param name="customer">A new <see cref="ShopifyCustomer"/>. Id should be set to null.</param>
+        /// <param name="customer">A new <see cref="Customer"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the customer.</param>
-        /// <returns>The new <see cref="ShopifyCustomer"/>.</returns>
-        public virtual async Task<ShopifyCustomer> CreateAsync(ShopifyCustomer customer, ShopifyCustomerCreateOptions options = null)
+        /// <returns>The new <see cref="Customer"/>.</returns>
+        public virtual async Task<Customer> CreateAsync(Customer customer, ShopifyCustomerCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.POST, "customer");
 
@@ -114,16 +114,16 @@ namespace ShopifySharp
 
             req.AddJsonBody(requestBody);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Customer>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyCustomer"/>. Id must not be null.
+        /// Updates the given <see cref="Customer"/>. Id must not be null.
         /// </summary>
-        /// <param name="customer">The <see cref="ShopifyCustomer"/> to update.</param>
+        /// <param name="customer">The <see cref="Customer"/> to update.</param>
         /// <param name="options">Options for updating the customer.</param>
-        /// <returns>The updated <see cref="ShopifyCustomer"/>.</returns>
-        public virtual async Task<ShopifyCustomer> UpdateAsync(ShopifyCustomer customer, ShopifyCustomerUpdateOptions options = null)
+        /// <returns>The updated <see cref="Customer"/>.</returns>
+        public virtual async Task<Customer> UpdateAsync(Customer customer, ShopifyCustomerUpdateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"customers/{customer.Id.Value}.json", Method.PUT, "customer");
 
@@ -141,7 +141,7 @@ namespace ShopifySharp
 
             req.AddJsonBody(requestBody);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyCustomer>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Customer>(_RestClient, req);
         }
 
         /// <summary>

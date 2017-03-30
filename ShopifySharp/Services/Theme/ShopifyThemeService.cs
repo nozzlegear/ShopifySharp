@@ -31,23 +31,23 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyTheme>> ListAsync(ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ShopifyListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.GET, "themes");
 
             //Add optional parameters to request
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyTheme>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Theme>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyTheme"/> with the given id.
+        /// Retrieves the <see cref="Theme"/> with the given id.
         /// </summary>
         /// <param name="themeId">The id of the theme to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyTheme"/>.</returns>
-        public virtual async Task<ShopifyTheme> GetAsync(long themeId, string fields = null)
+        /// <returns>The <see cref="Theme"/>.</returns>
+        public virtual async Task<Theme> GetAsync(long themeId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.GET, "theme");
 
@@ -56,18 +56,18 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyTheme>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Theme>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyTheme"/> on the store. The theme always starts out with a role of 
+        /// Creates a new <see cref="Theme"/> on the store. The theme always starts out with a role of 
         /// "unpublished." If the theme has a different role, it will be assigned that only after all of its 
         /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
         /// </summary>
-        /// <param name="theme">The new <see cref="ShopifyTheme"/>.</param>
+        /// <param name="theme">The new <see cref="Theme"/>.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
-        /// <returns>The new <see cref="ShopifyTheme"/>.</returns>
-        public virtual async Task<ShopifyTheme> CreateAsync(ShopifyTheme theme, string sourceUrl)
+        /// <returns>The new <see cref="Theme"/>.</returns>
+        public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.POST, "theme");
 
@@ -81,21 +81,21 @@ namespace ShopifySharp
 
             req.AddJsonBody(new { theme = body });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyTheme>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Theme>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyTheme"/>. Id must not be null.
+        /// Updates the given <see cref="Theme"/>. Id must not be null.
         /// </summary>
-        /// <param name="theme">The <see cref="ShopifyTheme"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyTheme"/>.</returns>
-        public virtual async Task<ShopifyTheme> UpdateAsync(ShopifyTheme theme)
+        /// <param name="theme">The <see cref="Theme"/> to update.</param>
+        /// <returns>The updated <see cref="Theme"/>.</returns>
+        public virtual async Task<Theme> UpdateAsync(Theme theme)
         {
             IRestRequest req = RequestEngine.CreateRequest($"themes/{theme.Id.Value}.json", Method.PUT, "theme");
 
             req.AddJsonBody(new { theme });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyTheme>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Theme>(_RestClient, req);
         }
 
         /// <summary>

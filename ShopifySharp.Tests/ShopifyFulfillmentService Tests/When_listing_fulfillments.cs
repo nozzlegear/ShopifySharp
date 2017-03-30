@@ -44,6 +44,6 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
 
         static IEnumerable<ShopifyFulfillment> Result;
 
-        static ShopifyOrder Order;
+        static Order Order;
     }
 }

@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests
 
         static ShopifyOrderService Service;
 
-        static ShopifyOrder Order;
+        static Order Order;
 
         static long Id;
     }

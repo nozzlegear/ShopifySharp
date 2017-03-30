@@ -67,20 +67,20 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
             var request = RequestEngine.CreateRequest("orders.json", Method.POST);
 
             //Creating an order with tax lines on both line items and the order will return an error
-            var order = new ShopifyOrder()
+            var order = new Order()
             {
                 CreatedAt = DateTime.UtcNow,
-                LineItems = new List<ShopifyLineItem>()
+                LineItems = new List<LineItem>()
                 {
-                    new ShopifyLineItem()
+                    new LineItem()
                     {
                         Title = "Click Keyboard",
                         Price = 99.99,
                         Grams = 600,
                         Quantity = 1,
-                        TaxLines = new List<ShopifyTaxLine>()
+                        TaxLines = new List<TaxLine>()
                         {
-                            new ShopifyTaxLine()
+                            new TaxLine()
                             {
                                 Price = 1.0,
                                 Rate = 0.01,
@@ -89,9 +89,9 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
                         }
                     }
                 },
-                TaxLines = new List<ShopifyTaxLine>()
+                TaxLines = new List<TaxLine>()
                 {
-                    new ShopifyTaxLine()
+                    new TaxLine()
                     {
                         Price = 6.0,
                         Rate = 0.06,
@@ -103,7 +103,7 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
             request.AddJsonBody(new { order });
 
             //Make request
-            await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, request);
+            await RequestEngine.ExecuteRequestAsync<Order>(_RestClient, request);
         }
 
     }

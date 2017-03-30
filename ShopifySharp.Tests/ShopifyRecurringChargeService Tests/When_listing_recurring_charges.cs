@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             // Only real apps can use the Shopify billing API.
 
             Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            ChargeId = Service.CreateAsync(new ShopifyRecurringCharge()
+            ChargeId = Service.CreateAsync(new RecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
                 Price = 123.45,
@@ -43,7 +43,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 
         static ShopifyRecurringChargeService Service;
 
-        static IEnumerable<ShopifyRecurringCharge> Charges;
+        static IEnumerable<RecurringCharge> Charges;
 
         static long ChargeId;
     }

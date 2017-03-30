@@ -36,6 +36,6 @@ namespace ShopifySharp.Tests.Page
 
         static int Result;
 
-        static ShopifyPage Page;
+        static ShopifySharp.Page Page;
     }
 }

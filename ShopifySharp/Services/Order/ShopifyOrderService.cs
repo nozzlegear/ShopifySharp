@@ -47,14 +47,14 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<ShopifyOrder>> ListAsync(ShopifyOrderFilter options = null)
+        public virtual async Task<IEnumerable<Order>> ListAsync(ShopifyOrderFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.GET, "orders");
 
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyOrder>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Order>>(_RestClient, req);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <param name="customerId">The id of the customer to list orders for.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<ShopifyOrder>> ListForCustomerAsync(long customerId, ShopifyOrderFilter options = null)
+        public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, ShopifyOrderFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.GET, "orders");
 
@@ -73,16 +73,16 @@ namespace ShopifySharp
             //Add optional parameters to request
             if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyOrder>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Order>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyOrder"/> with the given id.
+        /// Retrieves the <see cref="Order"/> with the given id.
         /// </summary>
         /// <param name="orderId">The id of the order to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyOrder"/>.</returns>
-        public virtual async Task<ShopifyOrder> GetAsync(long orderId, string fields = null)
+        /// <returns>The <see cref="Order"/>.</returns>
+        public virtual async Task<Order> GetAsync(long orderId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"orders/{orderId}.json", Method.GET, "order");
 
@@ -91,38 +91,38 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Order>(_RestClient, req);
         }
 
         /// <summary>
         /// Closes an order.
         /// </summary>
         /// <param name="id">The order's id.</param>
-        public virtual async Task<ShopifyOrder> CloseAsync(long id)
+        public virtual async Task<Order> CloseAsync(long id)
         {
             var req = RequestEngine.CreateRequest($"orders/{id}/close.json", Method.POST, "order");
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Order>(_RestClient, req);
         }
 
         /// <summary>
         /// Opens a closed order.
         /// </summary>
         /// <param name="id">The order's id.</param>
-        public virtual async Task<ShopifyOrder> OpenAsync(long id)
+        public virtual async Task<Order> OpenAsync(long id)
         {
             var req = RequestEngine.CreateRequest($"orders/{id}/open.json", Method.POST, "order");
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Order>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyOrder"/> on the store.
+        /// Creates a new <see cref="Order"/> on the store.
         /// </summary>
-        /// <param name="order">A new <see cref="ShopifyOrder"/>. Id should be set to null.</param>
+        /// <param name="order">A new <see cref="Order"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the order.</param>
-        /// <returns>The new <see cref="ShopifyOrder"/>.</returns>
-        public virtual async Task<ShopifyOrder> CreateAsync(ShopifyOrder order, ShopifyOrderCreateOptions options = null)
+        /// <returns>The new <see cref="Order"/>.</returns>
+        public virtual async Task<Order> CreateAsync(Order order, ShopifyOrderCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.POST, "order");
 
@@ -134,21 +134,21 @@ namespace ShopifySharp
 
             req.AddJsonBody(body);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Order>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyOrder"/>. Id must not be null.
+        /// Updates the given <see cref="Order"/>. Id must not be null.
         /// </summary>
-        /// <param name="order">The <see cref="ShopifyOrder"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyOrder"/>.</returns>
-        public virtual async Task<ShopifyOrder> UpdateAsync(ShopifyOrder order)
+        /// <param name="order">The <see cref="Order"/> to update.</param>
+        /// <returns>The updated <see cref="Order"/>.</returns>
+        public virtual async Task<Order> UpdateAsync(Order order)
         {
             IRestRequest req = RequestEngine.CreateRequest($"orders/{order.Id.Value}.json", Method.PUT, "order");
 
             req.AddJsonBody(new { order });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Order>(_RestClient, req);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace ShopifySharp
         /// Cancels an order.
         /// </summary>
         /// <param name="orderId">The order's id.</param>
-        /// <returns>The cancelled <see cref="ShopifyOrder"/>.</returns>
+        /// <returns>The cancelled <see cref="Order"/>.</returns>
         public virtual async Task CancelAsync(long orderId, ShopifyOrderCancelOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"orders/{orderId}/cancel.json", Method.POST);

@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <param name="sinceId">Restrict results to after the specified ID</param>
         /// <param name="handle">Filter by Blog handle</param>
         /// <param name="fields">comma-separated list of fields to include in the response</param>
-        public virtual async Task<IEnumerable<ShopifyBlog>> ListAsync(long? sinceId = null, string handle = null, string fields = null)
+        public virtual async Task<IEnumerable<Blog>> ListAsync(long? sinceId = null, string handle = null, string fields = null)
         {
             var request = RequestEngine.CreateRequest("blogs.json", RestSharp.Method.GET, "blogs");
 
@@ -41,7 +41,7 @@ namespace ShopifySharp
                 request.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyBlog>>(_RestClient, request);
+            return await RequestEngine.ExecuteRequestAsync<List<Blog>>(_RestClient, request);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blog">The blog being created. Id should be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="ShopifyMetaFieldService"/>.</param>
-        public virtual async Task<ShopifyBlog> CreateAsync(ShopifyBlog blog, IEnumerable<ShopifyMetaField> metafields = null)
+        public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
         {
             var request = RequestEngine.CreateRequest("blogs.json", RestSharp.Method.POST, "blog");
             var body = blog.ToDictionary();
@@ -74,7 +74,7 @@ namespace ShopifySharp
                 blog = body
             });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyBlog>(_RestClient, request);
+            return await RequestEngine.ExecuteRequestAsync<Blog>(_RestClient, request);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blog">The updated blog. Id should not be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="ShopifyMetaFieldService"/>.</param>
-        public virtual async Task<ShopifyBlog> UpdateAsync(ShopifyBlog blog, IEnumerable<ShopifyMetaField> metafields = null)
+        public virtual async Task<Blog> UpdateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
         {
             var request = RequestEngine.CreateRequest($"blogs/{blog.Id.Value}.json", RestSharp.Method.PUT, "blog");
             var body = blog.ToDictionary();
@@ -97,18 +97,18 @@ namespace ShopifySharp
                 blog = body
             });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyBlog>(_RestClient, request);
+            return await RequestEngine.ExecuteRequestAsync<Blog>(_RestClient, request);
         }
 
         /// <summary>
         /// Gets a blog with the given id.
         /// </summary>
         /// <param name="id">The id of the blog you want to retrieve.</param>
-        public virtual async Task<ShopifyBlog> GetAsync(long id)
+        public virtual async Task<Blog> GetAsync(long id)
         {
             var request = RequestEngine.CreateRequest($"blogs/{id}.json", RestSharp.Method.GET, "blog");
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyBlog>(_RestClient, request);
+            return await RequestEngine.ExecuteRequestAsync<Blog>(_RestClient, request);
         }
 
         /// <summary>

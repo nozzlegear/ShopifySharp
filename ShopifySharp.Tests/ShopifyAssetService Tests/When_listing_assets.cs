@@ -33,6 +33,6 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 
         static ShopifyAssetService Service;
 
-        static IEnumerable<ShopifyAsset> Assets;
+        static IEnumerable<Asset> Assets;
     }
 }

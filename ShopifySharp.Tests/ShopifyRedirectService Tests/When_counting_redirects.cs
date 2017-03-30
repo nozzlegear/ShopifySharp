@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
             for (int i = 0; i < 2; i++)
             {
-                var redirect = Service.CreateAsync(new ShopifyRedirect()
+                var redirect = Service.CreateAsync(new Redirect()
                 {
                     Path = Guid.NewGuid().ToString(),
                     Target = "https://example.com"
@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
         static ShopifyRedirectService Service;
 
-        static List<ShopifyRedirect> Created = new List<ShopifyRedirect>();
+        static List<Redirect> Created = new List<Redirect>();
 
         static int Result;
     }

@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 
         Because of = () =>
         {
-            Collect = Service.CreateAsync(new ShopifyCollect()
+            Collect = Service.CreateAsync(new Collect()
             {
                 CollectionId = CollectCreation.CollectionId,
                 ProductId = Product.Id.Value
@@ -40,8 +40,8 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 
         static ShopifyCollectService Service;
 
-        static ShopifyCollect Collect;
+        static Collect Collect;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
     }
 }

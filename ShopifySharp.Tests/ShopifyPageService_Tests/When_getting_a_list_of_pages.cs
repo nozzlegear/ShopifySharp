@@ -48,6 +48,6 @@ namespace ShopifySharp.Tests.Page
 
         static List<long> PageIds = new List<long>();
 
-        static IEnumerable<ShopifyPage> Pages;
+        static IEnumerable<ShopifySharp.Page> Pages;
     }
 }

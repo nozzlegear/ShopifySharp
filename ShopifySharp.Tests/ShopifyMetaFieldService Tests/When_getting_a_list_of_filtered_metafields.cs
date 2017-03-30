@@ -62,10 +62,10 @@ namespace ShopifySharp.Tests.MetaField
 
         static ShopifyProductService ProductService;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
 
         static List<long> MetaFieldIds = new List<long>();
 
-        static IEnumerable<ShopifyMetaField> MetaFields;
+        static IEnumerable<ShopifySharp.MetaField> MetaFields;
     }
 }

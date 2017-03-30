@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
         Because of = () =>
         {
-            Result = Service.CreateAsync(new ShopifyRedirect()
+            Result = Service.CreateAsync(new Redirect()
             {
                 Path = Guid.NewGuid().ToString(),
                 Target = "https://example.com"
@@ -37,6 +37,6 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
         static ShopifyRedirectService Service;
 
-        static ShopifyRedirect Result;
+        static Redirect Result;
     }
 }

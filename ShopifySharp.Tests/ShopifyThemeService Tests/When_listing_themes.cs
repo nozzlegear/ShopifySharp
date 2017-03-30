@@ -32,6 +32,6 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         static ShopifyThemeService Service;
 
-        static IEnumerable<ShopifyTheme> Result;
+        static IEnumerable<Theme> Result;
     }
 }

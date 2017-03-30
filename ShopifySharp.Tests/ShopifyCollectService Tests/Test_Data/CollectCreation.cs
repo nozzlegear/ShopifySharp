@@ -19,17 +19,17 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests.Test_Data
         /// Creates a new product that can be used to test the Collect API.
         /// </summary>
         /// <returns>The new product.</returns>
-        public static async Task<ShopifyProduct> CreateProduct()
+        public static async Task<ShopifySharp.Product> CreateProduct()
         {
             var service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var product = new ShopifyProduct()
+            var product = new ShopifySharp.Product()
             {
                 CreatedAt = DateTime.UtcNow,
                 Title = "Burton Custom Freestlye 151",
                 Vendor = "Burton",
                 BodyHtml = "<strong>Good snowboard!</strong>",
                 ProductType = "Snowboard",
-                Images = new List<ShopifyProductImage> { new ShopifyProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
+                Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
             };
 
             return await service.CreateAsync(product);

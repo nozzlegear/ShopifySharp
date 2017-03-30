@@ -23,15 +23,15 @@ namespace ShopifySharp
         #region Public, non-static methods
 
         /// <summary>
-        /// Returns the shop's <see cref="ShopifyShop"/> information.
+        /// Returns the shop's <see cref="Shop"/> information.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<ShopifyShop> GetAsync()
+        public virtual async Task<Shop> GetAsync()
         {
             IRestRequest request = RequestEngine.CreateRequest("shop.json", Method.GET, "shop");
 
             //Make request
-            return await RequestEngine.ExecuteRequestAsync<ShopifyShop>(_RestClient, request);
+            return await RequestEngine.ExecuteRequestAsync<Shop>(_RestClient, request);
         }
 
         /// <summary>

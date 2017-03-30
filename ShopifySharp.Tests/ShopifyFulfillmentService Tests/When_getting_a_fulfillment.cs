@@ -45,6 +45,6 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
 
         static long Id;
 
-        static ShopifyOrder Order;
+        static Order Order;
     }
 }

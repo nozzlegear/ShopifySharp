@@ -19,9 +19,9 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         Because of = () =>
         {
-            Theme1 = JsonConvert.DeserializeObject<ShopifyTheme>(Theme1Json);            
+            Theme1 = JsonConvert.DeserializeObject<Theme>(Theme1Json);            
 
-            Theme2 = JsonConvert.DeserializeObject<ShopifyTheme>(Theme2Json);
+            Theme2 = JsonConvert.DeserializeObject<Theme>(Theme2Json);
         };
 
         It should_deserialize_a_theme = () =>
@@ -40,8 +40,8 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         static string Theme2Json { get; } = "{\"id\":10556555,\"name\":\"launchpad-star\",\"created_at\":\"2014-09-03T11:20:41-05:00\",\"updated_at\":\"2015-11-11T11:28:59-06:00\",\"role\":\"main\",\"theme_store_id\":null,\"previewable\":true,\"processing\":false}";
 
-        static ShopifyTheme Theme1 { get; set; }        
+        static Theme Theme1 { get; set; }        
 
-        static ShopifyTheme Theme2 { get; set; }
+        static Theme Theme2 { get; set; }
     }
 }

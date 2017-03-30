@@ -39,16 +39,16 @@ namespace ShopifySharp.Tests
 
         Cleanup after = () =>
         {
-            foreach (ShopifyCustomer customer in _CreatedCustomers)
+            foreach (Customer customer in _CreatedCustomers)
             {
                 _Service.DeleteAsync(customer.Id.Value).Await();
             }
         };
 
-        static List<ShopifyCustomer> _CreatedCustomers = new List<ShopifyCustomer>();
+        static List<Customer> _CreatedCustomers = new List<Customer>();
         static int _Limit = 1;
         static ShopifyCustomerService _Service;
         static ShopifyListFilter _Options;
-        static IEnumerable<ShopifyCustomer> _Result;
+        static IEnumerable<Customer> _Result;
     }
 }

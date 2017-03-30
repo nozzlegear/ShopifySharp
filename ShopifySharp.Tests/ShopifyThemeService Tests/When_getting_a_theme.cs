@@ -37,6 +37,6 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         static long ThemeId { get; set; }
 
-        static ShopifyTheme Theme { get; set; }
+        static Theme Theme { get; set; }
     }
 }

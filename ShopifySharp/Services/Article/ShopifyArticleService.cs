@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the articles belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ShopifyArticle>> ListAsync(long blogId, ShopifyArticleFilter filter = null)
+        public virtual async Task<IEnumerable<Article>> ListAsync(long blogId, ShopifyArticleFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"blogs/{blogId}/articles.json", Method.GET, "articles");
 
@@ -31,7 +31,7 @@ namespace ShopifySharp
                 req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyArticle>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<Article>>(_RestClient, req);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ShopifySharp
         /// <param name="blogId">The blog that the article belongs to.</param>
         /// <param name="articleId">The article's id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        public virtual async Task<ShopifyArticle> GetAsync(long blogId, long articleId, string fields = null)
+        public virtual async Task<Article> GetAsync(long blogId, long articleId, string fields = null)
         {
             var req = RequestEngine.CreateRequest($"blogs/{blogId}/articles/{articleId}.json", Method.GET, "article");
 
@@ -66,7 +66,7 @@ namespace ShopifySharp
                 req.AddQueryParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyArticle>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Article>(_RestClient, req);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace ShopifySharp
         /// <param name="blogId">The blog that the article will belong to.</param>
         /// <param name="article">The article being created. Id should be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="ShopifyMetaFieldService"/>.</param>
-        public virtual async Task<ShopifyArticle> CreateAsync(long blogId, ShopifyArticle article, IEnumerable<ShopifyMetaField> metafields = null)
+        public virtual async Task<Article> CreateAsync(long blogId, Article article, IEnumerable<MetaField> metafields = null)
         {
             var req = RequestEngine.CreateRequest($"blogs/{blogId}/articles.json", Method.POST, "article");
             var body = article.ToDictionary();
@@ -90,7 +90,7 @@ namespace ShopifySharp
                 article = body
             });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyArticle>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Article>(_RestClient, req);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace ShopifySharp
         /// <param name="blogId">The blog that the article belongs to.</param>
         /// <param name="article">The article being updated. Id should not be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="ShopifyMetaFieldService"/>.</param>
-        public virtual async Task<ShopifyArticle> UpdateAsync(long blogId, ShopifyArticle article, IEnumerable<ShopifyMetaField> metafields = null)
+        public virtual async Task<Article> UpdateAsync(long blogId, Article article, IEnumerable<MetaField> metafields = null)
         {
             var req = RequestEngine.CreateRequest($"blogs/{blogId}/articles/{article.Id}.json", Method.PUT, "article");
             var body = article.ToDictionary();
@@ -114,7 +114,7 @@ namespace ShopifySharp
                 article = body
             });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyArticle>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<Article>(_RestClient, req);
         }
 
         /// <summary>

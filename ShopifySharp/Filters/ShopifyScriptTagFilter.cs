@@ -8,7 +8,7 @@ namespace ShopifySharp.Filters
     public class ShopifyScriptTagFilter : ShopifyListFilter
     {
         /// <summary>
-        /// Returns only those <see cref="ShopifyScriptTag"/>s with the given <see cref="ShopifyScriptTag.Src"/> value.
+        /// Returns only those <see cref="ScriptTag"/>s with the given <see cref="ScriptTag.Src"/> value.
         /// </summary>
         [JsonProperty("src")]
         public string Src { get; set; }

@@ -45,8 +45,8 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
 
         static ShopifyTransactionService Service;
 
-        static ShopifyOrder Order;
+        static Order Order;
 
-        static IEnumerable<ShopifyTransaction> Result;
+        static IEnumerable<Transaction> Result;
     }
 }

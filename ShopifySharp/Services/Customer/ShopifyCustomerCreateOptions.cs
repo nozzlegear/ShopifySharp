@@ -3,7 +3,7 @@
 namespace ShopifySharp
 {
     /// <summary>
-    /// Options for creating a <see cref="ShopifyCustomer"/>.
+    /// Options for creating a <see cref="Customer"/>.
     /// </summary>
     public class ShopifyCustomerCreateOptions : ShopifyCustomerUpdateOptions
     {

@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
         Establish context = () =>
         {
             Service = new ShopifyChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
-            Charge = new ShopifyCharge()
+            Charge = new Charge()
             {
                 Name = "Lorem Ipsum Single Charge",
                 Price = 123.45,
@@ -44,6 +44,6 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
 
         static ShopifyChargeService Service;
 
-        static ShopifyCharge Charge;
+        static Charge Charge;
     }
 }

@@ -62,8 +62,8 @@ namespace ShopifySharp.Tests.MetaField
 
         static List<long> MetaFieldIds = new List<long>();
 
-        static IEnumerable<ShopifyMetaField> MetaFields;
+        static IEnumerable<ShopifySharp.MetaField> MetaFields;
 
-        static ShopifyProduct Product;
+        static ShopifySharp.Product Product;
     }
 }

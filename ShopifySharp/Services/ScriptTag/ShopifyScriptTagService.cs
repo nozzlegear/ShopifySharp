@@ -28,10 +28,10 @@ namespace ShopifySharp
         #region Public, non-static methods
 
         /// <summary>
-        /// Gets a count of all of the shop's <see cref="ShopifyScriptTag"/>s.
+        /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
-        /// <param name="src">Optionally filters the count to only those <see cref="ShopifyScriptTag"/>s with the 
-        /// given <see cref="ShopifyScriptTag.Src"/> value.</param>
+        /// <param name="src">Optionally filters the count to only those <see cref="ScriptTag"/>s with the 
+        /// given <see cref="ScriptTag.Src"/> value.</param>
         /// <returns>The count.</returns>
         public virtual async Task<int> CountAsync(string src = null)
         {
@@ -47,26 +47,26 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop's <see cref="ShopifyScriptTag"/>s.
+        /// Gets a list of up to 250 of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ShopifyScriptTag>> ListAsync(ShopifyScriptTagFilter filter = null)
+        public virtual async Task<IEnumerable<ScriptTag>> ListAsync(ShopifyScriptTagFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.GET, "script_tags");
 
             //Add optional parameters to request
             if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyScriptTag>>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<List<ScriptTag>>(_RestClient, req);
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyScriptTag"/> with the given id.
+        /// Retrieves the <see cref="ScriptTag"/> with the given id.
         /// </summary>
-        /// <param name="tagId">The id of the <see cref="ShopifyScriptTag"/> to retrieve.</param>
+        /// <param name="tagId">The id of the <see cref="ScriptTag"/> to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyScriptTag"/>.</returns>
-        public virtual async Task<ShopifyScriptTag> GetAsync(long tagId, string fields = null)
+        /// <returns>The <see cref="ScriptTag"/>.</returns>
+        public virtual async Task<ScriptTag> GetAsync(long tagId, string fields = null)
         {
             IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.GET, "script_tag");
 
@@ -75,15 +75,15 @@ namespace ShopifySharp
                 req.AddParameter("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyScriptTag>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ScriptTag>(_RestClient, req);
         }
 
         /// <summary>
-        /// Creates a new <see cref="ShopifyScriptTag"/> on the store.
+        /// Creates a new <see cref="ScriptTag"/> on the store.
         /// </summary>
-        /// <param name="tag">A new <see cref="ShopifyScriptTag"/>. Id should be set to null.</param>
-        /// <returns>The new <see cref="ShopifyScriptTag"/>.</returns>
-        public virtual async Task<ShopifyScriptTag> CreateAsync(ShopifyScriptTag tag)
+        /// <param name="tag">A new <see cref="ScriptTag"/>. Id should be set to null.</param>
+        /// <returns>The new <see cref="ScriptTag"/>.</returns>
+        public virtual async Task<ScriptTag> CreateAsync(ScriptTag tag)
         {
             IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.POST, "script_tag");
 
@@ -95,25 +95,25 @@ namespace ShopifySharp
 
             req.AddJsonBody(body);
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyScriptTag>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ScriptTag>(_RestClient, req);
         }
 
         /// <summary>
-        /// Updates the given <see cref="ShopifyScriptTag"/>. Id must not be null.
+        /// Updates the given <see cref="ScriptTag"/>. Id must not be null.
         /// </summary>
-        /// <param name="tag">The <see cref="ShopifyScriptTag"/> to update.</param>
-        /// <returns>The updated <see cref="ShopifyScriptTag"/>.</returns>
-        public virtual async Task<ShopifyScriptTag> UpdateAsync(ShopifyScriptTag tag)
+        /// <param name="tag">The <see cref="ScriptTag"/> to update.</param>
+        /// <returns>The updated <see cref="ScriptTag"/>.</returns>
+        public virtual async Task<ScriptTag> UpdateAsync(ScriptTag tag)
         {
             IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tag.Id.Value}.json", Method.PUT, "script_tag");
 
             req.AddJsonBody(new { script_tag = tag });
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyScriptTag>(_RestClient, req);
+            return await RequestEngine.ExecuteRequestAsync<ScriptTag>(_RestClient, req);
         }
 
         /// <summary>
-        /// Deletes the <see cref="ShopifyScriptTag"/> with the given Id.
+        /// Deletes the <see cref="ScriptTag"/> with the given Id.
         /// </summary>
         /// <param name="tagId">The tag's Id.</param>
         public virtual async Task DeleteAsync(long tagId)

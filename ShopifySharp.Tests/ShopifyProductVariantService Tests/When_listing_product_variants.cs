@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
             VariantUtils.Service.DeleteAsync(ProductId, VariantId).Await();
         };
 
-        static IEnumerable<ShopifyProductVariant> Variants;
+        static IEnumerable<ProductVariant> Variants;
 
         static long ProductId;
 

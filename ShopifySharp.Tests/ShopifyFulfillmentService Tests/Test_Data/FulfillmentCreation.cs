@@ -11,7 +11,7 @@ namespace ShopifySharp.Tests.Test_Data
         /// <summary>
         /// Generates a valid <see cref="ShopifyFulfillment"/> for testing the Fulfillment API.
         /// </summary>
-        public static ShopifyFulfillment GenerateFulfillment(bool multipleTrackingNumbers = false, IEnumerable<ShopifyLineItem> items = null)
+        public static ShopifyFulfillment GenerateFulfillment(bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
         {
             ShopifyFulfillment fulfillment;
 
@@ -56,7 +56,7 @@ namespace ShopifySharp.Tests.Test_Data
         /// Creates a new order that can be used to test the Fulfillment API.
         /// </summary>
         /// <returns>The new product.</returns>
-        public static async Task<ShopifyOrder> CreateOrder()
+        public static async Task<Order> CreateOrder()
         {
             var order = OrderCreation.GenerateOrder();
             var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
