@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_listing_customers_with_options
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
             _Options = new ListFilter()
             {
                 Limit = _Limit
@@ -47,7 +47,7 @@ namespace ShopifySharp.Tests
 
         static List<Customer> _CreatedCustomers = new List<Customer>();
         static int _Limit = 1;
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static ListFilter _Options;
         static IEnumerable<Customer> _Result;
     }

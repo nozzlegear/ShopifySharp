@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
 {
-    [Subject(typeof(ShopifyTransactionService))]
+    [Subject(typeof(TransactionService))]
     class When_counting_transactions
     {
         Establish context = () =>
         {
-            Service = new ShopifyTransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new TransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
             Order = Setup.CreateOrder().Await().AsTask.Result;
 
             for (var i = 0; i < 2; i++)
@@ -43,7 +43,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
             Setup.DeleteOrder(Order.Id.Value).Await();
         };
 
-        static ShopifyTransactionService Service;
+        static TransactionService Service;
 
         static Order Order;
 

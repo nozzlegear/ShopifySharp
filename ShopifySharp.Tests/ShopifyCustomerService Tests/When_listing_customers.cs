@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_listing_customers
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             // Create 4 customers to ensure this test always has customers to retrieve. Delete them during cleanup.
             for(int i = 0; i < 4; i++)
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests
         };
 
         static List<Customer> _CreatedCustomers = new List<Customer>();
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static IEnumerable<Customer> _Result;
     }
 }

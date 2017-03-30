@@ -3,7 +3,7 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyCollectService.ListAsync(CollectFilter)"/> results.
+    /// Options for filtering <see cref="CollectService.ListAsync(CollectFilter)"/> results.
     /// </summary>
     public class CollectFilter : ListFilter
     {

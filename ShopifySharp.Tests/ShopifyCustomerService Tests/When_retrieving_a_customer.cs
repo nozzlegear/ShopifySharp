@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_retrieving_a_customer
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             //Create a customer to ensure this test always has a customer to retrieve.
             _Id = _Service.CreateAsync(CustomerCreation.CreateValidCustomer()).Await().AsTask.Result.Id.Value;
@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests
         };
 
         static long _Id;
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static Customer _Result;
     }
 }

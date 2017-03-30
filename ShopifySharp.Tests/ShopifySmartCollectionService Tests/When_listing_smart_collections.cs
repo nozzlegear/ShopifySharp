@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
 {
-    [Subject(typeof(ShopifySmartCollectionService))]
+    [Subject(typeof(SmartCollectionService))]
     class When_listing_a_smart_collection
     {
         Establish context = () =>
@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
             }
         };
 
-        static ShopifySmartCollectionService Service = new ShopifySmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        static SmartCollectionService Service = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         static IEnumerable<SmartCollection> Collections;
 

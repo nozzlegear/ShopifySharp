@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 {
-    [Subject(typeof(ShopifyAssetService))]
+    [Subject(typeof(AssetService))]
     class When_listing_assets
     {
         Establish context = () =>
         {
-            Service = new ShopifyAssetService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 
         };
 
-        static ShopifyAssetService Service;
+        static AssetService Service;
 
         static IEnumerable<Asset> Assets;
     }

@@ -70,7 +70,7 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
 
         };
 
-        static ShopifyEventService Service = new ShopifyEventService(Utils.MyShopifyUrl, Utils.AccessToken);
+        static EventService Service = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         static Exception Ex;
 

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_updating_a_customer_with_options
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             //Create a customer to update
             _Customer = _Service.CreateAsync(CustomerCreation.CreateValidCustomer()).Await().AsTask.Result;
@@ -24,7 +24,7 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            _Customer = _Service.UpdateAsync(_Customer, new ShopifyCustomerUpdateOptions()
+            _Customer = _Service.UpdateAsync(_Customer, new CustomerUpdateOptions()
             {
                 Password = "loktarogar",
                 PasswordConfirmation = "loktarogar"
@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests
             _Service.DeleteAsync(_Customer.Id.Value).Await();
         };
 
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static Customer _Customer;
     }
 }

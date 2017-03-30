@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Page
 {
-    [Subject(typeof(ShopifyPageService))]
+    [Subject(typeof(PageService))]
     public class When_updating_a_page_metafields
     {
         Establish context = () =>
         {
-            Service = new ShopifyPageService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
             Page = Service.CreateAsync(PageCreation.CreateValidPagesWithMetafield()).Await().AsTask.Result;
             Page.Metafields = Service.GetMetaFieldsAsync(Page.Id.Value).Await().AsTask.Result;
         };
@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests.Page
             }
         };
 
-        static ShopifyPageService Service;
+        static PageService Service;
 
         static ShopifySharp.Page Page;
 

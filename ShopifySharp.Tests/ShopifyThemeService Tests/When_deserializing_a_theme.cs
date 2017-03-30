@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 {
-    [Subject(typeof(ShopifyThemeService))]
+    [Subject(typeof(ThemeService))]
     class When_deserializing_a_theme
     {
         Establish context = () =>

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(OrderService))]
     public class When_listing_orders_with_options
     {
         Establish context = () =>
         {
-            Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (int i = 0; i < 3; i++)
             {
@@ -49,7 +49,7 @@ namespace ShopifySharp.Tests
             }
         };
 
-        static ShopifyOrderService Service;
+        static OrderService Service;
 
         static IEnumerable<Order> Result;
 

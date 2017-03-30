@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_counting_customers
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
 
         };
 
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static int? _Count;
     }
 }

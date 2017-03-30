@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyEventService_Tests
 {
-    [Subject(typeof(ShopifyEventService))]
+    [Subject(typeof(EventService))]
     class When_getting_an_event
     {
         Establish context = () =>
         {
-            Service = new ShopifyEventService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
             var list = Service.ListAsync(new EventListFilter()
             {
                 Limit = 1
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
 
         static long? Id;
 
-        static ShopifyEventService Service;
+        static EventService Service;
 
         static ShopifyEvent Event;
     }

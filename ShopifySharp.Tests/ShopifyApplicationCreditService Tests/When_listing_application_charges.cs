@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyApplicationCreditService_Tests
 {
-    [Subject(typeof(ShopifyApplicationCreditService))]
+    [Subject(typeof(ApplicationCreditService))]
     class When_listing_application_credits
     {
         Establish context = () =>

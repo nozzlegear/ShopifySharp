@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyArticleService_Tests
 {
-    [Subject(typeof(ShopifyArticleService))]
+    [Subject(typeof(ArticleService))]
     class When_deleting_an_article
     {
         Establish context = () =>

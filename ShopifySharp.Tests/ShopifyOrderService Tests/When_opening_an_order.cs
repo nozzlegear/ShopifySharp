@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(OrderService))]
     public class When_opening_an_order
     {
         Establish context = () =>
         {
-            Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             Id = Service.CreateAsync(OrderCreation.GenerateOrder()).Await().AsTask.Result.Id.Value;
             Service.CloseAsync(Id).Await();
         };
@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests
             Service.DeleteAsync(Id).Await();
         };
 
-        static ShopifyOrderService Service;
+        static OrderService Service;
 
         static Order Order;
 

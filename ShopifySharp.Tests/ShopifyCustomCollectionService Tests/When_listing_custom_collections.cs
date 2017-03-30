@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
 {
-    [Subject(typeof(ShopifyCustomCollectionService))]
+    [Subject(typeof(CustomCollectionService))]
     public class When_listing_a_custom_collection
     {
         Establish context = () =>
         {
-            Service = new ShopifyCustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (int i = 0; i < 3; i++)
             {
@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
             }
         };
 
-        static ShopifyCustomCollectionService Service;
+        static CustomCollectionService Service;
         
         static IEnumerable<CustomCollection> Collections;
 

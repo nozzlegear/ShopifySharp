@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_deleting_a_customer
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             //Create a customer to delete
             _CustomerId = _Service.CreateAsync(CustomerCreation.CreateValidCustomer()).Await().AsTask.Result.Id.Value;
@@ -43,7 +43,7 @@ namespace ShopifySharp.Tests
 
         static long _CustomerId;
         
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
 
         static ShopifyException _Exception;
     }

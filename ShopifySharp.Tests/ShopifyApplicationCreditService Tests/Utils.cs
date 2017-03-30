@@ -2,7 +2,7 @@
 {
     static class AppCreditUtils
     {
-        public static ShopifyApplicationCreditService Service = new ShopifyApplicationCreditService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public static ApplicationCreditService Service = new ApplicationCreditService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public static ApplicationCredit CreateCredit()
         {

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 {
-    [Subject(typeof(ShopifyScriptTagService))]
+    [Subject(typeof(ScriptTagService))]
     class When_listing_script_tags
     {
         Establish context = () =>
         {
-            Service = new ShopifyScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (int i = 0; i < 5; i++)
             {
@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 
         static string FilteredSrc = "https://nozzlegear.com/even.js";
 
-        static ShopifyScriptTagService Service;
+        static ScriptTagService Service;
 
         static IEnumerable<ScriptTag> Tags;
 

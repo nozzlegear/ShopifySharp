@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 { 
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_searching_for_a_customer
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             //Create a customer named jane
             Customer customer = CustomerCreation.CreateValidCustomer();
@@ -50,7 +50,7 @@ namespace ShopifySharp.Tests
         };
 
         static long _Id;
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static IEnumerable<Customer> _Result;
     }
 }

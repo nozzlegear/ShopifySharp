@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 {
-    [Subject(typeof(ShopifyAssetService))]
+    [Subject(typeof(AssetService))]
     class When_retrieving_assets
     {
         Establish context = () =>
         {
-            Service = new ShopifyAssetService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
             ThemeId = AssetUtils.GetValidThemeId();
             AssetKey = Service.ListAsync(ThemeId).Await().AsTask.Result.OrderBy(x => new Guid()).First().Key;
         };
@@ -34,7 +34,7 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 
         };
 
-        static ShopifyAssetService Service;
+        static AssetService Service;
 
         static long ThemeId;
 

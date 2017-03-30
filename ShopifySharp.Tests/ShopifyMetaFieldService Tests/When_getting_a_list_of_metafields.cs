@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.MetaField
 {
-    [Subject(typeof(ShopifyMetaFieldService))]
+    [Subject(typeof(MetaFieldService))]
     public class When_getting_a_list_of_metafields
     {
         Establish context = () =>
         {
-            ProductService = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
             Product = ProductService.CreateAsync(ProductCreation.CreateValidProducts()).Await().AsTask.Result;
 
-            Service = new ShopifyMetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (var i = 1; i <= 3; i++)
             {
@@ -56,9 +56,9 @@ namespace ShopifySharp.Tests.MetaField
             ProductService.DeleteAsync(Product.Id.Value).Await();
         };
 
-        static ShopifyMetaFieldService Service;
+        static MetaFieldService Service;
 
-        static ShopifyProductService ProductService;
+        static ProductService ProductService;
 
         static List<long> MetaFieldIds = new List<long>();
 

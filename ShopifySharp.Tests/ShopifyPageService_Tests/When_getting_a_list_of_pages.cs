@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Page
 {
-    [Subject(typeof(ShopifyPageService))]
+    [Subject(typeof(PageService))]
     public class When_getting_a_list_of_pages
     {
         Establish context = () =>
         {
-            Service = new ShopifyPageService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (var i = 0; i < 3; i++)
             {
-                var page = Service.CreateAsync(PageCreation.CreateValidPages(), new ShopifyPageCreateOptions()
+                var page = Service.CreateAsync(PageCreation.CreateValidPages(), new PageCreateOptions()
                 {
                     Published = false
                 }).Await().AsTask.Result;
@@ -44,7 +44,7 @@ namespace ShopifySharp.Tests.Page
             }
         };
 
-        static ShopifyPageService Service;
+        static PageService Service;
 
         static List<long> PageIds = new List<long>();
 

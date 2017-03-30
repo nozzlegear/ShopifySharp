@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
 {
-    [Subject(typeof(ShopifyProductVariantService))]
+    [Subject(typeof(ProductVariantService))]
     class When_listing_product_variants
     {
         Establish context = () =>

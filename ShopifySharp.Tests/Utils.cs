@@ -21,7 +21,7 @@ namespace ShopifySharp.Tests
         public static string MyShopifyUrl { get; } = ConfigurationManager.AppSettings.Get("MyShopifyUrl");
 
         /// <summary>
-        /// An access token to a shop created by a real application. This is only used for testing <see cref="ShopifyRecurringChargeService"/>,
+        /// An access token to a shop created by a real application. This is only used for testing <see cref="RecurringChargeService"/>,
         /// because a private app cannot create/manipulate charges.
         /// </summary>
         public static string BillingAccessToken { get; } = ConfigurationManager.AppSettings.Get("BillingAccessToken");

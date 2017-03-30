@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 {
-    [Subject(typeof(ShopifyThemeService))]
+    [Subject(typeof(ThemeService))]
     class When_creating_a_themes
     {
         Establish context = () =>
         {
-            Service = new ShopifyThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
             Service.DeleteAsync(Theme.Id.Value).Await();
         };
 
-        static ShopifyThemeService Service;
+        static ThemeService Service;
 
         static Theme Theme;
     }

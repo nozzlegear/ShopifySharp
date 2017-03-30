@@ -3,7 +3,7 @@ using System;
 
 namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
 {
-    [Subject(typeof(ShopifySmartCollectionService))]
+    [Subject(typeof(SmartCollectionService))]
     class When_deleting_a_smart_collection
     {
         Establish context = () =>
@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
             
         };
 
-        static ShopifySmartCollectionService Service = new ShopifySmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        static SmartCollectionService Service = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         static long? CollectionId;
 

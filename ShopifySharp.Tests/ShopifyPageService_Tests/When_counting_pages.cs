@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Page
 {
-    [Subject(typeof(ShopifyPageService))]
+    [Subject(typeof(PageService))]
     public class When_counting_pages
     {
         Establish context = () =>
         {
-            Service = new ShopifyPageService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Page = Service.CreateAsync(PageCreation.CreateValidPages(), new ShopifyPageCreateOptions() { Published = false }).Await().AsTask.Result;
+            Service = new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Page = Service.CreateAsync(PageCreation.CreateValidPages(), new PageCreateOptions() { Published = false }).Await().AsTask.Result;
         };
 
         Because of = () =>
@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.Page
             }
         };
 
-        static ShopifyPageService Service;
+        static PageService Service;
 
         static int Result;
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
-    [Subject(typeof(ShopifyRecurringChargeService))]
+    [Subject(typeof(RecurringChargeService))]
     class When_deleting_a_recurring_charge
     {
         Establish context = () =>
@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             // NOTE: Creating a charge will fail if the access token used is for a private app. 
             // Only real apps can use the Shopify billing API.
 
-            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
+            Service = new RecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             Charge = Service.CreateAsync(new RecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 
         };
 
-        static ShopifyRecurringChargeService Service;
+        static RecurringChargeService Service;
 
         static Exception Exception;
 

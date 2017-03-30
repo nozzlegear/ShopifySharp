@@ -3,8 +3,8 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyProductService.CountAsync(ProductFilter)"/> and 
-    /// <see cref="ShopifyProductService.ListAsync(ProductFilter)"/> results.
+    /// Options for filtering <see cref="ProductService.CountAsync(ProductFilter)"/> and 
+    /// <see cref="ProductService.ListAsync(ProductFilter)"/> results.
     /// </summary>
     public class ProductFilter : PublishableListFilter
     {

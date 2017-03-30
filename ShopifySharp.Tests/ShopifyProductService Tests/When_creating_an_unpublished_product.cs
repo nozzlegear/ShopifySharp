@@ -3,17 +3,17 @@ using ShopifySharp.Tests.Test_Data;
 
 namespace ShopifySharp.Tests.Product
 {
-    [Subject(typeof(ShopifyProductService))]
+    [Subject(typeof(ProductService))]
     public class When_creating_an_unpublished_product
     {
         Establish context = () =>
         {
-            Service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
         {
-            var options = new ShopifyProductCreateOptions()
+            var options = new ProductCreateOptions()
             {
                 Published = false
             };
@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests.Product
             }
         };
 
-        static ShopifyProductService Service;
+        static ProductService Service;
 
         static ShopifySharp.Product Product;
     }

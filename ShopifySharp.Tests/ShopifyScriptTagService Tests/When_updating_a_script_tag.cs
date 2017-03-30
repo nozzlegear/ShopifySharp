@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 {
-    [Subject(typeof(ShopifyScriptTagService))]
+    [Subject(typeof(ScriptTagService))]
     class When_updating_a_script_tag
     {
         Establish context = () =>
         {
-            Service = new ShopifyScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
             OriginalTag = Service.CreateAsync(new ScriptTag()
             {
                 Event = "onload",
@@ -38,7 +38,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
             Service.DeleteAsync(OriginalTag.Id.Value).Await();
         };
 
-        static ShopifyScriptTagService Service;
+        static ScriptTagService Service;
 
         static ScriptTag OriginalTag;
 

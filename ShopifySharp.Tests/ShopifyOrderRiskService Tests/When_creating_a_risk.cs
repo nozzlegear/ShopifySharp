@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 {
-    [Subject(typeof(ShopifyOrderRiskService))]
+    [Subject(typeof(OrderRiskService))]
     class When_creating_a_risk
     {
         Establish context = () =>
@@ -39,6 +39,6 @@ namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 
         static OrderRisk Risk;
 
-        static ShopifyOrderRiskService Service = new ShopifyOrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
+        static OrderRiskService Service = new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
     }
 }

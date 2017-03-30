@@ -3,12 +3,12 @@ using ShopifySharp.Enums;
 
 namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
 {
-    [Subject(typeof(ShopifyTransactionService))]
+    [Subject(typeof(TransactionService))]
     class When_creating_a_transaction
     {
         Establish context = () =>
         {
-            Service = new ShopifyTransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new TransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
             Order = Setup.CreateOrder().Await().AsTask.Result;
         };
 
@@ -34,7 +34,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
             Setup.DeleteOrder(Order.Id.Value).Await();
         };
 
-        static ShopifyTransactionService Service;
+        static TransactionService Service;
 
         static Order Order;
 

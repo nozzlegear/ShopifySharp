@@ -9,12 +9,12 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyWebhookService))]
+    [Subject(typeof(WebhookService))]
     public class When_listing_webhooks_with_a_filter
     {
         Establish context = () =>
         {
-            Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             // Create 4 normal webhooks to retrieve
             for (int i = 0; i < 4; i++)
@@ -54,7 +54,7 @@ namespace ShopifySharp.Tests
             }
         };
 
-        static ShopifyWebhookService Service;
+        static WebhookService Service;
         static IEnumerable<Webhook> Result;
         static string FilterTopic = "shop/update";
         static List<Webhook> CreatedWebhooks = new List<Webhook>();

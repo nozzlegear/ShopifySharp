@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 {
-    [Subject(typeof(ShopifyThemeService))]
+    [Subject(typeof(ThemeService))]
     class When_getting_a_theme
     {
         Establish context = () =>
         {
-            Service = new ShopifyThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             ThemeId = Service.ListAsync().Await().AsTask.Result.First().Id.Value;
         };
@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 
         };
 
-        static ShopifyThemeService Service { get; set; }
+        static ThemeService Service { get; set; }
 
         static long ThemeId { get; set; }
 

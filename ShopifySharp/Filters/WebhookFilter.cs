@@ -4,7 +4,7 @@ using ShopifySharp.Enums;
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyWebhookService.ListAsync(WebhookFilter)" /> results.
+    /// Options for filtering <see cref="WebhookService.ListAsync(WebhookFilter)" /> results.
     /// </summary>
     public class WebhookFilter : ListFilter
     {

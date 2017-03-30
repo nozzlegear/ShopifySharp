@@ -21,7 +21,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests.Test_Data
         /// <returns>The new product.</returns>
         public static async Task<ShopifySharp.Product> CreateProduct()
         {
-            var service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
             var product = new ShopifySharp.Product()
             {
                 CreatedAt = DateTime.UtcNow,
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests.Test_Data
         /// </summary>
         public static async Task DeleteProduct(long id)
         {
-            var service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             await service.DeleteAsync(id);
         }

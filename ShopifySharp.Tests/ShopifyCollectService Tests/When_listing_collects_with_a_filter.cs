@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 {
-    [Subject(typeof(ShopifyCollectService))]
+    [Subject(typeof(CollectService))]
     class When_listing_collects_with_a_filter
     {
         Establish context = () =>
         {
-            Service = new ShopifyCollectService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (var i = 0; i <3 ; i++)
             {
@@ -55,7 +55,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
             }
         };
 
-        static ShopifyCollectService Service;
+        static CollectService Service;
 
         static List<Collect> Created = new List<Collect>();
 

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyWebhookService))]
+    [Subject(typeof(WebhookService))]
     class When_updating_a_webhook
     {
         Establish context = () =>
         {
-            Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
             Webhook = Service.CreateAsync(WebhookCreation.CreateValidWebhook()).Await().AsTask.Result;
 
             //Preserve the original webhook address
@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests
             Service.DeleteAsync(Webhook.Id.Value).Await();
         };
 
-        static ShopifyWebhookService Service;
+        static WebhookService Service;
         static Webhook Webhook;
         static string OriginalAddress;
         static string NewPath = "/updated-address";

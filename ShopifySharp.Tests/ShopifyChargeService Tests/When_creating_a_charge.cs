@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyChargeService_Tests
 {
-    [Subject(typeof(ShopifyChargeService))]
+    [Subject(typeof(ChargeService))]
     class When_creating_a_charge
     {
         Establish context = () =>
         {
-            Service = new ShopifyChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
+            Service = new ChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             Charge = new Charge()
             {
                 Name = "Lorem Ipsum Single Charge",
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
             //Charges cannot be deleted.
         };
 
-        static ShopifyChargeService Service;
+        static ChargeService Service;
 
         static Charge Charge;
     }

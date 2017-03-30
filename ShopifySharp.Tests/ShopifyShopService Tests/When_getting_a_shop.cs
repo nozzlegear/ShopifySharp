@@ -4,12 +4,12 @@ using Machine.Specifications.Sdk;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyShopService), "Shop"), Tags("Shop")]
+    [Subject(typeof(ShopService), "Shop"), Tags("Shop")]
     public class When_getting_a_shop
     {
         Establish context = () =>
         {
-            _Service = new ShopifyShopService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new ShopService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -30,7 +30,7 @@ namespace ShopifySharp.Tests
 
         };
 
-        static ShopifyShopService _Service;
+        static ShopService _Service;
         static Shop _Shop;
     }
 }

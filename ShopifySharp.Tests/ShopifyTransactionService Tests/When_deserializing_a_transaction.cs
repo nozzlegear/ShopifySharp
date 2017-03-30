@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyThemeService_Tests
 {
-    [Subject(typeof(ShopifyTransactionService))]
+    [Subject(typeof(TransactionService))]
     class When_deserializing_a_transaction
     {
         Establish context = () =>

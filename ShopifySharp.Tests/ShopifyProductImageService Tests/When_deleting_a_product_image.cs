@@ -4,7 +4,7 @@ using System;
 
 namespace ShopifySharp.Tests.ShopifyProductImageService_Tests
 {
-    [Subject(typeof(ShopifyProductImageService))]
+    [Subject(typeof(ProductImageService))]
     class When_deleting_a_product_image
     {
         Establish context = () =>

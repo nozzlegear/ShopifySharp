@@ -3,13 +3,13 @@ using ShopifySharp.Tests.Test_Data;
 
 namespace ShopifySharp.Tests.Product
 {
-    [Subject(typeof(ShopifyProductService))]
+    [Subject(typeof(ProductService))]
     public class When_unpublishing_a_product
     {
         Establish context = () =>
         {
-            Service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Product = Service.CreateAsync(ProductCreation.CreateValidProducts(), new ShopifyProductCreateOptions() { Published = true }).Await().AsTask.Result;
+            Service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Product = Service.CreateAsync(ProductCreation.CreateValidProducts(), new ProductCreateOptions() { Published = true }).Await().AsTask.Result;
         };
 
         Because of = () =>
@@ -30,7 +30,7 @@ namespace ShopifySharp.Tests.Product
             }
         };
 
-        static ShopifyProductService Service;
+        static ProductService Service;
 
         static ShopifySharp.Product Product;
     }

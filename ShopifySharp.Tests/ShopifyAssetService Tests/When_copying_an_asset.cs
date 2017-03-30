@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 {
-    [Subject(typeof(ShopifyAssetService))]
+    [Subject(typeof(AssetService))]
     class When_copying_an_asset
     {
         Establish context = () =>
         {
-            Service = new ShopifyAssetService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
             ThemeId = AssetUtils.GetValidThemeId();
             OriginalAsset = Service.GetAsync(ThemeId, "templates/index.liquid").Await().AsTask.Result;
             AssetKey = "templates/test-index-copy.liquid";
@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
             Service.DeleteAsync(ThemeId, AssetKey).Await();
         };
 
-        static ShopifyAssetService Service;
+        static AssetService Service;
 
         static long ThemeId;
 

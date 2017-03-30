@@ -12,10 +12,10 @@ namespace ShopifySharp.Tests.MetaField
     {
         Establish context = () =>
         {
-            ProductService = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
             Product = ProductService.CreateAsync(ProductCreation.CreateValidProducts()).Await().AsTask.Result;
 
-            Service = new ShopifyMetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
             MetaField = Service.CreateAsync(MetaFieldCreation.CreateValidMetaField1(), Product.Id, "products").Await().AsTask.Result;
         };
 
@@ -34,11 +34,11 @@ namespace ShopifySharp.Tests.MetaField
             ProductService.DeleteAsync(Product.Id.Value).Await();
         };
 
-        static ShopifyMetaFieldService Service;
+        static MetaFieldService Service;
 
         static ShopifySharp.MetaField MetaField;
 
-        static ShopifyProductService ProductService;
+        static ProductService ProductService;
 
         static ShopifySharp.Product Product;
     }

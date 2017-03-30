@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
 {
-    [Subject(typeof(ShopifySmartCollectionService))]
+    [Subject(typeof(SmartCollectionService))]
     class When_updating_a_smart_collection
     {
         Establish context = () =>
@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests.ShopifySmartCollectionService_Tests
 
         static string UpdatedHtml = "<h2>Updated collection HTML</h2>";
 
-        static ShopifySmartCollectionService Service = new ShopifySmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        static SmartCollectionService Service = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         static SmartCollection Collection;
     }

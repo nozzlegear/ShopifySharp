@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Tests.ShopifyArticleService_Tests
 {
-    [Subject(typeof(ShopifyArticleService))]
+    [Subject(typeof(ArticleService))]
     class When_updating_an_article
     {
         Establish context = () =>

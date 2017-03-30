@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyEventService_Tests
 {
-    [Subject(typeof(ShopifyEventService))]
+    [Subject(typeof(EventService))]
     class When_listing_events
     {
         Establish context = () =>
         {
-            Service = new ShopifyEventService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
 
         };
 
-        static ShopifyEventService Service;        
+        static EventService Service;        
 
         static IEnumerable<ShopifyEvent> Events;
     }

@@ -51,7 +51,7 @@ namespace ShopifySharp
         public long Size { get; set; }
 
         /// <summary>
-        /// When set in an asset and used in <see cref="ShopifyAssetService.CreateOrUpdateAsync(long, Asset)"/>, 
+        /// When set in an asset and used in <see cref="AssetService.CreateOrUpdateAsync(long, Asset)"/>, 
         /// a new asset will be created and copied from an asset with the key matching this source key.
         /// </summary>
         [JsonProperty("source_key")]

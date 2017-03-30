@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(OrderService))]
     public class When_counting_orders
     {
         Establish context = () =>
         {
-            Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -30,7 +30,7 @@ namespace ShopifySharp.Tests
 
         };
 
-        static ShopifyOrderService Service;
+        static OrderService Service;
 
         static int? Result;
     }

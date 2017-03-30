@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Product
 {
-    [Subject(typeof(ShopifyProductService))]
+    [Subject(typeof(ProductService))]
     public class When_deleting_a_product
     {
         Establish context = () =>
         {
-            Service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Product = Service.CreateAsync(ProductCreation.CreateValidProducts(), new ShopifyProductCreateOptions() { Published = false }).Await().AsTask.Result;
+            Service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Product = Service.CreateAsync(ProductCreation.CreateValidProducts(), new ProductCreateOptions() { Published = false }).Await().AsTask.Result;
         };
 
         Because of = () =>
@@ -27,7 +27,7 @@ namespace ShopifySharp.Tests.Product
             //Passes if no exception was thrown.
         };
 
-        static ShopifyProductService Service;
+        static ProductService Service;
 
         static ShopifySharp.Product Product;
     }

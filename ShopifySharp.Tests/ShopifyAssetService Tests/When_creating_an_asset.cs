@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyAssetService_Tests
 {
-    [Subject(typeof(ShopifyAssetService))]
+    [Subject(typeof(AssetService))]
     class When_creating_an_asset
     {
         Establish context = () =>
         {
-            Service = new ShopifyAssetService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
             ThemeId = AssetUtils.GetValidThemeId();
             AssetKey = "templates/test.liquid";
             AssetValue = "<h1>Hello, world!</h1>";
@@ -45,7 +45,7 @@ namespace ShopifySharp.Tests.ShopifyAssetService_Tests
             Service.DeleteAsync(ThemeId, AssetKey).Await();
         };
 
-        static ShopifyAssetService Service;
+        static AssetService Service;
 
         static long ThemeId;
 

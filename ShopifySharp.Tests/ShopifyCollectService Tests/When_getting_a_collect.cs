@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 {
-    [Subject(typeof(ShopifyCollectService))]
+    [Subject(typeof(CollectService))]
     class When_getting_a_collect
     {
         Establish context = () =>
         {
-            Service = new ShopifyCollectService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
             Product = CollectCreation.CreateProduct().Await().AsTask.Result;
 
             Id = Service.CreateAsync(new Collect()
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
             CollectCreation.DeleteProduct(Product.Id.Value).Await();
         };
 
-        static ShopifyCollectService Service;
+        static CollectService Service;
 
         static Collect Collect;
 

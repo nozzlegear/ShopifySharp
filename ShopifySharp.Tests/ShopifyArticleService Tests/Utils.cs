@@ -5,7 +5,7 @@ namespace ShopifySharp.Tests.ShopifyArticleService_Tests
 {
     static class ArticleUtils
     {
-        public static ShopifyArticleService Service = new ShopifyArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public static ArticleService Service = new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public static string Title = "My new Article title - ";
 
@@ -24,7 +24,7 @@ namespace ShopifySharp.Tests.ShopifyArticleService_Tests
                 return BlogId.Value;
             }
 
-            var service = new ShopifyBlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
             var blogs = service.ListAsync().Result;
 
             BlogId = blogs.First().Id;

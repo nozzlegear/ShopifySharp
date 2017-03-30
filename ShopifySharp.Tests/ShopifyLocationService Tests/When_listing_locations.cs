@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyLocationService_Tests
 {
-    [Subject(typeof(ShopifyLocationService))]
+    [Subject(typeof(LocationService))]
     public class When_listing_locations
     {
         Establish context = () =>
         {
-            Service = new ShopifyLocationService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests.ShopifyLocationService_Tests
 
         };
 
-        static ShopifyLocationService Service;
+        static LocationService Service;
 
         static IEnumerable<Location> Result;
     }

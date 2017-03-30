@@ -4,8 +4,8 @@ using ShopifySharp.Enums;
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyOrderService.CountAsync(OrderFilter)"/> and
-    /// <see cref="ShopifyOrderService.ListAsync(OrderFilter)"/> results.
+    /// Options for filtering <see cref="OrderService.CountAsync(OrderFilter)"/> and
+    /// <see cref="OrderService.ListAsync(OrderFilter)"/> results.
     /// </summary>
     public class OrderFilter : ListFilter
     {

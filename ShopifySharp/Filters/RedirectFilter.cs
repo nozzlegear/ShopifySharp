@@ -3,7 +3,7 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyRedirectService.ListAsync(RedirectFilter)"/> results.
+    /// Options for filtering <see cref="RedirectService.ListAsync(RedirectFilter)"/> results.
     /// </summary>
     public class RedirectFilter : ListFilter
     {

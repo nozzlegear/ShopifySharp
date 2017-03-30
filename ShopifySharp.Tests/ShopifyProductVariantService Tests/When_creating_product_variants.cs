@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
 {
-    [Subject(typeof(ShopifyProductVariantService))]
+    [Subject(typeof(ProductVariantService))]
     class When_creating_product_variants
     {
         Establish context = () =>

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 {
-    [Subject(typeof(ShopifyRedirectService))]
+    [Subject(typeof(RedirectService))]
     class When_getting_a_redirect
     {
         Establish context = () =>
         {
-            Service = new ShopifyRedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             Id = Service.CreateAsync(new Redirect()
             {
@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
             Service.DeleteAsync(Id).Await();
         };
 
-        static ShopifyRedirectService Service;
+        static RedirectService Service;
 
         static Redirect Result;
 

@@ -7,12 +7,12 @@ using System.Threading;
 
 namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
 {
-    [Subject(typeof(ShopifyFulfillmentService))]
+    [Subject(typeof(FulfillmentService))]
     class When_counting_fulfillments_with_a_filter
     {
         Establish context = () =>
         {
-            Service = new ShopifyFulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
             Order = FulfillmentCreation.CreateOrder().Await().AsTask.Result;
 
             for (var i = 0; i < 2; i++)
@@ -45,7 +45,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
             FulfillmentCreation.DeleteOrder(Order.Id.Value).Await();
         };
 
-        static ShopifyFulfillmentService Service;
+        static FulfillmentService Service;
 
         static int Result;
 

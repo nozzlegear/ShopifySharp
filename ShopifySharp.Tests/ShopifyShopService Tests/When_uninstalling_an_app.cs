@@ -3,12 +3,12 @@ using System;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyShopService))]
+    [Subject(typeof(ShopService))]
     public class When_uninstalling_an_app
     {
         Establish context = () =>
         {
-            _Service = new ShopifyShopService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new ShopService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -27,6 +27,6 @@ namespace ShopifySharp.Tests
 
         };
 
-        static ShopifyShopService _Service;
+        static ShopService _Service;
     }
 }

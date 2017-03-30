@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 {
-    [Subject(typeof(ShopifyOrderRiskService))]
+    [Subject(typeof(OrderRiskService))]
     class When_listing_order_risks
     {
         Establish context = () =>
@@ -37,7 +37,7 @@ namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
 
         static long OrderId { get; set; }
 
-        static ShopifyOrderRiskService Service = new ShopifyOrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
+        static OrderRiskService Service = new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         static IEnumerable<OrderRisk> Risks;
     }

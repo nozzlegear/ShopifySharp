@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 {
-    [Subject(typeof(ShopifyScriptTagService))]
+    [Subject(typeof(ScriptTagService))]
     class When_counting_script_tags
     {
         Establish context = () =>
         {
-            Service = new ShopifyScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
             FilteredSrc = string.Format("https://nozzlegear.com/{0}/even.js", Guid.NewGuid().ToString());
 
             for (int i = 0; i < 5; i++)
@@ -53,7 +53,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
 
         static int FilteredCount;
 
-        static ShopifyScriptTagService Service;
+        static ScriptTagService Service;
 
         static List<ScriptTag> Tags = new List<ScriptTag>();
     }

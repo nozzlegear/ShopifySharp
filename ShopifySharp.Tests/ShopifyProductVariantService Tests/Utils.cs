@@ -8,7 +8,7 @@ namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
     {
         static long? ProductId { get; set; }
 
-        public static ShopifyProductVariantService Service = new ShopifyProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public static ProductVariantService Service = new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public static string Option1 { get; } = "blue";
         
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
                 return ProductId.Value;
             }
 
-            var service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
             var products = await service.ListAsync(new Filters.ProductFilter()
             {
                 Limit = 1,

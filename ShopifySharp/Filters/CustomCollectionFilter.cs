@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyCustomCollectionService"/> requests.
+    /// Options for filtering <see cref="CustomCollectionService"/> requests.
     /// </summary>
     public class CustomCollectionFilter : PublishableListFilter
     {

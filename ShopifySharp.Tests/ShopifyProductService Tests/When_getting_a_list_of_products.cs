@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Product
 {
-    [Subject(typeof(ShopifyProductService))]
+    [Subject(typeof(ProductService))]
     public class When_getting_a_list_of_products
     {
         Establish context = () =>
         {
-            Service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (var i = 0; i < 3; i++)
             {
-                var product = Service.CreateAsync(ProductCreation.CreateValidProducts(), new ShopifyProductCreateOptions()
+                var product = Service.CreateAsync(ProductCreation.CreateValidProducts(), new ProductCreateOptions()
                 {
                     Published = false
                 }).Await().AsTask.Result;
@@ -44,7 +44,7 @@ namespace ShopifySharp.Tests.Product
             }
         };
 
-        static ShopifyProductService Service;
+        static ProductService Service;
 
         static List<long> ProductIds = new List<long>();
 

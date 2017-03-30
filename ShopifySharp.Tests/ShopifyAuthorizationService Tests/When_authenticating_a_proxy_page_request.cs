@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyAuthorizationService_Tests
 {
-    [Subject(typeof(ShopifyAuthorizationService))]
+    [Subject(typeof(AuthorizationService))]
     class When_authenticating_a_proxy_page_request
     {
         Establish context = () =>
@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests.ShopifyAuthorizationService_Tests
 
         Because of = () =>
         {
-            IsValid = ShopifyAuthorizationService.IsAuthenticProxyRequest(RequestQuerystring, Utils.SecretKey);
+            IsValid = AuthorizationService.IsAuthenticProxyRequest(RequestQuerystring, Utils.SecretKey);
         };
 
         It should_authenticate_a_proxy_page_request = () =>

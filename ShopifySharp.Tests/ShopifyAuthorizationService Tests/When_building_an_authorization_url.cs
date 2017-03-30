@@ -8,7 +8,7 @@ using ShopifySharp.Enums;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyAuthorizationService))]
+    [Subject(typeof(AuthorizationService))]
     public class When_building_an_authorization_url
     {
         Establish context = () =>
@@ -22,7 +22,7 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            _Result = ShopifyAuthorizationService.BuildAuthorizationUrl(_Scopes, Utils.MyShopifyUrl, Utils.ApiKey);
+            _Result = AuthorizationService.BuildAuthorizationUrl(_Scopes, Utils.MyShopifyUrl, Utils.ApiKey);
         };
 
         It should_build_an_authorization_url = () =>

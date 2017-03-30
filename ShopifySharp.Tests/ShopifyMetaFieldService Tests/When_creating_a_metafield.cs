@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.MetaField
 {
-    [Subject(typeof(ShopifyMetaFieldService))]
+    [Subject(typeof(MetaFieldService))]
     public class When_creating_a_metafield
     {
         Establish context = () =>
         {
-            ProductService = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Service = new ShopifyMetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
+            ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -48,11 +48,11 @@ namespace ShopifySharp.Tests.MetaField
             }
         };
 
-        static ShopifyMetaFieldService Service;
+        static MetaFieldService Service;
 
         static ShopifySharp.MetaField MetaField;
 
-        static ShopifyProductService ProductService;
+        static ProductService ProductService;
 
         static ShopifySharp.Product Product;
     }

@@ -7,9 +7,9 @@ namespace ShopifySharp.Tests.Test_Data
     {
         public const string ImageFileName = "image-filename.jpg";
 
-        public static ShopifyProductService ProductService = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public static ProductService ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public static ShopifyProductImageService Service = new ShopifyProductImageService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public static ProductImageService Service = new ProductImageService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public static Task<ShopifySharp.Product> CreateParentProduct()
         {

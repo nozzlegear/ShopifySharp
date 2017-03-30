@@ -3,7 +3,7 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering the results of <see cref="ShopifyArticleService.ListAsync(long, ArticleFilter)"/>.
+    /// Options for filtering the results of <see cref="ArticleService.ListAsync(long, ArticleFilter)"/>.
     /// </summary>
     public class ArticleFilter : PublishableListFilter
     {

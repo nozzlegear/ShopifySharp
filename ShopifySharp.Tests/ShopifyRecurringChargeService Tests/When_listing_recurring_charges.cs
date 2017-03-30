@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
 {
-    [Subject(typeof(ShopifyRecurringChargeService))]
+    [Subject(typeof(RecurringChargeService))]
     class When_listing_recurring_charges
     {
         Establish context = () =>
@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             // NOTE: Creating a charge will fail if the access token used is for a private app. 
             // Only real apps can use the Shopify billing API.
 
-            Service = new ShopifyRecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
+            Service = new RecurringChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             ChargeId = Service.CreateAsync(new RecurringCharge()
             {
                 Name = "Lorem Ipsum Plan",
@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests.ShopifyRecurringChargeService_Tests
             //Charges must have an active status before they can be deleted. Shopify will automatically delete an inactive charge after 48 hours.
         };
 
-        static ShopifyRecurringChargeService Service;
+        static RecurringChargeService Service;
 
         static IEnumerable<RecurringCharge> Charges;
 

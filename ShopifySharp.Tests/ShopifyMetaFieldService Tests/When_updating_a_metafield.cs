@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.MetaField
 {
-    [Subject(typeof(ShopifyMetaFieldService))]
+    [Subject(typeof(MetaFieldService))]
     public class When_updating_a_metafield
     {
         Establish context = () =>
         {
-            ProductService = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Product = ProductService.CreateAsync(ProductCreation.CreateValidProducts(), new ShopifyProductCreateOptions() { Published = false }).Await().AsTask.Result;
+            ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Product = ProductService.CreateAsync(ProductCreation.CreateValidProducts(), new ProductCreateOptions() { Published = false }).Await().AsTask.Result;
 
-            Service = new ShopifyMetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
             MetaField = Service.CreateAsync(MetaFieldCreation.CreateValidMetaField2(), Product.Id, "products").Await().AsTask.Result;
         };
 
@@ -41,11 +41,11 @@ namespace ShopifySharp.Tests.MetaField
             }
         };
 
-        static ShopifyMetaFieldService Service;
+        static MetaFieldService Service;
 
         static ShopifySharp.MetaField MetaField;
 
-        static ShopifyProductService ProductService;
+        static ProductService ProductService;
 
         static ShopifySharp.Product Product;
     }

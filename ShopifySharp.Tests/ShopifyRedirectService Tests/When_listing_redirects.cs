@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 {
-    [Subject(typeof(ShopifyRedirectService))]
+    [Subject(typeof(RedirectService))]
     class When_listing_redirects
     {
         Establish context = () =>
         {
-            Service = new ShopifyRedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             for (int i = 0; i < 2; i++)
             {
@@ -45,7 +45,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
             }
         };
 
-        static ShopifyRedirectService Service;
+        static RedirectService Service;
 
         static List<Redirect> Created = new List<Redirect>();
 

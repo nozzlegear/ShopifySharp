@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 {
-    [Subject(typeof(ShopifyRedirectService))]
+    [Subject(typeof(RedirectService))]
     class When_listing_redirects_with_a_filter
     {
         Establish context = () =>
         {
-            Service = new ShopifyRedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
             FilteredTarget = "https://example.com/" + Guid.NewGuid().ToString();
             FilteredPath = Guid.NewGuid().ToString();
 
@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
             }
         };
 
-        static ShopifyRedirectService Service;
+        static RedirectService Service;
 
         static List<Redirect> Created = new List<Redirect>();
 

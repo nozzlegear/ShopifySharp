@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ShopifySharp.Tests.ShopifyBlogService_Tests
 {
-    [Subject(typeof(ShopifyBlogService))]
+    [Subject(typeof(BlogService))]
     public class When_updating_a_blog
     {
         Establish context = () =>

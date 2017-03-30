@@ -3,17 +3,17 @@ using ShopifySharp.Tests.Test_Data;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(OrderService))]
     public class When_cancelling_an_order_with_options
     {
         private Establish context = () =>
         {
             var order = OrderCreation.GenerateOrder();
 
-            Service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             Id = Service.CreateAsync(order).Await().AsTask.Result.Id.Value;
 
-            Options = new ShopifyOrderCancelOptions
+            Options = new OrderCancelOptions
             {
                 Reason = "customer"
             };
@@ -37,12 +37,12 @@ namespace ShopifySharp.Tests
             Service.DeleteAsync(Id).Await();
         };
 
-        static ShopifyOrderService Service;
+        static OrderService Service;
 
         static Order Order;
 
         static long Id;
 
-        static ShopifyOrderCancelOptions Options;
+        static OrderCancelOptions Options;
     }
 }

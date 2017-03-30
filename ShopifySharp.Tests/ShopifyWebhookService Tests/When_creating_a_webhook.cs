@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyWebhookService))]
+    [Subject(typeof(WebhookService))]
     class When_creating_a_webhook
     {
         Establish context = () =>
         {
-            Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
             ExampleWebhook = WebhookCreation.CreateValidWebhook(topic: "themes/publish");
         };
 
@@ -37,7 +37,7 @@ namespace ShopifySharp.Tests
             Service.DeleteAsync(Webhook.Id.Value).Await();
         };
 
-        static ShopifyWebhookService Service;
+        static WebhookService Service;
         static Webhook ExampleWebhook;
         static Webhook Webhook;
     }

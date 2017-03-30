@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyChargeService_Tests
 {
-    [Subject(typeof(ShopifyChargeService))]
+    [Subject(typeof(ChargeService))]
     class When_activating_a_charge
     {
         Establish context = () =>
@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
             // NOTE: Creating a charge will fail if the access token used is for a private app. 
             // Only real apps can use the Shopify billing API.
 
-            Service = new ShopifyChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
+            Service = new ChargeService(Utils.BillingMyShopifyUrl, Utils.BillingAccessToken);
             Charge = Service.CreateAsync(new Charge()
             {
                 Name = "Lorem Ipsum Single Charge",
@@ -44,7 +44,7 @@ namespace ShopifySharp.Tests.ShopifyChargeService_Tests
             //Charges cannot be deleted.
         };
 
-        static ShopifyChargeService Service;
+        static ChargeService Service;
 
         static Charge Charge;
     }

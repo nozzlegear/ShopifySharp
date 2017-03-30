@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyWebhookService))]
+    [Subject(typeof(WebhookService))]
     public class When_counting_webhooks_with_a_filter
     {
         Establish context = () =>
         {
-            Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             //Create one webhook with the original topic
             Webhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook()).Await().AsTask.Result);
@@ -48,7 +48,7 @@ namespace ShopifySharp.Tests
             }
         };
 
-        static ShopifyWebhookService Service;
+        static WebhookService Service;
         static int? AllCount;
         static int? FilteredCount;
         static string FilterTopic = "shop/update";

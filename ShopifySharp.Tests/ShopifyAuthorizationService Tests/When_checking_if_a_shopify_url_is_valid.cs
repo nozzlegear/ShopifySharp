@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Tests.ShopifyAuthorizationService_Tests
 {
-    [Subject(typeof(ShopifyAuthorizationService))]
+    [Subject(typeof(AuthorizationService))]
     class When_checking_if_a_shopify_url_is_valid
     {
         Establish context = () =>
@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests.ShopifyAuthorizationService_Tests
 
         Because of = () =>
         {
-            IsValid = ShopifyAuthorizationService.IsValidMyShopifyUrl("stages-test-shop-2.myshopify.com").Await().AsTask.Result;
+            IsValid = AuthorizationService.IsValidMyShopifyUrl("stages-test-shop-2.myshopify.com").Await().AsTask.Result;
         };
 
         It should_return_true = () =>

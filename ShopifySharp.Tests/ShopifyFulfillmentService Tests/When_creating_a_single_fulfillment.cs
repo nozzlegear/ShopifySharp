@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
 {
-    [Subject(typeof(ShopifyFulfillmentService))]
+    [Subject(typeof(FulfillmentService))]
     class When_creating_a_single_fulfillment
     {
         Establish context = () =>
         {
-            Service = new ShopifyFulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
             Order = FulfillmentCreation.CreateOrder().Await().AsTask.Result;
         };
 
@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
             FulfillmentCreation.DeleteOrder(Order.Id.Value).Await();
         };
 
-        static ShopifyFulfillmentService Service;
+        static FulfillmentService Service;
 
         static ShopifyFulfillment Fulfillment;
 

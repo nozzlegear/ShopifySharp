@@ -5,7 +5,7 @@ namespace ShopifySharp.Tests.ShopifyBlogService_Tests
 {
     static class BlogUtils
     {
-        public static ShopifyBlogService Service = new ShopifyBlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public static BlogService Service = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         /// <summary>
         /// The title use in <see cref="Blog"/>s created by <see cref="CreateBlog"/>. Note that the method will also append a random guid to the end of the title.

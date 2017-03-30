@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyArticleService_Tests
 {
-    [Subject(typeof(ShopifyArticleService))]
+    [Subject(typeof(ArticleService))]
     class When_listing_tags
     {
         Establish context = () =>

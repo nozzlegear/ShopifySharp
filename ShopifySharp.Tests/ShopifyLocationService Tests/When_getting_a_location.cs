@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyLocationService_Tests
 {
-    [Subject(typeof(ShopifyLocationService))]
+    [Subject(typeof(LocationService))]
     public class When_getting_a_location
     {
         Establish context = () =>
         {
-            Service = new ShopifyLocationService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             var list = Service.ListAsync().Await().AsTask.Result;
 
@@ -47,7 +47,7 @@ namespace ShopifySharp.Tests.ShopifyLocationService_Tests
 
         };
 
-        static ShopifyLocationService Service;
+        static LocationService Service;
 
         static Location Result;
 

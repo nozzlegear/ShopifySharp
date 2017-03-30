@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyAuthorizationService))]
+    [Subject(typeof(AuthorizationService))]
     class When_validating_shop_url
     {
         Establish context = () =>
@@ -17,8 +17,8 @@ namespace ShopifySharp.Tests
 
         Because of = () =>
         {
-            FirstUrlIsValid = ShopifyAuthorizationService.IsValidMyShopifyUrl(FirstUrl).Await().AsTask.Result;
-            SecondUrlIsValid = ShopifyAuthorizationService.IsValidMyShopifyUrl(SecondUrl).Await().AsTask.Result;
+            FirstUrlIsValid = AuthorizationService.IsValidMyShopifyUrl(FirstUrl).Await().AsTask.Result;
+            SecondUrlIsValid = AuthorizationService.IsValidMyShopifyUrl(SecondUrl).Await().AsTask.Result;
         };
 
         It should_validate_shop_url = () =>

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Product
 {
-    [Subject(typeof(ShopifyProductService))]
+    [Subject(typeof(ProductService))]
     public class When_creating_a_product
     {
         Establish context = () =>
         {
-            Service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests.Product
             }
         };
 
-        static ShopifyProductService Service;
+        static ProductService Service;
 
         static ShopifySharp.Product Product;
     }

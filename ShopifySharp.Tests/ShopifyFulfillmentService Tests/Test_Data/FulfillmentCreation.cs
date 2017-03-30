@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests.Test_Data
         public static async Task<Order> CreateOrder()
         {
             var order = OrderCreation.GenerateOrder();
-            var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             return await service.CreateAsync(order);
         }
@@ -69,7 +69,7 @@ namespace ShopifySharp.Tests.Test_Data
         /// </summary>
         public static async Task DeleteOrder(long id)
         {
-            var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             await service.DeleteAsync(id);
         }

@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
         public static async Task<Order> CreateOrder()
         {
             var order = Test_Data.OrderCreation.GenerateOrder();
-            var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             return await service.CreateAsync(order);
         }
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests.ShopifyTransactionService_Tests
         /// </summary>
         public static async Task DeleteOrder(long id)
         {
-            var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             await service.DeleteAsync(id);
         }

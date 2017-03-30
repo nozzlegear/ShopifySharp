@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyCustomerService))]
+    [Subject(typeof(CustomerService))]
     public class When_creating_a_customer_with_options
     {
         Establish context = () =>
         {
-            _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+            _Service = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
         };
 
         Because of = () =>
         {
-            _Result = _Service.CreateAsync(CustomerCreation.CreateValidCustomer(), new ShopifyCustomerCreateOptions()
+            _Result = _Service.CreateAsync(CustomerCreation.CreateValidCustomer(), new CustomerCreateOptions()
             {
                 Password = "loktarogar",
                 PasswordConfirmation = "loktarogar",
@@ -37,7 +37,7 @@ namespace ShopifySharp.Tests
             _Service.DeleteAsync(_Result.Id.Value).Await();
         };
 
-        static ShopifyCustomerService _Service;
+        static CustomerService _Service;
         static Customer _Result;
     }
 }

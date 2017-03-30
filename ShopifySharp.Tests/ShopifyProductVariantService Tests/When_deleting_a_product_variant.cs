@@ -3,7 +3,7 @@ using System;
 
 namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
 {
-    [Subject(typeof(ShopifyProductVariantService))]
+    [Subject(typeof(ProductVariantService))]
     class When_deleting_a_product_variant
     {
         Establish context = () =>

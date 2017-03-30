@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ShopifySharp.Tests.ShopifyProductImageService_Tests
 {
-    [Subject(typeof(ShopifyProductImageService))]
+    [Subject(typeof(ProductImageService))]
     class When_updating_product_images
     {
         Establish context = () =>

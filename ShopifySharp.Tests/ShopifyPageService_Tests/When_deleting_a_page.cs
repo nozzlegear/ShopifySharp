@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.Page
 {
-    [Subject(typeof(ShopifyPageService))]
+    [Subject(typeof(PageService))]
     public class When_deleting_a_page
     {
         Establish context = () =>
         {
-            Service = new ShopifyPageService(Utils.MyShopifyUrl, Utils.AccessToken);
-            Page = Service.CreateAsync(PageCreation.CreateValidPages(), new ShopifyPageCreateOptions() { Published = false }).Await().AsTask.Result;
+            Service = new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Page = Service.CreateAsync(PageCreation.CreateValidPages(), new PageCreateOptions() { Published = false }).Await().AsTask.Result;
         };
 
         Because of = () =>
@@ -27,7 +27,7 @@ namespace ShopifySharp.Tests.Page
             //Passes if no exception was thrown.
         };
 
-        static ShopifyPageService Service;
+        static PageService Service;
 
         static ShopifySharp.Page Page;
     }

@@ -2,12 +2,12 @@
 
 namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
 {
-    [Subject(typeof(ShopifyCustomCollectionService))]
+    [Subject(typeof(CustomCollectionService))]
     public class When_deleting_a_custom_collection
     {
         Establish context = () =>
         {
-            Service = new ShopifyCustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
             Collection = Service.CreateAsync(SubjectUtils.CreateValidObject()).Await().AsTask.Result;
         };
 
@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests.ShopifyCustomCollectionService_Tests
             
         };
 
-        static ShopifyCustomCollectionService Service;
+        static CustomCollectionService Service;
 
         static CustomCollection Collection;
     }

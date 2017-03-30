@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyWebhookService))]
+    [Subject(typeof(WebhookService))]
     public class When_listing_webhooks
     {
         Establish context = () =>
         {
-            Service = new ShopifyWebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+            Service = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
 
             // Create 4 webhooks to retrieve
             for(int i = 0; i < 4; i++)
@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests
         };
 
         static List<Webhook> CreatedWebhooks = new List<Webhook>();
-        static ShopifyWebhookService Service;
+        static WebhookService Service;
         static IEnumerable<Webhook> Result;
     }
 }
