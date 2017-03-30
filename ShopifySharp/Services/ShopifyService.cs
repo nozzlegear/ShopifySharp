@@ -89,11 +89,11 @@ namespace ShopifySharp
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid. 
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseRequest, HttpMethod method, HttpContent bodyContent = null)
+        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseRequest, HttpMethod method, HttpContent baseContent = null)
         {
-            return await _ExecutionPolicy.Run(baseRequest, bodyContent, async (request) =>
+            return await _ExecutionPolicy.Run(baseRequest, baseContent, async (request, content) =>
             {
-                var response = await request.SendAsync(method, bodyContent);
+                var response = await request.SendAsync(method, content);
                 var rawResult = await request.GetStringAsync();
 
                 //Check for and throw exception when necessary.
@@ -106,14 +106,26 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Executes a request and returns the given type. Throws an exception when the response is invalid. 
+        /// Executes a request and returns the given type. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseRequest, HttpMethod method, HttpContent bodyContent = null, string rootElement = null) where T : new()
+        /// <param name="baseRequest">
+        /// The request to be executed. Note that this request will be automatically disposed when the method returns.
+        /// </param>
+        /// <param name="method">
+        /// HTTP method to be used by the request.
+        /// </param>
+        /// <param name="baseContent">
+        /// Content that gets appended to the request body. Can be null. In most cases, you'll want to use <see cref="JsonContent"/>.
+        /// </param>
+        /// <remarks>
+        /// This method will automatically dispose the <paramref name="baseRequest"/> when finished.
+        /// </remarks>
+        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseRequest, HttpMethod method, HttpContent baseContent = null, string rootElement = null) where T : new()
         {
-            return await _ExecutionPolicy.Run<T>(baseRequest, bodyContent, async (request) =>
+            return await _ExecutionPolicy.Run<T>(baseRequest, baseContent, async (request, content) =>
             {
-                var response = await request.SendAsync(method, bodyContent);
+                var response = await request.SendAsync(method, content);
                 var rawResult = await request.GetStringAsync();
                 
                 //Check for and throw exception when necessary.
