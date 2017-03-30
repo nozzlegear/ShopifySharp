@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{833EC12B-956D-427B-A598-2F12B84589EF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShopifySharp</RootNamespace>
+    <AssemblyName>ShopifySharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\ShopifySharp.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Converters\FalseToNullConverter.cs" />
+    <Compile Include="Converters\NullableEnumConverter.cs" />
+    <Compile Include="Converters\NullToZeroConverter.cs" />
+    <Compile Include="Entities\ShopifyApplicationCredit.cs" />
+    <Compile Include="Entities\ShopifyArticle.cs" />
+    <Compile Include="Entities\ShopifyArticleImage.cs" />
+    <Compile Include="Entities\ShopifyAsset.cs" />
+    <Compile Include="Entities\ShopifyBlog.cs" />
+    <Compile Include="Entities\ShopifyCharge.cs" />
+    <Compile Include="Entities\ShopifyClientDetails.cs" />
+    <Compile Include="Entities\ShopifyCollect.cs" />
+    <Compile Include="Entities\ShopifyCustomCollection.cs" />
+    <Compile Include="Entities\ShopifyCustomCollectionImage.cs" />
+    <Compile Include="Entities\ShopifyRefundOrderAdjustment.cs" />
+    <Compile Include="Entities\ShopifyRefundLineItem.cs" />
+    <Compile Include="Entities\ShopifyRefund.cs" />
+    <Compile Include="Entities\ShopifyEvent.cs" />
+    <Compile Include="Entities\ShopifyLineItemProperty.cs" />
+    <Compile Include="Entities\ShopifyLocation.cs" />
+    <Compile Include="Entities\ShopifyNoteAttribute.cs" />
+    <Compile Include="Entities\ShopifyOrderRisk.cs" />
+    <Compile Include="Entities\ShopifyPage.cs" />
+    <Compile Include="Entities\ShopifyProduct.cs" />
+    <Compile Include="Entities\ShopifyDiscountCode.cs" />
+    <Compile Include="Entities\ShopifyFulfillment.cs" />
+    <Compile Include="Entities\ShopifyLineItem.cs" />
+    <Compile Include="Entities\ShopifyOrder.cs" />
+    <Compile Include="Entities\ShopifyPaymentDetails.cs" />
+    <Compile Include="Entities\ShopifyRedirect.cs" />
+    <Compile Include="Entities\ShopifySmartCollection.cs" />
+    <Compile Include="Entities\ShopifySmartCollectionImage.cs" />
+    <Compile Include="Entities\ShopifySmartCollectionRules.cs" />
+    <Compile Include="Entities\ShopifyTheme.cs" />
+    <Compile Include="Entities\ShopifyProductImage.cs" />
+    <Compile Include="Entities\ShopifyUsageCharge.cs" />
+    <Compile Include="Entities\ShopifyProductOption.cs" />
+    <Compile Include="Entities\ShopifyProductVariant.cs" />
+    <Compile Include="Entities\ShopifyRecurringCharge.cs" />
+    <Compile Include="Entities\ShopifyScriptTag.cs" />
+    <Compile Include="Entities\ShopifyShippingLine.cs" />
+    <Compile Include="Entities\ShopifyTaxLine.cs" />
+    <Compile Include="Entities\ShopifyTransaction.cs" />
+    <Compile Include="Entities\ShopifyWebhook.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Filters\ShopifyArticleFilter.cs" />
+    <Compile Include="Filters\ShopifyEventListFilter.cs" />
+    <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
+    <Compile Include="Filters\ShopifySmartCollectionFilter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Infrastructure\Policies\IRequestExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\Policies\RetryExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\Policies\DefaultRequestExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\Policies\SmartRetryExecutionPolicy.LeakyBucket.cs" />
+    <Compile Include="Infrastructure\Policies\SmartRetryExecutionPolicy.cs" />
+    <Compile Include="Infrastructure\RequestResult.cs" />
+    <Compile Include="Infrastructure\ShopifyRateLimitException.cs" />
+    <Compile Include="Serializers\JsonNetSerializer.cs" />
+    <Compile Include="Entities\ShopifyAddress.cs" />
+    <Compile Include="Entities\ShopifyCustomer.cs" />
+    <Compile Include="Entities\ShopifyMetaField.cs" />
+    <Compile Include="Entities\ShopifyObject.cs" />
+    <Compile Include="Entities\ShopifyShop.cs" />
+    <Compile Include="Infrastructure\Parameterizable.cs" />
+    <Compile Include="Infrastructure\RequestEngine.cs" />
+    <Compile Include="Infrastructure\ShopifyException.cs" />
+    <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
+    <Compile Include="Services\ApplicationCredit\ShopifyApplicationCreditService.cs" />
+    <Compile Include="Services\Article\ShopifyArticleService.cs" />
+    <Compile Include="Services\Asset\ShopifyAssetService.cs" />
+    <Compile Include="Services\Authorization\ShopifyAuthorizationService.cs" />
+    <Compile Include="Filters\ShopifyCollectFilter.cs" />
+    <Compile Include="Services\Blog\ShopifyBlogService.cs" />
+    <Compile Include="Services\Collect\ShopifyCollectService.cs" />
+    <Compile Include="Filters\ShopifyCustomCollectionFilter.cs" />
+    <Compile Include="Services\CustomCollection\ShopifyCustomCollectionService.cs" />
+    <Compile Include="Services\Customer\ShopifyCustomerUpdateOptions.cs" />
+    <Compile Include="Services\Event\ShopifyEventService.cs" />
+    <Compile Include="Services\Fulfillment\ShopifyFulfillmentService.cs" />
+    <Compile Include="Filters\ShopifyMetaFieldFilter.cs" />
+    <Compile Include="Services\MetaField\ShopifyMetaFieldService.cs" />
+    <Compile Include="Services\OrderRisk\ShopifyOrderRiskService.cs" />
+    <Compile Include="Services\Order\ShopifyOrderCancelOptions.cs" />
+    <Compile Include="Services\Page\ShopifyPageService.cs" />
+    <Compile Include="Filters\ShopifyPageFilter.cs" />
+    <Compile Include="Services\Page\ShopifyPageCreateOptions.cs" />
+    <Compile Include="Filters\ShopifyProductFilter.cs" />
+    <Compile Include="Services\ProductImage\ShopifyProductImageService.cs" />
+    <Compile Include="Services\ProductVariant\ShopifyProductVariantService.cs" />
+    <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
+    <Compile Include="Services\Product\ShopifyProductService.cs" />
+    <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />
+    <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
+    <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
+    <Compile Include="Services\Order\ShopifyOrderCreateOptions.cs" />
+    <Compile Include="Filters\ShopifyOrderFilter.cs" />
+    <Compile Include="Services\Order\ShopifyOrderService.cs" />
+    <Compile Include="Filters\ShopifyRedirectFilter.cs" />
+    <Compile Include="Filters\ShopifyScriptTagFilter.cs" />
+    <Compile Include="Services\ScriptTag\ShopifyScriptTagService.cs" />
+    <Compile Include="Filters\ShopifyCountFilter.cs" />
+    <Compile Include="Filters\ShopifyListFilter.cs" />
+    <Compile Include="Services\Redirect\ShopifyRedirectService.cs" />
+    <Compile Include="Filters\ShopifyPublishableListFilter.cs" />
+    <Compile Include="Services\Location\ShopifyLocationService.cs" />
+    <Compile Include="Services\ShopifyService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Shop\ShopifyShopService.cs" />
+    <Compile Include="Services\Charge\ShopifyChargeService.cs" />
+    <Compile Include="Services\SmartCollection\ShopifySmartCollectionService.cs" />
+    <Compile Include="Services\Theme\ShopifyThemeService.cs" />
+    <Compile Include="Services\Transaction\ShopifyTransactionService.cs" />
+    <Compile Include="Filters\ShopifyWebhookFilter.cs" />
+    <Compile Include="Services\UsageCharge\ShopifyUsageChargeService.cs" />
+    <Compile Include="Services\Webhook\ShopifyWebhookService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="ShopifySharp.nuspec" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
