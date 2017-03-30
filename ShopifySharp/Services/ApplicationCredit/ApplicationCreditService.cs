@@ -1,5 +1,6 @@
-﻿using RestSharp;
+﻿using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -22,14 +23,14 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
         public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(string fields = null)
         {
-            var req = RequestEngine.CreateRequest($"application_credits.json", Method.GET, "application_credits");
+            var req = PrepareRequest($"application_credits.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.AddQueryParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ApplicationCredit>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
         }
 
         /// <summary>
@@ -39,14 +40,14 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
         public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null)
         {
-            var req = RequestEngine.CreateRequest($"application_credits/{id}.json", Method.GET, "application_credit");
+            var req = PrepareRequest($"application_credits/{id}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.AddQueryParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ApplicationCredit>(_RestClient, req);
+            return await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Get, rootElement: "application_credit");
         }
 
         /// <summary>
@@ -55,11 +56,13 @@ namespace ShopifySharp
         /// <param name="credit">A new <see cref="ApplicationCredit"/>. Id should be set to null.</param>
         public virtual async Task<ApplicationCredit> CreateAsync(ApplicationCredit credit)
         {
-            var req = RequestEngine.CreateRequest($"application_credits.json", Method.POST, "application_credit");
+            var req = PrepareRequest($"application_credits.json");
+            var body = new JsonContent(new
+            {
+                application_credit = credit,
+            });
 
-            req.AddJsonBody(new { application_credit = credit });
-
-            return await RequestEngine.ExecuteRequestAsync<ApplicationCredit>(_RestClient, req);
+            return await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, body, "application_credit");
         }        
     }
 }
