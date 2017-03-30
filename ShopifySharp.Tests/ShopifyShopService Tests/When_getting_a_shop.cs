@@ -22,7 +22,7 @@ namespace ShopifySharp.Tests
         {
             _Shop.ShouldNotBeNull();
             _Shop.ForceSSL.HasValue.ShouldBeTrue();
-            string.IsNullOrEmpty(_Shop.DisplayPlanName).ShouldBeFalse();
+            string.IsNullOrEmpty(_Shop.PlanDisplayName).ShouldBeFalse();
         };
 
         Cleanup after = () =>

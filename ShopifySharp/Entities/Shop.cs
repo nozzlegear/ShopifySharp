@@ -139,7 +139,7 @@ namespace ShopifySharp
         /// The display name of the Shopify plan the shop is on.
         /// </summary>
         [JsonProperty("plan_display_name")]
-        public string DisplayPlanName { get; set; }
+        public string PlanDisplayName { get; set; }
 
         /// <summary>
         /// Indicates whether the Storefront password protection is enabled.
