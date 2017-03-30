@@ -1,13 +1,16 @@
-﻿using RestSharp;
+﻿using Flurl.Http;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
     public class DefaultRequestExecutionPolicy : IRequestExecutionPolicy
     {
-        public async Task<T> Run<T>(IRestClient client, IRestRequest request, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IFlurlClient request, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
-            return (await executeRequestAsync()).Result;
+            var fullResult = await executeRequestAsync(request, bodyContent);
+
+            return fullResult.Result;
         }
     }
 }

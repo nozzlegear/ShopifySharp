@@ -1,7 +1,8 @@
-﻿using RestSharp;
+﻿using Flurl.Http;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -23,14 +24,16 @@ namespace ShopifySharp
     public partial class SmartRetryExecutionPolicy : IRequestExecutionPolicy
     {
         private const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
+
         private const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
+
         private static readonly TimeSpan THROTTLE_DELAY = TimeSpan.FromMilliseconds(500);
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(IRestClient client, IRestRequest request, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IFlurlClient request, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
-            string accessToken = this.GetAccessToken(client);
+            string accessToken = this.GetAccessToken(request);
             LeakyBucket bucket = null;
 
             if (accessToken != null)
@@ -45,7 +48,7 @@ namespace ShopifySharp
             }
             try
             {
-                var requestResult = await executeRequestAsync();
+                var requestResult = await executeRequestAsync(request.Clone(), bodyContent);
                 int? bucketContentSize = this.GetBucketContentSize(requestResult.Response);
 
                 if (bucketContentSize != null)
@@ -68,20 +71,17 @@ namespace ShopifySharp
             }
         }
 
-        private string GetAccessToken(IRestClient client)
+        private string GetAccessToken(IFlurlClient client)
         {
-            return client.DefaultParameters
-                .SingleOrDefault(p => p.Type == ParameterType.HttpHeader && p.Name == REQUEST_HEADER_ACCESS_TOKEN)
-                ?.Value
-                ?.ToString();
+            var headerValues = client.HttpClient.DefaultRequestHeaders.GetValues(REQUEST_HEADER_ACCESS_TOKEN);
+
+            return headerValues.FirstOrDefault();
         }
 
-        private int? GetBucketContentSize(IRestResponse response)
+        private int? GetBucketContentSize(HttpResponseMessage response)
         {
-            string apiCallLimitHeaderValue = response.Headers
-                .FirstOrDefault(p => p.Name == RESPONSE_HEADER_API_CALL_LIMIT)
-                ?.Value
-                ?.ToString();
+            var headers = response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT);
+            var apiCallLimitHeaderValue = headers.Value?.FirstOrDefault();
 
             if (apiCallLimitHeaderValue != null)
             {
