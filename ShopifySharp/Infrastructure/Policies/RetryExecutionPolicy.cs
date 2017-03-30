@@ -14,21 +14,19 @@ namespace ShopifySharp
 
         public async Task<T> Run<T>(IFlurlClient request, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
-            RequestResult<T> fullResult = null;
-
-            while (fullResult == null)
+            while (true)
             {
                 try
                 {
-                    fullResult = await executeRequestAsync(request, bodyContent);
+                    var fullResult = await executeRequestAsync(request, bodyContent);
+
+                    return fullResult.Result;
                 }
                 catch (ShopifyRateLimitException)
                 {
                     await Task.Delay(RETRY_DELAY);
                 }
             }
-
-            return fullResult.Result;
         }
     }
 }

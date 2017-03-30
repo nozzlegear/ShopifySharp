@@ -33,7 +33,7 @@ namespace ShopifySharp
 
         public async Task<T> Run<T>(IFlurlClient request, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
-            string accessToken = this.GetAccessToken(request);
+            var accessToken = GetAccessToken(request);
             LeakyBucket bucket = null;
 
             if (accessToken != null)
@@ -41,33 +41,35 @@ namespace ShopifySharp
                 bucket = _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new LeakyBucket());
             }
 
-            Start:
-            if (accessToken != null)
+            while (true)
             {
-                await bucket.GrantAsync();
-            }
-            try
-            {
-                var requestResult = await executeRequestAsync(request.Clone(), bodyContent);
-                int? bucketContentSize = this.GetBucketContentSize(requestResult.Response);
-
-                if (bucketContentSize != null)
+                if (accessToken != null)
                 {
-                    bucket?.SetContentSize(bucketContentSize.Value);
+                    await bucket.GrantAsync();
                 }
 
-                return requestResult.Result;
-            }
-            catch (ShopifyRateLimitException)
-            {
-                //An exception may still occur:
-                //-Shopify may have a slightly different algorithm
-                //-Shopify may change to a different algorithm in the future
-                //-There may be timing and latency delays
-                //-Multiple programs may use the same access token
-                //-Multiple instance of the same program may use the same access token
-                await Task.Delay(THROTTLE_DELAY);
-                goto Start;
+                try
+                {
+                    var fullResult = await executeRequestAsync(request.Clone(), bodyContent);
+                    int? bucketContentSize = this.GetBucketContentSize(fullResult.Response);
+
+                    if (bucketContentSize != null)
+                    {
+                        bucket?.SetContentSize(bucketContentSize.Value);
+                    }
+
+                    return fullResult.Result;
+                }
+                catch (ShopifyRateLimitException)
+                {
+                    //An exception may still occur:
+                    //-Shopify may have a slightly different algorithm
+                    //-Shopify may change to a different algorithm in the future
+                    //-There may be timing and latency delays
+                    //-Multiple programs may use the same access token
+                    //-Multiple instance of the same program may use the same access token
+                    await Task.Delay(THROTTLE_DELAY);
+                }
             }
         }
 
