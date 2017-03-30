@@ -22,7 +22,7 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
             {
                 // Reach the rate limit of 40 requests per second
                 var tasks = Enumerable.Range(0, 45)
-                                      .Select(_ => Service.ListAsync(new ShopifyEventListFilter { Limit = 1 }));
+                                      .Select(_ => Service.ListAsync(new EventListFilter { Limit = 1 }));
                 Results = Task.WhenAll(tasks).Await().AsTask.Result;
             }
             catch (Exception e)

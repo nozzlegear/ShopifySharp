@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests.ShopifyOrderRiskService_Tests
         public static async Task<long> GetOrderId()
         {
             var service = new ShopifyOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var orders = await service.ListAsync(new Filters.ShopifyOrderFilter()
+            var orders = await service.ListAsync(new Filters.OrderFilter()
             {
                 Limit = 1,
                 Fields = "id"

@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering <see cref="ShopifyCustomCollectionService"/> requests.
     /// </summary>
-    public class ShopifyCustomCollectionFilter : ShopifyPublishableListFilter
+    public class CustomCollectionFilter : PublishableListFilter
     {
         /// <summary>
         /// Show smart collections with given title 

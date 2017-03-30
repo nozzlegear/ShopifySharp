@@ -28,7 +28,7 @@ namespace ShopifySharp.Tests
                 CreatedWebhooks.Add(Service.CreateAsync(WebhookCreation.CreateValidWebhook(topic: FilterTopic)).Await().AsTask.Result);
             }
 
-            Options = new ShopifyWebhookFilter()
+            Options = new WebhookFilter()
             {
                 Topic = FilterTopic
             };
@@ -58,6 +58,6 @@ namespace ShopifySharp.Tests
         static IEnumerable<Webhook> Result;
         static string FilterTopic = "shop/update";
         static List<Webhook> CreatedWebhooks = new List<Webhook>();
-        static ShopifyWebhookFilter Options;
+        static WebhookFilter Options;
     }
 }

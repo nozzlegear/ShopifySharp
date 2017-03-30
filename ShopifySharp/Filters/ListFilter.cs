@@ -8,7 +8,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// A generic class for filtering the results of a .ListAsync command.
     /// </summary>
-    public class ShopifyListFilter : ShopifyCountFilter
+    public class ListFilter : CountFilter
     {
         /// <summary>
         /// An optional array of order ids to retrieve. 

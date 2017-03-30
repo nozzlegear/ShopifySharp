@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">The <see cref="CustomCollection"/>. used to filter results</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(ShopifyCustomCollectionFilter filter = null)
+        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(CustomCollectionFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("/custom_collections.json", Method.GET, "custom_collections");
 
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// Gets a count of all of the custom collections
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
-        public virtual async Task<int> CountAsync(ShopifyCustomCollectionFilter options = null)
+        public virtual async Task<int> CountAsync(CustomCollectionFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("custom_collections/count.json", Method.GET, "count");
 

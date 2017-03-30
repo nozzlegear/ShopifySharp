@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the articles belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<Article>> ListAsync(long blogId, ShopifyArticleFilter filter = null)
+        public virtual async Task<IEnumerable<Article>> ListAsync(long blogId, ArticleFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"blogs/{blogId}/articles.json", Method.GET, "articles");
 
@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the articles belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(long blogId, ShopifyPublishableCountFilter filter = null)
+        public virtual async Task<int> CountAsync(long blogId, PublishableCountFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"blogs/{blogId}/articles/count.json", Method.GET, "count");
 

@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// A generic class for filtering the results of a .CountAsync command.
     /// </summary>
-    public class ShopifyEventListFilter : Parameterizable
+    public class EventListFilter : Parameterizable
     {
         /// <summary>
         /// Limit the amount of results. Default is 50, max is 250.

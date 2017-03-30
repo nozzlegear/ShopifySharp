@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// A generic class for filtering the results of a .CountAsync command.
     /// </summary>
-    public class ShopifyCountFilter : Parameterizable
+    public class CountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those created after date (format: 2008-12-31 03:00).

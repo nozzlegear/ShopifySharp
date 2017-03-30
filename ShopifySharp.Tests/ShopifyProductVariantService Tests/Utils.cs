@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests.ShopifyProductVariantService_Tests
             }
 
             var service = new ShopifyProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var products = await service.ListAsync(new Filters.ShopifyProductFilter()
+            var products = await service.ListAsync(new Filters.ProductFilter()
             {
                 Limit = 1,
                 Fields = "id"

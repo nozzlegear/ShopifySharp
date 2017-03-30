@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all orders for the shop.</returns>
-        public virtual async Task<int> CountAsync(ShopifyOrderFilter filter = null)
+        public virtual async Task<int> CountAsync(OrderFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders/count.json", Method.GET);
 
@@ -47,7 +47,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<Order>> ListAsync(ShopifyOrderFilter options = null)
+        public virtual async Task<IEnumerable<Order>> ListAsync(OrderFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.GET, "orders");
 
@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <param name="customerId">The id of the customer to list orders for.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, ShopifyOrderFilter options = null)
+        public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.GET, "orders");
 

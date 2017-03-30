@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Generic options for filtering objects that can be published (e.g. those with a PublishedAt, Published status).
     /// </summary>
-    public class ShopifyPublishableListFilter : ShopifyListFilter
+    public class PublishableListFilter : ListFilter
     {
         /// <summary>
         /// Show objects published after date (format: 2008-12-31 03:00).

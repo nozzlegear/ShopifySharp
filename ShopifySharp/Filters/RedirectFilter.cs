@@ -3,9 +3,9 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyRedirectService.ListAsync(ShopifyRedirectFilter)"/> results.
+    /// Options for filtering <see cref="ShopifyRedirectService.ListAsync(RedirectFilter)"/> results.
     /// </summary>
-    public class ShopifyRedirectFilter : ShopifyListFilter
+    public class RedirectFilter : ListFilter
     {
         /// <summary>
         /// An optional parameter that filters the result to redirects with the given path.

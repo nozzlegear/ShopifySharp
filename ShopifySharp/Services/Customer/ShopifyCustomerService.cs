@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Customer>> ListAsync(ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> ListAsync(ListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.GET, "customers");
 
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <param name="order">An optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
         /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
-        public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("customers/search.json", Method.GET, "customers");
             req.AddQueryParameter("query", query);

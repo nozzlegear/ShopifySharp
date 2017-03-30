@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyMetaFieldService.CountAsync(long?, string, ShopifyMetaFieldFilter)"/> and 
-    /// <see cref="ShopifyMetaFieldService.ListAsync(long?, string, ShopifyMetaFieldFilter)"/> results.
+    /// Options for filtering <see cref="ShopifyMetaFieldService.CountAsync(long?, string, MetaFieldFilter)"/> and 
+    /// <see cref="ShopifyMetaFieldService.ListAsync(long?, string, MetaFieldFilter)"/> results.
     /// </summary>
-    public class ShopifyMetaFieldFilter : ShopifyListFilter
+    public class MetaFieldFilter : ListFilter
     {
         /// <summary>
         /// Filter by namespace.

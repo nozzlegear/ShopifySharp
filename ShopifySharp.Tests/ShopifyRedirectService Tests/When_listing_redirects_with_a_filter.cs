@@ -31,12 +31,12 @@ namespace ShopifySharp.Tests.ShopifyRedirectService_Tests
 
         Because of = () =>
         {
-            TargetResult = Service.ListAsync(new ShopifyRedirectFilter()
+            TargetResult = Service.ListAsync(new RedirectFilter()
             {
                 Target = FilteredTarget
             }).Await().AsTask.Result;
 
-            PathResult = Service.ListAsync(new ShopifyRedirectFilter()
+            PathResult = Service.ListAsync(new RedirectFilter()
             {
                 Path = FilteredPath
             }).Await().AsTask.Result;

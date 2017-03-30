@@ -4,10 +4,10 @@ using ShopifySharp.Enums;
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyOrderService.CountAsync(ShopifyOrderFilter)"/> and
-    /// <see cref="ShopifyOrderService.ListAsync(ShopifyOrderFilter)"/> results.
+    /// Options for filtering <see cref="ShopifyOrderService.CountAsync(OrderFilter)"/> and
+    /// <see cref="ShopifyOrderService.ListAsync(OrderFilter)"/> results.
     /// </summary>
-    public class ShopifyOrderFilter : ShopifyListFilter
+    public class OrderFilter : ListFilter
     {
         /// <summary>
         /// The status of orders to retrieve. Known values are "open", "closed", "cancelled" and "any".

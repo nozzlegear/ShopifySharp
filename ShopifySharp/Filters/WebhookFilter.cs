@@ -4,9 +4,9 @@ using ShopifySharp.Enums;
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyWebhookService.ListAsync(ShopifyWebhookFilter)" /> results.
+    /// Options for filtering <see cref="ShopifyWebhookService.ListAsync(WebhookFilter)" /> results.
     /// </summary>
-    public class ShopifyWebhookFilter : ShopifyListFilter
+    public class WebhookFilter : ListFilter
     {
         /// <summary>
         /// An optional filter for the address property. When used, the method will only return webhooks with the given address.

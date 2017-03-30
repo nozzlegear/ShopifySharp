@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// Gets a count of all smart collections on the store.
         /// </summary>
         /// <param name="filterOptions">Options for filtering the count.</param>
-        public virtual async Task<int> CountAsync(ShopifySmartCollectionFilter filterOptions = null)
+        public virtual async Task<int> CountAsync(SmartCollectionFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest("smart_collections/count.json", Method.GET, "count");
 
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 smart collections.
         /// </summary>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<SmartCollection>> ListAsync(ShopifySmartCollectionFilter filterOptions = null)
+        public virtual async Task<IEnumerable<SmartCollection>> ListAsync(SmartCollectionFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest($"smart_collections.json", Method.GET, "smart_collections");
 

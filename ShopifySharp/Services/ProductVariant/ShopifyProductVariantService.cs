@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ShopifyListFilter filterOptions = null)
+        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ListFilter filterOptions = null)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/variants.json", Method.GET, "variants");
 

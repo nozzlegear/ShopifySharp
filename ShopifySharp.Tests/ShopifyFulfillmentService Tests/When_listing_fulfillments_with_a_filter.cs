@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
 
         Because of = () =>
         {
-            Result = Service.ListAsync(Order.Id.Value, new ShopifyListFilter()
+            Result = Service.ListAsync(Order.Id.Value, new ListFilter()
             {
                 SinceId = Created.First().Id.Value
             }).Await().AsTask.Result;

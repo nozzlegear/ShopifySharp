@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests.ShopifyFulfillmentService_Tests
 
         Because of = () =>
         {
-            Result = Service.CountAsync(Order.Id.Value, new ShopifyCountFilter()
+            Result = Service.CountAsync(Order.Id.Value, new CountFilter()
             {
                 CreatedAtMin = Created.Last().CreatedAt
             }).Await().AsTask.Result;

@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all fulfillments for the shop.</returns>
-        public virtual async Task<int> CountAsync(long orderId, ShopifyCountFilter filter = null)
+        public virtual async Task<int> CountAsync(long orderId, CountFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments/count.json", Method.GET);
 
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of fulfillments matching the filter.</returns>
-        public virtual async Task<IEnumerable<ShopifyFulfillment>> ListAsync(long orderId, ShopifyListFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyFulfillment>> ListAsync(long orderId, ListFilter options = null)
         {
             var req = RequestEngine.CreateRequest($"orders/{orderId}/fulfillments.json", Method.GET, "fulfillments");
 

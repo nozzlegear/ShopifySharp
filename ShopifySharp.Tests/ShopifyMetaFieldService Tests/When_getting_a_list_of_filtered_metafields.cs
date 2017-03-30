@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests.MetaField
 
         Because of = () =>
         {
-            MetaFields = Service.ListAsync(Product.Id, "products", new ShopifyMetaFieldFilter() { Namespace = "testing" }).Await().AsTask.Result;
+            MetaFields = Service.ListAsync(Product.Id, "products", new MetaFieldFilter() { Namespace = "testing" }).Await().AsTask.Result;
         };
 
         It should_list_metafields_with_specific_namespace = () =>

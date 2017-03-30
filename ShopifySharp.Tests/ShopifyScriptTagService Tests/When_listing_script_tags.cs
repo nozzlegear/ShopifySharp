@@ -30,7 +30,7 @@ namespace ShopifySharp.Tests.ShopifyScriptTagService_Tests
         Because of = () =>
         {
             Tags = Service.ListAsync().Await().AsTask.Result;
-            FilteredTags = Service.ListAsync(new ShopifyScriptTagFilter() {
+            FilteredTags = Service.ListAsync(new ScriptTagFilter() {
                 Src = FilteredSrc
             }).Await().AsTask.Result;
         };

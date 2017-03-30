@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of webhooks matching the filter.</returns>
-        public virtual async Task<IEnumerable<Webhook>> ListAsync(ShopifyWebhookFilter filter = null)
+        public virtual async Task<IEnumerable<Webhook>> ListAsync(WebhookFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.GET, "webhooks");
 

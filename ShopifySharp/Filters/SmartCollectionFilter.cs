@@ -3,9 +3,9 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// An object for filtering the results of <see cref="ShopifySmartCollectionService.CountAsync(ShopifySmartCollectionFilter)"/> and <see cref="ShopifySmartCollectionService.ListAsync(ShopifySmartCollectionFilter)"/>.
+    /// An object for filtering the results of <see cref="ShopifySmartCollectionService.CountAsync(SmartCollectionFilter)"/> and <see cref="ShopifySmartCollectionService.ListAsync(SmartCollectionFilter)"/>.
     /// </summary>
-    public class ShopifySmartCollectionFilter : ShopifyPublishableListFilter
+    public class SmartCollectionFilter : PublishableListFilter
     {
         /// <summary>
         /// Filter to smart collections with the given title.

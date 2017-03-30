@@ -15,7 +15,7 @@ namespace ShopifySharp.Tests
         Establish context = () =>
         {
             _Service = new ShopifyCustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
-            _Options = new ShopifyListFilter()
+            _Options = new ListFilter()
             {
                 Limit = _Limit
             };
@@ -48,7 +48,7 @@ namespace ShopifySharp.Tests
         static List<Customer> _CreatedCustomers = new List<Customer>();
         static int _Limit = 1;
         static ShopifyCustomerService _Service;
-        static ShopifyListFilter _Options;
+        static ListFilter _Options;
         static IEnumerable<Customer> _Result;
     }
 }

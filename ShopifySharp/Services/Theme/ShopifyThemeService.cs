@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Theme>> ListAsync(ShopifyListFilter filter = null)
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ListFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.GET, "themes");
 

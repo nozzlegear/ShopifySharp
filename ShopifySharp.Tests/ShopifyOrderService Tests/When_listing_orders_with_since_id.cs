@@ -25,7 +25,7 @@ namespace ShopifySharp.Tests
 
             SinceId = CreatedIds[2];
 
-            Options = new ShopifyOrderFilter()
+            Options = new OrderFilter()
             {
                 SinceId = SinceId
             };            
@@ -56,7 +56,7 @@ namespace ShopifySharp.Tests
 
         static IEnumerable<Order> Result;
 
-        static ShopifyOrderFilter Options;
+        static OrderFilter Options;
 
         static List<long> CreatedIds = new List<long>();
     }

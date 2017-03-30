@@ -11,7 +11,7 @@ namespace ShopifySharp.Tests.ShopifyEventService_Tests
         Establish context = () =>
         {
             Service = new ShopifyEventService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var list = Service.ListAsync(new ShopifyEventListFilter()
+            var list = Service.ListAsync(new EventListFilter()
             {
                 Limit = 1
             }).Await().AsTask.Result;           

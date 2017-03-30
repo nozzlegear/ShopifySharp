@@ -3,10 +3,10 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyPageService.CountAsync(ShopifyPageFilter)"/> and 
-    /// <see cref="ShopifyPageService.ListAsync(ShopifyPageFilter)"/> results.
+    /// Options for filtering <see cref="ShopifyPageService.CountAsync(PageFilter)"/> and 
+    /// <see cref="ShopifyPageService.ListAsync(PageFilter)"/> results.
     /// </summary>
-    public class ShopifyPageFilter : ShopifyPublishableListFilter
+    public class PageFilter : PublishableListFilter
     {
         /// <summary>
         /// Filter by page title.

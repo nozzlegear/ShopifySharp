@@ -3,9 +3,9 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyCollectService.ListAsync(ShopifyCollectFilter)"/> results.
+    /// Options for filtering <see cref="ShopifyCollectService.ListAsync(CollectFilter)"/> results.
     /// </summary>
-    public class ShopifyCollectFilter : ShopifyListFilter
+    public class CollectFilter : ListFilter
     {
         /// <summary>
         /// An optional product id to retrieve. 

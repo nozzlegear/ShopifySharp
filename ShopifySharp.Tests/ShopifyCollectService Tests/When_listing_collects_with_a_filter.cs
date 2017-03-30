@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests.ShopifyCollectService_Tests
 
         Because of = () =>
         {
-            Result = Service.ListAsync(new ShopifyCollectFilter()
+            Result = Service.ListAsync(new CollectFilter()
             {
                 ProductId = Products[0].Id.Value
             }).Await().AsTask.Result;

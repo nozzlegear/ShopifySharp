@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Supports CreatedAtMin and CreatedAtMax Properties</param>
         /// <returns>The count of all site events.</returns>
-        public virtual async Task<int> CountAsync(ShopifyCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CountFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("events/count.json", Method.GET);
 
@@ -67,7 +67,7 @@ namespace ShopifySharp
         /// <param name="options">Options for filtering the result.</param>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(long subjectId, string subjectType, ShopifyEventListFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(long subjectId, string subjectType, EventListFilter options = null)
         {
             // Ensure the subject type is plural
             if (! subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
@@ -90,7 +90,7 @@ namespace ShopifySharp
         /// Returns a list of events.
         /// </summary>
         /// <param name="options">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(ShopifyEventListFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(EventListFilter options = null)
         {
             var req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
             

@@ -50,7 +50,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<ScriptTag>> ListAsync(ShopifyScriptTagFilter filter = null)
+        public virtual async Task<IEnumerable<ScriptTag>> ListAsync(ScriptTagFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.GET, "script_tags");
 

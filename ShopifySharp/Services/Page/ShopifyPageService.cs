@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's pages.
         /// </summary>
         /// <returns>The count of all pages for the shop.</returns>
-        public virtual async Task<int> CountAsync(ShopifyPageFilter filter = null)
+        public virtual async Task<int> CountAsync(PageFilter filter = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages/count.json", Method.GET);
 
@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Page>> ListAsync(ShopifyPageFilter options = null)
+        public virtual async Task<IEnumerable<Page>> ListAsync(PageFilter options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.GET, "pages");
 

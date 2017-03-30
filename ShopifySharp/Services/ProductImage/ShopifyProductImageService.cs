@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="filter">An optional filter that restricts the results.</param>
         /// <returns>The count of all ProductImages for the shop.</returns>
-        public virtual async Task<int> CountAsync(long productId, ShopifyPublishableCountFilter filter = null)
+        public virtual async Task<int> CountAsync(long productId, PublishableCountFilter filter = null)
         {
             var req = RequestEngine.CreateRequest($"products/{productId}/images/count.json", Method.GET);
 

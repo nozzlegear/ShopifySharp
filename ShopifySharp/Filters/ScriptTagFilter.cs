@@ -3,9 +3,9 @@
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="ShopifyScriptTagService.ListAsync(ShopifyScriptTagFilter)"/> results.
+    /// Options for filtering <see cref="ShopifyScriptTagService.ListAsync(ScriptTagFilter)"/> results.
     /// </summary>
-    public class ShopifyScriptTagFilter : ShopifyListFilter
+    public class ScriptTagFilter : ListFilter
     {
         /// <summary>
         /// Returns only those <see cref="ScriptTag"/>s with the given <see cref="ScriptTag.Src"/> value.
