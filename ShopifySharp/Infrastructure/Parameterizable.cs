@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
+﻿using Flurl;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -16,12 +13,11 @@ namespace ShopifySharp
     public abstract class Parameterizable
     {
         /// <summary>
-        /// Converts the object to an array of RestSharp parameters.
+        /// Converts the object to an array of Flurl query parameters.
         /// </summary>
-        /// <returns>The array of RestSharp parameters.</returns>
-        public IEnumerable<Parameter> ToParameters(ParameterType type)
+        public IEnumerable<QueryParameter> ToParameters()
         {
-            List<Parameter> output = new List<Parameter>();
+            var output = new List<QueryParameter>();
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
             foreach (PropertyInfo property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -42,7 +38,7 @@ namespace ShopifySharp
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
 
-                var parameter = ToSingleParameter(propName, value, property, type);
+                var parameter = ToSingleParameter(propName, value, property);
 
                 output.Add(parameter);
             }
@@ -51,7 +47,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Converts the given property and value to a parameter. Can be overriden to customize parameterization of a property. 
+        /// Converts the given property and value to a Flurl query parameter. Can be overriden to customize parameterization of a property. 
         /// Will NOT be called by the <see cref="Parameterizable.ToParameters(ParameterType)"/> method if the value 
         /// is null.
         /// </summary>
@@ -59,9 +55,8 @@ namespace ShopifySharp
         /// rather than the real property name — where applicable. Use <paramref name="property"/>.Name to get the real name.</param>
         /// <param name="value">The property's value.</param>
         /// <param name="property">The property itself.</param>
-        /// <param name="type">The type of parameter to create.</param>
         /// <returns>The new parameter.</returns>
-        public virtual Parameter ToSingleParameter(string propName, object value, PropertyInfo property, ParameterType type)
+        public virtual QueryParameter ToSingleParameter(string propName, object value, PropertyInfo property)
         {
             Type valueType = value.GetType();
 
@@ -76,12 +71,7 @@ namespace ShopifySharp
                 value = ((DateTime)value).ToString("o");
             }
 
-            return new Parameter()
-            {
-                Name = propName,
-                Value = value,
-                Type = type
-            };
+            return new QueryParameter(propName, value);
         }
     }
 }
