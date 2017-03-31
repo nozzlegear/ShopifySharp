@@ -31,12 +31,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
+        /// Attempts to build a shop API <see cref="Uri"/> for the given shop. Will throw a <see cref="ShopifyException"/> if the URL cannot be formatted.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <exception cref="ShopifyException">Thrown if the given URL cannot be converted into a well-formed URI.</exception>
         /// <returns>The shop's API <see cref="Uri"/>.</returns>
-        protected Uri BuildShopUri(string myShopifyUrl)
+        public static Uri BuildShopUri(string myShopifyUrl)
         {
             if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
             {
@@ -46,13 +46,11 @@ namespace ShopifySharp
                 {
                     throw new ShopifyException($"The given {nameof(myShopifyUrl)} cannot be converted into a well-formed URI.");
                 }
-                else
-                {
-                    myShopifyUrl = Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl;
-                }
+
+                myShopifyUrl = Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl;
             }
 
-            UriBuilder builder = new UriBuilder(myShopifyUrl)
+            var builder = new UriBuilder(myShopifyUrl)
             {
                 Path = "admin/",
                 Scheme = Uri.UriSchemeHttps,
@@ -89,12 +87,13 @@ namespace ShopifySharp
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid. 
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseRequest, HttpMethod method, HttpContent baseContent = null)
+        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseClient, HttpMethod method, HttpContent baseContent = null)
         {
-            return await _ExecutionPolicy.Run(baseRequest, baseContent, async (request, content) =>
+            return await _ExecutionPolicy.Run(baseClient, baseContent, async (client, content) =>
             {
-                var response = await request.SendAsync(method, content);
-                var rawResult = await request.GetStringAsync();
+                var request = client.SendAsync(method, content);
+                var response = await request;
+                var rawResult = await request.ReceiveString();
 
                 //Check for and throw exception when necessary.
                 CheckResponseExceptions(response, rawResult);
@@ -109,7 +108,7 @@ namespace ShopifySharp
         /// Executes a request and returns the given type. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        /// <param name="baseRequest">
+        /// <param name="baseClient">
         /// The request to be executed. Note that this request will be automatically disposed when the method returns.
         /// </param>
         /// <param name="method">
@@ -119,14 +118,15 @@ namespace ShopifySharp
         /// Content that gets appended to the request body. Can be null. In most cases, you'll want to use <see cref="JsonContent"/>.
         /// </param>
         /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseRequest"/> when finished.
+        /// This method will automatically dispose the <paramref name="baseClient"/> when finished.
         /// </remarks>
-        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseRequest, HttpMethod method, HttpContent baseContent = null, string rootElement = null) where T : new()
+        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseClient, HttpMethod method, HttpContent baseContent = null, string rootElement = null) where T : new()
         {
-            return await _ExecutionPolicy.Run<T>(baseRequest, baseContent, async (request, content) =>
+            return await _ExecutionPolicy.Run<T>(baseClient, baseContent, async (client, content) =>
             {
-                var response = await request.SendAsync(method, content);
-                var rawResult = await request.GetStringAsync();
+                var request = client.SendAsync(method, content);
+                var response = await request;
+                var rawResult = await request.ReceiveString();
                 
                 //Check for and throw exception when necessary.
                 CheckResponseExceptions(response, rawResult);
