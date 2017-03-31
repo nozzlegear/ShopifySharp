@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
-using ShopifySharp.Enums;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -15,19 +12,13 @@ namespace ShopifySharp
     /// </summary>
     public class WebhookService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="WebhookService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public WebhookService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's webhooks.
         /// </summary>
@@ -36,16 +27,19 @@ namespace ShopifySharp
         /// <returns>The count of all webhooks for the shop.</returns>
         public virtual async Task<int> CountAsync(string address = null, string topic = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("webhooks/count.json", Method.GET);
+            var req = PrepareRequest("webhooks/count.json");
 
-            //Add optional parameters to request
-            if (string.IsNullOrEmpty(address) == false) req.AddParameter("address", address);
-            if (!string.IsNullOrEmpty(topic)) req.AddParameter("topic", topic);
+            if (!string.IsNullOrEmpty(address))
+            {
+                req.Url.QueryParams.Add("address", address);
+            }
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            if (!string.IsNullOrEmpty(topic))
+            {
+                req.Url.QueryParams.Add("topic", topic);
+            }
 
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -55,12 +49,14 @@ namespace ShopifySharp
         /// <returns>The list of webhooks matching the filter.</returns>
         public virtual async Task<IEnumerable<Webhook>> ListAsync(WebhookFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.GET, "webhooks");
+            var req = PrepareRequest("webhooks.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Webhook>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
         }
 
         /// <summary>
@@ -71,14 +67,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.GET, "webhook");
+            var req = PrepareRequest($"webhooks/{webhookId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Webhook>(_RestClient, req);
+            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");
         }
 
         /// <summary>
@@ -88,12 +84,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> CreateAsync(Webhook webhook)
         {
-            IRestRequest req = RequestEngine.CreateRequest("webhooks.json", Method.POST, "webhook");
+            var req = PrepareRequest("webhooks.json");
+            var content = new JsonContent(new
+            {
+                webhook = webhook
+            });
 
-            //Build the request body
-            req.AddJsonBody(new { webhook });
-
-            return await RequestEngine.ExecuteRequestAsync<Webhook>(_RestClient, req);
+            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook");
         }
 
         /// <summary>
@@ -103,11 +100,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> UpdateAsync(Webhook webhook)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhook.Id.Value}.json", Method.PUT, "webhook");
+            var req = PrepareRequest($"webhooks/{webhook.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                webhook = webhook
+            });
 
-            req.AddJsonBody(new { webhook });
-
-            return await RequestEngine.ExecuteRequestAsync<Webhook>(_RestClient, req);
+            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook");
         }
 
         /// <summary>
@@ -116,11 +115,9 @@ namespace ShopifySharp
         /// <param name="webhookId">The order object's Id.</param>
         public virtual async Task DeleteAsync(long webhookId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"webhooks/{webhookId}.json", Method.DELETE);
+            var req = PrepareRequest($"webhooks/{webhookId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

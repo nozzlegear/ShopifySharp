@@ -1,7 +1,8 @@
-﻿using RestSharp;
+﻿using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -23,9 +24,9 @@ namespace ShopifySharp
         /// <param name="productId">The product that the variants belong to.</param>
         public virtual async Task<int> CountAsync(long productId)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/variants/count.json", Method.GET, "count");            
+            var req = PrepareRequest($"products/{productId}/variants/count.json");            
 
-            return await RequestEngine.ExecuteRequestAsync<int>(_RestClient, req);
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -35,14 +36,14 @@ namespace ShopifySharp
         /// <param name="filterOptions">Options for filtering the result.</param>
         public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ListFilter filterOptions = null)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/variants.json", Method.GET, "variants");
+            var req = PrepareRequest($"products/{productId}/variants.json");
 
             if (filterOptions != null)
             {
-                req.Parameters.AddRange(filterOptions.ToParameters(ParameterType.GetOrPost));
+                req.Url.QueryParams.AddRange(filterOptions.ToParameters());
             }
             
-            return await RequestEngine.ExecuteRequestAsync<List<ProductVariant>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
         }
         
         /// <summary>
@@ -51,9 +52,9 @@ namespace ShopifySharp
         /// <param name="variantId">The id of the product variant to retrieve.</param>
         public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
-            var req = RequestEngine.CreateRequest($"variants/{variantId}.json", Method.GET, "variant");
+            var req = PrepareRequest($"variants/{variantId}.json");
             
-            return await RequestEngine.ExecuteRequestAsync<ProductVariant>(_RestClient, req);
+            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
         }
         
         /// <summary>
@@ -63,11 +64,13 @@ namespace ShopifySharp
         /// <param name="variant">A new <see cref="ProductVariant"/>. Id should be set to null.</param>
         public virtual async Task<ProductVariant> CreateAsync(long productId, ProductVariant variant)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/variants.json", Method.POST, "variant");
-
-            req.AddJsonBody(new { variant });
+            var req = PrepareRequest($"products/{productId}/variants.json");
+            var content = new JsonContent(new
+            {
+                variant = variant
+            });
             
-            return await RequestEngine.ExecuteRequestAsync<ProductVariant>(_RestClient, req);
+            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
         }
 
         /// <summary>
@@ -76,11 +79,13 @@ namespace ShopifySharp
         /// <param name="variant">The variant to update.</param>
         public virtual async Task<ProductVariant> UpdateAsync(ProductVariant variant)
         {
-            var req = RequestEngine.CreateRequest($"variants/{variant.Id.Value}.json", Method.PUT, "variant");
+            var req = PrepareRequest($"variants/{variant.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                variant = variant
+            });
 
-            req.AddJsonBody(new { variant });
-
-            return await RequestEngine.ExecuteRequestAsync<ProductVariant>(_RestClient, req);
+            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant");
         }
 
         /// <summary>
@@ -90,9 +95,9 @@ namespace ShopifySharp
         /// <param name="variantId">The product variant's id.</param>
         public virtual async Task DeleteAsync(long productId, long variantId)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/variants/{variantId}.json", Method.DELETE);
+            var req = PrepareRequest($"products/{productId}/variants/{variantId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
     }
 }

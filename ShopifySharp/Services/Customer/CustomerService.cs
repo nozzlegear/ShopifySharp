@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,30 +12,22 @@ namespace ShopifySharp
     /// </summary>
     public class CustomerService: ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="CustomerService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CustomerService(string myShopifyUrl, string shopAccessToken): base (myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's customers.
         /// </summary>
         /// <returns>The count of all customers for the shop.</returns>
         public virtual async Task<int> CountAsync()
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/count.json", Method.GET);
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            var req = PrepareRequest("customers/count.json");
+            
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -46,12 +36,14 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<IEnumerable<Customer>> ListAsync(ListFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.GET, "customers");
+            var req = PrepareRequest("customers.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Customer>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
         }
 
         /// <summary>
@@ -62,32 +54,39 @@ namespace ShopifySharp
         /// <returns>The <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> GetAsync(long customerId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.GET, "customer");
+            var req = PrepareRequest($"customers/{customerId}.json");
 
             if(string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Customer>(_RestClient, req);
+            return await ExecuteRequestAsync<Customer>(req, HttpMethod.Get, rootElement: "customer");
         }
 
         /// <summary>
-        /// Searches through a shop's customers for the given search query. 
+        /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
-        /// <param name="query">The search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
-        /// <param name="order">An optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
+        /// <param name="query">The (unencoded) search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
+        /// <param name="order">An (unencoded) optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
         /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
         public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ListFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers/search.json", Method.GET, "customers");
-            req.AddQueryParameter("query", query);
+            var req = PrepareRequest("customers/search.json");
+            req.Url.QueryParams.Add("query", query, false);
 
-            if (string.IsNullOrEmpty(order) == false) req.AddQueryParameter("order", order);
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.QueryString));
+            if (! string.IsNullOrEmpty(order))
+            {
+                req.Url.QueryParams.Add("order", order, false);
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Customer>>(_RestClient, req);
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
+
+            return await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
         }
 
         /// <summary>
@@ -98,23 +97,23 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> CreateAsync(Customer customer, CustomerCreateOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("customers.json", Method.POST, "customer");
-
-            var customerBody = customer.ToDictionary();
+            var req = PrepareRequest("customers.json");
+            var body = customer.ToDictionary();
 
             if (options != null)
             {
                 foreach (var keyValuePair in options.ToDictionary())
                 {
-                    customerBody.Add(keyValuePair);
+                    body.Add(keyValuePair);
                 }
             }
 
-            var requestBody = new { customer = customerBody };
+            var content = new JsonContent(new
+            {
+                customer = body
+            });
 
-            req.AddJsonBody(requestBody);
-
-            return await RequestEngine.ExecuteRequestAsync<Customer>(_RestClient, req);
+            return await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, content, "customer");
         }
 
         /// <summary>
@@ -125,23 +124,23 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> UpdateAsync(Customer customer, CustomerUpdateOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"customers/{customer.Id.Value}.json", Method.PUT, "customer");
-
-            var customerBody = customer.ToDictionary();
+            var req = PrepareRequest($"customers/{customer.Id.Value}.json");
+            var body = customer.ToDictionary();
 
             if (options != null)
             {
                 foreach (var keyValuePair in options.ToDictionary())
                 {
-                    customerBody.Add(keyValuePair);
+                    body.Add(keyValuePair);
                 }
             }
 
-            var requestBody = new { customer = customerBody };
+            var content = new JsonContent(new
+            {
+                customer = body
+            });
 
-            req.AddJsonBody(requestBody);
-
-            return await RequestEngine.ExecuteRequestAsync<Customer>(_RestClient, req);
+            return await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, content, "customer");
         }
 
         /// <summary>
@@ -150,11 +149,9 @@ namespace ShopifySharp
         /// <param name="customerId">The customer object's Id.</param>
         public virtual async Task DeleteAsync(long customerId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"customers/{customerId}.json", Method.DELETE);
+            var req = PrepareRequest($"customers/{customerId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

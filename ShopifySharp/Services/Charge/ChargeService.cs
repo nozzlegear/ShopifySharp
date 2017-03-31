@@ -1,10 +1,7 @@
-﻿using RestSharp;
-using System;
-using System.Collections;
+﻿using System.Net.Http;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -13,19 +10,13 @@ namespace ShopifySharp
     /// </summary>
     public class ChargeService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="ChargeService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public ChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static Charge methods
-
+        public ChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
+        
         /// <summary>
         /// Creates a <see cref="Charge"/>. 
         /// </summary>
@@ -33,11 +24,10 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Charge"/>.</returns>
         public virtual async Task<Charge> CreateAsync(Charge charge)
         {
-            IRestRequest req = RequestEngine.CreateRequest("application_charges.json", Method.POST, "application_charge");
+            var req = PrepareRequest("application_charges.json");
+            var content = new JsonContent(new { application_charge = charge });
 
-            req.AddJsonBody(new { application_charge = charge });
-
-            return await RequestEngine.ExecuteRequestAsync<Charge>(_RestClient, req);
+            return await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge");
         }
 
         /// <summary>
@@ -48,14 +38,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Charge"/>.</returns>
         public virtual async Task<Charge> GetAsync(long id, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"application_charges/{id}.json", Method.GET, "application_charge");
+            var req = PrepareRequest($"application_charges/{id}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Charge>(_RestClient, req);
+            return await ExecuteRequestAsync<Charge>(req, HttpMethod.Get, rootElement: "application_charge");
         }
 
         /// <summary>
@@ -66,19 +56,19 @@ namespace ShopifySharp
         /// <returns>The list of <see cref="Charge"/> objects.</returns>
         public virtual async Task<IEnumerable<Charge>> ListAsync(long? sinceId = null, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("application_charges.json", Method.GET, "application_charges");
+            var req = PrepareRequest("application_charges.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
             if (sinceId.HasValue)
             {
-                req.AddParameter("since_id", sinceId);
+                req.Url.QueryParams.Add("since_id", sinceId);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Charge>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
         }
 
         /// <summary>
@@ -87,11 +77,9 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to activate.</param>
         public virtual async Task ActivateAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"application_charges/{id}/activate.json", Method.POST);
+            var req = PrepareRequest($"application_charges/{id}/activate.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Post);
         }
-
-        #endregion
     }
 }

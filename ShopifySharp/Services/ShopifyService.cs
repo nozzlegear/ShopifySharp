@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <summary>
         /// Sets the execution policy for this instance only.
         /// </summary>
-        public static void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
+        public void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
         {
             _ExecutionPolicy = executionPolicy;
         }

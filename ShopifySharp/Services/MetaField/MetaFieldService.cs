@@ -1,11 +1,9 @@
 using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,19 +12,13 @@ namespace ShopifySharp
     /// </summary>
     public class MetaFieldService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="MetaFieldService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public MetaFieldService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of the metafields for the given entity type and filter options. Leave both resourceType and resourceId null for shop metafields.
         /// </summary>
@@ -37,19 +29,20 @@ namespace ShopifySharp
         public virtual async Task<int> CountAsync(long? resourceId, string resourceType = null, MetaFieldFilter filter = null)
         {
             string reqPath = "metafields/count.json";
-            if (resourceType != null && resourceId != null)
+
+            if (! string.IsNullOrEmpty(resourceType) && resourceId.HasValue)
             {
-                reqPath = $"{resourceType}/{resourceId}/metafields/count.json";
+                reqPath = $"{resourceType}/{resourceId.Value}/metafields/count.json";
             }
-            IRestRequest req = RequestEngine.CreateRequest(reqPath, Method.GET);
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            var req = PrepareRequest(reqPath);
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -62,16 +55,20 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<MetaField>> ListAsync(long? resourceId, string resourceType = null, MetaFieldFilter options = null)
         {
             string reqPath = "metafields.json";
-            if (resourceType != null && resourceId != null)
+
+            if (!string.IsNullOrEmpty(resourceType) && resourceId.HasValue)
             {
                 reqPath = $"{resourceType}/{resourceId}/metafields.json";
             }
-            IRestRequest req = RequestEngine.CreateRequest(reqPath, Method.GET, "metafields");
 
-            //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            var req = PrepareRequest(reqPath);
 
-            return await RequestEngine.ExecuteRequestAsync<List<MetaField>>(_RestClient, req);
+            if (options != null)
+            {
+                req.Url.QueryParams.AddRange(options.ToParameters());
+            }
+
+            return await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
         }
 
         /// <summary>
@@ -82,14 +79,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="MetaField"/>.</returns>
         public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.GET, "metafield");
+            var req = PrepareRequest($"metafields/{metafieldId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
+            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Get, rootElement: "metafield");
         }
 
         /// <summary>
@@ -102,21 +99,19 @@ namespace ShopifySharp
         public virtual async Task<MetaField> CreateAsync(MetaField metafield, long? resourceId, string resourceType = null)
         {
             string reqPath = "metafields.json";
-            if (resourceType != null && resourceId != null)
+
+            if (!string.IsNullOrEmpty(resourceType) && resourceId.HasValue)
             {
                 reqPath = $"{resourceType}/{resourceId}/metafields.json";
             }
-            IRestRequest req = RequestEngine.CreateRequest(reqPath, Method.POST, "metafield");
 
-            //Build the request body
-            Dictionary<string, object> body = new Dictionary<string, object>()
+            var req = PrepareRequest(reqPath);
+            var content = new JsonContent(new
             {
-                { "metafield", metafield }
-            };
-
-            req.AddJsonBody(body);
-
-            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
+                metafield = metafield
+            });
+            
+            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
         }
 
         /// <summary>
@@ -126,11 +121,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="MetaField"/>.</returns>
         public virtual async Task<MetaField> UpdateAsync(MetaField metafield)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafield.Id.Value}.json", Method.PUT, "metafield");
+            var req = PrepareRequest($"metafields/{metafield.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                metafield = metafield
+            });
 
-            req.AddJsonBody(new { metafield });
-
-            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
+            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, content, "metafield");
         }
 
         /// <summary>
@@ -139,11 +136,9 @@ namespace ShopifySharp
         /// <param name="metafieldId">The metafield object's Id.</param>
         public virtual async Task DeleteAsync(long metafieldId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"metafields/{metafieldId}.json", Method.DELETE);
+            var req = PrepareRequest($"metafields/{metafieldId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

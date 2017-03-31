@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,19 +12,13 @@ namespace ShopifySharp
     /// </summary>
     public class EventService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="EventService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public EventService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all site events.
         /// </summary>
@@ -32,15 +26,15 @@ namespace ShopifySharp
         /// <returns>The count of all site events.</returns>
         public virtual async Task<int> CountAsync(CountFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("events/count.json", Method.GET);
+            var req = PrepareRequest("events/count.json");
 
             //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -51,14 +45,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="ShopifyEvent"/>.</returns>
         public virtual async Task<ShopifyEvent> GetAsync(long eventId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"events/{eventId}.json", Method.GET, "event");
+            var req = PrepareRequest($"events/{eventId}.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyEvent>(_RestClient, req);
+            return await ExecuteRequestAsync<ShopifyEvent>(req, HttpMethod.Get, rootElement: "event");
         }
 
         /// <summary>
@@ -75,15 +69,15 @@ namespace ShopifySharp
                 subjectType = subjectType + "s";
             }
 
-            var req = RequestEngine.CreateRequest($"{subjectType?.ToLower()}/{subjectId}/events.json", Method.GET, "events");
+            var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
 
             //Add optional parameters to request
             if (options != null)
             {
-                req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+                req.Url.QueryParams.AddRange(options.ToParameters());
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyEvent>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<ShopifyEvent>>(req, HttpMethod.Get, rootElement: "events");
         }
 
         /// <summary>
@@ -92,18 +86,15 @@ namespace ShopifySharp
         /// <param name="options">Options for filtering the result.</param>
         public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(EventListFilter options = null)
         {
-            var req = RequestEngine.CreateRequest("events.json", Method.GET, "events");
+            var req = PrepareRequest("events.json");
             
             //Add optional parameters to request
             if (options != null)
             {
-                req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+                req.Url.QueryParams.AddRange(options.ToParameters());
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ShopifyEvent>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<ShopifyEvent>>(req, HttpMethod.Get, rootElement: "events");
         }
-
-
-        #endregion
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,31 +15,27 @@ namespace ShopifySharp
     /// </summary>
     public class CollectService : ShopifyService
     {
-        #region Constructor
         /// <summary>
         /// Creates a new instance of <see cref="CustomerService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CollectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion Constructor
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the collects (product-collection mappings).
         /// </summary>
         /// <returns>The count of all collects for the shop.</returns>
         public virtual async Task<int> CountAsync(CollectFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("collects/count.json", Method.GET, "count");
+            var req = PrepareRequest("collects/count.json");
 
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -47,11 +44,14 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<IEnumerable<Collect>> ListAsync(CollectFilter options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("collects.json", Method.GET, "collects");
+            var req = PrepareRequest("collects.json");
 
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (options != null)
+            {
+                req.Url.QueryParams.AddRange(options.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Collect>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Collect>>(req, HttpMethod.Get, rootElement: "collects");
         }
 
         /// <summary>
@@ -62,14 +62,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Collect"/>.</returns>
         public virtual async Task<Collect> GetAsync(long collectId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"collects/{collectId}.json", Method.GET, "collect");
+            var req = PrepareRequest($"collects/{collectId}.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Collect>(_RestClient, req);
+            return await ExecuteRequestAsync<Collect>(req, HttpMethod.Get, rootElement: "collect");
         }
 
 
@@ -80,16 +80,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Collect"/>.</returns>
         public virtual async Task<Collect> CreateAsync(Collect collect)
         {
-            IRestRequest req = RequestEngine.CreateRequest("collects.json", RestSharp.Method.POST, "collect");
-
-            Dictionary<string, object> body = new Dictionary<string, object>()
+            var req = PrepareRequest("collects.json");
+            var content = new JsonContent(new
             {
-                { "collect", collect }
-            };
+                collect = collect
+            });
 
-            req.AddJsonBody(body);
-
-            return await RequestEngine.ExecuteRequestAsync<Collect>(_RestClient, req);
+            return await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, content, "collect");
         }
 
         /// <summary>
@@ -98,11 +95,9 @@ namespace ShopifySharp
         /// <param name="collectId">The product object's Id.</param>
         public virtual async Task DeleteAsync(long collectId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"collects/{collectId}.json", Method.DELETE);
+            var req = PrepareRequest($"collects/{collectId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion Public, non-static methods
     }
 }

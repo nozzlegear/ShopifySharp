@@ -1,37 +1,25 @@
-﻿using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
     public class ShopService: ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="ShopService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ShopService(string myShopifyUrl, string shopAccessToken): base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
-        /// Returns the shop's <see cref="Shop"/> information.
+        /// Gets the shop's data.
         /// </summary>
-        /// <returns></returns>
         public virtual async Task<Shop> GetAsync()
         {
-            IRestRequest request = RequestEngine.CreateRequest("shop.json", Method.GET, "shop");
+            var request = PrepareRequest("shop.json");
 
-            //Make request
-            return await RequestEngine.ExecuteRequestAsync<Shop>(_RestClient, request);
+            return await ExecuteRequestAsync<Shop>(request, HttpMethod.Get, rootElement: "shop");
         }
 
         /// <summary>
@@ -39,11 +27,9 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task UninstallAppAsync()
         {
-            var request = RequestEngine.CreateRequest("api_permissions/current.json", Method.DELETE);
+            var request = PrepareRequest("api_permissions/current.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, request);
+            await ExecuteRequestAsync(request, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

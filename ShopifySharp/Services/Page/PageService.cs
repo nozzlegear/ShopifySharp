@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,34 +12,27 @@ namespace ShopifySharp
     /// </summary>
     public class PageService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="PageService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's pages.
         /// </summary>
         /// <returns>The count of all pages for the shop.</returns>
         public virtual async Task<int> CountAsync(PageFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages/count.json", Method.GET);
+            var req = PrepareRequest("pages/count.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
-
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
+            
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -50,12 +41,14 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<IEnumerable<Page>> ListAsync(PageFilter options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.GET, "pages");
+            var req = PrepareRequest("pages.json");
 
-            //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (options != null)
+            {
+                req.Url.QueryParams.AddRange(options.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Page>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Page>>(req, HttpMethod.Get, rootElement: "pages");
         }
 
         /// <summary>
@@ -66,14 +59,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Page"/>.</returns>
         public virtual async Task<Page> GetAsync(long pageId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.GET, "page");
+            var req = PrepareRequest($"pages/{pageId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Page>(_RestClient, req);
+            return await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
         }
 
         /// <summary>
@@ -84,17 +77,23 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Page"/>.</returns>
         public virtual async Task<Page> CreateAsync(Page page, PageCreateOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.POST, "page");
+            var req = PrepareRequest("pages.json");
+            var body = page.ToDictionary();
 
-            //Build the request body
-            Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
+            if (options != null)
             {
-                { "page", page }
-            };
+                foreach (var option in options.ToDictionary())
+                {
+                    body.Add(option);
+                }
+            }
 
-            req.AddJsonBody(body);
-
-            return await RequestEngine.ExecuteRequestAsync<Page>(_RestClient, req);
+            var content = new JsonContent(new
+            {
+                page = body
+            });
+            
+            return await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
         }
 
         /// <summary>
@@ -104,11 +103,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Page"/>.</returns>
         public virtual async Task<Page> UpdateAsync(Page page)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"pages/{page.Id.Value}.json", Method.PUT, "page");
+            var req = PrepareRequest($"pages/{page.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                page = page
+            });
 
-            req.AddJsonBody(new { page });
-
-            return await RequestEngine.ExecuteRequestAsync<Page>(_RestClient, req);
+            return await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page");
         }
 
         /// <summary>
@@ -117,47 +118,9 @@ namespace ShopifySharp
         /// <param name="pageId">The page object's Id.</param>
         public virtual async Task DeleteAsync(long pageId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}.json", Method.DELETE);
+            var req = PrepareRequest($"pages/{pageId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        /// <summary>
-        /// Updates the given <see cref="Page"/>. Id must not be null.
-        /// </summary>
-        /// <param name="pageId">The <see cref="Page"/> pageId to update.</param>
-        /// <param name="metafield">The <see cref="MetaField"/> to update.</param>
-        /// <returns>The updated <see cref="MetaField"/>.</returns>
-        public virtual async Task<MetaField> UpdateMetafieldAsync(long pageId, MetaField metafield)
-        {
-            var requestPath = $"pages/{pageId}/metafields.json";
-            var method = Method.POST;
-
-            if (metafield.Id.HasValue)
-            {
-                requestPath = $"pages/{pageId}/metafields/{metafield.Id.Value}.json";
-                method = Method.PUT;
-            }
-
-            IRestRequest req = RequestEngine.CreateRequest(requestPath, method, "metafield");
-
-            req.AddJsonBody(new {metafield});
-            
-            return await RequestEngine.ExecuteRequestAsync<MetaField>(_RestClient, req);
-        }
-
-        /// <summary>
-        /// Retrieves the collection of <see cref="MetaField"/> for the given page id.
-        /// </summary>
-        /// <param name="pageId">The id of the page to retrieve.</param>
-        /// <returns>The <see cref="Page"/>.</returns>
-        public virtual async Task<List<MetaField>> GetMetaFieldsAsync(long pageId)
-        {
-            IRestRequest req = RequestEngine.CreateRequest($"pages/{pageId}/metafields.json", Method.GET,"metafields");
-            
-            return await RequestEngine.ExecuteRequestAsync<List<MetaField>>(_RestClient, req);
-        }
-
-        #endregion
     }
 }

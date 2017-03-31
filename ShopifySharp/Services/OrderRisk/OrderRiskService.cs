@@ -1,6 +1,7 @@
-﻿using RestSharp;
+﻿using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -22,9 +23,9 @@ namespace ShopifySharp
         /// <param name="orderId">The order the risks belong to.</param>
         public virtual async Task<IEnumerable<OrderRisk>> ListAsync(long orderId)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/risks.json", Method.GET, "risks");
+            var req = PrepareRequest($"orders/{orderId}/risks.json");
             
-            return await RequestEngine.ExecuteRequestAsync<List<OrderRisk>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");
         }
         
         /// <summary>
@@ -34,9 +35,9 @@ namespace ShopifySharp
         /// <param name="riskId">The id of the risk to retrieve.</param>
         public virtual async Task<OrderRisk> GetAsync(long orderId, long riskId)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/risks/{riskId}.json", Method.GET, "risk");
+            var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
             
-            return await RequestEngine.ExecuteRequestAsync<OrderRisk>(_RestClient, req);
+            return await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Get, rootElement: "risk");
         }
         
         /// <summary>
@@ -46,11 +47,13 @@ namespace ShopifySharp
         /// <param name="risk">A new <see cref="OrderRisk"/>. Id should be set to null.</param>
         public virtual async Task<OrderRisk> CreateAsync(long orderId, OrderRisk risk)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/risks.json", Method.POST, "risk");
-
-            req.AddJsonBody(new { risk });
+            var req = PrepareRequest($"orders/{orderId}/risks.json");
+            var content = new JsonContent(new
+            {
+                risk = risk
+            });
             
-            return await RequestEngine.ExecuteRequestAsync<OrderRisk>(_RestClient, req);
+            return await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Post, content, "risk");
         }
 
         /// <summary>
@@ -60,11 +63,13 @@ namespace ShopifySharp
         /// <param name="risk">The risk to update.</param>
         public virtual async Task<OrderRisk> UpdateAsync(long orderId, OrderRisk risk)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/risks/{risk.Id.Value}.json", Method.PUT, "risk");
+            var req = PrepareRequest($"orders/{orderId}/risks/{risk.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                risk = risk
+            });
 
-            req.AddJsonBody(new { risk });
-
-            return await RequestEngine.ExecuteRequestAsync<OrderRisk>(_RestClient, req);
+            return await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Put, content, "risk");
         }
 
         /// <summary>
@@ -74,9 +79,9 @@ namespace ShopifySharp
         /// <param name="riskId">The risk's id.</param>
         public virtual async Task DeleteAsync(long orderId, long riskId)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/risks/{riskId}.json", Method.DELETE);
+            var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
     }
 }

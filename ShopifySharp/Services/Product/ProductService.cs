@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,34 +15,27 @@ namespace ShopifySharp
     /// </summary>
     public class ProductService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="ProductService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's products.
         /// </summary>
         /// <returns>The count of all products for the shop.</returns>
         public virtual async Task<int> CountAsync(ProductFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products/count.json", Method.GET);
+            var req = PrepareRequest("products/count.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
-
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
+            
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -50,12 +44,14 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<IEnumerable<Product>> ListAsync(ProductFilter options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products.json", Method.GET, "products");
+            var req = PrepareRequest("products.json");
 
-            //Add optional parameters to request
-            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+            if (options != null)
+            {
+                req.Url.QueryParams.AddRange(options.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Product>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
         }
 
         /// <summary>
@@ -66,14 +62,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Product"/>.</returns>
         public virtual async Task<Product> GetAsync(long productId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"products/{productId}.json", Method.GET, "product");
+            var req = PrepareRequest($"products/{productId}.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
+            return await ExecuteRequestAsync<Product>(req, HttpMethod.Get, rootElement: "product");
         }
 
         /// <summary>
@@ -84,25 +80,23 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Product"/>.</returns>
         public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("products.json", Method.POST, "product");
-
-            //Build the request body as a dictionary. Necessary because the create options must be added to the 
-            //'product' property.
-            var productBody = product.ToDictionary();
-
-            if(options != null)
+            var req = PrepareRequest("products.json");
+            var body = product.ToDictionary();
+            
+            if (options != null)
             {
-                foreach(var kvp in options.ToDictionary())
+                foreach (var option in options.ToDictionary())
                 {
-                    productBody.Add(kvp);
+                    body.Add(option);
                 }
             }
 
-            var requestBody = new { product = productBody };
+            var content = new JsonContent(new
+            {
+                product = body
+            });
 
-            req.AddJsonBody(requestBody);
-
-            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
+            return await ExecuteRequestAsync<Product>(req, HttpMethod.Post, content, "product");
         }
 
         /// <summary>
@@ -112,11 +106,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Product"/>.</returns>
         public virtual async Task<Product> UpdateAsync(Product product)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"products/{product.Id.Value}.json", Method.PUT, "product");
+            var req = PrepareRequest($"products/{product.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                product = product
+            });
 
-            req.AddJsonBody(new { product });
-
-            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
+            return await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
         }
 
         /// <summary>
@@ -125,9 +121,9 @@ namespace ShopifySharp
         /// <param name="productId">The product object's Id.</param>
         public virtual async Task DeleteAsync(long productId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"products/{productId}.json", Method.DELETE);
+            var req = PrepareRequest($"products/{productId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
 
         /// <summary>
@@ -137,9 +133,8 @@ namespace ShopifySharp
         /// <returns>The published <see cref="Product"/></returns>
         public virtual async Task<Product> PublishAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
-
-            req.AddJsonBody(new
+            var req = PrepareRequest($"products/{id}.json");
+            var content = new JsonContent(new
             {
                 product = new
                 {
@@ -148,7 +143,7 @@ namespace ShopifySharp
                 }
             });
 
-            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
+            return await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
         }
 
         /// <summary>
@@ -158,9 +153,8 @@ namespace ShopifySharp
         /// <returns>The unpublished <see cref="Product"/></returns>
         public virtual async Task<Product> UnpublishAsync(long id)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"products/{id}.json", Method.PUT, "product");
-
-            req.AddJsonBody(new
+            var req = PrepareRequest($"products/{id}.json");
+            var content = new JsonContent(new
             {
                 product = new
                 {
@@ -169,9 +163,7 @@ namespace ShopifySharp
                 }
             });
 
-            return await RequestEngine.ExecuteRequestAsync<Product>(_RestClient, req);
+            return await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
         }
-
-        #endregion
     }
 }

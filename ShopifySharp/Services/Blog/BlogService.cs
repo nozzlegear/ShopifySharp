@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -24,24 +26,24 @@ namespace ShopifySharp
         /// <param name="fields">comma-separated list of fields to include in the response</param>
         public virtual async Task<IEnumerable<Blog>> ListAsync(long? sinceId = null, string handle = null, string fields = null)
         {
-            var request = RequestEngine.CreateRequest("blogs.json", RestSharp.Method.GET, "blogs");
+            var request = PrepareRequest("blogs.json");
 
             if (sinceId.HasValue)
             {
-                request.AddParameter("since_id", sinceId.Value, RestSharp.ParameterType.GetOrPost);
+                request.Url.QueryParams.Add("since_id", sinceId.Value);
             }
 
             if (!string.IsNullOrEmpty(handle))
             {
-                request.AddParameter("handle", handle);
+                request.Url.QueryParams.Add("handle", handle);
             }
 
             if (!string.IsNullOrEmpty(fields))
             {
-                request.AddParameter("fields", fields);
+                request.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Blog>>(_RestClient, request);
+            return await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
         }
 
         /// <summary>
@@ -49,9 +51,9 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<int> CountAsync()
         {
-            var request = RequestEngine.CreateRequest("blogs/count.json", RestSharp.Method.GET, "count");
+            var request = PrepareRequest("blogs/count.json");
 
-            return await RequestEngine.ExecuteRequestAsync<int>(_RestClient, request);
+            return await ExecuteRequestAsync<int>(request, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace ShopifySharp
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
         public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
         {
-            var request = RequestEngine.CreateRequest("blogs.json", RestSharp.Method.POST, "blog");
+            var request = PrepareRequest("blogs.json");
             var body = blog.ToDictionary();
 
             if (metafields != null && metafields.Count() >= 1)
@@ -69,12 +71,12 @@ namespace ShopifySharp
                 body.Add("metafields", metafields);
             }
 
-            request.AddJsonBody(new
+            var content = new JsonContent(new
             {
                 blog = body
             });
 
-            return await RequestEngine.ExecuteRequestAsync<Blog>(_RestClient, request);
+            return await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, content, rootElement: "blog");
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace ShopifySharp
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
         public virtual async Task<Blog> UpdateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
         {
-            var request = RequestEngine.CreateRequest($"blogs/{blog.Id.Value}.json", RestSharp.Method.PUT, "blog");
+            var request = PrepareRequest($"blogs/{blog.Id.Value}.json");
             var body = blog.ToDictionary();
 
             if (metafields != null && metafields.Count() >= 1)
@@ -92,12 +94,12 @@ namespace ShopifySharp
                 body.Add("metafields", metafields);
             }
 
-            request.AddJsonBody(new
+            var content = new JsonContent(new
             {
                 blog = body
             });
 
-            return await RequestEngine.ExecuteRequestAsync<Blog>(_RestClient, request);
+            return await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, content, "blog");
         }
 
         /// <summary>
@@ -106,9 +108,9 @@ namespace ShopifySharp
         /// <param name="id">The id of the blog you want to retrieve.</param>
         public virtual async Task<Blog> GetAsync(long id)
         {
-            var request = RequestEngine.CreateRequest($"blogs/{id}.json", RestSharp.Method.GET, "blog");
+            var request = PrepareRequest($"blogs/{id}.json");
 
-            return await RequestEngine.ExecuteRequestAsync<Blog>(_RestClient, request);
+            return await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, rootElement: "blog");
         }
 
         /// <summary>
@@ -117,9 +119,9 @@ namespace ShopifySharp
         /// <param name="id">The id of the blog you want to delete.</param>
         public virtual async Task DeleteAsync(long id)
         {
-            var request = RequestEngine.CreateRequest($"blogs/{id}.json", RestSharp.Method.DELETE);
+            var request = PrepareRequest($"blogs/{id}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, request);
+            await ExecuteRequestAsync(request, HttpMethod.Delete);
         }
     }
 }

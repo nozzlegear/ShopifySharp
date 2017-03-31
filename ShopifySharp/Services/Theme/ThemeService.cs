@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+﻿using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,31 +11,27 @@ namespace ShopifySharp
     /// </summary>
     public class ThemeService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="ThemeService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ThemeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
         /// <returns></returns>
         public virtual async Task<IEnumerable<Theme>> ListAsync(ListFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.GET, "themes");
+            var req = PrepareRequest("themes.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Theme>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Theme>>(req, HttpMethod.Get, rootElement: "themes");
         }
 
         /// <summary>
@@ -49,14 +42,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Theme"/>.</returns>
         public virtual async Task<Theme> GetAsync(long themeId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.GET, "theme");
+            var req = PrepareRequest($"themes/{themeId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Theme>(_RestClient, req);
+            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
         }
 
         /// <summary>
@@ -69,19 +62,20 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Theme"/>.</returns>
         public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl)
         {
-            IRestRequest req = RequestEngine.CreateRequest("themes.json", Method.POST, "theme");
-
-            //Convert the theme to a dictionary, which will let us add the src URL to the request.
+            var req = PrepareRequest("themes.json");
             var body = theme.ToDictionary();
-
-            if (string.IsNullOrEmpty(sourceUrl) == false)
+            
+            if (! string.IsNullOrEmpty(sourceUrl))
             {
-                body["src"] = sourceUrl;
+                body.Add("src", sourceUrl);
             }
 
-            req.AddJsonBody(new { theme = body });
+            var content = new JsonContent(new
+            {
+                theme = body
+            });
 
-            return await RequestEngine.ExecuteRequestAsync<Theme>(_RestClient, req);
+            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
         }
 
         /// <summary>
@@ -91,11 +85,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Theme"/>.</returns>
         public virtual async Task<Theme> UpdateAsync(Theme theme)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{theme.Id.Value}.json", Method.PUT, "theme");
+            var req = PrepareRequest($"themes/{theme.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                theme = theme
+            });
 
-            req.AddJsonBody(new { theme });
-
-            return await RequestEngine.ExecuteRequestAsync<Theme>(_RestClient, req);
+            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme");
         }
 
         /// <summary>
@@ -104,11 +100,9 @@ namespace ShopifySharp
         /// <param name="themeId">The Theme object's Id.</param>
         public virtual async Task DeleteAsync(long themeId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}.json", Method.DELETE);
+            var req = PrepareRequest($"themes/{themeId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

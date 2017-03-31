@@ -1,11 +1,8 @@
-﻿using RestSharp;
-using ShopifySharp.Enums;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Net.Http;
+using Flurl.Http;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,19 +11,13 @@ namespace ShopifySharp
     /// </summary>
     public class AssetService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="AssetService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public AssetService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static Charge methods
-
+        
         /// <summary>
         /// Retrieves the <see cref="Asset"/> with the given id.
         /// </summary>
@@ -36,17 +27,17 @@ namespace ShopifySharp
         /// <returns>The <see cref="Asset"/>.</returns>
         public virtual async Task<Asset> GetAsync(long themeId, string key, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.GET, "asset");
+            var req = PrepareRequest($"themes/{themeId}/assets.json");
 
             //Add the proper asset querystring
             req = SetAssetQuerystring(req, key, themeId);
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Asset>(_RestClient, req);
+            return await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, rootElement: "asset");
         }
 
         /// <summary>
@@ -58,14 +49,14 @@ namespace ShopifySharp
         /// <returns>The list of <see cref="Asset"/> objects.</returns>
         public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.GET, "assets");
+            var req = PrepareRequest($"themes/{themeId}/assets.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Asset>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
         }
 
         /// <summary>
@@ -81,11 +72,13 @@ namespace ShopifySharp
         /// <returns>The created or updated asset.</returns>
         public virtual async Task<Asset> CreateOrUpdateAsync(long themeId, Asset asset)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.PUT, "asset");
+            var req = PrepareRequest($"themes/{themeId}/assets.json");
+            var content = new JsonContent(new
+            {
+                asset = asset
+            });
 
-            req.AddJsonBody(new { asset = asset });
-
-            return await RequestEngine.ExecuteRequestAsync<Asset>(_RestClient, req);
+            return await ExecuteRequestAsync<Asset>(req, HttpMethod.Put, content, "asset");
         }
 
         /// <summary>
@@ -95,17 +88,13 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         public virtual async Task DeleteAsync(long themeId, string key)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"themes/{themeId}/assets.json", Method.DELETE);
+            var req = PrepareRequest($"themes/{themeId}/assets.json");
 
             req = SetAssetQuerystring(req, key, themeId);
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
-
-        #region Private, static utility methods
-
+        
         /// <summary>
         /// Sets the proper querystring for getting or deleting a single asset.
         /// </summary>
@@ -113,16 +102,14 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <returns>The request with the proper querystring.</returns>
-        IRestRequest SetAssetQuerystring(IRestRequest req, string key, long themeId)
+        IFlurlClient SetAssetQuerystring(IFlurlClient req, string key, long themeId)
         {
             //QS should look like:
             //?asset[key]={key}&theme_id={themeId}
-            req.AddQueryParameter("asset[key]", key);
-            req.AddQueryParameter("theme_id", themeId.ToString());
+            req.Url.QueryParams.Add("asset[key]", key);
+            req.Url.QueryParams.Add("theme_id", themeId);
 
             return req;
         }
-
-        #endregion 
     }
 }

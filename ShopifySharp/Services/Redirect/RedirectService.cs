@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,19 +12,13 @@ namespace ShopifySharp
     /// </summary>
     public class RedirectService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="RedirectService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public RedirectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's redirects.
         /// </summary>
@@ -35,22 +27,19 @@ namespace ShopifySharp
         /// <returns>The count of all redirects for the shop.</returns>
         public virtual async Task<int> CountAsync(string path = null, string target = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("redirects/count.json", Method.GET);
+            var req = PrepareRequest("redirects/count.json");
 
-            //Add optional parameters to request
-            if(string.IsNullOrEmpty(path) == false)
+            if (! string.IsNullOrEmpty(path))
             {
-                req.AddParameter("path", path);
-            }
-            if(string.IsNullOrEmpty(target) == false)
-            {
-                req.AddParameter("target", target);
+                req.Url.QueryParams.Add("path", path);
             }
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            if (! string.IsNullOrEmpty(target))
+            {
+                req.Url.QueryParams.Add("target", target);
+            }
 
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -60,12 +49,14 @@ namespace ShopifySharp
         /// <returns>The list of <see cref="Redirect"/>.</returns>
         public virtual async Task<IEnumerable<Redirect>> ListAsync(RedirectFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.GET, "redirects");
+            var req = PrepareRequest("redirects.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Redirect>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Redirect>>(req, HttpMethod.Get, rootElement: "redirects");
         }
 
         /// <summary>
@@ -76,14 +67,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Redirect"/>.</returns>
         public virtual async Task<Redirect> GetAsync(long redirectId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.GET, "redirect");
+            var req = PrepareRequest($"redirects/{redirectId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Redirect>(_RestClient, req);
+            return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Get, rootElement: "redirect");
         }
 
         /// <summary>
@@ -95,11 +86,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Redirect"/>.</returns>
         public virtual async Task<Redirect> CreateAsync(Redirect redirect)
         {
-            IRestRequest req = RequestEngine.CreateRequest("redirects.json", Method.POST, "redirect");
+            var req = PrepareRequest("redirects.json");
+            var content = new JsonContent(new
+            {
+                redirect = redirect
+            });
 
-            req.AddJsonBody(new { redirect });
-
-            return await RequestEngine.ExecuteRequestAsync<Redirect>(_RestClient, req);
+            return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Post, content, "redirect");
         }
 
         /// <summary>
@@ -109,11 +102,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Redirect"/>.</returns>
         public virtual async Task<Redirect> UpdateAsync(Redirect redirect)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirect.Id.Value}.json", Method.PUT, "redirect");
+            var req = PrepareRequest($"redirects/{redirect.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                redirect = redirect
+            });
 
-            req.AddJsonBody(new { redirect });
-
-            return await RequestEngine.ExecuteRequestAsync<Redirect>(_RestClient, req);
+            return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Put, content, "redirect");
         }
 
         /// <summary>
@@ -122,11 +117,9 @@ namespace ShopifySharp
         /// <param name="redirectId">The redirect object's Id.</param>
         public virtual async Task DeleteAsync(long redirectId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"redirects/{redirectId}.json", Method.DELETE);
+            var req = PrepareRequest($"redirects/{redirectId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

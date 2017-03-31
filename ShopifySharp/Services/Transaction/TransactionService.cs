@@ -1,7 +1,7 @@
-﻿using RestSharp;
-using ShopifySharp.Enums;
+﻿using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -24,11 +24,9 @@ namespace ShopifySharp
         /// <returns>The count of all fulfillments for the shop.</returns>
         public virtual async Task<int> CountAsync(long orderId)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions/count.json", Method.GET);
-            var responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            var req = PrepareRequest($"orders/{orderId}/transactions/count.json");
 
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -39,20 +37,14 @@ namespace ShopifySharp
         /// <returns>The list of transactions.</returns>
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, long? sinceId = null)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions.json", Method.GET, "transactions");
+            var req = PrepareRequest($"orders/{orderId}/transactions.json");
 
-            //Add optional parameters to request
-            if (sinceId != null)
+            if (sinceId.HasValue)
             {
-                req.Parameters.Add(new Parameter()
-                {
-                    Name = "since_id",
-                    Value = sinceId,
-                    Type = ParameterType.GetOrPost
-                });
+                req.Url.QueryParams.Add("since_id", sinceId.Value);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<Transaction>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<Transaction>>(req, HttpMethod.Get, rootElement: "transactions");
         }
 
         /// <summary>
@@ -64,14 +56,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="Transaction"/>.</returns>
         public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions/{transactionId}.json", Method.GET, "transaction");
+            var req = PrepareRequest($"orders/{orderId}/transactions/{transactionId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<Transaction>(_RestClient, req);
+            return await ExecuteRequestAsync<Transaction>(req, HttpMethod.Get, rootElement: "transaction");
         }
 
         /// <summary>
@@ -82,11 +74,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Transaction"/>.</returns>
         public virtual async Task<Transaction> CreateAsync(long orderId, Transaction transaction)
         {
-            var req = RequestEngine.CreateRequest($"orders/{orderId}/transactions.json", Method.POST, "transaction");
+            var req = PrepareRequest($"orders/{orderId}/transactions.json");
+            var content = new JsonContent(new
+            {
+                transaction = transaction
+            });
 
-            req.AddJsonBody(new { transaction = transaction });
-
-            return await RequestEngine.ExecuteRequestAsync<Transaction>(_RestClient, req);
+            return await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, content, "transaction");
         }
     }
 }

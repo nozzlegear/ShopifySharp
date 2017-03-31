@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,19 +12,13 @@ namespace ShopifySharp
     /// </summary>
     public class ProductImageService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="ProductImageService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductImageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's ProductImages.
         /// </summary>
@@ -35,17 +27,14 @@ namespace ShopifySharp
         /// <returns>The count of all ProductImages for the shop.</returns>
         public virtual async Task<int> CountAsync(long productId, PublishableCountFilter filter = null)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/images/count.json", Method.GET);
+            var req = PrepareRequest($"products/{productId}/images/count.json");
 
             if (filter != null)
             {
-                req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+                req.Url.QueryParams.AddRange(filter.ToParameters());
             }
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -64,20 +53,19 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<IEnumerable<ProductImage>> ListAsync(long productId, long? sinceId = null, string fields = null)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/images.json", Method.GET, "images");
+            var req = PrepareRequest($"products/{productId}/images.json");
 
-            //Add optional parameters to request
             if (sinceId.HasValue)
             {
-                req.AddParameter("since_id", sinceId.Value);
+                req.Url.QueryParams.Add("since_id", sinceId.Value);
             }
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ProductImage>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
         }
 
         /// <summary>
@@ -89,14 +77,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/images/{imageId}.json", Method.GET, "image");
+            var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ProductImage>(_RestClient, req);
+            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");
         }
 
         /// <summary>
@@ -107,11 +95,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> CreateAsync(long productId, ProductImage image)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/images.json", Method.POST, "image");
+            var req = PrepareRequest($"products/{productId}/images.json");
+            var content = new JsonContent(new
+            {
+                image = image
+            });
 
-            req.AddJsonBody(new { image = image });
-
-            return await RequestEngine.ExecuteRequestAsync<ProductImage>(_RestClient, req);
+            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image");
         }
 
         /// <summary>
@@ -122,11 +112,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> UpdateAsync(long productId, ProductImage image)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/images/{image.Id.Value}.json", Method.PUT, "image");
+            var req = PrepareRequest($"products/{productId}/images/{image.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                image = image
+            });
 
-            req.AddJsonBody(new { image });
-
-            return await RequestEngine.ExecuteRequestAsync<ProductImage>(_RestClient, req);
+            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image");
         }
 
         /// <summary>
@@ -136,11 +128,9 @@ namespace ShopifySharp
         /// <param name="imageId">The ProductImage object's Id.</param>
         public virtual async Task DeleteAsync(long productId, long imageId)
         {
-            var req = RequestEngine.CreateRequest($"products/{productId}/images/{imageId}.json", Method.DELETE);
+            var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

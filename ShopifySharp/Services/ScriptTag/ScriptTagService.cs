@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using RestSharp;
+using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -14,19 +12,13 @@ namespace ShopifySharp
     /// </summary>
     public class ScriptTagService : ShopifyService
     {
-        #region Constructor
-
         /// <summary>
         /// Creates a new instance of <see cref="ScriptTagService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ScriptTagService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        #endregion
-
-        #region Public, non-static methods
-
+        
         /// <summary>
         /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
@@ -35,15 +27,14 @@ namespace ShopifySharp
         /// <returns>The count.</returns>
         public virtual async Task<int> CountAsync(string src = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags/count.json", Method.GET);
+            var req = PrepareRequest("script_tags/count.json");
 
-            //Filter the count where necessary.
-            if (string.IsNullOrEmpty(src) == false) req.AddQueryParameter("src", src);
+            if (!string.IsNullOrEmpty(src))
+            {
+                req.Url.QueryParams.Add("src", src);
+            }
 
-            JToken responseObject = await RequestEngine.ExecuteRequestAsync(_RestClient, req);
-
-            //Response looks like { "count" : 123 }. Does not warrant its own class.
-            return responseObject.Value<int>("count");
+            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -52,12 +43,14 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<IEnumerable<ScriptTag>> ListAsync(ScriptTagFilter filter = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.GET, "script_tags");
+            var req = PrepareRequest("script_tags.json");
 
-            //Add optional parameters to request
-            if (filter != null) req.Parameters.AddRange(filter.ToParameters(ParameterType.GetOrPost));
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
 
-            return await RequestEngine.ExecuteRequestAsync<List<ScriptTag>>(_RestClient, req);
+            return await ExecuteRequestAsync<List<ScriptTag>>(req, HttpMethod.Get, rootElement: "script_tags");
         }
 
         /// <summary>
@@ -68,14 +61,14 @@ namespace ShopifySharp
         /// <returns>The <see cref="ScriptTag"/>.</returns>
         public virtual async Task<ScriptTag> GetAsync(long tagId, string fields = null)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.GET, "script_tag");
+            var req = PrepareRequest($"script_tags/{tagId}.json");
 
-            if (string.IsNullOrEmpty(fields) == false)
+            if (! string.IsNullOrEmpty(fields))
             {
-                req.AddParameter("fields", fields);
+                req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await RequestEngine.ExecuteRequestAsync<ScriptTag>(_RestClient, req);
+            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");
         }
 
         /// <summary>
@@ -85,17 +78,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="ScriptTag"/>.</returns>
         public virtual async Task<ScriptTag> CreateAsync(ScriptTag tag)
         {
-            IRestRequest req = RequestEngine.CreateRequest("script_tags.json", Method.POST, "script_tag");
-
-            //Build the request body
-            var body = new Dictionary<string, object>()
+            var req = PrepareRequest("script_tags.json");
+            var content = new JsonContent(new
             {
-                { "script_tag", tag }
-            };
+                script_tag = tag
+            });
 
-            req.AddJsonBody(body);
-
-            return await RequestEngine.ExecuteRequestAsync<ScriptTag>(_RestClient, req);
+            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag");
         }
 
         /// <summary>
@@ -105,11 +94,13 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="ScriptTag"/>.</returns>
         public virtual async Task<ScriptTag> UpdateAsync(ScriptTag tag)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tag.Id.Value}.json", Method.PUT, "script_tag");
+            var req = PrepareRequest($"script_tags/{tag.Id.Value}.json");
+            var content = new JsonContent(new
+            {
+                script_tag = tag
+            });
 
-            req.AddJsonBody(new { script_tag = tag });
-
-            return await RequestEngine.ExecuteRequestAsync<ScriptTag>(_RestClient, req);
+            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag");
         }
 
         /// <summary>
@@ -118,11 +109,9 @@ namespace ShopifySharp
         /// <param name="tagId">The tag's Id.</param>
         public virtual async Task DeleteAsync(long tagId)
         {
-            IRestRequest req = RequestEngine.CreateRequest($"script_tags/{tagId}.json", Method.DELETE);
+            var req = PrepareRequest($"script_tags/{tagId}.json");
 
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-
-        #endregion
     }
 }

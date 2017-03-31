@@ -1,4 +1,5 @@
 ﻿using System;
+using Flurl.Http;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -6,16 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
-using RestSharp;
+using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Enums;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
     public static class AuthorizationService
     {
-        #region Public, static methods
-
         /// <summary>
         /// Determines if an incoming request is authentic.
         /// </summary>
@@ -172,15 +172,14 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the URL is valid.</returns>
         public static async Task<bool> IsValidMyShopifyUrl(string url)
         {
-            Uri uri = RequestEngine.BuildShopUri(url);
-            RestClient client = RequestEngine.CreateClient(uri);
+            var uri = ShopifyService.BuildShopUri(url);
 
-            //Make request
-            RestRequest request = new RestRequest("", Method.GET);
-            IRestResponse response = await client.ExecuteTaskAsync(request);
+            using (var client = uri.ToString().AllowAnyHttpStatus())
+            {
+                var response = await client.HeadAsync(completionOption: HttpCompletionOption.ResponseHeadersRead);
 
-            //Valid Shopify stores will have an X-ShopId header
-            return response.Headers.Any(h => h.Name == "X-ShopId");
+                return response.Headers.Any(h => h.Key == "X-ShopId");
+            }
         }
 
         /// <summary>
@@ -193,7 +192,7 @@ namespace ShopifySharp
         /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
         /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion. Only known grant type is "per-user", which will give an access token restricted to the permissions of the user accepting OAuth integration and will expire when that user logs out. Leave the grants array empty or null to receive a full access token that doesn't expire.</param>
         /// <returns>The authorization url.</returns>
-        public static Uri BuildAuthorizationUrl(IEnumerable<ShopifyAuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
+        public static Uri BuildAuthorizationUrl(IEnumerable<AuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
         {
             return BuildAuthorizationUrl(scopes.Select(s => s.ToSerializedString()), myShopifyUrl, shopifyApiKey, redirectUrl, state, grants);
         }
@@ -211,7 +210,7 @@ namespace ShopifySharp
         public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
         {
             //Prepare a uri builder for the shop URL
-            var builder = new UriBuilder(RequestEngine.BuildShopUri(myShopifyUrl));
+            var builder = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl));
 
             //Build the querystring
             var qs = new List<KeyValuePair<string, string>>()
@@ -254,19 +253,25 @@ namespace ShopifySharp
         /// <returns>The shop access token.</returns>
         public static async Task<string> Authorize(string code, string myShopifyUrl, string shopifyApiKey, string shopifySecretKey)
         {
-            Uri shopUri = RequestEngine.BuildShopUri(myShopifyUrl);
-            RestClient client = RequestEngine.CreateClient(shopUri);
-            IRestRequest req = RequestEngine.CreateRequest("oauth/access_token", Method.POST);
-            JToken response;
+            var shopUri = ShopifyService.BuildShopUri(myShopifyUrl);
 
-            //Build request body
-            req.AddJsonBody(new { client_id = shopifyApiKey, client_secret = shopifySecretKey, code });
+            using (var client = Flurl.Url.Combine(shopUri.ToString(), "oauth/access_token").AllowAnyHttpStatus())
+            {
+                var request = client.PostAsync(new JsonContent(new 
+                {
+                    client_id = shopifyApiKey,
+                    client_secret = shopifySecretKey,
+                    code,
+                }));
+                var response = await request;
+                var rawDataString = await request.ReceiveString();
 
-            response = await RequestEngine.ExecuteRequestAsync(client, req);
+                ShopifyService.CheckResponseExceptions(response, rawDataString);
+                
+                var json = JToken.Parse(rawDataString);
 
-            return response.Value<string>("access_token");
+                return json.Value<string>("access_token");
+            }
         }
-
-        #endregion
     }
 }
