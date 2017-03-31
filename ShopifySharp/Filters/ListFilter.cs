@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
+﻿using Flurl;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -49,24 +49,17 @@ namespace ShopifySharp.Filters
         /// rather than the real property name — where applicable. Use <paramref name="property"/>.Name to get the real name.</param>
         /// <param name="value">The property's value.</param>
         /// <param name="property">The property itself.</param>
-        /// <param name="type">The type of parameter to create.</param>
         /// <returns>The new parameter.</returns>
-        public override Parameter ToSingleParameter(string propName, object value, PropertyInfo property, ParameterType type)
+        public override QueryParameter ToSingleParameter(string propName, object value, PropertyInfo property)
         {
             if (propName == "ids" || propName == "Ids")
             {
-                //RestSharp does not automatically convert arrays into querystring params.
-                var param = new Parameter()
-                {
-                    Name = propName,
-                    Type = type,
-                    Value = string.Join(",", value as IEnumerable<long>)
-                };
+                var param = new QueryParameter(propName, string.Join(",", value as IEnumerable<long>));
 
                 return param;
             }
 
-            return base.ToSingleParameter(propName, value, property, type);
+            return base.ToSingleParameter(propName, value, property);
         }
     }
 }
