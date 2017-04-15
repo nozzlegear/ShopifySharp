@@ -11,26 +11,55 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
+using Microsoft.Extensions.Primitives;
 
 namespace ShopifySharp
 {
     public static class AuthorizationService
     {
+        private static string EncodeQuery(StringValues values, bool isKey) 
+        {
+            string s = values.FirstOrDefault();
+
+            if (string.IsNullOrEmpty(s)) 
+            {
+                return "";
+            }
+
+            //Important: Replace % before replacing &. Else second replace will replace those %25s.
+            string output = (s.Replace("%", "%25").Replace("&", "%26")) ?? "";
+
+            if (isKey)
+            {
+                output = output.Replace("=", "%3D");
+            }
+
+            return output;
+        }
+
+        private static string PrepareQuerystring(IEnumerable<KeyValuePair<string, StringValues>> querystring, string joinWith)
+        {
+            var kvps = querystring.Cast<string>()
+                .Select(key => new 
+                { 
+                    Key = EncodeQuery(key, true), 
+                    Value = EncodeQuery(querystring.FirstOrDefault(kvp => kvp.Key == key).Value, false) 
+                })
+                .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
+                .OrderBy(kvp => kvp.Key)
+                .Select(kvp => $"{kvp.Key}={kvp.Value}");
+
+            return string.Join(joinWith, kvps);
+        }
+
         /// <summary>
         /// Determines if an incoming request is authentic.
         /// </summary>
         /// <param name="querystring">The collection of querystring parameters from the request. Hint: use Request.QueryString if you're calling this from an ASP.NET MVC controller.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>A boolean indicating whether the request is authentic or not.</returns>
-        public static bool IsAuthenticRequest(NameValueCollection querystring, string shopifySecretKey)
+        public static bool IsAuthenticRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
         {
-            string hmac = querystring.Get("hmac");
-
-            if (string.IsNullOrEmpty(hmac))
-            {
-                return false;
-            }
-
             // To calculate HMAC signature:
             // 1. Cast querystring to KVP pairs.
             // 2. Remove `signature` and `hmac` keys.
@@ -42,26 +71,15 @@ namespace ShopifySharp
             // 8. Compute the kvps with an HMAC-SHA256 using the secret key.
             // 9. Request is authentic if the computed string equals the `hash` in query string.
             // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
+            var hmacValues = querystring.FirstOrDefault(kvp => kvp.Key == "hmac").Value;
 
-            Func<string, bool, string> replaceChars = (string s, bool isKey) =>
+            if (string.IsNullOrEmpty(hmacValues) || hmacValues.Count() < 1)
             {
-                //Important: Replace % before replacing &. Else second replace will replace those %25s.
-                string output = (s?.Replace("%", "%25").Replace("&", "%26")) ?? "";
+                return false;
+            }
 
-                if (isKey)
-                {
-                    output = output.Replace("=", "%3D");
-                }
-
-                return output;
-            };
-
-            var kvps = querystring.Cast<string>()
-                .Select(s => new { Key = replaceChars(s, true), Value = replaceChars(querystring[s], false) })
-                .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
-                .OrderBy(kvp => kvp.Key)
-                .Select(kvp => $"{kvp.Key}={kvp.Value}");
-
+            string hmac = hmacValues.First();
+            string kvps = PrepareQuerystring(querystring, "&");
             var hmacHasher = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
             var hash = hmacHasher.ComputeHash(Encoding.UTF8.GetBytes(string.Join("&", kvps)));
 
@@ -79,37 +97,19 @@ namespace ShopifySharp
         /// <param name="querystring">The collection of querystring parameters from the request. Hint: use Request.QueryString if you're calling this from an ASP.NET MVC controller.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>A boolean indicating whether the request is authentic or not.</returns>
-        public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string shopifySecretKey)
+        public static bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
         {
-            string signature = querystring.Get("signature");
+            // To calculate signature, order all querystring parameters by alphabetical (exclude the 
+            // signature itself). Then, hash it with the secret key.
+            var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key =="signature").Value;
 
-            if (string.IsNullOrEmpty(signature))
+            if (string.IsNullOrEmpty(signatureValues) || signatureValues.Count() < 1)
             {
                 return false;
             }
 
-            // To calculate signature, order all querystring parameters by alphabetical (exclude the 
-            // signature itself). Then, hash it with the secret key.
-
-            Func<string, bool, string> replaceChars = (string s, bool isKey) =>
-            {
-                //Important: Replace % before replacing &. Else second replace will replace those %25s.
-                string output = (s?.Replace("%", "%25").Replace("&", "%26")) ?? "";
-
-                if (isKey)
-                {
-                    output = output.Replace("=", "%3D");
-                }
-
-                return output;
-            };
-
-            var kvps = querystring.Cast<string>()
-                .Select(s => new { Key = replaceChars(s, true), Value = replaceChars(querystring[s], false) })
-                .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
-                .OrderBy(kvp => kvp.Key)
-                .Select(kvp => $"{kvp.Key}={kvp.Value}");
-
+            string signature = signatureValues.First();
+            string kvps = PrepareQuerystring(querystring, string.Empty);
             var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
             var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(string.Join(null, kvps)));
 
@@ -128,7 +128,7 @@ namespace ShopifySharp
         /// Hint: use Request.InputStream if you're calling this from an ASP.NET MVC controller.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
-        public static async Task<bool> IsAuthenticWebhook(NameValueCollection requestHeaders, Stream inputStream, string shopifySecretKey)
+        public static async Task<bool> IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, Stream inputStream, string shopifySecretKey)
         {
             //Input stream may have already been read when a controller determines parameters to 
             //pass to an action. Reset position to 0.
@@ -148,16 +148,17 @@ namespace ShopifySharp
         /// <param name="requestBody">The body of the request.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
-        public static bool IsAuthenticWebhook(NameValueCollection requestHeaders, string requestBody, string shopifySecretKey)
+        public static bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, string requestBody, string shopifySecretKey)
         {
-            string hmacHeader = requestHeaders.Get("X-Shopify-Hmac-SHA256");
+            var hmacHeaderValues = requestHeaders.FirstOrDefault(kvp => kvp.Key == "X-Shopify-Hmac-SHA256").Value;
 
-            if (string.IsNullOrEmpty(hmacHeader))
+            if (string.IsNullOrEmpty(hmacHeaderValues) || hmacHeaderValues.Count() < 1)
             {
                 return false;
             }
 
             //Compute a hash from the apiKey and the request body
+            string hmacHeader = hmacHeaderValues.First();
             HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
             string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
 
