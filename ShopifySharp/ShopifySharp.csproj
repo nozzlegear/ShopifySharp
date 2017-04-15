@@ -1,8 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <NuspecFile>./ShopifySharp.nuspec</NuspecFile>
-    <Version>4.0.0</Version>
+    <Version>4.0.0-alpha-1</Version>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</Description>
+    <Authors>Nozzlegear</Authors>
+    <Copyright>Nozzlegear Software</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
+    <PackageTags>shopify,ecommerce</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="flurl" Version="2.3.0" />
