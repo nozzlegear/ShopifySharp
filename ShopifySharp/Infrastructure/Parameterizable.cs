@@ -60,7 +60,7 @@ namespace ShopifySharp
         {
             Type valueType = value.GetType();
 
-            if (valueType.IsEnum)
+            if (valueType.GetTypeInfo().IsEnum)
             {
                 value = ((Enum)value).ToSerializedString();
             }
