@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public class ShopifyException : ApplicationException
+    public class ShopifyException : Exception
     {
         #region Public properties
 
