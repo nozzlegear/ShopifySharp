@@ -3,6 +3,8 @@ using System;
 using Newtonsoft.Json;
 using ShopifySharp.Enums;
 using System.Runtime.Serialization;
+using System.Reflection;
+using System.Linq;
 
 namespace ShopifySharp.Converters
 {
@@ -29,12 +31,12 @@ namespace ShopifySharp.Converters
                     var valInfo = enumType.GetMember(enumVal.ToString());
                     var enumMember = valInfo[0].GetCustomAttributes(typeof(EnumMemberAttribute), false);
 
-                    if (enumMember.Length == 0)
+                    if (enumMember.Count() == 0)
                     {
                         continue;
                     }
 
-                    if (((EnumMemberAttribute)enumMember[0]).Value?.ToString() == reader.Value?.ToString())
+                    if (((EnumMemberAttribute)enumMember.First()).Value?.ToString() == reader.Value?.ToString())
                     {
                         return (T) enumVal;
                     }
