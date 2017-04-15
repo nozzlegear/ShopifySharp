@@ -42,18 +42,18 @@ namespace ShopifySharp
             {
                 //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.
                 //Try to fix that by adding a scheme and checking again.
-                if (Uri.IsWellFormedUriString(Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl, UriKind.Absolute) == false)
+                if (Uri.IsWellFormedUriString("https://" + myShopifyUrl, UriKind.Absolute) == false)
                 {
                     throw new ShopifyException($"The given {nameof(myShopifyUrl)} cannot be converted into a well-formed URI.");
                 }
 
-                myShopifyUrl = Uri.UriSchemeHttps + Uri.SchemeDelimiter + myShopifyUrl;
+                myShopifyUrl = "https://" + myShopifyUrl;
             }
 
             var builder = new UriBuilder(myShopifyUrl)
             {
                 Path = "admin/",
-                Scheme = Uri.UriSchemeHttps,
+                Scheme = "https:",
                 Port = 443 //SSL port
             };
 
