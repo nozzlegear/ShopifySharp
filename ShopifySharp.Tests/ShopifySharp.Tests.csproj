@@ -37,23 +37,18 @@
   <ItemGroup>
     <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Machine.Specifications.Should, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Machine.Specifications.Should.0.8.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
@@ -294,9 +289,7 @@
     <None Include="AppSettings.private.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
     <None Include="Playlists\Assets.playlist" />
     <None Include="Playlists\Authorization.playlist" />
     <None Include="Playlists\Charges.playlist" />
