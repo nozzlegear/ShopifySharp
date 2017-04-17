@@ -126,6 +126,8 @@
     <Compile Include="ShopifyCustomCollectionService Tests\When_publishing_a_custom_collection.cs" />
     <Compile Include="ShopifyCustomCollectionService Tests\When_updating_a_custom_collection.cs" />
     <Compile Include="ShopifyCustomerService Tests\When_updating_a_customer_with_options.cs" />
+    <Compile Include="ShopifyDiscountService Tests\Utils.cs" />
+    <Compile Include="ShopifyDiscountService Tests\When_creating_a_discount.cs" />
     <Compile Include="ShopifyEventService Tests\When_getting_an_event.cs" />
     <Compile Include="ShopifyEventService Tests\When_listing_events.cs" />
     <Compile Include="ShopifyEventService Tests\When_counting_events.cs" />
