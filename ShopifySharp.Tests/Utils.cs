@@ -12,23 +12,22 @@ namespace ShopifySharp.Tests
     /// </summary>
     public static class Utils
     {
-        public static string ApiKey { get; } = ConfigurationManager.AppSettings.Get("ApiKey");
-
-        public static string SecretKey { get; } = ConfigurationManager.AppSettings.Get("SecretKey");
-
-        public static string AccessToken { get; } = ConfigurationManager.AppSettings.Get("AccessToken");
-
-        public static string MyShopifyUrl { get; } = ConfigurationManager.AppSettings.Get("MyShopifyUrl");
-
         /// <summary>
-        /// An access token to a shop created by a real application. This is only used for testing <see cref="RecurringChargeService"/>,
-        /// because a private app cannot create/manipulate charges.
+        /// Attempts to get an environment variable first by the key, then by 'SHOPIFYSHARP_{KEY}'. All keys must be uppercased!
         /// </summary>
-        public static string BillingAccessToken { get; } = ConfigurationManager.AppSettings.Get("BillingAccessToken");
+        private static string Get(string key) 
+        {
+            key = key.ToUpper();
 
-        /// <summary>
-        /// A *.myshopify.com domain corresponding to <see cref="BillingAccessToken"/>.
-        /// </summary>
-        public static string BillingMyShopifyUrl { get; } = ConfigurationManager.AppSettings.Get("BillingMyShopifyUrl");
+            return Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable("SHOPIFYSHARP_" + key);
+        }
+
+        public static string ApiKey { get; } = Get("API_KEY");
+
+        public static string SecretKey { get; } = Get("SECRET_KEY");
+
+        public static string AccessToken { get; } = Get("ACCESS_TOKEN");
+
+        public static string MyShopifyUrl { get; } = Get("MY_SHOPIFY_URL");
     }
 }

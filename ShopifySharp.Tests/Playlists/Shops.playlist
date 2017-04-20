@@ -1,1 +1,0 @@
-<Playlist Version="1.0"><Add Test="ShopifySharp.Tests.When_uninstalling_an_app::should_uninstall_the_app" /><Add Test="ShopifySharp.Tests.When_getting_a_shop::should_retrieve_a_shop" /></Playlist>
