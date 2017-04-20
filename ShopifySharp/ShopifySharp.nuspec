@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.6.1
+  =====
+  - Added missing `UpdatedAt` and `CreatedAt` properties on the `ShopifyMetaField` class.
+
   3.6.0
   =====
   - New `ShopifyDiscountService`: Create, get, list, delete, enable and disable Shopify discount codes. (Requires Shopify Plus subscription.)
