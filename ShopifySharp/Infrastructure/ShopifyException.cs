@@ -16,9 +16,9 @@ namespace ShopifySharp
         public Dictionary<string, IEnumerable<string>> Errors { get; set; } = new Dictionary<string, IEnumerable<string>>();
 
         /// <summary>
-        /// The raw, JSON-serialized error returned by Shopify.
+        /// The raw JSON string returned by Shopify.
         /// </summary>
-        public string JsonError { get; set; }
+        public string RawBody { get; set; }
         
         #endregion
 
@@ -28,11 +28,11 @@ namespace ShopifySharp
 
         public ShopifyException(string message): base(message) { }
 
-        public ShopifyException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string jsonError) : base(message)
+        public ShopifyException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string rawBody) : base(message)
         {
             HttpStatusCode = httpStatusCode;
             Errors = errors;
-            JsonError = jsonError;
+            RawBody = rawBody;
         }
 
         #endregion
