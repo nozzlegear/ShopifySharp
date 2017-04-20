@@ -10,6 +10,18 @@ namespace ShopifySharp
     public class ShopifyMetaField : ShopifyObject
     {
         /// <summary>
+        /// The date and time when the metafield was created.
+        /// </summary>
+        [JsonProperty("created_at")]
+        public DateTime? CreatedAt { get; set; }
+
+        /// <summary>
+        /// The date and time when the metafield was last updated.
+        /// </summary>
+        [JsonProperty("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
         /// Identifier for the metafield (maximum of 30 characters).
         /// </summary>
         [JsonProperty("key")]
