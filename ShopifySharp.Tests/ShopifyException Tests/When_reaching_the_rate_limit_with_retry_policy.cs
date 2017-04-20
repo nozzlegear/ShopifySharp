@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Tests.ShopifyException_Tests
+namespace ShopifySharp.Tests
 {
     [Subject(typeof(ShopifyRateLimitException))]
     class When_reaching_the_rate_limit_with_retry_policy
