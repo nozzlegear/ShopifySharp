@@ -20,7 +20,7 @@ namespace ShopifySharp
         public FulfillmentService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Gets a count of all of the shop's fulfillments.
+        /// Gets a count of all of the order's fulfillments.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the count.</param>
@@ -38,7 +38,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop's fulfillments.
+        /// Gets a list of up to 250 of the order's fulfillments.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="options">Options for filtering the list.</param>
@@ -75,7 +75,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Fulfillment"/> on the store.
+        /// Creates a new <see cref="Fulfillment"/> on the order.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
