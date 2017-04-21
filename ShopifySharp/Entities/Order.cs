@@ -108,10 +108,10 @@ namespace ShopifySharp
         public string FinancialStatus { get; set; }
 
         /// <summary>
-        /// An array of <see cref="ShopifyFulfillment"/> objects for this order.
+        /// An array of <see cref="Fulfillment"/> objects for this order.
         /// </summary>
         [JsonProperty("fulfillments")]
-        public IEnumerable<ShopifyFulfillment> Fulfillments { get; set; }
+        public IEnumerable<Fulfillment> Fulfillments { get; set; }
 
         /// <summary>
         /// The fulfillment status for this order. Known values are 'fulfilled', 'null' and 'partial'.
@@ -313,7 +313,7 @@ namespace ShopifySharp
         /// An array of <see cref="Transaction"/> objects that detail all of the transactions in 
         /// this order.
         /// </summary>
-        [JsonProperty("transactions"), Obsolete("This property is not documented in Shopify's API docs. Attempting to create an order with transactions often throws an error — use with caution.")]
+        [JsonProperty("transactions"), Obsolete("This property is not documented in Shopify's API docs. Attempting to create an order with transactions often throws an error ï¿½ use with caution.")]
         public IEnumerable<Transaction> Transactions { get; set; }
     }
 }

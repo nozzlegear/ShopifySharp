@@ -7,7 +7,7 @@ namespace ShopifySharp
     /// <summary>
     /// An object representing a Shopify fulfillment.
     /// </summary>
-    public class ShopifyFulfillment : ShopifyObject
+    public class Fulfillment : ShopifyObject
     {
         /// <summary>
         /// The date and time when the fulfillment was created. 
