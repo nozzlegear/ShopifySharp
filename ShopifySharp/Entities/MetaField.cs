@@ -1,14 +1,22 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
     public class MetaField : ShopifyObject
     {
+        /// <summary>
+        /// The date and time when the metafield was created.
+        /// </summary>
+        [JsonProperty("created_at")]
+        public DateTime? CreatedAt { get; set; }
+
+        /// <summary>
+        /// The date and time when the metafield was last updated.
+        /// </summary>
+        [JsonProperty("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
+
         /// <summary>
         /// Identifier for the metafield (maximum of 30 characters).
         /// </summary>
@@ -31,7 +39,7 @@ namespace ShopifySharp
         /// Container for a set of metadata. Namespaces help distinguish between metadata you created and metadata created by another individual with a similar namespace (maximum of 20 characters).
         /// </summary>
         [JsonProperty("namespace")]
-        public object Namespace { get; set; }
+        public string Namespace { get; set; }
 
         /// <summary>
         /// Additional information about the metafield.
