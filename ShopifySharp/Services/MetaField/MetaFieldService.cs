@@ -90,22 +90,31 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="MetaField"/> associated with the provided resource and resource id. Leave both resourceType and resourceId null for shop metafields.
+        /// Creates a new <see cref="MetaField"/> on the shop itself.
+        /// </summary>
+        /// <param name="metafield">A new <see cref="MetaField"/>. Id should be set to null.</param>
+        /// <returns>The new <see cref="MetaField"/>.</returns>
+        public virtual async Task<MetaField> CreateAsync(MetaField metafield)
+        {
+            var req = PrepareRequest("metafields.json");
+            var content = new JsonContent(new 
+            {
+                metafield = metafield
+            });
+
+            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="MetaField"/> associated with the provided resource type and resource id.
         /// </summary>
         /// <param name="metafield">A new <see cref="MetaField"/>. Id should be set to null.</param>
         /// <param name="resourceId">The Id of the resource the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <returns>The new <see cref="MetaField"/>.</returns>
-        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long? resourceId, string resourceType = null)
+        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType = null)
         {
-            string reqPath = "metafields.json";
-
-            if (!string.IsNullOrEmpty(resourceType) && resourceId.HasValue)
-            {
-                reqPath = $"{resourceType}/{resourceId}/metafields.json";
-            }
-
-            var req = PrepareRequest(reqPath);
+            var req = PrepareRequest( $"{resourceType}/{resourceId}/metafields.json");
             var content = new JsonContent(new
             {
                 metafield = metafield
