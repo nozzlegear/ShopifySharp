@@ -12,36 +12,31 @@ namespace ShopifySharp.Tests
     {
         private BlogService _Service => new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Blog> _CreatedBlogs => new List<Blog>();
+        private List<Blog> _Created => new List<Blog>();
 
         private string _Title => "ShopifySharp Test Blog";
 
         private string _Commentable => "moderate";
 
-        public Blog_Tests()
-        {
-
-        }
-
         public async Task InitializeAsync()
         {
             // Create one blog for methods like count, get, list, etc.
-            await CreateBlog();
+            await Create();
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var blog in _CreatedBlogs)
+            foreach (var obj in _Created)
             {
                 try
                 {
-                    await _Service.DeleteAsync(blog.Id.Value);
+                    await _Service.DeleteAsync(obj.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
                     if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                     {
-                        Console.WriteLine($"Failed to delete created Blog with id {blog.Id.Value}. {ex.Message}");
+                        Console.WriteLine($"Failed to delete created Blog with id {obj.Id.Value}. {ex.Message}");
                     }
                 }
             }
@@ -50,7 +45,7 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<Blog> CreateBlog(bool skipAddToCreatedList = false)
+        public async Task<Blog> Create(bool skipAddToCreatedList = false)
         {
             var blog = await _Service.CreateAsync(new Blog()
             {
@@ -60,7 +55,7 @@ namespace ShopifySharp.Tests
 
             if (! skipAddToCreatedList)
             {
-                _CreatedBlogs.Add(blog);
+                _Created.Add(blog);
             }
 
             return blog;
@@ -85,7 +80,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Blogs()
         {
-            var id = _CreatedBlogs.First().Id.Value;
+            var id = _Created.First().Id.Value;
             var blog = await _Service.GetAsync(id);
 
             Assert.True(blog.Id.HasValue);
@@ -96,7 +91,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Blogs()
         {
-            var created = await CreateBlog(true);
+            var created = await Create(true);
             bool threw = false;
 
             try
@@ -116,7 +111,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_Blogs()
         {
-            var created = await CreateBlog();
+            var created = await Create();
 
             Assert.NotNull(created);
             Assert.StartsWith(_Title, created.Title);
@@ -126,7 +121,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Blogs()
         {
-            var created = await CreateBlog();
+            var created = await Create();
 
             created.Commentable = "yes";
 

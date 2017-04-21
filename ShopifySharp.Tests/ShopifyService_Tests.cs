@@ -7,11 +7,6 @@ namespace ShopifySharp.Tests
     [Trait("Category", "ShopifyService")]
     public class ShopifyService_Tests
     {
-        public ShopifyService_Tests()
-        {
-
-        }
-
         [Fact]
         public void Returns_Message_About_The_StatusCode()
         {

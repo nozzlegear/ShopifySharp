@@ -7,11 +7,6 @@ namespace ShopifySharp.Tests
     {
         private ChargeService _Service => new ChargeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public Charge_Tests()
-        {
-
-        }
-
         [Fact(Skip = "Charges cannot be tested with a private application.")]
         public void Creates_Charges()
         {

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl.Http;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using Xunit;
 
@@ -13,11 +14,6 @@ namespace ShopifySharp.Tests
     [Trait("Category", "ShopifyException")]
     public class ShopifyException_Tests
     {
-        public ShopifyException_Tests()
-        {
-
-        }
-
         [Fact]
         public void Throws_On_OAuth_Code_Used()
         {
@@ -148,7 +144,6 @@ namespace ShopifySharp.Tests
             string rawBody;
             ShopifyException ex = null;
             
-
             // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
             using (var client = Flurl.Url.Combine(Utils.MyShopifyUrl, "orders.json").AllowAnyHttpStatus())
             {
@@ -172,6 +167,119 @@ namespace ShopifySharp.Tests
             Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
             Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
             Assert.True(ex.Errors.All(err => err.Value.Count() > 1));
+        }
+
+        [Fact]
+        public async Task Does_Not_Reach_Rate_Limit_With_Retry_Policy()
+        {
+            bool thrown = false;
+            int requestCount = 60;
+            IEnumerable<Order>[] list = null;
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            service.SetExecutionPolicy(new RetryExecutionPolicy());
+
+            try 
+            {
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                {
+                    Limit = 1
+                }));
+                list = await Task.WhenAll(tasks);
+            }
+            catch (ShopifyRateLimitException)
+            {
+                thrown = true;
+            }
+
+            Assert.False(thrown);
+            Assert.NotNull(list);
+            Assert.Equal(requestCount, list.Count());
+        }
+
+        [Fact]
+        public async Task Does_Not_Reach_Rate_Limit_With_Smart_Retry_Policy()
+        {
+            bool thrown = false;
+            int requestCount = 60;
+            IEnumerable<Order>[] list = null;
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
+            try 
+            {
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                {
+                    Limit = 1
+                }));
+                list = await Task.WhenAll(tasks);
+            }
+            catch (ShopifyRateLimitException)
+            {
+                thrown = true;
+            }
+
+            Assert.False(thrown);
+            Assert.NotNull(list);
+            Assert.Equal(requestCount, list.Count());   
+        }
+
+        [Fact]
+        public async Task Catches_Rate_Limit()
+        {
+            int requestCount = 60;
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            ShopifyRateLimitException ex = null;
+
+            try 
+            {
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                {
+                    Limit = 1
+                }));
+
+                await Task.WhenAll(tasks);
+            }
+            catch (ShopifyRateLimitException e)
+            {
+                ex = e;
+            }
+
+            Assert.NotNull(ex);
+            Assert.Equal(429, (int) ex.HttpStatusCode);
+            Assert.NotNull(ex.RawBody);
+            Assert.True(ex.Errors.Count > 0);
+            Assert.Equal("Error", ex.Errors.First().Key);
+            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
+        }
+
+        [Fact]
+        public async Task Catches_Rate_Limit_With_Base_Exception()
+        {
+            int requestCount = 60;
+            var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            ShopifyException ex = null;
+
+            try 
+            {
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                {
+                    Limit = 1
+                }));
+
+                await Task.WhenAll(tasks);
+            }
+            catch (ShopifyException e)
+            {
+                ex = e;
+            }
+
+            Assert.NotNull(ex);
+            Assert.IsType(ex.GetType(), typeof(ShopifyRateLimitException));
+            Assert.Equal(429, (int) ex.HttpStatusCode);
+            Assert.NotNull(ex.RawBody);
+            Assert.True(ex.Errors.Count > 0);
+            Assert.Equal("Error", ex.Errors.First().Key);
+            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
         }
     }
 }

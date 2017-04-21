@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using ShopifySharp.Enums;
@@ -11,11 +10,6 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Authorization")]
     class Authorization_Tests
     {
-        public Authorization_Tests()
-        {
-
-        }
-
         [Fact]
         public void Validates_Proxy_Requests()
         {

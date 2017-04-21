@@ -7,11 +7,6 @@ namespace ShopifySharp.Tests
     {
         private RecurringChargeService _Service => new RecurringChargeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public RecurringCharge_Tests()
-        {
-
-        }
-
         [Fact(Skip = "Recurring charges cannot be tested with a private application.")]
         public void Creates_Charges()
         {

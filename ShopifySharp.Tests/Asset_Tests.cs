@@ -12,16 +12,11 @@ namespace ShopifySharp.Tests
     {
         AssetService _Service => new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        List<Asset> _CreatedAssets => new List<Asset>();
+        List<Asset> _Created => new List<Asset>();
 
         string _AssetValue => "<h1>Hello world!</h1>";
 
         long _ThemeId { get; set; }
-
-        public Asset_Tests()
-        {
-
-        }
 
         public async Task InitializeAsync()
         {
@@ -33,7 +28,7 @@ namespace ShopifySharp.Tests
 
         public async Task DisposeAsync()
         {
-            foreach (var asset in _CreatedAssets)
+            foreach (var asset in _Created)
             {
                 try
                 {
@@ -52,7 +47,7 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates the object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<Asset> CreateAssetAsync(string key, bool skipAddToCreatedList = false)
+        public async Task<Asset> Create(string key, bool skipAddToCreatedList = false)
         {
             var asset = await _Service.CreateOrUpdateAsync(_ThemeId, new Asset()
             {
@@ -63,7 +58,7 @@ namespace ShopifySharp.Tests
 
             if (! skipAddToCreatedList)
             {
-                _CreatedAssets.Add(asset);
+                _Created.Add(asset);
             }
 
             return asset;
@@ -73,7 +68,7 @@ namespace ShopifySharp.Tests
         public async Task Creates_Assets()
         {
             string key = "templates/test.liquid";
-            var asset = await CreateAssetAsync(key);
+            var asset = await Create(key);
 
             Assert.NotNull(asset);
             Assert.Equal(asset.Key, key);
@@ -86,7 +81,7 @@ namespace ShopifySharp.Tests
         {
             string key = "templates/update-test.liquid";
             string newValue = "<h1>Hello, world! I've been updated!</h1>";
-            var asset = await CreateAssetAsync(key);
+            var asset = await Create(key);
             
             asset.Value = newValue;
             asset = await _Service.CreateOrUpdateAsync(_ThemeId, asset);
@@ -97,7 +92,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Assets()
         {
-            string key = _CreatedAssets.First().Key;
+            string key = _Created.First().Key;
             var asset = await _Service.GetAsync(_ThemeId, key);
 
             Assert.NotNull(asset);
@@ -109,7 +104,7 @@ namespace ShopifySharp.Tests
         public async Task Copies_Assets()
         {
             string key = "templates/copy-test.liquid";
-            var original = await CreateAssetAsync("templates/copy-original-test.liquid");
+            var original = await Create("templates/copy-original-test.liquid");
             var asset = await _Service.CreateOrUpdateAsync(_ThemeId, new Asset()
             {
                 Key = key,
@@ -136,7 +131,7 @@ namespace ShopifySharp.Tests
         {
             bool threw = false;
             string key = "templates/delete-test.liquid";
-            var created = await CreateAssetAsync(key, true);
+            var created = await Create(key, true);
 
             try
             {

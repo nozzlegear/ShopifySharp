@@ -12,11 +12,6 @@ namespace ShopifySharp.Tests
 
         static string _ValueString = " { \"Value\" : 5 } ";
 
-        public NullToZeroConverter_Tests()
-        {
-
-        }
-
         [Fact]
         public void ConvertEmptyValue()
         {

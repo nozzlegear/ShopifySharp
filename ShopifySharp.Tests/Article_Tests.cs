@@ -22,12 +22,7 @@ namespace ShopifySharp.Tests
 
         private long? _BlogId { get; set; }
 
-        private List<Article> _CreatedArticles => new List<Article>();
-
-        public ArticleUtils()
-        {
-
-        }
+        private List<Article> _Created => new List<Article>();
 
         public async Task InitializeAsync()
         {
@@ -37,12 +32,12 @@ namespace ShopifySharp.Tests
             _BlogId = blogs.First().Id;
 
             // Create at least one article for list, count, etc commands.
-            await CreateArticleAsync();
+            await Create();
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var article in _CreatedArticles)
+            foreach (var article in _Created)
             {
                 try
                 {
@@ -59,11 +54,11 @@ namespace ShopifySharp.Tests
         }
 
         /// <summary>
-        /// Convenience function for running tests. Creates an article and automatically adds it to the queue for deleting after tests finish.
+        /// Convenience function for running tests. Creates the object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        private async Task<Article> CreateArticleAsync(bool skipAddToDeleteList = false)
+        private async Task<Article> Create(bool skipAddToDeleteList = false)
         {
-            var article = await _Service.CreateAsync(_BlogId.Value, new Article()
+            var obj = await _Service.CreateAsync(_BlogId.Value, new Article()
             {
                 Title = _Title + Guid.NewGuid(),
                 Author = _Author,
@@ -77,10 +72,10 @@ namespace ShopifySharp.Tests
 
             if (! skipAddToDeleteList)
             {
-                _CreatedArticles.Add(article);
+                _Created.Add(obj);
             }
 
-            return article;
+            return obj;
         }
 
         [Fact]
@@ -94,7 +89,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_Articles()
         {
-            var article = await CreateArticleAsync();
+            var article = await Create();
 
             Assert.True(article.Id.HasValue);
             Assert.Equal(article.Author, _Author);
@@ -108,7 +103,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Articles()
         {
-            var article = await CreateArticleAsync(true);
+            var article = await Create(true);
             bool threw = false;
 
             try
@@ -161,7 +156,7 @@ namespace ShopifySharp.Tests
         public async Task Updates_Articles()
         {
             string html = "<h1>Updated!</h1>";
-            var article = await CreateArticleAsync();
+            var article = await Create();
 
             article.BodyHtml = html;
             article = await _Service.UpdateAsync(_BlogId.Value, article);
