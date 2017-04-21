@@ -29,7 +29,7 @@ namespace ShopifySharp
         public CustomCollectionImage Image { get; set; }
 
         /// <summary>
-        /// The collection image.
+        /// Whether the collection is published or not.
         /// </summary>
         [JsonProperty("published")]
         public bool Published { get; set; }
