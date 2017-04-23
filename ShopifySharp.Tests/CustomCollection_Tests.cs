@@ -94,7 +94,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_CustomCollections()
         {
-            var created = await Create();
+            var created = await Create(true);
             bool threw = false;
 
             try
