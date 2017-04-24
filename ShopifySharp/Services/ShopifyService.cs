@@ -26,6 +26,7 @@ namespace ShopifySharp
         protected ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
             _ShopUri = BuildShopUri(myShopifyUrl);
+            _AccessToken = shopAccessToken;
 
             // TODO: If there's a global execution policy set, assign it here.
         }
