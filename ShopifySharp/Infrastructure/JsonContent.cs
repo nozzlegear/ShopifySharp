@@ -14,7 +14,10 @@ namespace ShopifySharp.Infrastructure
 
         private static byte[] ToBytes(object data)
         {
-            var rawData = JsonConvert.SerializeObject(data);
+            var rawData = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
 
             return Encoding.UTF8.GetBytes(rawData);
         }
