@@ -14,15 +14,23 @@ namespace ShopifySharp.Tests
         {
             key = key.ToUpper();
 
-            return Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable("SHOPIFYSHARP_" + key);
+            string prefix = "SHOPIFYSHARP_";
+            string value = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(prefix + key);
+
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new Exception($"{nameof(key)} {key} was not found in environment variables. Add the key or {prefix + key} to your environment variables and try again.");
+            }
+
+            return value;
         }
 
-        public static string ApiKey { get; } = Get("API_KEY");
+        public static string ApiKey => Get("API_KEY");
 
-        public static string SecretKey { get; } = Get("SECRET_KEY");
+        public static string SecretKey => Get("SECRET_KEY");
 
-        public static string AccessToken { get; } = Get("ACCESS_TOKEN");
+        public static string AccessToken => Get("ACCESS_TOKEN");
 
-        public static string MyShopifyUrl { get; } = Get("MY_SHOPIFY_URL");
+        public static string MyShopifyUrl => Get("MY_SHOPIFY_URL");
     }
 }
