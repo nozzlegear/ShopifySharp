@@ -133,7 +133,7 @@ namespace ShopifySharp
                 CheckResponseExceptions(response, rawResult);
 
                 var jtoken = JToken.Parse(rawResult);
-                T result = jtoken.Value<T>(rootElement);
+                T result = jtoken.SelectToken(rootElement).ToObject<T>();
                 
                 return new RequestResult<T>(response, result, rawResult);
             });
