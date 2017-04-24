@@ -142,7 +142,7 @@
 			"			return obj;",
 			"		}",
 			"	}",
-		"}"
+		    "}"
 		],
 		"description": "Creates an xunit test class for ShopifySharp."
 	}
