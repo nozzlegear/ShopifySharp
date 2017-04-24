@@ -9,13 +9,150 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Order")]
-    public class Order_Tests : IAsyncLifetime
+    public class Order_Tests : IClassFixture<Order_Tests_Fixture>
     {
-        private OrderService _Service => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Order_Tests_Fixture Fixture { get; }
 
-        private List<Order> _Created => new List<Order>();
+        private OrderService Service { get; }
 
-        private string _Note => "This order was created while testing ShopifySharp!";
+        public Order_Tests(Order_Tests_Fixture fixture)
+        {
+            this.Fixture = fixture;
+            this.Service = fixture.Service;
+        }
+
+        [Fact]
+        public async Task Counts_Orders()
+        {
+            var count = await Service.CountAsync();
+
+            Assert.True(count > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Orders()
+        {
+            var list = await Service.ListAsync();
+
+            Assert.True(list.Count() > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Orders_With_Filter()
+        {
+            var created = await Task.WhenAll(Enumerable.Range(0, 2).Select(i => Fixture.Create()));
+            var ids = created.Select(o => o.Id.Value);
+            var list = await Service.ListAsync(new OrderFilter()
+            {
+                Ids = ids
+            });
+            
+            Assert.All(list, o => Assert.Contains(o.Id.Value, ids));
+        }
+
+        [Fact]
+        public async Task Deletes_Orders()
+        {
+            var created = await Fixture.Create(true);
+            bool threw = false;
+
+            try
+            {
+                await Service.DeleteAsync(created.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Deletes_Orders)} failed. {ex.Message}");
+
+                threw = true;
+            }
+
+            Assert.False(threw);
+        }
+
+        [Fact]
+        public async Task Gets_Orders()
+        {
+            var order = await Service.GetAsync(Fixture.Created.First().Id.Value);
+
+            Assert.NotNull(order);
+            Assert.Equal(Fixture.Note, order.Note);
+            Assert.True(order.Id.HasValue);
+        }
+
+        [Fact]
+        public async Task Creates_Orders()
+        {
+            var created = await Fixture.Create();
+
+            Assert.NotNull(created);
+            Assert.Equal(Fixture.Note, created.Note);
+            Assert.True(created.Id.HasValue);
+        }
+
+        [Fact]
+        public async Task Updates_Orders()
+        {
+            string note = "This note was updated while testing ShopifySharp!";
+            var created = await Fixture.Create();
+            created.Note = note;
+
+            var updated = await Service.UpdateAsync(created);
+        }
+
+        [Fact]
+        public async Task Opens_Orders()
+        {
+            // Close an order before opening it.
+            var closed = await Service.CloseAsync(Fixture.Created.First().Id.Value);
+            var opened = await Service.OpenAsync(closed.Id.Value);
+
+            Assert.False(opened.ClosedAt.HasValue);
+        }
+
+        [Fact]
+        public async Task Closes_Orders()
+        {
+            var closed = await Service.CloseAsync(Fixture.Created.Last().Id.Value);
+
+            Assert.True(closed.ClosedAt.HasValue);
+        }
+
+        [Fact]
+        public async Task Cancels_Orders()
+        {
+            long id = Fixture.Created.First().Id.Value;
+            
+            await Service.CancelAsync(id);
+
+            var order = await Service.GetAsync(id);
+
+            Assert.True(order.CancelledAt.HasValue);
+        }
+
+        [Fact]
+        public async Task Cancels_Orders_With_Options()
+        {
+            long id = Fixture.Created.Last().Id.Value;
+            
+            await Service.CancelAsync(id, new OrderCancelOptions()
+            {
+                Reason = "customer"
+            });
+
+            var order = await Service.GetAsync(id);
+
+            Assert.True(order.CancelledAt.HasValue);
+        }
+    }
+
+    public class Order_Tests_Fixture: IAsyncLifetime
+    {
+        public OrderService Service => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public string Note => "This order was created while testing ShopifySharp!";
+
+        public List<Order> Created { get; } = new List<Order>();
 
         public async Task InitializeAsync()
         {
@@ -25,11 +162,11 @@ namespace ShopifySharp.Tests
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in _Created)
+            foreach (var obj in Created)
             {
                 try
                 {
-                    await _Service.DeleteAsync(obj.Id.Value);
+                    await Service.DeleteAsync(obj.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
@@ -44,9 +181,9 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        private async Task<Order> Create(bool skipAddToCreateList = false)
+        public async Task<Order> Create(bool skipAddToCreateList = false)
         {
-            var obj = await _Service.CreateAsync(new Order()
+            var obj = await Service.CreateAsync(new Order()
             {
                 CreatedAt = DateTime.UtcNow,
                 BillingAddress = new Address()
@@ -84,139 +221,15 @@ namespace ShopifySharp.Tests
                 FinancialStatus = "paid",
                 TotalPrice = 5.00,
                 Email = Guid.NewGuid().ToString() + "@example.com",
-                Note = _Note,
+                Note = Note,
             });
 
             if (! skipAddToCreateList)
             {
-                _Created.Add(obj);
+                Created.Add(obj);
             }
 
             return obj;
-        }
-
-        [Fact]
-        public async Task Counts_Orders()
-        {
-            var count = await _Service.CountAsync();
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Orders()
-        {
-            var list = await _Service.ListAsync();
-
-            Assert.True(list.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Orders_With_Filter()
-        {
-            var created = await Task.WhenAll(Enumerable.Range(0, 2).Select(i => Create()));
-            var ids = created.Select(o => o.Id.Value);
-            var list = await _Service.ListAsync(new OrderFilter()
-            {
-                Ids = ids
-            });
-            
-            Assert.All(list, o => Assert.Contains(o.Id.Value, ids));
-        }
-
-        [Fact]
-        public async Task Deletes_Orders()
-        {
-            var created = await Create(true);
-            bool threw = false;
-
-            try
-            {
-                await _Service.DeleteAsync(created.Id.Value);
-            }
-            catch (ShopifyException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Orders)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
-        }
-
-        [Fact]
-        public async Task Gets_Orders()
-        {
-            var order = await _Service.GetAsync(_Created.First().Id.Value);
-
-            Assert.NotNull(order);
-            Assert.Equal(_Note, order.Note);
-            Assert.True(order.Id.HasValue);
-        }
-
-        [Fact]
-        public async Task Creates_Orders()
-        {
-            var created = await Create();
-
-            Assert.NotNull(created);
-            Assert.Equal(_Note, created.Note);
-            Assert.True(created.Id.HasValue);
-        }
-
-        [Fact]
-        public async Task Updates_Orders()
-        {
-            string note = "This note was updated while testing ShopifySharp!";
-            var created = await Create();
-            created.Note = note;
-
-            var updated = await _Service.UpdateAsync(created);
-        }
-
-        [Fact]
-        public async Task Opens_Orders()
-        {
-            // Close an order before opening it.
-            var closed = await _Service.CloseAsync(_Created.First().Id.Value);
-            var opened = await _Service.OpenAsync(closed.Id.Value);
-
-            Assert.False(opened.ClosedAt.HasValue);
-        }
-
-        [Fact]
-        public async Task Closes_Orders()
-        {
-            var closed = await _Service.CloseAsync(_Created.Last().Id.Value);
-
-            Assert.True(closed.ClosedAt.HasValue);
-        }
-
-        [Fact]
-        public async Task Cancels_Orders()
-        {
-            long id = _Created.First().Id.Value;
-            
-            await _Service.CancelAsync(id);
-
-            var order = await _Service.GetAsync(id);
-
-            Assert.True(order.CancelledAt.HasValue);
-        }
-
-        [Fact]
-        public async Task Cancels_Orders_With_Options()
-        {
-            long id = _Created.Last().Id.Value;
-            
-            await _Service.CancelAsync(id, new OrderCancelOptions()
-            {
-                Reason = "customer"
-            });
-
-            var order = await _Service.GetAsync(id);
-
-            Assert.True(order.CancelledAt.HasValue);
         }
     }
 }

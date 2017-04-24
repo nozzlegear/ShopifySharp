@@ -6,7 +6,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "ApplicationCredit")]
     public class ApplicationCredit_Tests
     {
-        private ApplicationCreditService _Service = new ApplicationCreditService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private ApplicationCreditService _Service => new ApplicationCreditService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         [Fact(Skip = "Application Credits cannot be tested because they're unusable in a private application.")]
         public async Task Creates_An_Application_Credit()

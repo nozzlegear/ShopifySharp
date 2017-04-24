@@ -8,15 +8,94 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Blog")]
-    public class Blog_Tests : IAsyncLifetime
+    public class Blog_Tests : IClassFixture<Blog_Tests_Fixture>
     {
-        private BlogService _Service => new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Blog_Tests_Fixture Fixture { get; }
 
-        private List<Blog> _Created => new List<Blog>();
+        public Blog_Tests(Blog_Tests_Fixture fixture)
+        {
+            this.Fixture = fixture;
+        }
 
-        private string _Title => "ShopifySharp Test Blog";
+        [Fact]
+        public async Task Counts_Blogs()
+        {
+            var count = await Fixture.Service.CountAsync();
 
-        private string _Commentable => "moderate";
+            Assert.True(count > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Blogs()
+        {
+            var list = await Fixture.Service.ListAsync();
+
+            Assert.True(list.Count() > 0);
+        }
+
+        [Fact]
+        public async Task Gets_Blogs()
+        {
+            var id = Fixture.Created.First().Id.Value;
+            var blog = await Fixture.Service.GetAsync(id);
+
+            Assert.True(blog.Id.HasValue);
+            Assert.StartsWith(Fixture.Title, blog.Title);
+            Assert.Equal(blog.Commentable, Fixture.Commentable);
+        }
+
+        [Fact]
+        public async Task Deletes_Blogs()
+        {
+            var created = await Fixture.Create(true);
+            bool threw = false;
+
+            try
+            {
+                await Fixture.Service.DeleteAsync(created.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Deletes_Blogs)} threw exception. {ex.Message}");
+
+                threw = true;
+            }
+
+            Assert.False(threw);
+        }
+
+        [Fact]
+        public async Task Creates_Blogs()
+        {
+            var created = await Fixture.Create();
+
+            Assert.NotNull(created);
+            Assert.StartsWith(Fixture.Title, created.Title);
+            Assert.Equal(Fixture.Commentable, created.Commentable);
+        }
+
+        [Fact]
+        public async Task Updates_Blogs()
+        {
+            var created = await Fixture.Create();
+
+            created.Commentable = "yes";
+
+            var updated = await Fixture.Service.UpdateAsync(created);
+
+            Assert.Equal("yes", created.Commentable);
+        }
+    }
+
+    public class Blog_Tests_Fixture : IAsyncLifetime
+    {
+        public BlogService Service => new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<Blog> Created { get; } = new List<Blog>();
+
+        public string Title => "ShopifySharp Test Blog";
+
+        public string Commentable => "moderate";
 
         public async Task InitializeAsync()
         {
@@ -26,11 +105,11 @@ namespace ShopifySharp.Tests
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in _Created)
+            foreach (var obj in Created)
             {
                 try
                 {
-                    await _Service.DeleteAsync(obj.Id.Value);
+                    await Service.DeleteAsync(obj.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
@@ -47,87 +126,18 @@ namespace ShopifySharp.Tests
         /// </summary>
         public async Task<Blog> Create(bool skipAddToCreatedList = false)
         {
-            var blog = await _Service.CreateAsync(new Blog()
+            var blog = await Service.CreateAsync(new Blog()
             {
-                Title = $"{_Title} #{Guid.NewGuid()}",
-                Commentable = _Commentable,
+                Title = $"{Title} #{Guid.NewGuid()}",
+                Commentable = Commentable,
             });
 
             if (! skipAddToCreatedList)
             {
-                _Created.Add(blog);
+                Created.Add(blog);
             }
 
             return blog;
-        }
-
-        [Fact]
-        public async Task Counts_Blogs()
-        {
-            var count = await _Service.CountAsync();
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Blogs()
-        {
-            var list = await _Service.ListAsync();
-
-            Assert.True(list.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Gets_Blogs()
-        {
-            var id = _Created.First().Id.Value;
-            var blog = await _Service.GetAsync(id);
-
-            Assert.True(blog.Id.HasValue);
-            Assert.StartsWith(_Title, blog.Title);
-            Assert.Equal(blog.Commentable, _Commentable);
-        }
-
-        [Fact]
-        public async Task Deletes_Blogs()
-        {
-            var created = await Create(true);
-            bool threw = false;
-
-            try
-            {
-                await _Service.DeleteAsync(created.Id.Value);
-            }
-            catch (ShopifyException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Blogs)} threw exception. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
-        }
-
-        [Fact]
-        public async Task Creates_Blogs()
-        {
-            var created = await Create();
-
-            Assert.NotNull(created);
-            Assert.StartsWith(_Title, created.Title);
-            Assert.Equal(_Commentable, created.Commentable);
-        }
-
-        [Fact]
-        public async Task Updates_Blogs()
-        {
-            var created = await Create();
-
-            created.Commentable = "yes";
-
-            var updated = await _Service.UpdateAsync(created);
-
-            Assert.Equal("yes", created.Commentable);
         }
     }
 }

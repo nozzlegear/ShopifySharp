@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private PageService _Service => new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Page> _Created => new List<Page>();
+        private List<Page> _Created { get; } = new List<Page>();
 
         private string _Title => "ShopifySharp Page API Tests";
 

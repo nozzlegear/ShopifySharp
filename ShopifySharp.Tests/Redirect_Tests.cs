@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private RedirectService _Service => new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Redirect> _Created => new List<Redirect>();
+        private List<Redirect> _Created { get; } = new List<Redirect>();
 
         private string _Target => "https://www.example.com/";
 

@@ -11,7 +11,7 @@ namespace ShopifySharp.Tests
     {
         private EventService _Service => new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<ShopifyEvent> _Created => new List<ShopifyEvent>();
+        private List<ShopifyEvent> _Created { get; } = new List<ShopifyEvent>();
 
         [Fact]
         public async Task Counts_Events()

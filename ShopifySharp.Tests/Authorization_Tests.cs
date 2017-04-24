@@ -8,7 +8,7 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Authorization")]
-    class Authorization_Tests
+    public class Authorization_Tests
     {
         [Fact]
         public void Validates_Proxy_Requests()

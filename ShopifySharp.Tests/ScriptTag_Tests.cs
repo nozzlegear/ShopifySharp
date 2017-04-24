@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private ScriptTagService _Service => new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<ScriptTag> _Created => new List<ScriptTag>();
+        private List<ScriptTag> _Created { get; } = new List<ScriptTag>();
 
         private string _Event => "onload";
 

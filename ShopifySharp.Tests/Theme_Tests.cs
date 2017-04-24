@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private ThemeService _Service => new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Theme> _Created => new List<Theme>();
+        private List<Theme> _Created { get; } = new List<Theme>();
 
         /// <summary>
         /// A URL pointing to a zipped up Shopify theme.

@@ -8,80 +8,19 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Article")]
-    public class ArticleUtils : IAsyncLifetime
+    public class Article_Tests : IClassFixture<Article_Tests_Fixture>
     {
-        private ArticleService _Service => new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Article_Tests_Fixture Fixture { get; }
 
-        private string _Title => "My new Article title - ";
-
-        private string _Author => "John Smith";
-
-        private string _Tags => "This Post, Has Been Tagged";
-
-        private string _BodyHtml => "<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>";
-
-        private long? _BlogId { get; set; }
-
-        private List<Article> _Created => new List<Article>();
-
-        public async Task InitializeAsync()
+        public Article_Tests(Article_Tests_Fixture fixture)
         {
-            var blogService = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var blogs = await blogService.ListAsync();
-
-            _BlogId = blogs.First().Id;
-
-            // Create at least one article for list, count, etc commands.
-            await Create();
-        }
-
-        public async Task DisposeAsync()
-        {
-            foreach (var article in _Created)
-            {
-                try
-                {
-                    await _Service.DeleteAsync(_BlogId.Value, article.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete Article with id {article.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates the object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        private async Task<Article> Create(bool skipAddToDeleteList = false)
-        {
-            var obj = await _Service.CreateAsync(_BlogId.Value, new Article()
-            {
-                Title = _Title + Guid.NewGuid(),
-                Author = _Author,
-                Tags = _Tags,
-                BodyHtml = _BodyHtml,
-                Image = new ArticleImage()
-                {
-                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
-                }
-            });
-
-            if (! skipAddToDeleteList)
-            {
-                _Created.Add(obj);
-            }
-
-            return obj;
+            this.Fixture = fixture;
         }
 
         [Fact]
         public async Task Counts_Articles()
         {
-            var count = await _Service.CountAsync(_BlogId.Value);
+            var count = await Fixture.Service.CountAsync(Fixture.BlogId.Value);
 
             Assert.True(count > 0);
         }
@@ -89,13 +28,13 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_Articles()
         {
-            var article = await Create();
+            var article = await Fixture.Create();
 
             Assert.True(article.Id.HasValue);
-            Assert.Equal(article.Author, _Author);
-            Assert.Equal(article.BodyHtml, _BodyHtml);
-            Assert.Equal(article.BlogId, _BlogId);
-            Assert.Contains(article.Title, _Title);
+            Assert.Equal(article.Author, Fixture.Author);
+            Assert.Equal(article.BodyHtml, Fixture.BodyHtml);
+            Assert.Equal(article.BlogId, Fixture.BlogId);
+            Assert.Contains(article.Title, Fixture.Title);
             Assert.NotEmpty(article.Handle);
             Assert.NotEmpty(article.Tags);
         }
@@ -103,12 +42,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Articles()
         {
-            var article = await Create(true);
+            var article = await Fixture.Create(true);
             bool threw = false;
 
             try
             {
-                await _Service.DeleteAsync(_BlogId.Value, article.Id.Value);
+                await Fixture.Service.DeleteAsync(Fixture.BlogId.Value, article.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -123,7 +62,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Articles()
         {
-            var articles = await _Service.ListAsync(_BlogId.Value);
+            var articles = await Fixture.Service.ListAsync(Fixture.BlogId.Value);
 
             Assert.True(articles.Count() > 0);
         }
@@ -131,16 +70,16 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Authors()
         {
-            var authors = await _Service.ListAuthorsAsync();
+            var authors = await Fixture.Service.ListAuthorsAsync();
 
             Assert.True(authors.Count() > 0);
-            Assert.True(authors.Any(a => a == _Author));
+            Assert.True(authors.Any(a => a == Fixture.Author));
         }
 
         [Fact]
         public async Task Lists_Tags()
         {
-            var tags = await _Service.ListTagsAsync();
+            var tags = await Fixture.Service.ListTagsAsync();
             
             Assert.True(tags.Count() > 0);
         }
@@ -148,7 +87,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Tags_For_Blog()
         {
-            var tags = await _Service.ListTagsForBlogAsync(_BlogId.Value);
+            var tags = await Fixture.Service.ListTagsForBlogAsync(Fixture.BlogId.Value);
 
             Assert.True(tags.Count() > 0);
         }
@@ -156,12 +95,83 @@ namespace ShopifySharp.Tests
         public async Task Updates_Articles()
         {
             string html = "<h1>Updated!</h1>";
-            var article = await Create();
+            var article = await Fixture.Create();
 
             article.BodyHtml = html;
-            article = await _Service.UpdateAsync(_BlogId.Value, article);
+            article = await Fixture.Service.UpdateAsync(Fixture.BlogId.Value, article);
 
             Assert.Equal(article.BodyHtml, html);
+        }
+    }
+
+    public class Article_Tests_Fixture : IAsyncLifetime
+    {
+        public ArticleService Service => new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public string Title => "My new Article title - ";
+
+        public string Author => "John Smith";
+
+        public string Tags => "This Post, Has Been Tagged";
+
+        public string BodyHtml => "<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>";
+
+        public long? BlogId { get; set; }
+
+        public List<Article> Created { get; } = new List<Article>();
+
+        public async Task InitializeAsync()
+        {
+            var blogService = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+            var blogs = await blogService.ListAsync();
+
+            BlogId = blogs.First().Id;
+
+            // Create at least one article for list, count, etc commands.
+            await Create();
+        }
+
+        public async Task DisposeAsync()
+        {
+            foreach (var article in Created)
+            {
+                try
+                {
+                    await Service.DeleteAsync(BlogId.Value, article.Id.Value);
+                }
+                catch (ShopifyException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete Article with id {article.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convenience function for running tests. Creates the object and automatically adds it to the queue for deleting after tests finish.
+        /// </summary>
+        public async Task<Article> Create(bool skipAddToDeleteList = false)
+        {
+            var obj = await Service.CreateAsync(BlogId.Value, new Article()
+            {
+                Title = Title + Guid.NewGuid(),
+                Author = Author,
+                Tags = Tags,
+                BodyHtml = BodyHtml,
+                Image = new ArticleImage()
+                {
+                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
+                }
+            });
+
+            if (! skipAddToDeleteList)
+            {
+                Created.Add(obj);
+            }
+
+            return obj;
         }
     }
 }

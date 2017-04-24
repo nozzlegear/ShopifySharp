@@ -19,7 +19,7 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
         /// </summary>
-        private List<Order> _Created => new List<Order>();
+        private List<Order> _Created { get; } = new List<Order>();
 
         public async Task InitializeAsync()
         {

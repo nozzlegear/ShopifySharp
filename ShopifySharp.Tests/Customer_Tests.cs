@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private CustomerService _Service => new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Customer> _Created => new List<Customer>();
+        private List<Customer> _Created { get; } = new List<Customer>();
 
         private string _FirstName => "John";
 

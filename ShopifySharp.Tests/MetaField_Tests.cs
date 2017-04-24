@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private MetaFieldService _Service => new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<ShopifySharp.MetaField> _Created => new List<ShopifySharp.MetaField>();
+        private List<ShopifySharp.MetaField> _Created { get; } = new List<ShopifySharp.MetaField>();
 
         private string _Namespace => "testing";
 

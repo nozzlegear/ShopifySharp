@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests
     {
         private ProductVariantService _Service => new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<ProductVariant> _Created => new List<ProductVariant>();
+        private List<ProductVariant> _Created { get; } = new List<ProductVariant>();
 
         private string _Option1 => "blue";
         

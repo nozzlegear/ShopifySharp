@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests
     {
         private OrderRiskService _Service => new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<OrderRisk> _Created => new List<OrderRisk>();
+        private List<OrderRisk> _Created { get; } = new List<OrderRisk>();
 
         private string _Message => "This looks risky!";
 

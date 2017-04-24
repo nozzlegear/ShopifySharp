@@ -14,7 +14,7 @@ namespace ShopifySharp.Tests
 
         private OrderService _OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Transaction> _Created => new List<Transaction>();
+        private List<Transaction> _Created { get; } = new List<Transaction>();
 
         private List<Order> _CreatedOrders => new List<Order>();
 

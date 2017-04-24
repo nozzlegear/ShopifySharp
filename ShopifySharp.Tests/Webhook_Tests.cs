@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private WebhookService _Service => new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Webhook> _Created => new List<Webhook>();
+        private List<Webhook> _Created { get; } = new List<Webhook>();
 
         private string _UrlPrefix => "https://requestb.in/";
 

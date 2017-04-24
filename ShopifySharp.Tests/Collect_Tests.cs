@@ -9,18 +9,98 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Collect")]
-    public class Collect_Tests : IAsyncLifetime
+    public class Collect_Tests : IClassFixture<Collect_Tests_Fixture>
     {
+        private Collect_Tests_Fixture Fixture { get; }
+
+        public Collect_Tests(Collect_Tests_Fixture fixture)
+        {
+            this.Fixture = fixture;
+        }
+
+        [Fact]
+        public async Task Counts_Collects()
+        {
+            var count = await Fixture.Service.CountAsync();
+
+            Assert.NotNull(count);
+        }
+
+        [Fact]
+        public async Task Lists_Collects()
+        {
+            var collects = await Fixture.Service.ListAsync();
+
+            Assert.True(collects.Count() > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Collects_With_A_Filter()
+        {
+            var collects = await Fixture.Service.ListAsync(new CollectFilter()
+            {
+                ProductId = Fixture.ProductId,
+            });
+
+            Assert.True(collects.Count() > 0);
+            Assert.All(collects, collect => Assert.Equal(Fixture.ProductId, collect.ProductId));
+        }
+
+        [Fact]
+        public async Task Gets_Collects()
+        {
+            var collect = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+
+            Assert.NotNull(collect);
+            Assert.True(collect.Id.HasValue);
+            Assert.Equal(Fixture.CollectionId, collect.CollectionId);
+            Assert.Equal(Fixture.ProductId, collect.ProductId);
+        }
+
+        [Fact]
+        public async Task Deletes_Collects()
+        {
+            var created = await Fixture.Create(true);
+            bool thrown = false;
+
+            try
+            {
+                await Fixture.Service.DeleteAsync(created.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.Write($"{nameof(Deletes_Collects)} failed. {ex.Message}.");
+                
+                thrown = true;
+            }
+
+            Assert.False(thrown);
+        }
+
+        [Fact]
+        public async Task Creates_Collects()
+        {
+            var collect = await Fixture.Create();
+
+            Assert.NotNull(collect);
+            Assert.True(collect.Id.HasValue);
+            Assert.Equal(Fixture.CollectionId, collect.CollectionId);
+            Assert.Equal(Fixture.ProductId, collect.ProductId);
+        }
+    }
+
+    public class Collect_Tests_Fixture : IAsyncLifetime
+    {
+        public CollectService Service => new CollectService(Utils.MyShopifyUrl, Utils.SecretKey);
+
+        public List<Collect> Created { get; } = new List<Collect>();
+
         /// <remarks>
         /// Hardcoded collection id used in previous versions was 27369427.
         /// </remarks>
-        private long _CollectionId { get; set; }
+        public long CollectionId { get; set; }
 
-        private long _ProductId { get; set; }
-
-        private CollectService _Service => new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-        private List<Collect> _Created => new List<Collect>();
+        public long ProductId { get; set; }
 
         public async Task InitializeAsync()
         {
@@ -46,8 +126,8 @@ namespace ShopifySharp.Tests
                 }
             });
 
-            _ProductId = product.Id.Value;
-            _CollectionId = collection.Id.Value;
+            ProductId = product.Id.Value;
+            CollectionId = collection.Id.Value;
 
             // Create a collection to use with get, list, count, etc. tests.
             await Create();
@@ -55,11 +135,11 @@ namespace ShopifySharp.Tests
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in _Created)
+            foreach (var obj in Created)
             {
                 try
                 {
-                    await _Service.DeleteAsync(obj.Id.Value);
+                    await Service.DeleteAsync(obj.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
@@ -71,8 +151,8 @@ namespace ShopifySharp.Tests
             }
 
             // Delete the product and the collect
-            await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(_CollectionId);
-            await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(_ProductId);
+            await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(CollectionId);
+            await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(ProductId);
         }
 
         /// <summary>
@@ -80,88 +160,18 @@ namespace ShopifySharp.Tests
         /// </summary>
         public async Task<Collect> Create(bool skipAddToCreatedList = false)
         {
-            var obj = await _Service.CreateAsync(new Collect()
+            var obj = await Service.CreateAsync(new Collect()
             {
-                CollectionId = _CollectionId,
-                ProductId = _ProductId,
+                CollectionId = CollectionId,
+                ProductId = ProductId,
             });
 
             if (! skipAddToCreatedList)
             {
-                _Created.Add(obj);
+                Created.Add(obj);
             }
 
             return obj;
-        }
-
-        [Fact]
-        public async Task Counts_Collects()
-        {
-            var count = await _Service.CountAsync();
-
-            Assert.NotNull(count);
-        }
-
-        [Fact]
-        public async Task Lists_Collects()
-        {
-            var collects = await _Service.ListAsync();
-
-            Assert.True(collects.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Collects_With_A_Filter()
-        {
-            var collects = await _Service.ListAsync(new CollectFilter()
-            {
-                ProductId = _ProductId,
-            });
-
-            Assert.True(collects.Count() > 0);
-            Assert.All(collects, collect => Assert.Equal(_ProductId, collect.ProductId));
-        }
-
-        [Fact]
-        public async Task Gets_Collects()
-        {
-            var collect = await _Service.GetAsync(_Created.First().Id.Value);
-
-            Assert.NotNull(collect);
-            Assert.True(collect.Id.HasValue);
-            Assert.Equal(_CollectionId, collect.CollectionId);
-            Assert.Equal(_ProductId, collect.ProductId);
-        }
-
-        [Fact]
-        public async Task Deletes_Collects()
-        {
-            var created = await Create(true);
-            bool thrown = false;
-
-            try
-            {
-                await _Service.DeleteAsync(created.Id.Value);
-            }
-            catch (ShopifyException ex)
-            {
-                Console.Write($"{nameof(Deletes_Collects)} failed. {ex.Message}.");
-                
-                thrown = true;
-            }
-
-            Assert.False(thrown);
-        }
-
-        [Fact]
-        public async Task Creates_Collects()
-        {
-            var collect = await Create();
-
-            Assert.NotNull(collect);
-            Assert.True(collect.Id.HasValue);
-            Assert.Equal(_CollectionId, collect.CollectionId);
-            Assert.Equal(_ProductId, collect.ProductId);
         }
     }
 }

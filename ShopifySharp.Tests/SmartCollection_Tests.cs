@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private SmartCollectionService _Service => new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<SmartCollection> _Created => new List<SmartCollection>();
+        private List<SmartCollection> _Created { get; } = new List<SmartCollection>();
 
         private string _BodyHtml => "<h1>Hello world!</h1>";
 

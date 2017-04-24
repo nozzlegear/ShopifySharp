@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
     {
         private ProductService _Service => new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<Product> _Created => new List<Product>();
+        private List<Product> _Created { get; } = new List<Product>();
 
         private string _Title => "ShopifySharp Test Product";
 

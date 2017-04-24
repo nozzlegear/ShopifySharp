@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests
 
         private ProductImageService _Service => new ProductImageService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        private List<ProductImage> _Created => new List<ProductImage>();
+        private List<ProductImage> _Created { get; } = new List<ProductImage>();
 
         private long _ProductId { get; set; }
 
