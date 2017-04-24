@@ -113,25 +113,27 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Products()
         {
-            var created = await _Service.GetAsync(_Created.First().Id.Value);
+            var obj = await _Service.GetAsync(_Created.First().Id.Value);
 
-            Assert.NotNull(created);
-            Assert.True(created.Id.HasValue);
-            Assert.Equal(_Title, created.Title);
-            Assert.Equal(_BodyHtml, created.BodyHtml);
-            Assert.Equal(_ProductType, created.ProductType);
+            Assert.NotNull(obj);
+            Assert.True(obj.Id.HasValue);
+            Assert.Equal(_Title, obj.Title);
+            Assert.Equal(_BodyHtml, obj.BodyHtml);
+            Assert.Equal(_ProductType, obj.ProductType);
+            Assert.Equal(_Vendor, obj.Vendor);
         }
 
         [Fact]
         public async Task Creates_Products()
         {
-            var created = await Create();
+            var obj = await Create();
 
-            Assert.NotNull(created);
-            Assert.True(created.Id.HasValue);
-            Assert.Equal(_Title, created.Title);
-            Assert.Equal(_BodyHtml, created.BodyHtml);
-            Assert.Equal(_ProductType, created.ProductType);
+            Assert.NotNull(obj);
+            Assert.True(obj.Id.HasValue);
+            Assert.Equal(_Title, obj.Title);
+            Assert.Equal(_BodyHtml, obj.BodyHtml);
+            Assert.Equal(_ProductType, obj.ProductType);
+            Assert.Equal(_Vendor, obj.Vendor);
         }
 
         [Fact]

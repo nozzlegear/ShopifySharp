@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShopifySharp.Tests.ShopifyLocationService_Tests
+namespace ShopifySharp.Tests
 {
     [Trait("Category", "Location")]
     public class Location_Tests

@@ -52,15 +52,7 @@ namespace ShopifySharp
             return await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
         }
 
-        /// <summary>
-        /// Creates a new <see cref="Theme"/> on the store. The theme always starts out with a role of 
-        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its 
-        /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
-        /// </summary>
-        /// <param name="theme">The new <see cref="Theme"/>.</param>
-        /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
-        /// <returns>The new <see cref="Theme"/>.</returns>
-        public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl)
+        private async Task<Theme> _CreateAsync(Theme theme, string sourceUrl = null)
         {
             var req = PrepareRequest("themes.json");
             var body = theme.ToDictionary();
@@ -76,6 +68,30 @@ namespace ShopifySharp
             });
 
             return await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
+        }
+
+        /// <summary>
+        /// Creates a new theme on the store. The theme always starts out with a role of 
+        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its 
+        /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
+        /// </summary>
+        /// <param name="theme">The new theme.</param>
+        /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
+        public virtual async Task<Theme> CreateAsync(Theme theme)
+        {
+            return await _CreateAsync(theme);
+        }
+
+        /// <summary>
+        /// Creates a new theme on the store. The theme always starts out with a role of 
+        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its 
+        /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
+        /// </summary>
+        /// <param name="theme">The new theme.</param>
+        /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
+        public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl)
+        {
+            return await _CreateAsync(theme, sourceUrl);
         }
 
         /// <summary>
