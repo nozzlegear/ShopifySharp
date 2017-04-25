@@ -134,7 +134,7 @@ namespace ShopifySharp.Tests
                 Published = false,
                 Image = new CustomCollectionImage()
                 {
-                    Src = "http://placehold.it/250x250"
+                    Src = "https://i.redd.it/zd0ksv8ezpry.png"
                 }
             });
 
@@ -142,6 +142,9 @@ namespace ShopifySharp.Tests
             {
                 Created.Add(obj);
             }
+
+            // Wait 2 seconds for image upload to finish.
+            await Task.Delay(2000);
 
             return obj;
         }
