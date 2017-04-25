@@ -9,17 +9,15 @@ namespace ShopifySharp.Tests
         [Fact]
         public void Returns_Message_About_The_StatusCode()
         {
-            var req = new Moq.Mock<HttpResponseMessage>();
+            var req = new HttpResponseMessage();
+            req.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+            req.ReasonPhrase = "Internal Server Error";
 
-            req.Setup(r => r.StatusCode).Returns(System.Net.HttpStatusCode.InternalServerError);
-            req.Setup(r => r.ReasonPhrase).Returns("Internal Server Error");
-
-            var fakeResponse = req.Object;
             ShopifyException ex = null;
 
             try
             {
-                ShopifyService.CheckResponseExceptions(fakeResponse, null);
+                ShopifyService.CheckResponseExceptions(req, null);
             }
             catch (ShopifyException e)
             {
@@ -28,7 +26,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(ex);
             Assert.Equal(ex.HttpStatusCode, System.Net.HttpStatusCode.InternalServerError);
-            Assert.Contains(ex.Message, "Response did not indicate success. Status: 500");
+            Assert.Contains("Response did not indicate success. Status: 500", ex.Message);
         }
     }
 }
