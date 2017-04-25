@@ -313,7 +313,7 @@ namespace ShopifySharp
         /// An array of <see cref="Transaction"/> objects that detail all of the transactions in 
         /// this order.
         /// </summary>
-        [JsonProperty("transactions"), Obsolete("This property is not documented in Shopify's API docs. Attempting to create an order with transactions often throws an error � use with caution.")]
+        [JsonProperty("transactions")]
         public IEnumerable<Transaction> Transactions { get; set; }
     }
 }
