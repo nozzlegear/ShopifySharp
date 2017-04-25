@@ -14,6 +14,15 @@ namespace ShopifySharp.Tests
     [Trait("Category", "ShopifyException")]
     public class ShopifyException_Tests
     {
+        private IFlurlClient PrepareRequest(string path)
+        {
+            var client = Flurl.Url.Combine(Utils.MyShopifyUrl, "admin", path)
+                .AllowAnyHttpStatus()
+                .WithHeader("X-Shopify-Access-Token", Utils.AccessToken);
+
+            return client;
+        }
+
         [Fact]
         public void Throws_On_OAuth_Code_Used()
         {
@@ -50,7 +59,7 @@ namespace ShopifySharp.Tests
             ShopifyException ex = null;
 
             // This request will return a response which looks like { errors: "some error message"}
-            using (var client = Flurl.Url.Combine(Utils.MyShopifyUrl, "api_permissions/current.json").AllowAnyHttpStatus())
+            using (var client = PrepareRequest("api_permissions/current.json"))
             {
                 var req = client.GetAsync();
                 response = await req;
@@ -79,21 +88,30 @@ namespace ShopifySharp.Tests
             string rawBody;
             ShopifyException ex = null;
 
-            // This request will return a response which looks like { errors: { "order" : "some error message" } }
-            using (var client = Flurl.Url.Combine(Utils.MyShopifyUrl, "orders.json").AllowAnyHttpStatus())
+            while (ex == null)
             {
-                var req = client.PostAsync(new JsonContent(new { }));;
-                response = await req;
-                rawBody = await req.ReceiveString();
-            }
+                // This request will return a response which looks like { errors: { "order" : "some error message" } }
+                using (var client = PrepareRequest("orders.json"))
+                {
+                    var req = client.PostAsync(new JsonContent(new { }));;
+                    response = await req;
+                    rawBody = await req.ReceiveString();
+                }
 
-            try
-            {
-                ShopifyService.CheckResponseExceptions(response, rawBody);
-            }
-            catch (ShopifyException e)
-            {
-                ex = e;
+                try
+                {
+                    ShopifyService.CheckResponseExceptions(response, rawBody);
+                }
+                catch (ShopifyRateLimitException)
+                {
+                    // Ignore this exception and retry the request.
+                    // RateLimitExceptions may happen when all Exception tests are running and
+                    // execution policies are retrying.
+                }
+                catch (ShopifyException e)
+                {
+                    ex = e;
+                }
             }
 
             Assert.NotNull(ex);
@@ -101,7 +119,7 @@ namespace ShopifySharp.Tests
             Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
             Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
             Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
-            Assert.True(ex.Errors.All(err => err.Value.Count() > 1));
+            Assert.True(ex.Errors.All(err => err.Value.Count() > 0));
         }
 
         [Fact]
@@ -145,7 +163,7 @@ namespace ShopifySharp.Tests
             ShopifyException ex = null;
             
             // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
-            using (var client = Flurl.Url.Combine(Utils.MyShopifyUrl, "orders.json").AllowAnyHttpStatus())
+            using (var client = PrepareRequest("orders.json"))
             {
                 var req = client.PostAsync(new JsonContent(new { order = order }));;
                 response = await req;
@@ -166,7 +184,7 @@ namespace ShopifySharp.Tests
             Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
             Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
             Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
-            Assert.True(ex.Errors.All(err => err.Value.Count() > 1));
+            Assert.True(ex.Errors.All(err => err.Value.Count() > 0));
         }
 
         [Fact]
@@ -274,7 +292,7 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.IsType(ex.GetType(), typeof(ShopifyRateLimitException));
+            Assert.IsType(typeof(ShopifyRateLimitException), ex);
             Assert.Equal(429, (int) ex.HttpStatusCode);
             Assert.NotNull(ex.RawBody);
             Assert.True(ex.Errors.Count > 0);
