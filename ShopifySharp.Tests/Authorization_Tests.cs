@@ -63,7 +63,7 @@ namespace ShopifySharp.Tests
             };
             var result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey);
 
-            Assert.Contains(result.ToString(), $"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers");
+            Assert.Contains($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers", result.ToString());
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace ShopifySharp.Tests
             string[] scopes = { "read_customers", "write_customers" };
             var result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey);
 
-            Assert.Contains(result.ToString(), $"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers");
+            Assert.Contains($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers", result.ToString());
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace ShopifySharp.Tests
             string state = Guid.NewGuid().ToString();
             var result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey, null, state, grants);
 
-            Assert.Contains(result.ToString(), $"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers&state={state}&grant_options[]=per-user");
+            Assert.Contains($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers&state={state}&grant_options[]=per-user", result.ToString());
         }
     }
 }
