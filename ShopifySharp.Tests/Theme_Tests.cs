@@ -48,7 +48,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Themes()
         {
-            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+            var created = await Fixture.Create();
+            var obj = await Fixture.Service.GetAsync(created.Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
@@ -81,7 +82,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Themes()
         {
-            string newValue = "ShopifySharp Updated Theme " + Guid.NewGuid();
+            string newValue = ("ShopifySharp Updated Theme " + Guid.NewGuid()).Substring(0, 50);
             var original = Fixture.Created.First();
             original.Name = newValue;
             
@@ -137,7 +138,7 @@ namespace ShopifySharp.Tests
         {
             var theme = new Theme()
             {
-                Name = NamePrefix + Guid.NewGuid(),
+                Name = (NamePrefix + Guid.NewGuid()).Substring(0, 50),
                 Role = Role,   
             };
             var obj = fromZipUrl ? await Service.CreateAsync(theme, ZipUrl) : await Service.CreateAsync(theme);

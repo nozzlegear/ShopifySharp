@@ -56,13 +56,14 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_SmartCollections()
         {
-            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+            var created = await Fixture.Create();
+            var obj = await Fixture.Service.GetAsync(created.Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
             Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
             Assert.Equal(Fixture.Title, obj.Title);
-            Assert.Equal(Fixture.Handle, obj.Handle);
+            Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact]
@@ -74,7 +75,7 @@ namespace ShopifySharp.Tests
             Assert.True(obj.Id.HasValue);
             Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
             Assert.Equal(Fixture.Title, obj.Title);
-            Assert.Equal(Fixture.Handle, obj.Handle);
+            Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
         }
 
         [Fact]

@@ -58,21 +58,31 @@ namespace ShopifySharp.Tests
             string rawBody;
             ShopifyException ex = null;
 
-            // This request will return a response which looks like { errors: "some error message"}
-            using (var client = PrepareRequest("api_permissions/current.json"))
-            {
-                var req = client.GetAsync();
-                response = await req;
-                rawBody = await req.ReceiveString();
-            }
 
-            try
+            while (ex == null)
             {
-                ShopifyService.CheckResponseExceptions(response, rawBody);
-            }
-            catch (ShopifyException e)
-            {
-                ex = e;
+                // This request will return a response which looks like { errors: "some error message"}
+                using (var client = PrepareRequest("api_permissions/current.json"))
+                {
+                    var req = client.GetAsync();
+                    response = await req;
+                    rawBody = await req.ReceiveString();
+                }
+
+                try
+                {
+                    ShopifyService.CheckResponseExceptions(response, rawBody);
+                }
+                catch (ShopifyRateLimitException)
+                {
+                    // Ignore this exception and retry the request.
+                    // RateLimitExceptions may happen when all Exception tests are running and
+                    // execution policies are retrying.
+                }
+                catch (ShopifyException e)
+                {
+                    ex = e;
+                }
             }
 
             Assert.NotNull(ex);
@@ -162,21 +172,30 @@ namespace ShopifySharp.Tests
             string rawBody;
             ShopifyException ex = null;
             
-            // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
-            using (var client = PrepareRequest("orders.json"))
+            while (ex == null)
             {
-                var req = client.PostAsync(new JsonContent(new { order = order }));;
-                response = await req;
-                rawBody = await req.ReceiveString();
-            }
+                // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
+                using (var client = PrepareRequest("orders.json"))
+                {
+                    var req = client.PostAsync(new JsonContent(new { order = order }));;
+                    response = await req;
+                    rawBody = await req.ReceiveString();
+                }
 
-            try
-            {
-                ShopifyService.CheckResponseExceptions(response, rawBody);
-            }
-            catch (ShopifyException e)
-            {
-                ex = e;
+                try
+                {
+                    ShopifyService.CheckResponseExceptions(response, rawBody);
+                }
+                catch (ShopifyRateLimitException)
+                {
+                    // Ignore this exception and retry the request.
+                    // RateLimitExceptions may happen when all Exception tests are running and
+                    // execution policies are retrying.
+                }
+                catch (ShopifyException e)
+                {
+                    ex = e;
+                }
             }
 
             Assert.NotNull(ex);

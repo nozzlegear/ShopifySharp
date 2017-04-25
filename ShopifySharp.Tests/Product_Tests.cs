@@ -172,10 +172,10 @@ namespace ShopifySharp.Tests
         {
             var obj = await Service.CreateAsync(new Product()
             {
-                Title = "Burton Custom Freestlye 151",
-                Vendor = "Burton",
-                BodyHtml = "<strong>Good snowboard!</strong>",
-                ProductType = "Snowboard",
+                Title = Title,
+                Vendor = Vendor,
+                BodyHtml = BodyHtml,
+                ProductType = ProductType,
                 Images = new List<ProductImage>
                 {
                     new ProductImage

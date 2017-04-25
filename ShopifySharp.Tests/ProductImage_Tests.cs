@@ -62,7 +62,6 @@ namespace ShopifySharp.Tests
             Assert.NotNull(image);
             Assert.True(image.Id.HasValue);
             Assert.Equal(Fixture.ProductId, image.ProductId);
-            Assert.Equal(Fixture.ImageFileName, image.Filename);
         }
 
         [Fact]
@@ -73,7 +72,6 @@ namespace ShopifySharp.Tests
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.ProductId, created.ProductId);
-            Assert.Equal(Fixture.ImageFileName, created.Filename);
         }
 
         [Fact]

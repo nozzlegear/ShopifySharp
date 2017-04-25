@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
+using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
@@ -37,7 +38,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Variants()
         {
-            var created = await Fixture.Create(true);
+            var created = await Fixture.Create(skipAddToCreatedList: true);
             bool threw = false;
 
             try
@@ -62,7 +63,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.Price, created.Price);
-            Assert.Equal(Fixture.Option1, created.Option1);
+            EmptyAssert.NotNullOrEmpty(created.Option1);
         }
 
         [Fact]
@@ -73,19 +74,19 @@ namespace ShopifySharp.Tests
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.Price, created.Price);
-            Assert.Equal(Fixture.Option1, created.Option1);
+            EmptyAssert.NotNullOrEmpty(created.Option1);
         }
 
         [Fact]
         public async Task Updates_Variants()
         {
-            string option2 = "green";
+            double newPrice = 11.22;
             var original = Fixture.Created.First();
-            original.Option2 = option2;
+            original.Price = newPrice;
 
             var updated = await Fixture.Service.UpdateAsync(original);
 
-            Assert.Equal(option2, updated.Option2);
+            Assert.Equal(newPrice, updated.Price);
         }
     }
 
@@ -95,8 +96,6 @@ namespace ShopifySharp.Tests
 
         public List<ProductVariant> Created { get; } = new List<ProductVariant>();
 
-        public string Option1 => "blue";
-        
         public double Price => 123.45;
 
         public long ProductId { get; set; }
@@ -134,11 +133,11 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<ProductVariant> Create(bool skipAddToCreatedList = false)
+        public async Task<ProductVariant> Create(string option1 = null, bool skipAddToCreatedList = false)
         {
             var obj = await Service.CreateAsync(ProductId, new ProductVariant()
             {
-                Option1 = Option1,
+                Option1 = Guid.NewGuid().ToString(),
                 Price = Price,
             });
 

@@ -57,7 +57,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Redirects()
         {
-            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+            var created = await Fixture.Create();
+            var obj = await Fixture.Service.GetAsync(created.Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);

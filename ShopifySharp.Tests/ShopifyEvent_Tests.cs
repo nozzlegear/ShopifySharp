@@ -6,7 +6,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "Event")]
+    [Trait("Category", "ShopifyEvent")]
     public class ShopifyEvent_Tests : IClassFixture<ShopifyEvent_Tests_Fixture>
     {
         private ShopifyEvent_Tests_Fixture Fixture { get; }
