@@ -8,15 +8,93 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Page")]
-    public class Page_Tests : IAsyncLifetime
+    public class Page_Tests : IClassFixture<Page_Tests_Fixture>
     {
-        private PageService _Service => new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Page_Tests_Fixture Fixture { get; }
 
-        private List<Page> _Created { get; } = new List<Page>();
+        public Page_Tests(Page_Tests_Fixture fixture)
+        {
+            this.Fixture = fixture;
+        }
 
-        private string _Title => "ShopifySharp Page API Tests";
+        [Fact]
+        public async Task Counts_Pages()
+        {
+            var count = await Fixture.Service.CountAsync();
 
-        private string _Html => "<strong>This string was created by ShopifySharp!</strong>";
+            Assert.True(count > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Pages()
+        {
+            var list = await Fixture.Service.ListAsync();
+
+            Assert.True(list.Count() > 0);
+        }
+
+        [Fact]
+        public async Task Deletes_Pages()
+        {
+            var created = await Fixture.Create(true);
+            bool threw = false;
+
+            try
+            {
+                await Fixture.Service.DeleteAsync(created.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Deletes_Pages)} failed. {ex.Message}");
+
+                threw = true;
+            }
+
+            Assert.False(threw);
+        }
+
+        [Fact]
+        public async Task Gets_Pages()
+        {
+            var page = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+
+            Assert.NotNull(page);
+            Assert.Equal(Fixture.Title, page.Title);
+            Assert.Equal(Fixture.Html, page.BodyHtml);
+        }
+
+        [Fact]
+        public async Task Creates_Pages()
+        {
+            var created = await Fixture.Create();
+
+            Assert.NotNull(created);
+            Assert.Equal(Fixture.Title, created.Title);
+            Assert.Equal(Fixture.Html, created.BodyHtml);
+        }
+
+        [Fact]
+        public async Task Updates_Pages()
+        {
+            string html = "<h1>This string was updated while testing ShopifySharp!</h1>";
+            var original = Fixture.Created.First();
+            original.BodyHtml = html;
+
+            var updated = await Fixture.Service.UpdateAsync(original);
+
+            Assert.Equal(html, updated.BodyHtml);
+        }
+    }
+
+    public class Page_Tests_Fixture : IAsyncLifetime
+    {
+        public PageService Service => new PageService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<Page> Created { get; } = new List<Page>();
+
+        public string Title => "ShopifySharp Page API Tests";
+
+        public string Html => "<strong>This string was created by ShopifySharp!</strong>";
 
         public async Task InitializeAsync()
         {
@@ -26,11 +104,11 @@ namespace ShopifySharp.Tests
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in _Created)
+            foreach (var obj in Created)
             {
                 try
                 {
-                    await _Service.DeleteAsync(obj.Id.Value);
+                    await Service.DeleteAsync(obj.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
@@ -47,87 +125,19 @@ namespace ShopifySharp.Tests
         /// </summary>
         public async Task<Page> Create(bool skipAddToCreatedList = false)
         {
-            var obj = await _Service.CreateAsync(new ShopifySharp.Page()
+            var obj = await Service.CreateAsync(new ShopifySharp.Page()
             {
                 CreatedAt = DateTime.UtcNow,
-                Title = _Title,
-                BodyHtml = _Html,
+                Title = Title,
+                BodyHtml = Html,
             });
 
             if (! skipAddToCreatedList)
             {
-                _Created.Add(obj);
+                Created.Add(obj);
             }
 
             return obj;
-        }
-
-        [Fact]
-        public async Task Counts_Pages()
-        {
-            var count = await _Service.CountAsync();
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Pages()
-        {
-            var list = await _Service.ListAsync();
-
-            Assert.True(list.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Deletes_Pages()
-        {
-            var created = await Create(true);
-            bool threw = false;
-
-            try
-            {
-                await _Service.DeleteAsync(created.Id.Value);
-            }
-            catch (ShopifyException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Pages)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
-        }
-
-        [Fact]
-        public async Task Gets_Pages()
-        {
-            var page = await _Service.GetAsync(_Created.First().Id.Value);
-
-            Assert.NotNull(page);
-            Assert.Equal(_Title, page.Title);
-            Assert.Equal(_Html, page.BodyHtml);
-        }
-
-        [Fact]
-        public async Task Creates_Pages()
-        {
-            var created = await Create();
-
-            Assert.NotNull(created);
-            Assert.Equal(_Title, created.Title);
-            Assert.Equal(_Html, created.BodyHtml);
-        }
-
-        [Fact]
-        public async Task Updates_Pages()
-        {
-            string html = "<h1>This string was updated while testing ShopifySharp!</h1>";
-            var original = _Created.First();
-            original.BodyHtml = html;
-
-            var updated = await _Service.UpdateAsync(original);
-
-            Assert.Equal(html, updated.BodyHtml);
         }
     }
 }

@@ -8,66 +8,19 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "SmartCollection")]
-    public class SmartCollection_Tests : IAsyncLifetime
+    public class SmartCollection_Tests : IClassFixture<SmartCollection_Tests_Fixture>
     {
-        private SmartCollectionService _Service => new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private SmartCollection_Tests_Fixture Fixture { get; }
 
-        private List<SmartCollection> _Created { get; } = new List<SmartCollection>();
-
-        private string _BodyHtml => "<h1>Hello world!</h1>";
-
-        private string _Handle => "ShopifySharp-Handle";
-
-        private string _Title => "ShopifySharp Test Smart Collection";
-
-        public async Task InitializeAsync()
+        public SmartCollection_Tests(SmartCollection_Tests_Fixture fixture)
         {
-            // Create one collection for use with count, list, get, etc. tests.
-            await Create();
-        }
-
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in _Created)
-            {
-                try
-                {
-                    await _Service.DeleteAsync(obj.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created SmartCollection with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        private async Task<SmartCollection> Create(bool skipAddToCreatedList = false)
-        {
-            var obj = await _Service.CreateAsync(new SmartCollection()
-            {
-                BodyHtml =  _BodyHtml,
-                Handle = _Handle,
-                Title = _Title,
-            });
-
-            if (! skipAddToCreatedList)
-            {
-                _Created.Add(obj);
-            }
-
-            return obj;
+            this.Fixture = fixture;
         }
 
         [Fact]
         public async Task Counts_SmartCollections()
         {
-            var count = await _Service.CountAsync();
+            var count = await Fixture.Service.CountAsync();
 
             Assert.True(count > 0);
         }
@@ -75,7 +28,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_SmartCollections()
         {
-            var list = await _Service.ListAsync();
+            var list = await Fixture.Service.ListAsync();
 
             Assert.True(list.Count() > 0);
         }
@@ -83,12 +36,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_SmartCollections()
         {
-            var created = await Create(true);
+            var created = await Fixture.Create(true);
             bool threw = false;
 
             try
             {
-                await _Service.DeleteAsync(created.Id.Value);
+                await Fixture.Service.DeleteAsync(created.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -103,37 +56,94 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_SmartCollections()
         {
-            var obj = await _Service.GetAsync(_Created.First().Id.Value);
+            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(_BodyHtml, obj.BodyHtml);
-            Assert.Equal(_Title, obj.Title);
-            Assert.Equal(_Handle, obj.Handle);
+            Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
+            Assert.Equal(Fixture.Title, obj.Title);
+            Assert.Equal(Fixture.Handle, obj.Handle);
         }
 
         [Fact]
         public async Task Creates_SmartCollections()
         {
-            var obj = await Create();
+            var obj = await Fixture.Create();
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(_BodyHtml, obj.BodyHtml);
-            Assert.Equal(_Title, obj.Title);
-            Assert.Equal(_Handle, obj.Handle);
+            Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
+            Assert.Equal(Fixture.Title, obj.Title);
+            Assert.Equal(Fixture.Handle, obj.Handle);
         }
 
         [Fact]
         public async Task Updates_SmartCollections()
         {
             string newValue = "New Title";
-            var original = _Created.First();
+            var original = Fixture.Created.First();
             original.Title = newValue;
             
-            var updated = await _Service.UpdateAsync(original);
+            var updated = await Fixture.Service.UpdateAsync(original);
 
             Assert.Equal(newValue, updated.Title);   
+        }
+    }
+
+    public class SmartCollection_Tests_Fixture : IAsyncLifetime
+    {
+        public SmartCollectionService Service => new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<SmartCollection> Created { get; } = new List<SmartCollection>();
+
+        public string BodyHtml => "<h1>Hello world!</h1>";
+
+        public string Handle => "ShopifySharp-Handle";
+
+        public string Title => "ShopifySharp Test Smart Collection";
+
+        public async Task InitializeAsync()
+        {
+            // Create one collection for use with count, list, get, etc. tests.
+            await Create();
+        }
+
+        public async Task DisposeAsync()
+        {
+            foreach (var obj in Created)
+            {
+                try
+                {
+                    await Service.DeleteAsync(obj.Id.Value);
+                }
+                catch (ShopifyException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created SmartCollection with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+        /// </summary>
+        public async Task<SmartCollection> Create(bool skipAddToCreatedList = false)
+        {
+            var obj = await Service.CreateAsync(new SmartCollection()
+            {
+                BodyHtml =  BodyHtml,
+                Handle = Handle,
+                Title = Title,
+            });
+
+            if (! skipAddToCreatedList)
+            {
+                Created.Add(obj);
+            }
+
+            return obj;
         }
     }
 }

@@ -8,66 +8,19 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "ScriptTag")]
-    public class ScriptTag_Tests : IAsyncLifetime
+    public class ScriptTag_Tests : IClassFixture<ScriptTag_Tests_Fixture>
     {
-        private ScriptTagService _Service => new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private ScriptTag_Tests_Fixture Fixture { get; }
 
-        private List<ScriptTag> _Created { get; } = new List<ScriptTag>();
-
-        private string _Event => "onload";
-
-        private string _Src => "https://unpkg.com/davenport@2.1.0/bin/browser.js";
-
-        private string _Scope => "online_store";
-
-        public async Task InitializeAsync()
+        public ScriptTag_Tests(ScriptTag_Tests_Fixture fixture)
         {
-            // Create one collection for use with count, list, get, etc. tests.
-            await Create();
-        }
-
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in _Created)
-            {
-                try
-                {
-                    await _Service.DeleteAsync(obj.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created ScriptTag with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        private async Task<ScriptTag> Create(bool skipAddToCreatedList = false)
-        {
-            var obj = await _Service.CreateAsync(new ScriptTag()
-            {
-                Event = _Event,
-                Src = _Src,
-                DisplayScope = _Scope,
-            });
-
-            if (! skipAddToCreatedList)
-            {
-                _Created.Add(obj);
-            }
-
-            return obj;
+            this.Fixture = fixture;
         }
 
         [Fact]
         public async Task Counts_ScriptTags()
         {
-            var count = await _Service.CountAsync();
+            var count = await Fixture.Service.CountAsync();
 
             Assert.True(count > 0);
         }
@@ -75,7 +28,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_ScriptTags()
         {
-            var list = await _Service.ListAsync();
+            var list = await Fixture.Service.ListAsync();
 
             Assert.True(list.Count() > 0);
         }
@@ -83,12 +36,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_ScriptTags()
         {
-            var created = await Create(true);
+            var created = await Fixture.Create(true);
             bool threw = false;
 
             try
             {
-                await _Service.DeleteAsync(created.Id.Value);
+                await Fixture.Service.DeleteAsync(created.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -103,37 +56,94 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_ScriptTags()
         {
-            var obj = await _Service.GetAsync(_Created.First().Id.Value);
+            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(_Src, obj.Src);
-            Assert.Equal(_Event, obj.Event);
-            Assert.Equal(_Scope, obj.DisplayScope);
+            Assert.Equal(Fixture.Src, obj.Src);
+            Assert.Equal(Fixture.Event, obj.Event);
+            Assert.Equal(Fixture.Scope, obj.DisplayScope);
         }
 
         [Fact]
         public async Task Creates_ScriptTags()
         {
-            var obj = await Create();
+            var obj = await Fixture.Create();
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(_Src, obj.Src);
-            Assert.Equal(_Event, obj.Event);
-            Assert.Equal(_Scope, obj.DisplayScope);
+            Assert.Equal(Fixture.Src, obj.Src);
+            Assert.Equal(Fixture.Event, obj.Event);
+            Assert.Equal(Fixture.Scope, obj.DisplayScope);
         }
 
         [Fact]
         public async Task Updates_ScriptTags()
         {
             string newValue = "all";
-            var original = _Created.First();
+            var original = Fixture.Created.First();
             original.DisplayScope = newValue;
             
-            var updated = await _Service.UpdateAsync(original);
+            var updated = await Fixture.Service.UpdateAsync(original);
 
             Assert.Equal(newValue, updated.DisplayScope);   
+        }
+    }
+
+    public class ScriptTag_Tests_Fixture : IAsyncLifetime
+    {
+        public ScriptTagService Service => new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<ScriptTag> Created { get; } = new List<ScriptTag>();
+
+        public string Event => "onload";
+
+        public string Src => "https://unpkg.com/davenport@2.1.0/bin/browser.js";
+
+        public string Scope => "online_store";
+
+        public async Task InitializeAsync()
+        {
+            // Create one collection for use with count, list, get, etc. tests.
+            await Create();
+        }
+
+        public async Task DisposeAsync()
+        {
+            foreach (var obj in Created)
+            {
+                try
+                {
+                    await Service.DeleteAsync(obj.Id.Value);
+                }
+                catch (ShopifyException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created ScriptTag with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+        /// </summary>
+        public async Task<ScriptTag> Create(bool skipAddToCreatedList = false)
+        {
+            var obj = await Service.CreateAsync(new ScriptTag()
+            {
+                Event = Event,
+                Src = Src,
+                DisplayScope = Scope,
+            });
+
+            if (! skipAddToCreatedList)
+            {
+                Created.Add(obj);
+            }
+
+            return obj;
         }
     }
 }

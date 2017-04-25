@@ -8,69 +8,19 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Theme")]
-    public class Theme_Tests : IAsyncLifetime
+    public class Theme_Tests : IClassFixture<Theme_Tests_Fixture>
     {
-        private ThemeService _Service => new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Theme_Tests_Fixture Fixture { get; }
 
-        private List<Theme> _Created { get; } = new List<Theme>();
-
-        /// <summary>
-        /// A URL pointing to a zipped up Shopify theme.
-        /// </summary>
-        private string _ZipUrl => "https://ironstorage.blob.core.windows.net/public-downloads/ShopifySharp/shopify_test_theme_for_shopifysharp.zip";
-
-        private string _NamePrefix => "ShopifySharp Test Theme ";
-
-        private string _Role => "unpublished";
-
-        public async Task InitializeAsync()
+        public Theme_Tests(Theme_Tests_Fixture fixture)
         {
-            // Create one collection for use with count, list, get, etc. tests.
-            await Create();
-        }
-
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in _Created)
-            {
-                try
-                {
-                    await _Service.DeleteAsync(obj.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created Theme with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        private async Task<Theme> Create(bool skipAddToCreatedList = false, bool fromZipUrl = false)
-        {
-            var theme = new Theme()
-            {
-                Name = _NamePrefix + Guid.NewGuid(),
-                Role = _Role,   
-            };
-            var obj = fromZipUrl ? await _Service.CreateAsync(theme, _ZipUrl) : await _Service.CreateAsync(theme);
-
-            if (! skipAddToCreatedList)
-            {
-                _Created.Add(obj);
-            }
-
-            return obj;
+            this.Fixture = fixture;
         }
 
         [Fact]
         public async Task Lists_Themes()
         {
-            var list = await _Service.ListAsync();
+            var list = await Fixture.Service.ListAsync();
 
             Assert.True(list.Count() > 0);
         }
@@ -78,12 +28,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Themes()
         {
-            var created = await Create(true);
+            var created = await Fixture.Create(true);
             bool threw = false;
 
             try
             {
-                await _Service.DeleteAsync(created.Id.Value);
+                await Fixture.Service.DeleteAsync(created.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -98,46 +48,106 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Themes()
         {
-            var obj = await _Service.GetAsync(_Created.First().Id.Value);
+            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.StartsWith(_NamePrefix, obj.Name);
-            Assert.Equal(_Role, obj.Role);
+            Assert.StartsWith(Fixture.NamePrefix, obj.Name);
+            Assert.Equal(Fixture.Role, obj.Role);
         }
 
         [Fact]
         public async Task Creates_Themes()
         {
-            var obj = await Create();
+            var obj = await Fixture.Create();
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.StartsWith(_NamePrefix, obj.Name);
-            Assert.Equal(_Role, obj.Role);
+            Assert.StartsWith(Fixture.NamePrefix, obj.Name);
+            Assert.Equal(Fixture.Role, obj.Role);
         }
 
         [Fact]
         public async Task Creates_Themes_From_Zip_Files()
         {
-            var obj = await Create(fromZipUrl: true);
+            var obj = await Fixture.Create(fromZipUrl: true);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.StartsWith(_NamePrefix, obj.Name);
-            Assert.Equal(_Role, obj.Role);
+            Assert.StartsWith(Fixture.NamePrefix, obj.Name);
+            Assert.Equal(Fixture.Role, obj.Role);
         }
 
         [Fact]
         public async Task Updates_Themes()
         {
             string newValue = "ShopifySharp Updated Theme " + Guid.NewGuid();
-            var original = _Created.First();
+            var original = Fixture.Created.First();
             original.Name = newValue;
             
-            var updated = await _Service.UpdateAsync(original);
+            var updated = await Fixture.Service.UpdateAsync(original);
 
             Assert.Equal(newValue, updated.Name);
+        }
+    }
+
+    public class Theme_Tests_Fixture : IAsyncLifetime
+    {
+        public ThemeService Service => new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<Theme> Created { get; } = new List<Theme>();
+
+        /// <summary>
+        /// A URL pointing to a zipped up Shopify theme.
+        /// </summary>
+        public string ZipUrl => "https://ironstorage.blob.core.windows.net/public-downloads/ShopifySharp/shopify_test_theme_for_shopifysharp.zip";
+
+        public string NamePrefix => "ShopifySharp Test Theme ";
+
+        public string Role => "unpublished";
+
+        public async Task InitializeAsync()
+        {
+            // Create one collection for use with count, list, get, etc. tests.
+            await Create();
+        }
+
+        public async Task DisposeAsync()
+        {
+            foreach (var obj in Created)
+            {
+                try
+                {
+                    await Service.DeleteAsync(obj.Id.Value);
+                }
+                catch (ShopifyException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created Theme with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+        /// </summary>
+        public async Task<Theme> Create(bool skipAddToCreatedList = false, bool fromZipUrl = false)
+        {
+            var theme = new Theme()
+            {
+                Name = NamePrefix + Guid.NewGuid(),
+                Role = Role,   
+            };
+            var obj = fromZipUrl ? await Service.CreateAsync(theme, ZipUrl) : await Service.CreateAsync(theme);
+
+            if (! skipAddToCreatedList)
+            {
+                Created.Add(obj);
+            }
+
+            return obj;
         }
     }
 }

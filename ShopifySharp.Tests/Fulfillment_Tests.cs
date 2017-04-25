@@ -8,18 +8,149 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Fulfillment")]
-    public class Fulfillent_Tests : IAsyncLifetime
+    public class Fulfillent_Tests : IClassFixture<Fulfillent_Tests_Fixture>
     {
-        private FulfillmentService _Service => new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Fulfillent_Tests_Fixture Fixture { get; }
 
-        private OrderService _OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public Fulfillent_Tests(Fulfillent_Tests_Fixture fixture)
+        {
+            this.Fixture = fixture;
+        }
 
-        private long _SampleOrderId { get; set; }
+        [Fact]
+        public async Task Counts_Fulfillments()
+        {
+            var count = await Fixture.Service.CountAsync(Fixture.OrderId);
+
+            Assert.True(count > 0);
+        }
+
+        [Fact]
+        public async Task Counts_Fulfillments_With_A_Filter()
+        {
+            var fromDate = DateTime.UtcNow.AddDays(-2);
+            var count = await Fixture.Service.CountAsync(Fixture.OrderId, new CountFilter()
+            {
+                CreatedAtMin = fromDate
+            });
+
+            Assert.True(count > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Fulfillments()
+        {
+            var list = await Fixture.Service.ListAsync(Fixture.OrderId);
+
+            Assert.True(list.Count() > 0);
+        }
+
+        [Fact]
+        public async Task Lists_Fulfillments_With_A_Filter()
+        {
+            var fromDate = DateTime.UtcNow.AddDays(-2);
+            var list = await Fixture.Service.ListAsync(Fixture.OrderId, new ListFilter()
+            {
+                CreatedAtMin = fromDate
+            });
+
+            Assert.True(list.Count() > 0);
+        }
+
+        [Fact]
+        public async Task Gets_Fulfillments()
+        {
+            // Find an id 
+            long id = Fixture.Created.First().Fulfillments.First().Id.Value;
+            var fulfillment = await Fixture.Service.GetAsync(Fixture.OrderId, id);
+
+            Assert.NotNull(fulfillment);
+        }
+
+        [Fact]
+        public async Task Creates_Fulfillments()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value);
+
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);
+        }
+
+        [Fact]
+        public async Task Creates_Fulfillments_With_Tracking_Numbers()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value, true);
+
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);
+            Assert.True(created.TrackingNumbers.Count() > 1);
+        }
+
+        [Fact]
+        public async Task Creates_Partial_Fulfillments()
+        {
+            var order = await Fixture.CreateOrder();
+            var lineItem = order.LineItems.First();
+
+            // A partial fulfillment does not fulfill the entire line item quantity
+            lineItem.Quantity -= 1;
+
+            var created = await Fixture.Create(order.Id.Value, false, new LineItem[] { lineItem });
+
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);            
+        }
+
+        [Fact]
+        public async Task Updates_Fulfillments()
+        {
+            string company = "Auntie Dot's Shipping Company";
+            var fulfillment = Fixture.Created.First().Fulfillments.First();
+            fulfillment.TrackingCompany = company;
+            
+            var updated = await Fixture.Service.UpdateAsync(fulfillment.OrderId, fulfillment);
+
+            Assert.Equal(company, updated.TrackingCompany);
+        }
+
+        [Fact(Skip = "Can't complete or cancel a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
+        public async Task Cancels_Fulfillments()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value);
+            var cancelled = await Fixture.Service.CancelAsync(order.Id.Value, created.Id.Value);
+
+            Assert.Equal("cancelled", cancelled.Status);
+        }
+
+        [Fact(Skip = "Can't complete or cancel a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
+        public async Task Completes_Fulfillments()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value);
+            var cancelled = await Fixture.Service.CancelAsync(order.Id.Value, created.Id.Value);
+
+            Assert.Equal("success", cancelled.Status);
+        }
+    }
+
+    public class Fulfillent_Tests_Fixture : IAsyncLifetime
+    {
+        public FulfillmentService Service => new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public OrderService OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public long OrderId { get; set; }
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
         /// </summary>
-        private List<Order> _Created { get; } = new List<Order>();
+        public List<Order> Created { get; } = new List<Order>();
 
         public async Task InitializeAsync()
         {
@@ -27,16 +158,16 @@ namespace ShopifySharp.Tests
             var order = await CreateOrder();
             var fulfillment = await Create(order.Id.Value);
 
-            _SampleOrderId = order.Id.Value;
+            OrderId = order.Id.Value;
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in _Created)
+            foreach (var obj in Created)
             {
                 try
                 {
-                    await _OrderService.DeleteAsync(obj.Id.Value);
+                    await OrderService.DeleteAsync(obj.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
@@ -45,9 +176,9 @@ namespace ShopifySharp.Tests
             }
         }
 
-        private async Task<Order> CreateOrder()
+        public async Task<Order> CreateOrder()
         {
-            var obj = await _OrderService.CreateAsync(new Order()
+            var obj = await OrderService.CreateAsync(new Order()
             {
                 CreatedAt = DateTime.UtcNow,
                 BillingAddress = new Address()
@@ -91,12 +222,12 @@ namespace ShopifySharp.Tests
                 SendReceipt = false
             });
 
-            _Created.Add(obj);
+            Created.Add(obj);
 
             return obj;
         }
 
-        private async Task<Fulfillment> Create(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
+        public async Task<Fulfillment> Create(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
         {
             Fulfillment fulfillment;
 
@@ -134,130 +265,9 @@ namespace ShopifySharp.Tests
                 fulfillment.LineItems = items;
             }
 
-            fulfillment = await _Service.CreateAsync(orderId, fulfillment, false);
+            fulfillment = await Service.CreateAsync(orderId, fulfillment, false);
 
             return fulfillment;
-        }
-
-        [Fact]
-        public async Task Counts_Fulfillments()
-        {
-            var count = await _Service.CountAsync(_SampleOrderId);
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Counts_Fulfillments_With_A_Filter()
-        {
-            var fromDate = DateTime.UtcNow.AddDays(-2);
-            var count = await _Service.CountAsync(_SampleOrderId, new CountFilter()
-            {
-                CreatedAtMin = fromDate
-            });
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Fulfillments()
-        {
-            var list = await _Service.ListAsync(_SampleOrderId);
-
-            Assert.True(list.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Fulfillments_With_A_Filter()
-        {
-            var fromDate = DateTime.UtcNow.AddDays(-2);
-            var list = await _Service.ListAsync(_SampleOrderId, new ListFilter()
-            {
-                CreatedAtMin = fromDate
-            });
-
-            Assert.True(list.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Gets_Fulfillments()
-        {
-            // Find an id 
-            long id = _Created.First().Fulfillments.First().Id.Value;
-            var fulfillment = await _Service.GetAsync(_SampleOrderId, id);
-
-            Assert.NotNull(fulfillment);
-        }
-
-        [Fact]
-        public async Task Creates_Fulfillments()
-        {
-            var order = await CreateOrder();
-            var created = await Create(order.Id.Value);
-
-            Assert.NotNull(created);
-            Assert.True(created.Id.HasValue);
-            Assert.Equal("success", created.Status);
-        }
-
-        [Fact]
-        public async Task Creates_Fulfillments_With_Tracking_Numbers()
-        {
-            var order = await CreateOrder();
-            var created = await Create(order.Id.Value, true);
-
-            Assert.NotNull(created);
-            Assert.True(created.Id.HasValue);
-            Assert.Equal("success", created.Status);
-            Assert.True(created.TrackingNumbers.Count() > 1);
-        }
-
-        [Fact]
-        public async Task Creates_Partial_Fulfillments()
-        {
-            var order = await CreateOrder();
-            var lineItem = order.LineItems.First();
-
-            // A partial fulfillment does not fulfill the entire line item quantity
-            lineItem.Quantity -= 1;
-
-            var created = await Create(order.Id.Value, false, new LineItem[] { lineItem });
-
-            Assert.NotNull(created);
-            Assert.True(created.Id.HasValue);
-            Assert.Equal("success", created.Status);            
-        }
-
-        [Fact]
-        public async Task Updates_Fulfillments()
-        {
-            string company = "Auntie Dot's Shipping Company";
-            var fulfillment = _Created.First().Fulfillments.First();
-            fulfillment.TrackingCompany = company;
-            
-            var updated = await _Service.UpdateAsync(fulfillment.OrderId, fulfillment);
-
-            Assert.Equal(company, updated.TrackingCompany);
-        }
-
-        [Fact(Skip = "Can't complete or cancel a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
-        public async Task Cancels_Fulfillments()
-        {
-            var order = await CreateOrder();
-            var created = await Create(order.Id.Value);
-            var cancelled = await _Service.CancelAsync(order.Id.Value, created.Id.Value);
-
-            Assert.Equal("cancelled", cancelled.Status);
-        }
-
-        [Fact(Skip = "Can't complete or cancel a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
-        public async Task Completes_Fulfillments()
-        {
-            var order = await CreateOrder();
-            var created = await Create(order.Id.Value);
-            var cancelled = await _Service.CancelAsync(order.Id.Value, created.Id.Value);
-
-            Assert.Equal("success", cancelled.Status);
         }
     }
 }

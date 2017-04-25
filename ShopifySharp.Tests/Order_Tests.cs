@@ -13,18 +13,15 @@ namespace ShopifySharp.Tests
     {
         private Order_Tests_Fixture Fixture { get; }
 
-        private OrderService Service { get; }
-
         public Order_Tests(Order_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
-            this.Service = fixture.Service;
         }
 
         [Fact]
         public async Task Counts_Orders()
         {
-            var count = await Service.CountAsync();
+            var count = await Fixture.Service.CountAsync();
 
             Assert.True(count > 0);
         }
@@ -32,7 +29,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Orders()
         {
-            var list = await Service.ListAsync();
+            var list = await Fixture.Service.ListAsync();
 
             Assert.True(list.Count() > 0);
         }
@@ -42,7 +39,7 @@ namespace ShopifySharp.Tests
         {
             var created = await Task.WhenAll(Enumerable.Range(0, 2).Select(i => Fixture.Create()));
             var ids = created.Select(o => o.Id.Value);
-            var list = await Service.ListAsync(new OrderFilter()
+            var list = await Fixture.Service.ListAsync(new OrderFilter()
             {
                 Ids = ids
             });
@@ -58,7 +55,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                await Service.DeleteAsync(created.Id.Value);
+                await Fixture.Service.DeleteAsync(created.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -73,7 +70,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Orders()
         {
-            var order = await Service.GetAsync(Fixture.Created.First().Id.Value);
+            var order = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
 
             Assert.NotNull(order);
             Assert.Equal(Fixture.Note, order.Note);
@@ -97,15 +94,15 @@ namespace ShopifySharp.Tests
             var created = await Fixture.Create();
             created.Note = note;
 
-            var updated = await Service.UpdateAsync(created);
+            var updated = await Fixture.Service.UpdateAsync(created);
         }
 
         [Fact]
         public async Task Opens_Orders()
         {
             // Close an order before opening it.
-            var closed = await Service.CloseAsync(Fixture.Created.First().Id.Value);
-            var opened = await Service.OpenAsync(closed.Id.Value);
+            var closed = await Fixture.Service.CloseAsync(Fixture.Created.First().Id.Value);
+            var opened = await Fixture.Service.OpenAsync(closed.Id.Value);
 
             Assert.False(opened.ClosedAt.HasValue);
         }
@@ -113,7 +110,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Closes_Orders()
         {
-            var closed = await Service.CloseAsync(Fixture.Created.Last().Id.Value);
+            var closed = await Fixture.Service.CloseAsync(Fixture.Created.Last().Id.Value);
 
             Assert.True(closed.ClosedAt.HasValue);
         }
@@ -123,9 +120,9 @@ namespace ShopifySharp.Tests
         {
             long id = Fixture.Created.First().Id.Value;
             
-            await Service.CancelAsync(id);
+            await Fixture.Service.CancelAsync(id);
 
-            var order = await Service.GetAsync(id);
+            var order = await Fixture.Service.GetAsync(id);
 
             Assert.True(order.CancelledAt.HasValue);
         }
@@ -135,12 +132,12 @@ namespace ShopifySharp.Tests
         {
             long id = Fixture.Created.Last().Id.Value;
             
-            await Service.CancelAsync(id, new OrderCancelOptions()
+            await Fixture.Service.CancelAsync(id, new OrderCancelOptions()
             {
                 Reason = "customer"
             });
 
-            var order = await Service.GetAsync(id);
+            var order = await Fixture.Service.GetAsync(id);
 
             Assert.True(order.CancelledAt.HasValue);
         }

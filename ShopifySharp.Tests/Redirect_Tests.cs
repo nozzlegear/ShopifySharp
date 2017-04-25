@@ -8,61 +8,19 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Redirect")]
-    public class Redirect_Tests : IAsyncLifetime
+    public class Redirect_Tests : IClassFixture<Redirect_Tests_Fixture>
     {
-        private RedirectService _Service => new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private Redirect_Tests_Fixture Fixture { get; }
 
-        private List<Redirect> _Created { get; } = new List<Redirect>();
-
-        private string _Target => "https://www.example.com/";
-
-        public async Task InitializeAsync()
+        public Redirect_Tests(Redirect_Tests_Fixture fixture)
         {
-            // Create one collection for use with count, list, get, etc. tests.
-            await Create();
-        }
-
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in _Created)
-            {
-                try
-                {
-                    await _Service.DeleteAsync(obj.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created Redirect with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        private async Task<Redirect> Create(bool skipAddToCreatedList = false)
-        {
-            var obj = await _Service.CreateAsync(new Redirect()
-            {
-                Path = Guid.NewGuid().ToString(),
-                Target = _Target,
-            });
-
-            if (! skipAddToCreatedList)
-            {
-                _Created.Add(obj);
-            }
-
-            return obj;
+            this.Fixture = fixture;
         }
 
         [Fact]
         public async Task Counts_Redirects()
         {
-            var count = await _Service.CountAsync();
+            var count = await Fixture.Service.CountAsync();
 
             Assert.True(count > 0);
         }
@@ -70,7 +28,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Redirects()
         {
-            var list = await _Service.ListAsync();
+            var list = await Fixture.Service.ListAsync();
 
             Assert.True(list.Count() > 0);
         }
@@ -78,12 +36,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Redirects()
         {
-            var created = await Create(true);
+            var created = await Fixture.Create(true);
             bool threw = false;
 
             try
             {
-                await _Service.DeleteAsync(created.Id.Value);
+                await Fixture.Service.DeleteAsync(created.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -98,22 +56,22 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Redirects()
         {
-            var obj = await _Service.GetAsync(_Created.First().Id.Value);
+            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(_Target, obj.Target);
+            Assert.Equal(Fixture.Target, obj.Target);
             Assert.NotEmpty(obj.Path);
         }
 
         [Fact]
         public async Task Creates_Redirects()
         {
-            var created = await Create();
-
+            var created = await Fixture.Create();
+            
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
-            Assert.Equal(_Target, created.Target);
+            Assert.Equal(Fixture.Target, created.Target);
             Assert.NotEmpty(created.Path);
         }
 
@@ -121,12 +79,64 @@ namespace ShopifySharp.Tests
         public async Task Updates_Redirects()
         {
             string newVal = "https://example.com/updated";
-            var original = _Created.First();
+            var original = Fixture.Created.First();
             original.Target = newVal;
             
-            var updated = await _Service.UpdateAsync(original);
+            var updated = await Fixture.Service.UpdateAsync(original);
 
             Assert.Equal(newVal, updated.Target);   
+        }
+    }
+
+    public class Redirect_Tests_Fixture : IAsyncLifetime
+    {
+        public RedirectService Service => new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<Redirect> Created { get; } = new List<Redirect>();
+
+        public string Target => "https://www.example.com/";
+
+        public async Task InitializeAsync()
+        {
+            // Create one collection for use with count, list, get, etc. tests.
+            await Create();
+        }
+
+        public async Task DisposeAsync()
+        {
+            foreach (var obj in Created)
+            {
+                try
+                {
+                    await Service.DeleteAsync(obj.Id.Value);
+                }
+                catch (ShopifyException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created Redirect with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+        /// </summary>
+        public async Task<Redirect> Create(bool skipAddToCreatedList = false)
+        {
+            var obj = await Service.CreateAsync(new Redirect()
+            {
+                Path = Guid.NewGuid().ToString(),
+                Target = Target,
+            });
+
+            if (! skipAddToCreatedList)
+            {
+                Created.Add(obj);
+            }
+
+            return obj;
         }
     }
 }

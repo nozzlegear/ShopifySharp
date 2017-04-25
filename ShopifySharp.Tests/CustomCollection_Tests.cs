@@ -126,7 +126,7 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        private async Task<CustomCollection> Create(bool skipAddToCreatedList = false)
+        public async Task<CustomCollection> Create(bool skipAddToCreatedList = false)
         {
             var obj = await Service.CreateAsync(new CustomCollection()
             {

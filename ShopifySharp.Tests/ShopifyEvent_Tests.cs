@@ -7,16 +7,19 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Event")]
-    public class ShopifyEvent_Tests
+    public class ShopifyEvent_Tests : IClassFixture<ShopifyEvent_Tests_Fixture>
     {
-        private EventService _Service => new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private ShopifyEvent_Tests_Fixture Fixture { get; }
 
-        private List<ShopifyEvent> _Created { get; } = new List<ShopifyEvent>();
+        public ShopifyEvent_Tests(ShopifyEvent_Tests_Fixture fixture)
+        {
+            this.Fixture = fixture;
+        }
 
         [Fact]
         public async Task Counts_Events()
         {
-            var count = await _Service.CountAsync();
+            var count = await Fixture.Service.CountAsync();
 
             Assert.True(count > 0);
         }
@@ -24,7 +27,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Events()
         {
-            var list = await _Service.ListAsync();
+            var list = await Fixture.Service.ListAsync();
 
             Assert.True(list.Count() > 0);
         }
@@ -38,7 +41,7 @@ namespace ShopifySharp.Tests
                 Limit = 1
             })).First().Id.Value;
             string subject = "Order";
-            var list = await _Service.ListAsync(orderId, subject);
+            var list = await Fixture.Service.ListAsync(orderId, subject);
 
             Assert.NotNull(list);
             Assert.All(list, e => Assert.Equal(subject, e.SubjectType));
@@ -47,11 +50,11 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Events()
         {
-            var list = await _Service.ListAsync(options: new EventListFilter()
+            var list = await Fixture.Service.ListAsync(options: new EventListFilter()
             {
                 Limit = 1
             });
-            var evt = await _Service.GetAsync(list.First().Id.Value);
+            var evt = await Fixture.Service.GetAsync(list.First().Id.Value);
 
             Assert.NotNull(evt);
             Assert.NotNull(evt.Author);
@@ -61,5 +64,12 @@ namespace ShopifySharp.Tests
             Assert.NotNull(evt.SubjectType);
             Assert.NotNull(evt.Verb);
         }
+    }
+
+    public class ShopifyEvent_Tests_Fixture
+    {
+        public EventService Service => new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public List<ShopifyEvent> Created { get; } = new List<ShopifyEvent>();
     }
 }
