@@ -92,7 +92,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Description, created.Description);
             EmptyAssert.NotNullOrEmpty(created.Key);
             Assert.NotNull(created.Value);
-            Assert.Equal(Fixture.ResourceType, created.OwnerResource);
+            Assert.True(new string[] { Fixture.ResourceType, Fixture.ResourceType.Substring(0, Fixture.ResourceType.Length - 1) }.Contains(created.OwnerResource));
             Assert.Equal(Fixture.ResourceId, created.OwnerId);
         }
 
@@ -105,7 +105,7 @@ namespace ShopifySharp.Tests
 
             var updated = await Fixture.Service.UpdateAsync(created);
 
-            Assert.Equal(value, updated.Value);
+            Assert.Equal(value, updated.Value.ToString());
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace ShopifySharp.Tests
 
             var updated = await Fixture.Service.UpdateAsync(created);
 
-            Assert.Equal(value, updated.Value);
+            Assert.Equal(value, updated.Value.ToString());
         }
     }
 
@@ -172,7 +172,7 @@ namespace ShopifySharp.Tests
             var obj = await Service.CreateAsync(new MetaField()
             {
                 Namespace = Namespace,
-                Key = Guid.NewGuid().ToString(),
+                Key = Guid.NewGuid().ToString().Substring(0, 25),
                 Value = "5",
                 ValueType = "integer",
                 Description = Description,
@@ -194,7 +194,7 @@ namespace ShopifySharp.Tests
             var obj = await Service.CreateAsync(new MetaField()
             {
                 Namespace = Namespace,
-                Key = Guid.NewGuid().ToString(),
+                Key = Guid.NewGuid().ToString().Substring(0, 25),
                 Value = "5",
                 ValueType = "integer",
                 Description = Description,
