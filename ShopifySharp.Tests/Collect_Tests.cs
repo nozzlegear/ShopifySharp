@@ -37,13 +37,14 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Collects_With_A_Filter()
         {
+            var productId = Fixture.Created.First().ProductId;
             var collects = await Fixture.Service.ListAsync(new CollectFilter()
             {
-                ProductId = Fixture.ProductId,
+                ProductId = productId,
             });
 
             Assert.True(collects.Count() > 0);
-            Assert.All(collects, collect => Assert.Equal(Fixture.ProductId, collect.ProductId));
+            Assert.All(collects, collect => Assert.True(collect.ProductId > 0));
         }
 
         [Fact]
@@ -54,7 +55,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(collect);
             Assert.True(collect.Id.HasValue);
             Assert.Equal(Fixture.CollectionId, collect.CollectionId);
-            Assert.Equal(Fixture.ProductId, collect.ProductId);
+            Assert.True(collect.ProductId > 0);
         }
 
         [Fact]
@@ -85,13 +86,13 @@ namespace ShopifySharp.Tests
             Assert.NotNull(collect);
             Assert.True(collect.Id.HasValue);
             Assert.Equal(Fixture.CollectionId, collect.CollectionId);
-            Assert.Equal(Fixture.ProductId, collect.ProductId);
+            Assert.True(collect.ProductId > 0);
         }
     }
 
     public class Collect_Tests_Fixture : IAsyncLifetime
     {
-        public CollectService Service => new CollectService(Utils.MyShopifyUrl, Utils.SecretKey);
+        public CollectService Service => new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Collect> Created { get; } = new List<Collect>();
 
@@ -100,21 +101,8 @@ namespace ShopifySharp.Tests
         /// </remarks>
         public long CollectionId { get; set; }
 
-        public long ProductId { get; set; }
-
         public async Task InitializeAsync()
         {
-            // Create a product to use with these tests.
-            var product = await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).CreateAsync(new ShopifySharp.Product()
-            {
-                CreatedAt = DateTime.UtcNow,
-                Title = "Burton Custom Freestlye 151",
-                Vendor = "Burton",
-                BodyHtml = "<strong>Good snowboard!</strong>",
-                ProductType = "Snowboard",
-                Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
-            });
-
             // Create a collection to use with these tests.
             var collection = await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).CreateAsync(new CustomCollection()
             {
@@ -126,7 +114,6 @@ namespace ShopifySharp.Tests
                 }
             });
 
-            ProductId = product.Id.Value;
             CollectionId = collection.Id.Value;
 
             // Create a collection to use with get, list, count, etc. tests.
@@ -135,11 +122,14 @@ namespace ShopifySharp.Tests
 
         public async Task DisposeAsync()
         {
+            var productService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+
             foreach (var obj in Created)
             {
                 try
                 {
                     await Service.DeleteAsync(obj.Id.Value);
+                    await productService.DeleteAsync(obj.ProductId);
                 }
                 catch (ShopifyException ex)
                 {
@@ -150,9 +140,8 @@ namespace ShopifySharp.Tests
                 }
             }
 
-            // Delete the product and the collect
+            // Delete the collection
             await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(CollectionId);
-            await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(ProductId);
         }
 
         /// <summary>
@@ -160,10 +149,20 @@ namespace ShopifySharp.Tests
         /// </summary>
         public async Task<Collect> Create(bool skipAddToCreatedList = false)
         {
+            // Create a product to use with these tests.
+            var product = await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).CreateAsync(new ShopifySharp.Product()
+            {
+                CreatedAt = DateTime.UtcNow,
+                Title = "Burton Custom Freestlye 151",
+                Vendor = "Burton",
+                BodyHtml = "<strong>Good snowboard!</strong>",
+                ProductType = "Snowboard",
+                Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
+            });
             var obj = await Service.CreateAsync(new Collect()
             {
                 CollectionId = CollectionId,
-                ProductId = ProductId,
+                ProductId = product.Id.Value,
             });
 
             if (! skipAddToCreatedList)
