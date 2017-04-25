@@ -49,8 +49,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Risks()
         {
-            long id = Fixture.Created.First().Id.Value;
-            var risk = await Fixture.Service.GetAsync(Fixture.OrderId, id);
+            var created = await Fixture.Create(Fixture.OrderId);
+            var risk = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
 
             Assert.NotNull(risk);
             Assert.Equal(Fixture.OrderId, risk.OrderId);
