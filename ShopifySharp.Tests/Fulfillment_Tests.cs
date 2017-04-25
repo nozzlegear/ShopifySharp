@@ -20,7 +20,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Counts_Fulfillments()
         {
-            var count = await Fixture.Service.CountAsync(Fixture.OrderId);
+            long orderId = Fixture.Created.First().OrderId;
+            var count = await Fixture.Service.CountAsync(orderId);
 
             Assert.True(count > 0);
         }
@@ -28,8 +29,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Counts_Fulfillments_With_A_Filter()
         {
+            long orderId = Fixture.Created.First().OrderId;
             var fromDate = DateTime.UtcNow.AddDays(-2);
-            var count = await Fixture.Service.CountAsync(Fixture.OrderId, new CountFilter()
+            var count = await Fixture.Service.CountAsync(orderId, new CountFilter()
             {
                 CreatedAtMin = fromDate
             });
@@ -40,7 +42,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Fulfillments()
         {
-            var list = await Fixture.Service.ListAsync(Fixture.OrderId);
+            long orderId = Fixture.Created.First().OrderId;
+            var list = await Fixture.Service.ListAsync(orderId);
 
             Assert.True(list.Count() > 0);
         }
@@ -48,8 +51,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Fulfillments_With_A_Filter()
         {
+            long orderId = Fixture.Created.First().OrderId;
             var fromDate = DateTime.UtcNow.AddDays(-2);
-            var list = await Fixture.Service.ListAsync(Fixture.OrderId, new ListFilter()
+            var list = await Fixture.Service.ListAsync(orderId, new ListFilter()
             {
                 CreatedAtMin = fromDate
             });
@@ -61,8 +65,8 @@ namespace ShopifySharp.Tests
         public async Task Gets_Fulfillments()
         {
             // Find an id 
-            long id = Fixture.Created.First().Fulfillments.First().Id.Value;
-            var fulfillment = await Fixture.Service.GetAsync(Fixture.OrderId, id);
+            var created = Fixture.Created.First();
+            var fulfillment = await Fixture.Service.GetAsync(created.OrderId, created.Id.Value);
 
             Assert.NotNull(fulfillment);
         }
@@ -110,10 +114,11 @@ namespace ShopifySharp.Tests
         public async Task Updates_Fulfillments()
         {
             string company = "Auntie Dot's Shipping Company";
-            var fulfillment = Fixture.Created.First().Fulfillments.First();
-            fulfillment.TrackingCompany = company;
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value, false);
+            created.TrackingCompany = company;
             
-            var updated = await Fixture.Service.UpdateAsync(fulfillment.OrderId, fulfillment);
+            var updated = await Fixture.Service.UpdateAsync(created.OrderId, created);
 
             Assert.Equal(company, updated.TrackingCompany);
         }
@@ -145,20 +150,18 @@ namespace ShopifySharp.Tests
 
         public OrderService OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public long OrderId { get; set; }
-
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
         /// </summary>
-        public List<Order> Created { get; } = new List<Order>();
+        public List<Order> CreatedOrders { get; } = new List<Order>();
+
+        public List<Fulfillment> Created { get; } = new List<Fulfillment>();
 
         public async Task InitializeAsync()
         {
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
             var fulfillment = await Create(order.Id.Value);
-
-            OrderId = order.Id.Value;
         }
 
         public async Task DisposeAsync()
@@ -222,7 +225,7 @@ namespace ShopifySharp.Tests
                 SendReceipt = false
             });
 
-            Created.Add(obj);
+            CreatedOrders.Add(obj);
 
             return obj;
         }
@@ -266,6 +269,8 @@ namespace ShopifySharp.Tests
             }
 
             fulfillment = await Service.CreateAsync(orderId, fulfillment, false);
+
+            Created.Add(fulfillment);
 
             return fulfillment;
         }
