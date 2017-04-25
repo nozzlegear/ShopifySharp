@@ -15,8 +15,9 @@ namespace ShopifySharp
         public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
             while (true)
-            using (var request = baseRequest.Clone())
             {
+                var request = baseRequest.Clone();
+
                 try
                 {
                     var fullResult = await executeRequestAsync(request, bodyContent);

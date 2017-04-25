@@ -42,8 +42,9 @@ namespace ShopifySharp
             }
 
             while (true)
-            using (var request = baseRequest.Clone())
             {
+                var request = baseRequest.Clone();
+
                 if (accessToken != null)
                 {
                     await bucket.GrantAsync();

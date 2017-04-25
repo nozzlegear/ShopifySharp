@@ -76,6 +76,10 @@ namespace ShopifySharp
         {
             var client = Flurl.Url.Combine(_ShopUri.ToString(), path).AllowAnyHttpStatus();
 
+            // Let the service decide when to dispose a request. Some execution policies clone the clients for reuse,
+            // but cloned clients still share the underlying HttpClient. Disposing a clone will break all further clones.
+            client.Settings.AutoDispose = false;
+
             if (! string.IsNullOrEmpty(_AccessToken))
             {
                 client = client.WithHeader("X-Shopify-Access-Token", _AccessToken);
@@ -90,7 +94,7 @@ namespace ShopifySharp
         /// </summary>
         protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseClient, HttpMethod method, HttpContent baseContent = null)
         {
-            return await _ExecutionPolicy.Run(baseClient, baseContent, async (client, content) =>
+            var policyResult = await _ExecutionPolicy.Run(baseClient, baseContent, async (client, content) =>
             {
                 var request = client.SendAsync(method, content);
                 var response = await request;
@@ -103,6 +107,10 @@ namespace ShopifySharp
 
                 return new RequestResult<JToken>(response, jtoken, rawResult);
             });
+
+            baseClient.Dispose();
+
+            return policyResult;
         }
 
         /// <summary>
@@ -123,7 +131,7 @@ namespace ShopifySharp
         /// </remarks>
         protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseClient, HttpMethod method, HttpContent baseContent = null, string rootElement = null) where T : new()
         {
-            return await _ExecutionPolicy.Run<T>(baseClient, baseContent, async (client, content) =>
+            var policyResult = await _ExecutionPolicy.Run<T>(baseClient, baseContent, async (client, content) =>
             {
                 var request = client.SendAsync(method, content);
                 var response = await request;
@@ -137,6 +145,10 @@ namespace ShopifySharp
                 
                 return new RequestResult<T>(response, result, rawResult);
             });
+
+            baseClient.Dispose();
+
+            return policyResult;
         }
 
         /// <summary>
