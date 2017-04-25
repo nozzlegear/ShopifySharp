@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests
         public void ConvertEmptyValue()
         {
             //Normal deserialization should fail to convert null or string to int
-            Assert.Throws<Exception>(() => JsonConvert.DeserializeObject<TestObject>(_EmptyValueString));
+            Assert.Throws<JsonSerializationException>(() => JsonConvert.DeserializeObject<TestObject>(_EmptyValueString));
         }
 
         [Fact]
