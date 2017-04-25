@@ -12,7 +12,7 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        private static IRequestExecutionPolicy _ExecutionPolicy = new DefaultRequestExecutionPolicy();
+        private IRequestExecutionPolicy _ExecutionPolicy = new DefaultRequestExecutionPolicy();
 
         protected Uri _ShopUri { get; set; }
 
