@@ -21,12 +21,16 @@ namespace ShopifySharp.Tests
         public async Task Creates_Assets()
         {
             string key = "templates/test.liquid";
-            var asset = await Fixture.Create(key);
+            var created = await Fixture.Create(key);
 
-            Assert.NotNull(asset);
-            Assert.Equal(asset.Key, key);
-            Assert.Equal(asset.Value, Fixture.AssetValue);
-            Assert.Equal(asset.ThemeId, Fixture.ThemeId);
+            Assert.NotNull(created);
+            Assert.Equal(key, created.Key);
+            Assert.Equal(Fixture.ThemeId, created.ThemeId);
+
+            // Value is not returned when creating or updating. Must get the asset to check it.
+            var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+
+            Assert.Equal(Fixture.AssetValue, asset.Value);
         }
 
         [Fact]
@@ -34,12 +38,15 @@ namespace ShopifySharp.Tests
         {
             string key = "templates/update-test.liquid";
             string newValue = "<h1>Hello, world! I've been updated!</h1>";
-            var asset = await Fixture.Create(key);
-            
-            asset.Value = newValue;
-            asset = await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, asset);
+            var created = await Fixture.Create(key);
+            created.Value = newValue;
 
-            Assert.Equal(asset.Value, newValue);
+            await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, created);
+
+            // Value is not returned when creating or updating. Must get the asset to check it.
+            var updated = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+
+            Assert.Equal(newValue, updated.Value);
         }
 
         [Fact]
