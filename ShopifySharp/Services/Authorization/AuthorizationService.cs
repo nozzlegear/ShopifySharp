@@ -39,11 +39,10 @@ namespace ShopifySharp
 
         private static string PrepareQuerystring(IEnumerable<KeyValuePair<string, StringValues>> querystring, string joinWith)
         {
-            var kvps = querystring.Cast<string>()
-                .Select(key => new 
+            var kvps = querystring.Select(kvp => new 
                 { 
-                    Key = EncodeQuery(key, true), 
-                    Value = EncodeQuery(querystring.FirstOrDefault(kvp => kvp.Key == key).Value, false) 
+                    Key = EncodeQuery(kvp.Key, true), 
+                    Value = EncodeQuery(kvp.Value, false) 
                 })
                 .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
                 .OrderBy(kvp => kvp.Key)
