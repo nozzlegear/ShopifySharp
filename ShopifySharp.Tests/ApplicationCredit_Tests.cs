@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Xunit;
+using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
@@ -20,7 +21,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(credit);
             Assert.True(credit.Id.HasValue);
-            Assert.NotEmpty(credit.Description);
+            EmptyAssert.NotNullOrEmpty(credit.Description);
             Assert.True(credit.Test.Value);
             Assert.True(credit.Amount > 0);
         }

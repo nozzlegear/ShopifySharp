@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
@@ -35,8 +36,8 @@ namespace ShopifySharp.Tests
             Assert.Equal(article.BodyHtml, Fixture.BodyHtml);
             Assert.Equal(article.BlogId, Fixture.BlogId);
             Assert.Contains(article.Title, Fixture.Title);
-            Assert.NotEmpty(article.Handle);
-            Assert.NotEmpty(article.Tags);
+            EmptyAssert.NotNullOrEmpty(article.Handle);
+            EmptyAssert.NotNullOrEmpty(article.Tags);
         }
 
         [Fact]

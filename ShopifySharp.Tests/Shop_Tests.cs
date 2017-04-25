@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Xunit;
+using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
@@ -15,9 +16,9 @@ namespace ShopifySharp.Tests
             var shop = await _Service.GetAsync();
 
             Assert.NotNull(shop);
-            Assert.NotEmpty(shop.Name);
-            Assert.NotEmpty(shop.PlanDisplayName);
-            Assert.NotEmpty(shop.MyShopifyDomain);
+            EmptyAssert.NotNullOrEmpty(shop.Name);
+            EmptyAssert.NotNullOrEmpty(shop.PlanDisplayName);
+            EmptyAssert.NotNullOrEmpty(shop.MyShopifyDomain);
         }
 
         [Fact(Skip = "Private applications cannot be uninstalled.")]

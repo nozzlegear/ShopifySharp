@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
@@ -74,9 +75,10 @@ namespace ShopifySharp.Tests
             Assert.NotNull(customer);
             Assert.Equal(Fixture.FirstName, customer.FirstName);
             Assert.Equal(Fixture.LastName, customer.LastName);
-            Assert.Empty(customer.Note);
-            Assert.Empty(customer.Addresses);
+            EmptyAssert.NullOrEmpty(customer.Note);
+            EmptyAssert.NullOrEmpty(customer.Addresses);
             Assert.Null(customer.DefaultAddress);
+            
         }
 
         [Fact]

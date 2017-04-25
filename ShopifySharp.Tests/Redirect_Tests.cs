@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
@@ -61,7 +62,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
             Assert.Equal(Fixture.Target, obj.Target);
-            Assert.NotEmpty(obj.Path);
+            EmptyAssert.NotNullOrEmpty(obj.Path);
         }
 
         [Fact]
@@ -72,7 +73,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.Target, created.Target);
-            Assert.NotEmpty(created.Path);
+            EmptyAssert.NotNullOrEmpty(created.Path);
         }
 
         [Fact]
