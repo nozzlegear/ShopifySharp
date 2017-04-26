@@ -176,6 +176,7 @@ namespace ShopifySharp.Tests
                 Vendor = Vendor,
                 BodyHtml = BodyHtml,
                 ProductType = ProductType,
+                Handle = Guid.NewGuid().ToString(),
                 Images = new List<ProductImage>
                 {
                     new ProductImage
