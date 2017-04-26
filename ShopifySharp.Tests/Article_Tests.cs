@@ -32,10 +32,10 @@ namespace ShopifySharp.Tests
             var article = await Fixture.Create();
 
             Assert.True(article.Id.HasValue);
-            Assert.Equal(article.Author, Fixture.Author);
-            Assert.Equal(article.BodyHtml, Fixture.BodyHtml);
-            Assert.Equal(article.BlogId, Fixture.BlogId);
-            Assert.Contains(article.Title, Fixture.Title);
+            Assert.Equal(Fixture.Author, article.Author);
+            Assert.Equal(Fixture.BodyHtml, article.BodyHtml);
+            Assert.Equal(Fixture.BlogId, article.BlogId);
+            Assert.Contains(Fixture.Title, article.Title);
             EmptyAssert.NotNullOrEmpty(article.Handle);
             EmptyAssert.NotNullOrEmpty(article.Tags);
         }
