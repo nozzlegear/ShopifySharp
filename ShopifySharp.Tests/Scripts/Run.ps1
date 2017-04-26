@@ -1,34 +1,42 @@
-# Run all tests except the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
-# dotnet test --filter "Category!=ShopifyException"
+# Run all tests before the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
+$exceptionTestsFile = "ShopifyException_Tests.cs";
+$tests = Get-ChildItem *_Tests.cs -exclude $exceptionTestsFile;
+# Add the Exception tests to the end of the array.
+$tests += (Get-ChildItem $exceptionTestsFile)[0];
+$skippedTests = @();
 
-$tests = gci *.cs | where { $_ -match "_Tests\.cs" };
-$failed = @();
+# Build the project once, then let all tests skip build.
+dotnet build -c Release;
 
-foreach ($test in $tests)
-{
-    write-host "TODO: Skip running the ShopifyException tests until all other tests have run." -ForegroundColor "yellow";
-
+foreach ($test in $tests) {
     $categoryName = $test.Name -replace "_Tests.cs","";
 
+    write-host "";
     write-host "Running $categoryName tests.";
 
-    $testOutput = dotnet test --filter "Category=$categoryName";
+    $testOutput = dotnet test --filter "Category=$categoryName" --no-build;
+    $testExitCode = $LastExitCode;
+    $totalTestsLine = $testOutput -match "^Total tests:";
+    
+    write-host $totalTestsLine;
 
-    write-host $testOutput;
-
-    if (([regex]::Match($output, "No test is available")).Success -eq $true)
-    {
+    if (([regex]::Match($output, "No test is available")).Success -eq $true) {
         # Bad category name, no test was run.
         write-host "$categoryName test in file $($test.Name) was not run! Category does not exist." -ForegroundColor "red";
+        $skippedTests += $categoryName;
     }
+    elseif ($testExitCode -ne 0 -or $output -contains "Test Run Failed.") {
+        Write-Host "$categoryName tests failed:" -ForegroundColor "red";
+        Write-Output $testOutput;
+        $message = "$categoryName tests failed with exit code $testExitCode.";
 
-    write-host "TODO: Check for errors in test and quit if found." -ForegroundColor "yellow";
+        throw $message;
+    }
+    else {
+        Write-Host "$categoryName tests passed." -ForegroundColor "Green";
+    }
 }
 
-if ($LastExitCode -ne 0)
-{
-    throw "Test errors detected. Exiting before running ShopifyException tests.";
+if ($skippedTests.Length -gt 0) {
+    $skippedTests | % { write-host "$_ test was skipped. Does it exist?" -ForegroundColor "yellow" }
 }
-
-# Run the exception tests last
-# dotnet test --filter "Category=ShopifyException"
