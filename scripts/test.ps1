@@ -1,10 +1,10 @@
 # Run all tests before the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
 $dir = "ShopifySharp.Tests";
 $config = "Release";
-$exceptionTestsFile = "$dir/ShopifyException_Tests.cs";
+$exceptionTestsFile = "ShopifyException_Tests.cs";
 $tests = Get-ChildItem "$dir/*_Tests.cs" -exclude "$exceptionTestsFile";
 # Add the Exception tests to the end of the array.
-$tests += (Get-ChildItem $exceptionTestsFile)[0];
+$tests += (Get-ChildItem "$dir/$exceptionTestsFile")[0];
 $skippedTests = @();
 
 # Build the project once, then let all tests skip build.
