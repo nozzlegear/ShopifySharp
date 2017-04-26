@@ -1,0 +1,35 @@
+version: 4.0.{build}
+image: Visual Studio 2017
+build_script:
+- ps: ./scripts/build.ps1
+test_script:
+- ps: ./scripts/test.ps1
+artifacts:
+- path: ShopifySharp/bin/Release/netstandard1.6
+  name: netstandard16
+# - path: ShopifySharp/bin/Release/net461
+#   name: net461
+skip_commits:
+  message: /\[skip\]/
+  files:
+    - readme.md
+    - LICENSE
+    - .gitignore
+    - .vscode/*
+    - changelog.md
+deploy:
+- provider: NuGet
+  api_key:
+    secure: uUJ91Fu+H69EdZ8RTYIa7G7UufCgCw1UXfZ2jAOEWJfKi8KNwDTFYaEDQCJS9xOc
+  on:
+    branch: master
+    appveyor_repo_tag: true
+- provider: GitHub
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  description: "Automated AppVeyor release for ShopifySharp v$(APPVEYOR_REPO_TAG_NAME). Check [changelog.md](https://github.com/nozzlegear/shopifysharp/blob/master/changelog.md) for a list of changes."
+  auth_token:
+    secure: OS2yhg1H8KSYenGLlIIvVgsxU1xjtmNRjxrUBuwiWltI3JlvTmaBFijVINnGclbp
+  artifact: ShopifySharp.nupkg
+  on:
+    branch: master
+    appveyor_repo_tag: true
