@@ -118,28 +118,44 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Cancels_Orders()
         {
-            long id = Fixture.Created.First().Id.Value;
+            var order = await Fixture.Create();
+            bool threw = false;
             
-            await Fixture.Service.CancelAsync(id);
+            try 
+            {
+                await Fixture.Service.CancelAsync(order.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Cancels_Orders)} failed. {ex.Message}");
+                
+                threw = true;
+            }
 
-            var order = await Fixture.Service.GetAsync(id);
-
-            Assert.True(order.CancelledAt.HasValue);
+            Assert.False(threw);
         }
 
         [Fact]
         public async Task Cancels_Orders_With_Options()
         {
-            long id = Fixture.Created.Last().Id.Value;
+            var order = await Fixture.Create();
+            bool threw = false;
             
-            await Fixture.Service.CancelAsync(id, new OrderCancelOptions()
+            try 
             {
-                Reason = "customer"
-            });
+                await Fixture.Service.CancelAsync(order.Id.Value, new OrderCancelOptions()
+                {
+                    Reason = "customer"
+                });
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Cancels_Orders_With_Options)} failed. {ex.Message}");
+                
+                threw = true;
+            }
 
-            var order = await Fixture.Service.GetAsync(id);
-
-            Assert.True(order.CancelledAt.HasValue);
+            Assert.False(threw);
         }
     }
 

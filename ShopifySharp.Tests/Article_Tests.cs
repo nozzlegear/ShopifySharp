@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Author, article.Author);
             Assert.Equal(Fixture.BodyHtml, article.BodyHtml);
             Assert.Equal(Fixture.BlogId, article.BlogId);
-            Assert.Contains(Fixture.Title, article.Title);
+            Assert.StartsWith(Fixture.Title, article.Title);
             EmptyAssert.NotNullOrEmpty(article.Handle);
             EmptyAssert.NotNullOrEmpty(article.Tags);
         }

@@ -41,8 +41,6 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(collection);
             Assert.True(collection.Id.HasValue);
-            Assert.NotNull(collection.Image);
-            EmptyAssert.NotNullOrEmpty(collection.Image.Src);
             Assert.Equal(Fixture.Title, collection.Title);
         }
 
@@ -74,8 +72,6 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(collection);
             Assert.True(collection.Id.HasValue);
-            Assert.NotNull(collection.Image);
-            EmptyAssert.NotNullOrEmpty(collection.Image.Src);
             Assert.Equal(Fixture.Title, collection.Title);
         }
 
@@ -132,20 +128,13 @@ namespace ShopifySharp.Tests
             var obj = await Service.CreateAsync(new CustomCollection()
             {
                 Title = Title,
-                Published = false,
-                Image = new CustomCollectionImage()
-                {
-                    Src = "https://i.redd.it/zd0ksv8ezpry.png"
-                }
+                Published = false
             });
 
             if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }
-
-            // Wait 2 seconds for image upload to finish.
-            await Task.Delay(2000);
 
             return obj;
         }
