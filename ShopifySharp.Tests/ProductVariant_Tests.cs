@@ -116,6 +116,11 @@ namespace ShopifySharp.Tests
         {
             foreach (var obj in Created)
             {
+                if (! obj.Id.HasValue) 
+                {
+                    continue; 
+                }
+
                 try
                 {
                     await Service.DeleteAsync(ProductId, obj.Id.Value);
