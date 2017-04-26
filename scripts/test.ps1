@@ -1,12 +1,14 @@
 # Run all tests before the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
-$exceptionTestsFile = "ShopifyException_Tests.cs";
-$tests = Get-ChildItem *_Tests.cs -exclude $exceptionTestsFile;
+$dir = "ShopifySharp.Tests";
+$config = "Release";
+$exceptionTestsFile = "$dir/ShopifyException_Tests.cs";
+$tests = Get-ChildItem "$dir/*_Tests.cs" -exclude "$exceptionTestsFile";
 # Add the Exception tests to the end of the array.
 $tests += (Get-ChildItem $exceptionTestsFile)[0];
 $skippedTests = @();
 
 # Build the project once, then let all tests skip build.
-dotnet build -c Release;
+dotnet build -c $config;
 
 foreach ($test in $tests) {
     $categoryName = $test.Name -replace "_Tests.cs","";
@@ -14,7 +16,7 @@ foreach ($test in $tests) {
     write-host "";
     write-host "Running $categoryName tests.";
 
-    $testOutput = dotnet test --filter "Category=$categoryName" --no-build;
+    $testOutput = dotnet test --filter "Category=$categoryName" --no-build "$dir/$dir.csproj";
     $testExitCode = $LastExitCode;
     $totalTestsLine = $testOutput -match "^Total tests:";
     
