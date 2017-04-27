@@ -159,6 +159,7 @@ namespace ShopifySharp.Tests
                 ProductType = "Snowboard",
                 Handle = Guid.NewGuid().ToString(),
                 Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
+                PublishedScope = "published"
             });
             var obj = await Service.CreateAsync(new Collect()
             {
