@@ -222,7 +222,8 @@ namespace ShopifySharp.Tests
                 Note = "Test note about the customer.",
             }, new OrderCreateOptions()
             {
-                SendReceipt = false
+                SendReceipt = false,
+                SendFulfillmentReceipt = false
             });
 
             CreatedOrders.Add(obj);
