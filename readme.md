@@ -80,6 +80,7 @@ With that said, this library is still pretty new. It currently suppports the fol
 - [Blogs](#blogs)
 - [Application Credits](#application-credits)
 - [Articles](#articles)
+- [Discounts](#discounts)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -95,7 +96,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [Country](https://help.shopify.com/api/reference/country) | |
 | [CustomerAddress](https://help.shopify.com/api/reference/customeraddress) | Object is implemented. |
 | [CustomerSavedSearch](https://help.shopify.com/api/reference/customersavedsearch) | |
-| [Discount](https://help.shopify.com/api/reference/discount) | Requires Shopify Plus. |
 | [FulfillmentEvent](https://help.shopify.com/api/reference/fulfillmentevent) | Object is implemented. |
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [ShopifyFulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/ShopifyFulfillmentService.cs). |
 | [GiftCard](https://help.shopify.com/api/reference/gift_card) | Requires Shopify Plus. |
@@ -125,6 +125,7 @@ These generous people have contributed their own hard work and time to improving
 - [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
 - [clement911](https://github.com/clement911)
 - [mchandschuh](https://github.com/mchandschuh)
+- [Andrew Mobbs](https://github.com/mobbsie)
 
 Thank you!
 
@@ -2004,6 +2005,67 @@ var charge = await service.GetAsync(creditId);
 ```cs
 var service = new ShopifyApplicationCreditService(myShopifyUrl, shopAccessToken);
 var charges = await service.ListAsync();
+```
+
+## Discounts
+
+Developers can create a discount code with the `ShopifyDiscountService`. A merchant's customers can enter the discount code during the checkout process to redeem percentage-based, fixed amount, or free shipping discounts on a specific product, collection or order. 
+
+**Discounts require a Shopify Plus subscription.**
+
+### Creating a Discount
+
+```cs
+var service = new ShopifyDiscountService(myShopifyUrl, shopAccessToken);
+var discount = await service.CreateAsync(new ShopifyDiscount()
+{
+    DiscountType = "fixed_amount",
+    Value = "10.00",
+    DiscountCode = "AuntieDot",
+    MinimumOrderAmount = "40.00",
+});
+```
+
+### Getting a Discount
+
+```cs
+var service = new ShopifyDiscountService(myShopifyUrl, shopAccessToken);
+var discount = await service.GetAsync(discountId):
+```
+
+### Listing Discounts
+
+```cs
+var service = new ShopifyDiscountService(myShopifyUrl, shopAccessToken);
+var discounts = await service.ListAsync();
+```
+
+### Deleting a Discount
+
+```cs
+var service = new ShopifyDiscountService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(discountId);
+```
+
+### Disabling a Discount
+
+Discount codes can be disabled via that API, which makes them inactive and unusable until reenabled.
+
+```cs
+var service = new ShopifyDiscountService(myShopifyUrl, shopAccessToken);
+
+await service.DisableAsync(discountId);
+```
+
+### Enabling a Discount
+
+Once disabled, a discount cannot be used by any customer until it's enabled.
+
+```cs
+var service = new ShopifyDiscountService(myShopifyUrl, shopAccessToken);
+
+await service.EnableAsync(discountId);
 ```
 
 # Handling Shopify's API rate limit
