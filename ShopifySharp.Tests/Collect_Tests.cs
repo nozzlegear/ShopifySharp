@@ -157,6 +157,7 @@ namespace ShopifySharp.Tests
                 Vendor = "Burton",
                 BodyHtml = "<strong>Good snowboard!</strong>",
                 ProductType = "Snowboard",
+                Handle = Guid.NewGuid().ToString(),
                 Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
             });
             var obj = await Service.CreateAsync(new Collect()
