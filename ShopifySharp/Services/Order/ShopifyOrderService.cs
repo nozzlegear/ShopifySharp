@@ -3,6 +3,7 @@ using RestSharp;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ShopifySharp
 {
@@ -125,14 +126,21 @@ namespace ShopifySharp
         public virtual async Task<ShopifyOrder> CreateAsync(ShopifyOrder order, ShopifyOrderCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("orders.json", Method.POST, "order");
+            var body = order.ToDictionary();
+
+            if (options != null)
+            {
+                foreach (var kvp in options.ToDictionary())
+                {
+                    body.Add(kvp);
+                }
+            }
 
             //Build the request body
-            Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
+            req.AddJsonBody(new
             {
-                { "order", order }
-            };
-
-            req.AddJsonBody(body);
+                order = body
+            });
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyOrder>(_RestClient, req);
         }

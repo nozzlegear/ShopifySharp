@@ -85,14 +85,20 @@ namespace ShopifySharp
         public virtual async Task<ShopifyPage> CreateAsync(ShopifyPage page, ShopifyPageCreateOptions options = null)
         {
             IRestRequest req = RequestEngine.CreateRequest("pages.json", Method.POST, "page");
+            var body = page.ToDictionary();
 
-            //Build the request body
-            Dictionary<string, object> body = new Dictionary<string, object>(options?.ToDictionary() ?? new Dictionary<string, object>())
+            if (options != null)
             {
-                { "page", page }
-            };
+                foreach (var kvp in options.ToDictionary())
+                {
+                    body.Add(kvp);
+                }
+            }
 
-            req.AddJsonBody(body);
+            req.AddJsonBody(new
+            {
+                page = body
+            });
 
             return await RequestEngine.ExecuteRequestAsync<ShopifyPage>(_RestClient, req);
         }
