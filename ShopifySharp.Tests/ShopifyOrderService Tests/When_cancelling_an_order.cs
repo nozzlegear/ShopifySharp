@@ -3,7 +3,7 @@ using ShopifySharp.Tests.Test_Data;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(ShopifyOrderService)), Tags("Order")]
     public class When_cancelling_an_order
     {
         Establish context = () =>
