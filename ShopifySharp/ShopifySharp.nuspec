@@ -11,6 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.7.0
+  =====
+  - BREAKING CHANGE: `ShopifyOrder.TotalPriceUsd` has been converted to a `Nullable Double` from `Double` to fix broken deserialization exceptions in production apps.
+  
   3.6.2
   =====
   - Bugfix: Object creation options for `ShopifyOrder` and `ShopifyPage` weren't serializing correctly.
