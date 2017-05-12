@@ -78,10 +78,12 @@ namespace ShopifySharp.Tests
         public async Task Updates_Blogs()
         {
             var created = await Fixture.Create();
+            long id = created.Id.Value;
 
             created.Commentable = "yes";
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(created);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
 
             Assert.Equal("yes", created.Commentable);
         }

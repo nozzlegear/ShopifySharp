@@ -82,9 +82,12 @@ namespace ShopifySharp.Tests
         {
             string newVal = "https://example.com/updated";
             var original = Fixture.Created.First();
-            original.Target = newVal;
+            long id = original.Id.Value;
             
-            var updated = await Fixture.Service.UpdateAsync(original);
+            original.Target = newVal;
+            original.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, original);
 
             Assert.Equal(newVal, updated.Target);   
         }

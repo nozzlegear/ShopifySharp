@@ -82,9 +82,12 @@ namespace ShopifySharp.Tests
         {
             string message = "An updated risk message.";
             var created = await Fixture.Create(Fixture.OrderId);
-            created.Message = message;
+            long id = created.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(Fixture.OrderId, created);
+            created.Message = message;
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(Fixture.OrderId, id, created);
 
             Assert.Equal(message, updated.Message);
         }

@@ -94,13 +94,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Webhook"/>. Id must not be null.
+        /// Updates the given <see cref="Webhook"/>.
         /// </summary>
+        /// <param name="webhookId">Id of the object being updated.</param>
         /// <param name="webhook">The <see cref="Webhook"/> to update.</param>
         /// <returns>The updated <see cref="Webhook"/>.</returns>
-        public virtual async Task<Webhook> UpdateAsync(Webhook webhook)
+        public virtual async Task<Webhook> UpdateAsync(long webhookId, Webhook webhook)
         {
-            var req = PrepareRequest($"webhooks/{webhook.Id.Value}.json");
+            var req = PrepareRequest($"webhooks/{webhookId}.json");
             var content = new JsonContent(new
             {
                 webhook = webhook

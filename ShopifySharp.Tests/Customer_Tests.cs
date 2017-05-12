@@ -116,9 +116,12 @@ namespace ShopifySharp.Tests
         {
             string firstName = "Jane";
             var customer = await Fixture.Create();
-            customer.FirstName = firstName;
+            long id = customer.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(customer);
+            customer.FirstName = firstName;
+            customer.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, customer);
 
             Assert.Equal(firstName, customer.FirstName);
         }
@@ -128,9 +131,12 @@ namespace ShopifySharp.Tests
         {
             string firstName = "Jane";
             var customer = await Fixture.Create();
-            customer.FirstName = firstName;
+            long id = customer.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(customer, new CustomerUpdateOptions()
+            customer.FirstName = firstName;
+            customer.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, customer, new CustomerUpdateOptions()
             {
                 Password = "loktarogar",
                 PasswordConfirmation = "loktarogar"

@@ -82,9 +82,12 @@ namespace ShopifySharp.Tests
         {
             decimal newPrice = (decimal) 11.22;
             var original = Fixture.Created.First();
-            original.Price = newPrice;
+            long id = original.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(original);
+            original.Price = newPrice;
+            original.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, original);
 
             Assert.Equal(newPrice, updated.Price);
         }

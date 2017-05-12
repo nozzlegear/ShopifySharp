@@ -80,9 +80,12 @@ namespace ShopifySharp.Tests
         {
             string newValue = "https://requestb.in/" + Guid.NewGuid();
             var original = Fixture.Created.First();
+            long id = original.Id.Value;
+
             original.Address = newValue;
-            
-            var updated = await Fixture.Service.UpdateAsync(original);
+            original.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, original);
 
             Assert.Equal(newValue, updated.Address);
         }

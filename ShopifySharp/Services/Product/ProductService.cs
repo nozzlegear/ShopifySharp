@@ -100,13 +100,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Product"/>. Id must not be null.
+        /// Updates the given <see cref="Product"/>.
         /// </summary>
+        /// <param name="productId">Id of the object being updated.</param>
         /// <param name="product">The <see cref="Product"/> to update.</param>
         /// <returns>The updated <see cref="Product"/>.</returns>
-        public virtual async Task<Product> UpdateAsync(Product product)
+        public virtual async Task<Product> UpdateAsync(long productId, Product product)
         {
-            var req = PrepareRequest($"products/{product.Id.Value}.json");
+            var req = PrepareRequest($"products/{productId}.json");
             var content = new JsonContent(new
             {
                 product = product

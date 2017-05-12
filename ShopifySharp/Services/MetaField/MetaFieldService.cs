@@ -133,12 +133,13 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given metafield. Id must not be null.
+        /// Updates the given metafield.
         /// </summary>
+        /// <param name="metafieldId">Id of the object being updated.</param>
         /// <param name="metafield">The metafield to update.</param>
-        public virtual async Task<MetaField> UpdateAsync(MetaField metafield)
+        public virtual async Task<MetaField> UpdateAsync(long metafieldId, MetaField metafield)
         {
-            var req = PrepareRequest($"metafields/{metafield.Id.Value}.json");
+            var req = PrepareRequest($"metafields/{metafieldId}.json");
             var content = new JsonContent(new
             {
                 metafield = metafield

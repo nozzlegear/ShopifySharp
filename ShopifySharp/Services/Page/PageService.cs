@@ -97,13 +97,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Page"/>. Id must not be null.
+        /// Updates the given <see cref="Page"/>.
         /// </summary>
+        /// <param name="pageId">Id of the object being updated.</param>
         /// <param name="page">The <see cref="Page"/> to update.</param>
         /// <returns>The updated <see cref="Page"/>.</returns>
-        public virtual async Task<Page> UpdateAsync(Page page)
+        public virtual async Task<Page> UpdateAsync(long pageId, Page page)
         {
-            var req = PrepareRequest($"pages/{page.Id.Value}.json");
+            var req = PrepareRequest($"pages/{pageId}.json");
             var content = new JsonContent(new
             {
                 page = page

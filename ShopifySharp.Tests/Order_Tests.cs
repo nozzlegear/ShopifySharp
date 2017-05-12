@@ -92,9 +92,12 @@ namespace ShopifySharp.Tests
         {
             string note = "This note was updated while testing ShopifySharp!";
             var created = await Fixture.Create();
-            created.Note = note;
+            long id = created.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(created);
+            created.Note = note;
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, created);
         }
 
         [Fact]

@@ -101,9 +101,12 @@ namespace ShopifySharp.Tests
         {
             string value = "10";
             var created = await Fixture.Create();
-            created.Value = value;
+            long id = created.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(created);
+            created.Value = value;
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, created);
 
             Assert.Equal(value, updated.Value.ToString());
         }
@@ -113,9 +116,12 @@ namespace ShopifySharp.Tests
         {
             string value = "10";
             var created = await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType);
-            created.Value = value;
+            long id = created.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(created);
+            created.Value = value;
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, created);
 
             Assert.Equal(value, updated.Value.ToString());
         }

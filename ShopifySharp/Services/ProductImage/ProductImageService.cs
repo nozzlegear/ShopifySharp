@@ -105,14 +105,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="ProductImage"/>. Id must not be null.
+        /// Updates the given <see cref="ProductImage"/>.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
+        /// <param name="productImageId">Id of the object being updated.</param>
         /// <param name="image">The <see cref="ProductImage"/> to update.</param>
         /// <returns>The updated <see cref="ProductImage"/>.</returns>
-        public virtual async Task<ProductImage> UpdateAsync(long productId, ProductImage image)
+        public virtual async Task<ProductImage> UpdateAsync(long productId, long productImageId, ProductImage image)
         {
-            var req = PrepareRequest($"products/{productId}/images/{image.Id.Value}.json");
+            var req = PrepareRequest($"products/{productId}/images/{productImageId}.json");
             var content = new JsonContent(new
             {
                 image = image

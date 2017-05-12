@@ -117,14 +117,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Customer"/>. Id must not be null.
+        /// Updates the given <see cref="Customer"/>.
         /// </summary>
+        /// <param name="customerId">Id of the object being updated.</param>
         /// <param name="customer">The <see cref="Customer"/> to update.</param>
         /// <param name="options">Options for updating the customer.</param>
         /// <returns>The updated <see cref="Customer"/>.</returns>
-        public virtual async Task<Customer> UpdateAsync(Customer customer, CustomerUpdateOptions options = null)
+        public virtual async Task<Customer> UpdateAsync(long customerId, Customer customer, CustomerUpdateOptions options = null)
         {
-            var req = PrepareRequest($"customers/{customer.Id.Value}.json");
+            var req = PrepareRequest($"customers/{customerId}.json");
             var body = customer.ToDictionary();
 
             if (options != null)

@@ -80,9 +80,12 @@ namespace ShopifySharp.Tests
         {
             string newTitle = "New Title";
             var created = await Fixture.Create();
+            long id = created.Id.Value;
+
             created.Title = newTitle;
-            
-            var updated = await Fixture.Service.UpdateAsync(created);
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, created);
 
             Assert.Equal(newTitle, updated.Title);   
         }

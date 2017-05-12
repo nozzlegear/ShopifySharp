@@ -100,13 +100,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="CustomCollection"/>. Id must not be null.
+        /// Updates the given <see cref="CustomCollection"/>.
         /// </summary>
+        /// <param name="customCollectionId">Id of the object being updated.</param>
         /// <param name="customCollection">The <see cref="CustomCollection"/> to update.</param>
         /// <returns>The updated <see cref="CustomCollection"/>.</returns>
-        public virtual async Task<CustomCollection> UpdateAsync(CustomCollection customCollection)
+        public virtual async Task<CustomCollection> UpdateAsync(long customCollectionId, CustomCollection customCollection)
         {
-            var req = PrepareRequest($"custom_collections/{customCollection.Id.Value}.json");
+            var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
             var content = new JsonContent(new
             {
                 custom_collection = customCollection

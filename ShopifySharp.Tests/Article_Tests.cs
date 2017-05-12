@@ -97,9 +97,12 @@ namespace ShopifySharp.Tests
         {
             string html = "<h1>Updated!</h1>";
             var article = await Fixture.Create();
+            long id = article.Id.Value;
 
             article.BodyHtml = html;
-            article = await Fixture.Service.UpdateAsync(Fixture.BlogId.Value, article);
+            article.Id = null;
+
+            article = await Fixture.Service.UpdateAsync(Fixture.BlogId.Value, id, article);
 
             Assert.Equal(article.BodyHtml, html);
         }

@@ -95,13 +95,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Theme"/>. Id must not be null.
+        /// Updates the given <see cref="Theme"/>.
         /// </summary>
+        /// <param name="themeId">Id of the object being updated.</param>
         /// <param name="theme">The <see cref="Theme"/> to update.</param>
         /// <returns>The updated <see cref="Theme"/>.</returns>
-        public virtual async Task<Theme> UpdateAsync(Theme theme)
+        public virtual async Task<Theme> UpdateAsync(long themeId, Theme theme)
         {
-            var req = PrepareRequest($"themes/{theme.Id.Value}.json");
+            var req = PrepareRequest($"themes/{themeId}.json");
             var content = new JsonContent(new
             {
                 theme = theme

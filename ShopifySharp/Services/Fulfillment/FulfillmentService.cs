@@ -97,14 +97,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Fulfillment"/>. Id must not be null.
+        /// Updates the given <see cref="Fulfillment"/>.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
+        /// <param name="">Id of the object being updated.</param>
         /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
         /// <returns>The updated <see cref="Fulfillment"/>.</returns>
-        public virtual async Task<Fulfillment> UpdateAsync(long orderId, Fulfillment fulfillment)
+        public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillment.Id.Value}.json");
+            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json");
             var content = new JsonContent(new
             {
                 fulfillment = fulfillment

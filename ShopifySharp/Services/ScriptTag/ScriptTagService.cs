@@ -88,13 +88,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="ScriptTag"/>. Id must not be null.
+        /// Updates the given <see cref="ScriptTag"/>.
         /// </summary>
+        /// <param name="scriptTagId">Id of the object being updated.</param>
         /// <param name="tag">The <see cref="ScriptTag"/> to update.</param>
         /// <returns>The updated <see cref="ScriptTag"/>.</returns>
-        public virtual async Task<ScriptTag> UpdateAsync(ScriptTag tag)
+        public virtual async Task<ScriptTag> UpdateAsync(long scriptTagId, ScriptTag tag)
         {
-            var req = PrepareRequest($"script_tags/{tag.Id.Value}.json");
+            var req = PrepareRequest($"script_tags/{scriptTagId}.json");
             var content = new JsonContent(new
             {
                 script_tag = tag

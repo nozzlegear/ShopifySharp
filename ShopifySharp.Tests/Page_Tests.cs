@@ -78,9 +78,12 @@ namespace ShopifySharp.Tests
         {
             string html = "<h1>This string was updated while testing ShopifySharp!</h1>";
             var original = Fixture.Created.First();
-            original.BodyHtml = html;
+            long id = original.Id.Value;
 
-            var updated = await Fixture.Service.UpdateAsync(original);
+            original.BodyHtml = html;
+            original.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, original);
 
             Assert.Equal(html, updated.BodyHtml);
         }

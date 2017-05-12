@@ -82,11 +82,12 @@ namespace ShopifySharp
         /// <summary>
         /// Updates a blog.
         /// </summary>
-        /// <param name="blog">The updated blog. Id should not be null.</param>
+        /// <param name="blogId">Id of the object being updated.</param>
+        /// <param name="blog">The updated blog.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
-        public virtual async Task<Blog> UpdateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
+        public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<MetaField> metafields = null)
         {
-            var request = PrepareRequest($"blogs/{blog.Id.Value}.json");
+            var request = PrepareRequest($"blogs/{blogId}.json");
             var body = blog.ToDictionary();
 
             if (metafields != null && metafields.Count() >= 1)

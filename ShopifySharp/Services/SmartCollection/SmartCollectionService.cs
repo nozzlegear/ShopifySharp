@@ -77,12 +77,13 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="SmartCollection"/>. Id must not be null.
+        /// Updates the given <see cref="SmartCollection"/>.
         /// </summary>
+        /// <param name="smartCollectionId">Id of the object being updated.</param>
         /// <param name="collection">The smart collection to update.</param>
-        public virtual async Task<SmartCollection> UpdateAsync(SmartCollection collection)
+        public virtual async Task<SmartCollection> UpdateAsync(long smartCollectionId, SmartCollection collection)
         {
-            var req = PrepareRequest($"smart_collections/{collection.Id.Value}.json");
+            var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
             var content = new JsonContent(new
             {
                 smart_collection = collection

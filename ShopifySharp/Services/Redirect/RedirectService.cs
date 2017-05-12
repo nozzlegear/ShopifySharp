@@ -96,13 +96,14 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Redirect"/>. Id must not be null.
+        /// Updates the given <see cref="Redirect"/>. 
         /// </summary>
+        /// <param name="redirectId">Id of the object being updated.</param>
         /// <param name="redirect">The <see cref="Redirect"/> to update.</param>
         /// <returns>The updated <see cref="Redirect"/>.</returns>
-        public virtual async Task<Redirect> UpdateAsync(Redirect redirect)
+        public virtual async Task<Redirect> UpdateAsync(long redirectId, Redirect redirect)
         {
-            var req = PrepareRequest($"redirects/{redirect.Id.Value}.json");
+            var req = PrepareRequest($"redirects/{redirectId}.json");
             var content = new JsonContent(new
             {
                 redirect = redirect

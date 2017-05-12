@@ -74,12 +74,13 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="ProductVariant"/>. Id must not be null.
+        /// Updates the given <see cref="ProductVariant"/>.
         /// </summary>
+        /// <param name="productVariantId">Id of the object being updated.</param>
         /// <param name="variant">The variant to update.</param>
-        public virtual async Task<ProductVariant> UpdateAsync(ProductVariant variant)
+        public virtual async Task<ProductVariant> UpdateAsync(long productVariantId, ProductVariant variant)
         {
-            var req = PrepareRequest($"variants/{variant.Id.Value}.json");
+            var req = PrepareRequest($"variants/{productVariantId}.json");
             var content = new JsonContent(new
             {
                 variant = variant

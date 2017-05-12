@@ -116,9 +116,12 @@ namespace ShopifySharp.Tests
             string company = "Auntie Dot's Shipping Company";
             var order = await Fixture.CreateOrder();
             var created = await Fixture.Create(order.Id.Value, false);
+            long id = created.Id.Value;
+
             created.TrackingCompany = company;
-            
-            var updated = await Fixture.Service.UpdateAsync(created.OrderId, created);
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(created.OrderId, id, created);
 
             Assert.Equal(company, updated.TrackingCompany);
         }
