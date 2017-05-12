@@ -144,15 +144,15 @@ namespace ShopifySharp.Tests
                     new LineItem()
                     {
                         Title = "Click Keyboard",
-                        Price = 99.99,
+                        Price = 99.99m,
                         Grams = 600,
                         Quantity = 1,
                         TaxLines = new List<TaxLine>()
                         {
                             new TaxLine()
                             {
-                                Price = 1.0,
-                                Rate = 0.01,
+                                Price = 1.0m,
+                                Rate = 0.01m,
                                 Title = "Keyboard tax"
                             }
                         }
@@ -162,8 +162,8 @@ namespace ShopifySharp.Tests
                 {
                     new TaxLine()
                     {
-                        Price = 6.0,
-                        Rate = 0.06,
+                        Price = 6.0m,
+                        Rate = 0.06m,
                         Title = "State tax"
                     }
                 }

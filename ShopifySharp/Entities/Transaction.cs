@@ -17,10 +17,8 @@ namespace ShopifySharp
         /// <summary>
         /// The amount of money that the transaction was for.
         /// </summary>
-        /// <remarks>Like a lot of the Shopify API, the number is actually a string. Json.Net should be 
-        /// able to convert it to a double.</remarks>
         [JsonProperty("amount")]
-        public double? Amount { get; set; }
+        public decimal? Amount { get; set; }
 
         /// <summary>
         /// The authorization code associated with the transaction.

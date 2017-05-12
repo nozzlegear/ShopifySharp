@@ -80,7 +80,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Variants()
         {
-            double newPrice = 11.22;
+            decimal newPrice = (decimal) 11.22;
             var original = Fixture.Created.First();
             original.Price = newPrice;
 
@@ -96,7 +96,7 @@ namespace ShopifySharp.Tests
 
         public List<ProductVariant> Created { get; } = new List<ProductVariant>();
 
-        public double Price => 123.45;
+        public decimal Price => 123.45m;
 
         public long ProductId { get; set; }
 

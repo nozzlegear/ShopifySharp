@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// The capped amount is the limit a customer can be charged for usage based billing.
         /// </summary>
         [JsonProperty("capped_amount")]
-        public double? CappedAmount { get; set; }
+        public decimal? CappedAmount { get; set; }
 
         /// <summary>
         /// The date and time when the customer cancelled their recurring application charge. Will be null if the charge has not
@@ -61,9 +61,9 @@ namespace ShopifySharp
         /// <summary>
         /// The price of the recurring application charge.
         /// </summary>
-        /// <remarks>Shopify returns this as a string, but JSON.net should be able to convert it to a double.</remarks>
+        /// <remarks>Shopify returns this as a string, but JSON.net should be able to convert it to a decimal.</remarks>
         [JsonProperty("price")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// The URL the customer is sent to once they accept/decline a charge.

@@ -232,7 +232,7 @@ namespace ShopifySharp.Tests
                     }
                 },
                 FinancialStatus = "paid",
-                TotalPrice = 5.00,
+                TotalPrice = 5.00m,
                 Email = Guid.NewGuid().ToString() + "@example.com",
                 Note = Note,
             });

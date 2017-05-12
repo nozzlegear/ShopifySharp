@@ -241,7 +241,7 @@ namespace ShopifySharp
         /// Price of the order before shipping and taxes
         /// </summary>
         [JsonProperty("subtotal_price")]
-        public double SubtotalPrice { get; set; }
+        public decimal SubtotalPrice { get; set; }
 
         /// <summary>
         /// An array of <see cref="TaxLine"/> objects, each of which details the total taxes applicable to the order.
@@ -265,31 +265,31 @@ namespace ShopifySharp
         /// The total amount of the discounts applied to the price of the order.
         /// </summary>
         [JsonProperty("total_discounts")]
-        public double TotalDiscounts { get; set; }
+        public decimal TotalDiscounts { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order.
         /// </summary>
         [JsonProperty("total_line_items_price")]
-        public double TotalLineItemsPrice { get; set; }
+        public decimal TotalLineItemsPrice { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order, with taxes and discounts included (must be positive).
         /// </summary>
         [JsonProperty("total_price")]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order, in USD, with taxes and discounts included (must be positive).
         /// </summary>
         [JsonProperty("total_price_usd"), Obsolete("TotalPriceUsd is not documented by Shopify and will be removed in a future release.")]
-        public double TotalPriceUsd { get; set; }
+        public decimal TotalPriceUsd { get; set; }
 
         /// <summary>
         /// The sum of all the taxes applied to the order (must be positive).
         /// </summary>
         [JsonProperty("total_tax")]
-        public double TotalTax { get; set; }
+        public decimal TotalTax { get; set; }
 
         /// <summary>
         /// The sum of all the weights of the line items in the order, in grams.

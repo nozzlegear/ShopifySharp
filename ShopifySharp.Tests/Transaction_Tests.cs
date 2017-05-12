@@ -109,7 +109,7 @@ namespace ShopifySharp.Tests
 
         public List<Order> CreatedOrders { get; } = new List<Order>();
 
-        public double Amount => 10.00;
+        public decimal Amount => 10.00m;
 
         public string Currency => "USD";
 
@@ -186,7 +186,7 @@ namespace ShopifySharp.Tests
                 {
                     new Transaction()
                     {
-                        Amount = 20.00,
+                        Amount = 20.00m,
                         Status = "success",
                         Kind = "authorization",
                         Test = true,

@@ -9,7 +9,7 @@ namespace ShopifySharp
         /// If set, Shopify will attempt to void/refund the payment depending on the status.
         /// </summary>
         [JsonProperty("amount")]
-        public double? RefundAmount { get; set; }
+        public decimal? RefundAmount { get; set; }
 
         /// <summary>
         /// Restock the items for this order back to your store.
