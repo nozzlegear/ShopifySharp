@@ -108,6 +108,9 @@ namespace ShopifySharp.Tests
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
 
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
+
             Assert.Equal(value, updated.Value.ToString());
         }
 
@@ -122,6 +125,9 @@ namespace ShopifySharp.Tests
             created.Id = null;
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(value, updated.Value.ToString());
         }

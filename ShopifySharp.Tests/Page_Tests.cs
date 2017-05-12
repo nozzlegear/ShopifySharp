@@ -77,13 +77,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_Pages()
         {
             string html = "<h1>This string was updated while testing ShopifySharp!</h1>";
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            original.BodyHtml = html;
-            original.Id = null;
+            created.BodyHtml = html;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(html, updated.BodyHtml);
         }

@@ -81,13 +81,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_Variants()
         {
             decimal newPrice = (decimal) 11.22;
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            original.Price = newPrice;
-            original.Id = null;
+            created.Price = newPrice;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(newPrice, updated.Price);
         }

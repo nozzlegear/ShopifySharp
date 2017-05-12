@@ -83,13 +83,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_Themes()
         {
             string newValue = ("ShopifySharp Updated Theme " + Guid.NewGuid()).Substring(0, 50);
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            original.Name = newValue;
-            original.Id = null;
+            created.Name = newValue;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(newValue, updated.Name);
         }

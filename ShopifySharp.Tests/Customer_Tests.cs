@@ -115,34 +115,40 @@ namespace ShopifySharp.Tests
         public async Task Updates_Customers()
         {
             string firstName = "Jane";
-            var customer = await Fixture.Create();
-            long id = customer.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            customer.FirstName = firstName;
-            customer.Id = null;
+            created.FirstName = firstName;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, customer);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
 
-            Assert.Equal(firstName, customer.FirstName);
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
+
+            Assert.Equal(firstName, updated.FirstName);
         }
 
         [Fact]
         public async Task Updates_Customers_With_Options()
         {
             string firstName = "Jane";
-            var customer = await Fixture.Create();
-            long id = customer.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            customer.FirstName = firstName;
-            customer.Id = null;
+            created.FirstName = firstName;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, customer, new CustomerUpdateOptions()
+            var updated = await Fixture.Service.UpdateAsync(id, created, new CustomerUpdateOptions()
             {
                 Password = "loktarogar",
                 PasswordConfirmation = "loktarogar"
             });
 
-            Assert.Equal(firstName, customer.FirstName);
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
+
+            Assert.Equal(firstName, updated.FirstName);
         }
 
         [Fact]

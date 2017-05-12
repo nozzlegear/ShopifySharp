@@ -123,6 +123,9 @@ namespace ShopifySharp.Tests
 
             var updated = await Fixture.Service.UpdateAsync(created.OrderId, id, created);
 
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
+
             Assert.Equal(company, updated.TrackingCompany);
         }
 

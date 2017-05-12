@@ -81,13 +81,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_ScriptTags()
         {
             string newValue = "all";
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            original.DisplayScope = newValue;
-            original.Id = null;
+            created.DisplayScope = newValue;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(newValue, updated.DisplayScope);   
         }

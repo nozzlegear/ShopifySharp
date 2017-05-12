@@ -81,13 +81,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_Redirects()
         {
             string newVal = "https://example.com/updated";
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
             
-            original.Target = newVal;
-            original.Id = null;
+            created.Target = newVal;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(newVal, updated.Target);   
         }

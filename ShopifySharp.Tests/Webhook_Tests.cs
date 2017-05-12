@@ -79,13 +79,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_Webhooks()
         {
             string newValue = "https://requestb.in/" + Guid.NewGuid();
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            original.Address = newValue;
-            original.Id = null;
+            created.Address = newValue;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(newValue, updated.Address);
         }

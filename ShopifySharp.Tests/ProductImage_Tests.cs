@@ -77,14 +77,17 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_ProductImages()
         {
-            var original = Fixture.Created.First();
-            int position = original.Position;
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            int position = created.Position;
+            long id = created.Id.Value;
 
-            original.Position += 1;
-            original.Id = null;
+            created.Position += 1;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(original.ProductId, id, original);
+            var updated = await Fixture.Service.UpdateAsync(created.ProductId, id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(position, updated.Position);
         }

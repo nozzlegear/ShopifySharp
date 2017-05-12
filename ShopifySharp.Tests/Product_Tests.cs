@@ -94,13 +94,16 @@ namespace ShopifySharp.Tests
         public async Task Updates_Products()
         {
             string title = "ShopifySharp Updated Test Product";
-            var original = Fixture.Created.First();
-            long id = original.Id.Value;
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
 
-            original.Title = title;
-            original.Id = null;
+            created.Title = title;
+            created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(id, original);
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
 
             Assert.Equal(title, updated.Title);
         }

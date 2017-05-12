@@ -104,6 +104,9 @@ namespace ShopifySharp.Tests
 
             article = await Fixture.Service.UpdateAsync(Fixture.BlogId.Value, id, article);
 
+            // Reset the id so the Fixture can properly delete this object.
+            article.Id = id;
+
             Assert.Equal(article.BodyHtml, html);
         }
     }
