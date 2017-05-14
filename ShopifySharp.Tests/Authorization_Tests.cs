@@ -61,29 +61,43 @@ namespace ShopifySharp.Tests
                 AuthorizationScope.ReadCustomers,
                 AuthorizationScope.WriteCustomers
             };
-            var result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey);
+            string redirectUrl = "http://example.com";
+            string result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey, redirectUrl).ToString();
 
-            Assert.Contains($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers", result.ToString());
+            Assert.Contains($"/admin/oauth/authorize?", result);
+            Assert.Contains($"client_id={Utils.ApiKey}", result);
+            Assert.Contains($"scope=read_customers,write_customers", result);
+            Assert.Contains($"redirect_uri={redirectUrl}", result);
         }
 
         [Fact]
         public void Builds_Authorization_Urls_With_Strings()
         {
             string[] scopes = { "read_customers", "write_customers" };
-            var result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey);
+            string redirectUrl = "http://example.com";
+            string result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey, redirectUrl).ToString();
 
-            Assert.Contains($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers", result.ToString());
+            Assert.Contains($"/admin/oauth/authorize?", result);
+            Assert.Contains($"client_id={Utils.ApiKey}", result);
+            Assert.Contains($"scope=read_customers,write_customers", result);
+            Assert.Contains($"redirect_uri={redirectUrl}", result);
         }
 
         [Fact]
         public void Builds_Authorization_Urls_With_Grants_And_State()
         {
             string[] scopes = { "read_customers", "write_customers" };
+            string redirectUrl = "http://example.com";
             string[] grants = { "per-user" };
             string state = Guid.NewGuid().ToString();
-            var result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey, null, state, grants);
+            string result = AuthorizationService.BuildAuthorizationUrl(scopes, Utils.MyShopifyUrl, Utils.ApiKey, redirectUrl, state, grants).ToString();
 
-            Assert.Contains($"/admin/oauth/authorize?client_id={Utils.ApiKey}&scope=read_customers,write_customers&state={state}&grant_options[]=per-user", result.ToString());
+            Assert.Contains($"/admin/oauth/authorize?", result);
+            Assert.Contains($"client_id={Utils.ApiKey}", result);
+            Assert.Contains($"scope=read_customers,write_customers", result);
+            Assert.Contains($"redirect_uri={redirectUrl}", result);
+            Assert.Contains($"state={state}", result);
+            Assert.Contains($"grant_options[]=per-user", result);
         }
     }
 }

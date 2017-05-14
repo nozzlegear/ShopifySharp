@@ -188,11 +188,11 @@ namespace ShopifySharp
         /// <param name="scopes">An array of <see cref="ShopifyAuthorizationScope"/> — the permissions that your app needs to run.</param>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopifyApiKey">Your app's public API key.</param>
-        /// <param name="redirectUrl">An optional URL to redirect the user to after integration. Overrides the Shopify app's default redirect URL.</param>
+        /// <param name="redirectUrl">URL to redirect the user to after integration.</param>
         /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
         /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion. Only known grant type is "per-user", which will give an access token restricted to the permissions of the user accepting OAuth integration and will expire when that user logs out. Leave the grants array empty or null to receive a full access token that doesn't expire.</param>
         /// <returns>The authorization url.</returns>
-        public static Uri BuildAuthorizationUrl(IEnumerable<AuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
+        public static Uri BuildAuthorizationUrl(IEnumerable<AuthorizationScope> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl, string state = null, IEnumerable<string> grants = null)
         {
             return BuildAuthorizationUrl(scopes.Select(s => s.ToSerializedString()), myShopifyUrl, shopifyApiKey, redirectUrl, state, grants);
         }
@@ -203,11 +203,11 @@ namespace ShopifySharp
         /// <param name="scopes">An array of Shopify permission strings, e.g. 'read_orders' or 'write_script_tags'. These are the permissions that your app needs to run.</param>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopifyApiKey">Your app's public API key.</param>
-        /// <param name="redirectUrl">An optional URL to redirect the user to after integration. Overrides the Shopify app's default redirect URL.</param>
+        /// <param name="redirectUrl">URL to redirect the user to after integration.</param>
         /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
         /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion. Only known grant type is "per-user", which will give an access token restricted to the permissions of the user accepting OAuth integration and will expire when that user logs out. Leave the grants array empty or null to receive a full access token that doesn't expire.</param>
         /// <returns>The authorization url.</returns>
-        public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl = null, string state = null, IEnumerable<string> grants = null)
+        public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl, string state = null, IEnumerable<string> grants = null)
         {
             //Prepare a uri builder for the shop URL
             var builder = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl));
@@ -217,12 +217,8 @@ namespace ShopifySharp
             {
                 new KeyValuePair<string, string>("client_id", shopifyApiKey),
                 new KeyValuePair<string, string>("scope", string.Join(",", scopes)),
+                new KeyValuePair<string, string>("redirect_uri", redirectUrl),
             };
-
-            if (string.IsNullOrEmpty(redirectUrl) == false)
-            {
-                qs.Add(new KeyValuePair<string, string>("redirect_uri", redirectUrl));
-            }
 
             if (string.IsNullOrEmpty(state) == false)
             {

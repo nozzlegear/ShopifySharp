@@ -177,8 +177,9 @@ Redirect your users to this authorization URL, where they'll be prompted to inst
 //This is the user's store URL.
 string usersMyShopifyUrl = "https://example.myshopify.com";
 
-//An optional URL to redirect the user to after they've confirmed app installation.
-//If you don't specify a redirect url, Shopify will redirect to your app's default URL.
+// A URL to redirect the user to after they've confirmed app installation.
+// This URL is required, and must be listed in your app's settings in your Shopify app dashboard.
+// It's case-sensitive too!
 string redirectUrl = "https://example.com/my/redirect/url";
 
 //An array of the Shopify access scopes your application needs to run.
@@ -196,7 +197,7 @@ var scopes = new List<string>()
 }
 
 //All ShopifyAuthorizationService methods are static.
-string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey);
+string authUrl = ShopifyAuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey, redirectUrl);
 ```
 
 ### Authorize an installation and generate an access token
