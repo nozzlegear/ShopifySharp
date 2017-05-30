@@ -31,12 +31,12 @@ namespace ShopifySharp
         /// Tax amount refunded
         /// </summary>
         [JsonProperty("total_tax")]
-        public decimal TotalTax { get; set; }
+        public decimal? TotalTax { get; set; }
 
         /// <summary>
         /// Item subtotal
         /// </summary>
         [JsonProperty("subtotal")]
-        public decimal SubTotal { get; set; }
+        public decimal? SubTotal { get; set; }
     }
 }

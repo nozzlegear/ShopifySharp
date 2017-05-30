@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// The price of the usage charge.
         /// </summary>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// The recurring application charge the usage charge belongs to.

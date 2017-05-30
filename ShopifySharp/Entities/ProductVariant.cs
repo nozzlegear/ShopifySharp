@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// The price of the product variant.
         /// </summary>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// The competitors prices for the same item.
@@ -146,7 +146,7 @@ namespace ShopifySharp
         /// The weight of the product variant in the unit system specified with weight_unit.
         /// </summary>
         [JsonProperty("weight")]
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
 
         /// <summary>
         /// The unit system that the product variant's weight is measure in. The weight_unit can be either "g", "kg, "oz", or "lb".

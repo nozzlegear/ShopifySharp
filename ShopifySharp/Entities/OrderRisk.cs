@@ -55,7 +55,7 @@ namespace ShopifySharp
         /// A number between 0 and 1 indicating percentage likelihood of being fraud.
         /// </summary>
         [JsonProperty("score")]
-        public decimal Score { get; set; }
+        public decimal? Score { get; set; }
 
         /// <summary>
         /// This indicates the source of the risk assessment. Known values are 'External', 'Internal' and 'Gateway'.

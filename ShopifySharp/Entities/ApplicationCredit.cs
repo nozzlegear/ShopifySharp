@@ -17,7 +17,7 @@ namespace ShopifySharp
         /// The amount refunded by the application credit.
         /// </summary>
         [JsonProperty("amount")]
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
 
         /// <summary>
         /// States whether or not the application credit is a test transaction. Valid values are true or null.

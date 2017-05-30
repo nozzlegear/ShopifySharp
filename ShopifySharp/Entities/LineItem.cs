@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// </summary>
         /// <remarks>Shopify returns this value as a string.</remarks>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for the product in the fulfillment. Can be null if the original product associated with the order is deleted at a later date
@@ -117,7 +117,7 @@ namespace ShopifySharp
         /// The total discount amount applied to this line item. This value is not subtracted in the line item price.
         /// </summary>
         [JsonProperty("total_discount")]
-        public decimal TotalDiscount { get; set; }
+        public decimal? TotalDiscount { get; set; }
 
         /// <summary>
         /// An array of custom information for an item that has been added to the cart.
