@@ -78,7 +78,7 @@ namespace ShopifySharp.Tests
         public async Task Updates_ProductImages()
         {
             var created = await Fixture.Create();
-            int position = created.Position + 1;
+            int position = created.Position.Value + 1;
             long id = created.Id.Value;
 
             created.Position = position;

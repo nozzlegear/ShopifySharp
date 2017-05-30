@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// A number specifying the manually sorted position of this product in a custom collection. The first position is 1. This value only applies when the custom collection is viewed using the Manual sort order.
         /// </summary>
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int?Position { get; set; }
 
         /// <summary>
         /// This is the same value as position but padded with leading zeroes to make it alphanumeric-sortable.

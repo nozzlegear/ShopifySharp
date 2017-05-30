@@ -94,7 +94,7 @@ namespace ShopifySharp
         /// Number of days that the customer is eligible for a free trial.
         /// </summary>
         [JsonProperty("trial_days")]
-        public int TrialDays { get; set; }
+        public int?TrialDays { get; set; }
 
         /// <summary>
         /// The date and time when the free trial ends. Will be null if the charge has not been accepted.

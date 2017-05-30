@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// The order of the product variant in the list of product variants. 1 is the first position.
         /// </summary>
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int?Position { get; set; }
 
         /// <summary>
         /// The values for the options.

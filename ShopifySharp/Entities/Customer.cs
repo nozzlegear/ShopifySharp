@@ -87,7 +87,7 @@ namespace ShopifySharp
         /// The number of orders associated with this customer.
         /// </summary>
         [JsonProperty("orders_count")]
-        public int OrdersCount { get; set; }
+        public int?OrdersCount { get; set; }
 
         /// <summary>
         /// The state of the customer in a shop. Valid values are 'disabled', 'decline', 'invited' and 'enabled'.
