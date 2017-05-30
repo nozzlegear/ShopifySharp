@@ -78,7 +78,8 @@ namespace ShopifySharp.Tests
         public async Task Updates_ProductImages()
         {
             var created = await Fixture.Create();
-            int position = created.Position.Value + 1;
+            // API seems to refuse to set a position higher than 5. 
+            int position = created.Position >= 5 ? 4 : created.Position.Value + 1;
             long id = created.Id.Value;
 
             created.Position = position;
