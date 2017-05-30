@@ -66,7 +66,7 @@ namespace ShopifySharp
         /// A unique numeric identifier for the order.
         /// </summary>
         [JsonProperty("order_id")]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
 
         /// <summary>
         /// Shopify does not currently offer documentation for this object.

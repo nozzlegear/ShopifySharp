@@ -129,7 +129,7 @@ namespace ShopifySharp.Tests
                 try
                 {
                     await Service.DeleteAsync(obj.Id.Value);
-                    await productService.DeleteAsync(obj.ProductId);
+                    await productService.DeleteAsync(obj.ProductId.Value);
                 }
                 catch (ShopifyException ex)
                 {

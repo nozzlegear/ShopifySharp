@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// The id of the resource that generated the event.
         /// </summary>
         [JsonProperty("subject_id")]
-        public long SubjectId { get; set; }
+        public long? SubjectId { get; set; }
 
         /// <summary>
         /// The type of the resource that generated the event.

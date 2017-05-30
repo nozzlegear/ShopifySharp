@@ -20,7 +20,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Counts_Fulfillments()
         {
-            long orderId = Fixture.Created.First().OrderId;
+            long orderId = Fixture.Created.First().OrderId.Value;
             var count = await Fixture.Service.CountAsync(orderId);
 
             Assert.True(count > 0);
@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Counts_Fulfillments_With_A_Filter()
         {
-            long orderId = Fixture.Created.First().OrderId;
+            long orderId = Fixture.Created.First().OrderId.Value;
             var fromDate = DateTime.UtcNow.AddDays(-2);
             var count = await Fixture.Service.CountAsync(orderId, new CountFilter()
             {
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Fulfillments()
         {
-            long orderId = Fixture.Created.First().OrderId;
+            long orderId = Fixture.Created.First().OrderId.Value;
             var list = await Fixture.Service.ListAsync(orderId);
 
             Assert.True(list.Count() > 0);
@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Fulfillments_With_A_Filter()
         {
-            long orderId = Fixture.Created.First().OrderId;
+            long orderId = Fixture.Created.First().OrderId.Value;
             var fromDate = DateTime.UtcNow.AddDays(-2);
             var list = await Fixture.Service.ListAsync(orderId, new ListFilter()
             {
@@ -66,7 +66,7 @@ namespace ShopifySharp.Tests
         {
             // Find an id 
             var created = Fixture.Created.First();
-            var fulfillment = await Fixture.Service.GetAsync(created.OrderId, created.Id.Value);
+            var fulfillment = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
 
             Assert.NotNull(fulfillment);
         }
@@ -121,7 +121,7 @@ namespace ShopifySharp.Tests
             created.TrackingCompany = company;
             created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(created.OrderId, id, created);
+            var updated = await Fixture.Service.UpdateAsync(created.OrderId.Value, id, created);
 
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;

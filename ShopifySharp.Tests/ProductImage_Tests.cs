@@ -85,7 +85,7 @@ namespace ShopifySharp.Tests
             created.Position = position;
             created.Id = null;
 
-            var updated = await Fixture.Service.UpdateAsync(created.ProductId, id, created);
+            var updated = await Fixture.Service.UpdateAsync(created.ProductId.Value, id, created);
 
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;

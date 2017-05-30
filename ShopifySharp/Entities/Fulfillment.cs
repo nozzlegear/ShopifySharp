@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// The unique numeric identifier for the order.
         /// </summary>
         [JsonProperty("order_id")]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
 
         /// <summary>
         /// A textfield with information about the receipt.

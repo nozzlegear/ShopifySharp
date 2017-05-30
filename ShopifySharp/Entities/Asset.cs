@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// The asset size in bytes.
         /// </summary>
         [JsonProperty("size")]
-        public long Size { get; set; }
+        public long? Size { get; set; }
 
         /// <summary>
         /// When set in an asset and used in <see cref="AssetService.CreateOrUpdateAsync(long, Asset)"/>, 
@@ -67,7 +67,7 @@ namespace ShopifySharp
         /// A unique numeric identifier for the theme.
         /// </summary>
         [JsonProperty("theme_id")]
-        public long ThemeId { get; set; }
+        public long? ThemeId { get; set; }
 
         /// <summary>
         /// The date and time when an asset was last updated. 

@@ -13,7 +13,7 @@ namespace ShopifySharp
         /// The id of the product associated with the image.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         /// The order of the product image in the list. The first product image is at position 1 and is the "main" image for the product.

@@ -16,13 +16,13 @@ namespace ShopifySharp
         /// The id of the custom collection containing the product.
         /// </summary>
         [JsonProperty("collection_id")]
-        public long CollectionId { get; set; }
+        public long? CollectionId { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for the product in the custom collection.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         /// States whether or not the collect is featured.

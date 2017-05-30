@@ -20,7 +20,7 @@ namespace ShopifySharp.Tests
 
         public async Task Counts_Transactions()
         {
-            var count = await Fixture.Service.CountAsync(Fixture.Created.First().OrderId);
+            var count = await Fixture.Service.CountAsync(Fixture.Created.First().OrderId.Value);
 
             Assert.True(count > 0);
         }
@@ -28,7 +28,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Transactions()
         {
-            var list = await Fixture.Service.ListAsync(Fixture.Created.First().OrderId);
+            var list = await Fixture.Service.ListAsync(Fixture.Created.First().OrderId.Value);
 
             Assert.True(list.Count() > 0);
         }
@@ -38,7 +38,7 @@ namespace ShopifySharp.Tests
         {
             var order = await Fixture.CreateOrder();
             var created = await Fixture.Create(order.Id.Value);
-            var obj = await Fixture.Service.GetAsync(created.OrderId, created.Id.Value);
+            var obj = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);

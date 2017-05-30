@@ -12,7 +12,7 @@ namespace ShopifySharp
         /// The unique numeric identifier for the product.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         /// The title of the product variant.

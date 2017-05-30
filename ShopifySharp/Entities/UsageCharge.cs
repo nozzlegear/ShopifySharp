@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// The recurring application charge the usage charge belongs to.
         /// </summary>
         [JsonProperty("recurring_application_charge_id")]
-        public long RecurringApplicationChargeId { get; set; }
+        public long? RecurringApplicationChargeId { get; set; }
 
         /// <summary>
         /// The date and time when the usage charge was last updated.
