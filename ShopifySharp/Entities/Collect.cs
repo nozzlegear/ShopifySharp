@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// States whether or not the collect is featured.
         /// </summary>
         [JsonProperty("featured")]
-        public bool Featured { get; set; }
+        public bool? Featured { get; set; }
 
         /// <summary>
         /// The date and time when the collect was created. The API returns this value in ISO 8601 format.

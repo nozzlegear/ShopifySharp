@@ -90,7 +90,7 @@ namespace ShopifySharp
         /// Whether the transaction is for testing purposes.
         /// </summary>
         [JsonProperty("test")]
-        public bool Test { get; set; }
+        public bool? Test { get; set; }
 
         /// <summary>
         /// The unique identifier for the user.

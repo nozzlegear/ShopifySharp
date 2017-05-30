@@ -230,12 +230,12 @@ namespace ShopifySharp
         /// Indicates whether the shop has web-based storefront or not.
         /// </summary>
         [JsonProperty("has_storefront")]
-        public bool HasStorefront { get; set; }
+        public bool? HasStorefront { get; set; }
 
         /// <summary>
         /// Indicates whether the shop has any outstanding setup steps or not.
         /// </summary>
         [JsonProperty("setup_required")]
-        public bool SetupRequired { get; set; }
+        public bool? SetupRequired { get; set; }
     }
 }

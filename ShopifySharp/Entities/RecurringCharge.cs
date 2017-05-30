@@ -88,7 +88,7 @@ namespace ShopifySharp
         /// </summary>
         /// <remarks>Valid values are 'true' or null. Needs a special converter to convert null to false and vice-versa.</remarks>
         [JsonProperty("test"), JsonConverter(typeof(FalseToNullConverter))]
-        public bool Test { get; set; }
+        public bool? Test { get; set; }
 
         /// <summary>
         /// Number of days that the customer is eligible for a free trial.

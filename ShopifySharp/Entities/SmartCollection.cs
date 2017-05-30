@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// If false, products must match all of the rules to be included in the collection. If true, products can only match one of the rules.
         /// </summary>
         [JsonProperty("disjunctive")]
-        public bool Disjunctive { get; set; }
+        public bool? Disjunctive { get; set; }
 
         /// <summary>
         /// The order in which products in the smart collection appear. Known values are 'alpha-asc', 'alpha-desc', 'best-selling', 'created', 'created-desc', 'manual', 'price-asc', 'price-desc'.

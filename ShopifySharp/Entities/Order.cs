@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// This is set when checking the "I want to receive occasional emails about new products, promotions and other news" checkbox during checkout.
         /// </summary>
         [JsonProperty("buyer_accepts_marketing")]
-        public bool BuyerAcceptsMarketing { get; set; }
+        public bool? BuyerAcceptsMarketing { get; set; }
 
         /// <summary>
         /// The reason why the order was cancelled. If the order was not cancelled, this value is null. Known values are "customer", "fraud", "inventory" and "other".
@@ -253,7 +253,7 @@ namespace ShopifySharp
         /// States whether or not taxes are included in the order subtotal. 
         /// </summary>
         [JsonProperty("taxes_included")]
-        public bool TaxesIncluded { get; set; }
+        public bool? TaxesIncluded { get; set; }
 
         /// <summary>
         /// Unique identifier for a particular order.

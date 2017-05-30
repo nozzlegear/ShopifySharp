@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// States whether or not the risk is displayed. Valid values are "true" or "false".
         /// </summary>
         [JsonProperty("display")]
-        public bool Display { get; set; }
+        public bool? Display { get; set; }
 
         /// <summary>
         /// The id of the order the order risk belongs to

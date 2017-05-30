@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// </summary>
         /// <remarks>Valid values are 'true' or null. Needs a special converter to convert null to false and vice-versa.</remarks>
         [JsonProperty("test"), JsonConverter(typeof(FalseToNullConverter))]
-        public bool Test { get; set; }
+        public bool? Test { get; set; }
 
         /// <summary>
         /// The date and time when the recurring application charge was last updated.

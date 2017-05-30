@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// Whether the collection is published or not.
         /// </summary>
         [JsonProperty("published")]
-        public bool Published { get; set; }
+        public bool? Published { get; set; }
 
         /// <summary>
         /// This can have two different types of values, depending on whether the Custom collection has been published (i.e., made visible to customers):

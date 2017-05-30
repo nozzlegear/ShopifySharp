@@ -55,7 +55,7 @@ namespace ShopifySharp
         /// Indicates whether this address is the default address.
         /// </summary>
         [JsonProperty("default")]
-        public bool Default { get; set; }
+        public bool? Default { get; set; }
 
         /// <summary>
         /// The first name.

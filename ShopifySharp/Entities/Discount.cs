@@ -66,13 +66,13 @@ namespace ShopifySharp
         /// When a discount applies to a product or collection resource, applies_once determines whether the discount should be applied once per order, or to every applicable item in the cart.
         /// </summary>
         [JsonProperty("applies_once")]
-        public bool AppliesOnce { get; set; }
+        public bool? AppliesOnce { get; set; }
 
         /// <summary>
         /// Determines whether the discount should be applied once, or any number of times per customer.
         /// </summary>
         [JsonProperty("applies_once_per_customer")]
-        public bool AppliesOncePerCustomer { get; set; }
+        public bool? AppliesOncePerCustomer { get; set; }
 
         /// <summary>
         /// The discount code can be set to apply to only a product, smart_collection, customersavedsearch or custom_collection.If applies_to_resource is set, then applies_to_id should also be set.

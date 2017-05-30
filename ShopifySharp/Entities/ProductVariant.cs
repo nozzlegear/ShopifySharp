@@ -102,13 +102,13 @@ namespace ShopifySharp
         /// Specifies whether or not a tax is charged when the product variant is sold.
         /// </summary>
         [JsonProperty("taxable")]
-        public bool Taxable { get; set; }
+        public bool? Taxable { get; set; }
 
         /// <summary>
         /// Specifies whether or not a customer needs to provide a shipping address when placing an order for this product variant.
         /// </summary>
         [JsonProperty("requires_shipping")]
-        public bool RequiresShipping { get; set; }
+        public bool? RequiresShipping { get; set; }
 
         /// <summary>
         /// The barcode, UPC or ISBN number for the product.
