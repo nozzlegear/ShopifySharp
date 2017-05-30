@@ -2,10 +2,11 @@ using Newtonsoft.Json;
 using System;
 
 namespace ShopifySharp
-{    /// <summary>
-     /// An object representing a Shopify event.
-     /// </summary>
-    public class ShopifyEvent : ShopifyObject
+{    
+    /// <summary>
+    /// An object representing a Shopify event.
+    /// </summary>
+    public class Event : ShopifyObject
     {
         /// <summary>
         /// Refers to a certain event and its resources.

@@ -6,12 +6,12 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "ShopifyEvent")]
-    public class ShopifyEvent_Tests : IClassFixture<ShopifyEvent_Tests_Fixture>
+    [Trait("Category", "Event")]
+    public class Event_Tests : IClassFixture<Event_Tests_Fixture>
     {
-        private ShopifyEvent_Tests_Fixture Fixture { get; }
+        private Event_Tests_Fixture Fixture { get; }
 
-        public ShopifyEvent_Tests(ShopifyEvent_Tests_Fixture fixture)
+        public Event_Tests(Event_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
@@ -66,10 +66,10 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class ShopifyEvent_Tests_Fixture
+    public class Event_Tests_Fixture
     {
         public EventService Service => new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public List<ShopifyEvent> Created { get; } = new List<ShopifyEvent>();
+        public List<Event> Created { get; } = new List<Event>();
     }
 }

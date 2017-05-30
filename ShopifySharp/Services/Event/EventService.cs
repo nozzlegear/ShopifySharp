@@ -38,12 +38,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Retrieves the <see cref="ShopifyEvent"/> with the given id.
+        /// Retrieves the <see cref="Event"/> with the given id.
         /// </summary>
         /// <param name="eventId">The id of the event to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="ShopifyEvent"/>.</returns>
-        public virtual async Task<ShopifyEvent> GetAsync(long eventId, string fields = null)
+        /// <returns>The <see cref="Event"/>.</returns>
+        public virtual async Task<Event> GetAsync(long eventId, string fields = null)
         {
             var req = PrepareRequest($"events/{eventId}.json");
 
@@ -52,7 +52,7 @@ namespace ShopifySharp
                 req.Url.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<ShopifyEvent>(req, HttpMethod.Get, rootElement: "event");
+            return await ExecuteRequestAsync<Event>(req, HttpMethod.Get, rootElement: "event");
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ShopifySharp
         /// <param name="options">Options for filtering the result.</param>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(long subjectId, string subjectType, EventListFilter options = null)
+        public virtual async Task<IEnumerable<Event>> ListAsync(long subjectId, string subjectType, EventListFilter options = null)
         {
             // Ensure the subject type is plural
             if (! subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
@@ -77,14 +77,14 @@ namespace ShopifySharp
                 req.Url.QueryParams.AddRange(options.ToParameters());
             }
 
-            return await ExecuteRequestAsync<List<ShopifyEvent>>(req, HttpMethod.Get, rootElement: "events");
+            return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
         }
 
         /// <summary>
         /// Returns a list of events.
         /// </summary>
         /// <param name="options">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ShopifyEvent>> ListAsync(EventListFilter options = null)
+        public virtual async Task<IEnumerable<Event>> ListAsync(EventListFilter options = null)
         {
             var req = PrepareRequest("events.json");
             
@@ -94,7 +94,7 @@ namespace ShopifySharp
                 req.Url.QueryParams.AddRange(options.ToParameters());
             }
 
-            return await ExecuteRequestAsync<List<ShopifyEvent>>(req, HttpMethod.Get, rootElement: "events");
+            return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
         }
     }
 }
