@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(ShopifyOrderService)), Tags("Order")]
     public class When_listing_orders_with_since_id
     {
         Establish context = () =>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
-    [Subject(typeof(ShopifyOrderService))]
+    [Subject(typeof(ShopifyOrderService)), Tags("Order")]
     public class When_updating_an_order
     {
         Establish context = () =>
