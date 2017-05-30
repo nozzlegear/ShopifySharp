@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// The date and time when the customer was created. 
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The default address for the customer.
@@ -118,7 +118,7 @@ namespace ShopifySharp
         /// The date and time when the customer information was updated. 
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// States whether or not the email address has been verified.

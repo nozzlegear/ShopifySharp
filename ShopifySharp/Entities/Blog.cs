@@ -4,7 +4,7 @@ using System;
 namespace ShopifySharp
 {
     /// <summary>
-    /// Represents a Blog — not a blog post — on a merchant's Shopify store.
+    /// Represents a Blog ï¿½ not a blog post ï¿½ on a merchant's Shopify store.
     /// </summary>
     public class Blog: ShopifyObject
     {
@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// The date and time when the blog was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// Feedburner is a web feed management provider and can be enabled to provide custom RSS feeds for Shopify bloggers. This property will default to blank or "null" unless feedburner is enabled through the shop admin.
@@ -69,6 +69,6 @@ namespace ShopifySharp
         /// The date and time when changes were last made to the blog's properties. Note that this is not updated when creating, modifying or deleting articles in the blog.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

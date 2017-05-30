@@ -75,6 +75,6 @@ namespace ShopifySharp
         /// The date and time when the smart collection was last modified. The API returns this value in ISO 8601 format.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// The date and time the image was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The image's src URL.

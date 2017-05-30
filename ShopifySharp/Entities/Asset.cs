@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// The date and time when the asset was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The path to the asset within a shop, prefixed with the asset's 'bucket' type,
@@ -73,7 +73,7 @@ namespace ShopifySharp
         /// The date and time when an asset was last updated. 
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// The asset that you are adding.

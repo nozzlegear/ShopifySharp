@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// The date and time when the webhook was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// An optional array of fields which should be included in webhooks.
@@ -53,6 +53,6 @@ namespace ShopifySharp
         /// The date and time when the webhook was updated.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

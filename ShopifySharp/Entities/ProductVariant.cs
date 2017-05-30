@@ -90,13 +90,13 @@ namespace ShopifySharp
         /// The date and time when the product variant was created. The API returns this value in ISO 8601 format.
         /// </summary>
         [JsonProperty("created_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time when the product variant was last modified. The API returns this value in ISO 8601 format.
         /// </summary>
         [JsonProperty("updated_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// Specifies whether or not a tax is charged when the product variant is sold.

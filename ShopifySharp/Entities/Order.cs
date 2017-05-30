@@ -72,7 +72,7 @@ namespace ShopifySharp
         /// The date and time when the order was created in Shopify.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The three letter code (ISO 4217) for the currency used for the payment.
@@ -301,7 +301,7 @@ namespace ShopifySharp
         /// The date and time when the order was last modified.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale. 

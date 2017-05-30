@@ -13,7 +13,7 @@ namespace ShopifySharp
         /// The date and time when the refund was created. 
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
 
         /// <summary>

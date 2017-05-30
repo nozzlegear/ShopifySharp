@@ -50,7 +50,7 @@ namespace ShopifySharp
         /// The date and time when the recurring application charge was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The name of the recurring application charge.
@@ -106,6 +106,6 @@ namespace ShopifySharp
         /// The date and time when the recurring application charge was last updated.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

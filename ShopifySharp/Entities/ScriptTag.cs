@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// The date and time when the <see cref="ScriptTag"/> was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// Where the script tag should be included on the store. Known values are 'online_store', 'order_status' or 'all'. Defaults to 'all'.
@@ -42,6 +42,6 @@ namespace ShopifySharp
         /// The date and time when the <see cref="ScriptTag"/> was updated.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }
