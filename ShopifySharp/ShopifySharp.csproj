@@ -55,6 +55,8 @@
     <Compile Include="Converters\FalseToNullConverter.cs" />
     <Compile Include="Converters\NullableEnumConverter.cs" />
     <Compile Include="Converters\NullToZeroConverter.cs" />
+    <Compile Include="Entities\ShopifyAbandonedCheckout.cs" />
+    <Compile Include="Entities\ShopifyCountry.cs" />
     <Compile Include="Entities\ShopifyDiscount.cs" />
     <Compile Include="Entities\ShopifyApplicationCredit.cs" />
     <Compile Include="Entities\ShopifyArticle.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="Entities\ShopifyCollect.cs" />
     <Compile Include="Entities\ShopifyCustomCollection.cs" />
     <Compile Include="Entities\ShopifyCustomCollectionImage.cs" />
+    <Compile Include="Entities\ShopifyProvince.cs" />
     <Compile Include="Entities\ShopifyRefundOrderAdjustment.cs" />
     <Compile Include="Entities\ShopifyRefundLineItem.cs" />
     <Compile Include="Entities\ShopifyRefund.cs" />
@@ -98,6 +101,8 @@
     <Compile Include="Entities\ShopifyWebhook.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Filters\ShopifyAbandonedCheckoutCountFilter.cs" />
+    <Compile Include="Filters\ShopifyAbandonedCheckoutListFilter.cs" />
     <Compile Include="Filters\ShopifyArticleFilter.cs" />
     <Compile Include="Filters\ShopifyEventListFilter.cs" />
     <Compile Include="Filters\ShopifyPublishableCountFilter.cs" />
@@ -120,6 +125,7 @@
     <Compile Include="Infrastructure\RequestEngine.cs" />
     <Compile Include="Infrastructure\ShopifyException.cs" />
     <Compile Include="Enums\ShopifyAuthorizationScope.cs" />
+    <Compile Include="Services\AbandonedCart\ShopifyAbandonedCartService.cs" />
     <Compile Include="Services\ApplicationCredit\ShopifyApplicationCreditService.cs" />
     <Compile Include="Services\Article\ShopifyArticleService.cs" />
     <Compile Include="Services\Asset\ShopifyAssetService.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="Services\ProductVariant\ShopifyProductVariantService.cs" />
     <Compile Include="Services\Product\ShopifyProductCreateOptions.cs" />
     <Compile Include="Services\Product\ShopifyProductService.cs" />
+    <Compile Include="Services\Province\ShopifyProvinceService.cs" />
     <Compile Include="Services\RecurringCharge\ShopifyRecurringChargeService.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerCreateOptions.cs" />
     <Compile Include="Services\Customer\ShopifyCustomerService.cs" />
