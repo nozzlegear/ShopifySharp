@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
@@ -29,13 +30,13 @@ namespace ShopifySharp
         /// The date when the discount code becomes disabled in ISO 8601 format.
         /// </summary>
         [JsonProperty("ends_at")]
-        public System.DateTime EndsAt { get; set; }
+        public DateTimeOffset EndsAt { get; set; }
 
         /// <summary>
         /// The date the discount becomes valid for use during checkout in ISO 8601 format.
         /// </summary>
         [JsonProperty("starts_at")]
-        public System.DateTime StartsAt { get; set; }
+        public DateTimeOffset StartsAt { get; set; }
 
         /// <summary>
         /// The status of the discount code. Valid values are enabled, disabled, or depleted.

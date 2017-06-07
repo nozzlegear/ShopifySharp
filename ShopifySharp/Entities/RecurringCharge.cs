@@ -19,13 +19,13 @@ namespace ShopifySharp
         /// has not been activated.
         /// </summary>
         [JsonProperty("activated_on")]
-        public DateTime? ActivatedOn { get; set; }
+        public DateTimeOffset? ActivatedOn { get; set; }
 
         /// <summary>
         /// The date and time when the customer will be billed. Will be null if the charge has not been activated by the customer.
         /// </summary>
         [JsonProperty("billing_on")]
-        public DateTime? BillingOn { get; set; }
+        public DateTimeOffset? BillingOn { get; set; }
 
         /// <summary>
         /// The capped amount is the limit a customer can be charged for usage based billing.
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// been cancelled.
         /// </summary>
         [JsonProperty("cancelled_on")]
-        public DateTime? CancelledOn { get; set; }
+        public DateTimeOffset? CancelledOn { get; set; }
 
         /// <summary>
         /// The URL that the customer should be sent to, to accept or decline the recurring application charge.
@@ -100,7 +100,7 @@ namespace ShopifySharp
         /// The date and time when the free trial ends. Will be null if the charge has not been accepted.
         /// </summary>
         [JsonProperty("trial_ends_on")]
-        public DateTime? TrialEndsOn { get; set; }
+        public DateTimeOffset? TrialEndsOn { get; set; }
 
         /// <summary>
         /// The date and time when the recurring application charge was last updated.

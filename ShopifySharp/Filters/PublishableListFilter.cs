@@ -12,13 +12,13 @@ namespace ShopifySharp.Filters
         /// Show objects published after date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("published_at_min")]
-        public DateTime? PublishedAtMin { get; set; } = null;
+        public DateTimeOffset? PublishedAtMin { get; set; } = null;
 
         /// <summary>
         /// Show objects published before date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("published_at_max")]
-        public DateTime? PublishedAtMax { get; set; } = null;
+        public DateTimeOffset? PublishedAtMax { get; set; } = null;
 
         /// <summary>
         /// Published Status.

@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// The date and time when the article was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime? CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// A human-friendly unique string for an article automatically generated from its title. It is used in the article's URL.
@@ -54,7 +54,7 @@ namespace ShopifySharp
         /// The date and time when the article was published. 
         /// </summary>
         [JsonProperty("published_at")]
-        public DateTime? PublishedAt { get; set; }
+        public DateTimeOffset? PublishedAt { get; set; }
 
         /// <summary>
         /// The text of the summary of the article, complete with HTML markup.
@@ -84,7 +84,7 @@ namespace ShopifySharp
         /// The date and time when the article was last updated.
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime? UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// A unique numeric identifier for the author of the article.

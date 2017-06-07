@@ -31,13 +31,13 @@ namespace ShopifySharp.Filters
         /// Show events created at or after date and time
         /// </summary>
         [JsonProperty("created_at_min")]
-        public DateTime? CreatedAtMin { get; set; }
+        public DateTimeOffset? CreatedAtMin { get; set; }
 
         /// <summary>
         /// Show events created at or before date and time
         /// </summary>
         [JsonProperty("created_at_max")]
-        public DateTime? CreatedAtMax { get; set; }
+        public DateTimeOffset? CreatedAtMax { get; set; }
 
         /// <summary>
         /// Only show events specified in filter (comma , separated). A full list of events can be found at https://help.shopify.com/api/reference/event

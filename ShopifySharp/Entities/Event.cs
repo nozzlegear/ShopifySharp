@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// The date and time when the event was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime? CreatedAt { get; set; }        
+        public DateTimeOffset? CreatedAt { get; set; }        
 
         /// <summary>
         /// A relative URL to the resource the event is for (may be null)

@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// This value can be set to dates in the past when importing from other systems. If no value is provided, it will be auto-generated.
         /// </remarks>
         [JsonProperty("processed_at")]
-        public DateTime? ProcessedAt { get; set; }
+        public DateTimeOffset? ProcessedAt { get; set; }
 
         /// <summary>
         /// The optional note attached to a refund.

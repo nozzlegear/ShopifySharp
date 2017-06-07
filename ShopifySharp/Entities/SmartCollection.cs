@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// If the smart collection is hidden (i.e., not published), this value is null. Changing a smart collection's status from published to hidden changes its published_at property to null.
         /// </summary>
         [JsonProperty("published_at")]
-        public DateTime? PublishedAt { get; set; }
+        public DateTimeOffset? PublishedAt { get; set; }
 
         /// <summary>
         /// The sales channels in which the smart collection is visible. The only currently known value is 'global'.

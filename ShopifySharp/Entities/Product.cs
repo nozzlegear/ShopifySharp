@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// Set to NULL to unpublish a product
         /// </summary>
         [JsonProperty("published_at", DefaultValueHandling = DefaultValueHandling.Include, NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedAt { get; set; }
+        public DateTimeOffset? PublishedAt { get; set; }
 
         /// <summary>
         /// The name of the vendor of the product.

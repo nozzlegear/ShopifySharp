@@ -12,25 +12,25 @@ namespace ShopifySharp.Filters
         /// Restricts results to those created after date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("created_at_min")]
-        public DateTime? CreatedAtMin { get; set; }
+        public DateTimeOffset? CreatedAtMin { get; set; }
 
         /// <summary>
         /// Restricts results to those created before date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("created_at_max")]
-        public DateTime? CreatedAtMax { get; set; }
+        public DateTimeOffset? CreatedAtMax { get; set; }
 
         /// <summary>
         /// Restricts results to those last updated after date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("updated_at_min")]
-        public DateTime? UpdatedAtMin { get; set; }
+        public DateTimeOffset? UpdatedAtMin { get; set; }
 
         /// <summary>
         /// Restricts results to those last updated before date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("updated_at_max")]
-        public DateTime? UpdatedAtMax { get; set; }
+        public DateTimeOffset? UpdatedAtMax { get; set; }
 
         /// <summary>
         /// Restrict results to after the specified ID. Note: this field may not have an effect on certain resources.

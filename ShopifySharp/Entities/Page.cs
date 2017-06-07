@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// The date and time when the page was published. The API returns this value in ISO 8601 format. 
         /// </summary>
         [JsonProperty("published_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public DateTime? PublishedAt { get; set; }
+        public DateTimeOffset? PublishedAt { get; set; }
 
         /// <summary>
         /// A human-friendly unique string for the page automatically generated from its title.

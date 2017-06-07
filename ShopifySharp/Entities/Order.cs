@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// The date and time when the order was cancelled. If the order was not cancelled, this value is null.
         /// </summary>
         [JsonProperty("cancelled_at")]
-        public DateTime? CancelledAt { get; set; }
+        public DateTimeOffset? CancelledAt { get; set; }
 
         /// <summary>
         /// Unique identifier for a particular cart that is attached to a particular order.
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// The date and time when the order was closed. If the order was not clsoed, this value is null.
         /// </summary>
         [JsonProperty("closed_at")]
-        public DateTime? ClosedAt { get; set; }
+        public DateTimeOffset? ClosedAt { get; set; }
 
         /// <summary>
         /// The customer's contact email address.
@@ -197,7 +197,7 @@ namespace ShopifySharp
         /// The date that the order was processed at.
         /// </summary>
         [JsonProperty("processed_at")]
-        public DateTime? ProcessedAt { get; set; }
+        public DateTimeOffset? ProcessedAt { get; set; }
 
         /// <summary>
         /// The type of payment processing method. Known values are 'checkout', 'direct', 'manual', 'offsite', 'express', 'free' and 'none'.
