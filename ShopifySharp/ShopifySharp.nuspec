@@ -11,6 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</description>
     <releaseNotes>
+  3.9.0
+  =====
+  - Added the following AuthorizationScope enums: read_checkouts, write_checkouts, read_reports, write_reports, read_price_rules and write_price_rules.
+  - Added RequestId property to ShopifyException and ShopifyRateLimitException.
+  
   3.8.0
   =====
   - BREAKING CHANGE: `ShopifyTransaction.Test` has been converted to a `Nullable Boolean` from `Boolean` to fix broken deserialization exceptions in production apps.
