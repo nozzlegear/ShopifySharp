@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyException_Tests
 {
-    [Subject(typeof(ShopifyRateLimitException))]
+    [Subject(typeof(ShopifyRateLimitException)), Tags("ShopifyException")]
     class When_reaching_the_rate_limit_with_smart_retry_policy
     {
         Establish context = () =>

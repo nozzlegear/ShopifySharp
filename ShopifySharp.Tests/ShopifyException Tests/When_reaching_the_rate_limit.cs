@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyException_Tests
 {
-    [Subject(typeof(ShopifyRateLimitException))]
+    [Subject(typeof(ShopifyRateLimitException)), Tags("ShopifyException")]
     class When_reaching_the_rate_limit
     {
         Establish context = () =>
@@ -60,6 +60,8 @@ namespace ShopifySharp.Tests.ShopifyException_Tests
             var e = (ShopifyException)Ex;
 
             e.JsonError.ShouldNotBeNull();
+            e.RequestId.ShouldNotBeNull();
+            e.RequestId.ShouldNotBeEmpty();
             e.Errors.Count.ShouldBeGreaterThanOrEqualTo(1);
             e.Errors.First().Key.Equals("Error").ShouldBeTrue();
             e.Errors.First().Value.First().ShouldEqual("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.");

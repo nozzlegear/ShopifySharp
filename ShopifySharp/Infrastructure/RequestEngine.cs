@@ -151,8 +151,10 @@ namespace ShopifySharp
         {
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
-                var json = Encoding.UTF8.GetString(response.RawBytes ?? new byte[] { });
-                Dictionary<string, IEnumerable<string>> errors = ParseErrorJson(json);
+                var requestIdHeader = response.Headers.FirstOrDefault(h => h.Name.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
+                string requestId = requestIdHeader?.Value as string;
+                string json = Encoding.UTF8.GetString(response.RawBytes ?? new byte[] { });
+                var errors = ParseErrorJson(json);
 
                 var code = response.StatusCode;
                 var message = $"Response did not indicate success. Status: {(int)code} {response.StatusDescription}.";
@@ -177,10 +179,10 @@ namespace ShopifySharp
                 // If the error was caused by reaching the API rate limit, throw a rate limit exception.
                 if ((int) code == 429 /* Too many requests */)
                 {
-                    throw new ShopifyRateLimitException(code, errors, message, json);
+                    throw new ShopifyRateLimitException(code, errors, message, json, requestId);
                 }
                 
-                throw new ShopifyException(code, errors, message, json);
+                throw new ShopifyException(code, errors, message, json, requestId);
             }
 
             if (response.ErrorException != null)

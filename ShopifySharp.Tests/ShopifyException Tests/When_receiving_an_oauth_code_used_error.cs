@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests.ShopifyException_Tests
 {
-    [Subject(typeof(ShopifyException))]
+    [Subject(typeof(ShopifyException)), Tags("ShopifyException")]
     class When_receiving_an_oauth_code_used_error
     {
         Establish context = () =>
