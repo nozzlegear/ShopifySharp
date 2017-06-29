@@ -12,7 +12,7 @@ namespace ShopifySharp
     /// <summary>
     /// An object representing a recurring application charge (i.e. a monthly subscription to your Shopify application).
     /// </summary>
-    public class RecurringCharge: ShopifyObject
+    public class RecurringCharge : ShopifyObject
     {
         /// <summary>
         /// The date and time when the customer activated the <see cref="RecurringCharge"/>. Will be null if the charge
@@ -94,7 +94,7 @@ namespace ShopifySharp
         /// Number of days that the customer is eligible for a free trial.
         /// </summary>
         [JsonProperty("trial_days")]
-        public int?TrialDays { get; set; }
+        public int? TrialDays { get; set; }
 
         /// <summary>
         /// The date and time when the free trial ends. Will be null if the charge has not been accepted.

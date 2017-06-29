@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// The quantity of the associated line item that was returned.
         /// </summary>
         [JsonProperty("quantity")]
-        public int?Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         /// <summary>
         /// Tax amount refunded

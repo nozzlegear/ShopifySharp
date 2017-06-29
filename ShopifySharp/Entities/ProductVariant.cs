@@ -30,14 +30,14 @@ namespace ShopifySharp
         /// The order of the product variant in the list of product variants. 1 is the first position.
         /// </summary>
         [JsonProperty("position")]
-        public int?Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         /// The weight of the product variant in grams.
         /// </summary>
-        [JsonProperty("grams"),JsonConverter(typeof(NullToZeroConverter))]
-        public int?Grams { get; set; }
-        
+        [JsonProperty("grams"), JsonConverter(typeof(NullToZeroConverter))]
+        public int? Grams { get; set; }
+
         /// <summary>
         /// Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock. Known values are 'deny' and 'continue'.
         /// </summary>
@@ -120,21 +120,21 @@ namespace ShopifySharp
         /// The number of items in stock for this product variant.
         /// </summary>
         [JsonProperty("inventory_quantity")]
-        public int?InventoryQuantity { get; set; }
+        public int? InventoryQuantity { get; set; }
 
         /// <summary>
         /// The original stock level the client believes the product variant has.
         /// This should be sent to avoid a race condition when the item being adjusted is simultaneously sold online.
         /// </summary>
         [JsonProperty("old_inventory_quantity")]
-        public int?OldInventoryQuantity { get; set; }
+        public int? OldInventoryQuantity { get; set; }
 
         /// <summary>
         /// Instead of sending a new and old value for inventory an adjustment value can be sent.
         /// If an adjustment value is sent it will take priority.
         /// </summary>
         [JsonProperty("inventory_quantity_adjustment")]
-        public int?InventoryQuantityAdjustment { get; set; }
+        public int? InventoryQuantityAdjustment { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for one of the product's images.

@@ -165,14 +165,14 @@ namespace ShopifySharp
         /// Numerical identifier unique to the shop. A number is sequential and starts at 1000.
         /// </summary>
         [JsonProperty("number")]
-        public int?Number { get; set; }
+        public int? Number { get; set; }
 
         /// <summary>
         /// A unique numeric identifier for the order. This one is used by the shop owner and customer. 
         /// This is different from the id property, which is also a unique numeric identifier for the order, but used for API purposes.
         /// </summary>
         [JsonProperty("order_number")]
-        public int?OrderNumber { get; set; }
+        public int? OrderNumber { get; set; }
 
         /// <summary>
         /// The URL pointing to the order status web page. The URL will be null unless the order was created from a checkout.

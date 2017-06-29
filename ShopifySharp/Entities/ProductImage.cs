@@ -19,7 +19,7 @@ namespace ShopifySharp
         /// The order of the product image in the list. The first product image is at position 1 and is the "main" image for the product.
         /// </summary>
         [JsonProperty("position")]
-        public int?Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         /// The date and time when the product image was created. The API returns this value in ISO 8601 format.
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("filename", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Filename { get; set; }
-        
+
         /// <summary>
         /// A base64 image attachment. Only used when creating a <see cref="ProductImage"/>, where it's then converted into the <see cref="Src"/>.
         /// </summary>
