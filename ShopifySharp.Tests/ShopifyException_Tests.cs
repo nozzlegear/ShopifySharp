@@ -34,7 +34,7 @@ namespace ShopifySharp.Tests
             };
             ShopifyException ex = null;
 
-            try 
+            try
             {
                 ShopifyService.CheckResponseExceptions(response, rawBody);
             }
@@ -103,7 +103,7 @@ namespace ShopifySharp.Tests
                 // This request will return a response which looks like { errors: { "order" : "some error message" } }
                 using (var client = PrepareRequest("orders.json"))
                 {
-                    var req = client.PostAsync(new JsonContent(new { }));;
+                    var req = client.PostAsync(new JsonContent(new { })); ;
                     response = await req;
                     rawBody = await req.ReceiveString();
                 }
@@ -171,13 +171,13 @@ namespace ShopifySharp.Tests
             HttpResponseMessage response;
             string rawBody;
             ShopifyException ex = null;
-            
+
             while (ex == null)
             {
                 // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
                 using (var client = PrepareRequest("orders.json"))
                 {
-                    var req = client.PostAsync(new JsonContent(new { order = order }));;
+                    var req = client.PostAsync(new JsonContent(new { order = order })); ;
                     response = await req;
                     rawBody = await req.ReceiveString();
                 }
@@ -200,6 +200,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(ex);
             Assert.True(ex.Errors.Count > 0);
+            Assert.NotNull(ex.RequestId);
             Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
             Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
             Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
@@ -215,7 +216,7 @@ namespace ShopifySharp.Tests
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             service.SetExecutionPolicy(new RetryExecutionPolicy());
 
-            try 
+            try
             {
                 var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
                 {
@@ -242,7 +243,7 @@ namespace ShopifySharp.Tests
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
 
-            try 
+            try
             {
                 var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
                 {
@@ -257,7 +258,7 @@ namespace ShopifySharp.Tests
 
             Assert.False(thrown);
             Assert.NotNull(list);
-            Assert.Equal(requestCount, list.Count());   
+            Assert.Equal(requestCount, list.Count());
         }
 
         [Fact]
@@ -267,7 +268,7 @@ namespace ShopifySharp.Tests
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             ShopifyRateLimitException ex = null;
 
-            try 
+            try
             {
                 var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
                 {
@@ -282,8 +283,9 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.Equal(429, (int) ex.HttpStatusCode);
+            Assert.Equal(429, (int)ex.HttpStatusCode);
             Assert.NotNull(ex.RawBody);
+            Assert.NotNull(ex.RequestId);
             Assert.True(ex.Errors.Count > 0);
             Assert.Equal("Error", ex.Errors.First().Key);
             Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
@@ -296,7 +298,7 @@ namespace ShopifySharp.Tests
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             ShopifyException ex = null;
 
-            try 
+            try
             {
                 var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
                 {
@@ -312,8 +314,9 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(ex);
             Assert.IsType(typeof(ShopifyRateLimitException), ex);
-            Assert.Equal(429, (int) ex.HttpStatusCode);
+            Assert.Equal(429, (int)ex.HttpStatusCode);
             Assert.NotNull(ex.RawBody);
+            Assert.NotNull(ex.RequestId);
             Assert.True(ex.Errors.Count > 0);
             Assert.Equal("Error", ex.Errors.First().Key);
             Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
