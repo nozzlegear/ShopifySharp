@@ -62,6 +62,24 @@ namespace ShopifySharp.Enums
         ReadUsers,
 
         [EnumMember(Value = "write_users")]
-        WriteUsers
+        WriteUsers,
+        
+        [EnumMember(Value = "read_checkouts")]
+        ReadCheckouts, 
+       
+        [EnumMember(Value = "write_checkouts")]
+        WriteCheckouts,
+        
+        [EnumMember(Value = "read_reports")]
+        ReadReports, 
+        
+        [EnumMember(Value = "write_reports")]
+        WriteReports,
+        
+        [EnumMember(Value = "read_price_rules")]
+        ReadPriceRules, 
+        
+        [EnumMember(Value = "write_price_rules")]
+        WritePriceRules
     }
 }

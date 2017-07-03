@@ -6,10 +6,13 @@ namespace ShopifySharp
 {
     public class ShopifyException : Exception
     {
-        #region Public properties
-
         public HttpStatusCode HttpStatusCode { get; set; }
-        
+
+        /// <summary>
+        /// The XRequestId header returned by Shopify. Can be used when working with the Shopify support team to identify the failed request.
+        /// </summary>
+        public string RequestId { get; set; }
+
         /// <remarks>
         /// Dictionary is always initialized to ensure null reference errors won't be thrown when trying to check error messages.
         /// </remarks>
@@ -19,22 +22,17 @@ namespace ShopifySharp
         /// The raw JSON string returned by Shopify.
         /// </summary>
         public string RawBody { get; set; }
-        
-        #endregion
-
-        #region Constructors
 
         public ShopifyException() { }
 
-        public ShopifyException(string message): base(message) { }
+        public ShopifyException(string message) : base(message) { }
 
-        public ShopifyException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string rawBody) : base(message)
+        public ShopifyException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string rawBody, string requestId) : base(message)
         {
             HttpStatusCode = httpStatusCode;
             Errors = errors;
             RawBody = rawBody;
+            RequestId = requestId;
         }
-
-        #endregion
     }
 }
