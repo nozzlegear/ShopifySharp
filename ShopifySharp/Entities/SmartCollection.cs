@@ -14,7 +14,7 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("body_html")]
         public string BodyHtml { get; set; }
-        
+
         /// <summary>
         /// A human-friendly unique string for the smart collection automatically generated from its title. This is used in shop themes by the Liquid templating language to refer to the smart collection. Limit of 255 characters.
         /// </summary>
@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// The list of rules that define what products go into the smart collection.        
         /// </summary>
         [JsonProperty("rules")]
-        public List<SmartCollectionRules> Rules { get; set; }
+        public IEnumerable<SmartCollectionRules> Rules { get; set; }
 
         /// <summary>
         /// If false, products must match all of the rules to be included in the collection. If true, products can only match one of the rules.
