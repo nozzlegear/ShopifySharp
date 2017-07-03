@@ -80,7 +80,7 @@ namespace ShopifySharp
             // but cloned clients still share the underlying HttpClient. Disposing a clone will break all further clones.
             client.Settings.AutoDispose = false;
 
-            if (! string.IsNullOrEmpty(_AccessToken))
+            if (!string.IsNullOrEmpty(_AccessToken))
             {
                 client = client.WithHeader("X-Shopify-Access-Token", _AccessToken);
             }
@@ -136,13 +136,13 @@ namespace ShopifySharp
                 var request = client.SendAsync(method, content);
                 var response = await request;
                 var rawResult = await request.ReceiveString();
-                
+
                 //Check for and throw exception when necessary.
                 CheckResponseExceptions(response, rawResult);
 
                 var jtoken = JToken.Parse(rawResult);
                 T result = jtoken.SelectToken(rootElement).ToObject<T>();
-                
+
                 return new RequestResult<T>(response, result, rawResult);
             });
 
@@ -159,9 +159,11 @@ namespace ShopifySharp
         {
             if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
             {
+                var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
+                string requestId = requestIdHeader.Value?.FirstOrDefault();
                 var errors = ParseErrorJson(rawResponse);
                 var code = response.StatusCode;
-                var message = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
+                string message = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
 
                 if (errors == null)
                 {
@@ -181,15 +183,15 @@ namespace ShopifySharp
                 }
 
                 // If the error was caused by reaching the API rate limit, throw a rate limit exception.
-                if ((int) code == 429 /* Too many requests */)
+                if ((int)code == 429 /* Too many requests */)
                 {
-                    throw new ShopifyRateLimitException(code, errors, message, rawResponse);
+                    throw new ShopifyRateLimitException(code, errors, message, rawResponse, requestId);
                 }
-                
-                throw new ShopifyException(code, errors, message, rawResponse);
+
+                throw new ShopifyException(code, errors, message, rawResponse, requestId);
             }
         }
-        
+
         /// <summary>
         /// Parses a JSON string for Shopify API errors.
         /// </summary>
@@ -223,7 +225,7 @@ namespace ShopifySharp
                 else if (parsed.Any(x => x.Path == "errors"))
                 {
                     var parsedErrors = parsed["errors"];
-                    
+
                     //errors can be either a single string, or an array of other errors
                     if (parsedErrors.Type == JTokenType.String)
                     {
