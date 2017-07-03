@@ -49,13 +49,6 @@ namespace ShopifySharp
         public string PublishedScope { get; set; }
 
         /// <summary>
-        /// Attaches additional metadata to a shop's resources:      
-        /// </summary>
-        [JsonProperty("metafield")]
-        public MetaField MetaField { get; set; }
-
-
-        /// <summary>
         /// The order in which products in the Custom collection appear
         /// </summary>
         [JsonProperty("sort_order")]

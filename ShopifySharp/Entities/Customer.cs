@@ -46,13 +46,6 @@ namespace ShopifySharp
         public string FirstName { get; set; }
 
         /// <summary>
-        /// Additional metadata about the customer. Note: This should only be used when creating or updating a <see cref="Customer"/>, as
-        /// Shopify will never return <see cref="Customer"/> metafields. Instead, you need to query metafields with <see cref="ShopifyMetafieldService"/>.
-        /// </summary>
-        [JsonProperty("metafields")]
-        public IEnumerable<MetaField> Metafields { get; set; }
-
-        /// <summary>
         /// The customer's identifier used with Multipass login
         /// </summary>
         [JsonProperty("multipass_identifier")]

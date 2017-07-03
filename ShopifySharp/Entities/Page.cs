@@ -56,11 +56,5 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("template_suffix")]
         public string TemplateSuffix { get; set; }
-
-        /// <summary>
-        /// Attaches additional information to a shop's resources.
-        /// </summary>
-        [JsonProperty("metafields")]
-        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }

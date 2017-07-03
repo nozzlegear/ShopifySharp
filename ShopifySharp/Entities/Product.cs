@@ -105,11 +105,5 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("images")]
         public IEnumerable<ProductImage> Images { get; set; }
-
-        /// <summary>
-        /// Attaches additional information to a shop's resources.
-        /// </summary>
-        [JsonProperty("metafields")]
-        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }
