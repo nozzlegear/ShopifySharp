@@ -49,8 +49,8 @@ namespace ShopifySharp.Tests
             string validUrl = Utils.MyShopifyUrl;
             string invalidUrl = "https://google.com";
 
-            Assert.True(await AuthorizationService.IsValidMyShopifyUrl(validUrl));
-            Assert.False(await AuthorizationService.IsValidMyShopifyUrl(invalidUrl));
+            Assert.True(await AuthorizationService.IsValidShopDomainAsync(validUrl));
+            Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
         }
 
         [Fact]

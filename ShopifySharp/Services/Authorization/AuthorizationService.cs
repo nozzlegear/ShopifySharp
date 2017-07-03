@@ -17,11 +17,11 @@ namespace ShopifySharp
 {
     public static class AuthorizationService
     {
-        private static string EncodeQuery(StringValues values, bool isKey) 
+        private static string EncodeQuery(StringValues values, bool isKey)
         {
             string s = values.FirstOrDefault();
 
-            if (string.IsNullOrEmpty(s)) 
+            if (string.IsNullOrEmpty(s))
             {
                 return "";
             }
@@ -39,11 +39,11 @@ namespace ShopifySharp
 
         private static string PrepareQuerystring(IEnumerable<KeyValuePair<string, StringValues>> querystring, string joinWith)
         {
-            var kvps = querystring.Select(kvp => new 
-                { 
-                    Key = EncodeQuery(kvp.Key, true), 
-                    Value = EncodeQuery(kvp.Value, false) 
-                })
+            var kvps = querystring.Select(kvp => new
+            {
+                Key = EncodeQuery(kvp.Key, true),
+                Value = EncodeQuery(kvp.Value, false)
+            })
                 .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
                 .OrderBy(kvp => kvp.Key)
                 .Select(kvp => $"{kvp.Key}={kvp.Value}");
@@ -100,7 +100,7 @@ namespace ShopifySharp
         {
             // To calculate signature, order all querystring parameters by alphabetical (exclude the 
             // signature itself). Then, hash it with the secret key.
-            var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key =="signature").Value;
+            var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key == "signature").Value;
 
             if (string.IsNullOrEmpty(signatureValues) || signatureValues.Count() < 1)
             {
@@ -162,15 +162,19 @@ namespace ShopifySharp
             string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
 
             //Webhook is valid if computed hash matches the header hash
-            return hash == hmacHeader; 
+            return hash == hmacHeader;
         }
 
         /// <summary>
-        /// A convenience function that tries to ensure that a given URL is a valid Shopify store by checking the response headers for X-ShopId.
+        /// A convenience function that tries to ensure that a given URL is a valid Shopify domain. It does this by making a HEAD request to the given domain, and returns true if the response contains an X-ShopId header. 
+        /// 
+        /// **Warning**: a domain could fake the response header, which would cause this method to return true.
+        /// 
+        /// **Warning**: this method of validation is not officially supported by Shopify and could break at any time.
         /// </summary>
         /// <param name="url">The URL of the shop to check.</param>
         /// <returns>A boolean indicating whether the URL is valid.</returns>
-        public static async Task<bool> IsValidMyShopifyUrl(string url)
+        public static async Task<bool> IsValidShopDomainAsync(string url)
         {
             var uri = ShopifyService.BuildShopUri(url);
 
@@ -253,7 +257,7 @@ namespace ShopifySharp
 
             using (var client = Flurl.Url.Combine(shopUri.ToString(), "oauth/access_token").AllowAnyHttpStatus())
             {
-                var request = client.PostAsync(new JsonContent(new 
+                var request = client.PostAsync(new JsonContent(new
                 {
                     client_id = shopifyApiKey,
                     client_secret = shopifySecretKey,
@@ -263,7 +267,7 @@ namespace ShopifySharp
                 var rawDataString = await request.ReceiveString();
 
                 ShopifyService.CheckResponseExceptions(response, rawDataString);
-                
+
                 var json = JToken.Parse(rawDataString);
 
                 return json.Value<string>("access_token");
