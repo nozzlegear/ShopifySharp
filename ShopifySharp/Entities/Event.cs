@@ -1,8 +1,9 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace ShopifySharp
-{    
+{
     /// <summary>
     /// An object representing a Shopify event.
     /// </summary>
@@ -12,7 +13,7 @@ namespace ShopifySharp
         /// Refers to a certain event and its resources.
         /// </summary>
         [JsonProperty("arguments")]
-        public string[] Arguments { get; set; }
+        public IEnumerable<string> Arguments { get; set; }
 
         /// <summary>
         /// A text field containing information about the event.
@@ -24,7 +25,7 @@ namespace ShopifySharp
         /// The date and time when the event was created.
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTimeOffset? CreatedAt { get; set; }        
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// A relative URL to the resource the event is for (may be null)
