@@ -9,31 +9,30 @@ namespace ShopifySharp
     /// A service for interacting with a customer's abandoned checkouts
     /// Billing and shipping info has been filled out but no purchase completed
     /// </summary>
-    public class ShopifyAbandonedCartService : ShopifyService
+    public class ShopifyAbandonedCheckoutService : ShopifyService
     {
-
         #region Constructor
-
         /// <summary>
         /// Creates a new instance of the service.
         /// </summary>
         /// <param name="myShopifyUrl"></param>
         /// <param name="shopAccessToken"></param>
-        public ShopifyAbandonedCartService(string myShopifyUrl, string shopAccessToken)
-            : base(myShopifyUrl, shopAccessToken)
+        public ShopifyAbandonedCheckoutService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken)
         {}
-
         #endregion
 
         /// <summary>
         /// Lists abandoned checkouts through an async call
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<ShopifyAbandonedCheckout> ListAsync()
+        public virtual async Task<IEnumerable<ShopifyAbandonedCheckout>> ListAsync(ShopifyAbandonedCheckoutFilter options = null)
         {
-            var req = RequestEngine.CreateRequest($"checkouts.json", Method.GET, "checkout");
+            var req = RequestEngine.CreateRequest($"checkouts.json", Method.GET, "checkouts");
 
-            return await RequestEngine.ExecuteRequestAsync<ShopifyAbandonedCheckout>(_RestClient, req);
+            //Add optional parameters to request
+            if (options != null) req.Parameters.AddRange(options.ToParameters(ParameterType.GetOrPost));
+
+            return await RequestEngine.ExecuteRequestAsync<List<ShopifyAbandonedCheckout>>(_RestClient, req);
         }
 
         /// <summary>

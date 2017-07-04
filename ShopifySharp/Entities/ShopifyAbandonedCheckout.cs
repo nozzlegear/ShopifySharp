@@ -70,7 +70,7 @@ namespace ShopifySharp
         /// The completed at.
         /// </value>
         [JsonProperty("completed_at")]
-        public DateTime CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
 
         /// <summary>
         /// Gets or sets the created at.
@@ -137,7 +137,7 @@ namespace ShopifySharp
         /// and the <see cref="ShopifyAddress" /> Id set to 0.
         /// </remarks>
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public new long Id { get; set; }
 
         /// <summary>
         /// Gets or sets the landing site.
@@ -152,7 +152,7 @@ namespace ShopifySharp
         /// A historical record of each item in the fulfillment.
         /// </summary>
         [JsonProperty("line_items")]
-        public IEnumerable<ShopifyLineItem> LineItems { get; set; }
+        public IEnumerable<ShopifyAbandonedCheckoutLineItem> LineItems { get; set; }
 
         /// <summary>
         /// Gets or sets the note.

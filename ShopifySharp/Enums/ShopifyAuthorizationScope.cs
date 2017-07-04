@@ -7,6 +7,9 @@ namespace ShopifySharp.Enums
     [JsonConverter(typeof(NullableEnumConverter<ShopifyAuthorizationScope>))]
     public enum ShopifyAuthorizationScope
     {
+        [EnumMember(Value = "read_abandoned_checkouts")]
+        ReadAbandonedCheckouts,
+
         [EnumMember(Value = "read_content")]
         ReadContent,
 

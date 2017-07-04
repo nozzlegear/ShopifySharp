@@ -1,0 +1,137 @@
+﻿using Newtonsoft.Json;
+using ShopifySharp.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ShopifySharp
+{
+    public class ShopifyAbandonedCheckoutLineItem : ShopifyObject
+    {
+        /// <summary>
+        /// An array of discounts applied to the line item.
+        /// An array of <see cref="ShopifyDiscountCode"/> objects, each of which details the discounts applicable to this <see cref="ShopifyAbandonedCheckoutLineItem"/>.
+        /// </summary>
+        [JsonIgnore]
+        public IEnumerable<ShopifyDiscountCode> Applied_Discounts { get; set; }
+
+        /// <summary>
+        /// The key / id of the abandoned checkout line item.
+        /// </summary>
+        [JsonProperty("key")]
+        public new string Id { get; set; }
+
+        /// <summary>
+        /// The compare at price of the item before discounts have been applied.
+        /// </summary>
+        /// <remarks>Shopify returns this value as a string.</remarks>
+        [JsonProperty("compare_at_price")]
+        public double? CompareAtPrice { get; set; }
+
+        // TODO: destination_location_id
+
+        /// <summary>
+        /// Service provider who is doing the fulfillment. Valid values are either "manual" or the name of the provider. eg: "amazon", "shipwire", etc.
+        /// </summary>
+        [JsonProperty("fulfillment_service")]
+        public string FulfillmentService { get; set; }
+
+        /// <summary>
+        /// States whether the order used a gift card.
+        /// </summary>
+        [JsonProperty("gift_card")]
+        public bool GiftCard { get; set; }
+
+        /// <summary>
+        /// The weight of the item in grams.
+        /// </summary>
+        [JsonProperty("grams")]
+        public int Grams { get; set; }
+
+        /// <summary>
+        /// The price of the line item before discounts have been applied.
+        /// </summary>
+        /// <remarks>Shopify returns this value as a string.</remarks>
+        [JsonProperty("line_price")]
+        public double LinePrice { get; set; }
+
+        // TODO: origin_location_id
+
+        /// <summary>
+        /// The price of the item before discounts have been applied.
+        /// </summary>
+        /// <remarks>Shopify returns this value as a string.</remarks>
+        [JsonProperty("price")]
+        public double Price { get; set; }
+
+        /// <summary>
+        /// The unique numeric identifier for the product in the fulfillment. Can be null if the original product associated with the order is deleted at a later date
+        /// </summary>
+        [JsonProperty("product_id")]
+        public long? ProductId { get; set; }
+
+        /// <summary>
+        /// An array of custom information for an item that has been added to the cart.
+        /// Often used to provide product customization options.
+        /// An array of <see cref="ShopifyTaxLine"/> objects, each of which details the taxes applicable to this <see cref="ShopifyLineItem"/>.
+        /// </summary>
+        [JsonProperty("properties")]
+        public IEnumerable<ShopifyLineItemProperty> Properties { get; set; }
+
+        /// <summary>
+        /// The number of products that were purchased.
+        /// </summary>
+        [JsonProperty("quantity")]
+        public int Quantity { get; set; }
+
+        /// <summary>
+        /// States whether or not the fulfillment requires shipping.
+        /// </summary>
+        [JsonProperty("requires_shipping")]
+        public bool RequiresShipping { get; set; }
+
+        /// <summary>
+        /// A unique identifier of the item in the fulfillment.
+        /// </summary>
+        [JsonProperty("sku")]
+        public string SKU { get; set; }
+
+        /// <summary>
+        /// An array of <see cref="ShopifyTaxLine"/> objects, each of which details the taxes applicable to this <see cref="ShopifyLineItem"/>.
+        /// </summary>
+        [JsonProperty("tax_lines")]
+        public IEnumerable<ShopifyTaxLine> TaxLines { get; set; }
+
+        /// <summary>
+        /// States whether or not the product was taxable.
+        /// </summary>
+        [JsonProperty("taxable")]
+        public bool Taxable { get; set; }
+
+        /// <summary>
+        /// The title of the product.
+        /// </summary>
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// The id of the product variant. Can be null if the product purchased is not a variant.
+        /// </summary>
+        [JsonProperty("variant_id")]
+        public long? VariantId { get; set; }
+
+        /// <summary>
+        /// The title of the product variant. Can be null if the product purchased is not a variant.
+        /// </summary>
+        [JsonProperty("variant_title")]
+        public string VariantTitle { get; set; }
+
+        /// <summary>
+        /// The name of the supplier of the item.
+        /// </summary>
+        [JsonProperty("vendor")]
+        public string Vendor { get; set; }
+    }
+}

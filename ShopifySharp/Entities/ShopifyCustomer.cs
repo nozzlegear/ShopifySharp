@@ -40,6 +40,12 @@ namespace ShopifySharp
         public string Email { get; set; }
 
         /// <summary>
+        /// The phone number of the customer.
+        /// </summary>
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        /// <summary>
         /// The customer's first name.
         /// </summary>
         [JsonProperty("first_name")]

@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Filters
 {
-    public class ShopifyAbandonedCheckoutListFilter : ShopifyListFilter
+    public class ShopifyAbandonedCheckoutFilter : ShopifyListFilter
     {
         [JsonProperty("status")]
         public string Status { get; set; } = "open";
