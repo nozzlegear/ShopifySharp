@@ -173,6 +173,27 @@ namespace ShopifySharp.Tests
 
             Assert.False(threw);
         }
+
+        [Fact]
+        public async Task Can_Be_Partially_Updated()
+        {
+            string newFirstName = "Sheev";
+            string newLastName = "Palpatine";
+            var created = await Fixture.Create();
+            var updated = await Fixture.Service.UpdateAsync(created.Id.Value, new Customer()
+            {
+                FirstName = newFirstName,
+                LastName = newLastName
+            });
+
+            Assert.Equal(created.Id, updated.Id);
+            Assert.Equal(newFirstName, updated.FirstName);
+            Assert.Equal(newLastName, updated.LastName);
+
+            // In previous versions of ShopifySharp, the updated JSON would have sent 'email=null' or 'note=null', clearing out the email address.
+            Assert.Equal(created.Email, updated.Email);
+            Assert.Equal(created.Note, updated.Note);
+        }
     }
 
     public class Customer_Tests_Fixture : IAsyncLifetime

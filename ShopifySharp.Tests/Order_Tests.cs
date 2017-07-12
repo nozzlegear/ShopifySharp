@@ -43,7 +43,7 @@ namespace ShopifySharp.Tests
             {
                 Ids = ids
             });
-            
+
             Assert.All(list, o => Assert.Contains(o.Id.Value, ids));
         }
 
@@ -128,15 +128,15 @@ namespace ShopifySharp.Tests
         {
             var order = await Fixture.Create();
             bool threw = false;
-            
-            try 
+
+            try
             {
                 await Fixture.Service.CancelAsync(order.Id.Value);
             }
             catch (ShopifyException ex)
             {
                 Console.WriteLine($"{nameof(Cancels_Orders)} failed. {ex.Message}");
-                
+
                 threw = true;
             }
 
@@ -148,8 +148,8 @@ namespace ShopifySharp.Tests
         {
             var order = await Fixture.Create();
             bool threw = false;
-            
-            try 
+
+            try
             {
                 await Fixture.Service.CancelAsync(order.Id.Value, new OrderCancelOptions()
                 {
@@ -159,15 +159,32 @@ namespace ShopifySharp.Tests
             catch (ShopifyException ex)
             {
                 Console.WriteLine($"{nameof(Cancels_Orders_With_Options)} failed. {ex.Message}");
-                
+
                 threw = true;
             }
 
             Assert.False(threw);
         }
+
+        [Fact]
+        public async Task Can_Be_Partially_Updated()
+        {
+            string newNote = "These notes were part of a partial update to this order.";
+            var created = await Fixture.Create();
+            var updated = await Fixture.Service.UpdateAsync(created.Id.Value, new Order()
+            {
+                Note = newNote
+            });
+
+            Assert.Equal(created.Id, updated.Id);
+            Assert.Equal(newNote, updated.Note);
+
+            // In previous versions of ShopifySharp, the updated JSON would have sent 'email=null', clearing out the email address.
+            Assert.Equal(created.Email, updated.Email);
+        }
     }
 
-    public class Order_Tests_Fixture: IAsyncLifetime
+    public class Order_Tests_Fixture : IAsyncLifetime
     {
         public OrderService Service => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -245,7 +262,7 @@ namespace ShopifySharp.Tests
                 Note = Note,
             });
 
-            if (! skipAddToCreateList)
+            if (!skipAddToCreateList)
             {
                 Created.Add(obj);
             }
