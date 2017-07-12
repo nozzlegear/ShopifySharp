@@ -208,7 +208,7 @@ namespace ShopifySharp.Tests
 
         public string Note => "Test note about this customer.";
 
-        public string Phone => "+1 613-555-1212";
+        public string Phone => "+1 613-556-1212";
 
         public async Task InitializeAsync()
         {
