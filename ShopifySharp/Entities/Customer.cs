@@ -83,6 +83,22 @@ namespace ShopifySharp
         public int? OrdersCount { get; set; }
 
         /// <summary>
+        /// The phone number for the customer. Valid formats can be of different types, for example:
+        /// 
+        /// 6135551212
+        /// 
+        /// +16135551212
+        /// 
+        /// 555-1212
+        /// 
+        /// (613)555-1212
+        /// 
+        /// +1 613-555-1212
+        /// </summary>
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        /// <summary>
         /// The state of the customer in a shop. Valid values are 'disabled', 'decline', 'invited' and 'enabled'.
         /// </summary>
         [JsonProperty("state")]

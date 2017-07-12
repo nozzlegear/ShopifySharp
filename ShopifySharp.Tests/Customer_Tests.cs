@@ -63,6 +63,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.FirstName, customer.FirstName);
             Assert.Equal(Fixture.LastName, customer.LastName);
             Assert.Equal(Fixture.Note, customer.Note);
+            Assert.Equal(Fixture.Phone, customer.Phone);
             Assert.NotNull(customer.Addresses);
             Assert.NotNull(customer.DefaultAddress);
         }
@@ -78,7 +79,7 @@ namespace ShopifySharp.Tests
             EmptyAssert.NullOrEmpty(customer.Note);
             EmptyAssert.NullOrEmpty(customer.Addresses);
             Assert.Null(customer.DefaultAddress);
-            
+
         }
 
         [Fact]
@@ -158,7 +159,7 @@ namespace ShopifySharp.Tests
             // Rather than putting a 20 second Thread.Sleep in the test, we'll just assume it's successful if the
             // test doesn't throw an exception.
             bool threw = false;
-            
+
             try
             {
                 var search = await Fixture.Service.SearchAsync("John");
@@ -185,6 +186,8 @@ namespace ShopifySharp.Tests
         public string LastName => "Doe";
 
         public string Note => "Test note about this customer.";
+
+        public string Phone => "+1 613-555-1212";
 
         public async Task InitializeAsync()
         {
@@ -235,12 +238,13 @@ namespace ShopifySharp.Tests
                         Default = true,
                     }
                 },
+                Phone = Phone,
                 VerifiedEmail = true,
                 Note = Note,
                 State = "enabled"
             }, options);
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }
