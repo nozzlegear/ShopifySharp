@@ -12,7 +12,9 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        private IRequestExecutionPolicy _ExecutionPolicy = new DefaultRequestExecutionPolicy();
+        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+
+        private IRequestExecutionPolicy _ExecutionPolicy;
 
         protected Uri _ShopUri { get; set; }
 
@@ -28,7 +30,9 @@ namespace ShopifySharp
             _ShopUri = BuildShopUri(myShopifyUrl);
             _AccessToken = shopAccessToken;
 
-            // TODO: If there's a global execution policy set, assign it here.
+            // If there's a global execution policy it should be set as this instance's policy. 
+            // User can override it with instance-specific execution policy.
+            _ExecutionPolicy = _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
         }
 
         /// <summary>
@@ -62,11 +66,21 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Sets the execution policy for this instance only.
+        /// Sets the execution policy for this instance only. This policy will always be used over the global execution policy.
+        /// The instance will revert back to the global execution policy if you pass null to this method.
         /// </summary>
         public void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
         {
-            _ExecutionPolicy = executionPolicy;
+            // If the user passes null, revert to the global execution policy.
+            _ExecutionPolicy = executionPolicy ?? _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
+        }
+
+        /// <summary>
+        /// Sets the global execution policy for all *new* instances. Current instances are unaffected, but you can call .SetExecutionPolicy on them.
+        /// </summary>
+        public static void SetGlobalExecutionPolicy(IRequestExecutionPolicy globalExecutionPolicy)
+        {
+            _GlobalExecutionPolicy = globalExecutionPolicy;
         }
 
         /// <summary>
