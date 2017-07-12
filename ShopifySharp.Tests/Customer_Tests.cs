@@ -63,7 +63,6 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.FirstName, customer.FirstName);
             Assert.Equal(Fixture.LastName, customer.LastName);
             Assert.Equal(Fixture.Note, customer.Note);
-            Assert.Equal(Fixture.Phone, customer.Phone);
             Assert.NotNull(customer.Addresses);
             Assert.NotNull(customer.DefaultAddress);
         }
@@ -208,8 +207,6 @@ namespace ShopifySharp.Tests
 
         public string Note => "Test note about this customer.";
 
-        public string Phone => "+1 613-556-1212";
-
         public async Task InitializeAsync()
         {
             // Create one customer for use with count, list, get, etc. tests.
@@ -259,7 +256,6 @@ namespace ShopifySharp.Tests
                         Default = true,
                     }
                 },
-                Phone = Phone,
                 VerifiedEmail = true,
                 Note = Note,
                 State = "enabled"
