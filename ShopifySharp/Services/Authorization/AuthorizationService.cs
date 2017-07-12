@@ -149,7 +149,7 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, string requestBody, string shopifySecretKey)
         {
-            var hmacHeaderValues = requestHeaders.FirstOrDefault(kvp => kvp.Key == "X-Shopify-Hmac-SHA256").Value;
+            var hmacHeaderValues = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value;
 
             if (string.IsNullOrEmpty(hmacHeaderValues) || hmacHeaderValues.Count() < 1)
             {
