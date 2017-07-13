@@ -27,12 +27,12 @@ skip_commits:
     - .vscode/*
     - changelog.md
 deploy:
-- provider: NuGet
-  api_key:
-    secure: uUJ91Fu+H69EdZ8RTYIa7G7UufCgCw1UXfZ2jAOEWJfKi8KNwDTFYaEDQCJS9xOc
-  on:
-    branch: master
-    appveyor_repo_tag: true
+# - provider: NuGet
+#   api_key:
+#     secure: uUJ91Fu+H69EdZ8RTYIa7G7UufCgCw1UXfZ2jAOEWJfKi8KNwDTFYaEDQCJS9xOc
+#   on:
+#     branch: master
+#     appveyor_repo_tag: true
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
   description: "Automated AppVeyor release for ShopifySharp v$(APPVEYOR_REPO_TAG_NAME). Check [changelog.md](https://github.com/nozzlegear/shopifysharp/blob/master/changelog.md) for a list of changes."
