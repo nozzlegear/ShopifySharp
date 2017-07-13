@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp.Tests
 {
@@ -12,23 +7,30 @@ namespace ShopifySharp.Tests
     /// </summary>
     public static class Utils
     {
-        public static string ApiKey { get; } = ConfigurationManager.AppSettings.Get("ApiKey");
-
-        public static string SecretKey { get; } = ConfigurationManager.AppSettings.Get("SecretKey");
-
-        public static string AccessToken { get; } = ConfigurationManager.AppSettings.Get("AccessToken");
-
-        public static string MyShopifyUrl { get; } = ConfigurationManager.AppSettings.Get("MyShopifyUrl");
-
         /// <summary>
-        /// An access token to a shop created by a real application. This is only used for testing <see cref="ShopifyRecurringChargeService"/>,
-        /// because a private app cannot create/manipulate charges.
+        /// Attempts to get an environment variable first by the key, then by 'SHOPIFYSHARP_{KEY}'. All keys must be uppercased!
         /// </summary>
-        public static string BillingAccessToken { get; } = ConfigurationManager.AppSettings.Get("BillingAccessToken");
+        private static string Get(string key) 
+        {
+            key = key.ToUpper();
 
-        /// <summary>
-        /// A *.myshopify.com domain corresponding to <see cref="BillingAccessToken"/>.
-        /// </summary>
-        public static string BillingMyShopifyUrl { get; } = ConfigurationManager.AppSettings.Get("BillingMyShopifyUrl");
+            string prefix = "SHOPIFYSHARP_";
+            string value = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(prefix + key);
+
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new Exception($"{nameof(key)} {key} was not found in environment variables. Add the key or {prefix + key} to your environment variables and try again.");
+            }
+
+            return value;
+        }
+
+        public static string ApiKey => Get("API_KEY");
+
+        public static string SecretKey => Get("SECRET_KEY");
+
+        public static string AccessToken => Get("ACCESS_TOKEN");
+
+        public static string MyShopifyUrl => Get("MY_SHOPIFY_URL");
     }
 }

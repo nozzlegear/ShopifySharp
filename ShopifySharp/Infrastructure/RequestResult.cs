@@ -1,16 +1,20 @@
-﻿using RestSharp;
+﻿using System.Net.Http;
 
 namespace ShopifySharp
 {
     public class RequestResult<T>
     {
-        public IRestResponse Response { get; }
+        public HttpResponseMessage Response { get; }
+
         public T Result { get; }
 
-        public RequestResult(IRestResponse response, T result)
+        public string RawResult { get; }
+
+        public RequestResult(HttpResponseMessage response, T result, string rawResult)
         {
             this.Response = response;
             this.Result = result;
+            this.RawResult = rawResult;
         }
     }
 }

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -33,7 +31,7 @@ namespace ShopifySharp
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
 
-                if (value.GetType().IsEnum)
+                if (value.GetType().GetTypeInfo().IsEnum)
                 {
                     value = ((Enum)value).ToSerializedString();
                 }
