@@ -14,10 +14,10 @@ build_script:
 test_script:
 - ps: ./scripts/test.ps1
 artifacts:
-- path: ShopifySharp/bin/Release/netstandard1.6
+- path: ShopifySharp/bin/Release/netstandard1.4
   name: netstandard16
-# - path: ShopifySharp/bin/Release/net461
-#   name: net461
+- path: ShopifySharp/bin/Release/net45
+  name: net461
 skip_commits:
   message: /\[skip\]/
   files:
