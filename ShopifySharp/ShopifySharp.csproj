@@ -4,7 +4,7 @@
     <Version>4.0.0-alpha-1</Version>
   </PropertyGroup>
   <PropertyGroup>
-    <Description>ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify.</Description>
+    <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
     <Authors>Nozzlegear</Authors>
     <Copyright>Nozzlegear Software</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
