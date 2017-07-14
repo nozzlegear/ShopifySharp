@@ -15,7 +15,7 @@ namespace ShopifySharp
         /// <summary>
         /// Converts the object to an array of Flurl query parameters.
         /// </summary>
-        public IEnumerable<QueryParameter> ToParameters()
+        public virtual IEnumerable<QueryParameter> ToParameters()
         {
             var output = new List<QueryParameter>();
 
