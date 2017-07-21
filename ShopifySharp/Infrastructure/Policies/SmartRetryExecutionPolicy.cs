@@ -77,9 +77,11 @@ namespace ShopifySharp
 
         private string GetAccessToken(IFlurlClient client)
         {
-            var headerValues = client.HttpClient.DefaultRequestHeaders.GetValues(REQUEST_HEADER_ACCESS_TOKEN);
-
-            return headerValues.FirstOrDefault();
+            IEnumerable<string> values = new List<string>();
+            
+            return client.HttpClient.DefaultRequestHeaders.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out values) ?
+                values.FirstOrDefault() :
+                null;
         }
 
         private int? GetBucketContentSize(HttpResponseMessage response)
