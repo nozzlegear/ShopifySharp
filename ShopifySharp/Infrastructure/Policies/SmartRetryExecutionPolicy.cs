@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ShopifySharp
 {
@@ -78,7 +79,7 @@ namespace ShopifySharp
         private string GetAccessToken(IFlurlClient client)
         {
             IEnumerable<string> values = new List<string>();
-            
+
             return client.HttpClient.DefaultRequestHeaders.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out values) ?
                 values.FirstOrDefault() :
                 null;
