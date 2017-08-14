@@ -168,6 +168,8 @@ to the **Tests** section below.
 
 ## Authorization and authentication
 
+**NOTICE**: If you're using ASP.NET MVC5 (or any version that isn't AspNet Core) you'll have compilation errors when trying to pass `Request.QueryString` or `Request.Headers` to the authorization methods described below. [See this issue for a workaround](https://github.com/nozzlegear/ShopifySharp/issues/164).
+
 ### Ensure a given URL is a valid *myshopify.com URL
 
 This is a convenience method that validates whether a given URL is a valid Shopify API domain (the Shopify API is hosted on each individual shop rather than at once central URL). It's great for ensuring
