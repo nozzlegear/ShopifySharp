@@ -117,7 +117,13 @@ namespace ShopifySharp
                 //Check for and throw exception when necessary.
                 CheckResponseExceptions(response, rawResult);
 
-                var jtoken = JToken.Parse(rawResult);
+                JToken jtoken = null;
+
+                // Don't parse the result when the request was Delete.
+                if (method != HttpMethod.Delete)
+                {
+                    jtoken = JToken.Parse(rawResult);
+                }
 
                 return new RequestResult<JToken>(response, jtoken, rawResult);
             });
@@ -154,6 +160,9 @@ namespace ShopifySharp
                 //Check for and throw exception when necessary.
                 CheckResponseExceptions(response, rawResult);
 
+                // This method may fail when the method was Delete, which is intendend. 
+                // Delete methods should not be parsing the response JSON and should instead
+                // be using the non-generic ExecuteRequestAsync.
                 var jtoken = JToken.Parse(rawResult);
                 T result = jtoken.SelectToken(rootElement).ToObject<T>();
 
