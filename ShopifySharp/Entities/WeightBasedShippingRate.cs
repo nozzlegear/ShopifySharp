@@ -9,13 +9,13 @@ namespace ShopifySharp
         /// Minimum order weight
         /// </summary>
         [JsonProperty("weight_low")]
-        public double? WeightLow { get; set; }
+        public decimal? WeightLow { get; set; }
 
         /// <summary>
         /// Maximum order weight
         /// </summary>
         [JsonProperty("weight_high")]
-        public double? WeightHigh { get; set; }
+        public decimal? WeightHigh { get; set; }
 
         /// <summary>
         /// Name of weight based rate
@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// Rate amount
         /// </summary>
         [JsonProperty("price")]
-        public string Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// Shipping zone id

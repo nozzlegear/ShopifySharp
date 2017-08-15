@@ -15,9 +15,14 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_ShippingZones()
         {
-            var list = await _Service.ListAsync();
+            var shippingZones = await _Service.ListAsync();
 
-            Assert.NotNull(list);
+            Assert.NotNull(shippingZones);
+
+            foreach(var shippingZone in shippingZones)
+            {
+                Assert.NotNull(shippingZone.Name);
+            }
         }
     }
 }

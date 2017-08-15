@@ -15,19 +15,19 @@ namespace ShopifySharp
         /// Minimum order price
         /// </summary>
         [JsonProperty("min_order_subtotal")]
-        public double? MinOrderSubtotal { get; set; }
+        public decimal? MinOrderSubtotal { get; set; }
 
         /// <summary>
         /// Rate amount
         /// </summary>
         [JsonProperty("price")]
-        public double? Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// Maximum order price
         /// </summary>
         [JsonProperty("max_order_subtotal")]
-        public double? MaxOrderSubtotal { get; set; }
+        public decimal? MaxOrderSubtotal { get; set; }
 
         /// <summary>
         /// Shipping zone id

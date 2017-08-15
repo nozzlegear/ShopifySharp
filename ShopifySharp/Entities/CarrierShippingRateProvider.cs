@@ -15,17 +15,13 @@ namespace ShopifySharp
         /// Rate adjustments - Flat fee
         /// </summary>
         [JsonProperty("flat_modifier")]
-        public string FlatModifier { get; set; }
+        public decimal? FlatModifier { get; set; }
 
         /// <summary>
         /// Rate adjustments - percentage
         /// </summary>
         [JsonProperty("percent_modifier")]
-        public int PercentModifier { get; set; }
-
-
-        [JsonProperty("service_filter")]
-        public ServiceFilter ServiceFilter { get; set; }
+        public int? PercentModifier { get; set; }
 
         /// <summary>
         /// Shipping zone id
