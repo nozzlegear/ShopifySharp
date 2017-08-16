@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
-    <Version>4.0.2</Version>
+    <Version>4.1.0</Version>
   </PropertyGroup>
   <PropertyGroup>
     <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
