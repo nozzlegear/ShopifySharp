@@ -29,13 +29,13 @@ namespace ShopifySharp.Filters
         public string FulfillmentStatus { get; set; }
 
         /// <summary>
-        /// Show orders imported after date (format: 2014-04-25T16:15:47-04:00)
+        /// Show orders imported after date.
         /// </summary>
         [JsonProperty("processed_at_min")]
         public DateTime? ProcessedAtMin { get; set; }
 
         /// <summary>
-        /// Show orders imported before date (format: 2014-04-25T16:15:47-04:00)
+        /// Show orders imported before date.
         /// </summary>
         [JsonProperty("processed_at_max")]
         public DateTime? ProcessedAtMax { get; set; }
