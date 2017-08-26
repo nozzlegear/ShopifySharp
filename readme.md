@@ -199,10 +199,10 @@ string usersMyShopifyUrl = "https://example.myshopify.com";
 string redirectUrl = "https://example.com/my/redirect/url";
 
 //An array of the Shopify access scopes your application needs to run.
-var scopes = new List<ShopifyAuthorizationScope>()
+var scopes = new List<AuthorizationScope>()
 {
-    ShopifyAuthorizationScope.ReadCustomers,
-    ShopifyAuthorizationScope.WriteCustomers
+    AuthorizationScope.ReadCustomers,
+    AuthorizationScope.WriteCustomers
 };
 
 //Or, use an array of string permissions
