@@ -93,6 +93,7 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [Application Credits](#application-credits)
 - [Articles](#articles)
 - [Discounts](#discounts)
+| [Policy](#policies)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -112,7 +113,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
 | [GiftCard](https://help.shopify.com/api/reference/gift_card) | Requires Shopify Plus. |
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
-| [Policy](https://help.shopify.com/api/reference/policy) | |
 | [Province](https://help.shopify.com/api/reference/province) | |
 | [Refund](https://help.shopify.com/api/reference/refund) | |
 | [ShippingZone](https://help.shopify.com/api/reference/shipping_zone) | |
@@ -2068,6 +2068,19 @@ Once disabled, a discount cannot be used by any customer until it's enabled.
 var service = new DiscountService(myShopifyUrl, shopAccessToken);
 
 await service.EnableAsync(discountId);
+```
+
+
+## Policies
+
+Developers can get the list of policies that a merchant has configured for their store, such as their refund or privacy policies.
+
+
+### Listing Policies
+
+```cs
+var service = new PolicyService(myShopifyUrl, shopAccessToken);
+var policies = await service.ListAsync();
 ```
 
 # Handling Shopify's API rate limit
