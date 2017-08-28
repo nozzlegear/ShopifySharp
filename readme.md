@@ -93,7 +93,8 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [Application Credits](#application-credits)
 - [Articles](#articles)
 - [Discounts](#discounts)
-| [Policy](#policies)
+- [Policy](#policies)
+- [ShippingZone](#shipping-zones)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -115,7 +116,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
 | [Province](https://help.shopify.com/api/reference/province) | |
 | [Refund](https://help.shopify.com/api/reference/refund) | |
-| [ShippingZone](https://help.shopify.com/api/reference/shipping_zone) | |
 | [Transaction](https://help.shopify.com/api/reference/transaction) | Object is implemented. |
 | [User](https://help.shopify.com/api/reference/user) | Requires Shopify Plus. |
 
@@ -2081,6 +2081,19 @@ Developers can get the list of policies that a merchant has configured for their
 ```cs
 var service = new PolicyService(myShopifyUrl, shopAccessToken);
 var policies = await service.ListAsync();
+```
+
+
+## Shipping Zones
+
+Developers can  get the list of shipping zones, their countries, provinces, and shipping rates.
+
+
+### Listing Shipping Zones
+
+```cs
+var service = new ShippingZoneService(myShopifyUrl, shopAccessToken);
+var shippingZones = await service.ListAsync();
 ```
 
 # Handling Shopify's API rate limit
