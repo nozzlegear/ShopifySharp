@@ -93,8 +93,8 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [Application Credits](#application-credits)
 - [Articles](#articles)
 - [Discounts](#discounts)
-- [Policy](#policies)
-- [ShippingZone](#shipping-zones)
+- [Policies](#policies)
+- [ShippingZones](#shipping-zones)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
