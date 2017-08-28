@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests
             var list = await _Service.ListAsync();
 
             Assert.NotNull(list);
-            Assert.True(list.Count() > 0);
+            
             foreach(var policy in list)
             {
                 EmptyAssert.NotNullOrEmpty(policy.Title);
