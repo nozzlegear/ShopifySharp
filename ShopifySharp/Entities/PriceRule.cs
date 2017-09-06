@@ -45,7 +45,7 @@ namespace ShopifySharp
         * It's important to note that when discounting a resource, the value must be a negative number.
         */
         [JsonProperty("value")]
-        public string Value { get; set; }
+        public decimal Value { get; set; }
 
         /**
         * The price rule can only be used once per customer (tracked by customer id).
@@ -119,24 +119,24 @@ namespace ShopifySharp
         * The date and time when the price rule starts.
         */
         [JsonProperty("starts_at")]
-        public string StartsAt { get; set; }
+        public DateTimeOffset? StartsAt { get; set; }
 
         /**
         * The date and time when the price rule ends.Must be after starts_at.
         */
         [JsonProperty("ends_at")]
-        public string EndsAt { get; set; }
+        public DateTimeOffset? EndsAt { get; set; }
 
         /**
         * The date and time the object was created.
         */
         [JsonProperty("created_at")]
-        public string CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /**
         * The date and time the object was last updated.
         */
         [JsonProperty("updated_at")]
-        public string UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }
