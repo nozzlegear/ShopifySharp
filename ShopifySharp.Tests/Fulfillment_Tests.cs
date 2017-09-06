@@ -107,7 +107,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
-            Assert.Equal("success", created.Status);            
+            Assert.Equal("success", created.Status);
         }
 
         [Fact]
@@ -165,6 +165,9 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            // Fulfillment API has a stricter rate limit when on a non-paid store.
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
             var fulfillment = await Create(order.Id.Value);
@@ -246,13 +249,13 @@ namespace ShopifySharp.Tests
                 fulfillment = new Fulfillment()
                 {
                     TrackingCompany = "Jack Black's Pack, Stack and Track",
-                    TrackingUrls = new string[] 
+                    TrackingUrls = new string[]
                     {
                         "https://example.com/da10038ee679f9afc93a785cafdd8d52",
                         "https://example.com/6349a40313ae3c7544331ff9fb44f28c",
                         "https://example.com/ca0b2d7bcccec4b58a94a24fa04101d3"
                     },
-                    TrackingNumbers = new string[] 
+                    TrackingNumbers = new string[]
                     {
                         "da10038ee679f9afc93a785cafdd8d52",
                         "6349a40313ae3c7544331ff9fb44f28c",
