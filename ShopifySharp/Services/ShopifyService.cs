@@ -180,39 +180,44 @@ namespace ShopifySharp
         /// <param name="response">The response.</param>
         public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
-            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
-            {
-                var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
-                string requestId = requestIdHeader.Value?.FirstOrDefault();
-                var errors = ParseErrorJson(rawResponse);
-                var code = response.StatusCode;
-                string message = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
+            int statusCode = (int)response.StatusCode;
 
-                if (errors == null)
-                {
-                    errors = new Dictionary<string, IEnumerable<string>>()
+            // No error if response was between 200 and 300.
+            if (statusCode >= 200 && statusCode < 300)
+            {
+                return;
+            }
+
+            var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
+            string requestId = requestIdHeader.Value?.FirstOrDefault();
+            var errors = ParseErrorJson(rawResponse);
+            var code = response.StatusCode;
+            string message = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
+
+            if (errors == null)
+            {
+                errors = new Dictionary<string, IEnumerable<string>>()
                     {
                         {
                             $"{(int)code} {response.ReasonPhrase}",
                             new string[] { message }
                         },
                     };
-                }
-                else
-                {
-                    var firstError = errors.First();
-
-                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
-                }
-
-                // If the error was caused by reaching the API rate limit, throw a rate limit exception.
-                if ((int)code == 429 /* Too many requests */)
-                {
-                    throw new ShopifyRateLimitException(code, errors, message, rawResponse, requestId);
-                }
-
-                throw new ShopifyException(code, errors, message, rawResponse, requestId);
             }
+            else
+            {
+                var firstError = errors.First();
+
+                message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+            }
+
+            // If the error was caused by reaching the API rate limit, throw a rate limit exception.
+            if ((int)code == 429 /* Too many requests */)
+            {
+                throw new ShopifyRateLimitException(code, errors, message, rawResponse, requestId);
+            }
+
+            throw new ShopifyException(code, errors, message, rawResponse, requestId);
         }
 
         /// <summary>
