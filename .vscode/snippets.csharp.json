@@ -1,5 +1,5 @@
 {
-	/*
+/*
     Add the following snippet to your C# user snippets in VSCode.
 */
 	"Setup ShopifySharp Test": {
@@ -99,7 +99,7 @@
 			"",
 			"\tpublic class $1_Tests_Fixture: IAsyncLifetime",
 			"\t{",
-			"\t\tpublic $1Service Service { get; } = new $1Service(Utils.MyShopifyUrl, Utils.AccessToken);",
+			"\t\tpublic $1Service Service => new $1Service(Utils.MyShopifyUrl, Utils.AccessToken);",
 			"",
 			"\t\tpublic List<$1> Created { get; } = new List<$1>();",
 			"",
