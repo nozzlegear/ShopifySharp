@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -152,9 +152,9 @@ namespace ShopifySharp.Tests
 
     public class Fulfillent_Tests_Fixture : IAsyncLifetime
     {
-        public FulfillmentService Service => new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public FulfillmentService Service { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public OrderService OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.

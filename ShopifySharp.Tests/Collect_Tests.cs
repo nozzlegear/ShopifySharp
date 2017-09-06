@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -92,7 +92,7 @@ namespace ShopifySharp.Tests
 
     public class Collect_Tests_Fixture : IAsyncLifetime
     {
-        public CollectService Service => new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public CollectService Service { get; } = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Collect> Created { get; } = new List<Collect>();
 

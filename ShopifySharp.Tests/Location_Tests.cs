@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -7,7 +7,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Location")]
     public class Location_Tests
     {
-        private LocationService _Service => new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private LocationService _Service { get; } = new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         [Fact]
         public async Task Lists_Locations()

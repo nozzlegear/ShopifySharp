@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -98,9 +98,9 @@ namespace ShopifySharp.Tests
     {
         public string ImageFileName => "image-filename.jpg";
 
-        public ProductService ProductService => new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public ProductImageService Service => new ProductImageService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ProductImageService Service { get; } = new ProductImageService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<ProductImage> Created { get; } = new List<ProductImage>();
 

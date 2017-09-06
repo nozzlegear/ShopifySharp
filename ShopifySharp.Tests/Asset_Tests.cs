@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -110,7 +110,7 @@ namespace ShopifySharp.Tests
 
     public class Asset_Tests_Fixture : IAsyncLifetime
     {
-        public AssetService Service => new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public AssetService Service { get; } = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Asset> Created { get; } = new List<Asset>();
 

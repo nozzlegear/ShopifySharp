@@ -97,7 +97,7 @@ namespace ShopifySharp.Tests
 
     public class PriceRule_Tests_Fixture : IAsyncLifetime
     {
-        public PriceRuleService Service => new PriceRuleService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public PriceRuleService Service { get; } = new PriceRuleService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<PriceRule> Created { get; } = new List<PriceRule>();
 

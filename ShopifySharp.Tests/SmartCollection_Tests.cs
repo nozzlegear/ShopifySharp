@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -99,7 +99,7 @@ namespace ShopifySharp.Tests
 
     public class SmartCollection_Tests_Fixture : IAsyncLifetime
     {
-        public SmartCollectionService Service => new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public SmartCollectionService Service { get; } = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<SmartCollection> Created { get; } = new List<SmartCollection>();
 

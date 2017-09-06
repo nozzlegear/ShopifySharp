@@ -101,9 +101,9 @@ namespace ShopifySharp.Tests
 
     public class Transaction_Tests_Fixture : IAsyncLifetime
     {
-        public TransactionService Service => new TransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public TransactionService Service { get; } = new TransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public OrderService OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Transaction> Created { get; } = new List<Transaction>();
 

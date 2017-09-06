@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -135,7 +135,7 @@ namespace ShopifySharp.Tests
 
     public class Product_Tests_Fixture : IAsyncLifetime
     {
-        public ProductService Service => new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ProductService Service { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Product> Created { get; } = new List<Product>();
 

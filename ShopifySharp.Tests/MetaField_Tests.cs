@@ -135,7 +135,7 @@ namespace ShopifySharp.Tests
 
     public class MetaField_Tests_Fixture : IAsyncLifetime
     {
-        public MetaFieldService Service => new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public MetaFieldService Service { get; } = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<ShopifySharp.MetaField> Created { get; } = new List<ShopifySharp.MetaField>();
 

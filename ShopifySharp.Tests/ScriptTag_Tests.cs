@@ -98,7 +98,7 @@ namespace ShopifySharp.Tests
 
     public class ScriptTag_Tests_Fixture : IAsyncLifetime
     {
-        public ScriptTagService Service => new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ScriptTagService Service { get; } = new ScriptTagService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<ScriptTag> Created { get; } = new List<ScriptTag>();
 

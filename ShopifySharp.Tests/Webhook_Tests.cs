@@ -96,7 +96,7 @@ namespace ShopifySharp.Tests
 
     public class Webhook_Tests_Fixture : IAsyncLifetime
     {
-        public WebhookService Service => new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public WebhookService Service { get; } = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Webhook> Created { get; } = new List<Webhook>();
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -113,7 +113,7 @@ namespace ShopifySharp.Tests
 
     public class Article_Tests_Fixture : IAsyncLifetime
     {
-        public ArticleService Service => new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ArticleService Service { get; } = new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public string Title => "My new Article title - ";
 

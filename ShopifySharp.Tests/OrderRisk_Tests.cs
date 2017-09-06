@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -98,7 +98,7 @@ namespace ShopifySharp.Tests
 
     public class OrderRisk_Tests_Fixture : IAsyncLifetime
     {
-        public OrderRiskService Service => new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public OrderRiskService Service { get; } = new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<OrderRisk> Created { get; } = new List<OrderRisk>();
 
