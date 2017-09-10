@@ -101,5 +101,10 @@ namespace ShopifySharp
         [JsonProperty("order_id")]
         public long? OrderId { get; set; }
 
+        /// <summary>
+        /// Thethe gift card code. Only for Creation
+        /// </summary>
+        [JsonProperty("code")]
+        public string Code { get; set; }
     }
 }

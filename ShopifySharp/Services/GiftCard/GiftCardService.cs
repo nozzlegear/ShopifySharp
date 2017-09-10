@@ -100,5 +100,41 @@ namespace ShopifySharp
 
             return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Put, content, "gift_card");
         }
+        /// <summary>
+        /// Disables the <see cref="GiftCard"/> with the given id.
+        /// </summary>
+        /// <param name="giftCardId">The id of the GiftCard to disable.</param>
+        /// <returns>The <see cref="GiftCard"/>.</returns>
+        public virtual async Task<GiftCard> DisableAsync(long giftCardId)
+        {
+            var req = PrepareRequest($"gift_cards/{giftCardId}/disable.json");
+
+            return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, rootElement: "gift_card");
+        }
+
+        /// <summary>
+        /// Search for gift cards matching supplied query
+        /// </summary>
+        /// <param name="query">The (unencoded) search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
+        /// <param name="order">An (unencoded) optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
+        /// <param name="filter">Options for filtering the results.</param>
+        /// <returns>A list of matching gift cards.</returns>
+        public virtual async Task<IEnumerable<GiftCard>> SearchAsync(string query, string order = null, ListFilter filter = null)
+        {
+            var req = PrepareRequest("gift_cards/search.json");
+            req.Url.QueryParams.Add("query", query, false);
+
+            if (!string.IsNullOrEmpty(order))
+            {
+                req.Url.QueryParams.Add("order", order, false);
+            }
+
+            if (filter != null)
+            {
+                req.Url.QueryParams.AddRange(filter.ToParameters());
+            }
+
+            return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+        }
     }
 }
