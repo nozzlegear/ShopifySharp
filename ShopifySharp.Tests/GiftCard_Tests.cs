@@ -74,7 +74,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_GiftCards_With_Code()
         {
-            var customCode = $"test{DateTime.Now.Ticks}";
+            var customCode = Guid.NewGuid().ToString();
             var lastFour = customCode.Substring(customCode.Length - 4);
             var created = await Fixture.Create(GiftCardValue, customCode);
 
@@ -116,11 +116,11 @@ namespace ShopifySharp.Tests
         public async Task Searches_For_GiftCards()
         {
 
-            var customCode = $"test{DateTime.Now.Ticks}";
-            var lastFour = customCode.Substring(customCode.Length - 4);
-            var created = await Fixture.Create(GiftCardValue, customCode);
-
-            var search = await Fixture.Service.SearchAsync(lastFour);
+            var customCode = Guid.NewGuid().ToString();
+            customCode = customCode.Substring(customCode.Length-20);
+            await Fixture.Create(GiftCardValue, customCode);
+            var query = "code:" + customCode;
+            var search = await Fixture.Service.SearchAsync(query);
 
             Assert.True(search.Any());
         }
@@ -155,10 +155,14 @@ namespace ShopifySharp.Tests
         }
         public async Task<GiftCard> Create(decimal value, string code = null)
         {
-            var giftCardRequest = new GiftCard() {InitialValue = 99};
+            var giftCardRequest = new GiftCard() {InitialValue = value };
             if (!string.IsNullOrEmpty(code))
             {
                 giftCardRequest.Code = code;
+            }
+            if (giftCardRequest.Code != null && giftCardRequest.Code.Length > 20)
+            {
+                giftCardRequest.Code = giftCardRequest.Code.Substring(giftCardRequest.Code.Length - 20);
             }
             var giftCard = await Service.CreateAsync(giftCardRequest);
 
