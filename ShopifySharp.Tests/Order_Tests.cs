@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -186,7 +186,7 @@ namespace ShopifySharp.Tests
 
     public class Order_Tests_Fixture : IAsyncLifetime
     {
-        public OrderService Service => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public OrderService Service { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public string Note => "This order was created while testing ShopifySharp!";
 

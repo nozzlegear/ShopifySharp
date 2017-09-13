@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -96,7 +96,7 @@ namespace ShopifySharp.Tests
 
     public class CustomCollection_Tests_Fixture : IAsyncLifetime
     {
-        public CustomCollectionService Service => new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public CustomCollectionService Service { get; } = new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<CustomCollection> Created { get; } = new List<CustomCollection>();
 

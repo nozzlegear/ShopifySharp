@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using ShopifySharp.Enums;
 
 namespace ShopifySharp.Filters
@@ -26,5 +27,23 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("fulfillment_status")]
         public string FulfillmentStatus { get; set; }
+
+        /// <summary>
+        /// Show orders imported after date.
+        /// </summary>
+        [JsonProperty("processed_at_min")]
+        public DateTime? ProcessedAtMin { get; set; }
+
+        /// <summary>
+        /// Show orders imported before date.
+        /// </summary>
+        [JsonProperty("processed_at_max")]
+        public DateTime? ProcessedAtMax { get; set; }
+
+        /// <summary>
+        /// Show orders attributed to a specific app. Valid values are the app ID to filter on (eg. 123) or a value of "current" to only show orders for the app currently consuming the API.
+        /// </summary>
+        [JsonProperty("attribution_app_id")]
+        public string AttributionAppId { get; set; }
     }
 }

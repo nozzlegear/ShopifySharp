@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -98,7 +98,7 @@ namespace ShopifySharp.Tests
 
     public class ProductVariant_Tests_Fixture : IAsyncLifetime
     {
-        public ProductVariantService Service => new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ProductVariantService Service { get; } = new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<ProductVariant> Created { get; } = new List<ProductVariant>();
 

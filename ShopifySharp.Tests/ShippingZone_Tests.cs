@@ -10,7 +10,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "ShippingZone")]
     public class ShippingZone_Tests
     {
-        private ShippingZoneService _Service => new ShippingZoneService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private ShippingZoneService _Service { get; } = new ShippingZoneService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         [Fact]
         public async Task Lists_ShippingZones()

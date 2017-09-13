@@ -100,7 +100,7 @@ namespace ShopifySharp.Tests
 
     public class Theme_Tests_Fixture : IAsyncLifetime
     {
-        public ThemeService Service => new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public ThemeService Service { get; } = new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Theme> Created { get; } = new List<Theme>();
 
