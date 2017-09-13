@@ -95,7 +95,7 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [Discounts](#discounts)
 - [Policies](#policies)
 - [ShippingZones](#shipping-zones)
-- [GiftCards](#gift-cards) | Requires Shopify Plus. |
+- [GiftCards](#gift-cards)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
