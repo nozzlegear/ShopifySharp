@@ -11,7 +11,7 @@ namespace ShopifySharp
         /// Returns the amount of money remaining on the gift card.
         /// </summary>
         [JsonProperty("balance")]
-        public decimal Balance { get; set; }
+        public decimal? Balance { get; set; }
 
         /// <summary>
         /// The date and time when the gift card was created. 
@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// Returns the initial amount of money on the gift card.
         /// </summary>
         [JsonProperty("initial_value")]
-        public decimal InitialValue { get; set; }
+        public decimal? InitialValue { get; set; }
 
         /// <summary>
         /// The date and time when the gift card was disabled. 
