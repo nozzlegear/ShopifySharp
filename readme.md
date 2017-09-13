@@ -95,6 +95,7 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [Discounts](#discounts)
 - [Policies](#policies)
 - [ShippingZones](#shipping-zones)
+- [GiftCards](#gift-cards) | Requires Shopify Plus. |
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -112,7 +113,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [CustomerSavedSearch](https://help.shopify.com/api/reference/customersavedsearch) | |
 | [FulfillmentEvent](https://help.shopify.com/api/reference/fulfillmentevent) | Object is implemented. |
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
-| [GiftCard](https://help.shopify.com/api/reference/gift_card) | Requires Shopify Plus. |
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
 | [Province](https://help.shopify.com/api/reference/province) | |
 | [Refund](https://help.shopify.com/api/reference/refund) | |
@@ -2095,6 +2095,66 @@ Developers can  get the list of shipping zones, their countries, provinces, and 
 var service = new ShippingZoneService(myShopifyUrl, shopAccessToken);
 var shippingZones = await service.ListAsync();
 ```
+
+
+## Gift Cards
+
+Developers can create a gift card with the `GiftCardService`.
+
+**Gift Cards require a Shopify Plus subscription.**
+
+
+### Listing Gift Cards
+
+```cs
+var service = new GiftCardService(myShopifyUrl, shopAccessToken);
+var giftCards = await service.ListAsync();
+```
+
+### Creating a Gift Card
+
+```cs
+var service = new GiftCardService(myShopifyUrl, shopAccessToken);
+var giftCard = await service.CreateAsync(new GiftCard()
+{
+    InitialValue = 100,
+    Code = "abc-bcd-efg"
+});
+```
+
+### Getting a Gift Card
+
+```cs
+var service = new GiftCardService(myShopifyUrl, shopAccessToken);
+var giftCard = await service.GetAsync(giftCardId):
+```
+
+
+### Disabling a Gift Card
+
+Gift Cards can be disabled via that API, which makes them inactive and unusable until reenabled.
+
+```cs
+var service = new GiftCardService(myShopifyUrl, shopAccessToken);
+
+await service.DisableAsync(discountId);
+```
+
+### Counting a Gift Cards
+
+```c#
+var service =  new GiftCardService(myShopifyUrl, shopAccessToken);
+int giftCardCount = await service.CountAsync();
+```
+
+
+### Searching  a Gift Cards
+
+```c#
+var service =  new GiftCardService(myShopifyUrl, shopAccessToken);
+IEnumerable<GiftCard> giftCards = await Service.SearchAsync("code: abc-bcd-efg");
+```
+
 
 # Handling Shopify's API rate limit
 
