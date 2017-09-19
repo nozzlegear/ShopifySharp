@@ -18,10 +18,11 @@ namespace ShopifySharp
             while (true)
             {
                 var request = baseRequest.Clone();
+                var content = bodyContent?.Clone();
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(request, bodyContent);
+                    var fullResult = await executeRequestAsync(request, content);
 
                     return fullResult.Result;
                 }
