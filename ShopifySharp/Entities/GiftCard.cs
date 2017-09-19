@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// A unique numeric identifier of the line_item that caused the creation of this gift card (if it was created by an order).
         /// </summary>
         [JsonProperty("line_item_id")]
-        public string LineItemId { get; set; }
+        public long? LineItemId { get; set; }
 
 
         /// <summary>
