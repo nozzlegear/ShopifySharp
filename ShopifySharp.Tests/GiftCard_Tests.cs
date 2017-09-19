@@ -18,21 +18,21 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Counts_GiftCards()
         {
             var count = await Fixture.Service.CountAsync();
             Assert.True(count > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Counts_GiftCards_With_A_Filter()
         {
             var enabledCount = await Fixture.Service.CountAsync("enabled");
             Assert.True(enabledCount > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Lists_GiftCards()
         {
             var list = await Fixture.Service.ListAsync();
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests
             Assert.True(list.Any());
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Lists_GiftCards_With_A_Filter()
         {
             var list = await Fixture.Service.ListAsync(new GiftCardFilter()
@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests
             Assert.True(list.Any());
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Gets_GiftCards()
         {
             // Find an id 
@@ -59,10 +59,10 @@ namespace ShopifySharp.Tests
             var giftCard = await Fixture.Service.GetAsync(created.Id.Value);
 
             Assert.NotNull(giftCard);
-            Assert.Equal(GiftCardValue,giftCard.InitialValue);
+            Assert.Equal(GiftCardValue, giftCard.InitialValue);
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Creates_GiftCards()
         {
             var created = await Fixture.Create(GiftCardValue);
@@ -71,7 +71,7 @@ namespace ShopifySharp.Tests
             Assert.True(created.Id.HasValue);
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Creates_GiftCards_With_Code()
         {
             var customCode = Guid.NewGuid().ToString();
@@ -82,9 +82,9 @@ namespace ShopifySharp.Tests
             Assert.True(created.Id.HasValue);
             Assert.Equal(lastFour, created.LastCharacters);
         }
-        
 
-        [Fact]
+
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Updates_GiftCards()
         {
             string note = "Updates_GiftCards note";
@@ -101,9 +101,9 @@ namespace ShopifySharp.Tests
 
             Assert.Equal(note, updated.Note);
         }
-        
 
-        [Fact]
+
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Disable_GiftCards()
         {
             var created = await Fixture.Create(GiftCardValue);
@@ -112,12 +112,12 @@ namespace ShopifySharp.Tests
             Assert.True(disabled.DisabledAt.HasValue);
         }
 
-        [Fact]
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Searches_For_GiftCards()
         {
 
             var customCode = Guid.NewGuid().ToString();
-            customCode = customCode.Substring(customCode.Length-20);
+            customCode = customCode.Substring(customCode.Length - 20);
             await Fixture.Create(GiftCardValue, customCode);
             var query = "code:" + customCode;
             var search = await Fixture.Service.SearchAsync(query);
@@ -129,8 +129,8 @@ namespace ShopifySharp.Tests
     public class GiftCard_Tests_Fixture : IAsyncLifetime
     {
         public GiftCardService Service => new GiftCardService(Utils.MyShopifyUrl, Utils.AccessToken);
-        
-        
+
+
         public List<GiftCard> Created { get; } = new List<GiftCard>();
 
         public async Task InitializeAsync()
@@ -155,7 +155,7 @@ namespace ShopifySharp.Tests
         }
         public async Task<GiftCard> Create(decimal value, string code = null)
         {
-            var giftCardRequest = new GiftCard() {InitialValue = value };
+            var giftCardRequest = new GiftCard() { InitialValue = value };
             if (!string.IsNullOrEmpty(code))
             {
                 giftCardRequest.Code = code;
