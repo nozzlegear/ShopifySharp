@@ -104,9 +104,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid. 
+        /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
+        /// <remarks>
+        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="baseContent" /> when finished.
+        /// </remarks>
         protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseClient, HttpMethod method, JsonContent baseContent = null)
         {
             var policyResult = await _ExecutionPolicy.Run(baseClient, baseContent, async (client, content) =>
@@ -130,6 +133,7 @@ namespace ShopifySharp
             });
 
             baseClient.Dispose();
+            baseContent?.Dispose();
 
             return policyResult;
         }
@@ -146,9 +150,10 @@ namespace ShopifySharp
         /// </param>
         /// <param name="baseContent">
         /// Content that gets appended to the request body. Can be null. In most cases, you'll want to use <see cref="JsonContent"/>.
+        /// Note that the content will be automatically disposed when the method returns.
         /// </param>
         /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseClient"/> when finished.
+        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="baseContent" /> when finished.
         /// </remarks>
         protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseClient, HttpMethod method, JsonContent baseContent = null, string rootElement = null) where T : new()
         {
@@ -171,6 +176,7 @@ namespace ShopifySharp
             });
 
             baseClient.Dispose();
+            baseContent?.Dispose();
 
             return policyResult;
         }
