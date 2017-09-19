@@ -2,6 +2,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -12,7 +13,7 @@ namespace ShopifySharp
     {
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(500);
 
-        public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IFlurlClient baseRequest, JsonContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
             while (true)
             {

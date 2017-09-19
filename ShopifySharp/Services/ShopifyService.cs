@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -106,7 +107,7 @@ namespace ShopifySharp
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid. 
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseClient, HttpMethod method, HttpContent baseContent = null)
+        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseClient, HttpMethod method, JsonContent baseContent = null)
         {
             var policyResult = await _ExecutionPolicy.Run(baseClient, baseContent, async (client, content) =>
             {
@@ -149,7 +150,7 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseClient"/> when finished.
         /// </remarks>
-        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseClient, HttpMethod method, HttpContent baseContent = null, string rootElement = null) where T : new()
+        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseClient, HttpMethod method, JsonContent baseContent = null, string rootElement = null) where T : new()
         {
             var policyResult = await _ExecutionPolicy.Run<T>(baseClient, baseContent, async (client, content) =>
             {

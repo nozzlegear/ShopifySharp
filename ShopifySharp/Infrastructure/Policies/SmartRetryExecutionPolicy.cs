@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -32,7 +33,7 @@ namespace ShopifySharp
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(IFlurlClient baseRequest, JsonContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;
@@ -45,6 +46,7 @@ namespace ShopifySharp
             while (true)
             {
                 var request = baseRequest.Clone();
+                var content = bodyContent?.Clone();
 
                 if (accessToken != null)
                 {
@@ -53,7 +55,7 @@ namespace ShopifySharp
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(request, bodyContent);
+                    var fullResult = await executeRequestAsync(request, content);
                     int? bucketContentSize = this.GetBucketContentSize(fullResult.Response);
 
                     if (bucketContentSize != null)
