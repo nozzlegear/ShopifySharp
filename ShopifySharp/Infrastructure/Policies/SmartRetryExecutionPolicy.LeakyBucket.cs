@@ -11,6 +11,7 @@ namespace ShopifySharp
             private const int BUCKET_MAX_SIZE = 40;
 
             private static ConcurrentBag<LeakyBucket> _allLeakyBuckets = new ConcurrentBag<LeakyBucket>();
+            
             private static Timer _dripAllBucketsTimer = new Timer(_ => DripAllBuckets(), null, THROTTLE_DELAY, THROTTLE_DELAY);
 
             private SemaphoreSlim _semaphore = new SemaphoreSlim(BUCKET_MAX_SIZE, BUCKET_MAX_SIZE);

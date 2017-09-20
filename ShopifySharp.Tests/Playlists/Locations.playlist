@@ -1,1 +1,0 @@
-<Playlist Version="1.0"><Add Test="ShopifySharp.Tests.ShopifyLocationService_Tests.When_getting_a_location::should_get_a_location" /><Add Test="ShopifySharp.Tests.ShopifyLocationService_Tests.When_listing_locations::should_list_locations" /></Playlist>
