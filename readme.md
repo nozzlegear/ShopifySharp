@@ -97,6 +97,7 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [ShippingZones](#shipping-zones)
 - [GiftCards](#gift-cards)
 - [Price Rules](#price-rules)
+- [User](#users)
 
 More functionality will be added each week until it reachs full parity with Shopify's REST API.
 
@@ -117,8 +118,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
 | [Province](https://help.shopify.com/api/reference/province) | |
 | [Refund](https://help.shopify.com/api/reference/refund) | |
-| [Transaction](https://help.shopify.com/api/reference/transaction) | Object is implemented. |
-| [User](https://help.shopify.com/api/reference/user) | Requires Shopify Plus. |
 
 ### Contributors
 
@@ -2211,6 +2210,27 @@ var priceRules = await service.ListAsync();
 var service = new PriceRuleService(myShopifyUrl, shopAccessToken);
 
 await service.DeleteAsync(ruleId);
+```
+
+## Users
+
+Developers can retrieve users with the `UserService`.
+
+**The Users API requires a Shopify Plus subscription.**
+
+
+### Listing Users
+
+```cs
+var service = new UserService(myShopifyUrl, shopAccessToken);
+var users = await service.ListAsync();
+```
+
+### Getting a User
+
+```cs
+var service = new UserService(myShopifyUrl, shopAccessToken);
+var user = await service.GetAsync(userId):
 ```
 
 # Handling Shopify's API rate limit
