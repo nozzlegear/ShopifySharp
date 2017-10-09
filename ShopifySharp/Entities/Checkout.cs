@@ -177,7 +177,7 @@ namespace ShopifySharp
         ///  name: The name of the product variant.
         /// </summary>
         [JsonProperty("line_items")]
-        public IEnumerable<LineItem> LineItems { get; set; }
+        public IEnumerable<CheckoutLineItem> LineItems { get; set; }
 
         /// <summary>
         /// </summary>

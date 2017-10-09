@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests
         {
             var count = await _Service.CountAsync();
 
-            Assert.True(count > 0);
+            Assert.True(count >= 0);
         }
 
         [Fact]
@@ -26,7 +26,25 @@ namespace ShopifySharp.Tests
         {
             var list = await _Service.ListAsync();
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Count() >= 0);
+            if (list.Count() > 0)
+            { 
+                foreach(Checkout ckout in list)
+                {
+                    Assert.NotNull(ckout.Token);
+                    Assert.NotNull(ckout.CartToken);
+                    Assert.NotNull(ckout.Email);
+                    Assert.True(ckout.LineItems.Count() > 0);
+                    foreach(CheckoutLineItem ln in ckout.LineItems)
+                    {
+                        Assert.NotNull(ln.SKU);
+                        Assert.NotNull(ln.ProductId);
+                        Assert.NotNull(ln.Price);
+                    }
+                    Assert.NotNull(ckout.Currency);
+                    Assert.NotNull(ckout.Name);
+                }
+            }
         }
     }
 }
