@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "ShopifySharp.Tests": {
+      "commandName": "Project"
+    }
+  }
+}
