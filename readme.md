@@ -138,6 +138,11 @@ These generous people have contributed their own hard work and time to improving
 - [clement911](https://github.com/clement911)
 - [mchandschuh](https://github.com/mchandschuh)
 - [Andrew Mobbs](https://github.com/mobbsie)
+- [Martin Zezulka](https://github.com/martinzezulkacz)
+- [Bart Coppens](https://github.com/bartcoppens)
+- [Tommy Holm Jakobsen](https://github.com/thj-dk)
+- [Andrew Fox](https://github.com/foxandrewj)
+- [Victor](https://github.com/vleontyev)
 
 Thank you!
 
