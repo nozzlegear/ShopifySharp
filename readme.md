@@ -62,7 +62,7 @@ fully-featured library for interacting with Shopify and building Shopify apps.
 
 With that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps. 
 
-ShopifySharp currently suppports the following Shopify APIs:
+ShopifySharp currently supports the following Shopify APIs:
 
 - [OAuth authentication](#authorization-and-authentication).
 - [Application charges (in-app purchases)](#one-time-application-charges)
@@ -607,9 +607,9 @@ var order = new Order()
         CountryCode = "US",
         Default = true,
     },
-    LineItems = new List<ShopifyLineItem>()
+    LineItems = new List<LineItem>()
     {
-        new ShopifyLineItem()
+        new LineItem()
         {
             Name = "Test Line Item",
             Title = "Test Line Item Title"
