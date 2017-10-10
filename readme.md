@@ -143,6 +143,7 @@ These generous people have contributed their own hard work and time to improving
 - [Tommy Holm Jakobsen](https://github.com/thj-dk)
 - [Andrew Fox](https://github.com/foxandrewj)
 - [Victor](https://github.com/vleontyev)
+- [lasamuadib](https://github.com/lasamuadib)
 
 Thank you!
 
