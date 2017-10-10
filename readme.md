@@ -98,6 +98,7 @@ ShopifySharp currently supports the following Shopify APIs:
 - [GiftCards](#gift-cards)
 - [Price Rules](#price-rules)
 - [User](#users)
+- [Abandoned Checkouts](#abandoned-checkouts)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -107,7 +108,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 
 | API | Notes |
 |-----|-------|
-| [AbandonedCheckouts](https://help.shopify.com/api/reference/abandoned_checkouts) | |
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
@@ -2237,6 +2237,24 @@ var users = await service.ListAsync();
 ```cs
 var service = new UserService(myShopifyUrl, shopAccessToken);
 var user = await service.GetAsync(userId):
+```
+
+## Abandoned Checkouts
+
+This is used to return abandoned checkouts. A checkout is considered abandoned when a customer has entered their billing & shipping info, but has yet to complete the purchase. 
+
+### Listing Abandoned Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkouts = await service.ListAsync();
+```
+
+### Count Abandoned Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
 ```
 
 # Handling Shopify's API rate limit
