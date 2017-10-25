@@ -25,7 +25,6 @@ namespace ShopifySharp.Tests
             return value;
         }
 
-
         public static string ApiKey => Get("API_KEY");
 
         public static string SecretKey => Get("SECRET_KEY");
