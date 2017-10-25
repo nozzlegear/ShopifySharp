@@ -93,7 +93,7 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(newValue, updated.Title);   
+            Assert.Equal(newValue, updated.Title);
         }
     }
 
@@ -140,12 +140,21 @@ namespace ShopifySharp.Tests
         {
             var obj = await Service.CreateAsync(new SmartCollection()
             {
-                BodyHtml =  BodyHtml,
+                BodyHtml = BodyHtml,
                 Handle = Handle,
                 Title = Title,
+                Rules = new List<SmartCollectionRules>
+                {
+                    new SmartCollectionRules
+                    {
+                        Column = "variant_price",
+                        Condition = "20",
+                        Relation = "less_than"
+                    }
+                }
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

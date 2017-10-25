@@ -51,7 +51,7 @@ dotnet add package shopifysharp
 
 Version 4.0.0 is a major update to ShopifySharp, it contains breaking changes by removing the `Shopify` prefix from almost every class, interface and object (the exception being `ShopifyException` and `ShopifyRateLimitException`. On top of that, every single entity property has been made nullable to both prevent deserialization errors that have plagued us humble C# developers since 1.0.0.
 
-Version 4.0.0 contains a bunch of great enhancements, though. Chiefly, it adds support for .NET Core apps! In addition, the library now supports sending partial classes (thanks to makinng properties nullable) when creating or updating a Shopify object. 
+Version 4.0.0 contains a bunch of great enhancements, though. Chiefly, it adds support for .NET Core apps! In addition, the library now supports sending partial classes (thanks to making properties nullable) when creating or updating a Shopify object. 
 
 ### A work-in-progress
 
@@ -62,7 +62,7 @@ fully-featured library for interacting with Shopify and building Shopify apps.
 
 With that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps. 
 
-ShopifySharp currently suppports the following Shopify APIs:
+ShopifySharp currently supports the following Shopify APIs:
 
 - [OAuth authentication](#authorization-and-authentication).
 - [Application charges (in-app purchases)](#one-time-application-charges)
@@ -98,8 +98,9 @@ ShopifySharp currently suppports the following Shopify APIs:
 - [GiftCards](#gift-cards)
 - [Price Rules](#price-rules)
 - [User](#users)
+- [Abandoned Checkouts](#abandoned-checkouts)
 
-More functionality will be added each week until it reachs full parity with Shopify's REST API.
+More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
 ### Unimplemented APIs
 
@@ -107,7 +108,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 
 | API | Notes |
 |-----|-------|
-| [AbandonedCheckouts](https://help.shopify.com/api/reference/abandoned_checkouts) | |
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
@@ -138,6 +138,12 @@ These generous people have contributed their own hard work and time to improving
 - [clement911](https://github.com/clement911)
 - [mchandschuh](https://github.com/mchandschuh)
 - [Andrew Mobbs](https://github.com/mobbsie)
+- [Martin Zezulka](https://github.com/martinzezulkacz)
+- [Bart Coppens](https://github.com/bartcoppens)
+- [Tommy Holm Jakobsen](https://github.com/thj-dk)
+- [Andrew Fox](https://github.com/foxandrewj)
+- [Victor](https://github.com/vleontyev)
+- [lasamuadib](https://github.com/lasamuadib)
 
 Thank you!
 
@@ -174,9 +180,9 @@ to the **Tests** section below.
 
 This is a convenience method that validates whether a given URL is a valid Shopify API domain (the Shopify API is hosted on each individual shop rather than at once central URL). It's great for ensuring
 you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is
-ideally used in conjuction with `AuthorizationService.BuildAuthorizationUrl`.
+ideally used in conjunction with `AuthorizationService.BuildAuthorizationUrl`.
 
-ShopifySharp will call the given URL and check for an `X-ShopId` header in the response. That header is present on all Shopify shops and its existence signals that the URL is indeed a Shopify URL.
+ShopifySharp will call the given URL and check for an `X-ShopId` header in the response. That header is present on all Shopify shops and it's existence signals that the URL is indeed a Shopify URL.
 
 **Note**, however, that this feature is undocumented by Shopify and may break at any time. Use at your own discretion. In addition, it's possible for a malicious site to fake the `X-ShopId` header which would make this method return `true`.
 
@@ -235,7 +241,7 @@ string accessToken = await AuthorizationService.Authorize(code, myShopifyUrl, sh
 
 ### Determine if a request is authentic
 
-Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring paramater called 'hmac' that you can use
+Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring parameter called 'hmac' that you can use
 to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's
 secret key.
 
@@ -607,9 +613,9 @@ var order = new Order()
         CountryCode = "US",
         Default = true,
     },
-    LineItems = new List<ShopifyLineItem>()
+    LineItems = new List<LineItem>()
     {
-        new ShopifyLineItem()
+        new LineItem()
         {
             Name = "Test Line Item",
             Title = "Test Line Item Title"
@@ -2085,7 +2091,7 @@ var policies = await service.ListAsync();
 
 ## Shipping Zones
 
-Developers can  get the list of shipping zones, their countries, provinces, and shipping rates.
+Developers can get the list of shipping zones, their countries, provinces, and shipping rates.
 
 
 ### Listing Shipping Zones
@@ -2231,6 +2237,24 @@ var users = await service.ListAsync();
 ```cs
 var service = new UserService(myShopifyUrl, shopAccessToken);
 var user = await service.GetAsync(userId):
+```
+
+## Abandoned Checkouts
+
+This is used to return abandoned checkouts. A checkout is considered abandoned when a customer has entered their billing & shipping info, but has yet to complete the purchase. 
+
+### Listing Abandoned Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkouts = await service.ListAsync();
+```
+
+### Count Abandoned Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync();
 ```
 
 # Handling Shopify's API rate limit
