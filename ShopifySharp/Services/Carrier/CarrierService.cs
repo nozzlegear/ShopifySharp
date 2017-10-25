@@ -38,20 +38,13 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Carrier"/>.</returns>
         public virtual async Task<Carrier> CreateAsync(Carrier carrier)
         {
-            try
+            var req = PrepareRequest("carrier_services.json");
+            var content = new JsonContent(new
             {
-                var req = PrepareRequest("carrier_services.json");
-                var content = new JsonContent(new
-                {
-                    carrier_service = carrier
-                });
+                carrier_service = carrier
+            });
 
-                return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service");
-            }
-            catch(Exception e)
-            {
-             return null;   
-            }
+            return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service");
         }
 
         /// <summary>
@@ -60,18 +53,10 @@ namespace ShopifySharp
         /// <param name="carrierId">The id of the Carrier to retrieve.</param>
         /// <returns>The <see cref="Carrier"/>.</returns>
         public virtual async Task<Carrier> GetAsync(long carrierId)
-        {
-            try
-            {                
-                var req = PrepareRequest($"carrier_services/{carrierId}.json");
+        {            
+            var req = PrepareRequest($"carrier_services/{carrierId}.json");
 
-                return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service");
-            }
-            catch(Exception e)
-            {
-                //Catching the 404 and returning null
-                return null;
-            }
+            return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service");           
         }
 
         /// <summary>

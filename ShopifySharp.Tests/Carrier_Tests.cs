@@ -19,58 +19,34 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
-        public void Lists_Carriers()
+        public async Task Lists_Carriers()
         {
-            try
-            {
+            var list = await Fixture.Service.ListAsync();
 
-                var list = Fixture.Service.ListAsync().Result;
-                Assert.True(list.Count() > 0);
-
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
+            Assert.True(list.Count() > 0);     
         }
 
         [Fact]
-        public void Gets_Carriers()
+        public async Task Gets_Carriers()
         {
-            try
-            {
-                var created = Fixture.Create();
+            var created = await Fixture.Create();
+            var carrier = await Fixture.Service.GetAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value);
 
-                var carrier = Fixture.Service.GetAsync(created.Id.Value).Result;
-
-                Fixture.Service.DeleteAsync(created.Id.Value).GetAwaiter().GetResult();
-
-                Assert.NotNull(carrier);
-                Assert.True(carrier.Id.HasValue);
-                Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);
-
-            }
-            catch(Exception e )
-            {
-                Console.WriteLine(e);
-            }
-            
+            Assert.NotNull(carrier);
+            Assert.True(carrier.Id.HasValue);
+            Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);            
         }
 
         [Fact]
-        public void Deletes_Carriers()
+        public async Task Deletes_Carriers()
         {
-            var created = Fixture.Create();
+            var created = await Fixture.Create();
             bool threw = false;
 
             try
             {
-                Fixture.Service.DeleteAsync(created.Id.Value).GetAwaiter().GetResult();
-
-                var stillThere = Fixture.Service.GetAsync(created.Id.Value).Result;
-
-                Assert.Null(stillThere);
+                await Fixture.Service.DeleteAsync(created.Id.Value);
             }
             catch (ShopifyException ex)
             {
@@ -84,45 +60,34 @@ namespace ShopifySharp.Tests
 
 
         [Fact]
-        public void Creates_Carriers()
+        public async Task Creates_Carriers()
         {
-            try
-            {
-                var carrier = Fixture.Create();
+            var carrier = await Fixture.Create();
+            await Fixture.Service.DeleteAsync(carrier.Id.Value);
 
-                Fixture.Service.DeleteAsync(carrier.Id.Value).GetAwaiter().GetResult();
-
-                Assert.NotNull(carrier);
-                Assert.True(carrier.Id.HasValue);
-                Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            Assert.NotNull(carrier);
+            Assert.True(carrier.Id.HasValue);
+            Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);       
         }
 
         [Fact]
-        public void Updates_Carriers()
+        public async Task Updates_Carriers()
         {
             string newCallbackUrl = "http://fakecallback2.com/";
-            var created = Fixture.Create();
-            
+            var created = await Fixture.Create();            
             long id = created.Id.Value;
 
             created.CallbackUrl = newCallbackUrl;
             created.Id = null;
 
-            var updated = Fixture.Service.UpdateAsync(id, created).Result;
-
-            Fixture.Service.DeleteAsync(updated.Id.Value).GetAwaiter().GetResult();
-
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+            await Fixture.Service.DeleteAsync(updated.Id.Value);
 
             Assert.Equal(newCallbackUrl, updated.CallbackUrl);   
         }
     }
 
-    public class Carrier_Tests_Fixture : IDisposable
+    public class Carrier_Tests_Fixture
     {
         public CarrierService Service { get; } = new CarrierService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -130,16 +95,12 @@ namespace ShopifySharp.Tests
 
         public string CallbackUrl => "http://fakecallback.com/";
 
-        public void Dispose()
-        {
-        }
-
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public Carrier Create()
+        public async Task<Carrier> Create()
         {
-            var obj = Service.CreateAsync(new Carrier()
+            var obj = await Service.CreateAsync(new Carrier()
             {
                 Name = "Test Carrier",
                 Active = true,
@@ -147,7 +108,7 @@ namespace ShopifySharp.Tests
                 CarrierServiceType = "api",
                 ServiceDiscovery = true,
                 Format = "json"    
-            }).Result;
+            });
 
             return obj;
         }
