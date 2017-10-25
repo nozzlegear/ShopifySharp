@@ -38,7 +38,7 @@ namespace ShopifySharp.Tests
 
         public static string SecretKey = "5d4a92a2891fd6126c3eae7d2e32b7fd";
 
-        public static string AccessToken => "9cf04c0100669eeb0b1dc9dd0ff2ed15";
+        public static string AccessToken = "9cf04c0100669eeb0b1dc9dd0ff2ed15";
 
         public static string MyShopifyUrl = "https://pgymygoatunittests.myshopify.com/";
     }
