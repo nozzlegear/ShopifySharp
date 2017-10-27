@@ -1,4 +1,4 @@
-using System;
+=using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Count() > 0);     
+            Assert.True(list.Count() >= 0);     
         }
 
         [Fact]
