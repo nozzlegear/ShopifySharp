@@ -1,4 +1,4 @@
-=using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Count() >= 0);     
+            Assert.True(list.Count() >= 0);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(carrier);
             Assert.True(carrier.Id.HasValue);
-            Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);            
+            Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);
         }
 
         [Fact]
@@ -67,14 +67,14 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(carrier);
             Assert.True(carrier.Id.HasValue);
-            Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);       
+            Assert.Equal(Fixture.CallbackUrl, carrier.CallbackUrl);
         }
 
         [Fact]
         public async Task Updates_Carriers()
         {
             string newCallbackUrl = "http://fakecallback2.com/";
-            var created = await Fixture.Create();            
+            var created = await Fixture.Create();
             long id = created.Id.Value;
 
             created.CallbackUrl = newCallbackUrl;
@@ -83,7 +83,7 @@ namespace ShopifySharp.Tests
             var updated = await Fixture.Service.UpdateAsync(id, created);
             await Fixture.Service.DeleteAsync(updated.Id.Value);
 
-            Assert.Equal(newCallbackUrl, updated.CallbackUrl);   
+            Assert.Equal(newCallbackUrl, updated.CallbackUrl);
         }
     }
 
@@ -107,7 +107,7 @@ namespace ShopifySharp.Tests
                 CallbackUrl = CallbackUrl,
                 CarrierServiceType = "api",
                 ServiceDiscovery = true,
-                Format = "json"    
+                Format = "json"
             });
 
             return obj;
