@@ -16,10 +16,10 @@ namespace ShopifySharp
             private int _leakRate = 1;
 
             private static ConcurrentBag<LeakyBucket> _allLeakyBuckets = new ConcurrentBag<LeakyBucket>();
-            
+
             private static Timer _dripAllBucketsTimer = new Timer(_ => DripAllBuckets(), null, THROTTLE_DELAY, THROTTLE_DELAY);
 
-            private SemaphoreSlim _semaphore = new SemaphoreSlim(DEFAULT_BUCKET_CAPACITY, DEFAULT_BUCKET_CAPACITY);
+            private SemaphoreSlim _semaphore = new SemaphoreSlim(DEFAULT_BUCKET_CAPACITY, 1000);
 
             public LeakyBucket()
             {
@@ -37,22 +37,15 @@ namespace ShopifySharp
                 //It is apparently possible to request the bucket size to be even larger
                 //https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/what-is-the-default-api-call-limit-on-shopify-stores-407292
                 //Note that when the capacity doubles, the leak rate also doubles. So, not only can request bursts be larger, it is also possible to sustain a faster rate over the long term.
-                if (bucketInfo.Capacity != this._bucketCapacity)
+                if (bucketInfo.Capacity > this._bucketCapacity)
                 {
                     lock (_semaphore)
                     {
-                        if (bucketInfo.Capacity != this._bucketCapacity)
+                        if (bucketInfo.Capacity > this._bucketCapacity)
                         {
-                            int waitingOperations = _bucketCapacity - _semaphore.CurrentCount;
-                            var oldSemaphore = Interlocked.Exchange(ref _semaphore, new SemaphoreSlim(bucketInfo.Capacity - waitingOperations, bucketInfo.Capacity));
-                            //release all operations waiting on the old semaphore
-                            if (waitingOperations > 0)
-                            {
-                                oldSemaphore.Release(waitingOperations);
-                            }
-                            oldSemaphore.Dispose();
-                            _leakRate = bucketInfo.Capacity / DEFAULT_BUCKET_CAPACITY;
+                            _semaphore.Release(bucketInfo.Capacity - this._bucketCapacity);
                             _bucketCapacity = bucketInfo.Capacity;
+                            _leakRate = bucketInfo.Capacity / DEFAULT_BUCKET_CAPACITY;
                         }
                     }
                 }
