@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+        private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
 
         private IRequestExecutionPolicy _ExecutionPolicy;
 
@@ -169,9 +172,9 @@ namespace ShopifySharp
                 // This method may fail when the method was Delete, which is intendend. 
                 // Delete methods should not be parsing the response JSON and should instead
                 // be using the non-generic ExecuteRequestAsync.
-                var jtoken = JToken.Parse(rawResult);
-                T result = jtoken.SelectToken(rootElement).ToObject<T>();
-
+                var reader = new JsonTextReader(new StringReader(rawResult));
+                var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
+                var result = data.ToObject<T>();
                 return new RequestResult<T>(response, result, rawResult);
             });
 
