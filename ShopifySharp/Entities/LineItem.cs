@@ -126,5 +126,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("properties")]
         public IEnumerable<LineItemProperty> Properties { get; set; }
+
+        [JsonProperty("variant_inventory_management")]
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        public string VariantInventoryManagement { get; set; }
+
+        [JsonProperty("product_exists")]
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        public bool? ProductExists { get; set; }
     }
 }
