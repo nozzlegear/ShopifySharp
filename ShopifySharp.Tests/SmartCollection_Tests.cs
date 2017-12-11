@@ -95,6 +95,13 @@ namespace ShopifySharp.Tests
 
             Assert.Equal(newValue, updated.Title);
         }
+
+        [Fact(Skip = "Must create products and add them to the rule.")]
+        public async Task Updates_SmartCollection_Products_Order()
+        {
+            var created = await Fixture.Create();
+            var updated = await Fixture.Service.UpdateProductOrderAsync(created.Id.Value, 5, 10, 15, 20);
+        }
     }
 
     public class SmartCollection_Tests_Fixture : IAsyncLifetime
