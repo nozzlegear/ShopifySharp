@@ -86,5 +86,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("times_used")]
         public int? TimesUsed { get; set; }
+
+        [JsonProperty("price_rule_id")]
+        /// <summary>
+        /// Unique numeric identifier for the price rule.
+        /// </summary>
+        public long? PriceRuleId { get; set; }
+
+        [JsonProperty("usage_count")]
+        /// <summary>
+        /// Number of times the discount code has been redeemed.
+        /// </summary>
+        public int? UsageCount { get; set; }
     }
 }
