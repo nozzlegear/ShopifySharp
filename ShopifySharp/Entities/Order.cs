@@ -131,6 +131,12 @@ namespace ShopifySharp
         [JsonProperty("fulfillment_status")]
         public string FulfillmentStatus { get; set; }
 
+        [JsonProperty("phone")]
+        /// <summary>
+        /// The customer's phone number.
+        /// </summary>
+        public string Phone { get; set; }
+
         /// <summary>
         /// Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values.
         /// </summary>
