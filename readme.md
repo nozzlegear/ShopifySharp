@@ -51,7 +51,7 @@ dotnet add package shopifysharp
 
 Version 4.0.0 is a major update to ShopifySharp, it contains breaking changes by removing the `Shopify` prefix from almost every class, interface and object (the exception being `ShopifyException` and `ShopifyRateLimitException`. On top of that, every single entity property has been made nullable to both prevent deserialization errors that have plagued us humble C# developers since 1.0.0.
 
-Version 4.0.0 contains a bunch of great enhancements, though. Chiefly, it adds support for .NET Core apps! In addition, the library now supports sending partial classes (thanks to making properties nullable) when creating or updating a Shopify object. 
+Version 4.0.0 contains a bunch of great enhancements, though. Chiefly, it adds support for .NET Core apps! In addition, the library now supports sending partial classes (thanks to making properties nullable) when creating or updating a Shopify object.
 
 ### A work-in-progress
 
@@ -60,7 +60,7 @@ hasn't been updated in over 3 years and requires that you know the exact URL pat
 creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a
 fully-featured library for interacting with Shopify and building Shopify apps.
 
-With that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps. 
+With that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
 
 ShopifySharp currently supports the following Shopify APIs:
 
@@ -111,7 +111,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
-| [CustomerAddress](https://help.shopify.com/api/reference/customeraddress) | Object is implemented. |
 | [CustomerSavedSearch](https://help.shopify.com/api/reference/customersavedsearch) | |
 | [FulfillmentEvent](https://help.shopify.com/api/reference/fulfillmentevent) | Object is implemented. |
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
@@ -1682,7 +1681,7 @@ var orderEvents = await service.ListAsync(orderId, subjectType);
 
 ## Order Risks
 
-The Order risk assessment is used to indicate to a merchant the fraud checks that have been done on an order. 
+The Order risk assessment is used to indicate to a merchant the fraud checks that have been done on an order.
 
 ### Create an Order Risk
 
@@ -1748,7 +1747,7 @@ var smartCollection = await service.CreateAsync(new SmartCollection()
    {
        // Base-64 image attachment
        Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
-   } 
+   }
 });
 ```
 
@@ -1994,7 +1993,7 @@ Additionally, Application Credits cannot be used by private applications.
 
 ```cs
 var service = new ApplicationCreditService(myShopifyUrl, shopAccessToken);
-var credit = await service.CreateAsync(new ApplicationCredit() 
+var credit = await service.CreateAsync(new ApplicationCredit()
 {
     Description = "Refund for Foo",
     Amount = 10.00m
@@ -2017,7 +2016,7 @@ var charges = await service.ListAsync();
 
 ## Discounts
 
-Developers can create a discount code with the `DiscountService`. A merchant's customers can enter the discount code during the checkout process to redeem percentage-based, fixed amount, or free shipping discounts on a specific product, collection or order. 
+Developers can create a discount code with the `DiscountService`. A merchant's customers can enter the discount code during the checkout process to redeem percentage-based, fixed amount, or free shipping discounts on a specific product, collection or order.
 
 **Discounts require a Shopify Plus subscription.**
 
@@ -2241,7 +2240,7 @@ var user = await service.GetAsync(userId):
 
 ## Abandoned Checkouts
 
-This is used to return abandoned checkouts. A checkout is considered abandoned when a customer has entered their billing & shipping info, but has yet to complete the purchase. 
+This is used to return abandoned checkouts. A checkout is considered abandoned when a customer has entered their billing & shipping info, but has yet to complete the purchase.
 
 ### Listing Abandoned Checkouts
 
@@ -2274,7 +2273,7 @@ foreach (var order in listOfOrders)
 	{
 		//Wait for 10 seconds before trying again.
 		await Task.Delay(10000);
-		
+
 		//If this throws an exception again, loop will break and the exception will be thrown.
 		await orderService.CloseAsync(order.Id.Value);
 	}
@@ -2284,7 +2283,7 @@ foreach (var order in listOfOrders)
 However, ShopifySharp also has request execution policies that you can use to implement a retry strategy. Currently there are three execution policies bundled with the library:
 
 1. `DefaultRequestExecutionPolicy`: This is the default policy, which will throw a `ShopifyRateLimitException` when the API rate limit has been reached.
-2. `RetryExecutionPolicy`: If a request throws a `ShopifyRateLimitException`, this policy will keep retrying it until it is successful. 
+2. `RetryExecutionPolicy`: If a request throws a `ShopifyRateLimitException`, this policy will keep retrying it until it is successful.
 3. `SmartRetryExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
 
 You have two different ways to set an execution policy. You can set a policy on a per-instance basis:
@@ -2311,7 +2310,7 @@ If you need a custom policy to do something more complicated or to e.g. implemen
 
 Occasionally we get requests to add certain properties to one of the List or Count filters that isn't documented anywhere by Shopify. For example, at one point it was possible to add a `name` prop to the `OrderFilter` that would make it possible to search for an `Order` by its name. Unfortunately this `name` filter was never documented and Shopify eventually removed that functionality, but it's a perfect example of wanting to use custom properties on the filters.
 
-Officially, my stance is that I tend to favor not adding undocumented things to this package on the fear that it will someday break and I'll have a big headache fielding questions and issues here on GitHub when it does. However, in the case of Filters it's possible for you to implement your own custom filter without it being officially supported! 
+Officially, my stance is that I tend to favor not adding undocumented things to this package on the fear that it will someday break and I'll have a big headache fielding questions and issues here on GitHub when it does. However, in the case of Filters it's possible for you to implement your own custom filter without it being officially supported!
 
 It's as easy as creating your own class that extends whichever filter your method accepts. For example, let's pretend that `name` search still works when listing Shopify orders, but this package doesn't support it. The `OrderService.ListAsync` method accepts an `OrderFilter` argument, so to get the `name` property sent along with the API call, all you need to do is create your own custom filter that extends `OrderFilter`:
 
@@ -2332,9 +2331,9 @@ var list = await orderService.ListAsync(new MyCustomOrderFilter()
 });
 ```
 
-If you need even more fine-grained control over what gets sent through your custom filter, you can also override the `ToParameters` or `ToSingleParameter` methods of the filter. Those methods are called by the service when it's serializing the filter to a querystring. 
+If you need even more fine-grained control over what gets sent through your custom filter, you can also override the `ToParameters` or `ToSingleParameter` methods of the filter. Those methods are called by the service when it's serializing the filter to a querystring.
 
-[You can take a look at the `Parameterizable` class (which is used by all filters) for a look at the current implementation](https://github.com/nozzlegear/ShopifySharp/blob/85a0eed28937eee2870e9104a55796e1a1039cfb/ShopifySharp/Infrastructure/Parameterizable.cs#L18) and what you can do in those methods. 
+[You can take a look at the `Parameterizable` class (which is used by all filters) for a look at the current implementation](https://github.com/nozzlegear/ShopifySharp/blob/85a0eed28937eee2870e9104a55796e1a1039cfb/ShopifySharp/Infrastructure/Parameterizable.cs#L18) and what you can do in those methods.
 
 
 # "Why don't you use enums?"
@@ -2343,9 +2342,9 @@ I'm a big fan of using enums to make things easier for C# devs, because it remov
 
 Many Shopify objects have string properties that only accept a predetermined list of values, and these properties are perfect for matching to C# enums. Unfortunately, Shopify has a habit of only documenting the most used values and leaving the developer to guess the rest. On top of that, they sometimes change those enums completely, [such as this case where they changed the enums used for filtering orders without announcing it](https://github.com/nozzlegear/ShopifySharp/issues/64).
 
-That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks. 
+That's a problem when it comes to strongly-typed languages like C#. If you receive an enum property that doesn't have a value matching the enum, you're going to get a big fat exception thrown in your face. This is especially problematic when these undocumented enum values are sent to you automatically in webhooks.
 
-On top of that, if there's an enum value that you need to send but isn't in ShopifySharp, you'll need to wait until a new version of the lib is released before you can use it. 
+On top of that, if there's an enum value that you need to send but isn't in ShopifySharp, you'll need to wait until a new version of the lib is released before you can use it.
 
 Enums would be much better suited to ShopifySharp if Shopify themselves used API versioning, but sadly that isn't the case. After struggling with undocumented values and unannounced changes that break apps through two major releases of ShopifySharp, I've made the decision to pull the plug on almost all enums in the lib.
 
@@ -2369,7 +2368,7 @@ SHOPIFYSHARP_ACCESS_TOKEN = value
 SHOPIFYSHARP_MY_SHOPIFY_URL = value
 ```
 
-**New features will not be published until they have test coverage**. If you'd like your pull request to be published, make sure you write tests for it! 
+**New features will not be published until they have test coverage**. If you'd like your pull request to be published, make sure you write tests for it!
 
 ShopifySharp is now using [xUnit](https://xunit.github.io/) for tests. New tests should all follow the format of other tests in 4.0. You can use the [Article](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp.Tests/Article_Tests.cs) test as an example, **but I would highly recommend that you [use the provided ShopifySharp Test snippet in the VSCode folder instead](https://github.com/nozzlegear/ShopifySharp/blob/master/.vscode/snippets.csharp.json)**. Create a new `*_Tests.cs` file and type `test-shopifysharp` in VSCode:
 
