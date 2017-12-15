@@ -20,6 +20,9 @@ namespace ShopifySharp
     {
         private static readonly Regex _querystringRegex = new Regex(@"[?|&]([\w\.]+)=([^?|^&]+)", RegexOptions.Compiled);
 
+        /// <remarks>
+        /// Source for this method: https://stackoverflow.com/a/22046389
+        /// </remarks>
         public static IDictionary<string, string> ParseRawQuerystring(string qs)
         {
             // Must use an absolute uri, else Uri.Query throws an InvalidOperationException
