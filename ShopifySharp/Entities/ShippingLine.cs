@@ -10,6 +10,12 @@ namespace ShopifySharp
     public class ShippingLine
     {
         /// <summary>
+        /// The carrier provided identifier.
+        /// </summary>
+        [JsonProperty("carrier_identifier")]
+        public string CarrierIdentifier { get; set; }
+
+        /// <summary>
         /// A reference to the shipping method.
         /// </summary>
         [JsonProperty("code")]
@@ -20,6 +26,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("price")]
         public decimal? Price { get; set; }
+
+        /// <summary>
+        /// The discounted price of this shipping method.
+        /// </summary>
+        [JsonProperty("discounted_price")]
+        public decimal? DiscountedPrice { get; set; }
 
         /// <summary>
         /// The source of the shipping method.
