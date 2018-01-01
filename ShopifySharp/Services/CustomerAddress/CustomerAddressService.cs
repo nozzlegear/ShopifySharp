@@ -10,14 +10,14 @@ namespace ShopifySharp
     /// <summary>
     /// A service for manipulating Shopify customers.
     /// </summary>
-    public class CustomerAddressService: ShopifyService
+    public class CustomerAddressService : ShopifyService
     {
         /// <summary>
         /// Creates a new instance of <see cref="CustomerAddressService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public CustomerAddressService(string myShopifyUrl, string shopAccessToken): base (myShopifyUrl, shopAccessToken) { }
+        public CustomerAddressService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop customers's addresses.
@@ -30,7 +30,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Address>>(req, HttpMethod.Get, rootElement: "addresses");
@@ -47,9 +47,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}.json");
 
-            if(string.IsNullOrEmpty(fields) == false)
+            if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Address>(req, HttpMethod.Get, rootElement: "customer_address");

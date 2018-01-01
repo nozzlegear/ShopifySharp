@@ -27,7 +27,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
@@ -42,7 +42,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.Select(kvp => new Flurl.QueryParameter(kvp.Key, kvp.Value)));
+                req.QueryParams.AddRange(options);
             }
 
             return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
@@ -59,7 +59,7 @@ namespace ShopifySharp
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule");

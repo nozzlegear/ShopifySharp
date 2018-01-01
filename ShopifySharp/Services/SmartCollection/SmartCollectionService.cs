@@ -28,7 +28,7 @@ namespace ShopifySharp
 
             if (filterOptions != null)
             {
-                req.Url.QueryParams.AddRange(filterOptions.ToParameters());
+                req.QueryParams.AddRange(filterOptions.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -44,7 +44,7 @@ namespace ShopifySharp
 
             if (filterOptions != null)
             {
-                req.Url.QueryParams.AddRange(filterOptions.ToParameters());
+                req.QueryParams.AddRange(filterOptions.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");

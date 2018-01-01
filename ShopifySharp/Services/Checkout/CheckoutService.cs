@@ -30,7 +30,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -46,7 +46,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Checkout>>(req, HttpMethod.Get, rootElement: "checkouts");

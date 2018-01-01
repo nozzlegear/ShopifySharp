@@ -8,17 +8,17 @@ namespace ShopifySharp
     /// <summary>
     /// A service for manipulating Shopify's RecurringApplicationCharge API.
     /// </summary>
-    public class RecurringChargeService:ShopifyService
+    public class RecurringChargeService : ShopifyService
     {
         /// <summary>
         /// Creates a new instance of <see cref="RecurringChargeService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public RecurringChargeService(string myShopifyUrl, string shopAccessToken): base (myShopifyUrl, shopAccessToken) { }
-        
+        public RecurringChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+
         /// <summary>
-        /// Creates a <see cref="RecurringCharge"/>. 
+        /// Creates a <see cref="RecurringCharge"/>.
         /// </summary>
         /// <param name="charge">The <see cref="RecurringCharge"/> to create.</param>
         /// <returns>The new <see cref="RecurringCharge"/>.</returns>
@@ -43,9 +43,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"recurring_application_charges/{id}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Get, rootElement: "recurring_application_charge");
@@ -61,14 +61,14 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("recurring_application_charges.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             if (sinceId.HasValue)
             {
-                req.Url.QueryParams.Add("since_id", sinceId.Value);
+                req.QueryParams.Add("since_id", sinceId.Value);
             }
 
             return await ExecuteRequestAsync<List<RecurringCharge>>(req, HttpMethod.Get, rootElement: "recurring_application_charges");

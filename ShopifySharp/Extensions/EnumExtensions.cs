@@ -14,20 +14,20 @@ namespace ShopifySharp
     public static class EnumExtensions
     {
         /// <summary>
-        /// Reads and uses the enum's <see cref="EnumMemberAttribute"/> for serialization. 
+        /// Reads and uses the enum's <see cref="EnumMemberAttribute"/> for serialization.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static string ToSerializedString(this Enum input)
         {
             string name = input.ToString();
-            MemberInfo[] info = input.GetType().GetMember(name);
+            var info = input.GetType().GetTypeInfo().DeclaredMembers.Where(i => i.Name == name);
 
-            if (info.Length > 0)
+            if (info.Count() > 0)
             {
-                var attribute = info[0].GetCustomAttribute<EnumMemberAttribute>();
+                var attribute = info.First().GetCustomAttribute<EnumMemberAttribute>();
 
-                if(attribute != null)
+                if (attribute != null)
                 {
                     return attribute.Value;
                 }

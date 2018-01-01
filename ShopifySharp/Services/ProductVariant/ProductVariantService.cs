@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// <param name="productId">The product that the variants belong to.</param>
         public virtual async Task<int> CountAsync(long productId)
         {
-            var req = PrepareRequest($"products/{productId}/variants/count.json");            
+            var req = PrepareRequest($"products/{productId}/variants/count.json");
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
@@ -40,12 +40,12 @@ namespace ShopifySharp
 
             if (filterOptions != null)
             {
-                req.Url.QueryParams.AddRange(filterOptions.ToParameters());
+                req.QueryParams.AddRange(filterOptions.ToParameters());
             }
-            
+
             return await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
         }
-        
+
         /// <summary>
         /// Retrieves the <see cref="ProductVariant"/> with the given id.
         /// </summary>
@@ -53,10 +53,10 @@ namespace ShopifySharp
         public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
             var req = PrepareRequest($"variants/{variantId}.json");
-            
+
             return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
         }
-        
+
         /// <summary>
         /// Creates a new <see cref="ProductVariant"/>.
         /// </summary>
@@ -69,7 +69,7 @@ namespace ShopifySharp
             {
                 variant = variant
             });
-            
+
             return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
         }
 

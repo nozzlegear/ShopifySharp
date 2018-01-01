@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public RedirectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's redirects.
         /// </summary>
@@ -29,14 +29,14 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("redirects/count.json");
 
-            if (! string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(path))
             {
-                req.Url.QueryParams.Add("path", path);
+                req.QueryParams.Add("path", path);
             }
 
-            if (! string.IsNullOrEmpty(target))
+            if (!string.IsNullOrEmpty(target))
             {
-                req.Url.QueryParams.Add("target", target);
+                req.QueryParams.Add("target", target);
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -53,7 +53,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Redirect>>(req, HttpMethod.Get, rootElement: "redirects");
@@ -69,18 +69,18 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"redirects/{redirectId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Get, rootElement: "redirect");
         }
 
         /// <summary>
-        /// Creates a new <see cref="Redirect"/> on the store. The redirect always starts out with a role of 
-        /// "unpublished." If the redirect has a different role, it will be assigned that only after all of its 
-        /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
+        /// Creates a new <see cref="Redirect"/> on the store. The redirect always starts out with a role of
+        /// "unpublished." If the redirect has a different role, it will be assigned that only after all of its
+        /// files have been extracted and stored by Shopify (which might take a couple of minutes).
         /// </summary>
         /// <param name="redirect">The new <see cref="Redirect"/>.</param>
         /// <returns>The new <see cref="Redirect"/>.</returns>
@@ -96,7 +96,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Updates the given <see cref="Redirect"/>. 
+        /// Updates the given <see cref="Redirect"/>.
         /// </summary>
         /// <param name="redirectId">Id of the object being updated.</param>
         /// <param name="redirect">The <see cref="Redirect"/> to update.</param>

@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public OrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's orders.
         /// </summary>
@@ -30,7 +30,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -47,7 +47,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
@@ -62,11 +62,11 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderFilter options = null)
         {
             var req = PrepareRequest("orders.json");
-            req.Url.QueryParams.Add("customer_id", customerId);
+            req.QueryParams.Add("customer_id", customerId);
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
@@ -84,7 +84,7 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Order>(req, HttpMethod.Get, rootElement: "order");
@@ -135,7 +135,7 @@ namespace ShopifySharp
             {
                 order = body
             });
-            
+
             return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order");
         }
 

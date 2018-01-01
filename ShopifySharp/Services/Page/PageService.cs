@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's pages.
         /// </summary>
@@ -29,9 +29,9 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
-            
+
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
@@ -45,7 +45,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Page>>(req, HttpMethod.Get, rootElement: "pages");
@@ -61,9 +61,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"pages/{pageId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
@@ -92,7 +92,7 @@ namespace ShopifySharp
             {
                 page = body
             });
-            
+
             return await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
         }
 

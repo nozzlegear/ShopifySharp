@@ -1,5 +1,4 @@
 ﻿using System;
-using Flurl.Http;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -223,11 +222,12 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the URL is valid.</returns>
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
-            var uri = ShopifyService.BuildShopUri(url);
+            var uri = ShopifyService.BuildShopUri(url, true);
 
-            using (var client = uri.ToString().AllowAnyHttpStatus())
+            using (var client = new HttpClient())
+            using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
             {
-                var response = await client.HeadAsync(completionOption: HttpCompletionOption.ResponseHeadersRead);
+                var response = await client.SendAsync(msg);
 
                 return response.Headers.Any(h => h.Key == "X-ShopId");
             }
@@ -261,7 +261,7 @@ namespace ShopifySharp
         public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl, string state = null, IEnumerable<string> grants = null)
         {
             //Prepare a uri builder for the shop URL
-            var builder = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl));
+            var builder = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false));
 
             //Build the querystring
             var qs = new List<KeyValuePair<string, string>>()
@@ -300,18 +300,23 @@ namespace ShopifySharp
         /// <returns>The shop access token.</returns>
         public static async Task<string> Authorize(string code, string myShopifyUrl, string shopifyApiKey, string shopifySecretKey)
         {
-            var shopUri = ShopifyService.BuildShopUri(myShopifyUrl);
-
-            using (var client = Flurl.Url.Combine(shopUri.ToString(), "oauth/access_token").AllowAnyHttpStatus())
+            var ub = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false))
             {
-                var request = client.PostAsync(new JsonContent(new
-                {
-                    client_id = shopifyApiKey,
-                    client_secret = shopifySecretKey,
-                    code,
-                }));
+                Path = "oauth/access_token"
+            };
+            var content = new JsonContent(new
+            {
+                client_id = shopifyApiKey,
+                client_secret = shopifySecretKey,
+                code,
+            });
+
+            using (var client = new HttpClient())
+            using (var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content))
+            {
+                var request = client.SendAsync(msg);
                 var response = await request;
-                var rawDataString = await request.ReceiveString();
+                var rawDataString = await response.Content.ReadAsStringAsync();
 
                 ShopifyService.CheckResponseExceptions(response, rawDataString);
 

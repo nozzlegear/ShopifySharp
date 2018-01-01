@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public WebhookService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's webhooks.
         /// </summary>
@@ -31,12 +31,12 @@ namespace ShopifySharp
 
             if (!string.IsNullOrEmpty(address))
             {
-                req.Url.QueryParams.Add("address", address);
+                req.QueryParams.Add("address", address);
             }
 
             if (!string.IsNullOrEmpty(topic))
             {
-                req.Url.QueryParams.Add("topic", topic);
+                req.QueryParams.Add("topic", topic);
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -53,7 +53,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
@@ -69,9 +69,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"webhooks/{webhookId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");

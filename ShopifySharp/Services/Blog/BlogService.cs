@@ -30,17 +30,17 @@ namespace ShopifySharp
 
             if (sinceId.HasValue)
             {
-                request.Url.QueryParams.Add("since_id", sinceId.Value);
+                request.QueryParams.Add("since_id", sinceId.Value);
             }
 
             if (!string.IsNullOrEmpty(handle))
             {
-                request.Url.QueryParams.Add("handle", handle);
+                request.QueryParams.Add("handle", handle);
             }
 
             if (!string.IsNullOrEmpty(fields))
             {
-                request.Url.QueryParams.Add("fields", fields);
+                request.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
