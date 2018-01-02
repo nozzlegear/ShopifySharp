@@ -25,7 +25,15 @@ namespace ShopifySharp.Infrastructure
                 newContent = c.Clone();
             }
 
-            return new CloneableRequestMessage(RequestUri, Method, newContent);
+            var cloned = new CloneableRequestMessage(RequestUri, Method, newContent);
+
+            // Copy over the request's headers which includes the access token if set
+            foreach (var header in Headers)
+            {
+                cloned.Headers.Add(header.Key, header.Value);
+            }
+
+            return cloned;
         }
     }
 }
