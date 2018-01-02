@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests
         {
             var ub = new UriBuilder(Utils.MyShopifyUrl)
             {
-                Path = path
+                Path = $"admin/{path}"
             };
             var msg = new HttpRequestMessage(method, ub.ToString())
             {
