@@ -18,8 +18,11 @@ namespace ShopifySharp
         {
             var output = new List<KeyValuePair<string, object>>();
 
+            // TODO: Create a recursive function that will aggregate the declaredproperties for
+            // this type and this type's base type (and that type's base type, and so on).
+
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
-            foreach (PropertyInfo property in GetType().GetTypeInfo().DeclaredProperties)
+            foreach (PropertyInfo property in GetType().GetAllDeclaredProperties())
             {
                 object value = property.GetValue(this, null);
                 string propName = property.Name;

@@ -21,9 +21,7 @@ namespace ShopifySharp.Infrastructure
             // Combine the url and the query param dictionary into a uri
             var query = QueryParams.Select(kvp =>
             {
-                var value = JsonConvert.SerializeObject(kvp.Value);
-
-                return $"{kvp.Key}={Uri.EscapeDataString(value)}";
+                return $"{kvp.Key}={Uri.EscapeDataString(kvp.Value.ToString())}";
             });
             var ub = new UriBuilder(Url)
             {

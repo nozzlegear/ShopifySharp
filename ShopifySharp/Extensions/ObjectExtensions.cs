@@ -17,7 +17,7 @@ namespace ShopifySharp
             IDictionary<string, object> output = new Dictionary<string, object>();
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
-            foreach (PropertyInfo property in obj.GetType().GetTypeInfo().DeclaredProperties)
+            foreach (PropertyInfo property in obj.GetType().GetAllDeclaredProperties())
             {
                 object value = property.GetValue(obj, null);
                 string propName = property.Name;
