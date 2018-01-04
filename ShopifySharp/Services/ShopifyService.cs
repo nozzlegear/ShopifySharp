@@ -23,6 +23,9 @@ namespace ShopifySharp
 
         protected string _AccessToken { get; set; }
 
+        ///
+        private HttpClient _Client { get; } = new HttpClient();
+
         /// <summary>
         /// Creates a new instance of <see cref="ShopifyService" />.
         /// </summary>
@@ -123,11 +126,10 @@ namespace ShopifySharp
         protected async Task<JToken> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
-            using (var client = new HttpClient())
             {
                 var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
                 {
-                    var request = client.SendAsync(requestMessage);
+                    var request = _Client.SendAsync(requestMessage);
 
                     using (var response = await request)
                     {
@@ -162,11 +164,10 @@ namespace ShopifySharp
         protected async Task<T> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null) where T : new()
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
-            using (var client = new HttpClient())
             {
                 var policyResult = await _ExecutionPolicy.Run<T>(baseRequestMessage, async (requestMessage) =>
                 {
-                    var request = client.SendAsync(requestMessage);
+                    var request = _Client.SendAsync(requestMessage);
 
                     using (var response = await request)
                     {
