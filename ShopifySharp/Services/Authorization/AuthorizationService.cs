@@ -302,7 +302,7 @@ namespace ShopifySharp
         {
             var ub = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false))
             {
-                Path = "oauth/access_token"
+                Path = "admin/oauth/access_token"
             };
             var content = new JsonContent(new
             {
