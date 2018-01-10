@@ -79,6 +79,14 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Validates_Shop_Malfunctioned_Urls()
+        {
+            string invalidUrl = "foo";
+            
+            Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
+        }
+
+        [Fact]
         public void Builds_Authorization_Urls_With_Enums()
         {
             var scopes = new List<AuthorizationScope>()

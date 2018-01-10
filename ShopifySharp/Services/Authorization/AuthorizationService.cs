@@ -225,11 +225,20 @@ namespace ShopifySharp
             var uri = ShopifyService.BuildShopUri(url, true);
 
             using (var client = new HttpClient())
-            using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
             {
-                var response = await client.SendAsync(msg);
+                using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
+                {
+                    try
+                    {
+                        var response = await client.SendAsync(msg);
 
-                return response.Headers.Any(h => h.Key == "X-ShopId");
+                        return response.Headers.Any(h => h.Key == "X-ShopId");
+                    }
+                    catch (HttpRequestException)
+                    {
+                        return false;
+                    }
+                }
             }
         }
 
