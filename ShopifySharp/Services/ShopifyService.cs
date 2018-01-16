@@ -15,16 +15,16 @@ namespace ShopifySharp
     public abstract class ShopifyService
     {
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+
         private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
+
+        private static HttpClient _Client { get; } = new HttpClient();
 
         private IRequestExecutionPolicy _ExecutionPolicy;
 
         protected Uri _ShopUri { get; set; }
 
         protected string _AccessToken { get; set; }
-
-        ///
-        private HttpClient _Client { get; } = new HttpClient();
 
         /// <summary>
         /// Creates a new instance of <see cref="ShopifyService" />.
