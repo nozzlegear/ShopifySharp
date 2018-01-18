@@ -146,6 +146,7 @@ These generous people have contributed their own hard work and time to improving
 - [Jeremy Simmons](https://github.com/jsimmonsdavidccook)
 - [BrianBarnard](https://github.com/BrianBarnard)
 - [Luke Vo](https://github.com/datvm)
+- [Josh](https://github.com/pianomanjh)
 
 Thank you!
 
