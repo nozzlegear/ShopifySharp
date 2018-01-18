@@ -99,6 +99,7 @@ ShopifySharp currently supports the following Shopify APIs:
 - [Price Rules](#price-rules)
 - [User](#users)
 - [Abandoned Checkouts](#abandoned-checkouts)
+- CustomerSavedSearch (docs not yet written)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -111,7 +112,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
-| [CustomerSavedSearch](https://help.shopify.com/api/reference/customersavedsearch) | |
 | [FulfillmentEvent](https://help.shopify.com/api/reference/fulfillmentevent) | Object is implemented. |
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
@@ -143,6 +143,9 @@ These generous people have contributed their own hard work and time to improving
 - [Andrew Fox](https://github.com/foxandrewj)
 - [Victor](https://github.com/vleontyev)
 - [lasamuadib](https://github.com/lasamuadib)
+- [Jeremy Simmons](https://github.com/jsimmonsdavidccook)
+- [BrianBarnard](https://github.com/BrianBarnard)
+- [Luke Vo](https://github.com/datvm)
 
 Thank you!
 
