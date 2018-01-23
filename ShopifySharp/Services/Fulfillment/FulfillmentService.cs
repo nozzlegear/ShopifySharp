@@ -31,7 +31,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -49,7 +49,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Fulfillment>>(req, HttpMethod.Get, rootElement: "fulfillments");
@@ -66,9 +66,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Get, rootElement: "fulfillment");
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
-        /// <param name="notifyCustomer">Whether the customer should be notified that the fulfillment 
+        /// <param name="notifyCustomer">Whether the customer should be notified that the fulfillment
         /// has been created.</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>
         public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment fulfillment, bool notifyCustomer)
@@ -92,7 +92,7 @@ namespace ShopifySharp
             {
                 fulfillment = body
             });
-            
+
             return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, content, "fulfillment");
         }
 

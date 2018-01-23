@@ -13,8 +13,14 @@ namespace ShopifySharp
     /// </summary>
     public class Order : ShopifyObject
     {
+        [JsonProperty("app_id")]
         /// <summary>
-        /// The mailing address associated with the payment method. This address is an optional field that will not be available on orders that do not require one. 
+        /// Unique identifier of the app who created the order.
+        /// </summary>
+        public long? AppId { get; set; }
+
+        /// <summary>
+        /// The mailing address associated with the payment method. This address is an optional field that will not be available on orders that do not require one.
         /// </summary>
         [JsonProperty("billing_address")]
         public Address BillingAddress { get; set; }
@@ -26,7 +32,7 @@ namespace ShopifySharp
         public string BrowserIp { get; set; }
 
         /// <summary>
-        /// Indicates whether or not the person who placed the order would like to receive email updates from the shop. 
+        /// Indicates whether or not the person who placed the order would like to receive email updates from the shop.
         /// This is set when checking the "I want to receive occasional emails about new products, promotions and other news" checkbox during checkout.
         /// </summary>
         [JsonProperty("buyer_accepts_marketing")]
@@ -86,6 +92,12 @@ namespace ShopifySharp
         [JsonProperty("customer")]
         public Customer Customer { get; set; }
 
+        [JsonProperty("customer_locale")]
+        /// <summary>
+        /// The two or three letter language code, optionally followed by a region modifier. Example values could be 'en', 'en-CA', 'en-PIRATE'.
+        /// </summary>
+        public string CustomerLocale { get; set; }
+
         /// <summary>
         /// Applicable discount codes that can be applied to the order.
         /// </summary>
@@ -93,9 +105,9 @@ namespace ShopifySharp
         public IEnumerable<DiscountCode> DiscountCodes { get; set; }
 
         /// <summary>
-        /// The order's email address. Note: On and after 2015-11-03, you should be using <see cref="ContactEmail"/> to refer to the customer's email address. 
-        /// Between 2015-11-03 and 2015-12-03, updates to an order's email will also update the customer's email. This is temporary so apps can be migrated over to 
-        /// doing customer updates rather than order updates to change the contact email. After 2015-12-03, updating updating an order's email will no longer update 
+        /// The order's email address. Note: On and after 2015-11-03, you should be using <see cref="ContactEmail"/> to refer to the customer's email address.
+        /// Between 2015-11-03 and 2015-12-03, updates to an order's email will also update the customer's email. This is temporary so apps can be migrated over to
+        /// doing customer updates rather than order updates to change the contact email. After 2015-12-03, updating updating an order's email will no longer update
         /// the customer's email and apps will have to use the customer update endpoint to do so.
         /// </summary>
         [JsonProperty("email")]
@@ -118,6 +130,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("fulfillment_status")]
         public string FulfillmentStatus { get; set; }
+
+        [JsonProperty("phone")]
+        /// <summary>
+        /// The customer's phone number.
+        /// </summary>
+        public string Phone { get; set; }
 
         /// <summary>
         /// Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values.
@@ -168,7 +186,7 @@ namespace ShopifySharp
         public int? Number { get; set; }
 
         /// <summary>
-        /// A unique numeric identifier for the order. This one is used by the shop owner and customer. 
+        /// A unique numeric identifier for the order. This one is used by the shop owner and customer.
         /// This is different from the id property, which is also a unique numeric identifier for the order, but used for API purposes.
         /// </summary>
         [JsonProperty("order_number")]
@@ -231,7 +249,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// Where the order originated. May only be set during creation, and is not writeable thereafter.
-        /// Orders created via the API may be assigned any string of your choice except for "web", "pos", "iphone", and "android". 
+        /// Orders created via the API may be assigned any string of your choice except for "web", "pos", "iphone", and "android".
         /// Default is "api".
         /// </summary>
         [JsonProperty("source_name")]
@@ -250,7 +268,7 @@ namespace ShopifySharp
         public IEnumerable<TaxLine> TaxLines { get; set; }
 
         /// <summary>
-        /// States whether or not taxes are included in the order subtotal. 
+        /// States whether or not taxes are included in the order subtotal.
         /// </summary>
         [JsonProperty("taxes_included")]
         public bool? TaxesIncluded { get; set; }
@@ -304,13 +322,13 @@ namespace ShopifySharp
         public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
-        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale. 
+        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale.
         /// </summary>
         [JsonProperty("user_id")]
         public long? UserId { get; set; }
 
         /// <summary>
-        /// An array of <see cref="Transaction"/> objects that detail all of the transactions in 
+        /// An array of <see cref="Transaction"/> objects that detail all of the transactions in
         /// this order.
         /// </summary>
         [JsonProperty("transactions")]

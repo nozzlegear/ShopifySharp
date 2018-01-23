@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
@@ -8,7 +8,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Shop")]
     public class Shop_Tests
     {
-        private ShopService _Service => new ShopService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private ShopService _Service { get; } = new ShopService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         [Fact]
         public async Task Gets_Shops()

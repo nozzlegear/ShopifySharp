@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
-    <Version>4.1.0</Version>
+    <Version>4.9.1</Version>
   </PropertyGroup>
   <PropertyGroup>
     <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
@@ -15,8 +15,6 @@
     <PackageTags>shopify,ecommerce</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="flurl" Version="2.3.0" />
-    <PackageReference Include="flurl.http" Version="1.1.2" />
     <PackageReference Include="microsoft.extensions.primitives" Version="1.1.0" />
     <PackageReference Include="newtonsoft.json" Version="10.0.1" />
   </ItemGroup>

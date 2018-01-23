@@ -10,7 +10,7 @@ namespace ShopifySharp
     public class Fulfillment : ShopifyObject
     {
         /// <summary>
-        /// The date and time when the fulfillment was created. 
+        /// The date and time when the fulfillment was created.
         /// </summary>
         [JsonProperty("created_at")]
         public DateTimeOffset? CreatedAt { get; set; }
@@ -34,7 +34,7 @@ namespace ShopifySharp
         public object Receipt { get; set; }
 
         /// <summary>
-        /// The status of the fulfillment. Valid values are 'pending', 'open', 'success', 'cancelled', 
+        /// The status of the fulfillment. Valid values are 'pending', 'open', 'success', 'cancelled',
         /// 'error' and 'failure'.
         /// </summary>
         [JsonProperty("status")]
@@ -77,5 +77,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }
+
+        [JsonProperty("service")]
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        public string Service { get; set; }
+
+        [JsonProperty("shipment_status")]
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        public string ShipmentStatus { get; set; }
     }
 }

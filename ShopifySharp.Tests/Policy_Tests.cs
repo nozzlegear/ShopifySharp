@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
@@ -8,7 +8,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Policy")]
     public class Policy_Tests
     {
-        private PolicyService _Service => new PolicyService(Utils.MyShopifyUrl, Utils.AccessToken);              
+        private PolicyService _Service { get; } = new PolicyService(Utils.MyShopifyUrl, Utils.AccessToken);              
 
         [Fact]
         public async Task Lists_Orders()
@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests
             var list = await _Service.ListAsync();
 
             Assert.NotNull(list);
-            Assert.True(list.Count() > 0);
+            
             foreach(var policy in list)
             {
                 EmptyAssert.NotNullOrEmpty(policy.Title);

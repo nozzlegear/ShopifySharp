@@ -1,5 +1,4 @@
 ﻿using System;
-using Flurl.Http;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -12,11 +11,34 @@ using Newtonsoft.Json.Linq;
 using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
+using System.Text.RegularExpressions;
 
 namespace ShopifySharp
 {
     public static class AuthorizationService
     {
+        private static readonly Regex _querystringRegex = new Regex(@"[?|&]([\w\.]+)=([^?|^&]+)", RegexOptions.Compiled);
+
+        /// <remarks>
+        /// Source for this method: https://stackoverflow.com/a/22046389
+        /// </remarks>
+        public static IDictionary<string, string> ParseRawQuerystring(string qs)
+        {
+            // Must use an absolute uri, else Uri.Query throws an InvalidOperationException
+            var uri = new UriBuilder("http://localhost:3000")
+            {
+                Query = Uri.UnescapeDataString(qs)
+            }.Uri;
+            var match = _querystringRegex.Match(uri.PathAndQuery);
+            var paramaters = new Dictionary<string, string>();
+            while (match.Success)
+            {
+                paramaters.Add(match.Groups[1].Value, match.Groups[2].Value);
+                match = match.NextMatch();
+            }
+            return paramaters;
+        }
+
         private static string EncodeQuery(StringValues values, bool isKey)
         {
             string s = values.FirstOrDefault();
@@ -90,6 +112,30 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Determines if an incoming request is authentic.
+        /// </summary>
+        /// <param name="querystring">A dictionary containing the keys and values from the request's querystring.</param>
+        /// <param name="shopifySecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
+        public static bool IsAuthenticRequest(IDictionary<string, string> querystring, string shopifySecretKey)
+        {
+            var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
+
+            return IsAuthenticRequest(qs, shopifySecretKey);
+        }
+
+        /// <summary>
+        /// Determines if an incoming request is authentic.
+        /// </summary>
+        /// <param name="querystring">The request's raw querystring.</param>
+        /// <param name="shopifySecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
+        public static bool IsAuthenticRequest(string querystring, string shopifySecretKey)
+        {
+            return IsAuthenticRequest(ParseRawQuerystring(querystring), shopifySecretKey);
+        }
+
+        /// <summary>
         /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
         /// except that proxy requests use HMACSHA256 rather than MD5.
         /// </summary>
@@ -98,7 +144,7 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the request is authentic or not.</returns>
         public static bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
         {
-            // To calculate signature, order all querystring parameters by alphabetical (exclude the 
+            // To calculate signature, order all querystring parameters by alphabetical (exclude the
             // signature itself). Then, hash it with the secret key.
             var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key == "signature").Value;
 
@@ -123,13 +169,13 @@ namespace ShopifySharp
         /// Determines if an incoming webhook request is authentic.
         /// </summary>
         /// <param name="requestHeaders">The request's headers. Hint: use Request.Headers if you're calling this from an ASP.NET MVC controller.</param>
-        /// <param name="inputStream">The request's input stream. This method does NOT dispose the stream. 
+        /// <param name="inputStream">The request's input stream. This method does NOT dispose the stream.
         /// Hint: use Request.InputStream if you're calling this from an ASP.NET MVC controller.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static async Task<bool> IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, Stream inputStream, string shopifySecretKey)
         {
-            //Input stream may have already been read when a controller determines parameters to 
+            //Input stream may have already been read when a controller determines parameters to
             //pass to an action. Reset position to 0.
             inputStream.Position = 0;
 
@@ -166,23 +212,33 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// A convenience function that tries to ensure that a given URL is a valid Shopify domain. It does this by making a HEAD request to the given domain, and returns true if the response contains an X-ShopId header. 
-        /// 
+        /// A convenience function that tries to ensure that a given URL is a valid Shopify domain. It does this by making a HEAD request to the given domain, and returns true if the response contains an X-ShopId header.
+        ///
         /// **Warning**: a domain could fake the response header, which would cause this method to return true.
-        /// 
+        ///
         /// **Warning**: this method of validation is not officially supported by Shopify and could break at any time.
         /// </summary>
         /// <param name="url">The URL of the shop to check.</param>
         /// <returns>A boolean indicating whether the URL is valid.</returns>
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
-            var uri = ShopifyService.BuildShopUri(url);
+            var uri = ShopifyService.BuildShopUri(url, true);
 
-            using (var client = uri.ToString().AllowAnyHttpStatus())
+            using (var client = new HttpClient())
             {
-                var response = await client.HeadAsync(completionOption: HttpCompletionOption.ResponseHeadersRead);
+                using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
+                {
+                    try
+                    {
+                        var response = await client.SendAsync(msg);
 
-                return response.Headers.Any(h => h.Key == "X-ShopId");
+                        return response.Headers.Any(h => h.Key == "X-ShopId");
+                    }
+                    catch (HttpRequestException)
+                    {
+                        return false;
+                    }
+                }
             }
         }
 
@@ -214,7 +270,7 @@ namespace ShopifySharp
         public static Uri BuildAuthorizationUrl(IEnumerable<string> scopes, string myShopifyUrl, string shopifyApiKey, string redirectUrl, string state = null, IEnumerable<string> grants = null)
         {
             //Prepare a uri builder for the shop URL
-            var builder = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl));
+            var builder = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false));
 
             //Build the querystring
             var qs = new List<KeyValuePair<string, string>>()
@@ -253,18 +309,23 @@ namespace ShopifySharp
         /// <returns>The shop access token.</returns>
         public static async Task<string> Authorize(string code, string myShopifyUrl, string shopifyApiKey, string shopifySecretKey)
         {
-            var shopUri = ShopifyService.BuildShopUri(myShopifyUrl);
-
-            using (var client = Flurl.Url.Combine(shopUri.ToString(), "oauth/access_token").AllowAnyHttpStatus())
+            var ub = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false))
             {
-                var request = client.PostAsync(new JsonContent(new
-                {
-                    client_id = shopifyApiKey,
-                    client_secret = shopifySecretKey,
-                    code,
-                }));
+                Path = "admin/oauth/access_token"
+            };
+            var content = new JsonContent(new
+            {
+                client_id = shopifyApiKey,
+                client_secret = shopifySecretKey,
+                code,
+            });
+
+            using (var client = new HttpClient())
+            using (var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content))
+            {
+                var request = client.SendAsync(msg);
                 var response = await request;
-                var rawDataString = await request.ReceiveString();
+                var rawDataString = await response.Content.ReadAsStringAsync();
 
                 ShopifyService.CheckResponseExceptions(response, rawDataString);
 

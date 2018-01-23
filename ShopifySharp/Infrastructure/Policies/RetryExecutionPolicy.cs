@@ -1,7 +1,7 @@
-﻿using Flurl.Http;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -12,7 +12,7 @@ namespace ShopifySharp
     {
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(500);
 
-        public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             while (true)
             {
@@ -20,7 +20,7 @@ namespace ShopifySharp
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(request, bodyContent);
+                    var fullResult = await executeRequestAsync(request);
 
                     return fullResult.Result;
                 }

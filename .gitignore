@@ -213,3 +213,4 @@ ModelManifest.xml
 
 # Ignore private configuration files
 *.private.config
+*/env.yml

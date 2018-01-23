@@ -1,10 +1,10 @@
-﻿using Flurl.Http;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -32,7 +32,7 @@ namespace ShopifySharp
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;
@@ -53,12 +53,12 @@ namespace ShopifySharp
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(request, bodyContent);
-                    int? bucketContentSize = this.GetBucketContentSize(fullResult.Response);
+                    var fullResult = await executeRequestAsync(request);
+                    var bucketState = this.GetBucketState(fullResult.Response);
 
-                    if (bucketContentSize != null)
+                    if (bucketState != null)
                     {
-                        bucket?.SetContentSize(bucketContentSize.Value);
+                        bucket?.SetState(bucketState);
                     }
 
                     return fullResult.Result;
@@ -70,33 +70,34 @@ namespace ShopifySharp
                     //-Shopify may change to a different algorithm in the future
                     //-There may be timing and latency delays
                     //-Multiple programs may use the same access token
-                    //-Multiple instance of the same program may use the same access token
+                    //-Multiple instances of the same program may use the same access token
                     await Task.Delay(THROTTLE_DELAY);
                 }
             }
         }
 
-        private string GetAccessToken(IFlurlClient client)
+        private string GetAccessToken(HttpRequestMessage client)
         {
             IEnumerable<string> values = new List<string>();
 
-            return client.HttpClient.DefaultRequestHeaders.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out values) ?
+            return client.Headers.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out values) ?
                 values.FirstOrDefault() :
                 null;
         }
 
-        private int? GetBucketContentSize(HttpResponseMessage response)
+        private LeakyBucketState GetBucketState(HttpResponseMessage response)
         {
             var headers = response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT);
             var apiCallLimitHeaderValue = headers.Value?.FirstOrDefault();
 
             if (apiCallLimitHeaderValue != null)
             {
-                int bucketContentSize;
-
-                if (int.TryParse(apiCallLimitHeaderValue.Split('/').First(), out bucketContentSize))
+                var split = apiCallLimitHeaderValue.Split('/');
+                if (split.Length == 2 &&
+                    int.TryParse(split[0], out int currentFillLevel) &&
+                    int.TryParse(split[1], out int capacity))
                 {
-                    return bucketContentSize;
+                    return new LeakyBucketState(capacity, currentFillLevel);
                 }
             }
 

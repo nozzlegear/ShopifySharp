@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 
 namespace ShopifySharp.Tests
 {
@@ -7,12 +8,32 @@ namespace ShopifySharp.Tests
     /// </summary>
     public static class Utils
     {
+        private static Dictionary<string, string> dotEnvFile;
+
+        static Utils()
+        {
+            // Console.WriteLine("DIRECTORY: " + System.IO.Directory.GetCurrentDirectory());
+            // dotEnvFile = DotEnvFile.DotEnvFile.LoadFile("env.yml");
+        }
+
         /// <summary>
         /// Attempts to get an environment variable first by the key, then by 'SHOPIFYSHARP_{KEY}'. All keys must be uppercased!
         /// </summary>
-        private static string Get(string key) 
+        private static string Get(string key)
         {
             key = key.ToUpper();
+
+            string dir = System.IO.Directory.GetCurrentDirectory();
+
+            if (dotEnvFile == null && System.IO.File.Exists("./env.yml"))
+            {
+                dotEnvFile = DotEnvFile.DotEnvFile.LoadFile("./env.yml");
+            }
+
+            if (dotEnvFile != null && dotEnvFile.ContainsKey(key))
+            {
+                return dotEnvFile[key];
+            }
 
             string prefix = "SHOPIFYSHARP_";
             string value = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(prefix + key);

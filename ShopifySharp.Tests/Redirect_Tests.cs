@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -98,7 +98,7 @@ namespace ShopifySharp.Tests
 
     public class Redirect_Tests_Fixture : IAsyncLifetime
     {
-        public RedirectService Service => new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public RedirectService Service { get; } = new RedirectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Redirect> Created { get; } = new List<Redirect>();
 

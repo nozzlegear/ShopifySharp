@@ -41,7 +41,7 @@ namespace ShopifySharp
 
             if (sinceId.HasValue)
             {
-                req.Url.QueryParams.Add("since_id", sinceId.Value);
+                req.QueryParams.Add("since_id", sinceId.Value);
             }
 
             return await ExecuteRequestAsync<List<Transaction>>(req, HttpMethod.Get, rootElement: "transactions");
@@ -58,9 +58,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/transactions/{transactionId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Transaction>(req, HttpMethod.Get, rootElement: "transaction");

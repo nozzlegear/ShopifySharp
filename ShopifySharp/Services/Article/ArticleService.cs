@@ -29,7 +29,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
@@ -46,7 +46,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -64,7 +64,7 @@ namespace ShopifySharp
 
             if (fields != null)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Article>(req, HttpMethod.Get, rootElement: "article");
@@ -80,7 +80,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"blogs/{blogId}/articles.json");
             var body = article.ToDictionary();
-            
+
             if (metafields != null)
             {
                 body.Add("metafields", metafields);
@@ -152,12 +152,12 @@ namespace ShopifySharp
 
             if (popular.HasValue)
             {
-                req.Url.QueryParams.Add("popular", popular.Value);
+                req.QueryParams.Add("popular", popular.Value);
             }
 
             if (limit.HasValue)
             {
-                req.Url.QueryParams.Add("limit", limit.Value);
+                req.QueryParams.Add("limit", limit.Value);
             }
 
             return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
@@ -175,12 +175,12 @@ namespace ShopifySharp
 
             if (popular.HasValue)
             {
-                req.Url.QueryParams.Add("popular", popular.Value);
+                req.QueryParams.Add("popular", popular.Value);
             }
 
             if (limit.HasValue)
             {
-                req.Url.QueryParams.Add("limit", limit.Value);
+                req.QueryParams.Add("limit", limit.Value);
             }
 
             return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");

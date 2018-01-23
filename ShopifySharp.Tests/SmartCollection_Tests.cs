@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -93,13 +93,20 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(newValue, updated.Title);   
+            Assert.Equal(newValue, updated.Title);
+        }
+
+        [Fact(Skip = "Must create products and add them to the rule.")]
+        public async Task Updates_SmartCollection_Products_Order()
+        {
+            var created = await Fixture.Create();
+            var updated = await Fixture.Service.UpdateProductOrderAsync(created.Id.Value, 5, 10, 15, 20);
         }
     }
 
     public class SmartCollection_Tests_Fixture : IAsyncLifetime
     {
-        public SmartCollectionService Service => new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public SmartCollectionService Service { get; } = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<SmartCollection> Created { get; } = new List<SmartCollection>();
 
@@ -140,12 +147,21 @@ namespace ShopifySharp.Tests
         {
             var obj = await Service.CreateAsync(new SmartCollection()
             {
-                BodyHtml =  BodyHtml,
+                BodyHtml = BodyHtml,
                 Handle = Handle,
                 Title = Title,
+                Rules = new List<SmartCollectionRules>
+                {
+                    new SmartCollectionRules
+                    {
+                        Column = "variant_price",
+                        Condition = "20",
+                        Relation = "less_than"
+                    }
+                }
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

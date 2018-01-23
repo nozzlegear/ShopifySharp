@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
@@ -68,7 +68,7 @@ namespace ShopifySharp.Tests
 
     public class Event_Tests_Fixture
     {
-        public EventService Service => new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public EventService Service { get; } = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Event> Created { get; } = new List<Event>();
     }

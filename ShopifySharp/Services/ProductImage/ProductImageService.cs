@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductImageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's ProductImages.
         /// </summary>
@@ -31,7 +31,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -57,12 +57,12 @@ namespace ShopifySharp
 
             if (sinceId.HasValue)
             {
-                req.Url.QueryParams.Add("since_id", sinceId.Value);
+                req.QueryParams.Add("since_id", sinceId.Value);
             }
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
@@ -79,9 +79,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");

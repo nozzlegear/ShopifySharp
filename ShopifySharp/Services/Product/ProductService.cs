@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's products.
         /// </summary>
@@ -32,9 +32,9 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
-            
+
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
@@ -48,7 +48,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
@@ -66,7 +66,7 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Product>(req, HttpMethod.Get, rootElement: "product");
@@ -82,7 +82,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("products.json");
             var body = product.ToDictionary();
-            
+
             if (options != null)
             {
                 foreach (var option in options.ToDictionary())

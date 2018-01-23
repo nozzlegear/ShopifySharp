@@ -1,10 +1,10 @@
-﻿using Flurl.Http;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
-    public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>(IFlurlClient request, HttpContent bodyContent);
+    public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>(CloneableRequestMessage request);
 
     /// <summary>
     /// Used to specify centralized logic that should run when executing shopify requests.
@@ -12,9 +12,8 @@ namespace ShopifySharp
     /// </summary>
     public interface IRequestExecutionPolicy
     {
-        /// <param name="baseRequest">The base request that was built by a service to execute. Requests can be reused with <see cref="IFlurlClient.Clone"/>.</param>
-        /// <param name="bodyContent">The request's body content, typically an instance of <see cref="StringContent"/>. This may be null depending on the request method.</param>
+        /// <param name="baseRequest">The base request that was built by a service to execute.</param>
         /// <param name="executeRequestAsync">A delegate that executes the request you pass to it.</param>
-        Task<T> Run<T>(IFlurlClient baseRequest, HttpContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync);
+        Task<T> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync);
     }
 }

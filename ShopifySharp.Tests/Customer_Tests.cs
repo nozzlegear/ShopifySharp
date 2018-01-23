@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -193,11 +193,56 @@ namespace ShopifySharp.Tests
             Assert.Equal(created.Email, updated.Email);
             Assert.Equal(created.Note, updated.Note);
         }
+
+        [Fact]
+        public async Task SendInvite_Customers_Default()
+        {
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
+
+            var invite = await Fixture.Service.SendInviteAsync(created.Id.Value);
+
+            Assert.NotNull(invite);
+
+        }
+
+        [Fact]
+        public async Task SendInvite_Customers_Custom()
+        {
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
+
+            var options = new CustomerInvite()
+            {
+                Subject = "Custom Subject courtesy of ShopifySharp",
+                CustomMessage = "Custom Message courtesy of ShopifySharp"
+            };
+
+            var invite = await Fixture.Service.SendInviteAsync(created.Id.Value, options);
+
+            Assert.NotNull(invite);
+            Assert.Equal(options.Subject, invite.Subject);
+            Assert.Equal(options.CustomMessage, invite.CustomMessage);
+
+        }
+
+        [Fact]
+        public async Task GetAccountActivationUrl_Customers()
+        {
+            var created = await Fixture.Create();
+            long id = created.Id.Value;
+
+            var url = await Fixture.Service.GetAccountActivationUrl(created.Id.Value);
+
+            Assert.NotEmpty(url);
+            Assert.Contains("account/activate", url);
+
+        }
     }
 
     public class Customer_Tests_Fixture : IAsyncLifetime
     {
-        public CustomerService Service => new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public CustomerService Service { get; } = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Customer> Created { get; } = new List<Customer>();
 

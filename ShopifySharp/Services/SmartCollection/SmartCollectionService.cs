@@ -28,7 +28,7 @@ namespace ShopifySharp
 
             if (filterOptions != null)
             {
-                req.Url.QueryParams.AddRange(filterOptions.ToParameters());
+                req.QueryParams.AddRange(filterOptions.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -44,12 +44,12 @@ namespace ShopifySharp
 
             if (filterOptions != null)
             {
-                req.Url.QueryParams.AddRange(filterOptions.ToParameters());
+                req.QueryParams.AddRange(filterOptions.ToParameters());
             }
-            
+
             return await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
         }
-        
+
         /// <summary>
         /// Retrieves the <see cref="SmartCollection"/> with the given id.
         /// </summary>
@@ -57,10 +57,10 @@ namespace ShopifySharp
         public virtual async Task<SmartCollection> GetAsync(long collectionId)
         {
             var req = PrepareRequest($"smart_collections/{collectionId}.json");
-            
+
             return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Get, rootElement: "smart_collection");
         }
-        
+
         /// <summary>
         /// Creates a new <see cref="SmartCollection"/>.
         /// </summary>
@@ -72,7 +72,7 @@ namespace ShopifySharp
             {
                 smart_collection = collection
             });
-            
+
             return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection");
         }
 
@@ -87,6 +87,22 @@ namespace ShopifySharp
             var content = new JsonContent(new
             {
                 smart_collection = collection
+            });
+
+            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+        }
+
+        /// <summary>
+        /// Updates the order of products when a SmartCollection's sort-by method is set to "manual".
+        /// </summary>
+        /// <param name="smartCollectionId">Id of the object being updated.</param>
+        /// <param name="productIds">An array of product ids sorted in the order you want them to appear in.</param>
+        public virtual async Task<SmartCollection> UpdateProductOrderAsync(long smartCollectionId, params long[] productIds)
+        {
+            var req = PrepareRequest($"smart_collections/{smartCollectionId}/order.json");
+            var content = new JsonContent(new
+            {
+                products = productIds
             });
 
             return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");

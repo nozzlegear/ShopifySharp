@@ -17,7 +17,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ThemeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
@@ -28,7 +28,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Theme>>(req, HttpMethod.Get, rootElement: "themes");
@@ -44,9 +44,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"themes/{themeId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
@@ -56,8 +56,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("themes.json");
             var body = theme.ToDictionary();
-            
-            if (! string.IsNullOrEmpty(sourceUrl))
+
+            if (!string.IsNullOrEmpty(sourceUrl))
             {
                 body.Add("src", sourceUrl);
             }
@@ -71,9 +71,9 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new theme on the store. The theme always starts out with a role of 
-        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its 
-        /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
+        /// Creates a new theme on the store. The theme always starts out with a role of
+        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its
+        /// files have been extracted and stored by Shopify (which might take a couple of minutes).
         /// </summary>
         /// <param name="theme">The new theme.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
@@ -83,9 +83,9 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new theme on the store. The theme always starts out with a role of 
-        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its 
-        /// files have been extracted and stored by Shopify (which might take a couple of minutes). 
+        /// Creates a new theme on the store. The theme always starts out with a role of
+        /// "unpublished." If the theme has a different role, it will be assigned that only after all of its
+        /// files have been extracted and stored by Shopify (which might take a couple of minutes).
         /// </summary>
         /// <param name="theme">The new theme.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
