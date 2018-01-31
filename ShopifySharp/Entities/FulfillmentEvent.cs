@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// The unique numeric identifier for the fulfillment.
         /// </summary>
         [JsonProperty("fulfillment_id")]
-        public long? Fulfillment { get; set; }
+        public long? FulfillmentId { get; set; }
 
         /// <summary>
         /// The status of the fulfillment event. Valid values are 'confirmed', 'in_transit', 
