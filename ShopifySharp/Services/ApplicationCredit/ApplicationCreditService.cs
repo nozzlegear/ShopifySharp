@@ -18,7 +18,7 @@ namespace ShopifySharp
         public ApplicationCreditService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Gets a list of all past and present application credits. 
+        /// Gets a list of all past and present application credits.
         /// </summary>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
         public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(string fields = null)
@@ -27,7 +27,7 @@ namespace ShopifySharp
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
@@ -44,7 +44,7 @@ namespace ShopifySharp
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Get, rootElement: "application_credit");
@@ -63,6 +63,6 @@ namespace ShopifySharp
             });
 
             return await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, body, "application_credit");
-        }        
+        }
     }
 }

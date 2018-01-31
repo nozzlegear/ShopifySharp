@@ -6,11 +6,6 @@ using System;
 
 namespace ShopifySharp.Infrastructure
 {
-    public interface ICloneable<T>
-    {
-        T Clone();
-    }
-
     public class JsonContent : ByteArrayContent
     {
         private object Data { get; set; }

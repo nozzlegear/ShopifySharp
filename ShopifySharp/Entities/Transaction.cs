@@ -103,5 +103,23 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("currency")]
         public string Currency { get; set; }
+
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        [JsonProperty("message")]
+        public string Message { get; set; }
+
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        [JsonProperty("location_id")]
+        public long? LocationId { get; set; }
+
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        [JsonProperty("parent_id")]
+        public long? ParentId { get; set; }
     }
 }

@@ -201,7 +201,7 @@ namespace ShopifySharp
         /// <summary>
         /// The full recovery URL to be sent to a customer to recover their abandoned checkout.
         /// </summary>
-        [JsonProperty("abandoned_check_url")]
+        [JsonProperty("abandoned_checkout_url")]
         public string AbandonedCheckoutUrl { get; set; }
 
         /// <summary>
@@ -251,5 +251,6 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("customer")]
         public Customer Customer { get; set; }
+        
     }
 }

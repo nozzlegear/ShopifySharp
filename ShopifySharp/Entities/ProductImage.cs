@@ -56,5 +56,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("variant_ids")]
         public IEnumerable<long> VariantIds { get; set; }
+
+        [JsonProperty("height")]
+        public int? Height { get; set; }
+
+        [JsonProperty("width")]
+        public int? Width { get; set; }
     }
 }

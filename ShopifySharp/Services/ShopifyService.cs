@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Flurl.Http;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
@@ -16,7 +15,10 @@ namespace ShopifySharp
     public abstract class ShopifyService
     {
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+
         private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
+
+        private static HttpClient _Client { get; } = new HttpClient();
 
         private IRequestExecutionPolicy _ExecutionPolicy;
 
@@ -31,10 +33,10 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         protected ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
-            _ShopUri = BuildShopUri(myShopifyUrl);
+            _ShopUri = BuildShopUri(myShopifyUrl, false);
             _AccessToken = shopAccessToken;
 
-            // If there's a global execution policy it should be set as this instance's policy. 
+            // If there's a global execution policy it should be set as this instance's policy.
             // User can override it with instance-specific execution policy.
             _ExecutionPolicy = _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
         }
@@ -45,7 +47,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <exception cref="ShopifyException">Thrown if the given URL cannot be converted into a well-formed URI.</exception>
         /// <returns>The shop's API <see cref="Uri"/>.</returns>
-        public static Uri BuildShopUri(string myShopifyUrl)
+        public static Uri BuildShopUri(string myShopifyUrl, bool withAdminPath)
         {
             if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
             {
@@ -61,9 +63,9 @@ namespace ShopifySharp
 
             var builder = new UriBuilder(myShopifyUrl)
             {
-                Path = "admin/",
                 Scheme = "https:",
-                Port = 443 //SSL port
+                Port = 443, //SSL port
+                Path = withAdminPath ? "admin" : ""
             };
 
             return builder.Uri;
@@ -87,23 +89,31 @@ namespace ShopifySharp
             _GlobalExecutionPolicy = globalExecutionPolicy;
         }
 
-        /// <summary>
-        /// Prepares a request to the path and appends the shop's access token header if applicable.    
-        /// </summary>
-        protected IFlurlClient PrepareRequest(string path)
+        protected RequestUri PrepareRequest(string path)
         {
-            var client = Flurl.Url.Combine(_ShopUri.ToString(), path).AllowAnyHttpStatus();
+            var ub = new UriBuilder(_ShopUri)
+            {
+                Scheme = "https:",
+                Port = 443,
+                Path = $"admin/{path}"
+            };
 
-            // Let the service decide when to dispose a request. Some execution policies clone the clients for reuse,
-            // but cloned clients still share the underlying HttpClient. Disposing a clone will break all further clones.
-            client.Settings.AutoDispose = false;
+            return new RequestUri(ub.Uri);
+        }
+
+        /// <summary>
+        /// Prepares a request to the path and appends the shop's access token header if applicable.
+        /// </summary>
+        protected CloneableRequestMessage PrepareRequestMessage(RequestUri uri, HttpMethod method, HttpContent content = null)
+        {
+            var msg = new CloneableRequestMessage(uri.ToUri(), method, content);
 
             if (!string.IsNullOrEmpty(_AccessToken))
             {
-                client = client.WithHeader("X-Shopify-Access-Token", _AccessToken);
+                msg.Headers.Add("X-Shopify-Access-Token", _AccessToken);
             }
 
-            return client;
+            return msg;
         }
 
         /// <summary>
@@ -111,77 +121,74 @@ namespace ShopifySharp
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
         /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="baseContent" /> when finished.
+        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
         /// </remarks>
-        protected async Task<JToken> ExecuteRequestAsync(IFlurlClient baseClient, HttpMethod method, JsonContent baseContent = null)
+        protected async Task<JToken> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null)
         {
-            var policyResult = await _ExecutionPolicy.Run(baseClient, baseContent, async (client, content) =>
+            using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
-                var request = client.SendAsync(method, content);
-                var response = await request;
-                var rawResult = await request.ReceiveString();
-
-                //Check for and throw exception when necessary.
-                CheckResponseExceptions(response, rawResult);
-
-                JToken jtoken = null;
-
-                // Don't parse the result when the request was Delete.
-                if (method != HttpMethod.Delete)
+                var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
                 {
-                    jtoken = JToken.Parse(rawResult);
-                }
+                    var request = _Client.SendAsync(requestMessage);
 
-                return new RequestResult<JToken>(response, jtoken, rawResult);
-            });
+                    using (var response = await request)
+                    {
+                        var rawResult = await response.Content.ReadAsStringAsync();
 
-            baseClient.Dispose();
-            baseContent?.Dispose();
+                        //Check for and throw exception when necessary.
+                        CheckResponseExceptions(response, rawResult);
 
-            return policyResult;
+                        JToken jtoken = null;
+
+                        // Don't parse the result when the request was Delete.
+                        if (baseRequestMessage.Method != HttpMethod.Delete)
+                        {
+                            jtoken = JToken.Parse(rawResult);
+                        }
+
+                        return new RequestResult<JToken>(response, jtoken, rawResult);
+                    }
+                });
+
+                return policyResult;
+            }
         }
 
         /// <summary>
         /// Executes a request and returns the given type. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        /// <param name="baseClient">
-        /// The request to be executed. Note that this request will be automatically disposed when the method returns.
-        /// </param>
-        /// <param name="method">
-        /// HTTP method to be used by the request.
-        /// </param>
-        /// <param name="baseContent">
-        /// Content that gets appended to the request body. Can be null. In most cases, you'll want to use <see cref="JsonContent"/>.
-        /// Note that the content will be automatically disposed when the method returns.
-        /// </param>
         /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="baseContent" /> when finished.
+        /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<T> ExecuteRequestAsync<T>(IFlurlClient baseClient, HttpMethod method, JsonContent baseContent = null, string rootElement = null) where T : new()
+        protected async Task<T> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null) where T : new()
         {
-            var policyResult = await _ExecutionPolicy.Run<T>(baseClient, baseContent, async (client, content) =>
+            using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
-                var request = client.SendAsync(method, content);
-                var response = await request;
-                var rawResult = await request.ReceiveString();
+                var policyResult = await _ExecutionPolicy.Run<T>(baseRequestMessage, async (requestMessage) =>
+                {
+                    var request = _Client.SendAsync(requestMessage);
 
-                //Check for and throw exception when necessary.
-                CheckResponseExceptions(response, rawResult);
+                    using (var response = await request)
+                    {
+                        var rawResult = await response.Content.ReadAsStringAsync();
 
-                // This method may fail when the method was Delete, which is intendend. 
-                // Delete methods should not be parsing the response JSON and should instead
-                // be using the non-generic ExecuteRequestAsync.
-                var reader = new JsonTextReader(new StringReader(rawResult));
-                var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
-                var result = data.ToObject<T>();
-                return new RequestResult<T>(response, result, rawResult);
-            });
+                        //Check for and throw exception when necessary.
+                        CheckResponseExceptions(response, rawResult);
 
-            baseClient.Dispose();
-            baseContent?.Dispose();
+                        // This method may fail when the method was Delete, which is intendend.
+                        // Delete methods should not be parsing the response JSON and should instead
+                        // be using the non-generic ExecuteRequestAsync.
+                        var reader = new JsonTextReader(new StringReader(rawResult));
+                        var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
+                        var result = data.ToObject<T>();
 
-            return policyResult;
+                        return new RequestResult<T>(response, result, rawResult);
+                    }
+                });
+
+                return policyResult;
+            }
         }
 
         /// <summary>
@@ -247,7 +254,7 @@ namespace ShopifySharp
             {
                 var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
 
-                // Errors can be any of the following: 
+                // Errors can be any of the following:
                 // 1. { errors: "some error message"}
                 // 2. { errors: { "order" : "some error message" } }
                 // 3. { errors: { "order" : [ "some error message" ] } }

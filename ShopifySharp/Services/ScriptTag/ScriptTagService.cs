@@ -18,11 +18,11 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ScriptTagService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
-        /// <param name="src">Optionally filters the count to only those <see cref="ScriptTag"/>s with the 
+        /// <param name="src">Optionally filters the count to only those <see cref="ScriptTag"/>s with the
         /// given <see cref="ScriptTag.Src"/> value.</param>
         /// <returns>The count.</returns>
         public virtual async Task<int> CountAsync(string src = null)
@@ -31,7 +31,7 @@ namespace ShopifySharp
 
             if (!string.IsNullOrEmpty(src))
             {
-                req.Url.QueryParams.Add("src", src);
+                req.QueryParams.Add("src", src);
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -47,7 +47,7 @@ namespace ShopifySharp
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<ScriptTag>>(req, HttpMethod.Get, rootElement: "script_tags");
@@ -63,9 +63,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"script_tags/{tagId}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");

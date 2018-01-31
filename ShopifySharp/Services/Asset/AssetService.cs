@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
-using Flurl.Http;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -17,7 +16,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public AssetService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Retrieves the <see cref="Asset"/> with the given id.
         /// </summary>
@@ -34,15 +33,15 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, rootElement: "asset");
         }
 
         /// <summary>
-        /// Retrieves a list of all <see cref="Asset"/> objects. Listing theme assets only returns metadata about each asset. 
-        /// You need to request assets individually in order to get their contents. 
+        /// Retrieves a list of all <see cref="Asset"/> objects. Listing theme assets only returns metadata about each asset.
+        /// You need to request assets individually in order to get their contents.
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
@@ -53,16 +52,16 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
         }
 
         /// <summary>
-        /// Creates or updates a <see cref="Asset"/>. Both tasks use the same method due to the 
+        /// Creates or updates a <see cref="Asset"/>. Both tasks use the same method due to the
         /// way Shopify API handles assets. If an asset has a unique <see cref="Asset.Key"/> value,
-        /// it will be created. If not, it will be updated. Copy an asset by setting the 
+        /// it will be created. If not, it will be updated. Copy an asset by setting the
         /// <see cref="Asset.SourceKey"/> to the target's <see cref="Asset.Key"/> value.
         /// Note: This will not return the asset's <see cref="Asset.Value"/> property. You should
         /// use <see cref="GetAsync(long, string, string)"/> to refresh the value after creating or updating.
@@ -94,7 +93,7 @@ namespace ShopifySharp
 
             await ExecuteRequestAsync(req, HttpMethod.Delete);
         }
-        
+
         /// <summary>
         /// Sets the proper querystring for getting or deleting a single asset.
         /// </summary>
@@ -102,12 +101,12 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <returns>The request with the proper querystring.</returns>
-        IFlurlClient SetAssetQuerystring(IFlurlClient req, string key, long themeId)
+        RequestUri SetAssetQuerystring(RequestUri req, string key, long themeId)
         {
             //QS should look like:
             //?asset[key]={key}&theme_id={themeId}
-            req.Url.QueryParams.Add("asset[key]", key);
-            req.Url.QueryParams.Add("theme_id", themeId);
+            req.QueryParams.Add("asset[key]", key);
+            req.QueryParams.Add("theme_id", themeId);
 
             return req;
         }

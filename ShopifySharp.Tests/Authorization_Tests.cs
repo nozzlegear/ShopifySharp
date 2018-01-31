@@ -44,12 +44,45 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public void Validates_Web_Requests_With_Dictionary_Querystring()
+        {
+            // Note that this method differes from Validates_Web_Requests() in that the aforementioned's dictionary is Dictionary<string, stringvalues> and this is Dictionary<string, string>.
+            var qs = new Dictionary<string, string>()
+            {
+                {"hmac", "134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746"},
+                {"shop", "stages-test-shop-2.myshopify.com"},
+                {"signature", "f477a85f3ed6027735589159f9da74da"},
+                {"timestamp", "1459779785"},
+            };
+
+            bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void Validates_Web_Requests_With_Raw_Querystring()
+        {
+            var qs = "hmac=134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746&shop=stages-test-shop-2.myshopify.com&signature=f477a85f3ed6027735589159f9da74da&timestamp=1459779785";
+
+            bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
+        }
+
+        [Fact]
         public async Task Validates_Shop_Urls()
         {
             string validUrl = Utils.MyShopifyUrl;
             string invalidUrl = "https://google.com";
 
             Assert.True(await AuthorizationService.IsValidShopDomainAsync(validUrl));
+            Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
+        }
+
+        [Fact]
+        public async Task Validates_Shop_Malfunctioned_Urls()
+        {
+            string invalidUrl = "foo";
+            
             Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
         }
 

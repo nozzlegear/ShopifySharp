@@ -15,10 +15,10 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public ChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
-        
+        public ChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+
         /// <summary>
-        /// Creates a <see cref="Charge"/>. 
+        /// Creates a <see cref="Charge"/>.
         /// </summary>
         /// <param name="charge">The <see cref="Charge"/> to create.</param>
         /// <returns>The new <see cref="Charge"/>.</returns>
@@ -40,9 +40,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"application_charges/{id}.json");
 
-            if (! string.IsNullOrEmpty(fields))
+            if (!string.IsNullOrEmpty(fields))
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Charge>(req, HttpMethod.Get, rootElement: "application_charge");
@@ -60,12 +60,12 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             if (sinceId.HasValue)
             {
-                req.Url.QueryParams.Add("since_id", sinceId);
+                req.QueryParams.Add("since_id", sinceId);
             }
 
             return await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");

@@ -1,5 +1,4 @@
-﻿using Flurl;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -11,7 +10,7 @@ namespace ShopifySharp.Filters
     public class ListFilter : CountFilter
     {
         /// <summary>
-        /// An optional array of order ids to retrieve. 
+        /// An optional array of order ids to retrieve.
         /// </summary>
         [JsonProperty("ids")]
         public IEnumerable<long> Ids { get; set; }
@@ -45,16 +44,16 @@ namespace ShopifySharp.Filters
         /// <summary>
         /// Parameterizes this class, with special handling for <see cref="Ids"/>.
         /// </summary>
-        /// <param name="propName">The name of the property. Will match the property's <see cref="JsonPropertyAttribute"/> name — 
+        /// <param name="propName">The name of the property. Will match the property's <see cref="JsonPropertyAttribute"/> name —
         /// rather than the real property name — where applicable. Use <paramref name="property"/>.Name to get the real name.</param>
         /// <param name="value">The property's value.</param>
         /// <param name="property">The property itself.</param>
         /// <returns>The new parameter.</returns>
-        public override QueryParameter ToSingleParameter(string propName, object value, PropertyInfo property)
+        public override KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
             if (propName == "ids" || propName == "Ids")
             {
-                var param = new QueryParameter(propName, string.Join(",", value as IEnumerable<long>));
+                var param = new KeyValuePair<string, object>(propName, string.Join(",", value as IEnumerable<long>));
 
                 return param;
             }

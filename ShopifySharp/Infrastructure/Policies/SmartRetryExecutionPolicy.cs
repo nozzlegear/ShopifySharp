@@ -1,5 +1,4 @@
-﻿using Flurl.Http;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
@@ -33,7 +32,7 @@ namespace ShopifySharp
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(IFlurlClient baseRequest, JsonContent bodyContent, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;
@@ -46,7 +45,6 @@ namespace ShopifySharp
             while (true)
             {
                 var request = baseRequest.Clone();
-                var content = bodyContent?.Clone();
 
                 if (accessToken != null)
                 {
@@ -55,7 +53,7 @@ namespace ShopifySharp
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(request, content);
+                    var fullResult = await executeRequestAsync(request);
                     var bucketState = this.GetBucketState(fullResult.Response);
 
                     if (bucketState != null)
@@ -78,11 +76,11 @@ namespace ShopifySharp
             }
         }
 
-        private string GetAccessToken(IFlurlClient client)
+        private string GetAccessToken(HttpRequestMessage client)
         {
             IEnumerable<string> values = new List<string>();
 
-            return client.HttpClient.DefaultRequestHeaders.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out values) ?
+            return client.Headers.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out values) ?
                 values.FirstOrDefault() :
                 null;
         }

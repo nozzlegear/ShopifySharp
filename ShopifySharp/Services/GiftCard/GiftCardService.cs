@@ -31,7 +31,7 @@ namespace ShopifySharp
 
             if (status != null)
             {
-                req.Url.QueryParams.Add("status", status);
+                req.QueryParams.Add("status", status);
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -48,7 +48,7 @@ namespace ShopifySharp
 
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
@@ -62,7 +62,7 @@ namespace ShopifySharp
         public virtual async Task<GiftCard> GetAsync(long giftCardId)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}.json");
-            
+
             return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Get, rootElement: "gift_card");
         }
 
@@ -122,16 +122,16 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<GiftCard>> SearchAsync(string query, string order = null, ListFilter filter = null)
         {
             var req = PrepareRequest("gift_cards/search.json");
-            req.Url.QueryParams.Add("query", query, false);
+            req.QueryParams.Add("query", query);
 
             if (!string.IsNullOrEmpty(order))
             {
-                req.Url.QueryParams.Add("order", order, false);
+                req.QueryParams.Add("order", order);
             }
 
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");

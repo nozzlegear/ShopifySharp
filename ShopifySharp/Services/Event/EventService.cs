@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public EventService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+
         /// <summary>
         /// Gets a count of all site events.
         /// </summary>
@@ -31,7 +31,7 @@ namespace ShopifySharp
             //Add optional parameters to request
             if (filter != null)
             {
-                req.Url.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToParameters());
             }
 
             return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
@@ -49,7 +49,7 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Event>(req, HttpMethod.Get, rootElement: "event");
@@ -64,7 +64,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Event>> ListAsync(long subjectId, string subjectType, EventListFilter options = null)
         {
             // Ensure the subject type is plural
-            if (! subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
+            if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
             {
                 subjectType = subjectType + "s";
             }
@@ -74,7 +74,7 @@ namespace ShopifySharp
             //Add optional parameters to request
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
@@ -87,11 +87,11 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Event>> ListAsync(EventListFilter options = null)
         {
             var req = PrepareRequest("events.json");
-            
+
             //Add optional parameters to request
             if (options != null)
             {
-                req.Url.QueryParams.AddRange(options.ToParameters());
+                req.QueryParams.AddRange(options.ToParameters());
             }
 
             return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");

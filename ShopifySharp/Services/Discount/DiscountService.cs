@@ -40,7 +40,7 @@ namespace ShopifySharp
 
             if (string.IsNullOrEmpty(fields) == false)
             {
-                req.Url.QueryParams.Add("fields", fields);
+                req.QueryParams.Add("fields", fields);
             }
 
             return await ExecuteRequestAsync<Discount>(req, HttpMethod.Get, rootElement: "discount");
@@ -55,10 +55,10 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("discounts.json");
 
-            // Build the request body as a dictionary. Necessary because the create options must be added to the 
+            // Build the request body as a dictionary. Necessary because the create options must be added to the
             // 'discount' property.
             var discountBody = discount.ToDictionary();
-            var content = new JsonContent(new 
+            var content = new JsonContent(new
             {
                 discount = discountBody
             });
