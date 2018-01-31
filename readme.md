@@ -79,6 +79,7 @@ ShopifySharp currently supports the following Shopify APIs:
 - [Redirects](#redirects)
 - [Collects](#collects)
 - [Fulfillments](#fulfillments)
+- Fulfillment Events (docs not yet written) (List/Get only. Create/Delete not implemented yet)
 - [Transactions](#transactions)
 - [Pages](#pages)
 - [Metafields](#metafields)
@@ -112,7 +113,6 @@ The following APIs are not yet implemented by ShopifySharp, but I'm slowly worki
 | [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
 | [Comments](https://help.shopify.com/api/reference/comment) | |
 | [Country](https://help.shopify.com/api/reference/country) | |
-| [FulfillmentEvent](https://help.shopify.com/api/reference/fulfillmentevent) | Object is implemented. |
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
 | [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
 | [Province](https://help.shopify.com/api/reference/province) | |
