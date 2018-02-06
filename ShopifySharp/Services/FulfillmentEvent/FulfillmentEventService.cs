@@ -45,5 +45,35 @@ namespace ShopifySharp
 
             return await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Get, rootElement: "fulfillment_event");
         }
+
+        /// <summary>
+        /// Creates a new <see cref="FulfillmentEvent"/> on the fulfillment.
+        /// </summary>
+        /// <param name="event">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
+        /// <returns>The new <see cref="FulfillmentEvent"/>.</returns>
+        public virtual async Task<FulfillmentEvent> CreateAsync(long orderId, long fulfillmentId, FulfillmentEvent @event)
+        {
+            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
+
+            var content = new JsonContent(new
+            {
+                @event
+            });
+
+            return await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event");
+        }
+
+        /// <summary>
+        /// Deletes the <see cref="FulfillmentEvent"/> with the given Id.
+        /// </summary>
+        /// <param name="orderId">The order id to which the fulfillment belongs to.</param>
+        /// <param name="fulfillmentId">The id of the fulfillment to which the event belongs to.</param>
+        /// <param name="fulfillmentEventId">The id of the fulfillment event to retrieve.</param>
+        public virtual async Task DeleteAsync(long orderId, long fulfillmentId, long fulfillmentEventId)
+        {
+            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
+
+            await ExecuteRequestAsync(req, HttpMethod.Delete);
+        }
     }
 }

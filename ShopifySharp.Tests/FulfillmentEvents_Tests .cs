@@ -20,16 +20,30 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_FulfillmentEvents()
         {
-            long orderId = Fixture.Created.First().OrderId.Value;
-            long fulfillmentId = Fixture.Created.First().Id.Value;
-            var list = await Fixture.Service.ListAsync(orderId, fulfillmentId);
-            Assert.True(list != null);
+            long orderId = Fixture.CreatedFulfillments.First().OrderId.Value;
+            long fulfillmentId = Fixture.CreatedFulfillments.First().Id.Value;
+            var list = await Fixture.FulfillmentEventService.ListAsync(orderId, fulfillmentId);
+            Assert.True(list.Count() > 0);
+        }
+
+        [Fact]
+        public async Task CreatesAndDeletes_FulfillmentEvents()
+        {
+            long orderId = Fixture.CreatedFulfillments.First().OrderId.Value;
+            long fulfillmentId = Fixture.CreatedFulfillments.First().Id.Value;
+            var @event = await Fixture.CreateFulfillmentEvent(orderId, fulfillmentId);
+
+            Assert.NotNull(@event);
+            Assert.True(@event.Id.HasValue);
+            Assert.Equal("confirmed", @event.Status);
+
+            await Fixture.FulfillmentEventService.DeleteAsync(orderId, fulfillmentId, @event.Id.Value);
         }
     }
 
     public class FulfillmentEvents_Tests_Fixture : IAsyncLifetime
     {
-        public FulfillmentEventService Service { get; } = new FulfillmentEventService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public FulfillmentEventService FulfillmentEventService { get; } = new FulfillmentEventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -40,7 +54,9 @@ namespace ShopifySharp.Tests
         /// </summary>
         public List<Order> CreatedOrders { get; } = new List<Order>();
 
-        public List<Fulfillment> Created { get; } = new List<Fulfillment>();
+        public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
+
+        public List<FulfillmentEvent> CreatedFulfillmentEvents { get; } = new List<FulfillmentEvent>();
 
         public async Task InitializeAsync()
         {
@@ -49,12 +65,13 @@ namespace ShopifySharp.Tests
 
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
-            var fulfillment = await Create(order.Id.Value);
+            var fulfillment = await CreateFulfillment(order.Id.Value);
+            await CreateFulfillmentEvent(order.Id.Value, fulfillment.Id.Value);
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in Created)
+            foreach (var obj in CreatedOrders)
             {
                 try
                 {
@@ -119,7 +136,7 @@ namespace ShopifySharp.Tests
             return obj;
         }
 
-        public async Task<Fulfillment> Create(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
+        public async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
         {
             Fulfillment fulfillment = new Fulfillment()
             {
@@ -131,9 +148,25 @@ namespace ShopifySharp.Tests
 
             fulfillment = await FulfillmentService.CreateAsync(orderId, fulfillment, false);
 
-            Created.Add(fulfillment);
+            CreatedFulfillments.Add(fulfillment);
 
             return fulfillment;
+        }
+
+        public async Task<FulfillmentEvent> CreateFulfillmentEvent(long orderId, long fulfillmentId)
+        {
+            var @event = new FulfillmentEvent()
+            {
+                OrderId = orderId,
+                FulfillmentId = fulfillmentId,
+                Status = "confirmed"
+            };
+
+            @event = await FulfillmentEventService.CreateAsync(orderId, fulfillmentId, @event);
+
+            CreatedFulfillmentEvents.Add(@event);
+
+            return @event;
         }
     }
 }
