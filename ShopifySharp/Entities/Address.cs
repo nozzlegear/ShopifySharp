@@ -70,6 +70,18 @@ namespace ShopifySharp
         public string LastName { get; set; }
 
         /// <summary>
+        /// The latitude. Auto-populated by Shopify on the order's Billing/Shipping address.
+        /// </summary>
+        [JsonProperty("latitude")]
+        public decimal? Latitude { get; set; }
+
+        /// <summary>
+        /// The longitude. Auto-populated by Shopify on the order's Billing/Shipping address.
+        /// </summary>
+        [JsonProperty("longitude")]
+        public decimal? Longitude { get; set; }
+
+        /// <summary>
         /// The name.
         /// </summary>
         [JsonProperty("name")]
