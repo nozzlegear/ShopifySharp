@@ -80,6 +80,12 @@ namespace ShopifySharp.Enums
         ReadPriceRules, 
         
         [EnumMember(Value = "write_price_rules")]
-        WritePriceRules
+        WritePriceRules,
+
+        [EnumMember(Value = "read_inventory")]
+        ReadInventory,
+
+        [EnumMember(Value = "write_inventory")]
+        WriteInventory
     }
 }
