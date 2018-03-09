@@ -86,6 +86,45 @@ namespace ShopifySharp.Enums
         ReadInventory,
 
         [EnumMember(Value = "write_inventory")]
-        WriteInventory
+        WriteInventory,
+
+        [EnumMember(Value = "read_product_listings")]
+        ReadProductListings,
+
+        [EnumMember(Value = "read_collection_listings")]
+        ReadCollectionListings,
+
+        [EnumMember(Value = "read_draft_orders")]
+        ReadDraftOrders,
+
+        [EnumMember(Value = "write_draft_orders")]
+        WriteDraftOrders,
+
+        [EnumMember(Value = "read_marketing_events")]
+        ReadMarketingEvents,
+
+        [EnumMember(Value = "write_marketing_events")]
+        WriteMarketingEvents,
+
+        [EnumMember(Value = "read_resource_feedbacks")]
+        ReadResourceFeedbacks,
+
+        [EnumMember(Value = "write_resource_feedbacks")]
+        WriteResourceFeedbacks,
+
+        [EnumMember(Value = "unauthenticated_read_collection_listings")]
+        UnauthenticatedReadCollectionListings,
+
+        [EnumMember(Value = "unauthenticated_read_product_listings")]
+        UnauthenticatedReadProductListings,
+
+        [EnumMember(Value = "unauthenticated_write_checkouts")]
+        UnauthenticatedWriteCheckouts,
+
+        [EnumMember(Value = "unauthenticated_write_customers")]
+        UnauthenticatedWriteCustomers,
+
+        [EnumMember(Value = "unauthenticated_read_content")]
+        UnauthenticatedReadContent
     }
 }
