@@ -309,7 +309,7 @@ namespace ShopifySharp
         /// <returns>The shop access token.</returns>
         public static async Task<string> Authorize(string code, string myShopifyUrl, string shopifyApiKey, string shopifySecretKey)
         {
-            return (await AuthorizeWithAuthorizationResult(code, myShopifyUrl, shopifyApiKey, shopifySecretKey)).AccessToken;
+            return (await AuthorizeWithResult(code, myShopifyUrl, shopifyApiKey, shopifySecretKey)).AccessToken;
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace ShopifySharp
         /// <param name="shopifyApiKey">Your app's public API key.</param>
         /// <param name="shopifySecretKey">Your app's secret key.</param>
         /// <returns>The authorization result.</returns>
-        public static async Task<AuthorizationResult> AuthorizeWithAuthorizationResult(string code, string myShopifyUrl, string shopifyApiKey, string shopifySecretKey)
+        public static async Task<AuthorizationResult> AuthorizeWithResult(string code, string myShopifyUrl, string shopifyApiKey, string shopifySecretKey)
         {
             var ub = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false))
             {
