@@ -343,7 +343,7 @@ namespace ShopifySharp
                 ShopifyService.CheckResponseExceptions(response, rawDataString);
 
                 var json = JToken.Parse(rawDataString);
-                return new AuthorizationResult(json.Value<string>("access_token"), json.Value<string>("scope").Split());
+                return new AuthorizationResult(json.Value<string>("access_token"), json.Value<string>("scope").Split(','));
             }
         }
     }
