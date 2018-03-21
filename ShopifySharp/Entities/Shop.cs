@@ -118,6 +118,12 @@ namespace ShopifySharp
         public string MoneyWithCurrencyFormat { get; set; }
 
         /// <summary>
+        /// Whether multi-location is enabled
+        /// </summary>
+        [JsonProperty("multi_location_enabled")]
+        public bool? MultiLocationEnabled { get; set; }
+
+        /// <summary>
         /// The shop's 'myshopify.com' domain.
         /// </summary>
         [JsonProperty("myshopify_domain")]
@@ -237,5 +243,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("setup_required")]
         public bool? SetupRequired { get; set; }
+
+        /// <summary>
+        /// The default unit of weight measurement 
+        /// </summary>
+        [JsonProperty("weight_unit")]
+        public string WeightUnit { get; set; }
     }
 }
