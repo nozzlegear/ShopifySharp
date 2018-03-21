@@ -32,13 +32,13 @@ namespace ShopifySharp.Filters
         /// Show orders imported after date.
         /// </summary>
         [JsonProperty("processed_at_min")]
-        public DateTime? ProcessedAtMin { get; set; }
+        public DateTimeOffset? ProcessedAtMin { get; set; }
 
         /// <summary>
         /// Show orders imported before date.
         /// </summary>
         [JsonProperty("processed_at_max")]
-        public DateTime? ProcessedAtMax { get; set; }
+        public DateTimeOffset? ProcessedAtMax { get; set; }
 
         /// <summary>
         /// Show orders attributed to a specific app. Valid values are the app ID to filter on (eg. 123) or a value of "current" to only show orders for the app currently consuming the API.
