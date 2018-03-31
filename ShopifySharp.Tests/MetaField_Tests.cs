@@ -8,12 +8,12 @@ using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "MetaField")]
-    public class MetaField_Tests : IClassFixture<MetaField_Tests_Fixture>
+    [Trait("Category", "Metafield")]
+    public class Metafield_Tests : IClassFixture<Metafield_Tests_Fixture>
     {
-        private MetaField_Tests_Fixture Fixture { get; }
+        private Metafield_Tests_Fixture Fixture { get; }
 
-        public MetaField_Tests(MetaField_Tests_Fixture fixture)
+        public Metafield_Tests(Metafield_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
@@ -202,11 +202,11 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class MetaField_Tests_Fixture : IAsyncLifetime
+    public class Metafield_Tests_Fixture : IAsyncLifetime
     {
-        public MetaFieldService Service { get; } = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public MetafieldService Service { get; } = new MetafieldService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public List<ShopifySharp.MetaField> Created { get; } = new List<ShopifySharp.MetaField>();
+        public List<ShopifySharp.Metafield> Created { get; } = new List<ShopifySharp.Metafield>();
 
         public string Namespace => "testing";
 
@@ -243,7 +243,7 @@ namespace ShopifySharp.Tests
                 {
                     if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                     {
-                        Console.WriteLine($"Failed to delete created MetaField with id {obj.Id.Value}. {ex.Message}");
+                        Console.WriteLine($"Failed to delete created Metafield with id {obj.Id.Value}. {ex.Message}");
                     }
                 }
             }
@@ -252,9 +252,9 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<MetaField> Create(bool skipAddToCreatedList = false)
+        public async Task<Metafield> Create(bool skipAddToCreatedList = false)
         {
-            var obj = await Service.CreateAsync(new MetaField()
+            var obj = await Service.CreateAsync(new Metafield()
             {
                 Namespace = Namespace,
                 Key = Guid.NewGuid().ToString().Substring(0, 25),
@@ -274,9 +274,9 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<MetaField> Create(long targetId, string resourceType, bool skipAddToCreatedList = false)
+        public async Task<Metafield> Create(long targetId, string resourceType, bool skipAddToCreatedList = false)
         {
-            var obj = await Service.CreateAsync(new MetaField()
+            var obj = await Service.CreateAsync(new Metafield()
             {
                 Namespace = Namespace,
                 Key = Guid.NewGuid().ToString().Substring(0, 25),
@@ -296,9 +296,9 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<MetaField> Create(long targetId, string resourceType, long parentTargetId, string parentResourceType, bool skipAddToCreatedList = false)
+        public async Task<Metafield> Create(long targetId, string resourceType, long parentTargetId, string parentResourceType, bool skipAddToCreatedList = false)
         {
-            var obj = await Service.CreateAsync(new MetaField()
+            var obj = await Service.CreateAsync(new Metafield()
             {
                 Namespace = Namespace,
                 Key = Guid.NewGuid().ToString().Substring(0, 25),

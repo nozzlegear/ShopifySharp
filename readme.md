@@ -1452,8 +1452,8 @@ await service.DeleteAsync(pageId);
 ### Creating a metafield
 
 ```cs
-var service = new MetaFieldService(myShopifyUrl, shopAccessToken);
-var metafield = new MetaField()
+var service = new MetafieldService(myShopifyUrl, shopAccessToken);
+var metafield = new Metafield()
 {
     Namespace = "myNamespace",
     Key = "myKey",
@@ -1469,29 +1469,29 @@ metafield = await service.CreateAsync(metafield, productId, "products");
 ### Counting metafields
 
 ```cs
-var service = new MetaFieldService(myShopifyUrl, shopAccessToken);
+var service = new MetafieldService(myShopifyUrl, shopAccessToken);
 var count = await service.CountAsync(productId, "products");
 ```
 
 ### Listing metafields
 
 ```cs
-var service = new MetaFieldService(myShopifyUrl, shopAccessToken);
+var service = new MetafieldService(myShopifyUrl, shopAccessToken);
 var metafields = await service.ListAsync(productId, "products");
 ```
 
 ### Getting a metafield
 
 ```cs
-var service = new MetaFieldService(myShopifyUrl, shopAccessToken);
+var service = new MetafieldService(myShopifyUrl, shopAccessToken);
 var metafield = await service.GetAsync(metafieldId);
 ```
 
 ### Updating a metafield
 
 ```cs
-var service = new MetaFieldService(myShopifyUrl, shopAccessToken);
-var metafield = await service.UpdateAsync(metafieldId, new MetaField()
+var service = new MetafieldService(myShopifyUrl, shopAccessToken);
+var metafield = await service.UpdateAsync(metafieldId, new Metafield()
 {
     Value = "45"
 });
@@ -1500,7 +1500,7 @@ var metafield = await service.UpdateAsync(metafieldId, new MetaField()
 ### Deleting a metafield
 
 ```cs
-var service = new MetaFieldService(myShopifyUrl, shopAccessToken);
+var service = new MetafieldService(myShopifyUrl, shopAccessToken);
 await service.DeleteAsync(metafieldId);
 ```
 
@@ -1573,9 +1573,9 @@ Product Images represent the various different images for a product. All product
 var service = new ProductImageService(myShopifyUrl, shopAccessToken);
 var image = await service.CreateAsync(productId, new ProductImage()
 {
-    Metafields = new List<MetaField>()
+    Metafields = new List<Metafield>()
     {
-        new MetaField()
+        new Metafield()
         {
             Key = "alt",
             Value = "new alt tag content",

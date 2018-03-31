@@ -60,8 +60,8 @@ namespace ShopifySharp
         /// Creates a new blog.
         /// </summary>
         /// <param name="blog">The blog being created. Id should be null.</param>
-        /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
-        public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
+        /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetafieldService"/>.</param>
+        public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<Metafield> metafields = null)
         {
             var request = PrepareRequest("blogs.json");
             var body = blog.ToDictionary();
@@ -84,8 +84,8 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">Id of the object being updated.</param>
         /// <param name="blog">The updated blog.</param>
-        /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
-        public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<MetaField> metafields = null)
+        /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetafieldService"/>.</param>
+        public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<Metafield> metafields = null)
         {
             var request = PrepareRequest($"blogs/{blogId}.json");
             var body = blog.ToDictionary();
