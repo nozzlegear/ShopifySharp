@@ -3,7 +3,7 @@ using System;
 
 namespace ShopifySharp
 {
-    public class MetaField : ShopifyObject
+    public class Metafield : ShopifyObject
     {
         /// <summary>
         /// The date and time when the metafield was created.
