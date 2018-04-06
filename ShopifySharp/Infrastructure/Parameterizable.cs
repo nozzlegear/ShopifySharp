@@ -60,6 +60,11 @@ namespace ShopifySharp
         /// <returns>The new parameter.</returns>
         public virtual KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
+            if (value is IEnumerable<long>)
+            {
+                return new KeyValuePair<string, object>(propName, string.Join(",", value as IEnumerable<long>));
+            }
+
             Type valueType = value.GetType();
 
             if (valueType.GetTypeInfo().IsEnum)
