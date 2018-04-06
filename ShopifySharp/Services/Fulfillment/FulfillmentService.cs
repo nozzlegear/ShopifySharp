@@ -103,12 +103,16 @@ namespace ShopifySharp
         /// <param name="">Id of the object being updated.</param>
         /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
         /// <returns>The updated <see cref="Fulfillment"/>.</returns>
-        public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment)
+        public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment, bool notifyCustomer=false)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json");
+
+            var body = fulfillment.ToDictionary();
+            body.Add("notify_customer", notifyCustomer);
+
             var content = new JsonContent(new
             {
-                fulfillment = fulfillment
+                fulfillment = body
             });
 
             return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, content, "fulfillment");
