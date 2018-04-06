@@ -113,6 +113,8 @@ namespace ShopifySharp
                 msg.Headers.Add("X-Shopify-Access-Token", _AccessToken);
             }
 
+            msg.Headers.Add("Accept", "application/json");
+
             return msg;
         }
 
