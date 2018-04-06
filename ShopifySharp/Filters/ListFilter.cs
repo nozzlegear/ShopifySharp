@@ -40,25 +40,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("order")]
         public string Order { get; set; }
-
-        /// <summary>
-        /// Parameterizes this class, with special handling for <see cref="Ids"/>.
-        /// </summary>
-        /// <param name="propName">The name of the property. Will match the property's <see cref="JsonPropertyAttribute"/> name —
-        /// rather than the real property name — where applicable. Use <paramref name="property"/>.Name to get the real name.</param>
-        /// <param name="value">The property's value.</param>
-        /// <param name="property">The property itself.</param>
-        /// <returns>The new parameter.</returns>
-        public override KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
-        {
-            if (propName == "ids" || propName == "Ids")
-            {
-                var param = new KeyValuePair<string, object>(propName, string.Join(",", value as IEnumerable<long>));
-
-                return param;
-            }
-
-            return base.ToSingleParameter(propName, value, property);
-        }
     }
 }

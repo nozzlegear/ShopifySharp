@@ -51,6 +51,12 @@ namespace ShopifySharp
         public string FulfillmentService { get; set; }
 
         /// <summary>
+        /// The unique identifier for the inventory item, which is used in the Inventory API to query for inventory information.
+        /// </summary>
+        [JsonProperty("inventory_item_id")]
+        public long? InventoryItemId { get; set; }
+
+        /// <summary>
         /// Specifies whether or not Shopify tracks the number of items in stock for this product variant. Known values are 'blank' and 'shopify'.
         /// </summary>
         [JsonProperty("inventory_management")]
@@ -120,6 +126,7 @@ namespace ShopifySharp
         /// The number of items in stock for this product variant.
         /// </summary>
         [JsonProperty("inventory_quantity")]
+        [Obsolete("Use the Inventory Level endpoint instead")]
         public int? InventoryQuantity { get; set; }
 
         /// <summary>
@@ -127,6 +134,7 @@ namespace ShopifySharp
         /// This should be sent to avoid a race condition when the item being adjusted is simultaneously sold online.
         /// </summary>
         [JsonProperty("old_inventory_quantity")]
+        [Obsolete("Use the Inventory Level endpoint instead")]
         public int? OldInventoryQuantity { get; set; }
 
         /// <summary>
@@ -134,6 +142,7 @@ namespace ShopifySharp
         /// If an adjustment value is sent it will take priority.
         /// </summary>
         [JsonProperty("inventory_quantity_adjustment")]
+        [Obsolete("Use the Inventory Level endpoint instead")]
         public int? InventoryQuantityAdjustment { get; set; }
 
         /// <summary>
