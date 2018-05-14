@@ -88,7 +88,6 @@ namespace ShopifySharp
             {
                 smart_collection = collection
             });
-
             return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
         }
 
@@ -96,16 +95,17 @@ namespace ShopifySharp
         /// Updates the order of products when a SmartCollection's sort-by method is set to "manual".
         /// </summary>
         /// <param name="smartCollectionId">Id of the object being updated.</param>
+        /// <param name="sortOrder">The order in which products in the smart collection appear. Note that specifying productIds parameter will have no effect unless the sort order is "manual"</param>
         /// <param name="productIds">An array of product ids sorted in the order you want them to appear in.</param>
-        public virtual async Task<SmartCollection> UpdateProductOrderAsync(long smartCollectionId, params long[] productIds)
+        public virtual async Task UpdateProductOrderAsync(long smartCollectionId, string sortOrder = null, params long[] productIds)
         {
             var req = PrepareRequest($"smart_collections/{smartCollectionId}/order.json");
             var content = new JsonContent(new
             {
+                sort_order = sortOrder,
                 products = productIds
             });
-
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            await ExecuteRequestAsync(req, HttpMethod.Put, content);
         }
 
         /// <summary>
