@@ -62,5 +62,8 @@ namespace ShopifySharp
 
         [JsonProperty("width")]
         public int? Width { get; set; }
+
+        [JsonProperty("alt")]
+        public string Alt { get; set; }
     }
 }
