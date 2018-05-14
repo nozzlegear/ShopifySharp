@@ -148,8 +148,7 @@ namespace ShopifySharp.Tests
 
             //check
             Assert.Equal("manual", collection.SortOrder);
-            int index = 0;
-            collects.ForEach(c => Assert.Equal(productIds[index++], c.ProductId));
+            collects.ForEach(c => Assert.True(productIds.Contains(c.ProductId.Value)));
 
             //delete the objects
             await Fixture.Service.DeleteAsync(collection.Id.Value);
