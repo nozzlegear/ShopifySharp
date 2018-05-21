@@ -10,9 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Update="env.yml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="env.yml.secret">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
