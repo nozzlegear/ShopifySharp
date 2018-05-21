@@ -128,8 +128,12 @@ namespace ShopifySharp
         public virtual async Task<DraftOrder> SendInvoice(long id)
         {
             var req = PrepareRequest($"draft_orders/{id}/send_invoice.json");
+            var content = new JsonContent(new 
+            {
+                draft_order_invoice = new {}
+            });
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order");
+            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order_invoice");
         }
     }
 }
