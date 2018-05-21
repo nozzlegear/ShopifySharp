@@ -8,11 +8,11 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Fulfillment")]
-    public class Fulfillent_Tests : IClassFixture<Fulfillent_Tests_Fixture>
+    public class Fulfillment_Tests : IClassFixture<Fulfillent_Tests_Fixture>
     {
         private Fulfillent_Tests_Fixture Fixture { get; }
 
-        public Fulfillent_Tests(Fulfillent_Tests_Fixture fixture)
+        public Fulfillment_Tests(Fulfillent_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }

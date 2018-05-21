@@ -22,6 +22,12 @@ namespace ShopifySharp
         public string Code { get; set; }
 
         /// <summary>
+        /// The phone number used for the shipment.
+        /// </summary>
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        /// <summary>
         /// The price of this shipping method.
         /// </summary>
         [JsonProperty("price")]

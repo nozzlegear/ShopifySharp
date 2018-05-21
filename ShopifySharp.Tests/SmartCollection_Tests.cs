@@ -97,7 +97,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(newValue, updated.Title);
         }
 
-        [Fact]
+        [Fact(Skip = "This test has a bit of a time delay that ShopifySharp isn't equipped to handle yet (Retry-After header).")]
         public async Task Updates_SmartCollection_Products_Order()
         {
             //generate a unique tag

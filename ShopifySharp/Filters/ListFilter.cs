@@ -40,5 +40,13 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("order")]
         public string Order { get; set; }
+
+        /// <summary>
+        /// An optional field name to include fulfillment services from entire store.
+        /// Any valid values are null and "all"
+        /// </summary>
+        [JsonProperty("scope")]
+        public string Scope { get; set; }
+
     }
 }
