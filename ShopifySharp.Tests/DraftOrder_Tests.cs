@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "DraftOrder"), Trait("Category", "focus")]
+    [Trait("Category", "DraftOrder")]
     public class DraftOrder_Tests : IClassFixture<DraftOrder_Tests_Fixture>
     {
         private DraftOrder_Tests_Fixture Fixture { get; }
