@@ -115,7 +115,7 @@ namespace ShopifySharp.Tests
             string to = "joshua@example.com";
             string subject = "Your draft order is ready";
             string message = "Pay pls";
-            var result = await Fixture.Service.SendInvoice(created.Id.Value, new DraftOrderInvoice()
+            var result = await Fixture.Service.SendInvoiceAsync(created.Id.Value, new DraftOrderInvoice()
             {
                 To = to, 
                 Subject = subject,

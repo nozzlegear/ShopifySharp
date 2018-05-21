@@ -125,7 +125,7 @@ namespace ShopifySharp
         /// Send an invoice for the draft order.
         /// </summary>
         /// <param name="id">The id of the item with the invoice.</param>
-        public virtual async Task<DraftOrderInvoice> SendInvoice(long id, DraftOrderInvoice customInvoice = null)
+        public virtual async Task<DraftOrderInvoice> SendInvoiceAsync(long id, DraftOrderInvoice customInvoice = null)
         {
             var req = PrepareRequest($"draft_orders/{id}/send_invoice.json");
             // If the custom invoice is not null, use that as the body. Else use an empty dictionary object which will send the default invoice
