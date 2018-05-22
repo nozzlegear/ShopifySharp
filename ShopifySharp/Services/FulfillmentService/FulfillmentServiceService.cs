@@ -22,15 +22,15 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of your app's FulfillmentServices.
         /// </summary>
-        /// <param name="options">Options for filtering the list. Set scope to all to retrieve all of the store's fulfillment services</param>
+        /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
-        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(ListFilter filter = null)
+        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null)
         {
             var req = PrepareRequest($"fulfillment_services.json");
 
-            if (filter != null)
+            if (!string.IsNullOrEmpty(scope))
             {
-                req.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.Add("scope", scope);
             }
 
             return await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");

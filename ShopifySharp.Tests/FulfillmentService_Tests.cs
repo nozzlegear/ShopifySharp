@@ -27,13 +27,9 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
-        public async Task Lists_FulfillmentServices_With_A_Filter()
+        public async Task Lists_All_FulfillmentServices()
         {
-            var fromDate = DateTime.UtcNow.AddDays(-2);
-            var list = await Fixture.Service.ListAsync(new ListFilter()
-            {
-                Scope = "all"
-            });
+            var list = await Fixture.Service.ListAsync("all");
 
             Assert.True(list.Count() > 0);
         }
