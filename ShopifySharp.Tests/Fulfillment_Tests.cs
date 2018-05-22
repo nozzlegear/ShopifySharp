@@ -8,11 +8,11 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Fulfillment")]
-    public class Fulfillment_Tests : IClassFixture<Fulfillent_Tests_Fixture>
+    public class Fulfillment_Tests : IClassFixture<Fulfillment_Tests_Fixture>
     {
-        private Fulfillent_Tests_Fixture Fixture { get; }
+        private Fulfillment_Tests_Fixture Fixture { get; }
 
-        public Fulfillment_Tests(Fulfillent_Tests_Fixture fixture)
+        public Fulfillment_Tests(Fulfillment_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
@@ -160,7 +160,7 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class Fulfillent_Tests_Fixture : IAsyncLifetime
+    public class Fulfillment_Tests_Fixture : IAsyncLifetime
     {
         public FulfillmentService Service { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
