@@ -141,5 +141,19 @@ namespace ShopifySharp
 
             return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
         }
+
+
+        /// <summary>
+        /// Opens a pending fulfillment with the given id.
+        /// </summary>
+        /// <param name="orderId">The order id to which the fulfillments belong.</param>
+        /// <param name="fulfillmentId">The fulfillment's id.</param>
+        public virtual async Task<Fulfillment> OpenAsync(long orderId, long fulfillmentId)
+        {
+            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/open.json");
+
+            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+        }
+
     }
 }
