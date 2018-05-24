@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// This property is undocumented by Shopify. It appears to be the shipping address of the order
         /// </summary>
         [JsonProperty("destination")]
-        public Destination Destination { get; set; }
+        public Address Destination { get; set; }
 
         /// <summary>
         /// The name of the shipping company.
