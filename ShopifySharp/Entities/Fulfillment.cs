@@ -52,7 +52,7 @@ namespace ShopifySharp
         /// sent when the fulfillment is created or updated. The default value is false for fulfillments
         /// on any orders created initially through the API. For all other orders, the default value is true.
         /// </summary>
-        [JsonProperty("email")]
+        [JsonProperty("notify_customer")]
         public bool? NotifyCustomer { get; set; }
 
 
