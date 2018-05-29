@@ -40,6 +40,12 @@ namespace ShopifySharp
         [JsonProperty("status")]
         public string Status { get; set; }
 
+        /// <summary>
+        /// The unique identifier of the location that the fulfillment should be processed for.
+        /// </summary>
+        [JsonProperty("location_id")]
+        public string LocationId { get; set; }
+
 
         /// <summary>
         /// This property is undocumented by Shopify. It appears to be the customer's email address
