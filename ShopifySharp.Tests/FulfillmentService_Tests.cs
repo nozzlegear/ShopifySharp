@@ -53,7 +53,7 @@ namespace ShopifySharp.Tests
             Assert.True(created.Id.HasValue);
         }
 
-        
+
         [Fact]
         public async Task Updates_FulfillmentServices()
         {
@@ -104,11 +104,9 @@ namespace ShopifySharp.Tests
             }
         }
 
-        public async Task<FulfillmentServiceEntity> Create()
+        public async Task<FulfillmentServiceEntity> Create(bool skipAddToCreateList = false)
         {
-            FulfillmentServiceEntity fulfillmentServiceEntity;
-
-            fulfillmentServiceEntity = new FulfillmentServiceEntity()
+            FulfillmentServiceEntity fulfillmentServiceEntity = await Service.CreateAsync(new FulfillmentServiceEntity()
             {
                 Name = $"MarsFulfillment{DateTime.Now.Ticks}",
                 CallbackUrl = "http://google.com",
@@ -116,11 +114,9 @@ namespace ShopifySharp.Tests
                 TrackingSupport = false,
                 RequiresShippingMethod = false,
                 Format = "json",
-            };
+            });
 
-            fulfillmentServiceEntity = await Service.CreateAsync(fulfillmentServiceEntity);
-
-            Created.Add(fulfillmentServiceEntity);
+            if (!skipAddToCreateList) Created.Add(fulfillmentServiceEntity);
 
             return fulfillmentServiceEntity;
         }
