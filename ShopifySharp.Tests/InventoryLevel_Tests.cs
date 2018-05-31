@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests
                 invLevel.Available = newQty = newRandom.Next(5, 55);
             }
 
-            var updated = await Fixture.Service.UpdateAsync(invLevel, true);
+            var updated = await Fixture.Service.SetAsync(invLevel, true);
 
             Assert.Equal(newQty, updated.Available);
             Assert.NotEqual(currQty, updated.Available);
@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests
             //When switching from the default location to a Fulfillment location, the default InventoryLevel is deleted
             var created = await Fixture.Create();
             //Set inventory back to original location because a location is required
-            await Fixture.Service.UpdateAsync(currentInvLevel, true);
+            await Fixture.Service.SetAsync(currentInvLevel, true);
             bool threw = false;
             try
             {
@@ -115,7 +115,7 @@ namespace ShopifySharp.Tests
         public async Task<InventoryLevel> Create(bool skipAddToCreateList = false)
         {
             var locId = (await FulfillmentServiceServTest.Create(skipAddToCreateList)).LocationId.Value;
-            return await Service.CreateAsync(InventoryItemId, locId, true);
+            return await Service.ConnectAsync(InventoryItemId, locId, true);
         }
     }
 }

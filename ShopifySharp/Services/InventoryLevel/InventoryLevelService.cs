@@ -50,16 +50,12 @@ namespace ShopifySharp
         /// <param name="updatedInventoryLevel">The updated <see cref="InventoryLevel"/></param>
         /// <param name="disconnectIfNecessary">Whether inventory for any previously connected locations will be set to 0 and the locations disconnected. This property is ignored when no fulfillment service is involved.</param>
         /// <returns>The updated <see cref="InventoryLevel"/></returns>
-        public virtual async Task<InventoryLevel> UpdateAsync(InventoryLevel updatedInventoryLevel, bool disconnectIfNecessary = false)
+        public virtual async Task<InventoryLevel> SetAsync(InventoryLevel updatedInventoryLevel, bool disconnectIfNecessary = false)
         {
             var req = PrepareRequest($"inventory_levels/set.json");
-            JsonContent content = new JsonContent(new
-            {
-                location_id = updatedInventoryLevel.LocationId,
-                inventory_item_id = updatedInventoryLevel.InventoryItemId,
-                available = updatedInventoryLevel.Available,
-                disconnect_if_necessary = disconnectIfNecessary
-            });
+            var body = updatedInventoryLevel.ToDictionary();
+            body.Add("disconnect_if_necessary", disconnectIfNecessary);
+            JsonContent content = new JsonContent(body);
             return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
         }
 
@@ -70,7 +66,7 @@ namespace ShopifySharp
         /// <param name="locationId">The ID of the location that the inventory level belongs to</param>
         /// <param name="relocateIfNecessary">Whether inventory for any previously connected locations will be relocated. This property is ignored when no fulfillment service location is involved</param>
         /// <returns>The new <see cref="InventoryLevel"/>.</returns>
-        public virtual async Task<InventoryLevel> CreateAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false)
+        public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false)
         {
             var req = PrepareRequest($"inventory_levels/connect.json");
             JsonContent content = new JsonContent(new
