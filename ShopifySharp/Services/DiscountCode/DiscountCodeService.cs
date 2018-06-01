@@ -50,7 +50,7 @@ namespace ShopifySharp
         /// Creates a new discount code.
         /// </summary>
         /// <param name="priceRuleId">Id of an existing price rule.</param>
-        public virtual async Task<PriceRule> CreateAsync(long priceRuleId, PriceRuleDiscountCode code)
+        public virtual async Task<PriceRuleDiscountCode> CreateAsync(long priceRuleId, PriceRuleDiscountCode code)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
             var body = code.ToDictionary();
@@ -60,7 +60,7 @@ namespace ShopifySharp
                 discount_code = body
             });
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "discount_code");
+            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code");
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="priceRuleId">The Id of the Price Rule being updated.</param>
         /// <param name="code">The code being updated.</param>
-        public virtual async Task<PriceRule> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code)
+        public virtual async Task<PriceRuleDiscountCode> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{code.Id.Value}.json");
             var content = new JsonContent(new
@@ -76,7 +76,7 @@ namespace ShopifySharp
                 discount_code = code
             });
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "discount_code");
+            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code");
         }
 
         /// <summary>
