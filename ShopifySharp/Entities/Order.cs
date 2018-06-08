@@ -105,6 +105,12 @@ namespace ShopifySharp
         public IEnumerable<DiscountCode> DiscountCodes { get; set; }
 
         /// <summary>
+        /// An ordered list of amounts allocated by discount applications. Each discount allocation is associated to a particular discount application.
+        /// </summary>
+        [JsonProperty("discount_applications")]
+        public IEnumerable<DiscountApplication> DiscountApplications { get; set; }
+
+        /// <summary>
         /// The order's email address. Note: On and after 2015-11-03, you should be using <see cref="ContactEmail"/> to refer to the customer's email address.
         /// Between 2015-11-03 and 2015-12-03, updates to an order's email will also update the customer's email. This is temporary so apps can be migrated over to
         /// doing customer updates rather than order updates to change the contact email. After 2015-12-03, updating updating an order's email will no longer update
@@ -290,6 +296,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_line_items_price")]
         public decimal? TotalLineItemsPrice { get; set; }
+
+        /// <summary>
+        /// The sum of all the tips in the order.
+        /// </summary>
+        [JsonProperty("total_tip_received")]
+        public decimal? TotalTipReceived { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order, with taxes and discounts included (must be positive).

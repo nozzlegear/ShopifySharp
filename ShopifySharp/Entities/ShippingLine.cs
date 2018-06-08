@@ -40,6 +40,12 @@ namespace ShopifySharp
         public decimal? DiscountedPrice { get; set; }
 
         /// <summary>
+        /// An ordered list of amounts allocated by discount applications. Each discount allocation is associated to a particular discount application.
+        /// </summary>
+        [JsonProperty("discount_allocations")]
+        public IEnumerable<DiscountAllocation> DiscountAllocations { get; set; }
+
+        /// <summary>
         /// The source of the shipping method.
         /// </summary>
         [JsonProperty("source")]
