@@ -120,6 +120,12 @@ namespace ShopifySharp
         public decimal? TotalDiscount { get; set; }
 
         /// <summary>
+        /// An ordered list of amounts allocated by discount applications. Each discount allocation is associated to a particular discount application.
+        /// </summary>
+        [JsonProperty("discount_allocations")]
+        public IEnumerable<DiscountAllocation> DiscountAllocations { get; set; }
+
+        /// <summary>
         /// An array of custom information for an item that has been added to the cart.
         /// Often used to provide product customization options.
         /// An array of <see cref="TaxLine"/> objects, each of which details the taxes applicable to this <see cref="LineItem"/>.
