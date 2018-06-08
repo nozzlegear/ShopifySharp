@@ -114,6 +114,18 @@ namespace ShopifySharp
         public IEnumerable<TaxLine> TaxLines { get; set; }
 
         /// <summary>
+        /// The payment gateway used to tender the tip, such as shopify_payments. Present only on tips.
+        /// </summary>
+        [JsonProperty("tip_payment_gateway")]
+        public string TipPaymentGateway { get; set; }
+
+        /// <summary>
+        /// The payment method used to tender the tip, such as Visa. Present only on tips.
+        /// </summary>
+        [JsonProperty("tip_payment_method")]
+        public string TipPaymentMethod { get; set; }
+
+        /// <summary>
         /// The total discount amount applied to this line item. This value is not subtracted in the line item price.
         /// </summary>
         [JsonProperty("total_discount")]

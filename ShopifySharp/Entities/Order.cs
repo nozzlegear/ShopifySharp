@@ -298,6 +298,12 @@ namespace ShopifySharp
         public decimal? TotalLineItemsPrice { get; set; }
 
         /// <summary>
+        /// The sum of all the tips in the order.
+        /// </summary>
+        [JsonProperty("total_tip_received")]
+        public decimal? TotalTipReceived { get; set; }
+
+        /// <summary>
         /// The sum of all the prices of all the items in the order, with taxes and discounts included (must be positive).
         /// </summary>
         [JsonProperty("total_price")]
