@@ -78,11 +78,10 @@ namespace ShopifySharp.Tests
         public async Task Updates_ProductImages()
         {
             var created = await Fixture.Create();
-            // API seems to refuse to set a position higher than 5. 
-            int position = created.Position >= 5 ? 4 : created.Position.Value + 1;
+            var newAlt = $"ShopifySharp test {Guid.NewGuid()}";
             long id = created.Id.Value;
-
-            created.Position = position;
+            
+            created.Alt = newAlt;       
             created.Id = null;
 
             var updated = await Fixture.Service.UpdateAsync(created.ProductId.Value, id, created);
@@ -90,7 +89,7 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(position, updated.Position);
+            Assert.Equal(newAlt, updated.Alt);
         }
     }
 

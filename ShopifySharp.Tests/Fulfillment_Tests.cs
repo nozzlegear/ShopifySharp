@@ -8,11 +8,11 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "Fulfillment")]
-    public class Fulfillent_Tests : IClassFixture<Fulfillent_Tests_Fixture>
+    public class Fulfillment_Tests : IClassFixture<Fulfillment_Tests_Fixture>
     {
-        private Fulfillent_Tests_Fixture Fixture { get; }
+        private Fulfillment_Tests_Fixture Fixture { get; }
 
-        public Fulfillent_Tests(Fulfillent_Tests_Fixture fixture)
+        public Fulfillment_Tests(Fulfillment_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
@@ -129,7 +129,17 @@ namespace ShopifySharp.Tests
             Assert.Equal(company, updated.TrackingCompany);
         }
 
-        [Fact(Skip = "Can't complete or cancel a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
+        [Fact(Skip = "Can't complete/cancel/open a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
+        public async Task Opens_Fulfillments()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value);
+            var opened = await Fixture.Service.OpenAsync(order.Id.Value, created.Id.Value);
+
+            Assert.Equal("open", opened.Status);
+        }
+
+        [Fact(Skip = "Can't complete/cancel/open a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
         public async Task Cancels_Fulfillments()
         {
             var order = await Fixture.CreateOrder();
@@ -139,7 +149,7 @@ namespace ShopifySharp.Tests
             Assert.Equal("cancelled", cancelled.Status);
         }
 
-        [Fact(Skip = "Can't complete or cancel a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
+        [Fact(Skip = "Can't complete/cancel/open a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
         public async Task Completes_Fulfillments()
         {
             var order = await Fixture.CreateOrder();
@@ -150,7 +160,7 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class Fulfillent_Tests_Fixture : IAsyncLifetime
+    public class Fulfillment_Tests_Fixture : IAsyncLifetime
     {
         public FulfillmentService Service { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 

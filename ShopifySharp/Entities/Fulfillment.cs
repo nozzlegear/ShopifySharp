@@ -41,6 +41,34 @@ namespace ShopifySharp
         public string Status { get; set; }
 
         /// <summary>
+        /// The unique identifier of the location that the fulfillment should be processed for.
+        /// </summary>
+        [JsonProperty("location_id")]
+        public string LocationId { get; set; }
+
+
+        /// <summary>
+        /// This property is undocumented by Shopify. It appears to be the customer's email address
+        /// </summary>
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// A flag indicating whether the customer should be notified. If set to true, an email will be
+        /// sent when the fulfillment is created or updated. The default value is false for fulfillments
+        /// on any orders created initially through the API. For all other orders, the default value is true.
+        /// </summary>
+        [JsonProperty("notify_customer")]
+        public bool? NotifyCustomer { get; set; }
+
+
+        /// <summary>
+        /// This property is undocumented by Shopify. It appears to be the shipping address of the order
+        /// </summary>
+        [JsonProperty("destination")]
+        public Address Destination { get; set; }
+
+        /// <summary>
         /// The name of the shipping company.
         /// </summary>
         [JsonProperty("tracking_company")]
@@ -77,6 +105,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// States the name of the inventory management service.
+        /// </summary>
+        [JsonProperty("variant_inventory_management")]
+        public string VariantInventoryManagement { get; set; }
 
         [JsonProperty("service")]
         /// <summary>

@@ -40,5 +40,6 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("order")]
         public string Order { get; set; }
+
     }
 }

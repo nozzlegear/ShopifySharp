@@ -113,6 +113,8 @@ namespace ShopifySharp
                 msg.Headers.Add("X-Shopify-Access-Token", _AccessToken);
             }
 
+            msg.Headers.Add("Accept", "application/json");
+
             return msg;
         }
 
@@ -207,8 +209,25 @@ namespace ShopifySharp
 
             var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
             string requestId = requestIdHeader.Value?.FirstOrDefault();
-            var errors = ParseErrorJson(rawResponse);
             var code = response.StatusCode;
+
+            // If the error was caused by reaching the API rate limit, throw a rate limit exception.
+            if ((int)code == 429 /* Too many requests */)
+            {
+                string listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
+                string rateLimitMessage = $"Error: {listMessage}";
+
+                // Shopify used to return JSON for rate limit exceptions, but then made an unannounced change and started returing HTML. 
+                // This dictionary is an attempt at preserving what was previously returned.
+                var rateLimitErrors = new Dictionary<string, IEnumerable<string>>()
+                {
+                    {"Error", new List<string>() {listMessage}}
+                };
+
+                throw new ShopifyRateLimitException(code, rateLimitErrors, rateLimitMessage, rawResponse, requestId);
+            }
+
+            var errors = ParseErrorJson(rawResponse);
             string message = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
 
             if (errors == null)
@@ -226,12 +245,6 @@ namespace ShopifySharp
                 var firstError = errors.First();
 
                 message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
-            }
-
-            // If the error was caused by reaching the API rate limit, throw a rate limit exception.
-            if ((int)code == 429 /* Too many requests */)
-            {
-                throw new ShopifyRateLimitException(code, errors, message, rawResponse, requestId);
             }
 
             throw new ShopifyException(code, errors, message, rawResponse, requestId);
