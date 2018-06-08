@@ -65,12 +65,16 @@ namespace ShopifySharp
         /// Creates a new <see cref="SmartCollection"/>.
         /// </summary>
         /// <param name="collection">A new <see cref="SmartCollection"/>. Id should be set to null.</param>
-        public virtual async Task<SmartCollection> CreateAsync(SmartCollection collection)
+        public virtual async Task<SmartCollection> CreateAsync(SmartCollection collection, bool published = true)
         {
             var req = PrepareRequest($"smart_collections.json");
+            var body = collection.ToDictionary();
+
+            body.Add("published", published);
+
             var content = new JsonContent(new
             {
-                smart_collection = collection
+                smart_collection = body
             });
 
             return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection");
@@ -88,6 +92,46 @@ namespace ShopifySharp
             {
                 smart_collection = collection
             });
+            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+        }
+
+        /// <summary>
+        /// Publishes an unpublished smart collection.
+        /// </summary>
+        /// <param name="smartCollectionId">The collection's id.</param>
+        public virtual async Task<SmartCollection> PublishAsync(long smartCollectionId)
+        {
+            var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
+            var body = new Dictionary<string, object>()
+            {
+                { "id", smartCollectionId },
+                { "published", true }
+            };
+            var content = new JsonContent(new 
+            {
+                smart_collection = body
+            });
+
+            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+        }
+
+        /// <summary>
+        /// Publishes an unpublished smart collection.
+        /// </summary>
+        /// <param name="smartCollectionId">The collection's id.</param>
+        public virtual async Task<SmartCollection> UnpublishAsync(long smartCollectionId)
+        {
+            var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
+            var body = new Dictionary<string, object>()
+            {
+                { "id", smartCollectionId },
+                { "published", false }
+            };
+            var content = new JsonContent(new 
+            {
+                smart_collection = body
+            });
+
             return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
         }
 
