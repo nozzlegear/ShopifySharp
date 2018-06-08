@@ -124,9 +124,9 @@ namespace ShopifySharp
 
         /// <summary>
         /// The number of items in stock for this product variant.
+        /// NOTE: After 2018-07-01, this field will be read-only in the Shopify API. Use the `InventoryLevelService` instead.
         /// </summary>
         [JsonProperty("inventory_quantity")]
-        [Obsolete("Use the Inventory Level endpoint instead")]
         public int? InventoryQuantity { get; set; }
 
         /// <summary>
