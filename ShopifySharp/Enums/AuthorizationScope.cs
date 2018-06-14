@@ -34,6 +34,9 @@ namespace ShopifySharp.Enums
         [EnumMember(Value = "read_orders")]
         ReadOrders,
 
+        [EnumMember( Value = "read_all_orders" )]
+        ReadAllOrders,
+
         [EnumMember(Value = "write_orders")]
         WriteOrders,
 
