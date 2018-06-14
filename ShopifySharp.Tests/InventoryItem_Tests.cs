@@ -33,6 +33,20 @@ namespace ShopifySharp.Tests
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
         }
+
+        [Fact]
+        public async Task Updates_Item()
+        {
+            var created = await Fixture.Service.GetAsync( Fixture.Created.First().InventoryItemId.Value );
+            long id = created.Id.Value;
+            string sku = "Some Updated sku";
+
+            created.SKU = sku;
+
+            var updated = await Fixture.Service.UpdateAsync( id, created );
+
+            Assert.Equal( sku, updated.SKU );
+        }
     }
 
     public class InventoryItem_Tests_Fixture : IAsyncLifetime
