@@ -67,7 +67,7 @@ namespace ShopifySharp
                 Value = EncodeQuery(kvp.Value, false)
             })
                 .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
-                .OrderBy(kvp => kvp.Key)
+                .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
                 .Select(kvp => $"{kvp.Key}={kvp.Value}");
 
             return string.Join(joinWith, kvps);
