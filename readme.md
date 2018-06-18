@@ -153,6 +153,7 @@ These generous people have contributed their own hard work and time to improving
 - [BrianBarnard](https://github.com/BrianBarnard)
 - [Luke Vo](https://github.com/datvm)
 - [Josh](https://github.com/pianomanjh)
+- [yuvalsade](https://github.com/yuvalsade)
 
 Thank you!
 
