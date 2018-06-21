@@ -134,5 +134,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("verified_email")]
         public bool? VerifiedEmail { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="Customer"/>. Note: This is not naturally returned with a <see cref="Customer"/> response, as
+        /// Shopify will not return <see cref="Customer"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }

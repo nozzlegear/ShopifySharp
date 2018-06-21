@@ -76,5 +76,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="SmartCollection"/>. Note: This is not naturally returned with a <see cref="SmartCollection"/> response, as
+        /// Shopify will not return <see cref="SmartCollection"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }

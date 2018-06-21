@@ -78,5 +78,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("collects")]
         public IEnumerable<Collect> Collects { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="CustomCollection"/>. Note: This is not naturally returned with a <see cref="CustomCollection"/> response, as
+        /// Shopify will not return <see cref="CustomCollection"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }
