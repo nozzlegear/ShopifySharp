@@ -65,5 +65,13 @@ namespace ShopifySharp
 
         [JsonProperty("alt")]
         public string Alt { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="ProductImage"/>. Note: This is not naturally returned with a <see cref="ProductImage"/> response, as
+        /// Shopify will not return <see cref="ProductImage"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }
