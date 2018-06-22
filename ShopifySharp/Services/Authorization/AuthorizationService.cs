@@ -232,7 +232,7 @@ namespace ShopifySharp
                     {
                         var response = await client.SendAsync(msg);
 
-                        return response.Headers.Any(h => h.Key == "X-ShopId");
+                        return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
                     }
                     catch (HttpRequestException)
                     {
