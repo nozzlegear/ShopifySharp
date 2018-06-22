@@ -156,5 +156,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("status")]
         public string Status { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="DraftOrder"/>. Note: This is not naturally returned with a <see cref="DraftOrder"/> response, as
+        /// Shopify will not return <see cref="DraftOrder"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }
