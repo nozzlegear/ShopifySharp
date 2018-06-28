@@ -37,7 +37,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_SmartCollections()
         {
-            var created = await Fixture.Create(true);
+            var created = await Fixture.Create(true, true);
             bool threw = false;
 
             try
@@ -77,6 +77,21 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
             Assert.Equal(Fixture.Title, obj.Title);
             Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
+            Assert.NotNull(obj.PublishedAt);
+            Assert.NotNull(obj.PublishedScope);
+        }
+
+        [Fact]
+        public async Task Creates_Unpublished_SmartCollections()
+        {
+            var obj = await Fixture.Create(false);
+
+            Assert.NotNull(obj);
+            Assert.True(obj.Id.HasValue);
+            Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
+            Assert.Equal(Fixture.Title, obj.Title);
+            Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
+            Assert.Null(obj.PublishedAt);
         }
 
         [Fact]
@@ -95,6 +110,30 @@ namespace ShopifySharp.Tests
             created.Id = id;
 
             Assert.Equal(newValue, updated.Title);
+        }
+
+        [Fact]
+        public async Task Publishes_SmartCollections()
+        {
+            var created = await Fixture.Create(false);
+
+            Assert.Null(created.PublishedAt);
+
+            var updated = await Fixture.Service.PublishAsync(created.Id.Value);
+
+            Assert.NotNull(updated.PublishedAt);
+        }
+
+        [Fact]
+        public async Task Unpublishes_SmartCollections()
+        {
+            var created = await Fixture.Create(true);
+
+            Assert.NotNull(created.PublishedAt);
+
+            var updated = await Fixture.Service.UnpublishAsync(created.Id.Value);
+
+            Assert.Null(updated.PublishedAt);
         }
 
         [Fact(Skip = "This test has a bit of a time delay that ShopifySharp isn't equipped to handle yet (Retry-After header).")]
@@ -196,7 +235,7 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<SmartCollection> Create(bool skipAddToCreatedList = false)
+        public async Task<SmartCollection> Create(bool published = true, bool skipAddToCreatedList = false)
         {
             var obj = await Service.CreateAsync(new SmartCollection()
             {
@@ -212,7 +251,7 @@ namespace ShopifySharp.Tests
                         Relation = "less_than"
                     }
                 }
-            });
+            }, published);
 
             if (!skipAddToCreatedList)
             {

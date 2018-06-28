@@ -124,9 +124,9 @@ namespace ShopifySharp
 
         /// <summary>
         /// The number of items in stock for this product variant.
+        /// NOTE: After 2018-07-01, this field will be read-only in the Shopify API. Use the `InventoryLevelService` instead.
         /// </summary>
         [JsonProperty("inventory_quantity")]
-        [Obsolete("Use the Inventory Level endpoint instead")]
         public int? InventoryQuantity { get; set; }
 
         /// <summary>
@@ -162,5 +162,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("weight_unit")]
         public string WeightUnit { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="ProductVariant"/>. Note: This is not naturally returned with a <see cref="ProductVariant"/> response, as
+        /// Shopify will not return <see cref="ProductVariant"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }

@@ -105,5 +105,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("images")]
         public IEnumerable<ProductImage> Images { get; set; }
+
+        /// <summary>
+        /// Additional metadata about the <see cref="Product"/>. Note: This is not naturally returned with a <see cref="Product"/> response, as
+        /// Shopify will not return <see cref="Product"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
+        /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
+        /// </summary>
+        [JsonProperty("metafields")]
+        public IEnumerable<MetaField> Metafields { get; set; }
     }
 }

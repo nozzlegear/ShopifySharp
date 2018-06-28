@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
-    public class DiscountCode
+    public class DiscountCode : ShopifyObject
     {
         /// <summary>
         /// The amount of the discount.

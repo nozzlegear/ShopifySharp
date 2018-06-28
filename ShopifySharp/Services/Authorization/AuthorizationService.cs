@@ -47,9 +47,9 @@ namespace ShopifySharp
             {
                 return "";
             }
-
-            //Important: Replace % before replacing &. Else second replace will replace those %25s.
-            string output = (s.Replace("%", "%25").Replace("&", "%26")) ?? "";
+      
+            // use standard url decoding, to match ruby Rack::Utils.parse_query(query_string)
+            string output = Uri.UnescapeDataString(s);
 
             if (isKey)
             {
@@ -67,7 +67,7 @@ namespace ShopifySharp
                 Value = EncodeQuery(kvp.Value, false)
             })
                 .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
-                .OrderBy(kvp => kvp.Key)
+                .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
                 .Select(kvp => $"{kvp.Key}={kvp.Value}");
 
             return string.Join(joinWith, kvps);
@@ -232,7 +232,7 @@ namespace ShopifySharp
                     {
                         var response = await client.SendAsync(msg);
 
-                        return response.Headers.Any(h => h.Key == "X-ShopId");
+                        return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
                     }
                     catch (HttpRequestException)
                     {
