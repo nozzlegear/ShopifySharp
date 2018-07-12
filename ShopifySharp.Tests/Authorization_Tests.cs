@@ -28,6 +28,34 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public void Validates_Proxy_Requests_With_Dictionary_QueryString()
+        {
+            //Configure querystring
+            var qs = new Dictionary<string, string>()
+            {
+                {"shop", "stages-test-shop-2.myshopify.com"},
+                {"path_prefix", "/apps/stages-order-tracker"},
+                {"timestamp", "1459781841"},
+                {"signature", "239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a"},
+            };
+
+            bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void Validates_Proxy_Requests_With_Raw_QueryString()
+        {
+            //Configure querystring
+            var qs = "shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&signature=239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a";         
+
+            bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
         public void Validates_Web_Requests()
         {
             var qs = new Dictionary<string, StringValues>()

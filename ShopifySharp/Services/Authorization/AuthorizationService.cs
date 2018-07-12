@@ -166,6 +166,32 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
+        /// except that proxy requests use HMACSHA256 rather than MD5.
+        /// </summary>
+        /// <param name="querystring">A dictionary containing the keys and values from the request's querystring.</param>
+        /// <param name="shopifySecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
+        public static bool IsAuthenticProxyRequest(IDictionary<string, string> querystring, string shopifySecretKey)
+        {
+            var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
+
+            return IsAuthenticProxyRequest(qs, shopifySecretKey);
+        }
+
+        /// <summary>
+        /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
+        /// except that proxy requests use HMACSHA256 rather than MD5.
+        /// </summary>
+        /// <param name="querystring">The request's raw querystring.</param>
+        /// <param name="shopifySecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
+        public static bool IsAuthenticProxyRequest(string querystring, string shopifySecretKey)
+        {
+            return IsAuthenticProxyRequest(ParseRawQuerystring(querystring), shopifySecretKey);
+        }
+
+        /// <summary>
         /// Determines if an incoming webhook request is authentic.
         /// </summary>
         /// <param name="requestHeaders">The request's headers. Hint: use Request.Headers if you're calling this from an ASP.NET MVC controller.</param>
