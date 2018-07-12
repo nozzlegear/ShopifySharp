@@ -86,6 +86,13 @@ namespace ShopifySharp
         public IEnumerable<long> PrerequisiteSavedSearchIds { get; set; }
 
         /**
+        * A list of prerequisite customer ids. For the price rule to be applicable,
+        * the customer applying the price rule must be in the group of customers specified.
+        */
+        [JsonProperty("prerequisite_customer_ids")]
+        public IEnumerable<long> PrerequisiteCustomerIds { get; set; }
+
+        /**
         * A list of entitled product ids.Can be used in combination with entitled_variant_ids. entitled_product_ids can
         * only be used in conjunction with target_type set to line_itemif and target_selection set to entitled
         */
