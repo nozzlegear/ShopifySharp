@@ -12,6 +12,7 @@ using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 using System.Text.RegularExpressions;
+using System.Net.Http.Headers;
 
 namespace ShopifySharp
 {
@@ -230,6 +231,31 @@ namespace ShopifySharp
 
             //Compute a hash from the apiKey and the request body
             string hmacHeader = hmacHeaderValues.First();
+            HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+            string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
+
+            //Webhook is valid if computed hash matches the header hash
+            return hash == hmacHeader;
+        }
+
+        /// <summary>
+        /// Determines if an incoming webhook request is authentic.
+        /// </summary>
+        /// <param name="requestHeaders">The request's headers.</param>
+        /// <param name="requestBody">The body of the request.</param>
+        /// <param name="shopifySecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
+        public static bool IsAuthenticWebhook(HttpRequestHeaders requestHeaders, string requestBody, string shopifySecretKey)
+        {
+            var hmacHeaderValue = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
+
+            if (string.IsNullOrEmpty(hmacHeaderValue))
+            {
+                return false;
+            }
+
+            //Compute a hash from the apiKey and the request body
+            string hmacHeader = hmacHeaderValue;
             HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
             string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
 
