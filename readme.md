@@ -107,6 +107,7 @@ ShopifySharp currently supports the following Shopify APIs:
 - [Abandoned Checkouts](#abandoned-checkouts)
 - CustomerSavedSearch (docs not yet written)
 - [Draft Orders](#draft-orders)
+- [Access Scopes](#access-scopes)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -2354,6 +2355,17 @@ var invoice = await service.SendInvoiceAsync(new DraftOrderInvoice()
 var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
 bool paymentPending = false;
 var draftOrder = await service.CompleteAsync(orderId, paymentPending);
+```
+
+## Access Scopes
+
+The Access Scope API allows you to retrieve the permissions that a merchant has granted to an app, such as `read_orders` and `write_products`. The list of access scopes is retrieved based on the access token used for the request, and only returns those scopes associated with the token.
+
+### List Access Scopes
+
+```cs
+var service = new AccessScopeService(myShopifyUrl, shopAccessToken);
+var scopes = await service.ListAsync();
 ```
 
 # Handling Shopify's API rate limit
