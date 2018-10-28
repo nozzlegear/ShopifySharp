@@ -21,6 +21,12 @@ namespace ShopifySharp
         public bool? Tracked { get; set; }
 
         /// <summary>
+        /// The unit cost of the inventory item.
+        /// </summary>
+        [JsonProperty("cost")]
+        public decimal? Cost { get; set; }
+
+        /// <summary>
         /// The date and time when the product variant was created. The API returns this value in ISO 8601 format.
         /// </summary>
         [JsonProperty("created_at", DefaultValueHandling = DefaultValueHandling.Ignore)]
