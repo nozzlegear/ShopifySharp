@@ -40,12 +40,15 @@ namespace ShopifySharp.Tests
             var created = await Fixture.Service.GetAsync( Fixture.Created.First().InventoryItemId.Value );
             long id = created.Id.Value;
             string sku = "Some Updated sku";
+            decimal cost = 42.42m;
 
             created.SKU = sku;
+            created.Cost = cost;
 
             var updated = await Fixture.Service.UpdateAsync( id, created );
 
             Assert.Equal( sku, updated.SKU );
+            Assert.Equal(cost, updated.Cost);
         }
     }
 
