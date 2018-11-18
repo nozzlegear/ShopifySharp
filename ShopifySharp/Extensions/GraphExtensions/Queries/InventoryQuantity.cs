@@ -25,18 +25,9 @@ namespace ShopifySharp
             JToken response = await graphService.PostAsync(body);
 
             GraphKeyValuePair inventory = new GraphKeyValuePair();
-
-            if (response["productVariant"] != null)
-            {
-                if (response["productVariant"]["inventoryItem"] != null)
-                {
-                    if (response["productVariant"]["inventoryItem"]["inventoryLevel"] != null)
-                    {
-                        inventory.Value = (int?)response.SelectToken("productVariant.inventoryItem.inventoryLevel.available");
-                        inventory.Id = (string)response.SelectToken("productVariant.inventoryItem.inventoryLevel.id");
-                    }
-                }
-            }
+            
+            inventory.Value = (int?)response.SelectToken("productVariant.inventoryItem.inventoryLevel.available");
+            inventory.Id = (string)response.SelectToken("productVariant.inventoryItem.inventoryLevel.id");              
 
             return inventory;
         }
