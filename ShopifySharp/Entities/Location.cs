@@ -73,5 +73,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Whether this is a fulfillment service location. If true, then the location is a fulfillment service location. If false, then the location was created by the merchant and isn't tied to a fulfillment service.
+        /// </summary>
+        [JsonProperty("legacy")]
+        public bool? Legacy { get; set; }
     }
 }
