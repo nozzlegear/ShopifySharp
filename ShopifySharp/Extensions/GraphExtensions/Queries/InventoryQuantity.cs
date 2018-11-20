@@ -8,6 +8,13 @@ namespace ShopifySharp
 {
     public static partial class GraphExtensions
     {
+        /// <summary>
+        /// Get a single inventory quantity for a variant/location combination.
+        /// </summary>
+        /// <param name="graphService">The GraphService</param>
+        /// <param name="variantId">The normal (long) variant ID.</param>
+        /// <param name="locationId">The normal (long) location ID.</param>
+        /// <returns>The Graph Inventory Level ID and the integer inventory value.</returns>
         public static async Task<GraphKeyValuePair> InventoryQuantityGetAsync(this GraphService graphService, long variantId, long locationId)
         {
             string body = @"
