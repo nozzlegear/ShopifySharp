@@ -91,7 +91,7 @@ namespace ShopifySharp
 
             return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
         }
-        
+
         /// <summary>
         /// Creates a new <see cref="Customer"/> on the store.
         /// </summary>
@@ -103,13 +103,13 @@ namespace ShopifySharp
             {
                 throw new ArgumentException("Name property is required", nameof(customerSavedSearch));
             }
-            
+
             var req = PrepareRequest($"{RootResource}.json");
             var body = customerSavedSearch.ToDictionary();
 
             var content = new JsonContent(new
             {
-                customer = body
+                customer_saved_search = body
             });
 
             return ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Post, content, RootElement);
@@ -157,12 +157,12 @@ namespace ShopifySharp
             {
                 req.QueryParams.Add("query", query);
             }
-            
+
             if (filter != null)
             {
                 req.QueryParams.AddRange(filter.ToParameters());
             }
-            
+
             return ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
         }
     }
