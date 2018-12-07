@@ -99,6 +99,12 @@ namespace ShopifySharp
         public string CustomerLocale { get; set; }
 
         /// <summary>
+        /// The unique numeric identifier of the POS device used.
+        /// </summary>
+        [JsonProperty("device_id")]
+        public long? DeviceId { get; set; }
+
+        /// <summary>
         /// Applicable discount codes that can be applied to the order.
         /// </summary>
         [JsonProperty("discount_codes")]
