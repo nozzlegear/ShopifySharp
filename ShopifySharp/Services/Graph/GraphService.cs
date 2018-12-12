@@ -31,10 +31,35 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(string body)
         {
-            var req = PrepareRequest("api/graphql.json"); 
+            var req = PrepareRequest("api/graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, "application/graphql");
 
+            return await SendAsync(req, content);
+        }
+
+        /// <summary>
+        /// Executes a Graph API Call.
+        /// </summary>
+        /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
+        /// <returns>A JToken containing the data from the request.</returns>
+        public virtual async Task<JToken> PostAsync(JToken body)
+        {
+            var req = PrepareRequest("api/graphql.json");
+
+            var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+
+            return await SendAsync(req, content);
+        }
+
+        /// <summary>
+        /// Content agnostic way to send the request, regardless of Json or GraphQL.
+        /// </summary>
+        /// <param name="req">The RequestUri.</param>
+        /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
+        /// <returns>A JToken containing the data from the request.</returns>
+        private async Task<JToken> SendAsync(RequestUri req, HttpContent content)
+        {
             JToken response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
 
             await CheckForErrorsAsync(response);
