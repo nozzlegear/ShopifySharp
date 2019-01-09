@@ -60,6 +60,19 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Adjusts the given <see cref="InventoryLevel"/>.
+        /// </summary>
+        /// <param name="updatedInventoryLevel">The updated <see cref="InventoryLevel"/></param>
+        /// <returns>The updated <see cref="InventoryLevel"/></returns>
+        public virtual async Task<InventoryLevel> AdjustAsync(InventoryLevelAdjust adjustInventoryLevel)
+        {
+            var req = PrepareRequest($"inventory_levels/adjust.json");
+            var body = adjustInventoryLevel.ToDictionary();
+            JsonContent content = new JsonContent(body);
+            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+        }
+
+        /// <summary>
         /// Connect an inventory item to a location
         /// </summary>
         /// <param name="inventoryItemId">The ID of the inventory item</param>
