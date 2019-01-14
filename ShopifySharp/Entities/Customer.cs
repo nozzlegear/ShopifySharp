@@ -28,6 +28,12 @@ namespace ShopifySharp
         public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
+        /// Currency used for customer's last order
+        /// </summary>
+        [JsonProperty("currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
         /// The default address for the customer.
         /// </summary>
         [JsonProperty("default_address")]
