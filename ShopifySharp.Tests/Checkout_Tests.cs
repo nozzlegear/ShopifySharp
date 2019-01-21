@@ -10,7 +10,6 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Checkout")]
     public class Checkout_Tests
     {
-
         private CheckoutService _Service { get; } = new CheckoutService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         [Fact]
@@ -28,14 +27,14 @@ namespace ShopifySharp.Tests
 
             Assert.True(list.Count() >= 0);
             if (list.Count() > 0)
-            { 
-                foreach(Checkout ckout in list)
+            {
+                foreach (Checkout ckout in list)
                 {
                     Assert.NotNull(ckout.Token);
                     Assert.NotNull(ckout.CartToken);
                     Assert.NotNull(ckout.Email);
                     Assert.True(ckout.LineItems.Count() > 0);
-                    foreach(CheckoutLineItem ln in ckout.LineItems)
+                    foreach (CheckoutLineItem ln in ckout.LineItems)
                     {
                         Assert.NotNull(ln.SKU);
                         Assert.NotNull(ln.ProductId);
@@ -45,6 +44,42 @@ namespace ShopifySharp.Tests
                     Assert.NotNull(ckout.Name);
                 }
             }
+        }
+
+        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        public async Task Creates_Checkouts()
+        {
+            var checkout = await _Service.CreateAsync(new Checkout
+            {
+                Email = "joshua@nozzlegear.com"
+            });
+
+            Assert.NotNull(checkout);
+            Assert.Equal("joshua@nozzlegear.com", checkout.Email);
+        }
+
+        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        public async Task Completes_Checkouts()
+        {
+
+        }
+
+        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        public async Task Gets_Checkouts()
+        {
+
+        }
+
+        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        public async Task Updates_Checkouts()
+        {
+
+        }
+
+        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        public async Task Lists_Checkout_Shipping_Rates()
+        {
+
         }
     }
 }
