@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using System;
 
 namespace ShopifySharp
 {
@@ -24,6 +25,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all orders for the shop.</returns>
+        [Obsolete("This endpoint is an undocumented feature. Shopify may remove support for this endpoint at any time, without warning.")]
         public virtual async Task<int> CountAsync(CheckoutFilter filter = null)
         {
             var req = PrepareRequest("checkouts/count.json");
@@ -40,6 +42,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's abandoned carts.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("This endpoint is an undocumented feature. Shopify may remove support for this endpoint at any time, without warning.")]
         public virtual async Task<IEnumerable<Checkout>> ListAsync(CheckoutFilter options = null)
         {
             var req = PrepareRequest("checkouts.json");
