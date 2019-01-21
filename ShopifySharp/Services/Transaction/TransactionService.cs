@@ -35,13 +35,17 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="sinceId">Filters the results to after the specified id.</param>
         /// <returns>The list of transactions.</returns>
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, long? sinceId = null)
+        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, long? sinceId = null, bool? inShopCurrency = null)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions.json");
 
             if (sinceId.HasValue)
             {
                 req.QueryParams.Add("since_id", sinceId.Value);
+            }
+            if (inShopCurrency.HasValue)
+            {
+                req.QueryParams.Add("in_shop_currency", inShopCurrency.Value);
             }
 
             return await ExecuteRequestAsync<List<Transaction>>(req, HttpMethod.Get, rootElement: "transactions");
@@ -54,13 +58,17 @@ namespace ShopifySharp
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Transaction"/>.</returns>
-        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null)
+        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null, bool? inShopCurrency = null)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions/{transactionId}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
                 req.QueryParams.Add("fields", fields);
+            }
+            if (inShopCurrency.HasValue)
+            {
+                req.QueryParams.Add("in_shop_currency", inShopCurrency.Value);
             }
 
             return await ExecuteRequestAsync<Transaction>(req, HttpMethod.Get, rootElement: "transaction");
