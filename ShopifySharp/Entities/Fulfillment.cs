@@ -123,5 +123,8 @@ namespace ShopifySharp
         /// This property is undocumented by Shopify.
         /// </summary>
         public string ShipmentStatus { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }
