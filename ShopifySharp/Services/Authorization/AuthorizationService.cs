@@ -13,6 +13,7 @@ using ShopifySharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 using System.Text.RegularExpressions;
 using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace ShopifySharp
 {
@@ -281,19 +282,20 @@ namespace ShopifySharp
                 AllowAutoRedirect = false
             })
             using (var client = new HttpClient(handler))
+            using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
             {
-                using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
-                {
-                    try
-                    {
-                        var response = await client.SendAsync(msg);
+                var version = (typeof(AuthorizationService)).GetTypeInfo().Assembly.GetName().Version;
+                msg.Headers.Add("User-Agent", $"ShopifySharp v{version} (https://github.com/nozzlegear/shopifysharp)");
 
-                        return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
-                    }
-                    catch (HttpRequestException)
-                    {
-                        return false;
-                    }
+                try
+                {
+                    var response = await client.SendAsync(msg);
+
+                    return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
+                }
+                catch (HttpRequestException)
+                {
+                    return false;
                 }
             }
         }
