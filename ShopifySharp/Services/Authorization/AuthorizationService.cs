@@ -274,9 +274,13 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the URL is valid.</returns>
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
-            var uri = ShopifyService.BuildShopUri(url, true);
+            var uri = ShopifyService.BuildShopUri(url, false);
 
-            using (var client = new HttpClient())
+            using (var handler = new HttpClientHandler
+            {
+                AllowAutoRedirect = false
+            })
+            using (var client = new HttpClient(handler))
             {
                 using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
                 {
