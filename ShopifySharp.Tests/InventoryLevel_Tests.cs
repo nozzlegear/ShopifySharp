@@ -53,6 +53,32 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Adjust_InventoryLevel()
+        {
+            var availableAdjustment = 1;
+            var invLevel = (await Fixture.Service.ListAsync(new InventoryLevelFilter
+            {
+                InventoryItemIds = new long[] { Fixture.InventoryItemId }
+            })).First();
+
+            var adjustInventoryLevel = new InventoryLevelAdjust()
+            {
+                AvailableAdjustment = availableAdjustment,
+                InventoryItemId = invLevel.InventoryItemId,
+                LocationId = invLevel.LocationId
+            };
+
+            int newQty, currQty;
+            currQty = invLevel.Available ?? 0;
+            newQty = currQty + availableAdjustment;
+
+            var updated = await Fixture.Service.AdjustAsync(adjustInventoryLevel);
+
+            Assert.Equal(newQty, updated.Available);
+            Assert.NotEqual(currQty, updated.Available);
+        }
+
+        [Fact(Skip = "Test appears to be broken in mysterious ways, with Shopify returning a 500 internal server error")]
         public async Task Deletes_InventoryLevel()
         {
             var currentInvLevel = (await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { Fixture.InventoryItemId } })).First();

@@ -1,4 +1,5 @@
 # ShopifySharp: A .NET library for Shopify.
+
 ### Now with .NET Core support!
 
 [![NuGet](https://img.shields.io/nuget/v/ShopifySharp.svg?maxAge=3600)](https://www.nuget.org/packages/ShopifySharp/)
@@ -22,14 +23,14 @@ Building an app or integration for the Shopify store is hard work. There are a t
 
 You're going to be asking yourself all of these questions when you try to build an app for the Shopify store:
 
-- How can I charge my users when they use my app?
-- What in the world is an embedded app?
-- How should I be using Shopify's redirect URLs?
-- When should I be using a proxy page?
-- Am I dealing with webhooks the right way?
-- How can I let my user's actual customers interact with the app?
-- Can I add custom scripts to their website, and what can those scripts even do?
-- How the heck do I go about testing my app?
+-   How can I charge my users when they use my app?
+-   What in the world is an embedded app?
+-   How should I be using Shopify's redirect URLs?
+-   When should I be using a proxy page?
+-   Am I dealing with webhooks the right way?
+-   How can I let my user's actual customers interact with the app?
+-   Can I add custom scripts to their website, and what can those scripts even do?
+-   How the heck do I go about testing my app?
 
 It's difficult to find blog posts or tutorials about building Shopify apps, and downright impossible if you're trying to build them with C# and ASP.NET. Shopify's own partner blog puts a huge focus on designing themes over building real, functional apps, and their API docs only go so far if you don't know what you're looking for.
 
@@ -69,45 +70,46 @@ With that said, Shopify is constantly adding new APIs and altering old ones. I t
 
 ShopifySharp currently supports the following Shopify APIs:
 
-- [OAuth authentication](#authorization-and-authentication).
-- [Application charges (in-app purchases)](#one-time-application-charges)
-- [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
-- [Usage charges](#usage-charges)
-- [Shops](#shops)
-- [Customers](#customers)
-- [Orders](#orders)
-- [Products](#products)
-- [Webhooks](#webhooks)
-- [Script Tags](#script-tags)
-- [Assets](#assets)
-- [Themes](#themes)
-- [Redirects](#redirects)
-- [Collects](#collects)
-- [Fulfillments](#fulfillments)
-- Fulfillment Events (docs not yet written) (List/Get only. Create/Delete not implemented yet)
-- [Transactions](#transactions)
-- [Pages](#pages)
-- [Metafields](#metafields)
-- [Custom Collections](#custom-collections)
-- [Product Images](#product-images)
-- [Locations](#locations)
-- [Events](#events)
-- [Order Risks](#order-risks)
-- [Smart Collections](#smart-collections)
-- [Product Variants](#product-variants)
-- [Blogs](#blogs)
-- [Application Credits](#application-credits)
-- [Articles](#articles)
-- [Discounts](#discounts)
-- [Policies](#policies)
-- [ShippingZones](#shipping-zones)
-- [GiftCards](#gift-cards)
-- [Price Rules](#price-rules)
-- [User](#users)
-- [Abandoned Checkouts](#abandoned-checkouts)
-- CustomerSavedSearch (docs not yet written)
-- [Draft Orders](#draft-orders)
-- [Access Scopes](#access-scopes)
+-   [OAuth authentication](#authorization-and-authentication).
+-   [Application charges (in-app purchases)](#one-time-application-charges)
+-   [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
+-   [Usage charges](#usage-charges)
+-   [Shops](#shops)
+-   [Customers](#customers)
+-   [Orders](#orders)
+-   [Products](#products)
+-   [Webhooks](#webhooks)
+-   [Script Tags](#script-tags)
+-   [Assets](#assets)
+-   [Themes](#themes)
+-   [Redirects](#redirects)
+-   [Collects](#collects)
+-   [Fulfillments](#fulfillments)
+-   Fulfillment Events (docs not yet written) (List/Get only. Create/Delete not implemented yet)
+-   [Transactions](#transactions)
+-   [Pages](#pages)
+-   [Metafields](#metafields)
+-   [Custom Collections](#custom-collections)
+-   [Product Images](#product-images)
+-   [Locations](#locations)
+-   [Events](#events)
+-   [Order Risks](#order-risks)
+-   [Smart Collections](#smart-collections)
+-   [Product Variants](#product-variants)
+-   [Blogs](#blogs)
+-   [Application Credits](#application-credits)
+-   [Articles](#articles)
+-   [Discounts](#discounts)
+-   [Policies](#policies)
+-   [ShippingZones](#shipping-zones)
+-   [GiftCards](#gift-cards)
+-   [Price Rules](#price-rules)
+-   [User](#users)
+-   [Abandoned Checkouts](#abandoned-checkouts)
+-   CustomerSavedSearch (docs not yet written)
+-   [Draft Orders](#draft-orders)
+-   [Access Scopes](#access-scopes)
+-   [Checkouts](#checkouts)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -115,46 +117,46 @@ More functionality will be added each week until it reaches full parity with Sho
 
 The following APIs are not yet implemented by ShopifySharp, but I'm slowly working through the list to reach 100% API parity. APIs are implemented in random order (mostly based on how much I need them in my own apps). **Need one of these APIs right now?** Please open an issue or make a pull request! I'm happy to offer guidance or help with writing tests.
 
-| API | Notes |
-|-----|-------|
-| [CarrierService](https://help.shopify.com/api/reference/carrierservice) | |
-| [Comments](https://help.shopify.com/api/reference/comment) | |
-| [Country](https://help.shopify.com/api/reference/country) | |
+| API                                                                             | Notes                                                                                                                                     |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [CarrierService](https://help.shopify.com/api/reference/carrierservice)         |                                                                                                                                           |
+| [Comments](https://help.shopify.com/api/reference/comment)                      |                                                                                                                                           |
+| [Country](https://help.shopify.com/api/reference/country)                       |                                                                                                                                           |
 | [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
-| [Multipass](https://help.shopify.com/api/reference/multipass) | Requires Shopify Plus. |
-| [Province](https://help.shopify.com/api/reference/province) | |
-| [Refund](https://help.shopify.com/api/reference/refund) | |
+| [Multipass](https://help.shopify.com/api/reference/multipass)                   | Requires Shopify Plus.                                                                                                                    |
+| [Province](https://help.shopify.com/api/reference/province)                     |                                                                                                                                           |
+| [Refund](https://help.shopify.com/api/reference/refund)                         |                                                                                                                                           |
 
 ### Contributors
 
 These generous people have contributed their own hard work and time to improving ShopifySharp:
 
-- [Yitzchok](https://github.com/yitzchok)
-- [Shannan Finley](https://github.com/squallop)
-- [stepankobzey](https://github.com/stepankobzey)
-- [Cathy Pank](https://github.com/Panksy)
-- [mooglegiant](https://github.com/mooglegiant)
-- [ishahrier](https://github.com/ishahrier)
-- [darkstar74](https://github.com/darkstar74)
-- [Angel Arriaga](https://github.com/damazoarriaga)
-- [Shaju Mohammed](https://github.com/shajumohamed)
-- [Jono](https://github.com/mrjono1)
-- [Tommy Holm Jakobsen](https://github.com/thj-dk)
-- [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
-- [clement911](https://github.com/clement911)
-- [mchandschuh](https://github.com/mchandschuh)
-- [Andrew Mobbs](https://github.com/mobbsie)
-- [Martin Zezulka](https://github.com/martinzezulkacz)
-- [Bart Coppens](https://github.com/bartcoppens)
-- [Tommy Holm Jakobsen](https://github.com/thj-dk)
-- [Andrew Fox](https://github.com/foxandrewj)
-- [Victor](https://github.com/vleontyev)
-- [lasamuadib](https://github.com/lasamuadib)
-- [Jeremy Simmons](https://github.com/jsimmonsdavidccook)
-- [BrianBarnard](https://github.com/BrianBarnard)
-- [Luke Vo](https://github.com/datvm)
-- [Josh](https://github.com/pianomanjh)
-- [yuvalsade](https://github.com/yuvalsade)
+-   [Yitzchok](https://github.com/yitzchok)
+-   [Shannan Finley](https://github.com/squallop)
+-   [stepankobzey](https://github.com/stepankobzey)
+-   [Cathy Pank](https://github.com/Panksy)
+-   [mooglegiant](https://github.com/mooglegiant)
+-   [ishahrier](https://github.com/ishahrier)
+-   [darkstar74](https://github.com/darkstar74)
+-   [Angel Arriaga](https://github.com/damazoarriaga)
+-   [Shaju Mohammed](https://github.com/shajumohamed)
+-   [Jono](https://github.com/mrjono1)
+-   [Tommy Holm Jakobsen](https://github.com/thj-dk)
+-   [Ernesto Gutiérrez](https://github.com/ernestogutierrez)
+-   [clement911](https://github.com/clement911)
+-   [mchandschuh](https://github.com/mchandschuh)
+-   [Andrew Mobbs](https://github.com/mobbsie)
+-   [Martin Zezulka](https://github.com/martinzezulkacz)
+-   [Bart Coppens](https://github.com/bartcoppens)
+-   [Tommy Holm Jakobsen](https://github.com/thj-dk)
+-   [Andrew Fox](https://github.com/foxandrewj)
+-   [Victor](https://github.com/vleontyev)
+-   [lasamuadib](https://github.com/lasamuadib)
+-   [Jeremy Simmons](https://github.com/jsimmonsdavidccook)
+-   [BrianBarnard](https://github.com/BrianBarnard)
+-   [Luke Vo](https://github.com/datvm)
+-   [Josh](https://github.com/pianomanjh)
+-   [yuvalsade](https://github.com/yuvalsade)
 
 Thank you!
 
@@ -187,7 +189,7 @@ to the **Tests** section below.
 
 **NOTICE**: If you're using ASP.NET MVC5 (or any version that isn't AspNet Core) you'll have compilation errors when trying to pass `Request.QueryString` or `Request.Headers` to the authorization methods described below. [See this issue for a workaround](https://github.com/nozzlegear/ShopifySharp/issues/164).
 
-### Ensure a given URL is a valid *myshopify.com URL
+### Ensure a given URL is a valid \*myshopify.com URL
 
 This is a convenience method that validates whether a given URL is a valid Shopify API domain (the Shopify API is hosted on each individual shop rather than at once central URL). It's great for ensuring
 you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is
@@ -342,8 +344,8 @@ else
 
 The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you for using your application. There are pros and cons to using the Shopify billing API versus a service like Stripe, BrainTree or PayPal.
 
-I've put together a small guide called ***Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps***,
-and you can get for **free** by joining the mailing list for ***Mastering Shopify Development*** (a training course
+I've put together a small guide called **_Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps_**,
+and you can get for **free** by joining the mailing list for **_Mastering Shopify Development_** (a training course
 for building Shopify apps with C# and ASP.NET).
 
 [Just head over here to get your free guide to the Shopify billing API.](https://nozzlegear.com/landing/shopify-billing-101?ref=ShopifySharp)
@@ -451,7 +453,7 @@ await service.ActivateAsync(chargeId);
 
 Shopify's Usage Charges let you set a capped amount on a recurring application charge, and only charge for usage. For example, you can create a charge that's capped at $100.00 per month, and then charge e.g. $1.00 for every 1000 emails your user sends using your app.
 
-To create a UsageCharge, you first need to create a RecurringCharge with a `CappedAmount` value and a `Terms` string. Your customers will see the terms when activating the recurring charge, so set it to something they can read like "$1.00 per 1000 emails".
+To create a UsageCharge, you first need to create a RecurringCharge with a `CappedAmount` value and a `Terms` string. Your customers will see the terms when activating the recurring charge, so set it to something they can read like "\$1.00 per 1000 emails".
 
 ### Create a usage charge
 
@@ -1681,7 +1683,7 @@ var events = await service.ListAsync();
 
 ### Listing events for a specific subject (e.g. Order or Product)
 
-You can filter your event list result to only the events created by a specific "subject"; i.e. you can list all events for one specific Order, Product, Article, etc. When filtering events in this way, you must supply both the "subject" type *and* its id.
+You can filter your event list result to only the events created by a specific "subject"; i.e. you can list all events for one specific Order, Product, Article, etc. When filtering events in this way, you must supply both the "subject" type _and_ its id.
 
 Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'. A current list of subject types can be found at [https://help.shopify.com/api/reference/event](https://help.shopify.com/api/reference/event).
 
@@ -2091,7 +2093,6 @@ await service.EnableAsync(discountId);
 
 Developers can get the list of policies that a merchant has configured for their store, such as their refund or privacy policies.
 
-
 ### Listing Policies
 
 ```cs
@@ -2099,11 +2100,9 @@ var service = new PolicyService(myShopifyUrl, shopAccessToken);
 var policies = await service.ListAsync();
 ```
 
-
 ## Shipping Zones
 
 Developers can get the list of shipping zones, their countries, provinces, and shipping rates.
-
 
 ### Listing Shipping Zones
 
@@ -2112,13 +2111,11 @@ var service = new ShippingZoneService(myShopifyUrl, shopAccessToken);
 var shippingZones = await service.ListAsync();
 ```
 
-
 ## Gift Cards
 
 Developers can create a gift card with the `GiftCardService`.
 
 **Gift Cards require a Shopify Plus subscription.**
-
 
 ### Listing Gift Cards
 
@@ -2145,7 +2142,6 @@ var service = new GiftCardService(myShopifyUrl, shopAccessToken);
 var giftCard = await service.GetAsync(giftCardId):
 ```
 
-
 ### Disabling a Gift Card
 
 Gift Cards can be disabled via that API, which makes them inactive and unusable until reenabled.
@@ -2163,8 +2159,7 @@ var service =  new GiftCardService(myShopifyUrl, shopAccessToken);
 int giftCardCount = await service.CountAsync();
 ```
 
-
-### Searching  a Gift Cards
+### Searching a Gift Cards
 
 ```c#
 var service =  new GiftCardService(myShopifyUrl, shopAccessToken);
@@ -2235,7 +2230,6 @@ Developers can retrieve users with the `UserService`.
 
 **The Users API requires a Shopify Plus subscription.**
 
-
 ### Listing Users
 
 ```cs
@@ -2272,21 +2266,21 @@ var count = await service.CountAsync();
 
 You can use the DraftOrder resource to allow merchants to create orders on behalf of customers. This is useful for Shopify merchants who receive orders through outside channels and enables a wide range of use cases including the following:
 
-- Create new orders for sales made by phone, in person, via chat, or by other means. Credit card payments for these orders can subsequently be entered in the Shopify admin.
-- Send invoices to customers to pay with a secure checkout link.
-- Use custom items to represent additional costs or products that aren't displayed in a shop's inventory.
-- Re-create mistaken orders.
-- Sell products at discount or wholesale rates.
-- Take pre-orders.
+-   Create new orders for sales made by phone, in person, via chat, or by other means. Credit card payments for these orders can subsequently be entered in the Shopify admin.
+-   Send invoices to customers to pay with a secure checkout link.
+-   Use custom items to represent additional costs or products that aren't displayed in a shop's inventory.
+-   Re-create mistaken orders.
+-   Sell products at discount or wholesale rates.
+-   Take pre-orders.
 
-### Listing Draft Orders 
+### Listing Draft Orders
 
 ```cs
 var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
 var draftOrders = await service.ListAsync();
 ```
 
-### Counting Draft orders 
+### Counting Draft orders
 
 ```cs
 var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
@@ -2300,7 +2294,7 @@ var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
 var draftOrder = await service.GetAsync(draftOrderId);
 ```
 
-### Create a Draft Order 
+### Create a Draft Order
 
 ```cs
 var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
@@ -2319,7 +2313,7 @@ var draftOrder = await Service.CreateAsync(new DraftOrder()
 });
 ```
 
-### Update a Draft Order 
+### Update a Draft Order
 
 ```cs
 var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
@@ -2349,7 +2343,7 @@ var invoice = await service.SendInvoiceAsync(new DraftOrderInvoice()
 });
 ```
 
-### Complete a Draft Order 
+### Complete a Draft Order
 
 ```cs
 var service = new DraftOrderService(myShopifyUrl, shopAccessToken);
@@ -2366,6 +2360,57 @@ The Access Scope API allows you to retrieve the permissions that a merchant has 
 ```cs
 var service = new AccessScopeService(myShopifyUrl, shopAccessToken);
 var scopes = await service.ListAsync();
+```
+
+## Checkouts
+
+If you're building an app with the Sales Channel SDK, then you can use the Checkout API to let customers purchase products from Shopify stores that have installed your sales channel.
+
+Shopify uses the Checkout resource to manage a user's cart as it transitions to a paid order. This process includes specifying which line items are included in the checkout, attaching a customer's shipping and payment details, and calculating tax and shipping rates. Credit card payments can be attached to a Checkout using the Payment resource.
+
+### Create Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkout = await service.CreateAsync(new Checkout
+{
+    Email = "joshua@nozzlegear.com"
+});
+```
+
+### Complete Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkoutToken = "token";
+var checkout = await service.CompleteAsync(checkoutToken);
+```
+
+### Get Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkoutToken = "token";
+var checkout = await service.GetAsync(checkoutToken);
+```
+
+### Updates Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkoutToken = "token";
+var checkout = await service.UpdateAsync(checkoutToken, new Checkout
+{
+    Email = "updated-email@nozzlegear.com"
+});
+```
+
+### List Shipping Rates for Checkout
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkoutToken = "token";
+var shippingRates = await service.ListShippingRatesAsync(checkoutToken);
 ```
 
 # Handling Shopify's API rate limit
@@ -2434,7 +2479,7 @@ public class MyCustomOrderFilter : OrderFilter
 }
 ```
 
-Your custom order filter still has all of the original properties of the base `OrderFilter` class, *plus* it has your new `Name` property. Since your custom filter extends the class that `OrderService.ListAsync` was looking for, you can now pass it as an argument to that method without any problems:
+Your custom order filter still has all of the original properties of the base `OrderFilter` class, _plus_ it has your new `Name` property. Since your custom filter extends the class that `OrderService.ListAsync` was looking for, you can now pass it as an argument to that method without any problems:
 
 ```cs
 var list = await orderService.ListAsync(new MyCustomOrderFilter()
@@ -2446,7 +2491,6 @@ var list = await orderService.ListAsync(new MyCustomOrderFilter()
 If you need even more fine-grained control over what gets sent through your custom filter, you can also override the `ToParameters` or `ToSingleParameter` methods of the filter. Those methods are called by the service when it's serializing the filter to a querystring.
 
 [You can take a look at the `Parameterizable` class (which is used by all filters) for a look at the current implementation](https://github.com/nozzlegear/ShopifySharp/blob/85a0eed28937eee2870e9104a55796e1a1039cfb/ShopifySharp/Infrastructure/Parameterizable.cs#L18) and what you can do in those methods.
-
 
 # "Why don't you use enums?"
 
@@ -2464,7 +2508,7 @@ What were previously enums in ShopifySharp 1.x and 2.x are now string properties
 
 # Tests
 
-The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's *.myshopify.com URL, and an access
+The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's \*.myshopify.com URL, and an access
 token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials)
 will show you exactly what you need to do to get a shop access token with full permissions.
 

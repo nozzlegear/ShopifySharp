@@ -13,6 +13,7 @@ using ShopifySharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 using System.Text.RegularExpressions;
 using System.Net.Http.Headers;
+using System.Reflection;
 
 namespace ShopifySharp
 {
@@ -274,22 +275,27 @@ namespace ShopifySharp
         /// <returns>A boolean indicating whether the URL is valid.</returns>
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
-            var uri = ShopifyService.BuildShopUri(url, true);
+            var uri = ShopifyService.BuildShopUri(url, false);
 
-            using (var client = new HttpClient())
+            using (var handler = new HttpClientHandler
             {
-                using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
-                {
-                    try
-                    {
-                        var response = await client.SendAsync(msg);
+                AllowAutoRedirect = false
+            })
+            using (var client = new HttpClient(handler))
+            using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
+            {
+                var version = (typeof(AuthorizationService)).GetTypeInfo().Assembly.GetName().Version;
+                msg.Headers.Add("User-Agent", $"ShopifySharp v{version} (https://github.com/nozzlegear/shopifysharp)");
 
-                        return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
-                    }
-                    catch (HttpRequestException)
-                    {
-                        return false;
-                    }
+                try
+                {
+                    var response = await client.SendAsync(msg);
+
+                    return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
+                }
+                catch (HttpRequestException)
+                {
+                    return false;
                 }
             }
         }
