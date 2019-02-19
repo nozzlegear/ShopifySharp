@@ -3,14 +3,8 @@ using System;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsPayoutFilter : Parameterizable 
+    public class ShopifyPaymentsPayoutFilter : ListFilter
     {
-        /// <summary>
-        /// Filter response to payouts exclusively after the specified ID.
-        /// </summary>
-        [JsonProperty("since_id")]
-        public long? SinceId { get; set; }
-
         /// <summary>
         /// Filter response to payouts exclusively before the specified ID
         /// </summary>
