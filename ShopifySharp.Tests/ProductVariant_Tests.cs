@@ -64,6 +64,7 @@ namespace ShopifySharp.Tests
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.Price, created.Price);
             EmptyAssert.NotNullOrEmpty(created.Option1);
+            Assert.Equal(Fixture.TaxCode, created.TaxCode);
         }
 
         [Fact]
@@ -75,16 +76,19 @@ namespace ShopifySharp.Tests
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.Price, created.Price);
             EmptyAssert.NotNullOrEmpty(created.Option1);
+            Assert.Equal(Fixture.TaxCode, created.TaxCode);
         }
 
         [Fact]
         public async Task Updates_Variants()
         {
             decimal newPrice = (decimal) 11.22;
+            string newTaxCode = "Updated Tax Code";
             var created = await Fixture.Create();
             long id = created.Id.Value;
 
             created.Price = newPrice;
+            created.TaxCode = newTaxCode;
             created.Id = null;
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
@@ -93,6 +97,7 @@ namespace ShopifySharp.Tests
             created.Id = id;
 
             Assert.Equal(newPrice, updated.Price);
+            Assert.Equal(newTaxCode, updated.TaxCode);
         }
     }
 
@@ -105,6 +110,8 @@ namespace ShopifySharp.Tests
         public decimal Price => 123.45m;
 
         public long ProductId { get; set; }
+
+        public string TaxCode => "A1234";
 
         public async Task InitializeAsync()
         {
@@ -150,6 +157,7 @@ namespace ShopifySharp.Tests
             {
                 Option1 = Guid.NewGuid().ToString(),
                 Price = Price,
+                TaxCode = TaxCode
             });
 
             if (! skipAddToCreatedList)
