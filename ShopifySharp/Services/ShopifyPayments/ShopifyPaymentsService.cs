@@ -48,7 +48,7 @@ namespace ShopifySharp
             return await ExecuteRequestAsync<ShopifyPaymentsPayout>(req, HttpMethod.Get, rootElement: "payout");
         }
 
-        public virtual async Task<IEnumerable<ShopifyPaymentsPayout>> ListDisputesAsync(ShopifyPaymentsDisputeFilter options = null)
+        public virtual async Task<IEnumerable<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeFilter options = null)
         {
             var req = PrepareRequest("shopify_payments/disputes.json");
 
@@ -57,13 +57,13 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(options.ToParameters());
             }
 
-            return await ExecuteRequestAsync<List<ShopifyPaymentsPayout>>(req, HttpMethod.Get, rootElement: "disputes");
+            return await ExecuteRequestAsync<List<ShopifyPaymentsDispute>>(req, HttpMethod.Get, rootElement: "disputes");
         }
 
-        public virtual async Task<ShopifyPaymentsPayout> GetDisputeAsync(long disputeId)
+        public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
         {
             var req = PrepareRequest($"shopify_payments/disputes/{disputeId}.json");
-            return await ExecuteRequestAsync<ShopifyPaymentsPayout>(req, HttpMethod.Get, rootElement: "dispute");
+            return await ExecuteRequestAsync<ShopifyPaymentsDispute>(req, HttpMethod.Get, rootElement: "dispute");
         }
 
         public virtual async Task<IEnumerable<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionFilter options = null)

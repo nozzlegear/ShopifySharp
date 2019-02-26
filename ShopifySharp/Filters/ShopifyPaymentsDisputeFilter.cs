@@ -3,14 +3,8 @@ using System;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsDisputeFilter : Parameterizable 
+    public class ShopifyPaymentsDisputeFilter : ListFilter
     {
-        /// <summary>
-        /// Return only disputes after the specified ID.
-        /// </summary>
-        [JsonProperty("since_id")]
-        public long? SinceId { get; set; }
-
         /// <summary>
         /// Return only disputes before the specified ID.
         /// </summary>

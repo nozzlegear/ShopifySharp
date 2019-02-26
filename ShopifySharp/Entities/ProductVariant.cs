@@ -111,6 +111,12 @@ namespace ShopifySharp
         public bool? Taxable { get; set; }
 
         /// <summary>
+        /// Specifies a tax code which is used for Avalara tax integrations
+        /// </summary>
+        [JsonProperty("tax_code")]
+        public string TaxCode { get; set; }
+
+        /// <summary>
         /// Specifies whether or not a customer needs to provide a shipping address when placing an order for this product variant.
         /// </summary>
         [JsonProperty("requires_shipping")]
