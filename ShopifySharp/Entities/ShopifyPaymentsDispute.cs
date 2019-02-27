@@ -32,6 +32,9 @@ namespace ShopifySharp
         [JsonProperty("evidence_due_by")]
         public DateTimeOffset? EvidenceDueBy { get; set; }
 
+        [JsonProperty("initiated_at")]
+        public DateTimeOffset? InitiatedAt { get; set; }
+
         [JsonProperty("evidence_sent_on")]
         public DateTimeOffset? EvidenceSentOn { get; set; }
 
