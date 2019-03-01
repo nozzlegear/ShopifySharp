@@ -59,14 +59,18 @@ Version 4.0.0 is a major update to ShopifySharp, it contains breaking changes by
 
 Version 4.0.0 contains a bunch of great enhancements, though. Chiefly, it adds support for .NET Core apps! In addition, the library now supports sending partial classes (thanks to making properties nullable) when creating or updating a Shopify object.
 
-### A work-in-progress
+# Frequently Asked Questions
 
-Currently, the only other .NET library for Shopify is [Shopify.net](https://github.com/cmcdonaldca/shopify.net), which
-hasn't been updated in over 3 years and requires that you know the exact URL paths of the Shopify API, along with
-creating your own entity classes for each resource. That's why I'm building ShopifySharp — .NET developers need a
-fully-featured library for interacting with Shopify and building Shopify apps.
+- **Question**: How do I look up a Shopify order by its name?
+    - **Answer**: [See this article to learn how to look up a Shopify order by its name property.](https://nozzlegear.com/shopify/looking-up-a-shopify-order-by-its-name)
+- **Question**: The `XyzService.ListAsync()` method only returns 50 objects, how do I list all orders/customers/articles/etc?
+    - **Answer**: [See this article to learn how to list all objects using any ShopifySharp service.](https://nozzlegear.com/shopify/listing-all-orders-customers-articles-or-anything-else-with-the-shopify-api)
+- **Question**: How do I use ShopifySharp with a private app?
+    - **Answer**: ShopifySharp works with any private Shopify app, no extra configuration needed. All you need to do is pass in your private app's password wherever ShopifySharp asks for an access token. For example: `var service = new ShopifySharp.OrderService("mydomain.myshopify.com", "PRIVATE APP PASSWORD HERE")`. This package's test suite uses a private app for testing API calls, so this method is confirmed working.
 
-With that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
+# A work-in-progress
+
+I first started working on ShopifySharp because .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps, which didn't exist several years ago. My goal is to eventually reach 100% compatibility with the Shopify REST API, but, with that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
 
 ShopifySharp currently supports the following Shopify APIs:
 
