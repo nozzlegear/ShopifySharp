@@ -30,13 +30,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets a list of variants belonging to the given product.
+        /// Gets a list of variants, optionally filtered to a given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ListFilter filterOptions = null)
+        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long? productId = null, ListFilter filterOptions = null)
         {
-            var req = PrepareRequest($"products/{productId}/variants.json");
+            var req = productId != null && productId != 0
+                ? PrepareRequest($"products/{productId}/variants.json")
+                : PrepareRequest("variants.json");
 
             if (filterOptions != null)
             {
