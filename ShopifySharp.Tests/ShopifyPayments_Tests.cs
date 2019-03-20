@@ -17,29 +17,41 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetBalance()
         {
-            var balances = await _Service.GetBalanceAsync();
-            Assert.NotNull(balances);
+            if (await _Service.IsShopifyPaymentAPIEnabled())
+            {
+                var balances = await _Service.GetBalanceAsync();
+                Assert.NotNull(balances);
+            }
         }
 
         [Fact]
         public async Task GetPayouts()
         {
-            var payouts = await _Service.ListPayoutsAsync();
-            Assert.NotNull(payouts);
+            if (await _Service.IsShopifyPaymentAPIEnabled())
+            {
+                var payouts = await _Service.ListPayoutsAsync();
+                Assert.NotNull(payouts);
+            }
         }
 
         [Fact]
         public async Task GetDisputes()
         {
-            var disputes = await _Service.ListDisputesAsync();
-            Assert.NotNull(disputes);
+            if (await _Service.IsShopifyPaymentAPIEnabled())
+            {
+                var disputes = await _Service.ListDisputesAsync();
+                Assert.NotNull(disputes);
+            }
         }
 
         [Fact]
         public async Task GetTransactions()
         {
-            var transactions = await _Service.ListTransactionsAsync();
-            Assert.NotNull(transactions);
+            if (await _Service.IsShopifyPaymentAPIEnabled())
+            {
+                var transactions = await _Service.ListTransactionsAsync();
+                Assert.NotNull(transactions);
+            }
         }
     }
 }
