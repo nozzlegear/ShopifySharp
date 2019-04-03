@@ -212,7 +212,8 @@ namespace ShopifySharp
             var code = response.StatusCode;
 
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
-            if ((int)code == 429 /* Too many requests */)
+            if ((int)code == 429 /* Too many requests */
+                || ((int)code == 422 && rawResponse.Contains("Too many messages"))) /* New response is a 422 error with a "Too many requests" message */
             {
                 string listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
                 string rateLimitMessage = $"Error: {listMessage}";
