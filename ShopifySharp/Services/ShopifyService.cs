@@ -145,7 +145,9 @@ namespace ShopifySharp
                         // Don't parse the result when the request was Delete.
                         if (baseRequestMessage.Method != HttpMethod.Delete)
                         {
-                            jtoken = JToken.Parse(rawResult);
+                            // Make sure that dates are not stripped of any timezone information if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
+                            using (var reader = new JsonTextReader(new StringReader(rawResult)) { DateParseHandling = DateParseHandling.None })
+                                jtoken = JObject.Load(reader);
                         }
 
                         return new RequestResult<JToken>(response, jtoken, rawResult);
