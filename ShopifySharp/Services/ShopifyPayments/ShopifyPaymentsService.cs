@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Filters;
+using System.Net;
 
 namespace ShopifySharp
 {
@@ -17,6 +18,24 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ShopifyPaymentsService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+
+        /// <summary>
+        /// Checks whether the Shopify Payments API is enabled on this store.
+        /// If not enabled, all Shopify Payments API endpoints will return HTTP 404 / Not Found
+        /// </summary>
+        public virtual async Task<bool> IsShopifyPaymentAPIEnabled()
+        {
+            try
+            {
+                //calling any method endpoint would do, but choosing GetBalance because it is likely the most lightweight
+                await this.GetBalanceAsync();
+                return true;
+            }
+            catch (ShopifyException ex) when (ex.HttpStatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Gets a count of all of the shop's transactions.
