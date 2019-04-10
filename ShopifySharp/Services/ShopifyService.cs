@@ -14,13 +14,17 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
+        private static string _GlobalAPIVersion = null;
+
+        private static string _APIVersion = null;
+
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+
+        private IRequestExecutionPolicy _ExecutionPolicy;
 
         private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
 
         private static HttpClient _Client { get; } = new HttpClient();
-
-        private IRequestExecutionPolicy _ExecutionPolicy;
 
         protected Uri _ShopUri { get; set; }
 
@@ -39,6 +43,7 @@ namespace ShopifySharp
             // If there's a global execution policy it should be set as this instance's policy.
             // User can override it with instance-specific execution policy.
             _ExecutionPolicy = _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
+            _APIVersion = _GlobalAPIVersion;
         }
 
         /// <summary>
@@ -89,13 +94,29 @@ namespace ShopifySharp
             _GlobalExecutionPolicy = globalExecutionPolicy;
         }
 
+        /// <summary>
+        /// Sets the api version for this instance only
+        /// </summary>
+        public void SetAPIVersion(string apiVersion)
+        {
+            _APIVersion = apiVersion;
+        }
+
+        /// <summary>
+        /// Sets the global api version for all *new* instances. Current instances are unaffected, but you can call .SetAPIVersion on them.
+        /// </summary>
+        public static void SetGlobalAPIVersion(string apiVeresion)
+        {
+            _GlobalAPIVersion = apiVeresion;
+        }
+
         protected RequestUri PrepareRequest(string path)
         {
             var ub = new UriBuilder(_ShopUri)
             {
                 Scheme = "https:",
                 Port = 443,
-                Path = $"admin/{path}"
+                Path = _APIVersion == null ? $"admin/{path}" : $"admin/api/{_APIVersion}/{path}"
             };
 
             return new RequestUri(ub.Uri);
