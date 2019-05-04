@@ -286,6 +286,12 @@ namespace ShopifySharp
         public bool? TaxesIncluded { get; set; }
 
         /// <summary>
+        /// States whether this is a test order.
+        /// </summary>
+        [JsonProperty("test")]
+        public bool? Test { get; set; }
+
+        /// <summary>
         /// Unique identifier for a particular order.
         /// </summary>
         [JsonProperty("token")]
