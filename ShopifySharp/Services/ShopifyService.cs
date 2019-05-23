@@ -14,9 +14,7 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        private static string _GlobalAPIVersion = null;
-
-        private static string _APIVersion = null;
+        public const string APIVersion = "2019-04";
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
 
@@ -29,6 +27,8 @@ namespace ShopifySharp
         protected Uri _ShopUri { get; set; }
 
         protected string _AccessToken { get; set; }
+
+        protected virtual bool SupportsAPIVersioning => true;
 
         /// <summary>
         /// Creates a new instance of <see cref="ShopifyService" />.
@@ -43,7 +43,6 @@ namespace ShopifySharp
             // If there's a global execution policy it should be set as this instance's policy.
             // User can override it with instance-specific execution policy.
             _ExecutionPolicy = _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
-            _APIVersion = _GlobalAPIVersion;
         }
 
         /// <summary>
@@ -94,29 +93,13 @@ namespace ShopifySharp
             _GlobalExecutionPolicy = globalExecutionPolicy;
         }
 
-        /// <summary>
-        /// Sets the api version for this instance only
-        /// </summary>
-        public void SetAPIVersion(string apiVersion)
-        {
-            _APIVersion = apiVersion;
-        }
-
-        /// <summary>
-        /// Sets the global api version for all *new* instances. Current instances are unaffected, but you can call .SetAPIVersion on them.
-        /// </summary>
-        public static void SetGlobalAPIVersion(string apiVeresion)
-        {
-            _GlobalAPIVersion = apiVeresion;
-        }
-
         protected RequestUri PrepareRequest(string path)
         {
             var ub = new UriBuilder(_ShopUri)
             {
                 Scheme = "https:",
                 Port = 443,
-                Path = _APIVersion == null ? $"admin/{path}" : $"admin/api/{_APIVersion}/{path}"
+                Path = SupportsAPIVersioning ? $"admin/api/{APIVersion}/{path}" : $"admin/{path}"
             };
 
             return new RequestUri(ub.Uri);
