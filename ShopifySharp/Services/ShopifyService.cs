@@ -14,17 +14,21 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
+        public virtual string APIVersion => "2019-04";
+
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+
+        private IRequestExecutionPolicy _ExecutionPolicy;
 
         private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
 
         private static HttpClient _Client { get; } = new HttpClient();
 
-        private IRequestExecutionPolicy _ExecutionPolicy;
-
         protected Uri _ShopUri { get; set; }
 
         protected string _AccessToken { get; set; }
+
+        protected virtual bool SupportsAPIVersioning => true;
 
         /// <summary>
         /// Creates a new instance of <see cref="ShopifyService" />.
@@ -95,7 +99,7 @@ namespace ShopifySharp
             {
                 Scheme = "https:",
                 Port = 443,
-                Path = $"admin/{path}"
+                Path = SupportsAPIVersioning ? $"admin/api/{APIVersion}/{path}" : $"admin/{path}"
             };
 
             return new RequestUri(ub.Uri);

@@ -18,6 +18,9 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public AccessScopeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
+        //oauth endpoints don't support versioning
+        protected override bool SupportsAPIVersioning => false;
+
         /// <summary>
         /// Retrieves a list of access scopes associated to the access token.
         /// </summary>
