@@ -102,7 +102,7 @@ namespace ShopifySharp
         /// <param name="notifyCustomer">Whether the customer should be notified that the fulfillment
         /// has been created.</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>
-        [Obsolete("The notifyCustomer parameter can already be found on the Fulfillment object. This extra parameter will be removed from FulfillmentService.UpdateAsync in a future release.")]
+        [Obsolete("The notifyCustomer parameter can already be found on the Fulfillment object. This extra parameter will be removed from FulfillmentService.UpdateAsync in a future release.", false)]
         public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment fulfillment, bool notifyCustomer)
         {
             // Set the notifyCustomer property on the fulfillment
@@ -137,7 +137,7 @@ namespace ShopifySharp
         /// <param name="fulfillmentId">Id of the object being updated.</param>
         /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
         /// <returns>The updated <see cref="Fulfillment"/>.</returns>
-        [Obsolete("The notifyCustomer parameter can already be found on the Fulfillment object. This extra parameter will be removed from FulfillmentService.UpdateAsync in a future release.")]
+        [Obsolete("The notifyCustomer parameter can already be found on the Fulfillment object. This extra parameter will be removed from FulfillmentService.UpdateAsync in a future release.", false)]
         public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment, bool notifyCustomer = false)
         {
             // Set the notifyCustomer property on the fulfillment
