@@ -233,27 +233,48 @@ namespace ShopifySharp
                 throw new ShopifyRateLimitException(code, rateLimitErrors, rateLimitMessage, rawResponse, requestId);
             }
 
-            var errors = ParseErrorJson(rawResponse);
-            string message = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
+            var contentType = response.Headers.GetValues("Content-Type").FirstOrDefault();
+            var defaultMessage = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
 
-            if (errors == null)
+            if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
             {
-                errors = new Dictionary<string, IEnumerable<string>>()
-                    {
+                var errors = ParseErrorJson(rawResponse);
+                string message = defaultMessage;
+
+                if (errors == null)
+                {
+                    errors = new Dictionary<string, IEnumerable<string>>()
                         {
-                            $"{(int)code} {response.ReasonPhrase}",
-                            new string[] { message }
-                        },
-                    };
+                            {
+                                $"{(int)code} {response.ReasonPhrase}",
+                                new string[] { message }
+                            },
+                        };
+                }
+                else
+                {
+                    var firstError = errors.First();
+
+                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                }
+
+                throw new ShopifyException(code, errors, message, rawResponse, requestId);
             }
-            else
             {
-                var firstError = errors.First();
+                var errors = new Dictionary<string, IEnumerable<string>>
+                {
+                    {
+                        $"{(int)code} {response.ReasonPhrase}",
+                        new string[] { defaultMessage }
+                    },
+                    {
+                        "NoJsonError",
+                        new string[] { "Response did not return JSON, unable to parse error message (if any)." }
+                    }
+                };
 
-                message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                throw new ShopifyException(code, errors, defaultMessage, rawResponse, requestId);
             }
-
-            throw new ShopifyException(code, errors, message, rawResponse, requestId);
         }
 
         /// <summary>
