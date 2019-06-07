@@ -48,7 +48,7 @@ namespace ShopifySharp.Filters
         /// <summary>
         /// An optional array of order ids to retrieve.
         /// </summary>
-        [JsonProperty("ids")]
+        [JsonProperty("ids"), Obsolete("The Ids property is ignored for articles. Using this property to list or count articles is a noop, and the property will be removed in the future.", false)]
         public IEnumerable<long> Ids { get; set; }
 
         /// <summary>
