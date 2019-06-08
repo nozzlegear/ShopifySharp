@@ -20,7 +20,7 @@ namespace ShopifySharp
 
         private IRequestExecutionPolicy _ExecutionPolicy;
 
-        private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
+        private static JsonSerializer _Serializer = Serializer.JsonSerializer;
 
         private static HttpClient _Client { get; } = new HttpClient();
 
@@ -151,7 +151,9 @@ namespace ShopifySharp
                         {
                             // Make sure that dates are not stripped of any timezone information if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
                             using (var reader = new JsonTextReader(new StringReader(rawResult)) { DateParseHandling = DateParseHandling.None })
+                            {
                                 jtoken = JObject.Load(reader);
+                            }
                         }
 
                         return new RequestResult<JToken>(response, jtoken, rawResult);
