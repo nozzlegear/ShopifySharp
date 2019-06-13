@@ -235,7 +235,7 @@ namespace ShopifySharp
                 throw new ShopifyRateLimitException(code, rateLimitErrors, rateLimitMessage, rawResponse, requestId);
             }
 
-            var contentType = response.Headers.GetValues("Content-Type").FirstOrDefault();
+            var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
             var defaultMessage = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
 
             if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
