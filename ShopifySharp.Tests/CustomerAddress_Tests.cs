@@ -66,7 +66,7 @@ namespace ShopifySharp.Tests
             var created = await Fixture.Create(streetAddress);
 
             Assert.NotNull(created);
-            Assert.Equal(streetAddress, Address.Address1);
+            Assert.Equal(streetAddress, created.Address1);
             Assert.Equal(Fixture.FirstName, created.FirstName);
             Assert.Equal(Fixture.LastName, created.LastName);
         }
