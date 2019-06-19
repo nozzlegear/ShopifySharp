@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
@@ -33,16 +34,19 @@ namespace ShopifySharp.Tests
         public void Throws_On_OAuth_Code_Used()
         {
             string rawBody = "{\"error\":\"invalid_request\",\"error_description\":\"The authorization code was not found or was already used\"}";
-            var response = new HttpResponseMessage()
+            var res = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.NotAcceptable,
-                ReasonPhrase = "Not Acceptable"
+                ReasonPhrase = "Not Acceptable",
+                Content = new StringContent(rawBody)
             };
+            res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+
             ShopifyException ex = null;
 
             try
             {
-                ShopifyService.CheckResponseExceptions(response, rawBody);
+                ShopifyService.CheckResponseExceptions(res, rawBody);
             }
             catch (ShopifyException e)
             {

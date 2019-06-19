@@ -10,17 +10,19 @@ namespace ShopifySharp.Tests
         [Fact]
         public void Returns_Message_About_The_StatusCode()
         {
-            var req = new HttpResponseMessage();
-            req.StatusCode = System.Net.HttpStatusCode.InternalServerError;
-            req.ReasonPhrase = "Internal Server Error";
-            req.Content = new StringContent("{}");
-            req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            var res = new HttpResponseMessage()
+            {
+                StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                ReasonPhrase = "Internal Server Error",
+                Content = new StringContent("{}")
+            };
+            res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
             ShopifyException ex = null;
 
             try
             {
-                ShopifyService.CheckResponseExceptions(req, "{}");
+                ShopifyService.CheckResponseExceptions(res, "{}");
             }
             catch (ShopifyException e)
             {
