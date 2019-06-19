@@ -81,7 +81,7 @@ namespace ShopifySharp.Tests
         public async Task Lists_Tags()
         {
             var tags = await Fixture.Service.ListTagsAsync();
-            
+
             Assert.True(tags.Count() > 0);
         }
 
@@ -115,6 +115,8 @@ namespace ShopifySharp.Tests
     {
         public ArticleService Service { get; } = new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public BlogService BlogService { get; } = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public string Title => "My new Article title - ";
 
         public string Author => "John Smith";
@@ -129,8 +131,12 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            var blogService = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var blogs = await blogService.ListAsync();
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            BlogService.SetExecutionPolicy(policy);
+
+            var blogs = await BlogService.ListAsync();
 
             BlogId = blogs.First().Id;
 
@@ -173,7 +179,7 @@ namespace ShopifySharp.Tests
                 }
             });
 
-            if (! skipAddToDeleteList)
+            if (!skipAddToDeleteList)
             {
                 Created.Add(obj);
             }

@@ -70,7 +70,7 @@ namespace ShopifySharp.Tests
         public async Task Creates_Redirects()
         {
             var created = await Fixture.Create();
-            
+
             Assert.NotNull(created);
             Assert.True(created.Id.HasValue);
             Assert.Equal(Fixture.Target, created.Target);
@@ -83,7 +83,7 @@ namespace ShopifySharp.Tests
             string newVal = "https://example.com/updated";
             var created = await Fixture.Create();
             long id = created.Id.Value;
-            
+
             created.Target = newVal;
             created.Id = null;
 
@@ -92,7 +92,7 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(newVal, updated.Target);   
+            Assert.Equal(newVal, updated.Target);
         }
     }
 
@@ -106,6 +106,8 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create one collection for use with count, list, get, etc. tests.
             await Create();
         }
@@ -139,7 +141,7 @@ namespace ShopifySharp.Tests
                 Target = Target,
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

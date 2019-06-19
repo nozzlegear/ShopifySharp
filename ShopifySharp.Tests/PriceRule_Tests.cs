@@ -120,6 +120,8 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create one for count, list, get, etc. orders.
             await Create(Guid.NewGuid().ToString());
         }

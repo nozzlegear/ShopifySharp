@@ -100,6 +100,8 @@ namespace ShopifySharp.Tests
     {
         public OrderRiskService Service { get; } = new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public List<OrderRisk> Created { get; } = new List<OrderRisk>();
 
         public string Message => "This looks risky!";
@@ -118,11 +120,16 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            OrderId = (await new OrderService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new OrderFilter()
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            OrderService.SetExecutionPolicy(policy);
+
+            OrderId = (await OrderService.ListAsync(new OrderFilter()
             {
                 Limit = 1
             })).First().Id.Value;
-            
+
             // Create a risk for count, list, get, etc. tests.
             await Create(OrderId);
         }
@@ -160,7 +167,7 @@ namespace ShopifySharp.Tests
                 Display = Display,
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

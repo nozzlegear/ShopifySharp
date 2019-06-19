@@ -118,6 +118,8 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Get a product id to use with these tests.
             var prod = await ProductTest.Create();
             VariantTest.ProductId = prod.Id.Value;
@@ -125,6 +127,7 @@ namespace ShopifySharp.Tests
             InventoryItemId = variant.InventoryItemId.Value;
             variant.SKU = "TestSKU";//To change fulfillment, SKU is required
             variant.InventoryManagement = "Shopify";//To set inventory, InventoryManagement must be Shopify
+
             await VariantTest.Service.UpdateAsync(variant.Id.Value, variant);
         }
 

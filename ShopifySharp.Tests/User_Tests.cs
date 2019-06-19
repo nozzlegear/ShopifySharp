@@ -43,7 +43,12 @@ namespace ShopifySharp.Tests
     {
         public UserService Service => new UserService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public Task InitializeAsync() => Task.CompletedTask;
+        public Task InitializeAsync()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
+            return Task.CompletedTask;
+        }
 
         public Task DisposeAsync() => Task.CompletedTask;
     }

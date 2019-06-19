@@ -130,11 +130,12 @@ namespace ShopifySharp.Tests
     {
         public GiftCardService Service => new GiftCardService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-
         public List<GiftCard> Created { get; } = new List<GiftCard>();
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create an giftCard.
             var giftCard = await Create(GiftCard_Tests.GiftCardValue);
         }

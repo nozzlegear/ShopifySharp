@@ -7,12 +7,17 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Location")]
     public class Location_Tests
     {
-        private LocationService _Service { get; } = new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
+        LocationService Service { get; } = new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public Location_Tests()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+        }
 
         [Fact]
         public async Task Lists_Locations()
         {
-            var list = await _Service.ListAsync();
+            var list = await Service.ListAsync();
 
             Assert.NotNull(list);
         }
@@ -20,13 +25,13 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Locations()
         {
-            var list = await _Service.ListAsync();
+            var list = await Service.ListAsync();
 
             // Not all shops have a location.
             if (list.Count() > 0)
             {
                 long id = list.First().Id.Value;
-                var location = await _Service.GetAsync(id);
+                var location = await Service.GetAsync(id);
 
                 Assert.NotNull(location.Address1);
                 Assert.True(location.Id.HasValue);

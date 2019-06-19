@@ -149,6 +149,8 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create one for count, list, get, etc. orders.
             await Create();
         }
@@ -169,7 +171,7 @@ namespace ShopifySharp.Tests
                     }
                 }
             }
-        } 
+        }
 
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
@@ -192,7 +194,7 @@ namespace ShopifySharp.Tests
                 },
             }, options);
 
-            if (! skipAddToCreateList)
+            if (!skipAddToCreateList)
             {
                 Created.Add(obj);
             }

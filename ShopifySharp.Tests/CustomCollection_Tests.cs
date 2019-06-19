@@ -90,7 +90,7 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(newTitle, updated.Title);   
+            Assert.Equal(newTitle, updated.Title);
         }
     }
 
@@ -104,6 +104,8 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create one collection for use with count, list, get, etc. tests.
             await Create();
         }

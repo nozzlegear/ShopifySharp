@@ -70,6 +70,12 @@ namespace ShopifySharp.Tests
     {
         public EventService Service { get; } = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public List<Event> Created { get; } = new List<Event>();
+        public Task InitializeAsync()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
+            return Task.CompletedTask;
+        }
     }
 }
+

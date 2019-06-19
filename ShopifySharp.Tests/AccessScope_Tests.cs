@@ -32,6 +32,8 @@ namespace ShopifySharp.Tests
 
         public Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             return Task.CompletedTask;
         }
 

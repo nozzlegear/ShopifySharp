@@ -98,6 +98,8 @@ namespace ShopifySharp.Tests
     {
         public CustomerAddressService Service { get; } = new CustomerAddressService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public CustomerService CustomerService { get; } = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public string FirstName => "John";
 
         public string LastName => "Doe";
@@ -112,8 +114,12 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            var customerService = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var customers = await customerService.ListAsync();
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            CustomerService.SetExecutionPolicy(policy);
+
+            var customers = await CustomerService.ListAsync();
 
             CustomerId = customers.First().Id;
 
