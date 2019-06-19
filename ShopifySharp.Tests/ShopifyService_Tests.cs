@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -12,12 +13,14 @@ namespace ShopifySharp.Tests
             var req = new HttpResponseMessage();
             req.StatusCode = System.Net.HttpStatusCode.InternalServerError;
             req.ReasonPhrase = "Internal Server Error";
+            req.Content = new StringContent("{}");
+            req.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
             ShopifyException ex = null;
 
             try
             {
-                ShopifyService.CheckResponseExceptions(req, null);
+                ShopifyService.CheckResponseExceptions(req, "{}");
             }
             catch (ShopifyException e)
             {
