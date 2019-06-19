@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Addresses()
         {
-            var created = await Fixture.Create("123 4th St", true);
+            var created = await Fixture.Create(Fixture.RandomStreetAddress(), true);
             bool threw = false;
 
             try
@@ -49,10 +49,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Gets_Addresses()
         {
-            var created = await Fixture.Create("234 5th St");
+            var streetAddress = Fixture.RandomStreetAddress();
+            var created = await Fixture.Create(streetAddress);
             var address = await Fixture.Service.GetAsync(Fixture.CustomerId.Value, created.Id.Value);
 
             Assert.NotNull(address);
+            Assert.Equal(streetAddress, address.Address1);
             Assert.Equal(Fixture.FirstName, address.FirstName);
             Assert.Equal(Fixture.LastName, address.LastName);
         }
@@ -60,13 +62,13 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_Addresses()
         {
-            var address = await Fixture.Create("345 6th St");
+            var streetAddress = Fixture.RandomStreetAddress();
+            var created = await Fixture.Create(streetAddress);
 
-            Assert.NotNull(address);
-            Assert.Equal(Fixture.FirstName, address.FirstName);
-            Assert.Equal(Fixture.LastName, address.LastName);
-
-            await Fixture.Service.DeleteAsync(Fixture.CustomerId.Value, address.Id.Value);
+            Assert.NotNull(created);
+            Assert.Equal(streetAddress, Address.Address1);
+            Assert.Equal(Fixture.FirstName, created.FirstName);
+            Assert.Equal(Fixture.LastName, created.LastName);
         }
 
         [Fact]
@@ -75,7 +77,7 @@ namespace ShopifySharp.Tests
             string firstName = "Jane";
             string lastName = "Doe";
             string fullName = "Jane Doe";
-            var created = await Fixture.Create("456 7th St");
+            var created = await Fixture.Create(Fixture.RandomStreetAddress());
             long id = created.Id.Value;
 
             created.FirstName = firstName;
@@ -103,6 +105,10 @@ namespace ShopifySharp.Tests
         public long? CustomerId { get; set; }
 
         public List<Address> Created { get; } = new List<Address>();
+
+        Random Randomizer { get; } = new Random();
+
+        public string RandomStreetAddress() => $"{Randomizer.Next(1, 9999)} 99th St";
 
         public async Task InitializeAsync()
         {
