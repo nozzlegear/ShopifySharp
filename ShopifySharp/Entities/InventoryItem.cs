@@ -33,6 +33,12 @@ namespace ShopifySharp
         public string CountryCodeOfOrigin { get; set; }
 
         /// <summary>
+        /// The two-digit code for the province where the inventory item was made. Used only if the shipping provider for the inventory item is Canada Post.
+        /// </summary>
+        [JsonProperty("province_code_of_origin")]
+        public string ProvinceCodeOfOrigin { get; set; }
+
+        /// <summary>
         /// The general Harmonized System (HS) code for the inventory item. Used if a country-specific HS code is not available.
         /// </summary>
         [JsonProperty("harmonized_system_code")]
@@ -41,8 +47,14 @@ namespace ShopifySharp
         /// <summary>
         /// An array of country-specific Harmonized System (HS) codes for the item. Used to determine duties when shipping the inventory item to certain countries.
         /// </summary>
-        [JsonProperty("HarmonizedSystemCodes")]
-        public IEnumerable<HSCode> HarmonizedSystemCodes { get; set; }
+        [JsonProperty("country_harmonized_system_codes")]
+        public IEnumerable<HSCode> CountryHarmonizedSystemCodes { get; set; }
+
+        /// <summary>
+        /// Whether a customer needs to provide a shipping address when placing an order containing the inventory item.
+        /// </summary>
+        [JsonProperty("requires_shipping")]
+        public bool? RequiresShipping { get; set; }
 
         /// <summary>
         /// The date and time when the product variant was created. The API returns this value in ISO 8601 format.
