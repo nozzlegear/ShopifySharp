@@ -24,7 +24,7 @@ namespace ShopifySharp
         public string Reason { get; set; }
 
         [JsonProperty("network_reason_code")]
-        public string NetworkReasonCcode { get; set; }
+        public string NetworkReasonCode { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }
