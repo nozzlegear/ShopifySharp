@@ -38,5 +38,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("subtotal")]
         public decimal? SubTotal { get; set; }
+
+        /// <summary>
+        /// The subtotal of the refund line item in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("subtotal_set")]
+        public PriceSet SubTotalTaxSet { get; set; }
+
+        /// <summary>
+        /// The total tax of the line item in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("total_tax_set")]
+        public PriceSet TotalTaxSet { get; set; }
     }
 }
