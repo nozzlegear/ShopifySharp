@@ -132,6 +132,12 @@ namespace ShopifySharp
         public decimal? TotalDiscount { get; set; }
 
         /// <summary>
+        /// The total discount applied to the line item in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("total_discount_set")]
+        public PriceSet TotalDiscountSet { get; set; }
+
+        /// <summary>
         /// An ordered list of amounts allocated by discount applications. Each discount allocation is associated to a particular discount application.
         /// </summary>
         [JsonProperty("discount_allocations")]
@@ -145,16 +151,22 @@ namespace ShopifySharp
         [JsonProperty("properties")]
         public IEnumerable<LineItemProperty> Properties { get; set; }
 
-        [JsonProperty("variant_inventory_management")]
         /// <summary>
         /// This property is undocumented by Shopify.
         /// </summary>
+        [JsonProperty("variant_inventory_management")]
         public string VariantInventoryManagement { get; set; }
 
-        [JsonProperty("product_exists")]
         /// <summary>
         /// This property is undocumented by Shopify.
         /// </summary>
+        [JsonProperty("product_exists")]
         public bool? ProductExists { get; set; }
+
+        /// <summary>
+        /// The price of the line item in shop and presentment currencies
+        /// </summary>
+        [JsonProperty("price_set")]
+        public PriceSet PriceSet { get; set; }
     }
 }
