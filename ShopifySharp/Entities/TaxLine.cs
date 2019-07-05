@@ -10,7 +10,7 @@ namespace ShopifySharp
     public class TaxLine
     {
         /// <summary>
-        /// The amount of tax to be charged.    
+        /// The amount of tax to be charged.
         /// </summary>
         [JsonProperty("price")]
         public decimal? Price { get; set; }
@@ -26,5 +26,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("title")]
         public string Title { get; set; }
+
+        /// <summary>
+        /// The amount added to the order for this tax in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("price_set")]
+        public PriceSet PriceSet { get; set; }
     }
 }

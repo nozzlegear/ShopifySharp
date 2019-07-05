@@ -43,5 +43,17 @@ namespace ShopifySharp
         /// Reason for the refund
         /// </summary>
         public string Reason { get; set; }
+
+        /// <summary>
+        /// The amount of the order adjustment in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("amount_set")]
+        public PriceSet AmountSet { get; set; }
+
+        /// <summary>
+        /// The tax amount of the order adjustment in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("tax_amount_set")]
+        public PriceSet TaxAmountSet { get; set; }
     }
 }
