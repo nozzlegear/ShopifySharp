@@ -179,5 +179,12 @@ namespace ShopifySharp
 
             await ExecuteRequestAsync(req, HttpMethod.Post, content);
         }
+
+        public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId)
+        {
+            var req = PrepareRequest($"orders/{orderId}/metafields.json");
+
+            return await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
+        }
     }
 }

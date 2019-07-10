@@ -167,6 +167,26 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Gets_Metafields()
+        {
+            var order = await Fixture.Create();
+            bool threw = false;
+
+            try
+            {
+                await Fixture.Service.GetMetaFieldsAsync(order.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Gets_Metafields)} failed. {ex.Message}");
+
+                threw = true;
+            }
+
+            Assert.False(threw);
+        }
+
+        [Fact]
         public async Task Can_Be_Partially_Updated()
         {
             string newNote = "These notes were part of a partial update to this order.";
