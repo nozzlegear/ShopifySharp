@@ -96,16 +96,16 @@ namespace ShopifySharp.Tests
             string newNote = $"New note value {Guid.NewGuid()}";
             var created = await Fixture.Create();
             long id = created.Id.Value;
-            
+
             created.Note = newNote;
             created.Id = null;
-            
+
             var updated = await Fixture.Service.UpdateAsync(id, created);
 
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(newNote, updated.Note);   
+            Assert.Equal(newNote, updated.Note);
         }
 
         [Fact(Skip = "Cannot test with my dev store since the trial has expired.")]
@@ -117,7 +117,7 @@ namespace ShopifySharp.Tests
             string message = "Pay pls";
             var result = await Fixture.Service.SendInvoiceAsync(created.Id.Value, new DraftOrderInvoice()
             {
-                To = to, 
+                To = to,
                 Subject = subject,
                 CustomMessage = message,
             });
@@ -145,11 +145,11 @@ namespace ShopifySharp.Tests
             created = await Fixture.Service.CompleteAsync(created.Id.Value, true);
 
             Assert.NotNull(created.CompletedAt);
-            Assert.Equal("completed", created.Status);            
+            Assert.Equal("completed", created.Status);
         }
     }
 
-    public class DraftOrder_Tests_Fixture: IAsyncLifetime
+    public class DraftOrder_Tests_Fixture : IAsyncLifetime
     {
         public DraftOrderService Service => new DraftOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -165,6 +165,8 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
             // Create one for count, list, get, etc. tests.
             await Create();
         }
@@ -206,7 +208,7 @@ namespace ShopifySharp.Tests
                 Note = Note
             });
 
-            if (! skipAddToCreateList)
+            if (!skipAddToCreateList)
             {
                 Created.Add(obj);
             }

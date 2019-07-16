@@ -10,12 +10,17 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Checkout")]
     public class Checkout_Tests
     {
-        private CheckoutService _Service { get; } = new CheckoutService(Utils.MyShopifyUrl, Utils.AccessToken);
+        CheckoutService Service { get; } = new CheckoutService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public Checkout_Tests()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+        }
 
         [Fact]
         public async Task Counts_Checkouts()
         {
-            var count = await _Service.CountAsync();
+            var count = await Service.CountAsync();
 
             Assert.True(count >= 0);
         }
@@ -23,7 +28,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Checkouts()
         {
-            var list = await _Service.ListAsync();
+            var list = await Service.ListAsync();
 
             Assert.True(list.Count() >= 0);
             if (list.Count() > 0)
@@ -49,7 +54,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
         public async Task Creates_Checkouts()
         {
-            var checkout = await _Service.CreateAsync(new Checkout
+            var checkout = await Service.CreateAsync(new Checkout
             {
                 Email = "joshua@nozzlegear.com"
             });

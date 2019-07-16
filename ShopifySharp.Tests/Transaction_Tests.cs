@@ -121,6 +121,11 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            OrderService.SetExecutionPolicy(policy);
+
             // Create one collection for use with count, list, get, etc. tests.
             var order = await CreateOrder();
             await Create(order.Id.Value);
@@ -220,7 +225,7 @@ namespace ShopifySharp.Tests
                 Kind = kind
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

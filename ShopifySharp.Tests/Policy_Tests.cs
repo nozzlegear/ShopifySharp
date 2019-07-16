@@ -8,16 +8,21 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Policy")]
     public class Policy_Tests
     {
-        private PolicyService _Service { get; } = new PolicyService(Utils.MyShopifyUrl, Utils.AccessToken);              
+        PolicyService Service { get; } = new PolicyService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public Policy_Tests()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+        }
 
         [Fact]
         public async Task Lists_Orders()
         {
-            var list = await _Service.ListAsync();
+            var list = await Service.ListAsync();
 
             Assert.NotNull(list);
-            
-            foreach(var policy in list)
+
+            foreach (var policy in list)
             {
                 EmptyAssert.NotNullOrEmpty(policy.Title);
                 Assert.NotNull(policy.CreatedAt);

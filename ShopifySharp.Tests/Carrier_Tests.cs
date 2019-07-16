@@ -95,6 +95,14 @@ namespace ShopifySharp.Tests
 
         public string CallbackUrl => "http://fakecallback.com/";
 
+        public async Task InitializeAsync()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+
+            // Create one blog for methods like count, get, list, etc.
+            await Create();
+        }
+
         public async Task DisposeAsync()
         {
             foreach (var obj in Created)

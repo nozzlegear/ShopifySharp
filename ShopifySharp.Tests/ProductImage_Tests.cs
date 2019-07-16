@@ -80,8 +80,8 @@ namespace ShopifySharp.Tests
             var created = await Fixture.Create();
             var newAlt = $"ShopifySharp test {Guid.NewGuid()}";
             long id = created.Id.Value;
-            
-            created.Alt = newAlt;       
+
+            created.Alt = newAlt;
             created.Id = null;
 
             var updated = await Fixture.Service.UpdateAsync(created.ProductId.Value, id, created);
@@ -107,6 +107,11 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            ProductService.SetExecutionPolicy(policy);
+
             // Get a product to use as the parent for all images.
             ProductId = (await ProductService.ListAsync(new ProductFilter()
             {
@@ -146,7 +151,7 @@ namespace ShopifySharp.Tests
                 Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==\n"
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

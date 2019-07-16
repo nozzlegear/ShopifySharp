@@ -81,7 +81,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Variants()
         {
-            decimal newPrice = (decimal) 11.22;
+            decimal newPrice = (decimal)11.22;
             var created = await Fixture.Create();
             long id = created.Id.Value;
 
@@ -101,6 +101,8 @@ namespace ShopifySharp.Tests
     {
         public ProductVariantService Service { get; } = new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public List<ProductVariant> Created { get; } = new List<ProductVariant>();
 
         public decimal Price => 123.45m;
@@ -109,8 +111,13 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            ProductService.SetExecutionPolicy(policy);
+
             // Get a product id to use with these tests.
-            ProductId = (await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new ProductFilter()
+            ProductId = (await ProductService.ListAsync(new ProductFilter()
             {
                 Limit = 1
             })).First().Id.Value;
@@ -123,9 +130,9 @@ namespace ShopifySharp.Tests
         {
             foreach (var obj in Created)
             {
-                if (! obj.Id.HasValue) 
+                if (!obj.Id.HasValue)
                 {
-                    continue; 
+                    continue;
                 }
 
                 try
@@ -153,7 +160,7 @@ namespace ShopifySharp.Tests
                 Price = Price
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
             }

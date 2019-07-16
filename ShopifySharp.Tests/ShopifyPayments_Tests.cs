@@ -12,14 +12,19 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Shopify payments")]
     public class ShopifyPayments_Tests
     {
-        private ShopifyPaymentsService _Service { get; } = new ShopifyPaymentsService(Utils.MyShopifyUrl, Utils.AccessToken);
+        ShopifyPaymentsService Service { get; } = new ShopifyPaymentsService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public ShopifyPayments_Tests()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+        }
 
         [Fact]
         public async Task GetBalance()
         {
-            if (await _Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabled())
             {
-                var balances = await _Service.GetBalanceAsync();
+                var balances = await Service.GetBalanceAsync();
                 Assert.NotNull(balances);
             }
         }
@@ -27,9 +32,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetPayouts()
         {
-            if (await _Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabled())
             {
-                var payouts = await _Service.ListPayoutsAsync();
+                var payouts = await Service.ListPayoutsAsync();
                 Assert.NotNull(payouts);
             }
         }
@@ -37,9 +42,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetDisputes()
         {
-            if (await _Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabled())
             {
-                var disputes = await _Service.ListDisputesAsync();
+                var disputes = await Service.ListDisputesAsync();
                 Assert.NotNull(disputes);
             }
         }
@@ -47,9 +52,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetTransactions()
         {
-            if (await _Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabled())
             {
-                var transactions = await _Service.ListTransactionsAsync();
+                var transactions = await Service.ListTransactionsAsync();
                 Assert.NotNull(transactions);
             }
         }

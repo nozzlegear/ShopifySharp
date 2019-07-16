@@ -186,6 +186,11 @@ namespace ShopifySharp.Tests
 
     public class Order_Tests_Fixture : IAsyncLifetime
     {
+        public Order_Tests_Fixture()
+        {
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+        }
+
         public OrderService Service { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public string Note => "This order was created while testing ShopifySharp!";

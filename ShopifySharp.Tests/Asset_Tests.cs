@@ -112,6 +112,8 @@ namespace ShopifySharp.Tests
     {
         public AssetService Service { get; } = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public ThemeService ThemeService { get; } = new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public List<Asset> Created { get; } = new List<Asset>();
 
         public string AssetValue => "<h1>Hello world!</h1>";
@@ -120,8 +122,12 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            var themeService = new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);  
-            var themes = await themeService.ListAsync();  
+            var policy = new SmartRetryExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            ThemeService.SetExecutionPolicy(policy);
+
+            var themes = await ThemeService.ListAsync();
 
             ThemeId = themes.First().Id.Value;
         }
@@ -156,12 +162,12 @@ namespace ShopifySharp.Tests
                 Key = key
             });
 
-            if (! skipAddToCreatedList)
+            if (!skipAddToCreatedList)
             {
                 Created.Add(asset);
             }
 
             return asset;
         }
-    }    
+    }
 }
