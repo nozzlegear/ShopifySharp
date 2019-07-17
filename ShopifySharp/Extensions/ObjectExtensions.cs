@@ -8,6 +8,18 @@ namespace ShopifySharp
 {
     public static class ObjectExtensions
     {
+        public static T CloneViaJson<T>(this T o)
+        {
+            var json = o.ToJson();
+
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        public static string ToJson<T>(this T o)
+        {
+            return JsonConvert.SerializeObject(o);
+        }
+
         /// <summary>
         /// Converts the object to a dictionary./>
         /// </summary>

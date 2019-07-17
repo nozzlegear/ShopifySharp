@@ -25,13 +25,41 @@ namespace ShopifySharp.Tests
             var list = await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { Fixture.Created.First().InventoryItemId.Value } });
             Assert.True(list.Count() > 0);
         }
+
+        [Fact]
+        public async Task Sets_Level()
+        {
+            var variant = await Fixture.Create();
+            var inventoryItem = await Fixture.InventoryItemService.GetAsync(variant.InventoryItemId.Value);
+            var inventoryLevels = await Fixture.Service.ListAsync(new InventoryLevelFilter() { InventoryItemIds = new long[] { inventoryItem.Id.Value } });
+            var inventoryLevel = inventoryLevels.First();
+
+            inventoryLevel.Available++;
+
+            bool threw = false;
+
+            try
+            {
+                await Fixture.Service.SetAsync(inventoryLevel);
+            }
+            catch (ShopifyException ex)
+            {
+                Console.WriteLine($"{nameof(Sets_Level)} failed. {ex.Message}");
+
+                threw = true;
+            }
+
+            Assert.False(threw);
+        }
     }
 
     public class InventoryLevel_Tests_Fixture : IAsyncLifetime
     {
         public InventoryLevelService Service { get; } = new InventoryLevelService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public ProductVariantService VariantService { get; } = new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public InventoryItemService InventoryItemService { get; } = new InventoryItemService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public ProductVariantService VariantService { get; } = new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);        
 
         public List<ProductVariant> Created { get; } = new List<ProductVariant>();
 

@@ -33,5 +33,22 @@ namespace ShopifySharp
 
             return await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
         }
+
+        /// <summary>
+        /// Set an InventoryLevel
+        /// </summary>
+        /// <param name="inventoryLevel">The InventoryLevel to set</param>
+        public virtual async Task<InventoryLevel> SetAsync(InventoryLevel inventoryLevel)
+        {
+            var req = PrepareRequest($"inventory_levels/set.json");
+            var body = inventoryLevel.ToDictionary();
+
+            var content = new JsonContent(new
+            {
+                inventoryLevel = body
+            });
+
+            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventoryLevel");
+        }
     }
 }

@@ -25,5 +25,11 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("value_type")]
         public string ValueType { get; set; } = null;
+
+        /// <summary>
+        /// Filter by owner_resource.
+        /// </summary>
+        [JsonProperty("owner_resource")]
+        public string OwnerResource { get; set; } = null;
     }
 }

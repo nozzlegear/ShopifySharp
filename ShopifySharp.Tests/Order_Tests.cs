@@ -35,6 +35,15 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task ListsAll_Orders()
+        {
+            var list = await Fixture.Service.ListAllAsync();
+            var count = await Fixture.Service.CountAsync();
+
+            Assert.True(list.Count() == count);
+        }
+
+        [Fact]
         public async Task Lists_Orders_With_Filter()
         {
             var created = await Task.WhenAll(Enumerable.Range(0, 2).Select(i => Fixture.Create()));

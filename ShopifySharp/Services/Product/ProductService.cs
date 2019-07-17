@@ -13,7 +13,7 @@ namespace ShopifySharp
     /// <summary>
     /// A service for manipulating Shopify products.
     /// </summary>
-    public class ProductService : ShopifyService
+    public class ProductService : ShopifyService, IListAsync<Product, ProductFilter>
     {
         /// <summary>
         /// Creates a new instance of <see cref="ProductService" />.

@@ -34,6 +34,15 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task ListsAll_Products()
+        {
+            var list = await Fixture.Service.ListAllAsync();
+            var count = await Fixture.Service.CountAsync();
+
+            Assert.True(list.Count() == count);
+        }
+
+        [Fact]
         public async Task Deletes_Products()
         {
             var created = await Fixture.Create(true);
