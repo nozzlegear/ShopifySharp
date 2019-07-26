@@ -25,5 +25,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("available")]
         public int? Available { get; set; }
+
+        /// <summary>
+        /// The date and time when the inventory level was last modified.
+        /// </summary>
+        [JsonProperty("updated_at")]
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

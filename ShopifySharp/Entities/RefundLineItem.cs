@@ -50,5 +50,18 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_tax_set")]
         public PriceSet TotalTaxSet { get; set; }
+
+        /// <summary>
+        /// How this refund line item affects inventory levels.
+        /// </summary>
+        [JsonProperty("restock_type")]
+        public string RestockType { get; set; }
+
+        /// <summary>
+        /// The unique identifier of the location where the items will be restocked.
+        /// Required when restock_type has the value return or cancel.
+        /// </summary>
+        [JsonProperty("location_id")]
+        public long? LocationId { get; set; }
     }
 }
