@@ -180,6 +180,11 @@ namespace ShopifySharp
             await ExecuteRequestAsync(req, HttpMethod.Post, content);
         }
 
+        /// <summary>
+        /// Get MetaField's for an order.
+        /// </summary>
+        /// <param name="orderId">The order's id.</param>
+        /// <returns>The set of <see cref="MetaField"/> for the order.</returns>
         public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId)
         {
             var req = PrepareRequest($"orders/{orderId}/metafields.json");
