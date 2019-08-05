@@ -214,3 +214,6 @@ ModelManifest.xml
 # Ignore private configuration files
 *.private.config
 */env.yml
+
+# Ignore VS Code Ionide extension folder
+.ionide
