@@ -1,5 +1,7 @@
 namespace ShopifySharp.Experimental
 
+open ShopifySharp
+
 module Webhooks = 
     type WebhookProperty = 
         | Address 
@@ -48,3 +50,37 @@ module Webhooks =
     /// </summary>
     let removeProperty topic : WebhookProperties -> WebhookProperties = 
         Map.remove topic
+
+    // Extend the base ShopifySharp.WebhookService to include methods for creating/updating webhooks.
+    type Service(shopDomain: string, accessToken: string, ?policy: IRequestExecutionPolicy) = 
+        let baseService = WebhookService(shopDomain, accessToken)
+
+        do Option.iter (fun p -> baseService.SetExecutionPolicy p) policy
+        
+        /// <summary>
+        /// Serializes the map of <see cref="WebhookProperty" /> to a JSON string.
+        /// </summary>
+        let mapToJson (map: WebhookProperties) = 
+            let rec nextProperty (list: (WebhookProperty * obj option) list) (output: Map<string, obj>)  = 
+                match list with 
+                | [] -> ShopifySharp.Infrastructure.Serializer.Serialize output
+                | (key, value) :: rest -> 
+                    let value = value |> Option.defaultValue (box null)
+                    Map.add (key.ToJsonName) (value) output 
+                    |> nextProperty rest
+
+            nextProperty (Map.toList map) (Map.empty)
+
+        static member NewService domain accessToken = Service(domain, accessToken)
+        static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)
+        member x.APIVersion = baseService.APIVersion 
+        member x.SetExecutionPolicy = baseService.SetExecutionPolicy
+        member x.Count = baseService.CountAsync >> Async.AwaitTask
+        member x.List = baseService.ListAsync >> Async.AwaitTask
+        member x.Delete = baseService.DeleteAsync >> Async.AwaitTask
+        member x.Create webhook =
+            let json = mapToJson webhook 
+            failwith "Not implemented"
+        member x.Update webhook = 
+            let json = mapToJson webhook 
+            failwith "Not implemented"
