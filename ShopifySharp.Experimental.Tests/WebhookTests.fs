@@ -25,7 +25,7 @@ let ``Serializes webhook properties to a dictionary`` () =
         "metafield_namespaces" => seq ["namespace1"; "namespace2"]
     ]
         
-    Assert.Equal<Map<string, obj>>(dictionary, expected)
+    Assert.Equal<Map<string, obj>>(expected, dictionary)
 
 [<Fact>]
 let ``Serializes webhook properties to a dictionary with explicit null values`` () =
@@ -47,7 +47,7 @@ let ``Serializes webhook properties to a dictionary with explicit null values`` 
         "metafield_namespaces" => seq ["namespace1"; "namespace2"]
     ]
         
-    Assert.Equal<Map<string, obj>>(dictionary, expected)
+    Assert.Equal<Map<string, obj>>(expected, dictionary)
     
 [<Fact>]
 let ``Removes properties from the dictionary`` () =
@@ -69,7 +69,7 @@ let ``Removes properties from the dictionary`` () =
         "metafield_namespaces" => seq ["namespace1"; "namespace2"]
     ]
         
-    Assert.Equal<Map<string, obj>>(dictionary, expected)
+    Assert.Equal<Map<string, obj>>(expected, dictionary)
     Assert.False(Map.containsKey "format" dictionary)
     
 [<Fact>]
@@ -87,6 +87,6 @@ let ``Does not add unused properties`` () =
         "metafield_namespaces" => seq ["namespace1"; "namespace2"]
     ]
         
-    Assert.Equal<Map<string, obj>>(dictionary, expected)
+    Assert.Equal<Map<string, obj>>(expected, dictionary)
     Assert.False(Map.containsKey "format" dictionary)
     Assert.False(Map.containsKey "fields" dictionary)
