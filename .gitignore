@@ -215,5 +215,9 @@ ModelManifest.xml
 *.private.config
 */env.yml
 
-# Ignore VS Code Ionide extension folder
+# Ignore IDE settings
 .ionide
+.idea
+ 
+# Ignore signing keys
+*.snk
