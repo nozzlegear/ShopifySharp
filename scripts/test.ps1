@@ -1,14 +1,21 @@
-# Run all tests before the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
-$dir = "ShopifySharp.Tests";
 $config = "Release";
+
+# Build the project once, then let all tests skip build.
+dotnet build -c $config;
+
+# Run the unit tests in the experimental project first 
+dotnet test -c $config --no-build "ShopifySharp.Experimental/ShopifySharp.Experimental.fsproj"
+
+write-host "";
+write-host "Finished running experimental unit tests." -ForegroundColor "green";
+
+# Run all remaining tests before the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
+$dir = "ShopifySharp.Tests";
 $exceptionTestsFile = "ShopifyException_Tests.cs";
 $tests = Get-ChildItem "$dir/*_Tests.cs" -exclude "$exceptionTestsFile";
 # Add the Exception tests to the end of the array.
 $tests += (Get-ChildItem "$dir/$exceptionTestsFile")[0];
 $skippedTests = @();
-
-# Build the project once, then let all tests skip build.
-dotnet build -c $config;
 
 foreach ($test in $tests) {
     $categoryName = $test.Name -replace "_Tests.cs","";
