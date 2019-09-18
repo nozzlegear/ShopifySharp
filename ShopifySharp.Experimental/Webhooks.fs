@@ -1,6 +1,10 @@
 namespace ShopifySharp.Experimental
 
+open System.Collections.Generic
+open System.Net.Http
 open ShopifySharp
+open FSharp.Control.Tasks.V2.ContextInsensitive
+open ShopifySharp.Infrastructure
 
 module Webhooks = 
     type WebhookProperty = 
@@ -53,34 +57,34 @@ module Webhooks =
 
     // Extend the base ShopifySharp.WebhookService to include methods for creating/updating webhooks.
     type Service(shopDomain: string, accessToken: string, ?policy: IRequestExecutionPolicy) = 
-        let baseService = WebhookService(shopDomain, accessToken)
-
-        do Option.iter (fun p -> baseService.SetExecutionPolicy p) policy
+        inherit WebhookService (shopDomain, accessToken)
         
-        /// <summary>
-        /// Serializes the map of <see cref="WebhookProperty" /> to a JSON string.
-        /// </summary>
-        let mapToJson (map: WebhookProperties) = 
+        // Set the execution policy if one was given
+        do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
+        
+        /// Serializes the map of properties to a `Map<string, obj>`, which ShopifySharp can then serialize to JSON.
+        let mapToDictionary properties =
             let rec nextProperty (list: (WebhookProperty * obj option) list) (output: Map<string, obj>)  = 
                 match list with 
-                | [] -> ShopifySharp.Infrastructure.Serializer.Serialize output
+                | [] -> output
                 | (key, value) :: rest -> 
                     let value = value |> Option.defaultValue (box null)
                     Map.add (key.ToJsonName) (value) output 
                     |> nextProperty rest
 
-            nextProperty (Map.toList map) (Map.empty)
+            nextProperty (Map.toList properties) Map.empty
+        
+        member x.CreateAsync (webhook: WebhookProperties) =
+            let req = base.PrepareRequest "webhooks.json"
+            let data = dict [ "webhook", mapToDictionary webhook ]
+            let content = new JsonContent(data)
+            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook")
+            
+        member x.UpdateAsync (id: int64) (webhook: WebhookProperties) =
+            let req = base.PrepareRequest (sprintf "webhooks/%i.json" id)
+            let data = dict [ "webhook", mapToDictionary webhook ]
+            let content = new JsonContent(data)
+            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook")
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)
-        member x.APIVersion = baseService.APIVersion 
-        member x.SetExecutionPolicy = baseService.SetExecutionPolicy
-        member x.Count = baseService.CountAsync >> Async.AwaitTask
-        member x.List = baseService.ListAsync >> Async.AwaitTask
-        member x.Delete = baseService.DeleteAsync >> Async.AwaitTask
-        member x.Create webhook =
-            let json = mapToJson webhook 
-            failwith "Not implemented"
-        member x.Update webhook = 
-            let json = mapToJson webhook 
-            failwith "Not implemented"
