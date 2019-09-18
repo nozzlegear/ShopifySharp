@@ -63,7 +63,7 @@ module Webhooks =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
         
         /// Serializes the map of properties to a `Map<string, obj>`, which ShopifySharp can then serialize to JSON.
-        let mapToDictionary properties =
+        member x.MapToDictionary properties =
             let rec nextProperty (list: (WebhookProperty * obj option) list) (output: Map<string, obj>)  = 
                 match list with 
                 | [] -> output
@@ -76,13 +76,13 @@ module Webhooks =
         
         member x.CreateAsync (webhook: WebhookProperties) =
             let req = base.PrepareRequest "webhooks.json"
-            let data = dict [ "webhook", mapToDictionary webhook ]
+            let data = dict [ "webhook", x.MapToDictionary webhook ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook")
             
         member x.UpdateAsync (id: int64) (webhook: WebhookProperties) =
             let req = base.PrepareRequest (sprintf "webhooks/%i.json" id)
-            let data = dict [ "webhook", mapToDictionary webhook ]
+            let data = dict [ "webhook", x.MapToDictionary webhook ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook")
 
