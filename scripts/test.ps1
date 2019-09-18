@@ -4,7 +4,7 @@ $config = "Release";
 dotnet build -c $config;
 
 # Run the unit tests in the experimental project first 
-dotnet test -c $config --no-build "ShopifySharp.Experimental/ShopifySharp.Experimental.fsproj"
+dotnet test -c $config --no-build "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 
 write-host "";
 write-host "Finished running experimental unit tests." -ForegroundColor "green";
