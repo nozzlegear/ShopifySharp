@@ -35,8 +35,8 @@ namespace ShopifySharp
         /// <summary>
         /// The weight of the product variant in grams.
         /// </summary>
-        [JsonProperty("grams"), JsonConverter(typeof(NullToZeroConverter))]
-        public int? Grams { get; set; }
+        [JsonProperty("grams")]
+        public long? Grams { get; set; }
 
         /// <summary>
         /// Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock. Known values are 'deny' and 'continue'.
