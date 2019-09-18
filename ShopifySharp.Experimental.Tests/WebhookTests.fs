@@ -1,4 +1,4 @@
-module Tests
+module WebhookTests
 
 open Xunit
 open ShopifySharp.Experimental
