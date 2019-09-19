@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// The weight of the item in grams.
         /// </summary>
         [JsonProperty("grams")]
-        public int? Grams { get; set; }
+        public long? Grams { get; set; }
 
         /// <summary>
         /// The price of the item before discounts have been applied.
