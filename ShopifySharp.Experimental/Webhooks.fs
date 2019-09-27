@@ -66,6 +66,8 @@ module Webhooks =
     /// </summary>
     let removeProperty topic : WebhookProperties -> WebhookProperties = 
         Map.remove topic
+        
+    let inline private (=>) a b = a, toRawPropertyNames b |> JsonValue.MapPropertyValuesToObjects
 
     // Extend the base ShopifySharp.WebhookService to include methods for creating/updating webhooks.
     type Service(shopDomain: string, accessToken: string, ?policy: IRequestExecutionPolicy) = 
@@ -76,13 +78,13 @@ module Webhooks =
         
         member x.CreateAsync (webhook: WebhookProperties) =
             let req = base.PrepareRequest "webhooks.json"
-            let data = dict [ "webhook", toRawPropertyNames webhook ]
+            let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook")
             
         member x.UpdateAsync (id: int64) (webhook: WebhookProperties) =
             let req = base.PrepareRequest (sprintf "webhooks/%i.json" id)
-            let data = dict [ "webhook", toRawPropertyNames webhook ]
+            let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook")
 
