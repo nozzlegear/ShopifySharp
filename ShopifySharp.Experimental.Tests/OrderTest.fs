@@ -4,10 +4,7 @@ open System.Collections
 open Xunit
 open ShopifySharp.Experimental
 
-let inline private (=>) a b =
-    match b with
-    | :? seq as b -> a, b
-    | _ -> a, b
+let inline private (=>) a b = a, box b
 
 [<Fact>]
 let ``Merges order properties and creation option properties`` () =
