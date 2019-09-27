@@ -1,5 +1,7 @@
-version: 4.0.{build}
-image: Visual Studio 2017
+image: Visual Studio 2019
+branches:
+  only:
+    - master
 environment:
   SHOPIFYSHARP_API_KEY:
     secure: uF/ZRFFV19rv9tyOtspau/SpzMLQaGFWgBYge7kRC4vk/HHRxKda7BaNi46QhzN/
@@ -13,11 +15,6 @@ build_script:
 - ps: ./scripts/build.ps1
 test_script:
 - ps: ./scripts/test.ps1
-artifacts:
-- path: ShopifySharp/bin/Release/netstandard1.4
-  name: netstandard16
-- path: ShopifySharp/bin/Release/net45
-  name: net461
 skip_commits:
   message: /\[skip\]/
   files:
