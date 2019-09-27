@@ -1,7 +1,6 @@
 #! /bin/pwsh
 
 dotnet restore --verbosity quiet;
-dotnet build --no-restore -c Release --verbosity quiet;
 
 # Get a list of the projects that will be built and packed (those that aren't test projects)
 $projects = gci "./ShopifySharp*/*.*sproj" | where-object -filterscript { $_ -inotmatch "tests" } 
@@ -18,7 +17,7 @@ if ([string]::IsNullOrEmpty($tagOfHead))
     # Get the prerelease version suffix from AppVeyor's build revision
     $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
     $revision = "b{0:D5}" -f [convert]::ToInt32($revision, 10)
-    $projects | % { dotnet pack --no-build --verbosity quiet -c Release -o $artifacts --version-suffix $revision $_ }
+    $projects | % { dotnet pack --verbosity quiet -c Release -o $artifacts --version-suffix $revision $_ }
 }
 else
 {
@@ -32,7 +31,7 @@ else
         }
     }
     
-    $projects | % { dotnet pack --no-build --verbosity quiet -c Release -o $artifacts $_ }
+    $projects | % { dotnet pack --verbosity quiet -c Release -o $artifacts $_ }
 }
 
 # Gather all nuget packages and push them to AppVeyor artifacts
