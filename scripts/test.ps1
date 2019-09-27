@@ -6,6 +6,11 @@ dotnet build -c $config;
 # Run the unit tests in the experimental project first 
 dotnet test -c $config --no-build "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 
+if ($LastExitCode -ne 0) {
+    $message = "Experimental project tests failed with exit code $LastExitCode.";
+    throw $message;
+}
+
 write-host "";
 write-host "Finished running experimental unit tests." -ForegroundColor "green";
 
