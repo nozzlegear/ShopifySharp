@@ -7,6 +7,13 @@
   <ItemGroup>
     <Compile Include="Domain.fs" />
     <Compile Include="Webhooks.fs" />
+    <Compile Include="Metafields.fs" />
+    <Compile Include="Addresses.fs" />
+    <Compile Include="Transactions.fs" />
+    <Compile Include="TaxLines.fs" />
+    <Compile Include="OrderLineItems.fs" />
+    <Compile Include="Customers.fs" />
+    <Compile Include="Orders.fs" />
   </ItemGroup>
 
   <ItemGroup>
