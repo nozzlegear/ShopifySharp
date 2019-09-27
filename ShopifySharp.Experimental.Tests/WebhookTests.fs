@@ -8,7 +8,6 @@ let inline private (=>) a b = a, box b
 
 [<Fact>]
 let ``Serializes webhook properties to a dictionary`` () =
-    let service = Webhooks.Service.NewService "domain" "token"
     let dictionary =
         Webhooks.newWebhook
         |> Webhooks.address "https://example.com"
@@ -16,20 +15,19 @@ let ``Serializes webhook properties to a dictionary`` () =
         |> Webhooks.fields ["field1"; "field2"]
         |> Webhooks.topic "app/uninstalled"
         |> Webhooks.metafieldNamespaces ["namespace1"; "namespace2"]
-        |> service.MapToDictionary
+        |> Webhooks.toRawPropertyNames
     let expected = Map [
         "address" => "https://example.com"
         "format" => "json"
-        "fields" => seq ["field1"; "field2"]
+        "fields" => seq [ box "field1"; box "field2"]
         "topic" => "app/uninstalled"
-        "metafield_namespaces" => seq ["namespace1"; "namespace2"]
+        "metafield_namespaces" => seq [ box "namespace1"; box "namespace2" ]
     ]
         
-    Assert.Equal<Map<string, obj>>(expected, dictionary)
+    Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
 
 [<Fact>]
 let ``Serializes webhook properties to a dictionary with explicit null values`` () =
-    let service = Webhooks.Service.NewService "domain" "token"
     let dictionary =
         Webhooks.newWebhook
         |> Webhooks.address "https://example.com"
@@ -38,20 +36,19 @@ let ``Serializes webhook properties to a dictionary with explicit null values`` 
         |> Webhooks.fields ["field1"; "field2"]
         |> Webhooks.topic "app/uninstalled"
         |> Webhooks.metafieldNamespaces ["namespace1"; "namespace2"]
-        |> service.MapToDictionary
+        |> Webhooks.toRawPropertyNames
     let expected = Map [
         "address" => "https://example.com"
         "format" => null
-        "fields" => seq ["field1"; "field2"]
+        "fields" => seq [ box "field1"; box "field2" ]
         "topic" => "app/uninstalled"
-        "metafield_namespaces" => seq ["namespace1"; "namespace2"]
+        "metafield_namespaces" => seq [ box "namespace1"; box "namespace2" ]
     ]
         
-    Assert.Equal<Map<string, obj>>(expected, dictionary)
+    Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
     
 [<Fact>]
 let ``Removes properties from the dictionary`` () =
-    let service = Webhooks.Service.NewService "domain" "token"
     let dictionary =
         Webhooks.newWebhook
         |> Webhooks.address "https://example.com"
@@ -61,32 +58,31 @@ let ``Removes properties from the dictionary`` () =
         |> Webhooks.fields ["field1"; "field2"]
         |> Webhooks.topic "app/uninstalled"
         |> Webhooks.metafieldNamespaces ["namespace1"; "namespace2"]
-        |> service.MapToDictionary
+        |> Webhooks.toRawPropertyNames
     let expected = Map [
         "address" => "https://example.com"
-        "fields" => seq ["field1"; "field2"]
+        "fields" => seq [ box "field1"; box "field2"]
         "topic" => "app/uninstalled"
-        "metafield_namespaces" => seq ["namespace1"; "namespace2"]
+        "metafield_namespaces" => seq [ box "namespace1"; box "namespace2"]
     ]
         
-    Assert.Equal<Map<string, obj>>(expected, dictionary)
+    Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
     Assert.False(Map.containsKey "format" dictionary)
     
 [<Fact>]
 let ``Does not add unused properties`` () =
-    let service = Webhooks.Service.NewService "domain" "token"
     let dictionary =
         Webhooks.newWebhook
         |> Webhooks.address "https://example.com"
         |> Webhooks.topic "app/uninstalled"
         |> Webhooks.metafieldNamespaces ["namespace1"; "namespace2"]
-        |> service.MapToDictionary
+        |> Webhooks.toRawPropertyNames
     let expected = Map [
         "address" => "https://example.com"
         "topic" => "app/uninstalled"
-        "metafield_namespaces" => seq ["namespace1"; "namespace2"]
+        "metafield_namespaces" => seq [box "namespace1"; box "namespace2"]
     ]
         
-    Assert.Equal<Map<string, obj>>(expected, dictionary)
+    Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
     Assert.False(Map.containsKey "format" dictionary)
     Assert.False(Map.containsKey "fields" dictionary)

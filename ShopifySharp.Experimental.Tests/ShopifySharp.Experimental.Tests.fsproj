@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <Compile Include="WebhookTests.fs" />
+        <Compile Include="JsonValueTests.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
