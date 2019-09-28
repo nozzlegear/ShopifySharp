@@ -24,7 +24,7 @@ function Exec
     }
 }
 
-echo "============================ RESTORING DEPENDENCIES ==========================="
+write-host "============================ RESTORING DEPENDENCIES ==========================="
 exec { & dotnet restore --verbosity quiet }
 
 # Get a list of the projects that will be built and packed (those that aren't test projects)
@@ -39,18 +39,18 @@ $artifactsFolder = "./artifacts";
 
 if ([string]::IsNullOrEmpty($tagOfHead))
 {
-    echo "============================= PACKING FOR PRERELEASE ==========================="
+    write-host "============================= PACKING FOR PRERELEASE ==========================="
     # Get the prerelease version suffix from AppVeyor's build revision
     $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
     $revision = "b{0:D5}" -f [convert]::ToInt32($revision, 10)
     $projects | % { 
         exec { & dotnet pack -c Release -o $artifactsFolder --version-suffix $revision $_ }
-        echo "Packed $($_.Name) for prerelease." -ForegroundColor "green"
+        write-host "Packed $($_.Name) for prerelease." -ForegroundColor "green"
     }
 }
 else
 {
-    echo "============================= PACKING FOR RELEASE ==========================="
+    write-host "============================= PACKING FOR RELEASE ==========================="
     # Unused, but we could also compare that the VersionSuffix attributes of a project match the tag and refuse if they don't.
     $projects | % {
         [xml]$projectFile = Get-Content $_
@@ -63,22 +63,31 @@ else
 
     $projects | % { 
         exec { & dotnet pack -c Release -o $artifactsFolder $_ }
-        echo "Packed $($_.Name) for release." -ForegroundColor "green"
+        write-host "Packed $($_.Name) for release." -ForegroundColor "green"
     }
 }
 
-echo "============================= PUSHING APPVEYOR ARTIFACTS ==========================="
+write-host "============================= PUSHING APPVEYOR ARTIFACTS ==========================="
 # Gather all nuget packages and push them to AppVeyor artifacts
-$packed = gci "./ShopifySharp*/$artifactsFolder/*.nupkg"
+# Depending on the version of dotnet, the artifacts folder may either be at root level, or in each project's own folder
+$packedPath = "./ShopifySharp*/$artifactsFolder/*.nupkg"
 
-if (!(test-path "./ShopifySharp/$artifactsFolder")) {
-    gci "./ShopifySharp"
-    throw "./ShopifySharp/$artifactsFolder does not exist"
+if (! (test-path $packedPath)) 
+{
+    $packedPath = "$artifactsFolder/*.nupkg"
+    
+    if (! (test-path $packedPath)) 
+    {
+        gci "./"
+        gci "./ShopifySharp"
+        throw "Unable to locate artifacts folder."
+    }
 }
 
-echo "Found $($packed.Count) artifacts to push."
+$packed = gci $packedPath 
+write-host "Found $($packed.Count) artifacts to push."
 
 $packed | % {
     exec { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName $_.Name }
-    echo "Pushed $($_.Name) artifact."
+    write-host "Pushed $($_.Name) artifact."
 }
