@@ -1,7 +1,11 @@
 $config = "Release";
 
+write-host "============================= BUILDING TEST PROJECTS ==========================="
+
 # Build the project once, then let all tests skip build.
-dotnet build -c $config;
+dotnet build -c $config --verbosity quiet;
+
+write-host "============================= RUNNING EXPERIMENTAL TESTS ==========================="
 
 # Run the unit tests in the experimental project first 
 dotnet test -c $config --no-build "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
@@ -13,6 +17,7 @@ if ($LastExitCode -ne 0) {
 
 write-host "";
 write-host "Finished running experimental unit tests." -ForegroundColor "green";
+write-host "============================= RUNNING MAIN PACKAGE TESTS ==========================="
 
 # Run all remaining tests before the ShopifyException tests, which aim to hit the rate limit and therefore break other tests.
 $dir = "ShopifySharp.Tests";
