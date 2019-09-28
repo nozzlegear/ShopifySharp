@@ -86,3 +86,18 @@ let ``Does not add unused properties`` () =
     Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
     Assert.False(Map.containsKey "format" dictionary)
     Assert.False(Map.containsKey "fields" dictionary)
+
+[<Fact>]
+let ``Replaces properties if they already exist`` () =
+    let dictionary =
+        Webhooks.newWebhook
+        |> Webhooks.address "https://example.com"
+        |> Webhooks.topic "app/uninstalled"
+        |> Webhooks.topic "hello/world"
+        |> Webhooks.toRawPropertyNames
+    let expected = Map [
+        "address" => "https://example.com"
+        "topic" => "hello/world"
+    ]
+    
+    Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
