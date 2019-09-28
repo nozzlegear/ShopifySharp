@@ -274,19 +274,19 @@ module Orders =
             let req = base.PrepareRequest "orders.json"
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "order")
+            base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order")
             
         member x.CreateAsync(order: OrderProperties, options: CreationOptions.CreationOptionProperties) =
             let req = base.PrepareRequest "orders.json"
             let data = dict [ "order", mergeOrderAndCreationOptions order options |> JsonValue.MapPropertyValuesToObjects ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "order")
+            base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order")
             
         member x.UpdateAsync (id: int64) (order: OrderProperties) =
             let req = base.PrepareRequest (sprintf "orders/%i.json" id)
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "order")
+            base.ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order")
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)
