@@ -44,8 +44,8 @@ if ([string]::IsNullOrEmpty($tagOfHead))
     $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
     $revision = "b{0:D5}" -f [convert]::ToInt32($revision, 10)
     $projects | % { 
-        exec { & dotnet pack --verbosity quiet -c Release -o $artifactsFolder --version-suffix $revision $_ }
-        echo "Packed $($_.Name) for prerelease."
+        exec { & dotnet pack -c Release -o $artifactsFolder --version-suffix $revision $_ }
+        echo "Packed $($_.Name) for prerelease." -ForegroundColor "green"
     }
 }
 else
@@ -62,15 +62,22 @@ else
     }
 
     $projects | % { 
-        exec { & dotnet pack --verbosity quiet -c Release -o $artifactsFolder $_ }
-        echo "Packed $($_.Name) for release."
+        exec { & dotnet pack -c Release -o $artifactsFolder $_ }
+        echo "Packed $($_.Name) for release." -ForegroundColor "green"
     }
 }
 
 echo "============================= PUSHING APPVEYOR ARTIFACTS ==========================="
 # Gather all nuget packages and push them to AppVeyor artifacts
 $packed = gci "./ShopifySharp*/$artifactsFolder/*.nupkg"
+
+if (!(test-path "./ShopifySharp/$artifactsFolder")) {
+    gci "./ShopifySharp"
+    throw "./ShopifySharp/$artifactsFolder does not exist"
+}
+
 echo "Found $($packed.Count) artifacts to push."
+
 $packed | % {
     exec { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName $_.Name }
     echo "Pushed $($_.Name) artifact."
