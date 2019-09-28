@@ -3,8 +3,21 @@ module WebhookTests
 open Xunit
 open ShopifySharp.Experimental
 open ShopifySharp.Experimental.Webhooks
+open System.Threading.Tasks
 
 let inline private (=>) a b = a, box b
+let private service = Webhooks.Service.NewService "https://example.myshopify.com" "test token"
+    
+type UpdateFunction = (int64 * Webhooks.WebhookProperties) -> Task<ShopifySharp.Webhook>
+type CreateFunction = Webhooks.WebhookProperties -> Task<ShopifySharp.Webhook>
+
+[<Fact>]
+let ``Function signatures match what they are expected to be`` () =
+    // The test itself does nothing but pass. The compiler should throw errors if the signatures ever change.
+    let _: UpdateFunction = service.UpdateAsync
+    let _: CreateFunction = service.CreateAsync
+    
+    Assert.True true 
 
 [<Fact>]
 let ``Serializes webhook properties to a dictionary`` () =

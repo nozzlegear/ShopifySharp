@@ -1,10 +1,25 @@
 ﻿module OrderTests
 
 open System.Collections
+open System.Threading.Tasks
 open Xunit
 open ShopifySharp.Experimental
 
 let inline private (=>) a b = a, box b
+let private service = Orders.Service.NewService "https://example.myshopify.com" "test token"
+
+type UpdateFunction = (int64 * Orders.OrderProperties) -> Task<ShopifySharp.Order>
+type CreateFunction = Orders.OrderProperties -> Task<ShopifySharp.Order>
+type CreateWithOptionsFunction = (Orders.OrderProperties * Orders.CreationOptions.CreationOptionProperties) -> Task<ShopifySharp.Order>
+
+[<Fact>]
+let ``Function signatures match what they are expected to be`` () =
+    // The test itself does nothing but pass. The compiler should throw errors if the signatures ever change.
+    let _: UpdateFunction = service.UpdateAsync
+    let _: CreateFunction = service.CreateAsync
+    let _: CreateWithOptionsFunction = service.CreateAsync
+    
+    Assert.True true 
 
 [<Fact>]
 let ``Merges order properties and creation option properties`` () =
@@ -36,5 +51,3 @@ let ``Merges order properties and creation option properties`` () =
     ]
     
     Assert.Equal(box expected, JsonValue.MapPropertyValuesToObjects merged)
-    
-    
