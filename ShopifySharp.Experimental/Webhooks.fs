@@ -82,7 +82,7 @@ module Webhooks =
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook")
             
-        member x.UpdateAsync (id: int64) (webhook: WebhookProperties) =
+        member x.UpdateAsync (id: int64, webhook: WebhookProperties) =
             let req = base.PrepareRequest (sprintf "webhooks/%i.json" id)
             let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)

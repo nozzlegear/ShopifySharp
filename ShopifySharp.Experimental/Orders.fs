@@ -282,7 +282,7 @@ module Orders =
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order")
             
-        member x.UpdateAsync (id: int64) (order: OrderProperties) =
+        member x.UpdateAsync (id: int64, order: OrderProperties) =
             let req = base.PrepareRequest (sprintf "orders/%i.json" id)
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
