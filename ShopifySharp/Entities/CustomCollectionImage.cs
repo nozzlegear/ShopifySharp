@@ -36,12 +36,12 @@ namespace ShopifySharp
         /// Width of the image in pixels.
         /// </summary>
         [JsonProperty("width")]
-        public int Width { get; set; }
+        public int? Width { get; set; }
 
         /// <summary>
         /// Height of the image in pixels.
         /// </summary>
         [JsonProperty("height")]
-        public int Height { get; set; }
+        public int? Height { get; set; }
     }
 }
