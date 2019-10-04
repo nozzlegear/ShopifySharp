@@ -21,9 +21,27 @@ namespace ShopifySharp
         public string Src { get; set; }
 
         /// <summary>
+        /// Alternative text that describes the collection image.
+        /// </summary>
+        [JsonProperty("alt")]
+        public string Alt { get; set; }
+
+        /// <summary>
         /// The date the image was created.
         /// </summary>
         [JsonProperty("created_at")]
         public DateTimeOffset? Created_At { get; set; }
+
+        /// <summary>
+        /// Width of the image in pixels.
+        /// </summary>
+        [JsonProperty("width")]
+        public int? Width { get; set; }
+
+        /// <summary>
+        /// Height of the image in pixels.
+        /// </summary>
+        [JsonProperty("height")]
+        public int? Height { get; set; }
     }
 }
