@@ -2170,6 +2170,36 @@ var service =  new GiftCardService(myShopifyUrl, shopAccessToken);
 IEnumerable<GiftCard> giftCards = await Service.SearchAsync("code: abc-bcd-efg");
 ```
 
+## Gift Card Adjustments
+
+Developers can create adjustments on existing gift cards with the `GiftCardAdjustmentService`.
+
+**Gift Cards require a Shopify Plus subscription and also the Gift Card Adjustment endpoint needs to be enabled on your store, contact Shopify plus support for more info.**
+
+### Listing Gift Card Adjustments
+
+```cs
+var service = new GiftCardAdjustmentService(myShopifyUrl, shopAccessToken);
+var giftCardAdjustments = await service.ListAsync(giftCardId);
+```
+
+### Creating a Gift Card Adjustment
+
+```cs
+var service = new GiftCardAdjustmentService(myShopifyUrl, shopAccessToken);
+var giftCard = await service.CreateAsync(giftCardId, new GiftCardAdjustment()
+{
+    Amount = -1.00,
+});
+```
+
+### Getting a Gift Card Adjustment
+
+```cs
+var service = new GiftCardAdjustmentService(myShopifyUrl, shopAccessToken);
+var giftCardAdjustment = await service.GetAsync(giftCardId, adjustmentId):
+```
+
 ## Price Rules
 
 The Price Rules API allows you to dynamically create discounts with multiple conditions that can be applied at checkout to cart items or shipping lines via a discount code. Price rules can be created for a fixed value discount, a percentage discount, or a shipping line discount. You can also specify the dates for which the price rule is valid, the number of times the price rule can be applied, and to which products, collections, variants, customer groups and even shipping countries the price rule can be applied.
