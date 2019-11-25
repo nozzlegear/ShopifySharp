@@ -214,3 +214,10 @@ ModelManifest.xml
 # Ignore private configuration files
 *.private.config
 */env.yml
+
+# Ignore IDE settings
+.ionide
+.idea
+ 
+# Ignore signing keys
+*.snk

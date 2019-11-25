@@ -11,7 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
 		readme.md = readme.md
+		scripts\build.ps1 = scripts\build.ps1
+		scripts\test.ps1 = scripts\test.ps1
 	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ShopifySharp.Experimental", "ShopifySharp.Experimental\ShopifySharp.Experimental.fsproj", "{DE7BB881-2191-489D-B9AA-F5F910EF55D8}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ShopifySharp.Experimental.Tests", "ShopifySharp.Experimental.Tests\ShopifySharp.Experimental.Tests.fsproj", "{39D50A8A-271D-4891-A749-C1225E8C9EC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,14 @@ Global
 		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1391793-75FA-43D1-8D8C-0DF405D80DB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7BB881-2191-489D-B9AA-F5F910EF55D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7BB881-2191-489D-B9AA-F5F910EF55D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7BB881-2191-489D-B9AA-F5F910EF55D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7BB881-2191-489D-B9AA-F5F910EF55D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D50A8A-271D-4891-A749-C1225E8C9EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D50A8A-271D-4891-A749-C1225E8C9EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D50A8A-271D-4891-A749-C1225E8C9EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D50A8A-271D-4891-A749-C1225E8C9EC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
