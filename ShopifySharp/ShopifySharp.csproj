@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
     <PackageTags>shopify,ecommerce</PackageTags>
-    <VersionPrefix>4.22.0</VersionPrefix>
+    <VersionPrefix>4.22.1</VersionPrefix>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="microsoft.extensions.primitives" Version="1.1.0" />
