@@ -97,12 +97,11 @@ let ``Replaces properties if they already exist`` () =
         Charges.newCharge
         |> Charges.name "My Charge"
         |> Charges.returnUrl "https://example.com/activate-charge"
+        |> Charges.returnUrl "hello world"
         |> Charges.toRawPropertyNames
     let expected = Map [
         "name" => "My Charge"
-        "return_url" => "https://example.com/activate-charge"
+        "return_url" => "hello world"
     ]    
    
     Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary)
-    Assert.False(Map.containsKey "test" dictionary)
-    Assert.False(Map.containsKey "price" dictionary)
