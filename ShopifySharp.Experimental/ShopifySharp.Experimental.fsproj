@@ -27,6 +27,7 @@
     <Compile Include="ScriptTags.fs" />
     <Compile Include="Charges.fs" />
     <Compile Include="RecurringCharges.fs" />
+    <Compile Include="UsageCharges.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
