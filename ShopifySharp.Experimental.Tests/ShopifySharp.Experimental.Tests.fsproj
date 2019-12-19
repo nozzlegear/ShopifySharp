@@ -13,6 +13,7 @@
         <Compile Include="JsonValueTests.fs" />
         <Compile Include="OrderTest.fs" />
         <Compile Include="ScriptTagTest.fs" />
+        <Compile Include="ChargeTest.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
