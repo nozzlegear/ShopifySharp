@@ -51,9 +51,9 @@ module UsageCharges =
         // Set the execution policy if one was given
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
-        member x.CreateAsync (recurringChargeId : int64, tag : UsageChargeProperties) =
+        member x.CreateAsync (recurringChargeId : int64, data : UsageChargeProperties) =
             let req = base.PrepareRequest (sprintf "recurring_application_charges/%i/usage_charges.json" recurringChargeId)
-            let data = dict [ "usage_charge" => tag ]
+            let data = dict [ "usage_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, content, "usage_charge")
 

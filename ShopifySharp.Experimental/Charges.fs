@@ -59,9 +59,9 @@ module Charges =
         // Set the execution policy if one was given
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
-        member x.CreateAsync (tag : ChargeProperties) =
+        member x.CreateAsync (data : ChargeProperties) =
             let req = base.PrepareRequest "application_charges.json"
-            let data = dict [ "application_charge" => tag ]
+            let data = dict [ "application_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge")
 

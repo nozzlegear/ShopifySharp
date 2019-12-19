@@ -71,9 +71,9 @@ module RecurringCharges =
         // Set the execution policy if one was given
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
-        member x.CreateAsync (tag : RecurringChargeProperties) =
+        member x.CreateAsync (data : RecurringChargeProperties) =
             let req = base.PrepareRequest "recurring_application_charges.json"
-            let data = dict [ "recurring_application_charge" => tag ]
+            let data = dict [ "recurring_application_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge")
 
