@@ -5,7 +5,6 @@ open System.Threading.Tasks
 open Xunit
 open ShopifySharp.Experimental
 
-let inline private (=>) a b = a, box b
 let private service = Orders.Service.NewService "https://example.myshopify.com" "test token"
 
 type UpdateFunction = (int64 * Orders.OrderProperties) -> Task<ShopifySharp.Order>

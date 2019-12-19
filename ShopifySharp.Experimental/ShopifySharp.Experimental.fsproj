@@ -24,6 +24,7 @@
     <Compile Include="OrderLineItems.fs" />
     <Compile Include="Customers.fs" />
     <Compile Include="Orders.fs" />
+    <Compile Include="ScriptTags.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
