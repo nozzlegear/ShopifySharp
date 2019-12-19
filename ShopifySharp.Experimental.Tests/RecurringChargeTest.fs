@@ -17,7 +17,7 @@ let ``Function signatures match what they are expected to be`` () =
     Assert.True true
 
 [<Fact>]
-let ``Serializes script tag properties to a dictionary`` () =
+let ``Serializes recurring charge properties to a dictionary`` () =
     let dictionary =
         RecurringCharges.newRecurringCharge
         |> RecurringCharges.cappedAmount 5.0M
@@ -41,7 +41,7 @@ let ``Serializes script tag properties to a dictionary`` () =
     Assert.Equal(expected, JsonValue.MapPropertyValuesToObjects dictionary) 
     
 [<Fact>]
-let ``Serializes script tag properties to a dictionary with explicit null values`` () =
+let ``Serializes recurring charge properties to a dictionary with explicit null values`` () =
     let dictionary =
         RecurringCharges.newRecurringCharge
         |> RecurringCharges.cappedAmount 5.0M
