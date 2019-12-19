@@ -29,7 +29,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="taskbuilder.fs" Version="2.1.0" />
-  </ItemGroup>
 </Project>
