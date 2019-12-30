@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(string body)
         {
-            var req = PrepareRequest("api/graphql.json");
+            var req = PrepareRequest("graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, "application/graphql");
 
@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(JToken body)
         {
-            var req = PrepareRequest("api/graphql.json");
+            var req = PrepareRequest("graphql.json");
 
             var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
