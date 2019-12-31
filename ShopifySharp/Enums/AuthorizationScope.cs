@@ -66,22 +66,22 @@ namespace ShopifySharp.Enums
 
         [EnumMember(Value = "write_users")]
         WriteUsers,
-        
+
         [EnumMember(Value = "read_checkouts")]
-        ReadCheckouts, 
-       
+        ReadCheckouts,
+
         [EnumMember(Value = "write_checkouts")]
         WriteCheckouts,
-        
+
         [EnumMember(Value = "read_reports")]
-        ReadReports, 
-        
+        ReadReports,
+
         [EnumMember(Value = "write_reports")]
         WriteReports,
-        
+
         [EnumMember(Value = "read_price_rules")]
-        ReadPriceRules, 
-        
+        ReadPriceRules,
+
         [EnumMember(Value = "write_price_rules")]
         WritePriceRules,
 
@@ -128,6 +128,9 @@ namespace ShopifySharp.Enums
         UnauthenticatedWriteCustomers,
 
         [EnumMember(Value = "unauthenticated_read_content")]
-        UnauthenticatedReadContent
+        UnauthenticatedReadContent,
+
+        [EnumMember(Value = "read_locations")]
+        ReadLocations
     }
 }
