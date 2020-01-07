@@ -8,9 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="TestUtils.fs" />
         <Compile Include="WebhookTests.fs" />
         <Compile Include="JsonValueTests.fs" />
         <Compile Include="OrderTest.fs" />
+        <Compile Include="ScriptTagTest.fs" />
+        <Compile Include="ChargeTest.fs" />
+        <Compile Include="RecurringChargeTest.fs" />
+        <Compile Include="UsageChargeTest.fs" />
+        <Compile Include="ApplicationCreditTest.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 

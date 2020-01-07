@@ -1,10 +1,7 @@
 ﻿module JsonValueTests
 
-open System.Collections.Generic
 open Xunit
 open ShopifySharp.Experimental
-
-let inline private (=>) a b = a, box b
 
 [<Fact>]
 let ``Serializes raw integer value`` () =

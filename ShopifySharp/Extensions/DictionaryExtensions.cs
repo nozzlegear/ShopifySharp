@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ShopifySharp
 {
-    public static class DictionaryExtensions
+    internal static class DictionaryExtensions
     {
         public static void AddRange(this IDictionary<string, object> dictionary, IEnumerable<KeyValuePair<string, object>> kvps)
         {

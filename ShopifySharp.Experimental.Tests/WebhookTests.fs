@@ -5,7 +5,6 @@ open ShopifySharp.Experimental
 open ShopifySharp.Experimental.Webhooks
 open System.Threading.Tasks
 
-let inline private (=>) a b = a, box b
 let private service = Webhooks.Service.NewService "https://example.myshopify.com" "test token"
     
 type UpdateFunction = (int64 * Webhooks.WebhookProperties) -> Task<ShopifySharp.Webhook>

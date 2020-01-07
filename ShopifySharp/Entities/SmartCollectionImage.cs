@@ -25,5 +25,23 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("attachment")]
         public string Attachment { get; set; }
+
+        /// <summary>
+        /// Width of the image in pixels.
+        /// </summary>
+        [JsonProperty("width")]
+        public int? Width { get; set; }
+
+        /// <summary>
+        /// Height of the image in pixels.
+        /// </summary>
+        [JsonProperty("height")]
+        public int? Height { get; set; }
+
+        /// <summary>
+        /// Alternative text that describes the collection image.
+        /// </summary>
+        [JsonProperty("alt")]
+        public string Alt { get; set; }
     }
 }

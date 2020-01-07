@@ -11,7 +11,7 @@ namespace ShopifySharp
     /// <summary>
     /// Enum Extension Method
     /// </summary>
-    public static class EnumExtensions
+    internal static class EnumExtensions
     {
         /// <summary>
         /// Reads and uses the enum's <see cref="EnumMemberAttribute"/> for serialization.
@@ -23,7 +23,7 @@ namespace ShopifySharp
             string name = input.ToString();
             var info = input.GetType().GetTypeInfo().DeclaredMembers.Where(i => i.Name == name);
 
-            if (info.Count() > 0)
+            if (info.Any())
             {
                 var attribute = info.First().GetCustomAttribute<EnumMemberAttribute>();
 

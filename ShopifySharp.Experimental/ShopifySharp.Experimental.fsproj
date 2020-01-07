@@ -24,11 +24,13 @@
     <Compile Include="OrderLineItems.fs" />
     <Compile Include="Customers.fs" />
     <Compile Include="Orders.fs" />
+    <Compile Include="ScriptTags.fs" />
+    <Compile Include="Charges.fs" />
+    <Compile Include="RecurringCharges.fs" />
+    <Compile Include="UsageCharges.fs" />
+    <Compile Include="ApplicationCredit.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="taskbuilder.fs" Version="2.1.0" />
   </ItemGroup>
 </Project>

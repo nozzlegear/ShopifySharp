@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace ShopifySharp
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static IEnumerable<PropertyInfo> GetAllDeclaredProperties(this Type type)
         {

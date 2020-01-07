@@ -1,6 +1,6 @@
 namespace ShopifySharp
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         /// <summary>
         /// Checks if a string starts with another string, ignoring case.
