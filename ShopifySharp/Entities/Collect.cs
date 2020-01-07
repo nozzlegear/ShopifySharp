@@ -27,6 +27,7 @@ namespace ShopifySharp
         /// <summary>
         /// States whether or not the collect is featured.
         /// </summary>
+        [Obsolete]
         [JsonProperty("featured")]
         public bool? Featured { get; set; }
 
