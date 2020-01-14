@@ -32,12 +32,12 @@ namespace ShopifySharp.Tests
         {
             //CalculateAsync
             var order = await Fixture.OrderService.GetAsync(Fixture.Created.First().Id.Value);
-            var requestedRefund = PrepareCalculate(order);
+            var requestedRefund = Prepare_Calculate(order);
             var calculateResponse = await Fixture.Service.CalculateAsync(order.Id.Value, requestedRefund);
             Assert.True(calculateResponse.Transactions.Count<Transaction>() > 0, "No transactions for order!"); //Perhaps something is unexpected with the order, or call/response was malformed."
 
             //RefundAsync
-            var fullRefundForAnOrder = PrepareRefund(calculateResponse);
+            var fullRefundForAnOrder = Prepare_Refund(calculateResponse);
             var refundResponse = await Fixture.Service.RefundAsync(order.Id.Value, fullRefundForAnOrder);
             Assert.True(refundResponse.ProcessedAt.HasValue && refundResponse.ProcessedAt > DateTime.UtcNow.AddDays(-1), "Refund was not processed"); //Order was not processed, thus was not successfully refunded"
 
@@ -138,7 +138,7 @@ namespace ShopifySharp.Tests
             Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
         }
 
-        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken); //original
+        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         public RefundService Service { get; } = new RefundService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public string Note => "This order was created while testing ShopifySharp!";
@@ -149,7 +149,7 @@ namespace ShopifySharp.Tests
         {
             if (!OrderId.HasValue)
                 return;
-            // Create an order for count, list, get, etc. orders.
+            // Retrieve an order for count, list, get, etc. orders.
             await Retrieve(OrderId.Value);
         }
 
