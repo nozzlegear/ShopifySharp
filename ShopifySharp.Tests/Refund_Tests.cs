@@ -131,7 +131,7 @@ namespace ShopifySharp.Tests
         /// An id tied to an order.
         /// Requires that the order be manually created and set before testing.
         /// </summary>
-        public long? OrderId = 1941696315452; 
+        public long? OrderId = null; 
 
         public Refund_Tests_Fixture()
         {
