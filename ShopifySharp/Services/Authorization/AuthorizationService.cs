@@ -43,7 +43,10 @@ namespace ShopifySharp
 
         private static string EncodeQuery(StringValues values, bool isKey)
         {
-            string s = values.FirstOrDefault();
+            //array parameters are handled differently: see https://community.shopify.com/c/Shopify-APIs-SDKs/HMAC-calculation-vs-ids-arrays/td-p/261154
+            string s = values.Count <= 1 ?
+                            values.FirstOrDefault() :
+                            '[' + string.Join(", ", values.Select(v => '"' + v + '"')) + ']';
 
             if (string.IsNullOrEmpty(s))
             {
@@ -55,7 +58,7 @@ namespace ShopifySharp
 
             if (isKey)
             {
-                output = output.Replace("=", "%3D");
+                output = output.Replace("=", "%3D").Replace("[]", "");
             }
 
             return output;
