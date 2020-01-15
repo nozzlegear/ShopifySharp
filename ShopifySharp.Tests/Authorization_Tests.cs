@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using ShopifySharp.Enums;
 using Xunit;
@@ -48,7 +49,7 @@ namespace ShopifySharp.Tests
         public void Validates_Proxy_Requests_With_Raw_QueryString()
         {
             //Configure querystring
-            var qs = "shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&signature=239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a";         
+            var qs = "shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&signature=239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a";
 
             bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
 
@@ -68,6 +69,15 @@ namespace ShopifySharp.Tests
 
             bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
 
+            Assert.True(isValid);
+        }
+
+        [Fact(Skip = "TODO: Generate a real query string with the shop and secret key used by the build server, which contains an ids[] parameter")]
+        public void Validates_Web_Requests_WithArrayParameter()
+        {
+            string query = "hmac=123....";
+            var qs = QueryHelpers.ParseQuery(query);
+            bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
             Assert.True(isValid);
         }
 
@@ -110,7 +120,7 @@ namespace ShopifySharp.Tests
         public async Task Validates_Shop_Malfunctioned_Urls()
         {
             string invalidUrl = "foo";
-            
+
             Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
         }
 
