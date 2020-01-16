@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
@@ -21,6 +22,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's discounts.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Discount>> ListAsync()
         {
             var req = PrepareRequest("discounts.json");

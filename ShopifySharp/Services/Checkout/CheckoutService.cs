@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's abandoned carts.
         /// </summary>
         /// <returns></returns>
-        [Obsolete("This endpoint is an undocumented feature. Shopify may remove support for this endpoint at any time, without warning.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Checkout>> ListAsync(CheckoutFilter options = null)
         {
             var req = PrepareRequest("checkouts.json");

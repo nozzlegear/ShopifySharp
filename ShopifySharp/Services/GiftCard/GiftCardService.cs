@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
@@ -42,6 +43,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of gift cards matching the filter.</returns>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<GiftCard>> ListAsync(GiftCardFilter options = null)
         {
             var req = PrepareRequest("gift_cards.json");
