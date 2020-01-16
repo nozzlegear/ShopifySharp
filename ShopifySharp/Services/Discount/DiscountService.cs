@@ -21,10 +21,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's discounts.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Discount>> ListAsync()
+        public virtual async Task<IEnumerable<Discount>> ListAsync(IListFilter filter)
         {
-            var req = PrepareRequest("discounts.json");
-
+            throw new Exception("not yet implemented");
             return await ExecuteRequestAsync<List<Discount>>(req, HttpMethod.Get, rootElement: "discounts");
         }
 

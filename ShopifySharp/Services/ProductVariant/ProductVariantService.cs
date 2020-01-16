@@ -34,8 +34,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
         /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ListFilter filterOptions = null)
+        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"products/{productId}/variants.json");
 
             if (filterOptions != null)

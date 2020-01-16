@@ -43,8 +43,9 @@ namespace ShopifySharp
         /// </summary>
         /// <returns></returns>
         [Obsolete("This endpoint is an undocumented feature. Shopify may remove support for this endpoint at any time, without warning.")]
-        public virtual async Task<IEnumerable<Checkout>> ListAsync(CheckoutFilter options = null)
+        public virtual async Task<IEnumerable<Checkout>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("checkouts.json");
 
             if (options != null)

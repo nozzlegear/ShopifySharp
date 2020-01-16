@@ -23,8 +23,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the articles belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<Article>> ListAsync(long blogId, ArticleFilter filter = null)
+        public virtual async Task<IEnumerable<Article>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"blogs/{blogId}/articles.json");
 
             if (filter != null)

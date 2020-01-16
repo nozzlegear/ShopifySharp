@@ -25,8 +25,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">The <see cref="CustomCollection"/>. used to filter results</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(CustomCollectionFilter filter = null)
+        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("custom_collections.json");
 
             //Add optional parameters to request

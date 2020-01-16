@@ -24,9 +24,9 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of access scopes associated to the access token.
         /// </summary>
-        public virtual async Task<IEnumerable<AccessScope>> ListAsync()
+        public virtual async Task<IEnumerable<AccessScope>> ListAsync(IListFilter filter)
         {
-            var req = PrepareRequest($"oauth/access_scopes.json");
+            throw new Exception("not yet implemented");
             return await ExecuteRequestAsync<List<AccessScope>>(req, HttpMethod.Get, rootElement: "access_scopes");
         }
     }

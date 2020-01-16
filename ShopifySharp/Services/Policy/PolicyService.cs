@@ -16,10 +16,9 @@ namespace ShopifySharp
         /// <summary>
         /// Get the policies and their contents for a shop
         /// </summary>
-        public virtual async Task<IEnumerable<Policy>> ListAsync()
+        public virtual async Task<IEnumerable<Policy>> ListAsync(IListFilter filter)
         {
-            var request = PrepareRequest("policies.json");
-
+            throw new Exception("not yet implemented");
             return await ExecuteRequestAsync<List<Policy>>(request, HttpMethod.Get, rootElement: "policies");
         }
     }

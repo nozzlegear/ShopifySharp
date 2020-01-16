@@ -21,8 +21,9 @@ namespace ShopifySharp
         /// Gets a list of all order risks for an order.
         /// </summary>
         /// <param name="orderId">The order the risks belong to.</param>
-        public virtual async Task<IEnumerable<OrderRisk>> ListAsync(long orderId)
+        public virtual async Task<IEnumerable<OrderRisk>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"orders/{orderId}/risks.json");
             
             return await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");

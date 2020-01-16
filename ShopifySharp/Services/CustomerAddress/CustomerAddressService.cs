@@ -24,8 +24,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerId">The id of the customer to retrieve.</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Address>> ListAsync(long customerId, ListFilter filter = null)
+        public virtual async Task<IEnumerable<Address>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"customers/{customerId}/addresses.json");
 
             if (filter != null)

@@ -42,8 +42,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of gift cards matching the filter.</returns>
-        public virtual async Task<IEnumerable<GiftCard>> ListAsync(GiftCardFilter options = null)
+        public virtual async Task<IEnumerable<GiftCard>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("gift_cards.json");
 
             if (options != null)

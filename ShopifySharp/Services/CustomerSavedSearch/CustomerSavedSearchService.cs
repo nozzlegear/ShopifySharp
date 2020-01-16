@@ -37,8 +37,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
         /// <returns></returns>
-        public virtual Task<List<CustomerSavedSearch>> ListAsync(ListFilter filter = null)
+        public virtual Task<List<CustomerSavedSearch>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"{RootResource}.json");
 
             if (filter != null)

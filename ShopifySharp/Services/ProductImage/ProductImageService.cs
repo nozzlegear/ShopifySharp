@@ -51,8 +51,9 @@ namespace ShopifySharp
         /// <remarks>
         /// Unlike most list commands, this one only accepts the since_id and fields filters.
         /// </remarks>
-        public virtual async Task<IEnumerable<ProductImage>> ListAsync(long productId, long? sinceId = null, string fields = null)
+        public virtual async Task<IEnumerable<ProductImage>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"products/{productId}/images.json");
 
             if (sinceId.HasValue)

@@ -41,8 +41,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<Order>> ListAsync(OrderFilter options = null)
+        public virtual async Task<IEnumerable<Order>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("orders.json");
 
             if (options != null)

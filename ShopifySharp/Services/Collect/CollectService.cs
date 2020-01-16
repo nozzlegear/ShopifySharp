@@ -42,8 +42,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Collect>> ListAsync(CollectFilter options = null)
+        public virtual async Task<IEnumerable<Collect>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("collects.json");
 
             if (options != null)

@@ -25,8 +25,9 @@ namespace ShopifySharp
         /// Gets a list of gift card adjustments belonging to the given gift card.
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
-        public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId)
+        public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
 
             return await ExecuteRequestAsync<List<GiftCardAdjustment>>(req, HttpMethod.Get, rootElement: "adjustments");

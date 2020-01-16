@@ -24,10 +24,9 @@ namespace ShopifySharp
         /// Retrieve a list of all carrier services that are associated with the store.
         /// </summary>
         /// <returns>The list of <see cref="Carrier" that are associated with the store.</returns>
-        public virtual async Task<IEnumerable<Carrier>> ListAsync()
+        public virtual async Task<IEnumerable<Carrier>> ListAsync(IListFilter filter)
         {
-            var req = PrepareRequest("carrier_services.json");
-
+            throw new Exception("not yet implemented");
             return await ExecuteRequestAsync<List<Carrier>>(req, HttpMethod.Get, rootElement: "carrier_services");
         }
 

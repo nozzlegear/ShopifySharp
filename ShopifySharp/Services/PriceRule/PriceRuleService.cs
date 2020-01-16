@@ -21,8 +21,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<IEnumerable<PriceRule>> ListAsync(PriceRuleFilter options = null)
+        public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("price_rules.json");
 
             if (options != null)
@@ -36,8 +37,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<IEnumerable<PriceRule>> ListAsync(Dictionary<string, object> options)
+        public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("price_rules.json");
 
             if (options != null)

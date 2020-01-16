@@ -22,8 +22,9 @@ namespace ShopifySharp
         /// Gets a list of inventory items
         /// </summary>
         /// <param name="filterOptions">Options for filtering the result. InventoryItemIds and/or LocationIds must be populated.</param>
-        public virtual async Task<IEnumerable<InventoryLevel>> ListAsync(InventoryLevelFilter filterOptions)
+        public virtual async Task<IEnumerable<InventoryLevel>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"inventory_levels.json");
 
             if (filterOptions != null)

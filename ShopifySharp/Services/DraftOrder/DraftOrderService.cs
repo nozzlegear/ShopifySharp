@@ -32,8 +32,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<DraftOrder>> ListAsync(ListFilter filter = null)
+        public virtual async Task<IEnumerable<DraftOrder>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("draft_orders.json");
 
             if (filter != null)

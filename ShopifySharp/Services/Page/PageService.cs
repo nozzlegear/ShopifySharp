@@ -39,8 +39,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Page>> ListAsync(PageFilter options = null)
+        public virtual async Task<IEnumerable<Page>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("pages.json");
 
             if (options != null)

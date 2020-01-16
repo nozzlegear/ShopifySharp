@@ -22,8 +22,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShippingZone"/> objects.</returns>
-        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(string fields = null)
+        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("shipping_zones.json");
 
             if (string.IsNullOrEmpty(fields) == false)

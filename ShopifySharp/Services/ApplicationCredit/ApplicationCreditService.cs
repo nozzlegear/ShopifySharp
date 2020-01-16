@@ -21,8 +21,9 @@ namespace ShopifySharp
         /// Gets a list of all past and present application credits.
         /// </summary>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(string fields = null)
+        public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"application_credits.json");
 
             if (!string.IsNullOrEmpty(fields))

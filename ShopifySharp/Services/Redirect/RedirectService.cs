@@ -47,8 +47,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">An optional filter that restricts the results.</param>
         /// <returns>The list of <see cref="Redirect"/>.</returns>
-        public virtual async Task<IEnumerable<Redirect>> ListAsync(RedirectFilter filter = null)
+        public virtual async Task<IEnumerable<Redirect>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("redirects.json");
 
             if (filter != null)

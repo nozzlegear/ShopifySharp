@@ -24,8 +24,9 @@ namespace ShopifySharp
         /// <param name="sinceId">Restrict results to after the specified ID</param>
         /// <param name="handle">Filter by Blog handle</param>
         /// <param name="fields">comma-separated list of fields to include in the response</param>
-        public virtual async Task<IEnumerable<Blog>> ListAsync(long? sinceId = null, string handle = null, string fields = null)
+        public virtual async Task<IEnumerable<Blog>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var request = PrepareRequest("blogs.json");
 
             if (sinceId.HasValue)

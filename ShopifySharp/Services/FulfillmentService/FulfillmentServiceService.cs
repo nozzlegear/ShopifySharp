@@ -24,8 +24,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
-        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null)
+        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"fulfillment_services.json");
 
             if (!string.IsNullOrEmpty(scope))

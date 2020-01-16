@@ -40,8 +40,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Customer>> ListAsync(ListFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("customers.json");
 
             if (filter != null)

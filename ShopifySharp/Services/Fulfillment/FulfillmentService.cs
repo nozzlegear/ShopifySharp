@@ -44,8 +44,9 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="options">Options for filtering the list.</param>
         /// <returns>The list of fulfillments matching the filter.</returns>
-        public virtual async Task<IEnumerable<Fulfillment>> ListAsync(long orderId, ListFilter options = null)
+        public virtual async Task<IEnumerable<Fulfillment>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
 
             if (options != null)

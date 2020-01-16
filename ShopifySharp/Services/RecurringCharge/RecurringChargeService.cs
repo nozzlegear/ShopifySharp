@@ -57,8 +57,9 @@ namespace ShopifySharp
         /// <param name="sinceId">Restricts results to any charge after the given id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="RecurringCharge"/> objects.</returns>
-        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(long? sinceId = null, string fields = null)
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(IListFilter filter)
         {
+            throw new Exception("not yet implemented");
             var req = PrepareRequest("recurring_application_charges.json");
 
             if (!string.IsNullOrEmpty(fields))
