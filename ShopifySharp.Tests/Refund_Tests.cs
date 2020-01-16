@@ -27,7 +27,7 @@ namespace ShopifySharp.Tests
         ///*GetAsync & ListForOrderAsync: To be able to list a refund, a refund must be created (via PrepareRefund).
         ///*PrepareRefund: In order to create a Refund, a transaction Id must have been retrieved (via CalculateAsync).
         ///</summary>
-        [Fact]
+        [Fact(Skip = "Requires a real order ID, not one created by the Shopify API.")]
         public async Task Get_Refund_And_List()
         {
             //CalculateAsync
