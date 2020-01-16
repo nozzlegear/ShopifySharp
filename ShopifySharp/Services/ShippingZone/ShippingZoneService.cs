@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="ShippingZone"/> objects.</returns>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<ShippingZone>> ListAsync(string fields = null)
         {
             var req = PrepareRequest("shipping_zones.json");

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,6 +33,7 @@ namespace ShopifySharp
         /// Retrieves a list of all <see cref="Location"/> objects.
         /// </summary>
         /// <returns>The list of <see cref="Location"/> objects.</returns>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Location>> ListAsync()
         {
             var req = PrepareRequest($"locations.json");

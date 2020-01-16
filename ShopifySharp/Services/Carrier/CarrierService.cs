@@ -24,6 +24,7 @@ namespace ShopifySharp
         /// Retrieve a list of all carrier services that are associated with the store.
         /// </summary>
         /// <returns>The list of <see cref="Carrier" that are associated with the store.</returns>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Carrier>> ListAsync()
         {
             var req = PrepareRequest("carrier_services.json");

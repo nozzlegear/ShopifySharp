@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -61,6 +62,7 @@ namespace ShopifySharp
         /// <param name="options">Options for filtering the result.</param>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Event>> ListAsync(long subjectId, string subjectType, EventListFilter options = null)
         {
             // Ensure the subject type is plural
@@ -84,6 +86,7 @@ namespace ShopifySharp
         /// Returns a list of events.
         /// </summary>
         /// <param name="options">Options for filtering the result.</param>
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Event>> ListAsync(EventListFilter options = null)
         {
             var req = PrepareRequest("events.json");
