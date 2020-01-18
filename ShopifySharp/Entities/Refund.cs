@@ -59,12 +59,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("refund_line_items")]
         public IEnumerable<RefundLineItem> RefundLineItems { get; set; }
-
+        
         /// <summary>
-        /// Whether or not the line items were added back to the store inventory.
+        /// How this refund affects inventory levels.
         /// </summary>
         [JsonProperty("restock_type")]
-        public bool? Restock { get; set; }
+        public string RestockType { get; set; }
 
         /// <summary>
         /// The list of <see cref="Transaction"/> objects
