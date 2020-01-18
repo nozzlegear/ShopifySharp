@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <summary>
         /// Whether or not the line items were added back to the store inventory.
         /// </summary>
-        [JsonProperty("restock")]
+        [JsonProperty("restock_type")]
         public bool? Restock { get; set; }
 
         /// <summary>
