@@ -47,14 +47,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Fulfillment>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Fulfillment>>(req, HttpMethod.Get, rootElement: "fulfillments");
+            // var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Fulfillment>>(req, HttpMethod.Get, rootElement: "fulfillments");
         }
 
         /// <summary>

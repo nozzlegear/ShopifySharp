@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
@@ -51,14 +52,15 @@ namespace ShopifySharp
 
         public virtual async Task<IEnumerable<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutFilter options = null)
         {
-            var req = PrepareRequest("shopify_payments/payouts.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsPayout>>(req, HttpMethod.Get, rootElement: "payouts");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("shopify_payments/payouts.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ShopifyPaymentsPayout>>(req, HttpMethod.Get, rootElement: "payouts");
         }
 
         public virtual async Task<ShopifyPaymentsPayout> GetPayoutAsync(long payoutId)
@@ -69,14 +71,15 @@ namespace ShopifySharp
 
         public virtual async Task<IEnumerable<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeFilter options = null)
         {
-            var req = PrepareRequest("shopify_payments/disputes.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsDispute>>(req, HttpMethod.Get, rootElement: "disputes");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("shopify_payments/disputes.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ShopifyPaymentsDispute>>(req, HttpMethod.Get, rootElement: "disputes");
         }
 
         public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
@@ -87,14 +90,15 @@ namespace ShopifySharp
 
         public virtual async Task<IEnumerable<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionFilter options = null)
         {
-            var req = PrepareRequest("shopify_payments/balance/transactions.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsTransaction>>(req, HttpMethod.Get, rootElement: "transactions");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("shopify_payments/balance/transactions.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ShopifyPaymentsTransaction>>(req, HttpMethod.Get, rootElement: "transactions");
         }
     }
 }

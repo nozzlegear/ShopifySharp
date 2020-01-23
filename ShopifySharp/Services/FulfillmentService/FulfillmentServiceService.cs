@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -27,14 +28,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"fulfillment_services.json");
-
-            if (!string.IsNullOrEmpty(scope))
-            {
-                req.QueryParams.Add("scope", scope);
-            }
-
-            return await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");
+            // var req = PrepareRequest($"fulfillment_services.json");
+            //
+            // if (!string.IsNullOrEmpty(scope))
+            // {
+            //     req.QueryParams.Add("scope", scope);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");
         }
 
         /// <summary>

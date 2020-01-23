@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -24,7 +26,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Discount>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            return await ExecuteRequestAsync<List<Discount>>(req, HttpMethod.Get, rootElement: "discounts");
+            // return await ExecuteRequestAsync<List<Discount>>(req, HttpMethod.Get, rootElement: "discounts");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -27,14 +28,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Address>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"customers/{customerId}/addresses.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Address>>(req, HttpMethod.Get, rootElement: "addresses");
+            // var req = PrepareRequest($"customers/{customerId}/addresses.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Address>>(req, HttpMethod.Get, rootElement: "addresses");
         }
 
         /// <summary>

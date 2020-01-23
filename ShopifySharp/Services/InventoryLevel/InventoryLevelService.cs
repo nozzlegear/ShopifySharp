@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,14 +26,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<InventoryLevel>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"inventory_levels.json");
-
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
+            // var req = PrepareRequest($"inventory_levels.json");
+            //
+            // if (filterOptions != null)
+            // {
+            //     req.QueryParams.AddRange(filterOptions.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
         }
 
         /// <summary>

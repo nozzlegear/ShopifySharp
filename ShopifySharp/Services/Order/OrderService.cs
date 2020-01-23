@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -26,14 +27,15 @@ namespace ShopifySharp
         /// <returns>The count of all orders for the shop.</returns>
         public virtual async Task<int> CountAsync(OrderFilter filter = null)
         {
-            var req = PrepareRequest("orders/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("orders/count.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -44,14 +46,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Order>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("orders.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
+            // var req = PrepareRequest("orders.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
         }
 
         /// <summary>
@@ -62,15 +64,16 @@ namespace ShopifySharp
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderFilter options = null)
         {
-            var req = PrepareRequest("orders.json");
-            req.QueryParams.Add("customer_id", customerId);
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("orders.json");
+            // req.QueryParams.Add("customer_id", customerId);
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
         }
 
         /// <summary>

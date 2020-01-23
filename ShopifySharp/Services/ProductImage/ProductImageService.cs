@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -54,19 +55,19 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<ProductImage>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"products/{productId}/images.json");
-
-            if (sinceId.HasValue)
-            {
-                req.QueryParams.Add("since_id", sinceId.Value);
-            }
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
+            // var req = PrepareRequest($"products/{productId}/images.json");
+            //
+            // if (sinceId.HasValue)
+            // {
+            //     req.QueryParams.Add("since_id", sinceId.Value);
+            // }
+            //
+            // if (!string.IsNullOrEmpty(fields))
+            // {
+            //     req.QueryParams.Add("fields", fields);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
         }
 
         /// <summary>

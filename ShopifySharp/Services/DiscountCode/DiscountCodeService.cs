@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,9 +24,9 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<PriceRuleDiscountCode>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
+            // var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
 
-            return await ExecuteRequestAsync<List<PriceRuleDiscountCode>>(req, HttpMethod.Get, rootElement: "discount_codes");
+            // return await ExecuteRequestAsync<List<PriceRuleDiscountCode>>(req, HttpMethod.Get, rootElement: "discount_codes");
         }
 
         /// <summary>

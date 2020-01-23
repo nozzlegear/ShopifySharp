@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -23,15 +24,15 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
         public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            var req = PrepareRequest($"application_credits.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
+            throw new System.Exception("not yet implemented");
+            // var req = PrepareRequest($"application_credits.json");
+            //
+            // if (!string.IsNullOrEmpty(fields))
+            // {
+            //     req.QueryParams.Add("fields", fields);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
         }
 
         /// <summary>

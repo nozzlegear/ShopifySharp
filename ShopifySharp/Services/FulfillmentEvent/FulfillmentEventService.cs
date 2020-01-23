@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -28,9 +29,9 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<FulfillmentEvent>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
-
-            return await ExecuteRequestAsync<List<FulfillmentEvent>>(req, HttpMethod.Get, rootElement: "fulfillment_events");
+            // var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
+            //
+            // return await ExecuteRequestAsync<List<FulfillmentEvent>>(req, HttpMethod.Get, rootElement: "fulfillment_events");
         }
 
         /// <summary>

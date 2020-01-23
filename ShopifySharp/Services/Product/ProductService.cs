@@ -28,14 +28,15 @@ namespace ShopifySharp
         /// <returns>The count of all products for the shop.</returns>
         public virtual async Task<int> CountAsync(ProductFilter filter = null)
         {
-            var req = PrepareRequest("products/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("products/count.json");
+            //
+            // // if (filter != null)
+            // // {
+            // //     req.QueryParams.AddRange(filter.ToParameters());
+            // // }
+            //
+            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -45,14 +46,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Product>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("products.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
+            // var req = PrepareRequest("products.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
         }
 
         /// <summary>

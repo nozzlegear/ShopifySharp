@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -44,14 +45,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<ScriptTag>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("script_tags.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ScriptTag>>(req, HttpMethod.Get, rootElement: "script_tags");
+            // var req = PrepareRequest("script_tags.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ScriptTag>>(req, HttpMethod.Get, rootElement: "script_tags");
         }
 
         /// <summary>

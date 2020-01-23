@@ -28,14 +28,15 @@ namespace ShopifySharp
         [Obsolete("This endpoint is an undocumented feature. Shopify may remove support for this endpoint at any time, without warning.")]
         public virtual async Task<int> CountAsync(CheckoutFilter filter = null)
         {
-            var req = PrepareRequest("checkouts/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("checkouts/count.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -46,14 +47,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Checkout>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("checkouts.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Checkout>>(req, HttpMethod.Get, rootElement: "checkouts");
+            // var req = PrepareRequest("checkouts.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Checkout>>(req, HttpMethod.Get, rootElement: "checkouts");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,14 +38,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<ProductVariant>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"products/{productId}/variants.json");
-
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
+            // var req = PrepareRequest($"products/{productId}/variants.json");
+            //
+            // if (filterOptions != null)
+            // {
+            //     req.QueryParams.AddRange(filterOptions.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
         }
 
         /// <summary>

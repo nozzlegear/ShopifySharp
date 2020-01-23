@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
@@ -24,31 +25,31 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("price_rules.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+            // var req = PrepareRequest("price_rules.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
         }
 
-        /// <summary>
-        /// Gets a list of up to 250 of the shop's price rules.
-        /// </summary>
-        public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
-        {
-            throw new Exception("not yet implemented");
-            var req = PrepareRequest("price_rules.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options);
-            }
-
-            return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
-        }
+        // /// <summary>
+        // /// Gets a list of up to 250 of the shop's price rules.
+        // /// </summary>
+        // public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
+        // {
+        //     throw new Exception("not yet implemented");
+        //     var req = PrepareRequest("price_rules.json");
+        //
+        //     if (options != null)
+        //     {
+        //         req.QueryParams.AddRange(options);
+        //     }
+        //
+        //     return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+        // }
 
         /// <summary>
         /// Retrieves the object with the given id.

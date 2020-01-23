@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -25,14 +27,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<ShippingZone>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("shipping_zones.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
+            // var req = PrepareRequest("shipping_zones.json");
+            //
+            // if (string.IsNullOrEmpty(fields) == false)
+            // {
+            //     req.QueryParams.Add("fields", fields);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
         }
     }
 }

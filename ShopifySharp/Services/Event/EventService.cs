@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -64,39 +65,39 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Event>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            // Ensure the subject type is plural
-            if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
-            {
-                subjectType = subjectType + "s";
-            }
-
-            var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
-
-            //Add optional parameters to request
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+            // // Ensure the subject type is plural
+            // if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
+            // {
+            //     subjectType = subjectType + "s";
+            // }
+            //
+            // var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
+            //
+            // //Add optional parameters to request
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
         }
 
-        /// <summary>
-        /// Returns a list of events.
-        /// </summary>
-        /// <param name="options">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<Event>> ListAsync(IListFilter filter)
-        {
-            throw new Exception("not yet implemented");
-            var req = PrepareRequest("events.json");
-
-            //Add optional parameters to request
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
-        }
+        // /// <summary>
+        // /// Returns a list of events.
+        // /// </summary>
+        // /// <param name="options">Options for filtering the result.</param>
+        // public virtual async Task<IEnumerable<Event>> ListAsync(IListFilter filter)
+        // {
+        //     throw new Exception("not yet implemented");
+        //     // var req = PrepareRequest("events.json");
+        //     //
+        //     // //Add optional parameters to request
+        //     // if (options != null)
+        //     // {
+        //     //     req.QueryParams.AddRange(options.ToParameters());
+        //     // }
+        //     //
+        //     // return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+        // }
     }
 }

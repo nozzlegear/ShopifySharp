@@ -40,14 +40,14 @@ namespace ShopifySharp
         public virtual Task<List<CustomerSavedSearch>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"{RootResource}.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
+            // var req = PrepareRequest($"{RootResource}.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
         }
 
         /// <summary>
@@ -77,20 +77,21 @@ namespace ShopifySharp
         /// <returns>A list of matching customers.</returns>
         public virtual Task<List<CustomerSavedSearch>> SearchAsync(string query, string sinceId = null, ListFilter filter = null)
         {
-            var req = PrepareRequest($"{RootResource}.json");
-            req.QueryParams.Add("query", query);
-
-            if (!string.IsNullOrEmpty(sinceId))
-            {
-                req.QueryParams.Add("since_id", sinceId);
-            }
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
+            throw new NotImplementedException();
+            // var req = PrepareRequest($"{RootResource}.json");
+            // req.QueryParams.Add("query", query);
+            //
+            // if (!string.IsNullOrEmpty(sinceId))
+            // {
+            //     req.QueryParams.Add("since_id", sinceId);
+            // }
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
         }
 
         /// <summary>
@@ -152,19 +153,20 @@ namespace ShopifySharp
         /// <returns></returns>
         public Task<List<Customer>> GetCustomersFromSavedSearch(long customerSavedSearchId, string query = null, ListFilter filter = null)
         {
-            var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}/customers.json");
-
-            if (query != null)
-            {
-                req.QueryParams.Add("query", query);
-            }
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
+            throw new NotImplementedException();
+            // var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}/customers.json");
+            //
+            // if (query != null)
+            // {
+            //     req.QueryParams.Add("query", query);
+            // }
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -18,14 +19,15 @@ namespace ShopifySharp
 
         public virtual async Task<int> CountAsync(DraftOrderFilter filter = null)
         {
-            var req = PrepareRequest("draft_orders/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("draft_orders/count.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -35,14 +37,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<DraftOrder>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("draft_orders.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
+            // var req = PrepareRequest("draft_orders.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
         }
 
         /// <summary>

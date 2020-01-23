@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -35,7 +37,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Location>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            return await ExecuteRequestAsync<List<Location>>(req, HttpMethod.Get, rootElement: "locations");
+            // return await ExecuteRequestAsync<List<Location>>(req, HttpMethod.Get, rootElement: "locations");
         }
     }
 }

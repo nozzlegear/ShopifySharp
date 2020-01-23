@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -24,9 +26,9 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<OrderRisk>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"orders/{orderId}/risks.json");
-            
-            return await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");
+            // var req = PrepareRequest($"orders/{orderId}/risks.json");
+            //
+            // return await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");
         }
         
         /// <summary>

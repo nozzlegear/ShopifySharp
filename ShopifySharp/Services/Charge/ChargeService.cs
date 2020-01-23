@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -57,19 +59,19 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Charge>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("application_charges.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            if (sinceId.HasValue)
-            {
-                req.QueryParams.Add("since_id", sinceId);
-            }
-
-            return await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
+            // var req = PrepareRequest("application_charges.json");
+            //
+            // if (string.IsNullOrEmpty(fields) == false)
+            // {
+            //     req.QueryParams.Add("fields", fields);
+            // }
+            //
+            // if (sinceId.HasValue)
+            // {
+            //     req.QueryParams.Add("since_id", sinceId);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
         }
 
         /// <summary>

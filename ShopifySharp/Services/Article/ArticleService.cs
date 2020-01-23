@@ -25,15 +25,15 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<IEnumerable<Article>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            var req = PrepareRequest($"blogs/{blogId}/articles.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
+            throw new System.Exception("not yet implemented");
+            // var req = PrepareRequest($"blogs/{blogId}/articles.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
         }
 
         /// <summary>

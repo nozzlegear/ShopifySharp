@@ -27,7 +27,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Carrier>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            return await ExecuteRequestAsync<List<Carrier>>(req, HttpMethod.Get, rootElement: "carrier_services");
+            // return await ExecuteRequestAsync<List<Carrier>>(req, HttpMethod.Get, rootElement: "carrier_services");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
@@ -45,14 +46,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<GiftCard>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("gift_cards.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+            // var req = PrepareRequest("gift_cards.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
         }
 
         /// <summary>
@@ -122,20 +123,21 @@ namespace ShopifySharp
         /// <returns>A list of matching gift cards.</returns>
         public virtual async Task<IEnumerable<GiftCard>> SearchAsync(string query, string order = null, ListFilter filter = null)
         {
-            var req = PrepareRequest("gift_cards/search.json");
-            req.QueryParams.Add("query", query);
-
-            if (!string.IsNullOrEmpty(order))
-            {
-                req.QueryParams.Add("order", order);
-            }
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("gift_cards/search.json");
+            // req.QueryParams.Add("query", query);
+            //
+            // if (!string.IsNullOrEmpty(order))
+            // {
+            //     req.QueryParams.Add("order", order);
+            // }
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
         }
     }
 }

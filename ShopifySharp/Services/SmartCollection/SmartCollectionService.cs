@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,14 +25,15 @@ namespace ShopifySharp
         /// <param name="filterOptions">Options for filtering the count.</param>
         public virtual async Task<int> CountAsync(SmartCollectionFilter filterOptions = null)
         {
-            var req = PrepareRequest("smart_collections/count.json");
-
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("smart_collections/count.json");
+            //
+            // if (filterOptions != null)
+            // {
+            //     req.QueryParams.AddRange(filterOptions.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>
@@ -41,14 +43,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<SmartCollection>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"smart_collections.json");
-
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
+            // var req = PrepareRequest($"smart_collections.json");
+            //
+            // if (filterOptions != null)
+            // {
+            //     req.QueryParams.AddRange(filterOptions.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
         }
 
         /// <summary>

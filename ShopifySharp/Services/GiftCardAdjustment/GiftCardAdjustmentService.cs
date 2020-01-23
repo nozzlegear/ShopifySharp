@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -28,9 +29,9 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
-
-            return await ExecuteRequestAsync<List<GiftCardAdjustment>>(req, HttpMethod.Get, rootElement: "adjustments");
+            // var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
+            //
+            // return await ExecuteRequestAsync<List<GiftCardAdjustment>>(req, HttpMethod.Get, rootElement: "adjustments");
         }
 
         /// <summary>

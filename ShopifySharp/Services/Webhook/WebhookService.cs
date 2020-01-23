@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -50,15 +51,15 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Webhook>> ListAsync(IListFilter filter)
         {
             throw new Exception("Not yet implemented");
-
-            var req = PrepareRequest("webhooks.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
+            //
+            // var req = PrepareRequest("webhooks.json");
+            //
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
         }
 
         /// <summary>

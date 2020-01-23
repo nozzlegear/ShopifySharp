@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -19,7 +21,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Policy>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            return await ExecuteRequestAsync<List<Policy>>(request, HttpMethod.Get, rootElement: "policies");
+            // return await ExecuteRequestAsync<List<Policy>>(request, HttpMethod.Get, rootElement: "policies");
         }
     }
 }

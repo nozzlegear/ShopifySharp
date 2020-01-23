@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -49,14 +51,14 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Asset>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest($"themes/{themeId}/assets.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
+            // var req = PrepareRequest($"themes/{themeId}/assets.json");
+            //
+            // if (string.IsNullOrEmpty(fields) == false)
+            // {
+            //     req.QueryParams.Add("fields", fields);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -28,15 +29,15 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<CustomCollection>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var req = PrepareRequest("custom_collections.json");
-
-            //Add optional parameters to request
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
+            // var req = PrepareRequest("custom_collections.json");
+            //
+            // //Add optional parameters to request
+            // if (filter != null)
+            // {
+            //     req.QueryParams.AddRange(filter.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
         }
 
         /// <summary>
@@ -61,14 +62,15 @@ namespace ShopifySharp
         /// <returns>The count of all collects for the shop.</returns>
         public virtual async Task<int> CountAsync(CustomCollectionFilter options = null)
         {
-            var req = PrepareRequest("custom_collections/count.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            throw new NotImplementedException();
+            // var req = PrepareRequest("custom_collections/count.json");
+            //
+            // if (options != null)
+            // {
+            //     req.QueryParams.AddRange(options.ToParameters());
+            // }
+            //
+            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
         }
 
         /// <summary>

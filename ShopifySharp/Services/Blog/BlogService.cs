@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -27,24 +29,24 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Blog>> ListAsync(IListFilter filter)
         {
             throw new Exception("not yet implemented");
-            var request = PrepareRequest("blogs.json");
-
-            if (sinceId.HasValue)
-            {
-                request.QueryParams.Add("since_id", sinceId.Value);
-            }
-
-            if (!string.IsNullOrEmpty(handle))
-            {
-                request.QueryParams.Add("handle", handle);
-            }
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                request.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
+            // var request = PrepareRequest("blogs.json");
+            //
+            // if (sinceId.HasValue)
+            // {
+            //     request.QueryParams.Add("since_id", sinceId.Value);
+            // }
+            //
+            // if (!string.IsNullOrEmpty(handle))
+            // {
+            //     request.QueryParams.Add("handle", handle);
+            // }
+            //
+            // if (!string.IsNullOrEmpty(fields))
+            // {
+            //     request.QueryParams.Add("fields", fields);
+            // }
+            //
+            // return await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
         }
 
         /// <summary>

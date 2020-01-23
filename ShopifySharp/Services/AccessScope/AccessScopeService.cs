@@ -26,8 +26,8 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<AccessScope>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            return await ExecuteRequestAsync<List<AccessScope>>(req, HttpMethod.Get, rootElement: "access_scopes");
+            throw new System.Exception("not yet implemented");
+            // return await ExecuteRequestAsync<List<AccessScope>>(req, HttpMethod.Get, rootElement: "access_scopes");
         }
     }
 }
