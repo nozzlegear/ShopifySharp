@@ -11,7 +11,7 @@ namespace ShopifySharp
         /// The name of the note attribute.
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public object Name { get; set; }
 
         /// <summary>
         /// The value of the note attribute.
