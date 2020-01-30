@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
 using System.IO;
+using System.Text.RegularExpressions;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -123,6 +125,20 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Attempts to parse the Link header from a web response. Returns either the header value or null if it does not exist.
+        /// </summary>
+        /// <remarks>
+        /// The Link header only exists on list requests. 
+        /// </remarks>
+        protected string ReadLinkHeader(HttpResponseMessage response)
+        {
+            var header = response.Headers.FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase));
+            var headerValue = String.Join(", ", header.Value);
+
+            return headerValue ?? string.Empty;
+        }
+
+        /// <summary>
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
@@ -156,7 +172,7 @@ namespace ShopifySharp
                             }
                         }
 
-                        return new RequestResult<JToken>(response, jtoken, rawResult);
+                        return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
                     }
                 });
 
@@ -193,7 +209,7 @@ namespace ShopifySharp
                         var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
                         var result = data.ToObject<T>();
 
-                        return new RequestResult<T>(response, result, rawResult);
+                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
                     }
                 });
 
@@ -359,6 +375,103 @@ namespace ShopifySharp
             }
 
             return errors;
+        }
+
+        bool TryParsePageInfoFromLink(string linkValue, out string url)
+        {
+            var regex = new Regex("<(.*)>;");
+            var match = regex.Match(linkValue);
+
+            if (match.Success == false)
+            {
+                url = null;
+                return false;
+            }
+
+            if (match.Groups.Count < 2)
+            {
+                url = null;
+                return false;
+            }
+            
+            var parsedLinkUrl = match.Groups[1].Value;
+
+            if (string.IsNullOrWhiteSpace(parsedLinkUrl))
+            {
+                url = null;
+                return false;
+            }
+
+            var querySubstringStartIndex = parsedLinkUrl.IndexOf("?", StringComparison.Ordinal);
+            var querystring = parsedLinkUrl.Substring(querySubstringStartIndex + 1);
+            var splitQuery =
+                querystring.Split(new[] {'?', '&'})
+                    .Select(querySegment =>
+                    {
+                        var splitKvp = querySegment.Split('=');
+                        var key = splitKvp.First();
+
+                        if (splitKvp.Length == 2)
+                        {
+                            return new
+                            {
+                                key = key,
+                                value = splitKvp[1]
+                            };
+                        }
+
+                        return new
+                        {
+                            key = key,
+                            value = ""
+                        };
+                    });
+            var pageInfoKvp = splitQuery.FirstOrDefault(kvp => kvp.key == "page_info");
+
+            if (pageInfoKvp == null || !string.IsNullOrEmpty(pageInfoKvp.value))
+            {
+                url = null;
+                return false;
+            }
+
+            url = pageInfoKvp.value;
+            return true;
+        }
+
+        /// <summary>
+        /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
+        /// </summary>
+        public ListResult<T> ParseLinkHeaderToListResult<T>(string linkHeader)
+        {
+            var links = linkHeader
+                .Split(',')
+                .Select(link => link.Trim())
+                .ToArray();
+            var nextPageLink =
+                links.FirstOrDefault(link => link.Contains("rel=\"next\""));
+            var previousPageLink = 
+                links.FirstOrDefault(link => link.Contains("rel=\"previous\""));
+            var listResult = new ListResult<T>();
+
+            if (TryParsePageInfoFromLink(nextPageLink, out var parsedNextPageLink))
+            {
+                listResult.NextPageLink = parsedNextPageLink;
+            }
+            else
+            {
+                listResult.NextPageLink = null;
+            }
+            
+            if (TryParsePageInfoFromLink(previousPageLink, out var parsedPreviousPageLink))
+            {
+                listResult.PreviousPageLink = parsedPreviousPageLink;
+            }
+            else
+            {
+                listResult.PreviousPageLink = null;
+            }
+
+            return listResult;
         }
     }
 }
