@@ -40,7 +40,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("target", target);
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -76,7 +78,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Get, rootElement: "redirect");
+            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Get, rootElement: "redirect");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -93,8 +97,9 @@ namespace ShopifySharp
             {
                 redirect = redirect
             });
+            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Post, content, "redirect");
 
-            return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Post, content, "redirect");
+            return response.Result;
         }
 
         /// <summary>
@@ -110,8 +115,9 @@ namespace ShopifySharp
             {
                 redirect = redirect
             });
+            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Put, content, "redirect");
 
-            return await ExecuteRequestAsync<Redirect>(req, HttpMethod.Put, content, "redirect");
+            return response.Result;
         }
 
         /// <summary>

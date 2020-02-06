@@ -31,8 +31,9 @@ namespace ShopifySharp
             {
                 recurring_application_charge = charge
             });
+            var response= await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge");
 
-            return await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge");
+            return response.Result;
         }
 
         /// <summary>
@@ -50,7 +51,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Get, rootElement: "recurring_application_charge");
+            var response = await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Get, rootElement: "recurring_application_charge");
+
+            return response.Result;
         }
 
         /// <summary>

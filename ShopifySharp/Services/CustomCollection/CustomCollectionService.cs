@@ -53,7 +53,8 @@ namespace ShopifySharp
                 custom_collection = customCollection
             });
 
-            return await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Post, content, "custom_collection");
+            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Post, content, "custom_collection");
+            return response.Result;
         }
 
         /// <summary>
@@ -88,7 +89,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Get, rootElement: "custom_collection");
+            var result = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Get, rootElement: "custom_collection");
+            return result.Result;
         }
 
         /// <summary>
@@ -116,7 +118,8 @@ namespace ShopifySharp
                 custom_collection = customCollection
             });
 
-            return await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Put, content, "custom_collection");
+            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Put, content, "custom_collection");
+            return response.Result;
         }
     }
 }

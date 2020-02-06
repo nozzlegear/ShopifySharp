@@ -60,8 +60,9 @@ namespace ShopifySharp
         public virtual async Task<SmartCollection> GetAsync(long collectionId)
         {
             var req = PrepareRequest($"smart_collections/{collectionId}.json");
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Get, rootElement: "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Get, rootElement: "smart_collection");
+            return response.Result;
         }
 
         /// <summary>
@@ -79,8 +80,9 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection");
+            return response.Result;
         }
 
         /// <summary>
@@ -95,7 +97,9 @@ namespace ShopifySharp
             {
                 smart_collection = collection
             });
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -114,8 +118,9 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            return response.Result;
         }
 
         /// <summary>
@@ -134,8 +139,9 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            return response.Result;
         }
 
         /// <summary>

@@ -128,7 +128,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Get, rootElement: "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Get, rootElement: "metafield");
+            return response.Result;
         }
 
         /// <summary>
@@ -143,7 +144,8 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            return response.Result;
         }
 
         /// <summary>
@@ -162,7 +164,8 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            return response.Result;
         }
 
         /// <summary>
@@ -179,7 +182,8 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            return response.Result;
         }
 
         /// <summary>
@@ -194,8 +198,9 @@ namespace ShopifySharp
             {
                 metafield = metafield
             });
-
-            return await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, content, "metafield");
+            
+            return response.Result;
         }
 
         /// <summary>

@@ -54,7 +54,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Address>(req, HttpMethod.Get, rootElement: "customer_address");
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Get, rootElement: "customer_address");
+            return response.Result;
         }
 
 
@@ -73,7 +74,8 @@ namespace ShopifySharp
                 address = addressBody
             });
 
-            return await ExecuteRequestAsync<Address>(req, HttpMethod.Post, content, "customer_address");
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Post, content, "customer_address");
+            return response.Result;
         }
 
         /// <summary>
@@ -93,7 +95,8 @@ namespace ShopifySharp
                 address = addressBody
             });
 
-            return await ExecuteRequestAsync<Address>(req, HttpMethod.Put, content, "customer_address");
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, content, "customer_address");
+            return response.Result;
         }
 
         /// <summary>
@@ -118,9 +121,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}/default.json");
 
-            return await ExecuteRequestAsync<Address>(req, HttpMethod.Put, rootElement: "customer_address");
-
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, rootElement: "customer_address");
+            return response.Result;
         }
-
     }
 }

@@ -71,7 +71,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Product>(req, HttpMethod.Get, rootElement: "product");
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Get, rootElement: "product");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -97,8 +99,9 @@ namespace ShopifySharp
             {
                 product = body
             });
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Post, content, "product");
 
-            return await ExecuteRequestAsync<Product>(req, HttpMethod.Post, content, "product");
+            return response.Result;
         }
 
         /// <summary>
@@ -114,8 +117,9 @@ namespace ShopifySharp
             {
                 product = product
             });
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
 
-            return await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
+            return response.Result;
         }
 
         /// <summary>
@@ -145,8 +149,9 @@ namespace ShopifySharp
                     published = true
                 }
             });
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
 
-            return await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
+            return response.Result;
         }
 
         /// <summary>
@@ -165,8 +170,9 @@ namespace ShopifySharp
                     published = false
                 }
             });
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
 
-            return await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
+            return response.Result;
         }
     }
 }

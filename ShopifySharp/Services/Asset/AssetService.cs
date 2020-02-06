@@ -38,7 +38,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, rootElement: "asset");
+            var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, rootElement: "asset");
+            return response.Result;
         }
 
         /// <summary>
@@ -80,7 +81,8 @@ namespace ShopifySharp
                 asset = asset
             });
 
-            return await ExecuteRequestAsync<Asset>(req, HttpMethod.Put, content, "asset");
+            var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Put, content, "asset");
+            return response.Result;
         }
 
         /// <summary>

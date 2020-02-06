@@ -69,7 +69,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -95,8 +97,9 @@ namespace ShopifySharp
             {
                 page = body
             });
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
 
-            return await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
+            return response.Result;
         }
 
         /// <summary>
@@ -112,8 +115,9 @@ namespace ShopifySharp
             {
                 page = page
             });
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page");
 
-            return await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page");
+            return response.Result;
         }
 
         /// <summary>

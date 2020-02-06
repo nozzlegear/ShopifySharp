@@ -35,7 +35,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("src", src);
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -70,7 +72,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -85,8 +89,9 @@ namespace ShopifySharp
             {
                 script_tag = tag
             });
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag");
 
-            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag");
+            return response.Result;
         }
 
         /// <summary>
@@ -102,8 +107,9 @@ namespace ShopifySharp
             {
                 script_tag = tag
             });
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag");
 
-            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag");
+            return response.Result;
         }
 
         /// <summary>

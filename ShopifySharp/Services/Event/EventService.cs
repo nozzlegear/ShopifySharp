@@ -35,7 +35,8 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToParameters());
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -53,7 +54,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Event>(req, HttpMethod.Get, rootElement: "event");
+            var response = await ExecuteRequestAsync<Event>(req, HttpMethod.Get, rootElement: "event");
+            return response.Result;
         }
 
         /// <summary>

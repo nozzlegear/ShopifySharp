@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Net.Http;
-using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,11 +58,11 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         private async Task<JToken> SendAsync(RequestUri req, HttpContent content)
         {
-            JToken response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
 
-            await CheckForErrorsAsync(response);
+            await CheckForErrorsAsync(response.RawResult);
 
-            return response["data"];
+            return response.Result["data"];
         }
 
         /// <summary>

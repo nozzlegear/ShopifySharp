@@ -44,7 +44,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"inventory_items/{inventoryItemId}.json");
 
-            return await ExecuteRequestAsync<InventoryItem>(req, HttpMethod.Get, rootElement: "inventory_item");
+            var response = await ExecuteRequestAsync<InventoryItem>(req, HttpMethod.Get, rootElement: "inventory_item");
+            return response.Result;
         }
 
 
@@ -60,8 +61,8 @@ namespace ShopifySharp
                 inventory_item = inventoryItem
             } );
 
-            return await ExecuteRequestAsync<InventoryItem>( req, HttpMethod.Put, content, rootElement: "inventory_item" );
+            var response = await ExecuteRequestAsync<InventoryItem>( req, HttpMethod.Put, content, rootElement: "inventory_item" );
+            return response.Result;
         }
-
     }
 }

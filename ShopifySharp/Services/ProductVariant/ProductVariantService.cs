@@ -26,8 +26,9 @@ namespace ShopifySharp
         public virtual async Task<int> CountAsync(long productId)
         {
             var req = PrepareRequest($"products/{productId}/variants/count.json");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -55,8 +56,9 @@ namespace ShopifySharp
         public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
             var req = PrepareRequest($"variants/{variantId}.json");
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
 
-            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
+            return response.Result;
         }
 
         /// <summary>
@@ -71,8 +73,9 @@ namespace ShopifySharp
             {
                 variant = variant
             });
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
 
-            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
+            return response.Result;
         }
 
         /// <summary>
@@ -87,8 +90,9 @@ namespace ShopifySharp
             {
                 variant = variant
             });
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant");
 
-            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant");
+            return response.Result;
         }
 
         /// <summary>

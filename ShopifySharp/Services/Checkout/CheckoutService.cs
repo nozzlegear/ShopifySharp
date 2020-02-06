@@ -65,7 +65,8 @@ namespace ShopifySharp
             var req = PrepareRequest("checkout.json");
             var body = checkout.ToDictionary();
 
-            return await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, new JsonContent(checkout), rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, new JsonContent(checkout), rootElement: "checkout");
+            return response.Result;
         }
 
         /// <summary>
@@ -75,7 +76,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}/complete.json");
 
-            return await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, rootElement: "checkout");
+            return response.Result;
         }
 
         /// <summary>
@@ -85,7 +87,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            return await ExecuteRequestAsync<Checkout>(req, HttpMethod.Get, rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Get, rootElement: "checkout");
+            return response.Result;
         }
 
         /// <summary>
@@ -95,7 +98,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            return await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, new JsonContent(updatedCheckout), rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, new JsonContent(updatedCheckout), rootElement: "checkout");
+            return response.Result;
         }
 
         /// <summary>
@@ -107,7 +111,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}/shipping_rates.json");
 
-            return await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, rootElement: "shipping_rates");
+            var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, rootElement: "shipping_rates");
+            return response.Result;
         }
     }
 }

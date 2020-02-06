@@ -56,9 +56,13 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"inventory_levels/set.json");
             var body = updatedInventoryLevel.ToDictionary();
+            
             body.Add("disconnect_if_necessary", disconnectIfNecessary);
-            JsonContent content = new JsonContent(body);
-            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            var content = new JsonContent(body);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -70,8 +74,10 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"inventory_levels/adjust.json");
             var body = adjustInventoryLevel.ToDictionary();
-            JsonContent content = new JsonContent(body);
-            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            var content = new JsonContent(body);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -84,13 +90,15 @@ namespace ShopifySharp
         public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false)
         {
             var req = PrepareRequest($"inventory_levels/connect.json");
-            JsonContent content = new JsonContent(new
+            var content = new JsonContent(new
             {
                 location_id = locationId,
                 inventory_item_id = inventoryItemId,
                 relocate_if_necessary = relocateIfNecessary
             });
-            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            return response.Result;
         }
     }
 }

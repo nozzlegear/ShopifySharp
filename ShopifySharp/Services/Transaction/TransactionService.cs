@@ -25,8 +25,9 @@ namespace ShopifySharp
         public virtual async Task<int> CountAsync(long orderId)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions/count.json");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -43,12 +44,15 @@ namespace ShopifySharp
             {
                 req.QueryParams.Add("since_id", sinceId.Value);
             }
+            
             if (inShopCurrency.HasValue)
             {
                 req.QueryParams.Add("in_shop_currency", inShopCurrency.Value);
             }
 
-            return await ExecuteRequestAsync<List<Transaction>>(req, HttpMethod.Get, rootElement: "transactions");
+            var response = await ExecuteRequestAsync<List<Transaction>>(req, HttpMethod.Get, rootElement: "transactions");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -66,12 +70,15 @@ namespace ShopifySharp
             {
                 req.QueryParams.Add("fields", fields);
             }
+            
             if (inShopCurrency.HasValue)
             {
                 req.QueryParams.Add("in_shop_currency", inShopCurrency.Value);
             }
 
-            return await ExecuteRequestAsync<Transaction>(req, HttpMethod.Get, rootElement: "transaction");
+            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Get, rootElement: "transaction");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -87,8 +94,9 @@ namespace ShopifySharp
             {
                 transaction = transaction
             });
+            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, content, "transaction");
 
-            return await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, content, "transaction");
+            return response.Result;
         }
     }
 }

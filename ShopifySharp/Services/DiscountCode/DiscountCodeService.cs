@@ -12,7 +12,6 @@ namespace ShopifySharp
     /// </summary>
     public class DiscountCodeService : ShopifyService
     {
-
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DiscountCodeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
@@ -45,7 +44,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Get, rootElement: "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Get, rootElement: "discount_code");
+            return response.Result;
         }
 
         /// <summary>
@@ -62,7 +62,8 @@ namespace ShopifySharp
                 discount_code = body
             });
 
-            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code");
+            return response.Result;
         }
 
         /// <summary>
@@ -78,7 +79,8 @@ namespace ShopifySharp
                 discount_code = code
             });
 
-            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code");
+            return response.Result;
         }
 
         /// <summary>

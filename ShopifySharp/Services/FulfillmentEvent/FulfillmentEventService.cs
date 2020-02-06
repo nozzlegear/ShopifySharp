@@ -45,7 +45,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
 
-            return await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Get, rootElement: "fulfillment_event");
+            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Get, rootElement: "fulfillment_event");
+            return response.Result;
         }
 
         /// <summary>
@@ -62,7 +63,8 @@ namespace ShopifySharp
                 @event
             });
 
-            return await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event");
+            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event");
+            return response.Result;
         }
 
         /// <summary>

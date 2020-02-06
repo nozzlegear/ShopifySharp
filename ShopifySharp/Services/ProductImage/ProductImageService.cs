@@ -35,7 +35,9 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToParameters());
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -86,7 +88,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -102,8 +106,9 @@ namespace ShopifySharp
             {
                 image = image
             });
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image");
 
-            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image");
+            return response.Result;
         }
 
         /// <summary>
@@ -120,8 +125,9 @@ namespace ShopifySharp
             {
                 image = image
             });
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image");
 
-            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image");
+            return response.Result;
         }
 
         /// <summary>

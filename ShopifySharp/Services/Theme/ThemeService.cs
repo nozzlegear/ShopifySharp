@@ -51,7 +51,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
+
+            return response.Result;
         }
 
         private async Task<Theme> _CreateAsync(Theme theme, string sourceUrl = null)
@@ -68,8 +70,9 @@ namespace ShopifySharp
             {
                 theme = body
             });
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
 
-            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
+            return response.Result;
         }
 
         /// <summary>
@@ -109,8 +112,9 @@ namespace ShopifySharp
             {
                 theme = theme
             });
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme");
 
-            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme");
+            return response.Result;
         }
 
         /// <summary>

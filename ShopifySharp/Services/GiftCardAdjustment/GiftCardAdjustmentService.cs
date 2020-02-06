@@ -43,8 +43,8 @@ namespace ShopifySharp
         public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json");
-
-            return await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Get, rootElement: "adjustment");
+            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Get, rootElement: "adjustment");
+            return response.Result;
         }
 
         /// <summary>
@@ -61,7 +61,8 @@ namespace ShopifySharp
                 adjustment = adjustment
             });
 
-            return await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment");
+            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment");
+            return response.Result;
         }
     }
 }

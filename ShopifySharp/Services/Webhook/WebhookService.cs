@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -40,7 +41,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("topic", topic);
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -77,7 +80,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");
+            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -92,8 +97,9 @@ namespace ShopifySharp
             {
                 webhook = webhook
             });
+            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook");
 
-            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook");
+            return response.Result;
         }
 
         /// <summary>
@@ -109,8 +115,9 @@ namespace ShopifySharp
             {
                 webhook = webhook
             });
+            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook");
 
-            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook");
+            return response.Result;
         }
 
         /// <summary>

@@ -54,7 +54,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Refund>(req, HttpMethod.Get, rootElement: "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Get, rootElement: "refund");
+            return response.Result;
         }
 
         /// <summary>
@@ -69,9 +70,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var result = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
 
-            return result;
+            return response.Result;
         }
 
         /// <summary>
@@ -81,9 +82,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var result = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
 
-            return result;
+            return response.Result;
         }
     }
 }

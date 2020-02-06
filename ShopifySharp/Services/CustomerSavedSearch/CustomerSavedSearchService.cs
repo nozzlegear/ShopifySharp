@@ -26,11 +26,12 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's customers.
         /// </summary>
         /// <returns>The count of all customers for the shop.</returns>
-        public virtual Task<int> CountAsync()
+        public virtual async Task<int> CountAsync()
         {
             var req = PrepareRequest($"{RootResource}/count.json");
 
-            return ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace ShopifySharp
         /// <param name="customerSearchId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Customer"/>.</returns>
-        public virtual Task<CustomerSavedSearch> GetAsync(long customerSearchId, string fields = null)
+        public virtual async Task<CustomerSavedSearch> GetAsync(long customerSearchId, string fields = null)
         {
             var req = PrepareRequest($"{RootResource}/{customerSearchId}.json");
 
@@ -65,7 +66,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Get, rootElement: RootElement);
+            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Get, rootElement: RootElement);
+            return response.Result;
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearch">A new <see cref="CustomerSavedSearch"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="Customer"/>.</returns>
-        public virtual Task<CustomerSavedSearch> CreateAsync(CustomerSavedSearch customerSavedSearch)
+        public virtual async Task<CustomerSavedSearch> CreateAsync(CustomerSavedSearch customerSavedSearch)
         {
             if (string.IsNullOrWhiteSpace(customerSavedSearch.Name))
             {
@@ -114,7 +116,8 @@ namespace ShopifySharp
                 customer_saved_search = body
             });
 
-            return ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Post, content, RootElement);
+            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Post, content, RootElement);
+            return response.Result;
         }
 
         /// <summary>
@@ -122,7 +125,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the object being updated.</param>
         /// <param name="customerSavedSearch">The <see cref="CustomerSavedSearch"/> to update.</param>
-        public virtual Task<CustomerSavedSearch> UpdateAsync(long customerSavedSearchId, CustomerSavedSearch customerSavedSearch)
+        public virtual async Task<CustomerSavedSearch> UpdateAsync(long customerSavedSearchId, CustomerSavedSearch customerSavedSearch)
         {
             var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}.json");
             var body = customerSavedSearch.ToDictionary();
@@ -132,7 +135,8 @@ namespace ShopifySharp
                 customer_saved_search = body
             });
 
-            return ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Put, content, RootElement);
+            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Put, content, RootElement);
+            return response.Result;
         }
 
         /// <summary>

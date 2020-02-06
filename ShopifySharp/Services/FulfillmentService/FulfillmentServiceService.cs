@@ -53,7 +53,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Get, rootElement: "fulfillment_service");
+            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Get, rootElement: "fulfillment_service");
+            return response.Result;
         }
 
         /// <summary>
@@ -72,7 +73,8 @@ namespace ShopifySharp
                 fulfillment_service = body
             });
 
-            return await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Post, content, "fulfillment_service");
+            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Post, content, "fulfillment_service");
+            return response.Result;
         }
 
         /// <summary>
@@ -91,7 +93,8 @@ namespace ShopifySharp
                 fulfillment_service = body
             });
 
-            return await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Put, content, "fulfillment_service");
+            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Put, content, "fulfillment_service");
+            return response.Result;
         }
 
         /// <summary>

@@ -34,7 +34,8 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToParameters());
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -69,7 +70,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Customer>(req, HttpMethod.Get, rootElement: "customer");
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Get, rootElement: "customer");
+            return response.Result;
         }
 
         /// <summary>
@@ -122,7 +124,8 @@ namespace ShopifySharp
                 customer = body
             });
 
-            return await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, content, "customer");
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, content, "customer");
+            return response.Result;
         }
 
         /// <summary>
@@ -150,7 +153,8 @@ namespace ShopifySharp
                 customer = body
             });
 
-            return await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, content, "customer");
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, content, "customer");
+            return response.Result;
         }
 
         /// <summary>
@@ -180,7 +184,8 @@ namespace ShopifySharp
                 customer_invite = invite
             });
 
-            return await ExecuteRequestAsync<CustomerInvite>(req, HttpMethod.Post, content, "customer_invite");
+            var response = await ExecuteRequestAsync<CustomerInvite>(req, HttpMethod.Post, content, "customer_invite");
+            return response.Result;
         }
 
         /// <summary>
@@ -194,12 +199,9 @@ namespace ShopifySharp
         public virtual async Task<string> GetAccountActivationUrl(long customerid)
         {
             var req = PrepareRequest($"customers/{customerid}/account_activation_url.json");
-
             var response = await ExecuteRequestAsync(req, HttpMethod.Post);
 
-            return response.SelectToken("account_activation_url").ToString();
-
+            return response.Result.SelectToken("account_activation_url").ToString();
         }
-
     }
 }

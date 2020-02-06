@@ -50,7 +50,8 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToParameters());
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -68,7 +69,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Article>(req, HttpMethod.Get, rootElement: "article");
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Get, rootElement: "article");
+            return response.Result;
         }
 
         /// <summary>
@@ -92,7 +94,8 @@ namespace ShopifySharp
                 article = body
             });
 
-            return await ExecuteRequestAsync<Article>(req, HttpMethod.Post, content, "article");
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Post, content, "article");
+            return response.Result;
         }
 
         /// <summary>
@@ -117,7 +120,8 @@ namespace ShopifySharp
                 article = body
             });
 
-            return await ExecuteRequestAsync<Article>(req, HttpMethod.Put, content, "article");
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Put, content, "article");
+            return response.Result;
         }
 
         /// <summary>
@@ -139,7 +143,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"articles/authors.json");
 
-            return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "authors");
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "authors");
+            return response.Result;
         }
 
         /// <summary>
@@ -161,7 +166,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("limit", limit.Value);
             }
 
-            return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            return response.Result;
         }
 
         /// <summary>
@@ -184,7 +190,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("limit", limit.Value);
             }
 
-            return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            return response.Result;
         }
     }
 }

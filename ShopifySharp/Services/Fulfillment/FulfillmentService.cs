@@ -35,7 +35,8 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToParameters());
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -73,7 +74,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Get, rootElement: "fulfillment");
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Get, rootElement: "fulfillment");
+            return response.Result;
         }
 
         /// <summary>
@@ -92,7 +94,8 @@ namespace ShopifySharp
                 fulfillment = body
             });
 
-            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, content, "fulfillment");
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, content, "fulfillment");
+            return response.Result;
         }
 
         /// <summary>
@@ -128,7 +131,8 @@ namespace ShopifySharp
                 fulfillment = body
             });
 
-            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, content, "fulfillment");
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, content, "fulfillment");
+            return response.Result;
         }
 
         /// <summary>
@@ -156,7 +160,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/complete.json");
 
-            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+            return response.Result;
         }
 
         /// <summary>
@@ -168,9 +173,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel.json");
 
-            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+            return response.Result;
         }
-
 
         /// <summary>
         /// Opens a pending fulfillment with the given id.
@@ -181,8 +186,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/open.json");
 
-            return await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment");
+            return response.Result;
         }
-
     }
 }

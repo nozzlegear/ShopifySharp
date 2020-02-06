@@ -41,8 +41,9 @@ namespace ShopifySharp
         public virtual async Task<User> GetAsync(long userId)
         {
             var req = PrepareRequest($"users/{userId}.json");
-            
-            return await ExecuteRequestAsync<User>(req, HttpMethod.Get, rootElement: "user");
+            var response = await ExecuteRequestAsync<User>(req, HttpMethod.Get, rootElement: "user");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -52,8 +53,9 @@ namespace ShopifySharp
         public virtual async Task<User> GetCurrentAsync()
         {
             var req = PrepareRequest("users/current.json");
+            var response = await ExecuteRequestAsync<User>(req, HttpMethod.Get, rootElement: "user");
 
-            return await ExecuteRequestAsync<User>(req, HttpMethod.Get, rootElement: "user");
+            return response.Result;
         }
     }
 }

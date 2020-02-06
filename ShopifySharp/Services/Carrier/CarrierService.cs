@@ -43,7 +43,8 @@ namespace ShopifySharp
                 carrier_service = carrier
             });
 
-            return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service");
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service");
+            return response.Result;
         }
 
         /// <summary>
@@ -55,7 +56,8 @@ namespace ShopifySharp
         {            
             var req = PrepareRequest($"carrier_services/{carrierId}.json");
 
-            return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service");           
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service");
+            return response.Result;
         }
 
         /// <summary>
@@ -83,7 +85,8 @@ namespace ShopifySharp
                 carrier_service = carrier
             });
 
-            return await ExecuteRequestAsync<Carrier>(req, HttpMethod.Put, content, "carrier_service");
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Put, content, "carrier_service");
+            return response.Result;
         }
     }
 }

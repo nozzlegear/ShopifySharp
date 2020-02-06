@@ -26,8 +26,8 @@ namespace ShopifySharp
         public virtual async Task<Location> GetAsync(long id)
         {
             var req = PrepareRequest($"locations/{id}.json");           
-
-            return await ExecuteRequestAsync<Location>(req, HttpMethod.Get, rootElement: "location");
+            var response= await ExecuteRequestAsync<Location>(req, HttpMethod.Get, rootElement: "location");
+            return response.Result;
         }
 
         /// <summary>

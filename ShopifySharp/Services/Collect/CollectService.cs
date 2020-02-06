@@ -71,7 +71,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Collect>(req, HttpMethod.Get, rootElement: "collect");
+            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Get, rootElement: "collect");
+            return response.Result;
         }
 
 
@@ -88,7 +89,8 @@ namespace ShopifySharp
                 collect = collect
             });
 
-            return await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, content, "collect");
+            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, content, "collect");
+            return response.Result;
         }
 
         /// <summary>

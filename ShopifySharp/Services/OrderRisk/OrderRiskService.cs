@@ -39,8 +39,9 @@ namespace ShopifySharp
         public virtual async Task<OrderRisk> GetAsync(long orderId, long riskId)
         {
             var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
-            
-            return await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Get, rootElement: "risk");
+            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Get, rootElement: "risk");
+
+            return response.Result;
         }
         
         /// <summary>
@@ -55,8 +56,9 @@ namespace ShopifySharp
             {
                 risk = risk
             });
-            
-            return await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Post, content, "risk");
+            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Post, content, "risk");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -73,7 +75,8 @@ namespace ShopifySharp
                 risk = risk
             });
 
-            return await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Put, content, "risk");
+            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Put, content, "risk");
+            return response.Result;
         }
 
         /// <summary>

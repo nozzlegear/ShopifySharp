@@ -35,7 +35,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("status", status);
             }
 
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -65,7 +66,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}.json");
 
-            return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Get, rootElement: "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Get, rootElement: "gift_card");
+            return response.Result;
         }
 
         /// <summary>
@@ -83,7 +85,8 @@ namespace ShopifySharp
                 gift_card = body
             });
 
-            return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, content, "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, content, "gift_card");
+            return response.Result;
         }
 
         /// <summary>
@@ -99,9 +102,10 @@ namespace ShopifySharp
             {
                 gift_card = giftCard
             });
-
-            return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Put, content, "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Put, content, "gift_card");
+            return response.Result;
         }
+        
         /// <summary>
         /// Disables the <see cref="GiftCard"/> with the given id.
         /// </summary>
@@ -110,8 +114,8 @@ namespace ShopifySharp
         public virtual async Task<GiftCard> DisableAsync(long giftCardId)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}/disable.json");
-
-            return await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, rootElement: "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, rootElement: "gift_card");
+            return response.Result;
         }
 
         /// <summary>

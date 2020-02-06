@@ -12,7 +12,6 @@ namespace ShopifySharp
     /// </summary>
     public class DraftOrderService : ShopifyService
     {
-
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DraftOrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
@@ -61,7 +60,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Get, rootElement: "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Get, rootElement: "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -81,7 +81,8 @@ namespace ShopifySharp
                 draft_order = body
             });
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -97,7 +98,8 @@ namespace ShopifySharp
                 draft_order = order.ToDictionary()
             });
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -121,7 +123,8 @@ namespace ShopifySharp
             var req = PrepareRequest($"draft_orders/{id}/complete.json");
             req.QueryParams.Add("payment_pending", paymentPending);
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -138,7 +141,8 @@ namespace ShopifySharp
                 draft_order_invoice = body
             });
 
-            return await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice");
+            var response = await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice");
+            return response.Result;
         }
     }
 }

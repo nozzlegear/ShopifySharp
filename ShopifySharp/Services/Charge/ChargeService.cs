@@ -29,7 +29,8 @@ namespace ShopifySharp
             var req = PrepareRequest("application_charges.json");
             var content = new JsonContent(new { application_charge = charge });
 
-            return await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge");
+            var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge");
+            return response.Result;
         }
 
         /// <summary>
@@ -47,7 +48,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Charge>(req, HttpMethod.Get, rootElement: "application_charge");
+            var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Get, rootElement: "application_charge");
+            return response.Result;
         }
 
         /// <summary>

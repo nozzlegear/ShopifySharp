@@ -56,7 +56,8 @@ namespace ShopifySharp
         {
             var request = PrepareRequest("blogs/count.json");
 
-            return await ExecuteRequestAsync<int>(request, HttpMethod.Get, rootElement: "count");
+            var response = await ExecuteRequestAsync<int>(request, HttpMethod.Get, rootElement: "count");
+            return response.Result;
         }
 
         /// <summary>
@@ -79,7 +80,8 @@ namespace ShopifySharp
                 blog = body
             });
 
-            return await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, content, rootElement: "blog");
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, content, rootElement: "blog");
+            return response.Result;
         }
 
         /// <summary>
@@ -103,7 +105,8 @@ namespace ShopifySharp
                 blog = body
             });
 
-            return await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, content, "blog");
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, content, "blog");
+            return response.Result;
         }
 
         /// <summary>
@@ -114,7 +117,8 @@ namespace ShopifySharp
         {
             var request = PrepareRequest($"blogs/{id}.json");
 
-            return await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, rootElement: "blog");
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, rootElement: "blog");
+            return response.Result;
         }
 
         /// <summary>

@@ -91,7 +91,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Get, rootElement: "order");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Get, rootElement: "order");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -101,8 +103,9 @@ namespace ShopifySharp
         public virtual async Task<Order> CloseAsync(long id)
         {
             var req = PrepareRequest($"orders/{id}/close.json");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -112,8 +115,9 @@ namespace ShopifySharp
         public virtual async Task<Order> OpenAsync(long id)
         {
             var req = PrepareRequest($"orders/{id}/open.json");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -139,8 +143,9 @@ namespace ShopifySharp
             {
                 order = body
             });
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -156,8 +161,9 @@ namespace ShopifySharp
             {
                 order = order
             });
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -192,8 +198,9 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId)
         {
             var req = PrepareRequest($"orders/{orderId}/metafields.json");
+            var response = await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
 
-            return await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
+            return response.Result;
         }
     }
 }

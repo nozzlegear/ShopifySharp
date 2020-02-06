@@ -44,7 +44,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Discount>(req, HttpMethod.Get, rootElement: "discount");
+            var response = await ExecuteRequestAsync<Discount>(req, HttpMethod.Get, rootElement: "discount");
+            return response.Result;
         }
 
         /// <summary>
@@ -64,7 +65,8 @@ namespace ShopifySharp
                 discount = discountBody
             });
 
-            return await ExecuteRequestAsync<Discount>(req, HttpMethod.Post, content, "discount");
+            var response = await ExecuteRequestAsync<Discount>(req, HttpMethod.Post, content, "discount");
+            return response.Result;
         }
 
         /// <summary>
@@ -76,7 +78,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"discounts/{discountId}/enable.json");
 
-            return await ExecuteRequestAsync<Discount>(req, HttpMethod.Put, rootElement: "discount");
+            var response = await ExecuteRequestAsync<Discount>(req, HttpMethod.Put, rootElement: "discount");
+            return response.Result;
         }
 
         /// <summary>
@@ -88,7 +91,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"discounts/{discountId}/disable.json");
 
-            return await ExecuteRequestAsync<Discount>(req, HttpMethod.Put, rootElement: "discount");
+            var response = await ExecuteRequestAsync<Discount>(req, HttpMethod.Put, rootElement: "discount");
+            return response.Result;
         }
 
         /// <summary>

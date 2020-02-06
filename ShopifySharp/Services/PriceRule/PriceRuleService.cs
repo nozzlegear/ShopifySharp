@@ -65,7 +65,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule");
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -76,13 +78,13 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("price_rules.json");
             var body = rule.ToDictionary();
-
             var content = new JsonContent(new
             {
                 price_rule = body
             });
+            var response =  await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule");
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule");
+            return response.Result;
         }
 
         /// <summary>
@@ -97,8 +99,9 @@ namespace ShopifySharp
             {
                 price_rule = rule
             });
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule");
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule");
+            return response.Result;
         }
 
         /// <summary>

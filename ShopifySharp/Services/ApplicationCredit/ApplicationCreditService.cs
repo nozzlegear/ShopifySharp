@@ -49,7 +49,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Get, rootElement: "application_credit");
+            var response = await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Get, rootElement: "application_credit");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -64,7 +66,9 @@ namespace ShopifySharp
                 application_credit = credit,
             });
 
-            return await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, body, "application_credit");
+            var response = await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, body, "application_credit");
+
+            return response.Result;
         }
     }
 }
