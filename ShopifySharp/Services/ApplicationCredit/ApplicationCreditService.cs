@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -21,18 +22,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of all past and present application credits.
         /// </summary>
-        /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public virtual async Task<IEnumerable<ApplicationCredit>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<ApplicationCredit>> ListAsync(IListFilter filter)
         {
-            throw new System.Exception("not yet implemented");
-            // var req = PrepareRequest($"application_credits.json");
-            //
-            // if (!string.IsNullOrEmpty(fields))
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
+            var req = PrepareRequest($"application_credits.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
+            
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of all past and present application credits.
+        /// </summary>
+        public virtual async Task<IListResult<ApplicationCredit>> ListAsync(ApplicationCreditListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>
