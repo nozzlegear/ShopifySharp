@@ -14,6 +14,6 @@ namespace ShopifySharp
     {
         /// <param name="baseRequest">The base request that was built by a service to execute.</param>
         /// <param name="executeRequestAsync">A delegate that executes the request you pass to it.</param>
-        Task<T> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync);
+        Task<RequestResult<T>> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync);
     }
 }

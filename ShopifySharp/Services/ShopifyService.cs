@@ -137,7 +137,7 @@ namespace ShopifySharp
 
             return headerValue ?? string.Empty;
         }
-
+        
         /// <summary>
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
@@ -145,7 +145,7 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
         /// </remarks>
-        protected async Task<JToken> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null)
+        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
@@ -159,7 +159,7 @@ namespace ShopifySharp
 
                         //Check for and throw exception when necessary.
                         CheckResponseExceptions(response, rawResult);
-
+                        
                         JToken jtoken = null;
 
                         // Don't parse the result when the request was Delete.
@@ -175,7 +175,7 @@ namespace ShopifySharp
                         return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
                     }
                 });
-
+                
                 return policyResult;
             }
         }
@@ -187,7 +187,7 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<T> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null) where T : new()
+        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null) where T : new()
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {

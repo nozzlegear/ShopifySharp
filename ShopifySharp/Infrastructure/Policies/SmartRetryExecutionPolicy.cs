@@ -32,7 +32,7 @@ namespace ShopifySharp
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;
@@ -61,7 +61,7 @@ namespace ShopifySharp
                         bucket?.SetState(bucketState);
                     }
 
-                    return fullResult.Result;
+                    return fullResult;
                 }
                 catch (ShopifyRateLimitException)
                 {
