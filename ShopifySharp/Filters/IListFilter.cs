@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ShopifySharp.Filters
 {
     public interface IListFilter
@@ -11,5 +13,10 @@ namespace ShopifySharp.Filters
         /// The number of items which should be returned. Default is 50, maximum is 250.
         /// </summary>
         int? Limit { get; set; }
+
+        /// <summary>
+        /// Converts the filter to a list of key/value pairs which can be turned into a querystring.
+        /// </summary>
+        IEnumerable<KeyValuePair<string, object>> ToQueryParameters();
     }
 }

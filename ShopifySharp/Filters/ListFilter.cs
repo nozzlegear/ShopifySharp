@@ -12,5 +12,10 @@ namespace ShopifySharp.Filters
         public string PageInfo { get; set; }
 
         public int? Limit { get; set; }
+
+        public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
