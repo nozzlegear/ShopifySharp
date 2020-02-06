@@ -48,18 +48,18 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of webhooks matching the filter.</returns>
-        public virtual async Task<IEnumerable<Webhook>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Webhook>> ListAsync(IListFilter filter)
         {
-            throw new Exception("Not yet implemented");
-            //
-            // var req = PrepareRequest("webhooks.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
+            var req = PrepareRequest("webhooks.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var result = await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
+
+            return ParseLinkHeaderToListResult(result);
         }
 
         /// <summary>
