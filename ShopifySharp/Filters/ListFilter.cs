@@ -13,7 +13,7 @@ namespace ShopifySharp.Filters
 
         public int? Limit { get; set; }
 
-        public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        public virtual IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
         {
             throw new System.NotImplementedException();
         }
