@@ -441,7 +441,7 @@ namespace ShopifySharp
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
-        public ListResult<T> ParseLinkHeaderToListResult<T>(string linkHeader)
+        public IListResult<T> ParseLinkHeaderToListResult<T>(string linkHeader)
         {
             var links = linkHeader
                 .Split(',')
