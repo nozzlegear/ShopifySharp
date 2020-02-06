@@ -441,9 +441,9 @@ namespace ShopifySharp
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
-        public IListResult<T> ParseLinkHeaderToListResult<T>(string linkHeader)
+        public IListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
-            var links = linkHeader
+            var links = requestResult.RawLinkHeaderValue
                 .Split(',')
                 .Select(link => link.Trim())
                 .ToArray();
@@ -451,7 +451,10 @@ namespace ShopifySharp
                 links.FirstOrDefault(link => link.Contains("rel=\"next\""));
             var previousPageLink = 
                 links.FirstOrDefault(link => link.Contains("rel=\"previous\""));
-            var listResult = new ListResult<T>();
+            var listResult = new ListResult<T>
+            {
+                Items = requestResult.Result
+            };
 
             if (TryParsePageInfoFromLink(nextPageLink, out var parsedNextPageLink))
             {
