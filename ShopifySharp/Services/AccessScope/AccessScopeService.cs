@@ -3,6 +3,7 @@ using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -24,10 +25,12 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of access scopes associated to the access token.
         /// </summary>
-        public virtual async Task<IEnumerable<AccessScope>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<AccessScope>> ListAsync()
         {
-            throw new System.Exception("not yet implemented");
-            // return await ExecuteRequestAsync<List<AccessScope>>(req, HttpMethod.Get, rootElement: "access_scopes");
+            var req = PrepareRequest("oauth/access_scopes.json");
+            var response = await ExecuteRequestAsync<List<AccessScope>>(req, HttpMethod.Get, rootElement: "access_scopes");
+
+            return response.Result;
         }
     }
 }
