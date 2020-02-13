@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="GiftCardService.ListAsync(GiftCardFilter)"/> results.
+    /// Options for filtering gift cards. 
     /// </summary>
     public class GiftCardFilter : ListFilter
     {
@@ -15,5 +14,16 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("status")]
         public string Status { get; set; }
+        
+        [JsonProperty("since_id")]
+        public long SinceId { get; set; }
+        
+        [JsonProperty("fields")]
+        public string Fields { get; set; }
+
+        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

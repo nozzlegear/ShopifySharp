@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
     /// <summary>
-    /// A service for manipulating mapping between shopify products and collections
+    /// A service for manipulating mapping between Shopify products and collections.
     /// </summary>
     public class CollectService : ShopifyService
     {
@@ -42,18 +43,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<Collect>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Collect>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("collects.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Collect>>(req, HttpMethod.Get, rootElement: "collects");
+            var req = PrepareRequest("collects.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Collect>>(req, HttpMethod.Get, rootElement: "collects");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's collects.
+        /// </summary>
+        public virtual async Task<IListResult<Collect>> ListAsync(CollectListFilter filter)
+        {
+            return await ListAsync((IListFilter)filter);
         }
 
         /// <summary>

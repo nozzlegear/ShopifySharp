@@ -39,6 +39,7 @@ namespace ShopifySharp
             }
 
             var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, rootElement: "asset");
+            
             return response.Result;
         }
 
@@ -49,17 +50,18 @@ namespace ShopifySharp
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="Asset"/> objects.</returns>
-        public virtual async Task<IEnumerable<Asset>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, string fields = null)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"themes/{themeId}/assets.json");
-            //
-            // if (string.IsNullOrEmpty(fields) == false)
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
+            var req = PrepareRequest($"themes/{themeId}/assets.json");
+            
+            if (string.IsNullOrEmpty(fields) == false)
+            {
+                req.QueryParams.Add("fields", fields);
+            }
+            
+            var response = await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
+            
+            return response.Result;
         }
 
         /// <summary>

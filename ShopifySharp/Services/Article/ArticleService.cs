@@ -3,6 +3,7 @@ using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -21,19 +22,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 articles belonging to the given blog.
         /// </summary>
-        /// <param name="blogId">The blog that the articles belong to.</param>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<Article>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Article>> ListAsync(long blogId, IListFilter filter)
         {
-            throw new System.Exception("not yet implemented");
-            // var req = PrepareRequest($"blogs/{blogId}/articles.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
+            var req = PrepareRequest($"blogs/{blogId}/articles.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
+            
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 articles belonging to the given blog.
+        /// </summary>
+        public virtual async Task<IListResult<Article>> ListAsync(int blogId, ArticleListFilter filter)
+        {
+            return await ListAsync(blogId, (IListFilter) filter);
         }
 
         /// <summary>

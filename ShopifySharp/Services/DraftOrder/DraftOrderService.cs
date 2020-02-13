@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp 
 {
@@ -16,7 +17,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DraftOrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
 
-        public virtual async Task<int> CountAsync(DraftOrderFilter filter = null)
+        public virtual async Task<int> CountAsync(DraftOrderListFilter listFilter = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest("draft_orders/count.json");
@@ -32,18 +33,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
-        /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<DraftOrder>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<DraftOrder>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("draft_orders.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
+            var req = PrepareRequest("draft_orders.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's draft orders.
+        /// </summary>
+        public virtual async Task<IListResult<DraftOrder>> ListAsync(DraftOrderListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

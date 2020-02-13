@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -17,15 +18,20 @@ namespace ShopifySharp
         public DiscountCodeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop's discount codes.
+        /// Gets a list of up to 250 of the discount codes belonging to the price rule.
         /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<PriceRuleDiscountCode>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
+            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
 
-            // return await ExecuteRequestAsync<List<PriceRuleDiscountCode>>(req, HttpMethod.Get, rootElement: "discount_codes");
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<PriceRuleDiscountCode>>(req, HttpMethod.Get, rootElement: "discount_codes");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
         /// <summary>

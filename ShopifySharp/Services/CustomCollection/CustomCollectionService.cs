@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -13,31 +14,33 @@ namespace ShopifySharp
     /// </summary>
     public class CustomCollectionService : ShopifyService
     {
-        /// <summary>
-        /// Creates a new instance of <see cref="CustomCollectionService" />.
-        /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CustomCollectionService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// default: 50
-        /// Gets a list of up to 250 custom collections for the corresponding productId
+        /// Gets a list of up to 250 custom collections.
         /// </summary>
-        /// <param name="filter">The <see cref="CustomCollection"/>. used to filter results</param>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<CustomCollection>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("custom_collections.json");
-            //
-            // //Add optional parameters to request
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
+            var req = PrepareRequest("custom_collections.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 custom collections.
+        /// </summary>
+        public virtual async Task<IListResult<CustomCollection>> ListAsync(CustomCollectionFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

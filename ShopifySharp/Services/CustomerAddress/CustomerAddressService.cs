@@ -1,41 +1,38 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
     /// <summary>
-    /// A service for manipulating Shopify customers.
+    /// A service for manipulating Shopify customers addresses.
     /// </summary>
     public class CustomerAddressService : ShopifyService
     {
-        /// <summary>
-        /// Creates a new instance of <see cref="CustomerAddressService" />.
-        /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CustomerAddressService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop customers's addresses.
+        /// Gets a list of up to 250 of the shop customer's addresses.
         /// </summary>
         /// <param name="customerId">The id of the customer to retrieve.</param>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<Address>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Address>> ListAsync(long customerId, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"customers/{customerId}/addresses.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Address>>(req, HttpMethod.Get, rootElement: "addresses");
+            var req = PrepareRequest($"customers/{customerId}/addresses.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Address>>(req, HttpMethod.Get, rootElement: "addresses");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
         /// <summary>

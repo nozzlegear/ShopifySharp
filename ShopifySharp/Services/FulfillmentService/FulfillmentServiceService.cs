@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -13,9 +12,6 @@ namespace ShopifySharp
     /// </summary>
     public class FulfillmentServiceService : ShopifyService
     {
-        /// <summary>
-        /// Creates a new instance of <see cref="FulfillmentServiceService" />.
-        /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public FulfillmentServiceService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
@@ -25,17 +21,18 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
-        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"fulfillment_services.json");
-            //
-            // if (!string.IsNullOrEmpty(scope))
-            // {
-            //     req.QueryParams.Add("scope", scope);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");
+            var req = PrepareRequest($"fulfillment_services.json");
+            
+            if (!string.IsNullOrEmpty(scope))
+            {
+                req.QueryParams.Add("scope", scope);
+            }
+            
+            var response = await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");
+
+            return response.Result;
         }
 
         /// <summary>

@@ -26,12 +26,12 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillment belongs to.</param>
         /// <param name="fulfillmentId">The fulfillment id to which the fulfillment events belong to.</param>
         /// <returns>The list of fulfillment events for the given fulfillment.</returns>
-        public virtual async Task<IEnumerable<FulfillmentEvent>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<FulfillmentEvent>> ListAsync(long orderId, long fulfillmentId)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
-            //
-            // return await ExecuteRequestAsync<List<FulfillmentEvent>>(req, HttpMethod.Get, rootElement: "fulfillment_events");
+            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
+            var response = await ExecuteRequestAsync<List<FulfillmentEvent>>(req, HttpMethod.Get, rootElement: "fulfillment_events");
+
+            return response.Result;
         }
 
         /// <summary>

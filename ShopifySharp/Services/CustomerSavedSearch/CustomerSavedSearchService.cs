@@ -4,11 +4,12 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
     /// <summary>
-    /// A service for manipulating Shopify customers.
+    /// A service for manipulating Shopify saved searches.
     /// </summary>
     public class CustomerSavedSearchService : ShopifyService
     {
@@ -35,20 +36,28 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop's customers.
+        /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        /// <returns></returns>
-        public virtual Task<List<CustomerSavedSearch>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"{RootResource}.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
+            var req = PrepareRequest($"{RootResource}.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's customer saved searches.
+        /// </summary>
+        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -61,45 +62,62 @@ namespace ShopifySharp
         /// <summary>
         /// Returns a list of events for the given subject and subject type. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event
         /// </summary>
-        /// <param name="options">Options for filtering the result.</param>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<IEnumerable<Event>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // // Ensure the subject type is plural
-            // if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
-            // {
-            //     subjectType = subjectType + "s";
-            // }
-            //
-            // var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
-            //
-            // //Add optional parameters to request
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+            // Ensure the subject type is plural
+            if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
+            {
+                subjectType = subjectType + "s";
+            }
+            
+            var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
-        // /// <summary>
-        // /// Returns a list of events.
-        // /// </summary>
-        // /// <param name="options">Options for filtering the result.</param>
-        // public virtual async Task<IEnumerable<Event>> ListAsync(IListFilter filter)
-        // {
-        //     throw new Exception("not yet implemented");
-        //     // var req = PrepareRequest("events.json");
-        //     //
-        //     // //Add optional parameters to request
-        //     // if (options != null)
-        //     // {
-        //     //     req.QueryParams.AddRange(options.ToParameters());
-        //     // }
-        //     //
-        //     // return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
-        // }
+        /// <summary>
+        /// Returns a list of events.
+        /// </summary>
+        public virtual async Task<IListResult<Event>> ListAsync(IListFilter filter)
+        {
+            var req = PrepareRequest("events.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Returns a list of events for the given subject and subject type. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event
+        /// </summary>
+        /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
+        /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
+        public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType,
+            EventListFilter filter)
+        {
+            return await ListAsync(subjectId, subjectType, (IListFilter) filter);
+        }
+
+        /// <summary>
+        /// Returns a list of events.
+        /// </summary>
+        public virtual async Task<IListResult<Event>> ListAsync(EventListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
+        }
     }
 }

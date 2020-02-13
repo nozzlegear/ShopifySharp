@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -21,32 +22,28 @@ namespace ShopifySharp
         public BlogService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Gets a list of all blogs.
+        /// Gets a list of up to 250 blogs belonging to the store.
         /// </summary>
-        /// <param name="sinceId">Restrict results to after the specified ID</param>
-        /// <param name="handle">Filter by Blog handle</param>
-        /// <param name="fields">comma-separated list of fields to include in the response</param>
-        public virtual async Task<IEnumerable<Blog>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Blog>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var request = PrepareRequest("blogs.json");
-            //
-            // if (sinceId.HasValue)
-            // {
-            //     request.QueryParams.Add("since_id", sinceId.Value);
-            // }
-            //
-            // if (!string.IsNullOrEmpty(handle))
-            // {
-            //     request.QueryParams.Add("handle", handle);
-            // }
-            //
-            // if (!string.IsNullOrEmpty(fields))
-            // {
-            //     request.QueryParams.Add("fields", fields);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
+            var request = PrepareRequest("blogs.json");
+
+            if (filter != null)
+            {
+                request.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 blogs belonging to the store.
+        /// </summary>
+        public virtual async Task<IListResult<Blog>> ListAsync(BlogListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

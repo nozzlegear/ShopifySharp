@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System;
 namespace ShopifySharp
 {
     /// <summary>
-    /// A service for manipulating Carriers
+    /// A service for working with shipping carriers.
     /// </summary>
     public class CarrierService : ShopifyService
     {
@@ -23,11 +22,12 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieve a list of all carrier services that are associated with the store.
         /// </summary>
-        /// <returns>The list of <see cref="Carrier" that are associated with the store.</returns>
-        public virtual async Task<IEnumerable<Carrier>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<Carrier>> ListAsync()
         {
-            throw new Exception("not yet implemented");
-            // return await ExecuteRequestAsync<List<Carrier>>(req, HttpMethod.Get, rootElement: "carrier_services");
+            var req = PrepareRequest("carrier_services.json");
+            var response = await ExecuteRequestAsync<List<Carrier>>(req, HttpMethod.Get, rootElement: "carrier_services");
+
+            return response.Result;
         }
 
         /// <summary>

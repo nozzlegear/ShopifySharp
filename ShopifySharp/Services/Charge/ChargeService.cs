@@ -57,23 +57,23 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="sinceId">Restricts results to any charge after the given id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="Charge"/> objects.</returns>
-        public virtual async Task<IEnumerable<Charge>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<Charge>> ListAsync(long? sinceId = null, string fields = null)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("application_charges.json");
-            //
-            // if (string.IsNullOrEmpty(fields) == false)
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // if (sinceId.HasValue)
-            // {
-            //     req.QueryParams.Add("since_id", sinceId);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
+            var req = PrepareRequest("application_charges.json");
+            
+            if (string.IsNullOrEmpty(fields) == false)
+            {
+                req.QueryParams.Add("fields", fields);
+            }
+            
+            if (sinceId.HasValue)
+            {
+                req.QueryParams.Add("since_id", sinceId);
+            }
+            
+            var response = await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
+
+            return response.Result;
         }
 
         /// <summary>

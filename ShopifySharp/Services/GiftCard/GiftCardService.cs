@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -42,19 +43,28 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
-        /// <param name="options">Options for filtering the list.</param>
-        /// <returns>The list of gift cards matching the filter.</returns>
-        public virtual async Task<IEnumerable<GiftCard>> ListAsync(IListFilter filter)
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IListResult<GiftCard>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("gift_cards.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+            var req = PrepareRequest("gift_cards.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the gift cards.
+        /// </summary>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IListResult<GiftCard>> ListAsync(GiftCardFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>
@@ -121,27 +131,21 @@ namespace ShopifySharp
         /// <summary>
         /// Search for gift cards matching supplied query
         /// </summary>
-        /// <param name="query">The (unencoded) search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
-        /// <param name="order">An (unencoded) optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
-        /// <param name="filter">Options for filtering the results.</param>
-        /// <returns>A list of matching gift cards.</returns>
-        public virtual async Task<IEnumerable<GiftCard>> SearchAsync(string query, string order = null, ListFilter filter = null)
+        /// <param name="filter">Options for searching and filtering the results.</param>
+        public virtual async Task<IListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("gift_cards/search.json");
-            // req.QueryParams.Add("query", query);
-            //
-            // if (!string.IsNullOrEmpty(order))
-            // {
-            //     req.QueryParams.Add("order", order);
-            // }
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+            if (filter == null)
+            {
+                throw new ArgumentNullException(nameof(filter));
+            }
+            
+            var req = PrepareRequest("gift_cards/search.json");
+            
+            req.QueryParams.AddRange(filter.ToQueryParameters());
+            
+            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+
+            return ParseLinkHeaderToListResult(response);
         }
     }
 }
