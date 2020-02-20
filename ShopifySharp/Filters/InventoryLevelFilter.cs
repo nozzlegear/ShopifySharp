@@ -1,24 +1,26 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// Options for filtering <see cref="InventoryLevelService.ListAsync(InventoryLevelFilter)"/> results.
+    /// You **must** include InventoryItemIds, LocationIds, or both as filter parameters.
     /// </summary>
-    public class InventoryLevelFilter : ListFilter
+    public class InventoryLevelFilter : ListFilter, IInventoryLevelFilter
     {
-        /// <summary>
-        /// Ids of inventory items to retrieve
-        /// </summary>
         [JsonProperty("inventory_item_ids")]
         public IEnumerable<long> InventoryItemIds { get; set; }
 
-        /// <summary>
-        /// Ids of locations to search
-        /// </summary>
         [JsonProperty("location_ids")]
         public IEnumerable<long> LocationIds { get; set; }
+        
+        [JsonProperty("updated_at_min")]
+        public DateTimeOffset? UpdatedAtMin { get; set; }
+
+        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

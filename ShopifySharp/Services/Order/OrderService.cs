@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -41,19 +42,30 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's orders.
         /// </summary>
-        /// <param name="options">Options for filtering the list.</param>
+        /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<Order>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Order>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("orders.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
+            var req = PrepareRequest("orders.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's orders.
+        /// </summary>
+        /// <param name="filter">Options for filtering the list.</param>
+        /// <returns>The list of orders matching the filter.</returns>
+        public virtual async Task<IListResult<Order>> ListAsync(OrderFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

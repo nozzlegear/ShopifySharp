@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
@@ -16,8 +15,10 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public LocationService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-        
+        public LocationService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken)
+        {
+        }
+
         /// <summary>
         /// Retrieves the <see cref="Location"/> with the given id.
         /// </summary>
@@ -25,8 +26,8 @@ namespace ShopifySharp
         /// <returns>The <see cref="Location"/>.</returns>
         public virtual async Task<Location> GetAsync(long id)
         {
-            var req = PrepareRequest($"locations/{id}.json");           
-            var response= await ExecuteRequestAsync<Location>(req, HttpMethod.Get, rootElement: "location");
+            var req = PrepareRequest($"locations/{id}.json");
+            var response = await ExecuteRequestAsync<Location>(req, HttpMethod.Get, rootElement: "location");
             return response.Result;
         }
 
@@ -36,8 +37,10 @@ namespace ShopifySharp
         /// <returns>The list of <see cref="Location"/> objects.</returns>
         public virtual async Task<IEnumerable<Location>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // return await ExecuteRequestAsync<List<Location>>(req, HttpMethod.Get, rootElement: "locations");
+            var req = PrepareRequest($"locations.json");
+            var response = await ExecuteRequestAsync<List<Location>>(req, HttpMethod.Get, rootElement: "locations");
+
+            return response.Result;
         }
     }
 }

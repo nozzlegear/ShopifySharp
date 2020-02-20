@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -20,20 +21,28 @@ namespace ShopifySharp
         public InventoryLevelService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
+        /// Gets a list of inventory items. 
+        /// </summary>
+        public virtual async Task<IListResult<InventoryLevel>> ListAsync(IInventoryLevelFilter filter)
+        {
+            var req = PrepareRequest($"inventory_levels.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+        
+        /// <summary>
         /// Gets a list of inventory items
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the result. InventoryItemIds and/or LocationIds must be populated.</param>
-        public virtual async Task<IEnumerable<InventoryLevel>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<InventoryLevel>> ListAsync(InventoryLevelFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"inventory_levels.json");
-            //
-            // if (filterOptions != null)
-            // {
-            //     req.QueryParams.AddRange(filterOptions.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
+            return await ListAsync((IInventoryLevelFilter) filter);
         }
 
         /// <summary>

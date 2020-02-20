@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -23,12 +24,19 @@ namespace ShopifySharp
         /// Gets a list of all order risks for an order.
         /// </summary>
         /// <param name="orderId">The order the risks belong to.</param>
-        public virtual async Task<IEnumerable<OrderRisk>> ListAsync(IListFilter filter)
+        /// <param name="filter">Options for filtering the request.</param>
+        public virtual async Task<IListResult<OrderRisk>> ListAsync(long orderId, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"orders/{orderId}/risks.json");
-            //
-            // return await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");
+            var req = PrepareRequest($"orders/{orderId}/risks.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response= await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");
+
+            return ParseLinkHeaderToListResult(response);
         }
         
         /// <summary>

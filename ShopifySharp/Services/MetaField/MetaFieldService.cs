@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -66,38 +67,39 @@ namespace ShopifySharp
             return await _CountAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields/count.json", filter);
         }
 
-        private async Task<IEnumerable<MetaField>> _ListAsync(IListFilter filter)
+        private async Task<IListResult<MetaField>> _ListAsync(string path, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest(path);
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
+            var req = PrepareRequest(path);
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+
+            var response = await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
-        // /// <summary>
-        // /// Gets a list of the metafields for the shop itself.
-        // /// </summary>
-        // /// <param name="filter">Options to filter the results.</param>
-        // public virtual async Task<IEnumerable<MetaField>> ListAsync(IListFilter filter)
-        // {
-        //     return await _ListAsync("metafields.json", filter);
-        // }
+        /// <summary>
+        /// Gets a list of the metafields for the shop itself.
+        /// </summary>
+        /// <param name="filter">Options to filter the results.</param>
+        public virtual async Task<IListResult<MetaField>> ListAsync(IListFilter filter)
+        {
+            return await _ListAsync("metafields.json", filter);
+        }
 
-        // /// <summary>
-        // /// Gets a list of the metafields for the given entity type and filter options.
-        // /// </summary>
-        // /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
-        // /// <param name="resourceId">The Id for the resource type.</param>
-        // /// <param name="filter">Options to filter the results.</param>
-        // public virtual async Task<IEnumerable<MetaField>> ListAsync(IListFilter filter)
-        // {
-        //     return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
-        // }
+        /// <summary>
+        /// Gets a list of the metafields for the given entity type and filter options.
+        /// </summary>
+        /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
+        /// <param name="resourceId">The Id for the resource type.</param>
+        /// <param name="filter">Options to filter the results.</param>
+        public virtual async Task<IListResult<MetaField>> ListAsync(long resourceId, string resourceType, IListFilter filter)
+        {
+            return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
+        }
 
         /// <summary>
         /// Gets a list of the metafields for the given entity type and filter options.
@@ -107,12 +109,43 @@ namespace ShopifySharp
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<IEnumerable<MetaField>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, IListFilter filter)
         {
-            throw new NotImplementedException();
-            // return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
+            return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
         }
 
+        /// <summary>
+        /// Gets a list of the metafields for the shop itself.
+        /// </summary>
+        /// <param name="filter">Options to filter the results.</param>
+        public virtual async Task<IListResult<MetaField>> ListAsync(MetaFieldFilter filter)
+        {
+            return await _ListAsync("metafields.json", filter);
+        }
+
+        /// <summary>
+        /// Gets a list of the metafields for the given entity type and filter options.
+        /// </summary>
+        /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
+        /// <param name="resourceId">The Id for the resource type.</param>
+        /// <param name="filter">Options to filter the results.</param>
+        public virtual async Task<IListResult<MetaField>> ListAsync(long resourceId, string resourceType, MetaFieldFilter filter)
+        {
+            return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
+        }
+
+        /// <summary>
+        /// Gets a list of the metafields for the given entity type and filter options.
+        /// </summary>
+        /// <param name="parentResourceType">The type of shopify parentresource to obtain metafields for. This could be blogs, products.</param>
+        /// <param name="parentResourceId">The Id for the parent resource type.</param>
+        /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
+        /// <param name="resourceId">The Id for the resource type.</param>
+        /// <param name="filter">Options to filter the results.</param>
+        public virtual async Task<IListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, MetaFieldFilter filter)
+        {
+            return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
+        }
 
         /// <summary>
         /// Retrieves the metafield with the given id.

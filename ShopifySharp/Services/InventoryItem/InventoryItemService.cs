@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -22,18 +23,21 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of inventory items.
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the result. Ids must be populated.</param>
-        public virtual async Task<IEnumerable<InventoryItem>> ListAsync(IListFilter filter)
+        /// <param name="ids">Show only inventory items specified by a list of IDs. Maximum: 100.</param>
+        public virtual async Task<IListResult<InventoryItem>> ListAsync(IEnumerable<long> ids, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"inventory_items.json");
-            //
-            // if (filterOptions != null)
-            // {
-            //     req.QueryParams.AddRange(filterOptions.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<InventoryItem>>(req, HttpMethod.Get, rootElement: "inventory_items");
+            var req = PrepareRequest($"inventory_items.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            req.QueryParams.Add("ids", string.Join(",", ids));
+            
+            var response = await ExecuteRequestAsync<List<InventoryItem>>(req, HttpMethod.Get, rootElement: "inventory_items");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
         /// <summary>
