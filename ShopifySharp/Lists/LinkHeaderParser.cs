@@ -8,8 +8,8 @@ namespace ShopifySharp.Lists
 {
     public static class LinkHeaderParser
     {
-        private static Regex _regexPrevLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=previous", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        private static Regex _regexNextLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=next", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static Regex _regexPrevLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=""previous""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static Regex _regexNextLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=""next""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         public static LinkHeaderParseResult Parse(string linkHeaderValue)
         {
