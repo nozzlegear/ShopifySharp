@@ -55,25 +55,37 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of all past and present <see cref="Charge"/> objects.
         /// </summary>
-        /// <param name="sinceId">Restricts results to any charge after the given id.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        public virtual async Task<IEnumerable<Charge>> ListAsync(long? sinceId = null, string fields = null)
+        /// <param name="filter">Options for filtering the list.</param>
+        private async Task<IEnumerable<Charge>> _ListAsync(IUnpaginatedListFilter filter = null)
         {
             var req = PrepareRequest("application_charges.json");
             
-            if (string.IsNullOrEmpty(fields) == false)
+            if (filter != null)
             {
-                req.QueryParams.Add("fields", fields);
-            }
-            
-            if (sinceId.HasValue)
-            {
-                req.QueryParams.Add("since_id", sinceId);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
             var response = await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
 
             return response.Result;
+        }
+
+        /// <summary>
+        /// Retrieves a list of all past and present <see cref="Charge"/> objects.
+        /// </summary>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<Charge>> ListAsync(IUnpaginatedListFilter filter = null)
+        {
+            return await _ListAsync(filter);
+        }
+
+        /// <summary>
+        /// Retrieves a list of all past and present <see cref="Charge"/> objects.
+        /// </summary>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null)
+        {
+            return await _ListAsync(filter);
         }
 
         /// <summary>

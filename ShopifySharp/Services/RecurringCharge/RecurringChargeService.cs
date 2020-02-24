@@ -56,16 +56,13 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
-        /// </summary>
-        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
+        private async Task<IEnumerable<RecurringCharge>> _ListAsync(IUnpaginatedListFilter filter = null)
         {
             var req = PrepareRequest("recurring_application_charges.json");
 
             if (filter != null)
             {
-                req.QueryParams.AddRange(filter.ToQueryParams());
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
             var response = await ExecuteRequestAsync<List<RecurringCharge>>(req, HttpMethod.Get, rootElement: "recurring_application_charges");
@@ -73,6 +70,22 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <summary>
+        /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
+        /// </summary>
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(IUnpaginatedListFilter filter = null)
+        {
+            return await _ListAsync(filter);
+        }
+
+        /// <summary>
+        /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
+        /// </summary>
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
+        {
+            return await _ListAsync(filter);
+        }
+        
         /// <summary>
         /// Activates a <see cref="RecurringCharge"/> that the shop owner has accepted.
         /// </summary>

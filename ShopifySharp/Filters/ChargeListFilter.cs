@@ -2,8 +2,14 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class ApplicationCreditListFilter : ListFilter
+    public class ChargeListFilter : UnpaginatedListFilter
     {
+        /// <summary>
+        /// Restrict results to after the specified ID.
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+        
         /// <summary>
         /// Retrieve only certain fields, specified by a comma-separated list of field names. 
         /// </summary>

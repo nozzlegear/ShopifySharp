@@ -48,20 +48,41 @@ namespace ShopifySharp
         /// You need to request assets individually in order to get their contents.
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="Asset"/> objects.</returns>
-        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, string fields = null)
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<Asset>> _ListAsync(long themeId, IUnpaginatedListFilter filter = null)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
             
-            if (string.IsNullOrEmpty(fields) == false)
+            if (filter != null)
             {
-                req.QueryParams.Add("fields", fields);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
             var response = await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
             
             return response.Result;
+        }
+        
+        /// <summary>
+        /// Retrieves a list of all <see cref="Asset"/> objects. Listing theme assets only returns metadata about each asset.
+        /// You need to request assets individually in order to get their contents.
+        /// </summary>
+        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, IUnpaginatedListFilter filter = null)
+        {
+            return await _ListAsync(themeId, filter);
+        }
+
+        /// <summary>
+        /// Retrieves a list of all <see cref="Asset"/> objects. Listing theme assets only returns metadata about each asset.
+        /// You need to request assets individually in order to get their contents.
+        /// </summary>
+        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, AssetListFilter filter = null)
+        {
+            return await _ListAsync(themeId, filter);
         }
 
         /// <summary>
