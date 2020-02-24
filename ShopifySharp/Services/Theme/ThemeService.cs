@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -22,18 +23,18 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<Theme>> ListAsync(IListFilter filter = null)
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("themes.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Theme>>(req, HttpMethod.Get, rootElement: "themes");
+            var req = PrepareRequest("themes.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Theme>>(req, HttpMethod.Get, rootElement: "themes");
+
+            return response.Result;
         }
 
         /// <summary>

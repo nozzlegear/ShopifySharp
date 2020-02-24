@@ -63,24 +63,39 @@ namespace ShopifySharp
             return response.Result;
         }
 
+
+        private async Task<IEnumerable<UsageCharge>> _ListAsync(long recurringChargeId, IUnpaginatedListFilter filter = null)
+        {
+            var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, rootElement: "usage_charges");
+
+            return response.Result;
+        }
+
         /// <summary>
         /// Retrieves a list of all past and present <see cref="UsageCharge"/> objects.
         /// </summary>
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="UsageCharge"/> objects.</returns>
-        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, IListFilter filter)
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, IUnpaginatedListFilter filter = null)
         {
-            throw new Exception("not yet implemented");
-            //
-            // var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
-            //
-            // if (!string.IsNullOrEmpty(fields))
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, rootElement: "usage_charges");
+            return await _ListAsync(recurringChargeId, filter);
+        }
+
+        /// <summary>
+        /// Retrieves a list of all past and present <see cref="UsageCharge"/> objects.
+        /// </summary>
+        /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null)
+        {
+            return await _ListAsync(recurringChargeId, filter);
         }
     }
 }
