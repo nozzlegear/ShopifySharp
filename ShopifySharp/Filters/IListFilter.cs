@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace ShopifySharp.Filters
@@ -13,6 +14,11 @@ namespace ShopifySharp.Filters
         /// The number of items which should be returned. Default is 50, maximum is 250.
         /// </summary>
         int? Limit { get; set; }
+
+        /// <summary>
+        /// A comma-separated list of which fields to show in the results. This parameter only works for some endpoints.
+        /// </summary>
+        string Fields { get; set; }
 
         /// <summary>
         /// Converts the filter to a list of key/value pairs which can be turned into a querystring.
