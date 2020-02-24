@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
@@ -57,10 +56,5 @@ namespace ShopifySharp.Filters
 		/// </summary>
         [JsonProperty("updated_at_max")]
 		public DateTimeOffset UpdatedAtMax { get; set; }
-
-		public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

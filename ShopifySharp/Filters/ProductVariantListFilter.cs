@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -26,10 +25,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("presentment_currencies")]
         public IEnumerable<string> PresentmentCurrencies { get; set; }
-        
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

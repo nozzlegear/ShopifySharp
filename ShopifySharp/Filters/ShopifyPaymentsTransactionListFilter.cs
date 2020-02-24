@@ -1,6 +1,4 @@
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace ShopifySharp.Filters 
 {
@@ -29,10 +27,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("payout_status")]
         public string PayoutStatus { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

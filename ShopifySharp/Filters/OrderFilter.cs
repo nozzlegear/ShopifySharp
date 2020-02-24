@@ -78,16 +78,13 @@ namespace ShopifySharp.Filters
         /// <summary>
         /// Retrieve only orders specified by a comma-separated list of order IDs.
         /// </summary>
+        [JsonProperty("ids")]
         public IEnumerable<long> Ids { get; set; }
         
         /// <summary>
         /// Retrieve only orders specified by a comma-separated list of order IDs.
         /// </summary>
+        [JsonProperty("since_id")]
         public long? SinceId { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

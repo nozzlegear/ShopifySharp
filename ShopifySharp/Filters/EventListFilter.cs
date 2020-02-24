@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace ShopifySharp.Filters
 {
@@ -14,6 +13,12 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("since_id")]
         public long? SinceId { get; set; }
+
+        /// <summary>
+        /// A comma-separated list of fields to include in the response.
+        /// </summary>
+        [JsonProperty("fields")]
+        public string Fields { get; set; }
 
         /// <summary>
         /// Show events created at or after date and time
@@ -38,16 +43,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("verb")]
         public string Verbs { get; set; }
-
-        /// <summary>
-        /// A comma-separated list of fields to include in the response.
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -6,8 +6,7 @@ namespace ShopifySharp.Filters
     {
         public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
         {
-            var a = base.ToParameters();
-            throw new System.NotImplementedException();
+            return base.ToParameters();
         }
     }
 }

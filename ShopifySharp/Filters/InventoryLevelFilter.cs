@@ -17,10 +17,5 @@ namespace ShopifySharp.Filters
         
         [JsonProperty("updated_at_min")]
         public DateTimeOffset? UpdatedAtMin { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

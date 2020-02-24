@@ -1,14 +1,19 @@
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
     public class FulfillmentListFilter : ListFilter
     {
+        /// <summary>
+        /// Restrict results to after the specified ID
+        /// </summary>
         [JsonProperty("since_id")]
         public long? SinceId { get; set; }
-        
+
+        /// <summary>
+        /// A comma-separated list of fields to include in the response.
+        /// </summary>
         [JsonProperty("fields")]
         public string Fields { get; set; }
         
@@ -23,10 +28,5 @@ namespace ShopifySharp.Filters
         
         [JsonProperty("updated_at_max")]
         public DateTimeOffset? UpdatedAtMax { get; set; }
-        
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

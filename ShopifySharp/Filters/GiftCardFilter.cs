@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
@@ -10,20 +8,21 @@ namespace ShopifySharp.Filters
     public class GiftCardFilter : ListFilter
     {
         /// <summary>
+        /// Restrict results to after the specified ID
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+
+        /// <summary>
+        /// A comma-separated list of fields to include in the response.
+        /// </summary>
+        [JsonProperty("fields")]
+        public string Fields { get; set; }
+        
+        /// <summary>
         /// The status of gift card to retrieve. Known values are "enabled", "disabled".
         /// </summary>
         [JsonProperty("status")]
         public string Status { get; set; }
-        
-        [JsonProperty("since_id")]
-        public long SinceId { get; set; }
-        
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

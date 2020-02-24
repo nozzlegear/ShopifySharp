@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
@@ -68,10 +67,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("times_used")]
         public int? TimesUsed { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

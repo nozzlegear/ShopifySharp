@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace ShopifySharp.Filters 
 {
@@ -23,10 +22,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("initiated_at ")]
         public DateTimeOffset? InitiatedAt { get; set; }
-
-        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

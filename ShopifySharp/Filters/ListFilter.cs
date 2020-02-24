@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace ShopifySharp.Filters
 {
     /// <summary>
     /// A generic class for filtering the results of a .ListAsync command.
     /// </summary>
-    public class ListFilter : IListFilter
+    public class ListFilter : Parameterizable, IListFilter
     {
         /// <summary>
         /// A unique ID used to access a page of results. Must be present to list more than the first page of results. 
@@ -23,7 +22,7 @@ namespace ShopifySharp.Filters
 
         public virtual IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
         {
-            throw new System.NotImplementedException();
+            return base.ToParameters();
         }
     }
 }
