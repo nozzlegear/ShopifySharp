@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering the results of listing articles.
     /// </summary>
-    public class ArticleListFilter : ListFilter
+    public class ArticleListFilter : ListFilter<Article>
     {
         /// <summary>
         /// Filter the results to this article handle.

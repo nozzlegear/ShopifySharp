@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering <see cref="WebhookService.ListAsync(WebhookFilter)" /> results.
     /// </summary>
-    public class WebhookFilter : ListFilter
+    public class WebhookFilter : ListFilter<Webhook>
     {
         /// <summary>
         /// An optional filter for the address property. When used, the method will only return webhooks with the given address.

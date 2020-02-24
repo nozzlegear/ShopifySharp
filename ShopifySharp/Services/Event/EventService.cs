@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType, IListFilter filter)
+        public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType, IListFilter<Event> filter)
         {
             // Ensure the subject type is plural
             if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
@@ -87,7 +87,7 @@ namespace ShopifySharp
         /// <summary>
         /// Returns a list of events.
         /// </summary>
-        public virtual async Task<IListResult<Event>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Event>> ListAsync(IListFilter<Event> filter)
         {
             var req = PrepareRequest("events.json");
             
@@ -109,7 +109,7 @@ namespace ShopifySharp
         public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType,
             EventListFilter filter)
         {
-            return await ListAsync(subjectId, subjectType, (IListFilter) filter);
+            return await ListAsync(subjectId, subjectType, (IListFilter<Event>) filter);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<Event>> ListAsync(EventListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<Event>) filter);
         }
     }
 }

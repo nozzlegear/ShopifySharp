@@ -69,7 +69,7 @@ namespace ShopifySharp
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="UsageCharge"/> objects.</returns>
-        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, IListFilter filter)
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, IListFilter<UsageCharge> filter)
         {
             throw new Exception("not yet implemented");
             //

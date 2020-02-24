@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of PriceRules. 
     /// </summary>
-    public class PriceRuleListFilter : ListFilter
+    public class PriceRuleListFilter : ListFilter<PriceRule>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

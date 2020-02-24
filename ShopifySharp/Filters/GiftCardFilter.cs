@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering gift cards. 
     /// </summary>
-    public class GiftCardFilter : ListFilter
+    public class GiftCardFilter : ListFilter<GiftCard>
     {
         /// <summary>
         /// The status of gift card to retrieve. Known values are "enabled", "disabled".

@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Redirects.
     /// </summary>
-    public class RedirectListFilter : ListFilter
+    public class RedirectListFilter : ListFilter<Redirect>
     {
         /// <summary>
         /// An optional parameter that filters the result to redirects with the given path.

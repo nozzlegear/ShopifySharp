@@ -3,6 +3,65 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="AccessScope_Tests.cs" />
+    <Compile Remove="ApplicationCredit_Tests.cs" />
+    <Compile Remove="Article_Tests.cs" />
+    <Compile Remove="Asset_Tests.cs" />
+    <Compile Remove="Authorization_Tests.cs" />
+    <Compile Remove="Blog_Tests.cs" />
+    <Compile Remove="Carrier_Tests.cs" />
+    <Compile Remove="Charge_Tests.cs" />
+    <Compile Remove="Checkout_Tests.cs" />
+    <Compile Remove="Collect_Tests.cs" />
+    <Compile Remove="CustomCollection_Tests.cs" />
+    <Compile Remove="CustomerAddress_Tests.cs" />
+    <Compile Remove="CustomerSavedSearch_Tests.cs" />
+    <Compile Remove="Customer_Tests.cs" />
+    <Compile Remove="DateTime_Tests.cs" />
+    <Compile Remove="DiscountCode_Tests.cs" />
+    <Compile Remove="DraftOrder_Tests.cs" />
+    <Compile Remove="Event_Tests.cs" />
+    <Compile Remove="FalseToNullConverter_Tests.cs" />
+    <Compile Remove="FulfillmentEvents_Tests .cs" />
+    <Compile Remove="FulfillmentService_Tests.cs" />
+    <Compile Remove="Fulfillment_Tests.cs" />
+    <Compile Remove="GdprEntities_Tests.cs" />
+    <Compile Remove="GiftCardAdjustment_Tests.cs" />
+    <Compile Remove="GiftCard_Tests.cs" />
+    <Compile Remove="InvalidDateToNullConverter_Tests.cs" />
+    <Compile Remove="InventoryItem_Tests.cs" />
+    <Compile Remove="InventoryLevel_Tests.cs" />
+    <Compile Remove="Location_Tests.cs" />
+    <Compile Remove="MetaField_Tests.cs" />
+    <Compile Remove="OrderRisk_Tests.cs" />
+    <Compile Remove="Order_Tests.cs" />
+    <Compile Remove="Page_Tests.cs" />
+    <Compile Remove="Policy_Tests.cs" />
+    <Compile Remove="PriceRule_Tests.cs" />
+    <Compile Remove="ProductImage_Tests.cs" />
+    <Compile Remove="ProductVariant_Tests.cs" />
+    <Compile Remove="Product_Tests.cs" />
+    <Compile Remove="RecurringCharge_Tests.cs" />
+    <Compile Remove="Redirect_Tests.cs" />
+    <Compile Remove="Refund_Tests.cs" />
+    <Compile Remove="ScriptTag_Tests.cs" />
+    <Compile Remove="ShippingZone_Tests.cs" />
+    <Compile Remove="ShopifyException_Tests.cs" />
+    <Compile Remove="ShopifyPayments_Tests.cs" />
+    <Compile Remove="ShopifyService_Tests.cs" />
+    <Compile Remove="Shop_Tests.cs" />
+    <Compile Remove="SmartCollection_Tests.cs" />
+    <Compile Remove="Theme_Tests.cs" />
+    <Compile Remove="Transaction_Tests.cs" />
+    <Compile Remove="UsageCharge_Tests.cs" />
+    <Compile Remove="User_Tests.cs" />
+    <Compile Remove="Utils.cs" />
+    <Compile Remove="Webhook_Tests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="env.yml.secret" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="dotenvfile" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />

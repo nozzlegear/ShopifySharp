@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsTransactionListFilter : ListFilter
+    public class ShopifyPaymentsTransactionListFilter : ListFilter<ShopifyPaymentsTransaction>
     {
         /// <summary>
         /// Filter response to transactions exclusively before the specified ID

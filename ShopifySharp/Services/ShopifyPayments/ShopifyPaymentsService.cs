@@ -73,7 +73,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<IListResult<ShopifyPaymentsDispute>> ListDisputesAsync(IListFilter filter)
+        public virtual async Task<IListResult<ShopifyPaymentsDispute>> ListDisputesAsync(IListFilter<ShopifyPaymentsDispute> filter)
         {
             var req = PrepareRequest("shopify_payments/disputes.json");
             
@@ -89,7 +89,7 @@ namespace ShopifySharp
 
         public virtual async Task<IListResult<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeListFilter filter)
         {
-            return await ListDisputesAsync((IListFilter) filter);
+            return await ListDisputesAsync((IListFilter<ShopifyPaymentsDispute>) filter);
         }
 
         public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
@@ -100,7 +100,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<IListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(IListFilter filter)
+        public virtual async Task<IListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(IListFilter<ShopifyPaymentsTransaction> filter)
         {
             var req = PrepareRequest("shopify_payments/balance/transactions.json");
             
@@ -116,7 +116,7 @@ namespace ShopifySharp
 
         public virtual async Task<IListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionListFilter filter)
         {
-            return await ListTransactionsAsync((IListFilter) filter);
+            return await ListTransactionsAsync((IListFilter<ShopifyPaymentsTransaction>) filter);
         }
     }
 }

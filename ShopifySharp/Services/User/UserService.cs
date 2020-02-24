@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// Gets all the users
         /// </summary>
         /// <returns>The list of all users.</returns>
-        public virtual async Task<IEnumerable<User>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<User>> ListAsync(IListFilter<User> filter)
         {
             throw new Exception("not yet implemented");
             // var req = PrepareRequest("users.json");

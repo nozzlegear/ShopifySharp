@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsDisputeListFilter : ListFilter
+    public class ShopifyPaymentsDisputeListFilter : ListFilter<ShopifyPaymentsDispute>
     {
         /// <summary>
         /// Return only disputes before the specified ID.

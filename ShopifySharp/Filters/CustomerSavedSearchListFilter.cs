@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class CustomerSavedSearchListFilter : ListFilter
+    public class CustomerSavedSearchListFilter : ListFilter<CustomerSavedSearch>
     {
         [JsonProperty("since_id")]
         public long? SinceId { get; set; }

@@ -130,7 +130,7 @@ namespace ShopifySharp
         /// <remarks>
         /// The Link header only exists on list requests. 
         /// </remarks>
-        protected string ReadLinkHeader(HttpResponseMessage response)
+        private string ReadLinkHeader(HttpResponseMessage response)
         {
             var header = response.Headers.FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase));
             var headerValue = String.Join(", ", header.Value);
@@ -221,7 +221,7 @@ namespace ShopifySharp
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
+        internal static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
             int statusCode = (int)response.StatusCode;
 
@@ -299,7 +299,7 @@ namespace ShopifySharp
         /// Parses a JSON string for Shopify API errors.
         /// </summary>
         /// <returns>Returns null if the JSON could not be parsed into an error.</returns>
-        public static Dictionary<string, IEnumerable<string>> ParseErrorJson(string json)
+        private static Dictionary<string, IEnumerable<string>> ParseErrorJson(string json)
         {
             if (string.IsNullOrEmpty(json))
             {
@@ -380,9 +380,9 @@ namespace ShopifySharp
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
-        public IListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
+        protected IListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
-            return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse(requestResult.RawLinkHeaderValue));
+            return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse<T>(requestResult.RawLinkHeaderValue));
         }
     }
 }

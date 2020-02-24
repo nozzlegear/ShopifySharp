@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters 
 {
-    public class DraftOrderListFilter : ListFilter 
+    public class DraftOrderListFilter : ListFilter<DraftOrder>
     {
         /// <summary>
         /// Only return orders with the given status. Known values are "open" (default), "invoice_sent", and "completed".

@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Products. 
     /// </summary>
-    public class ProductListFilter : ListFilter
+    public class ProductListFilter : ListFilter<Product>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

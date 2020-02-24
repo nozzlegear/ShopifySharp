@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Script Tags.
     /// </summary>
-    public class ScriptTagListFilter : ListFilter
+    public class ScriptTagListFilter : ListFilter<ScriptTag>
     {
         /// <summary>
         /// Returns only those with the given src value.

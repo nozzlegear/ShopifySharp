@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering custom collection lists.
     /// </summary>
-    public class CustomCollectionFilter : ListFilter
+    public class CustomCollectionFilter : ListFilter<CustomCollection>
     {
         /// <summary>
         /// Show smart collections with given title 

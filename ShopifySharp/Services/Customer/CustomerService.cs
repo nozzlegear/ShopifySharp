@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<IListResult<Customer>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Customer>> ListAsync(IListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers.json");
             
@@ -57,7 +57,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<Customer>> ListAsync(CustomerListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<Customer>) filter);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace ShopifySharp
         /// <param name="order">An (unencoded) optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
         /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
-        public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ListFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ListFilter<Customer> filter = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest("customers/search.json");

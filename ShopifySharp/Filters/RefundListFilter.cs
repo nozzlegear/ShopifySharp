@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class RefundListFilter : ListFilter
+    public class RefundListFilter : ListFilter<Refund>
     {
         /// <summary>
         /// Retrieve only certain fields, specified by a comma-separated list of field names. 

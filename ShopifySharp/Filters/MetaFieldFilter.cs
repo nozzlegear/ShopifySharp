@@ -8,7 +8,7 @@ namespace ShopifySharp.Filters
 	/// Options for filtering <see cref="MetaFieldService.CountAsync(long?, string, MetaFieldFilter)"/> and 
 	/// <see cref="MetaFieldService.ListAsync(long?, string, MetaFieldFilter)"/> results.
 	/// </summary>
-	public class MetaFieldFilter : ListFilter
+	public class MetaFieldFilter : ListFilter<MetaField>
 	{
 		/// <summary>
 		/// Filter by namespace.

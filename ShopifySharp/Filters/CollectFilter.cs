@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering <see cref="CollectService.ListAsync(CollectFilter)"/> results.
     /// </summary>
-    public class CollectFilter : ListFilter
+    public class CollectFilter : ListFilter<Collect>
     {
         /// <summary>
         /// An optional product id to retrieve. 

@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(IListFilter<CustomerSavedSearch> filter)
         {
             var req = PrepareRequest($"{RootResource}.json");
             
@@ -57,7 +57,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<CustomerSavedSearch>) filter);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace ShopifySharp
         /// <param name="sinceId">Restricts results to after a given id.</param>
         /// <param name="filter">Options for filtering the results.</param>
         /// <returns>A list of matching customers.</returns>
-        public virtual Task<List<CustomerSavedSearch>> SearchAsync(string query, string sinceId = null, ListFilter filter = null)
+        public virtual Task<List<CustomerSavedSearch>> SearchAsync(string query, string sinceId = null, ListFilter<CustomerSavedSearch> filter = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest($"{RootResource}.json");
@@ -164,7 +164,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the Customer Saved Search</param>
         /// <returns></returns>
-        public Task<List<Customer>> GetCustomersFromSavedSearch(long customerSavedSearchId, string query = null, ListFilter filter = null)
+        public Task<List<Customer>> GetCustomersFromSavedSearch(long customerSavedSearchId, string query = null, ListFilter<Customer> filter = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}/customers.json");

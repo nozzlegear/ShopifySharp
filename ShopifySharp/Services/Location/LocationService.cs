@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// Retrieves a list of all <see cref="Location"/> objects.
         /// </summary>
         /// <returns>The list of <see cref="Location"/> objects.</returns>
-        public virtual async Task<IEnumerable<Location>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<Location>> ListAsync(IListFilter<Location> filter)
         {
             var req = PrepareRequest($"locations.json");
             var response = await ExecuteRequestAsync<List<Location>>(req, HttpMethod.Get, rootElement: "locations");

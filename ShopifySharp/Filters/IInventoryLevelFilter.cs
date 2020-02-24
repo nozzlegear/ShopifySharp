@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// You **must** include InventoryItemIds, LocationIds, or both as filter parameters.
     /// </summary>
-    public interface IInventoryLevelFilter : IListFilter
+    public interface IInventoryLevelFilter : IListFilter<InventoryLevel>
     {
         /// <summary>
         /// Ids of inventory items to retrieve

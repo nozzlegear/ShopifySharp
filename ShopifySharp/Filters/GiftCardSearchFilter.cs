@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ShopifySharp.Filters
 {
-    public class GiftCardSearchFilter : ListFilter
+    public class GiftCardSearchFilter : ListFilter<GiftCard>
     {
         /// <summary>
         /// The field and direction to order results by.

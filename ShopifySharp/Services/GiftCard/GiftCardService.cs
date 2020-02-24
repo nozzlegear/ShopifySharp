@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<GiftCard>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<GiftCard>> ListAsync(IListFilter<GiftCard> filter)
         {
             var req = PrepareRequest("gift_cards.json");
             
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<IListResult<GiftCard>> ListAsync(GiftCardFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<GiftCard>) filter);
         }
 
         /// <summary>

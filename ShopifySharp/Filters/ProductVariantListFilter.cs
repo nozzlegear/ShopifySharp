@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Product Variants. 
     /// </summary>
-    public class ProductVariantListFilter : ListFilter
+    public class ProductVariantListFilter : ListFilter<ProductVariant>
     {
         /// <summary>
         /// Restrict results to after the specified ID.
