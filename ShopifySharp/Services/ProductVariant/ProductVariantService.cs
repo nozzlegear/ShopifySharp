@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -35,19 +36,29 @@ namespace ShopifySharp
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
-        /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<ProductVariant>> ListAsync(long productId, IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"products/{productId}/variants.json");
-            //
-            // if (filterOptions != null)
-            // {
-            //     req.QueryParams.AddRange(filterOptions.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
+            var req = PrepareRequest($"products/{productId}/variants.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
+
+            return ParseLinkHeaderToListResult(response);
         }
+
+        /// <summary>
+        /// Gets a list of variants belonging to the given product.
+        /// </summary>
+        /// <param name="productId">The product that the variants belong to.</param>
+        public virtual async Task<IListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter)
+        {
+            return await ListAsync(productId, (IListFilter) filter);
+        }
+        
 
         /// <summary>
         /// Retrieves the <see cref="ProductVariant"/> with the given id.

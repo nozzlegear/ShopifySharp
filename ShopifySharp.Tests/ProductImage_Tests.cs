@@ -113,7 +113,7 @@ namespace ShopifySharp.Tests
             ProductService.SetExecutionPolicy(policy);
 
             // Get a product to use as the parent for all images.
-            ProductId = (await ProductService.ListAsync(new ProductFilter()
+            ProductId = (await ProductService.ListAsync(new ProductListFilter()
             {
                 Limit = 1
             })).First().Id.Value;

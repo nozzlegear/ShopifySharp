@@ -20,21 +20,20 @@ namespace ShopifySharp
         public ShippingZoneService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Retrieves a list of all <see cref="ShippingZone"/> objects.
+        /// Retrieves a list of all shipping zones. 
         /// </summary>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="ShippingZone"/> objects.</returns>
-        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("shipping_zones.json");
-            //
-            // if (string.IsNullOrEmpty(fields) == false)
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
+            var req = PrepareRequest("shipping_zones.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
+
+            return response.Result;
         }
     }
 }

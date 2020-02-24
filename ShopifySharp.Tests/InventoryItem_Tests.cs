@@ -72,7 +72,7 @@ namespace ShopifySharp.Tests
             VariantService.SetExecutionPolicy(policy);
 
             // Get a product id to use with these tests.
-            ProductId = (await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new ProductFilter()
+            ProductId = (await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new ProductListFilter()
             {
                 Limit = 1
             })).First().Id.Value;

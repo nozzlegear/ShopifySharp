@@ -1,24 +1,19 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
     /// <summary>
-    /// A class for filtering the results of a .ListAsync command that returns PriceRules.
+    /// Options for filtering lists of PriceRules. 
     /// </summary>
-    public class PriceRuleFilter : Parameterizable
+    public class PriceRuleListFilter : ListFilter
     {
         /// <summary>
-        /// Limit the amount of results. Default is 50, max is 250.
+        /// Restrict results to after the specified ID.
         /// </summary>
-        [JsonProperty("limit")]
-        public int? Limit { get; set; }
-
-        /// <summary>
-        /// Page of results to be returned. Default is 1.
-        /// </summary>
-        [JsonProperty("page")]
-        public int? Page { get; set; }
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
 
         /// <summary>
         /// Restricts results to those created after date (format: 2008-12-31 03:00).
@@ -73,5 +68,10 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("times_used")]
         public int? TimesUsed { get; set; }
+
+        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

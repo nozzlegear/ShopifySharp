@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -24,20 +25,29 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<Refund>> ListForOrderAsync(long orderId, OrderFilter options = null)
+        public virtual async Task<IListResult<Refund>> ListForOrderAsync(long orderId, IListFilter filter)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest($"orders/{orderId}/refunds.json");
-            // req.QueryParams.Add("customer_id", orderId);
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Refund>>(req, HttpMethod.Get, rootElement: "refunds");
+            var req = PrepareRequest($"orders/{orderId}/refunds.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Refund>>(req, HttpMethod.Get, rootElement: "refunds");
+
+            return ParseLinkHeaderToListResult(response);
         }
+
+        /// <summary>
+        /// Retrieves a list of refunds for an order.
+        /// </summary>
+        /// <param name="orderId">The id of the order to list orders for.</param>
+        public virtual async Task<IListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter)
+        {
+            return await ListForOrderAsync(orderId, (IListFilter) filter);
+        }
+        
 
         /// <summary>
         /// Retrieves a specific refund.

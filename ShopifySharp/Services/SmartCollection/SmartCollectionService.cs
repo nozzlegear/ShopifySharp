@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -23,7 +24,7 @@ namespace ShopifySharp
         /// Gets a count of all smart collections on the store.
         /// </summary>
         /// <param name="filterOptions">Options for filtering the count.</param>
-        public virtual async Task<int> CountAsync(SmartCollectionFilter filterOptions = null)
+        public virtual async Task<int> CountAsync(SmartCollectionListFilter filterOptions = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest("smart_collections/count.json");
@@ -39,18 +40,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 smart collections.
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<SmartCollection>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<SmartCollection>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"smart_collections.json");
-            //
-            // if (filterOptions != null)
-            // {
-            //     req.QueryParams.AddRange(filterOptions.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
+            var req = PrepareRequest($"smart_collections.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 smart collections.
+        /// </summary>
+        public virtual async Task<IListResult<SmartCollection>> ListAsync(SmartCollectionListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

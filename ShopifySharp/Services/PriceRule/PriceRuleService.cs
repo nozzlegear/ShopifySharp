@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -14,7 +15,6 @@ namespace ShopifySharp
     /// </summary>
     public class PriceRuleService : ShopifyService
     {
-
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PriceRuleService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
@@ -22,19 +22,28 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<PriceRule>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("price_rules.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+            var req = PrepareRequest("price_rules.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's price rules.
+        /// </summary>
+        public virtual async Task<IListResult<PriceRule>> ListAsync(PriceRuleListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
+        }
+        
         // /// <summary>
         // /// Gets a list of up to 250 of the shop's price rules.
         // /// </summary>

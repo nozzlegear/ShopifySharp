@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsDisputeFilter : ListFilter
+    public class ShopifyPaymentsDisputeListFilter : ListFilter
     {
         /// <summary>
         /// Return only disputes before the specified ID.
@@ -22,5 +23,10 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("initiated_at ")]
         public DateTimeOffset? InitiatedAt { get; set; }
+
+        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

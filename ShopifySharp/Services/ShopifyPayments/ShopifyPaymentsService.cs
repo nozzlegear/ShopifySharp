@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Filters;
 using System.Net;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -72,17 +73,23 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<IEnumerable<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeFilter options = null)
+        public virtual async Task<IListResult<ShopifyPaymentsDispute>> ListDisputesAsync(IListFilter filter)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("shopify_payments/disputes.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ShopifyPaymentsDispute>>(req, HttpMethod.Get, rootElement: "disputes");
+            var req = PrepareRequest("shopify_payments/disputes.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ShopifyPaymentsDispute>>(req, HttpMethod.Get, rootElement: "disputes");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        public virtual async Task<IListResult<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeListFilter filter)
+        {
+            return await ListDisputesAsync((IListFilter) filter);
         }
 
         public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
@@ -93,17 +100,23 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<IEnumerable<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionFilter options = null)
+        public virtual async Task<IListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(IListFilter filter)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("shopify_payments/balance/transactions.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ShopifyPaymentsTransaction>>(req, HttpMethod.Get, rootElement: "transactions");
+            var req = PrepareRequest("shopify_payments/balance/transactions.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ShopifyPaymentsTransaction>>(req, HttpMethod.Get, rootElement: "transactions");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        public virtual async Task<IListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionListFilter filter)
+        {
+            return await ListTransactionsAsync((IListFilter) filter);
         }
     }
 }

@@ -117,7 +117,7 @@ namespace ShopifySharp.Tests
             ProductService.SetExecutionPolicy(policy);
 
             // Get a product id to use with these tests.
-            ProductId = (await ProductService.ListAsync(new ProductFilter()
+            ProductId = (await ProductService.ListAsync(new ProductListFilter()
             {
                 Limit = 1
             })).First().Id.Value;

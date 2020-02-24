@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsTransactionFilter : ListFilter
+    public class ShopifyPaymentsTransactionListFilter : ListFilter
     {
         /// <summary>
         /// Filter response to transactions exclusively before the specified ID
@@ -28,5 +29,10 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("payout_status")]
         public string PayoutStatus { get; set; }
+
+        public override IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

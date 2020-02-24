@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -48,21 +49,28 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
-        /// <param name="filter">An optional filter that restricts the results.</param>
-        /// <returns>The list of <see cref="Redirect"/>.</returns>
-        public virtual async Task<IEnumerable<Redirect>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Redirect>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("redirects.json");
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Redirect>>(req, HttpMethod.Get, rootElement: "redirects");
+            var req = PrepareRequest("redirects.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Redirect>>(req, HttpMethod.Get, rootElement: "redirects");
+
+            return ParseLinkHeaderToListResult(response);
         }
 
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's redirects.
+        /// </summary>
+        public virtual async Task<IListResult<Redirect>> ListAsync(RedirectListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
+        }
+        
         /// <summary>
         /// Retrieves the <see cref="Redirect"/> with the given id.
         /// </summary>

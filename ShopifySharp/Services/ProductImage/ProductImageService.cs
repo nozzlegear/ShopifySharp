@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -44,32 +45,27 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        /// <param name="fields">
-        /// An optional, comma-separated list of fields to include in the response.
-        /// </param>
-        /// <param name="sinceId">
-        /// Restricts results to after the specified id.
-        /// </param>
-        /// <returns>The list of <see cref="ProductImage"/>.</returns>
-        /// <remarks>
-        /// Unlike most list commands, this one only accepts the since_id and fields filters.
-        /// </remarks>
-        public virtual async Task<IEnumerable<ProductImage>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, IListFilter filter)        
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest($"products/{productId}/images.json");
-            //
-            // if (sinceId.HasValue)
-            // {
-            //     req.QueryParams.Add("since_id", sinceId.Value);
-            // }
-            //
-            // if (!string.IsNullOrEmpty(fields))
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
+            var req = PrepareRequest($"products/{productId}/images.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's ProductImages.
+        /// </summary>
+        /// <param name="productId">The id of the product that counted images belong to.</param>
+        public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, ProductListFilter filter)
+        {
+            return await ListAsync(productId, (IListFilter) filter);
         }
 
         /// <summary>

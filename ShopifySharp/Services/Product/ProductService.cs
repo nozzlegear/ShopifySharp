@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -26,7 +27,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's products.
         /// </summary>
         /// <returns>The count of all products for the shop.</returns>
-        public virtual async Task<int> CountAsync(ProductFilter filter = null)
+        public virtual async Task<int> CountAsync(ProductListFilter filter = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest("products/count.json");
@@ -42,18 +43,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<Product>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Product>> ListAsync(IListFilter filter)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("products.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
+            var req = PrepareRequest("products.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's products.
+        /// </summary>
+        public virtual async Task<IListResult<Product>> ListAsync(ProductListFilter filter)
+        {
+            return await ListAsync((IListFilter) filter);
         }
 
         /// <summary>

@@ -59,25 +59,18 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
         /// </summary>
-        /// <param name="sinceId">Restricts results to any charge after the given id.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="RecurringCharge"/> objects.</returns>
-        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(IListFilter filter)
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
         {
-            throw new Exception("not yet implemented");
-            // var req = PrepareRequest("recurring_application_charges.json");
-            //
-            // if (!string.IsNullOrEmpty(fields))
-            // {
-            //     req.QueryParams.Add("fields", fields);
-            // }
-            //
-            // if (sinceId.HasValue)
-            // {
-            //     req.QueryParams.Add("since_id", sinceId.Value);
-            // }
-            //
-            // return await ExecuteRequestAsync<List<RecurringCharge>>(req, HttpMethod.Get, rootElement: "recurring_application_charges");
+            var req = PrepareRequest("recurring_application_charges.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParams());
+            }
+            
+            var response = await ExecuteRequestAsync<List<RecurringCharge>>(req, HttpMethod.Get, rootElement: "recurring_application_charges");
+
+            return response.Result;
         }
 
         /// <summary>
