@@ -16,7 +16,7 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        public virtual string APIVersion => "2019-04";
+        public virtual string APIVersion => "2019-10";
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
 
@@ -137,7 +137,7 @@ namespace ShopifySharp
 
             return headerValue ?? string.Empty;
         }
-        
+
         /// <summary>
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
@@ -159,7 +159,7 @@ namespace ShopifySharp
 
                         //Check for and throw exception when necessary.
                         CheckResponseExceptions(response, rawResult);
-                        
+
                         JToken jtoken = null;
 
                         // Don't parse the result when the request was Delete.
@@ -175,7 +175,7 @@ namespace ShopifySharp
                         return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
                     }
                 });
-                
+
                 return policyResult;
             }
         }
@@ -377,104 +377,12 @@ namespace ShopifySharp
             return errors;
         }
 
-        bool TryParsePageInfoFromLink(string linkValue, out string url)
-        {
-            var regex = new Regex("<(.*)>;");
-            var match = regex.Match(linkValue);
-
-            if (match.Success == false)
-            {
-                url = null;
-                return false;
-            }
-
-            if (match.Groups.Count < 2)
-            {
-                url = null;
-                return false;
-            }
-            
-            var parsedLinkUrl = match.Groups[1].Value;
-
-            if (string.IsNullOrWhiteSpace(parsedLinkUrl))
-            {
-                url = null;
-                return false;
-            }
-
-            var querySubstringStartIndex = parsedLinkUrl.IndexOf("?", StringComparison.Ordinal);
-            var querystring = parsedLinkUrl.Substring(querySubstringStartIndex + 1);
-            var splitQuery =
-                querystring.Split(new[] {'?', '&'})
-                    .Select(querySegment =>
-                    {
-                        var splitKvp = querySegment.Split('=');
-                        var key = splitKvp.First();
-
-                        if (splitKvp.Length == 2)
-                        {
-                            return new
-                            {
-                                key = key,
-                                value = splitKvp[1]
-                            };
-                        }
-
-                        return new
-                        {
-                            key = key,
-                            value = ""
-                        };
-                    });
-            var pageInfoKvp = splitQuery.FirstOrDefault(kvp => kvp.key == "page_info");
-
-            if (pageInfoKvp == null || !string.IsNullOrEmpty(pageInfoKvp.value))
-            {
-                url = null;
-                return false;
-            }
-
-            url = pageInfoKvp.value;
-            return true;
-        }
-
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
         public IListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
-            var links = requestResult.RawLinkHeaderValue
-                .Split(',')
-                .Select(link => link.Trim())
-                .ToArray();
-            var nextPageLink =
-                links.FirstOrDefault(link => link.Contains("rel=\"next\""));
-            var previousPageLink = 
-                links.FirstOrDefault(link => link.Contains("rel=\"previous\""));
-            var listResult = new ListResult<T>
-            {
-                Items = requestResult.Result
-            };
-
-            if (TryParsePageInfoFromLink(nextPageLink, out var parsedNextPageLink))
-            {
-                listResult.NextPageLink = parsedNextPageLink;
-            }
-            else
-            {
-                listResult.NextPageLink = null;
-            }
-            
-            if (TryParsePageInfoFromLink(previousPageLink, out var parsedPreviousPageLink))
-            {
-                listResult.PreviousPageLink = parsedPreviousPageLink;
-            }
-            else
-            {
-                listResult.PreviousPageLink = null;
-            }
-
-            return listResult;
+            return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse(requestResult.RawLinkHeaderValue));
         }
     }
 }
