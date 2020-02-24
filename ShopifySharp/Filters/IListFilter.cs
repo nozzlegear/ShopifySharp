@@ -16,11 +16,6 @@ namespace ShopifySharp.Filters
         int? Limit { get; set; }
 
         /// <summary>
-        /// A comma-separated list of which fields to show in the results. This parameter only works for some endpoints.
-        /// </summary>
-        string Fields { get; set; }
-
-        /// <summary>
         /// Converts the filter to a list of key/value pairs which can be turned into a querystring.
         /// </summary>
         IEnumerable<KeyValuePair<string, object>> ToQueryParameters();
