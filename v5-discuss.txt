@@ -1,2 +1,5 @@
 Do we really need IListResult<T>? It seems to be ListResult<T> is enough and doesn't require an interface
+
 Do we really need IListFilter? It seems to be ListFilter is enough and doesn't require an interface
+
+Why is ListFilter not inheriting from Parameterizable? Doing so would mean it could inherity from ToParameters() for free
