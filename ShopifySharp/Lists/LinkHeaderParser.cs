@@ -15,6 +15,10 @@ namespace ShopifySharp.Lists
         {
             var prevLink = GetPageInfoParam(linkHeaderValue, _regexPrevLink);
             var nextLink = GetPageInfoParam(linkHeaderValue, _regexNextLink);
+
+            if (prevLink == null && nextLink == null)
+                throw new ShopifyException($"Found neither a 'previous' or 'next' url in the link header: '{linkHeaderValue}'");
+
             return new LinkHeaderParseResult(prevLink, nextLink);
         }
 
