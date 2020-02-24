@@ -1,0 +1,1 @@
+Do we really need IListResult<T>? It seems to be ListResult<T> is enough and doesn't require an interface
