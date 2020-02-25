@@ -20,23 +20,38 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public SmartCollectionService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
+        private async Task<int> _CountAsync(ICountFilter filter = null)
+        {
+            var req = PrepareRequest("smart_collections/count.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+
+            return response.Result;
+        }
+
         /// <summary>
         /// Gets a count of all smart collections on the store.
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the count.</param>
-        public virtual async Task<int> CountAsync(SmartCollectionListFilter filterOptions = null)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("smart_collections/count.json");
-            //
-            // if (filterOptions != null)
-            // {
-            //     req.QueryParams.AddRange(filterOptions.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await _CountAsync(filter);
         }
 
+        /// <summary>
+        /// Gets a count of all smart collections on the store.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+        
         /// <summary>
         /// Gets a list of up to 250 smart collections.
         /// </summary>
