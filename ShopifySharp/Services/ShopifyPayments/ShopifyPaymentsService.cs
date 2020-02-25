@@ -51,8 +51,12 @@ namespace ShopifySharp
 
             return response.Result;
         }
-
-        private async Task<IListResult<ShopifyPaymentsPayout>> _ListPayoutsAsync(IListFilter filter = null)
+        
+        /// <summary>
+        /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(IListFilter filter)
         {
             var req = PrepareRequest("shopify_payments/payouts.json");
             
@@ -65,23 +69,14 @@ namespace ShopifySharp
 
             return ParseLinkHeaderToListResult(response);
         }
-        
-        /// <summary>
-        /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
-        /// </summary>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(IListFilter filter = null)
-        {
-            return await _ListPayoutsAsync(filter);
-        }
 
         /// <summary>
         /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutListFilter filter = null)
+        public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutListFilter filter)
         {
-            return await _ListPayoutsAsync(filter);
+            return await ListPayoutsAsync((IListFilter) filter);
         }
         
         public virtual async Task<ShopifyPaymentsPayout> GetPayoutAsync(long payoutId)
