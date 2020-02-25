@@ -20,15 +20,17 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all of the shop's customers.
         /// </summary>
-        /// <returns>The count of all customers for the shop.</returns>
-        public virtual async Task<int> CountAsync(CountFilter filter = null)
+        /// <remarks>
+        /// According to Shopify's documentation, the count endpoint does not support any parameters. 
+        /// </remarks>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
         {
             var req = PrepareRequest("customers/count.json");
 
             //Add optional parameters to request
             if (filter != null)
             {
-                req.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");

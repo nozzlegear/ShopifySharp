@@ -125,7 +125,7 @@ namespace ShopifySharp.Tests
             Service.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
 
-            OrderId = (await OrderService.ListAsync(new OrderFilter()
+            OrderId = (await OrderService.ListAsync(new OrderListFilter()
             {
                 Limit = 1
             })).First().Id.Value;

@@ -30,9 +30,15 @@ namespace ShopifySharp.Filters
         [JsonProperty("status")]
         public string Status { get; set; }
         
+        /// <summary>
+        /// Restricts results to those last updated after date (format: 2008-12-31 03:00).
+        /// </summary>
         [JsonProperty("updated_at_min")]
         public DateTimeOffset? UpdatedAtMin { get; set; }
-        
+
+        /// <summary>
+        /// Restricts results to those last updated before date (format: 2008-12-31 03:00).
+        /// </summary>
         [JsonProperty("updated_at_max")]
         public DateTimeOffset? UpdatedAtMax { get; set; }
     }

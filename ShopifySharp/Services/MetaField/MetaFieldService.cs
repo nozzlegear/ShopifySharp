@@ -21,24 +21,28 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public MetaFieldService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(string path, MetaFieldFilter filter = null)
+        private async Task<int> _CountAsync(string path, ICountFilter filter = null)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest(path);
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            var req = PrepareRequest(path);
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+
+            return response.Result;
         }
 
         /// <summary>
         /// Gets a count of the metafields on the shop itself.
         /// </summary>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<int> CountAsync(MetaFieldFilter filter = null)
+        /// <remarks>
+        /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
+        /// </remarks>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
         {
             return await _CountAsync("metafields/count.json", filter);
         }
@@ -49,7 +53,10 @@ namespace ShopifySharp
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<int> CountAsync(long resourceId, string resourceType, MetaFieldFilter filter = null)
+        /// <remarks>
+        /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
+        /// </remarks>
+        public virtual async Task<int> CountAsync(long resourceId, string resourceType, ICountFilter filter = null)
         {
             return await _CountAsync($"{resourceType}/{resourceId}/metafields/count.json", filter);
         }
@@ -62,7 +69,10 @@ namespace ShopifySharp
         /// <param name="parentResourceType">The type of shopify parent resource to obtain metafields for. This could be blogs, products.</param>
         /// <param name="parentResourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<int> CountAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType,  MetaFieldFilter filter = null)
+        /// <remarks>
+        /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
+        /// </remarks>
+        public virtual async Task<int> CountAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType,  ICountFilter filter = null)
         {
             return await _CountAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields/count.json", filter);
         }

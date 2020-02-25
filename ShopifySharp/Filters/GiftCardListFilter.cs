@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering gift cards. 
     /// </summary>
-    public class GiftCardFilter : ListFilter
+    public class GiftCardListFilter : ListFilter
     {
         /// <summary>
         /// Restrict results to after the specified ID
@@ -20,7 +20,7 @@ namespace ShopifySharp.Filters
         public string Fields { get; set; }
         
         /// <summary>
-        /// The status of gift card to retrieve. Known values are "enabled", "disabled".
+        /// Restricts results to those with the given status. Known values are "enabled", "disabled".
         /// </summary>
         [JsonProperty("status")]
         public string Status { get; set; }

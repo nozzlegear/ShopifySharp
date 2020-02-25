@@ -61,23 +61,36 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        private async Task<int> _CountAsync(ICountFilter options = null)
+        {
+            var req = PrepareRequest("custom_collections/count.json");
+            
+            if (options != null)
+            {
+                req.QueryParams.AddRange(options.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+
+            return response.Result;
+        }
+        
         /// <summary>
         /// Gets a count of all of the custom collections
         /// </summary>
-        /// <returns>The count of all collects for the shop.</returns>
-        public virtual async Task<int> CountAsync(CustomCollectionFilter options = null)
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("custom_collections/count.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await _CountAsync(filter);
         }
 
+        /// <summary>
+        /// Gets a count of all of the custom collections
+        /// </summary>
+        public virtual async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+        
         /// <summary>
         /// Retrieves the <see cref="CustomCollection"/> with the given id.
         /// </summary>

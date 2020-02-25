@@ -21,24 +21,38 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductImageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Gets a count of all of the shop's ProductImages.
-        /// </summary>
-        /// <param name="productId">The id of the product that counted images belong to.</param>
-        /// <param name="filter">An optional filter that restricts the results.</param>
-        /// <returns>The count of all ProductImages for the shop.</returns>
-        public virtual async Task<int> CountAsync(long productId, PublishableCountFilter filter = null)
+        private async Task<int> _CountAsync(long productId, ICountFilter filter = null)
         {
             var req = PrepareRequest($"products/{productId}/images/count.json");
 
             if (filter != null)
             {
-                req.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
             return response.Result;
+        }
+        
+        /// <summary>
+        /// Gets a count of all of the shop's ProductImages.
+        /// </summary>
+        /// <param name="productId">The id of the product that counted images belong to.</param>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(long productId, ICountFilter filter = null)
+        {
+            return await _CountAsync(productId, filter);
+        }
+        
+        /// <summary>
+        /// Gets a count of all of the shop's ProductImages.
+        /// </summary>
+        /// <param name="productId">The id of the product that counted images belong to.</param>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(long productId, ProductImageCountFilter filter = null)
+        {
+            return await _CountAsync(productId, filter);
         }
 
         /// <summary>

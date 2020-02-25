@@ -43,7 +43,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Lists_GiftCards_With_A_Filter()
         {
-            var list = await Fixture.Service.ListAsync(new GiftCardFilter()
+            var list = await Fixture.Service.ListAsync(new GiftCardListFilter()
             {
                 Status = "enabled"
             });

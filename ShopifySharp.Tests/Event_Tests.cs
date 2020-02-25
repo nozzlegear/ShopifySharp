@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests
         public async Task Lists_Events_For_Subjects()
         {
             // Get an order id
-            long orderId = (await new OrderService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new OrderFilter()
+            long orderId = (await new OrderService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new OrderListFilter()
             {
                 Limit = 1
             })).First().Id.Value;

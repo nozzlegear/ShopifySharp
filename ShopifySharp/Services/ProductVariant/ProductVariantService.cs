@@ -24,9 +24,19 @@ namespace ShopifySharp
         /// Gets a count of all variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
-        public virtual async Task<int> CountAsync(long productId)
+        /// <param name="filter">Options for filtering the result.</param>
+        /// <remarks>
+        /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
+        /// </remarks>
+        public virtual async Task<int> CountAsync(long productId, ICountFilter filter = null)
         {
             var req = PrepareRequest($"products/{productId}/variants/count.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
             return response.Result;

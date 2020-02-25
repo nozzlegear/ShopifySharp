@@ -22,22 +22,34 @@ namespace ShopifySharp
         {
         }
 
-        /// <summary>
-        /// Gets a count of all of the gift cards.
-        /// </summary>
-        /// <param name="status">The status of gift card to retrieve. Known values are "enabled", "disabled".</param>
-        /// <returns>The count of all fulfillments for the shop.</returns>
-        public virtual async Task<int> CountAsync(string status = null)
+        private async Task<int> _CountAsync(ICountFilter filter = null)
         {
             var req = PrepareRequest($"gift_cards/count.json");
 
-            if (status != null)
+            if (filter != null)
             {
-                req.QueryParams.Add("status", status);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            
             return response.Result;
+        }
+        
+        /// <summary>
+        /// Gets a count of all of the gift cards.
+        /// </summary>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+        
+        /// <summary>
+        /// Gets a count of all of the gift cards.
+        /// </summary>
+        public virtual async Task<int> CountAsync(GiftCardCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
         }
 
         /// <summary>
@@ -62,7 +74,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<GiftCard>> ListAsync(GiftCardFilter filter)
+        public virtual async Task<IListResult<GiftCard>> ListAsync(GiftCardListFilter filter)
         {
             return await ListAsync((IListFilter) filter);
         }

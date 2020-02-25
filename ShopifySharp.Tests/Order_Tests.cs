@@ -39,7 +39,7 @@ namespace ShopifySharp.Tests
         {
             var created = await Task.WhenAll(Enumerable.Range(0, 2).Select(i => Fixture.Create()));
             var ids = created.Select(o => o.Id.Value);
-            var list = await Fixture.Service.ListAsync(new OrderFilter()
+            var list = await Fixture.Service.ListAsync(new OrderListFilter()
             {
                 Ids = ids
             });

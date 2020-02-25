@@ -237,7 +237,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -264,7 +264,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -289,7 +289,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -319,7 +319,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));

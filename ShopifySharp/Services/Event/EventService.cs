@@ -21,23 +21,36 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public EventService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Gets a count of all site events.
-        /// </summary>
-        /// <param name="filter">Supports CreatedAtMin and CreatedAtMax Properties</param>
-        /// <returns>The count of all site events.</returns>
-        public virtual async Task<int> CountAsync(CountFilter filter = null)
+        private async Task<int> _CountAsync(ICountFilter filter = null)
         {
             var req = PrepareRequest("events/count.json");
 
-            //Add optional parameters to request
             if (filter != null)
             {
-                req.QueryParams.AddRange(filter.ToParameters());
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            
             return response.Result;
+        }
+        
+        /// <summary>
+        /// Gets a count of all site events.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+        
+        /// <summary>
+        /// Gets a count of all site events.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(EventCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
         }
 
         /// <summary>

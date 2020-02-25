@@ -21,24 +21,36 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ScriptTagService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
-        /// </summary>
-        /// <param name="src">Optionally filters the count to only those <see cref="ScriptTag"/>s with the
-        /// given <see cref="ScriptTag.Src"/> value.</param>
-        /// <returns>The count.</returns>
-        public virtual async Task<int> CountAsync(string src = null)
+        private async Task<int> _CountAsync(ICountFilter filter = null)
         {
             var req = PrepareRequest("script_tags/count.json");
 
-            if (!string.IsNullOrEmpty(src))
+            if (filter != null)
             {
-                req.QueryParams.Add("src", src);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
             return response.Result;
+        }
+
+        /// <summary>
+        /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+
+        /// <summary>
+        /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(ScriptTagCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
         }
 
         /// <summary>

@@ -21,29 +21,36 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public RedirectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Gets a count of all of the shop's redirects.
-        /// </summary>
-        /// <param name="path">An optional parameter that filters the result to redirects with the given path.</param>
-        /// <param name="target">An optional parameter that filters the result to redirects with the given target.</param>
-        /// <returns>The count of all redirects for the shop.</returns>
-        public virtual async Task<int> CountAsync(string path = null, string target = null)
+        private async Task<int> _CountAsync(ICountFilter filter = null)
         {
             var req = PrepareRequest("redirects/count.json");
 
-            if (!string.IsNullOrEmpty(path))
+            if (filter != null)
             {
-                req.QueryParams.Add("path", path);
-            }
-
-            if (!string.IsNullOrEmpty(target))
-            {
-                req.QueryParams.Add("target", target);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
             
             return response.Result;
+        }
+        
+        /// <summary>
+        /// Gets a count of all of the shop's redirects.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+        
+        /// <summary>
+        /// Gets a count of all of the shop's redirects.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(RedirectCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
         }
 
         /// <summary>

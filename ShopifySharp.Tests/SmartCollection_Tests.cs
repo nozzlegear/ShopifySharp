@@ -183,7 +183,7 @@ namespace ShopifySharp.Tests
 
             //get products  - use collect service to get products so they are returned in order
             var collectService = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var collects = (await collectService.ListAsync(new CollectFilter() { CollectionId = collection.Id })).ToList();
+            var collects = (await collectService.ListAsync(new CollectCountFilter() { CollectionId = collection.Id })).ToList();
 
             //check
             Assert.Equal("manual", collection.SortOrder);

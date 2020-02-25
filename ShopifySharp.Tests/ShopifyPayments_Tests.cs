@@ -22,7 +22,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetBalance()
         {
-            if (await Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabledAsync())
             {
                 var balances = await Service.GetBalanceAsync();
                 Assert.NotNull(balances);
@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetPayouts()
         {
-            if (await Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabledAsync())
             {
                 var payouts = await Service.ListPayoutsAsync();
                 Assert.NotNull(payouts);
@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetDisputes()
         {
-            if (await Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabledAsync())
             {
                 var disputes = await Service.ListDisputesAsync();
                 Assert.NotNull(disputes);
@@ -52,7 +52,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetTransactions()
         {
-            if (await Service.IsShopifyPaymentAPIEnabled())
+            if (await Service.IsShopifyPaymentAPIEnabledAsync())
             {
                 var transactions = await Service.ListTransactionsAsync();
                 Assert.NotNull(transactions);

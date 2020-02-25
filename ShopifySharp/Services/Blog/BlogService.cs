@@ -67,7 +67,7 @@ namespace ShopifySharp
             var request = PrepareRequest("blogs.json");
             var body = blog.ToDictionary();
 
-            if (metafields != null && metafields.Count() >= 1)
+            if (metafields != null && metafields.Any())
             {
                 body.Add("metafields", metafields);
             }

@@ -8,13 +8,13 @@ namespace ShopifySharp.Filters
     public class RedirectListFilter : ListFilter
     {
         /// <summary>
-        /// An optional parameter that filters the result to redirects with the given path.
+        /// Filters the result to those with the given path.
         /// </summary>
         [JsonProperty("path")]
         public string Path { get; set; }
 
         /// <summary>
-        /// An optional parameter that filters the result to redirects with the given target.
+        /// Filters the result to those with the given target.
         /// </summary>
         [JsonProperty("target")]
         public string Target { get; set; }

@@ -38,7 +38,7 @@ namespace ShopifySharp.Tests
         public async Task Lists_Collects_With_A_Filter()
         {
             var productId = Fixture.Created.First().ProductId;
-            var collects = await Fixture.Service.ListAsync(new CollectFilter()
+            var collects = await Fixture.Service.ListAsync(new CollectCountFilter()
             {
                 ProductId = productId,
             });

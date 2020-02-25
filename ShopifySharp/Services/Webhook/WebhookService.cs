@@ -21,29 +21,38 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public WebhookService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Gets a count of all of the shop's webhooks.
-        /// </summary>
-        /// <param name="address">An optional filter for the address property. When used, this method will only count webhooks with the given address.</param>
-        /// <param name="topic">An optional filter for the topic property. When used, this method will only count webhooks with the given topic. A full list of topics can be found at https://help.shopify.com/api/reference/webhook. </param>
-        /// <returns>The count of all webhooks for the shop.</returns>
-        public virtual async Task<int> CountAsync(string address = null, string topic = null)
+        private async Task<int> _CountAsync(ICountFilter filter = null)
         {
             var req = PrepareRequest("webhooks/count.json");
 
-            if (!string.IsNullOrEmpty(address))
+            if (filter != null)
             {
-                req.QueryParams.Add("address", address);
-            }
-
-            if (!string.IsNullOrEmpty(topic))
-            {
-                req.QueryParams.Add("topic", topic);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
 
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
             return response.Result;
+        }
+
+        /// <summary>
+        /// Gets a count of all of the shop's webhooks.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        /// <returns>The count of all webhooks for the shop.</returns>
+        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        {
+            return await _CountAsync(filter);
+        }
+
+        /// <summary>
+        /// Gets a count of all of the shop's webhooks.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        /// <returns>The count of all webhooks for the shop.</returns>
+        public virtual async Task<int> CountAsync(WebhookCountFilter filter = null)
+        {
+            return await _CountAsync(filter);
         }
 
         /// <summary>

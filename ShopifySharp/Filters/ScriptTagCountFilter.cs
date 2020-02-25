@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    /// <summary>
-    /// Options for filtering lists of Script Tags.
-    /// </summary>
-    public class ScriptTagListFilter : ListFilter
+    public class ScriptTagCountFilter : CountFilter
     {
         /// <summary>
         /// Restricts results to those with the given src value.
