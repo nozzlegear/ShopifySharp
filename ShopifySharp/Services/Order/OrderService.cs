@@ -85,26 +85,6 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets a list of up to 250 of the customer's orders.
-        /// </summary>
-        /// <param name="customerId">The id of the customer to list orders for.</param>
-        /// <param name="options">Options for filtering the list.</param>
-        /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderListFilter options = null)
-        {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("orders.json");
-            // req.QueryParams.Add("customer_id", customerId);
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
-        }
-
-        /// <summary>
         /// Retrieves the <see cref="Order"/> with the given id.
         /// </summary>
         /// <param name="orderId">The id of the order to retrieve.</param>

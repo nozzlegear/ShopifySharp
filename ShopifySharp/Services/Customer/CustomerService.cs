@@ -210,5 +210,30 @@ namespace ShopifySharp
 
             return response.Result.SelectToken("account_activation_url").ToString();
         }
+
+        /// <summary>
+        /// Gets a list of the customer's orders.
+        /// </summary>
+        /// <param name="customerId">The id of the customer to list orders for.</param>
+        /// <param name="filter">Options for filtering the result.</param>
+        /// <remarks>
+        /// Previously this was part of the OrderService, and was documented under the Orders API in Shopify.
+        /// Shopify appears to have moved it to the Customers API.
+        /// https://shopify.dev/docs/admin-api/rest/reference/customers/customer#orders-2020-01
+        /// This list does not appear to be paginated. 
+        /// </remarks>
+        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, IListFilter filter = null)
+        {
+            var req = PrepareRequest($"customers/{customerId}/orders.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
+
+            return response.Result;
+        }
     }
 }

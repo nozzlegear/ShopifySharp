@@ -60,6 +60,9 @@ Doublecheck these following services to see if they use the new paginated listin
 - AssetService
 - CarrierService
 - ChargeService
+- CustomerService.ListOrdersAsync
+
+Note: OrderService.ListForCustomerAsync has been moved to CustomerService.ListOrdersForCustomerAsync. 
 
 # Version 4.0.0
 
