@@ -60,7 +60,7 @@ namespace ShopifySharp
         {
             var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
 
-            await CheckForErrorsAsync(response.RawResult);
+            CheckForErrors(response.RawResult);
 
             return response.Result["data"];
         }
@@ -70,11 +70,12 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="response">The JToken response from ExecuteRequestAsync.</param>
         /// <returns>Task.</returns>
-        private async Task CheckForErrorsAsync(JToken response)
+        private void CheckForErrors(JToken response)
         {
             if (response["errors"] != null)
             {
                 var errorList = new List<string>();
+                
                 foreach (var error in response["errors"])
                 {
                     errorList.Add(error["message"].ToString());
