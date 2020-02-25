@@ -52,19 +52,38 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<IEnumerable<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutFilter options = null)
+        private async Task<IListResult<ShopifyPaymentsPayout>> _ListPayoutsAsync(IListFilter filter = null)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("shopify_payments/payouts.json");
-            //
-            // if (options != null)
-            // {
-            //     req.QueryParams.AddRange(options.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<ShopifyPaymentsPayout>>(req, HttpMethod.Get, rootElement: "payouts");
+            var req = PrepareRequest("shopify_payments/payouts.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<ShopifyPaymentsPayout>>(req, HttpMethod.Get, rootElement: "payouts");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+        
+        /// <summary>
+        /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(IListFilter filter = null)
+        {
+            return await _ListPayoutsAsync(filter);
         }
 
+        /// <summary>
+        /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutListFilter filter = null)
+        {
+            return await _ListPayoutsAsync(filter);
+        }
+        
         public virtual async Task<ShopifyPaymentsPayout> GetPayoutAsync(long payoutId)
         {
             var req = PrepareRequest($"shopify_payments/payouts/{payoutId}.json");
