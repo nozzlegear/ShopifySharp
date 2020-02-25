@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// Checks whether the Shopify Payments API is enabled on this store.
         /// If not enabled, all Shopify Payments API endpoints will return HTTP 404 / Not Found
         /// </summary>
-        public virtual async Task<bool> IsShopifyPaymentAPIEnabled()
+        public virtual async Task<bool> IsShopifyPaymentApiEnabledAsync()
         {
             try
             {
