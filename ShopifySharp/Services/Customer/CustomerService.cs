@@ -27,7 +27,6 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("customers/count.json");
 
-            //Add optional parameters to request
             if (filter != null)
             {
                 req.QueryParams.AddRange(filter.ToQueryParameters());
@@ -84,27 +83,28 @@ namespace ShopifySharp
         /// <summary>
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
-        /// <param name="query">The (unencoded) search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
-        /// <param name="order">An (unencoded) optional string to order the results, in format of 'field_name DESC'. Default is 'last_order_date DESC'.</param>
-        /// <param name="filter">Options for filtering the results.</param>
-        /// <returns>A list of matching customers.</returns>
-        public virtual async Task<IEnumerable<Customer>> SearchAsync(string query, string order = null, ListFilter filter = null)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<IListResult<Customer>> SearchAsync(IListFilter filter)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest("customers/search.json");
-            // req.QueryParams.Add("query", query);
-            //
-            // if (!string.IsNullOrEmpty(order))
-            // {
-            //     req.QueryParams.Add("order", order);
-            // }
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
+            var req = PrepareRequest("customers/search.json");
+            
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
+            var response = await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
+
+            return ParseLinkHeaderToListResult(response);
+        }
+
+        /// <summary>
+        /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<IListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
+        {
+            return await SearchAsync((IListFilter) filter);
         }
 
         /// <summary>
