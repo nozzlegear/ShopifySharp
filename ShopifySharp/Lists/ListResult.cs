@@ -8,9 +8,9 @@ namespace ShopifySharp.Lists
     {
         public IEnumerable<T> Items { get; }
 
-        public LinkHeaderParseResult LinkHeader { get; }
+        public LinkHeaderParseResult<T> LinkHeader { get; }
 
-        public ListResult(IEnumerable<T> items, LinkHeaderParseResult linkHeader)
+        public ListResult(IEnumerable<T> items, LinkHeaderParseResult<T> linkHeader)
         {
             Items = items;
             LinkHeader = linkHeader;

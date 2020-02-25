@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class UsageChargeListFilter : UnpaginatedListFilter
+    public class UsageChargeListFilter : UnpaginatedListFilter<UsageCharge>
     {
         /// <summary>
         /// Retrieve only certain fields, specified by a comma-separated list of field names. 

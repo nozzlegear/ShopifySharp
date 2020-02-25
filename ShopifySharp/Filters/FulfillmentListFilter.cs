@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class FulfillmentListFilter : ListFilter
+    public class FulfillmentListFilter : ListFilter<Fulfillment>
     {
         /// <summary>
         /// Restrict results to after the specified ID

@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Themes. 
     /// </summary>
-    public class ThemeListFilter : UnpaginatedListFilter
+    public class ThemeListFilter : UnpaginatedListFilter<Theme>
     {
         /// <summary>
         /// Retrieve only certain fields, specified by a comma-separated list of field names. 

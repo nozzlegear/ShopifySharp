@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering custom collection lists.
     /// </summary>
-    public class CustomCollectionListFilter : ListFilter
+    public class CustomCollectionListFilter : ListFilter<CustomCollection>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

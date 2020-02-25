@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
-        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null)
+        public virtual async Task<IEnumerable<Theme>> ListAsync(IUnpaginatedListFilter<Theme> filter = null)
         {
             var req = PrepareRequest("themes.json");
             
@@ -35,6 +35,14 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<List<Theme>>(req, HttpMethod.Get, rootElement: "themes");
 
             return response.Result;
+        }
+        
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's themes.
+        /// </summary>
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null)
+        {
+            return await ListAsync((IUnpaginatedListFilter<Theme>) filter);
         }
 
         /// <summary>

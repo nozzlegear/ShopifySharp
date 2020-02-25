@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, IListFilter filter)        
+        public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, IListFilter<ProductImage> filter)        
         {
             var req = PrepareRequest($"products/{productId}/images.json");
 
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, ProductListFilter filter)
         {
-            return await ListAsync(productId, (IListFilter) filter);
+            return await ListAsync(productId, (IListFilter<ProductImage>) filter);
         }
 
         /// <summary>

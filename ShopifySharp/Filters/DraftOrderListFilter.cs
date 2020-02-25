@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters 
 {
-    public class DraftOrderListFilter : ListFilter 
+    public class DraftOrderListFilter : ListFilter<DraftOrder>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

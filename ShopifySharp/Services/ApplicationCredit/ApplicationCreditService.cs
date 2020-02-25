@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of all past and present application credits.
         /// </summary>
-        public virtual async Task<IListResult<ApplicationCredit>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<ApplicationCredit>> ListAsync(IListFilter<ApplicationCredit> filter)
         {
             var req = PrepareRequest($"application_credits.json");
 
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<ApplicationCredit>> ListAsync(ApplicationCreditListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<ApplicationCredit>) filter);
         }
 
         /// <summary>

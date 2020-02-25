@@ -5,7 +5,7 @@ namespace ShopifySharp.Lists
 {
     public interface IListResult<T>
     {
-        LinkHeaderParseResult LinkHeader { get; }
+        LinkHeaderParseResult<T> LinkHeader { get; }
 
         IEnumerable<T> Items { get; }
     }
