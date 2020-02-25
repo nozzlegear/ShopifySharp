@@ -3,7 +3,7 @@ using System;
 
 namespace ShopifySharp.Filters 
 {
-    public class ShopifyPaymentsPayoutListFilter : ListFilter
+    public class ShopifyPaymentsPayoutListFilter : ListFilter<ShopifyPaymentsPayout>
     {
         /// <summary>
         /// Filter response to payouts exclusively before the specified ID

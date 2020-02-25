@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<IListResult<PriceRule>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<PriceRule>> ListAsync(IListFilter<PriceRule> filter)
         {
             var req = PrepareRequest("price_rules.json");
             
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<PriceRule>> ListAsync(PriceRuleListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<PriceRule>) filter);
         }
         
         // /// <summary>

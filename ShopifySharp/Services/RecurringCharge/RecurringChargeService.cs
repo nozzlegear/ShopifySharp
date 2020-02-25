@@ -56,7 +56,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private async Task<IEnumerable<RecurringCharge>> _ListAsync(IUnpaginatedListFilter filter = null)
+        private async Task<IEnumerable<RecurringCharge>> _ListAsync(IUnpaginatedListFilter<RecurringCharge> filter = null)
         {
             var req = PrepareRequest("recurring_application_charges.json");
 
@@ -73,7 +73,7 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
         /// </summary>
-        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(IUnpaginatedListFilter filter = null)
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(IUnpaginatedListFilter<RecurringCharge> filter = null)
         {
             return await _ListAsync(filter);
         }

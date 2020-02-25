@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
-        public virtual async Task<IListResult<Refund>> ListForOrderAsync(long orderId, IListFilter filter)
+        public virtual async Task<IListResult<Refund>> ListForOrderAsync(long orderId, IListFilter<Refund> filter)
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
             
@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// <param name="orderId">The id of the order to list orders for.</param>
         public virtual async Task<IListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter)
         {
-            return await ListForOrderAsync(orderId, (IListFilter) filter);
+            return await ListForOrderAsync(orderId, (IListFilter<Refund>) filter);
         }
         
 

@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Smart Collections.
     /// </summary>
-    public class SmartCollectionListFilter : ListFilter
+    public class SmartCollectionListFilter : ListFilter<SmartCollection>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

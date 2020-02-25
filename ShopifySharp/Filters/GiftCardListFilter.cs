@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering gift cards. 
     /// </summary>
-    public class GiftCardListFilter : ListFilter
+    public class GiftCardListFilter : ListFilter<GiftCard>
     {
         /// <summary>
         /// Restrict results to after the specified ID

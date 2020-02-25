@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Webhooks. 
     /// </summary>
-    public class WebhookListFilter : ListFilter
+    public class WebhookListFilter : ListFilter<Webhook>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

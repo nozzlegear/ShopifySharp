@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of orders.
     /// </summary>
-    public class OrderListFilter : ListFilter
+    public class OrderListFilter : ListFilter<Order>
     {
         /// <summary>
         /// Restricts results to those with the given status. Known values are "open", "closed", "cancelled" and "any".

@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Shipping Zones. 
     /// </summary>
-    public class ShippingZoneListFilter : UnpaginatedListFilter
+    public class ShippingZoneListFilter : UnpaginatedListFilter<ShippingZone>
     {
         /// <summary>
         /// Retrieve only certain fields, specified by a comma-separated list of field names. 

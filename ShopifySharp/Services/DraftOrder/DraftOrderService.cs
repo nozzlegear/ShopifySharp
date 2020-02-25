@@ -52,7 +52,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
-        public virtual async Task<IListResult<DraftOrder>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<DraftOrder>> ListAsync(IListFilter<DraftOrder> filter)
         {
             var req = PrepareRequest("draft_orders.json");
             
@@ -71,7 +71,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<DraftOrder>> ListAsync(DraftOrderListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<DraftOrder>) filter);
         }
 
         /// <summary>

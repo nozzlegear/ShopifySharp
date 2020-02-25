@@ -63,8 +63,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-
-        private async Task<IEnumerable<UsageCharge>> _ListAsync(long recurringChargeId, IUnpaginatedListFilter filter = null)
+        private async Task<IEnumerable<UsageCharge>> _ListAsync(long recurringChargeId, IUnpaginatedListFilter<UsageCharge> filter = null)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
 
@@ -83,7 +82,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, IUnpaginatedListFilter filter = null)
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, IUnpaginatedListFilter<UsageCharge> filter = null)
         {
             return await _ListAsync(recurringChargeId, filter);
         }

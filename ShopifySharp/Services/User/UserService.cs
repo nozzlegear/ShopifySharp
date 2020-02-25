@@ -22,11 +22,17 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets all the users
+        /// Gets all the users.
         /// </summary>
-        public virtual async Task<IEnumerable<User>> ListAsync()
+        public virtual async Task<IEnumerable<User>> ListAsync(IUnpaginatedListFilter<User> filter = null)
         {
             var req = PrepareRequest("users.json");
+
+            if (filter != null)
+            {
+                req.QueryParams.AddRange(filter.ToQueryParameters());
+            }
+            
             var response = await ExecuteRequestAsync<List<User>>(req, HttpMethod.Get, rootElement: "users");
 
             return response.Result;

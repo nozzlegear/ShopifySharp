@@ -40,7 +40,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private async Task<IEnumerable<Transaction>> _ListAsync(long orderId, IUnpaginatedListFilter filter = null)
+        private async Task<IEnumerable<Transaction>> _ListAsync(long orderId, IUnpaginatedListFilter<Transaction> filter = null)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions.json");
 
@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, IUnpaginatedListFilter filter = null)
+        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, IUnpaginatedListFilter<Transaction> filter = null)
         {
             return await _ListAsync(orderId, filter);
         }
@@ -69,8 +69,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId,
-            TransactionListFilter filter = null)
+        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null)
         {
             return await _ListAsync(orderId, filter);
         }

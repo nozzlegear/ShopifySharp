@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class ChargeListFilter : UnpaginatedListFilter
+    public class ChargeListFilter : UnpaginatedListFilter<Charge>
     {
         /// <summary>
         /// Restrict results to after the specified ID.

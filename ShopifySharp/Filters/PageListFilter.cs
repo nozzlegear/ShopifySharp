@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Pages. 
     /// </summary>
-    public class PageListFilter : ListFilter
+    public class PageListFilter : ListFilter<Page>
     {
         /// <summary>
         /// Filter by page title.

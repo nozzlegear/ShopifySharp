@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class ApplicationCreditListFilter : ListFilter
+    public class ApplicationCreditListFilter : ListFilter<ApplicationCredit>
     {
         /// <summary>
         /// Retrieve only certain fields, specified by a comma-separated list of field names. 

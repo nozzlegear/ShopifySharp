@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// A generic class for filtering the results of a .CountAsync command.
     /// </summary>
-    public class EventListFilter : ListFilter
+    public class EventListFilter : ListFilter<Event>
     {
         /// <summary>
         /// Restrict results to after the specified ID

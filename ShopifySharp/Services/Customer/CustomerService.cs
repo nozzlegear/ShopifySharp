@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<IListResult<Customer>> ListAsync(IListFilter filter)
+        public virtual async Task<IListResult<Customer>> ListAsync(IListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers.json");
             
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<Customer>> ListAsync(CustomerListFilter filter)
         {
-            return await ListAsync((IListFilter) filter);
+            return await ListAsync((IListFilter<Customer>) filter);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IListResult<Customer>> SearchAsync(IListFilter filter)
+        public virtual async Task<IListResult<Customer>> SearchAsync(IListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers/search.json");
             
@@ -104,7 +104,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<IListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
         {
-            return await SearchAsync((IListFilter) filter);
+            return await SearchAsync((IListFilter<Customer>) filter);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace ShopifySharp
         /// https://shopify.dev/docs/admin-api/rest/reference/customers/customer#orders-2020-01
         /// This list does not appear to be paginated. 
         /// </remarks>
-        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, IListFilter filter = null)
+        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, IListFilter<Customer> filter = null)
         {
             var req = PrepareRequest($"customers/{customerId}/orders.json");
             

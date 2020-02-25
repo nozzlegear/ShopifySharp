@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ShopifySharp.Filters
 {
-    public class UnpaginatedListFilter : Parameterizable, IUnpaginatedListFilter
+    public class UnpaginatedListFilter<T> : Parameterizable, IUnpaginatedListFilter<T>
     {
         public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
         {

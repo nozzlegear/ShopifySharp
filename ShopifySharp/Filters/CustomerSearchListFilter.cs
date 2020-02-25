@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class CustomerSearchListFilter : ListFilter
+    public class CustomerSearchListFilter : ListFilter<Customer>
     {
         /// <summary>
         /// Set the field and direction by which to order results, e.g. "last_order_date DESC".

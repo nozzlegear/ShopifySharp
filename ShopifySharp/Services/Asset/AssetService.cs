@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Asset>> _ListAsync(long themeId, IUnpaginatedListFilter filter = null)
+        public virtual async Task<IEnumerable<Asset>> _ListAsync(long themeId, IUnpaginatedListFilter<Asset> filter = null)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
             
@@ -69,7 +69,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, IUnpaginatedListFilter filter = null)
+        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, IUnpaginatedListFilter<Asset> filter = null)
         {
             return await _ListAsync(themeId, filter);
         }
