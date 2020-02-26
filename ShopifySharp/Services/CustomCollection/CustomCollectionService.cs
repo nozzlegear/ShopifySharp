@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
         {
-            return await ListAsync((IListFilter<CustomCollection>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>
@@ -61,34 +61,18 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private async Task<int> _CountAsync(ICountFilter options = null)
+        private async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
         {
             var req = PrepareRequest("custom_collections/count.json");
             
-            if (options != null)
+            if (filter != null)
             {
-                req.QueryParams.AddRange(options.ToQueryParameters());
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
             return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the custom collections
-        /// </summary>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
-        /// <summary>
-        /// Gets a count of all of the custom collections
-        /// </summary>
-        public virtual async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
         }
         
         /// <summary>

@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<Customer>> ListAsync(CustomerListFilter filter)
         {
-            return await ListAsync((IListFilter<Customer>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<IListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
         {
-            return await SearchAsync((IListFilter<Customer>) filter);
+            return await SearchAsync(filter.AsListFilter());
         }
 
         /// <summary>

@@ -20,7 +20,11 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public SmartCollectionService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
+        /// <summary>
+        /// Gets a count of all smart collections on the store.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
         {
             var req = PrepareRequest("smart_collections/count.json");
             
@@ -34,24 +38,6 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Gets a count of all smart collections on the store.
-        /// </summary>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
-        /// <summary>
-        /// Gets a count of all smart collections on the store.
-        /// </summary>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-        
         /// <summary>
         /// Gets a list of up to 250 smart collections.
         /// </summary>
@@ -74,7 +60,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<SmartCollection>> ListAsync(SmartCollectionListFilter filter)
         {
-            return await ListAsync((IListFilter<SmartCollection>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>

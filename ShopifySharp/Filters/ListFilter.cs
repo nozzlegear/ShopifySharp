@@ -29,5 +29,7 @@ namespace ShopifySharp.Filters
             PageInfo = pageInfo;
             Limit = limit;
         }
+
+        public ListFilter<T> AsListFilter() => this; 
     }
 }

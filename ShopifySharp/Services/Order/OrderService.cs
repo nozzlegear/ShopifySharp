@@ -21,7 +21,12 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public OrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
+        /// <summary>
+        /// Gets a count of all of the shop's orders.
+        /// </summary>
+        /// <param name="filter">Options for filtering the count.</param>
+        /// <returns>The count of all orders for the shop.</returns>
+        public async Task<int> CountAsync(OrderCountFilter filter = null)
         {
             var req = PrepareRequest("orders/count.json");
             
@@ -33,26 +38,6 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
 
             return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the shop's orders.
-        /// </summary>
-        /// <param name="filter">Options for filtering the count.</param>
-        /// <returns>The count of all orders for the shop.</returns>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
-        /// <summary>
-        /// Gets a count of all of the shop's orders.
-        /// </summary>
-        /// <param name="filter">Options for filtering the count.</param>
-        /// <returns>The count of all orders for the shop.</returns>
-        public virtual async Task<int> CountAsync(OrderCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
         }
         
         /// <summary>
@@ -81,7 +66,7 @@ namespace ShopifySharp
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<IListResult<Order>> ListAsync(OrderListFilter filter)
         {
-            return await ListAsync((IListFilter<Order>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>

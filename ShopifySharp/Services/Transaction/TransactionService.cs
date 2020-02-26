@@ -40,7 +40,12 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private async Task<IEnumerable<Transaction>> _ListAsync(long orderId, IUnpaginatedListFilter<Transaction> filter = null)
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's transactions.
+        /// </summary>
+        /// <param name="orderId">The order id to which the fulfillments belong.</param>
+        /// <param name="filter">Options for filtering the list.</param>
+        public async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions.json");
 
@@ -54,27 +59,6 @@ namespace ShopifySharp
             return response.Result;
         }
         
-        /// <summary>
-        /// Gets a list of up to 250 of the shop's transactions.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, IUnpaginatedListFilter<Transaction> filter = null)
-        {
-            return await _ListAsync(orderId, filter);
-        }
-
-        /// <summary>
-        /// Gets a list of up to 250 of the shop's transactions.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null)
-        {
-            return await _ListAsync(orderId, filter);
-        }
-        
-
         /// <summary>
         /// Retrieves the <see cref="Transaction"/> with the given id.
         /// </summary>

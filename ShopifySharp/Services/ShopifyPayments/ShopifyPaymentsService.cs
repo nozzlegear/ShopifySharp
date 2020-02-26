@@ -76,7 +76,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<IListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutListFilter filter)
         {
-            return await ListPayoutsAsync((IListFilter<ShopifyPaymentsPayout>) filter);
+            return await ListPayoutsAsync(filter.AsListFilter());
         }
         
         public virtual async Task<ShopifyPaymentsPayout> GetPayoutAsync(long payoutId)
@@ -103,7 +103,7 @@ namespace ShopifySharp
 
         public virtual async Task<IListResult<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeListFilter filter)
         {
-            return await ListDisputesAsync((IListFilter<ShopifyPaymentsDispute>) filter);
+            return await ListDisputesAsync(filter.AsListFilter());
         }
 
         public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
@@ -130,7 +130,7 @@ namespace ShopifySharp
 
         public virtual async Task<IListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionListFilter filter)
         {
-            return await ListTransactionsAsync((IListFilter<ShopifyPaymentsTransaction>) filter);
+            return await ListTransactionsAsync(filter.AsListFilter());
         }
     }
 }

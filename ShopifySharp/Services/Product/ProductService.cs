@@ -23,7 +23,11 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
+        /// <summary>
+        /// Gets a count of all of the shop's products.
+        /// </summary>
+        /// <returns>The count of all products for the shop.</returns>
+        public async Task<int> CountAsync(ProductCountFilter filter = null)
         {
             var req = PrepareRequest("products/count.json");
             
@@ -37,24 +41,6 @@ namespace ShopifySharp
             return response.Result;
         }
         
-        /// <summary>
-        /// Gets a count of all of the shop's products.
-        /// </summary>
-        /// <returns>The count of all products for the shop.</returns>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the shop's products.
-        /// </summary>
-        /// <returns>The count of all products for the shop.</returns>
-        public virtual async Task<int> CountAsync(ProductCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
@@ -77,7 +63,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IListResult<Product>> ListAsync(ProductListFilter filter)
         {
-            return await ListAsync((IListFilter<Product>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>

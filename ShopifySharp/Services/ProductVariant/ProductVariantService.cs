@@ -66,7 +66,7 @@ namespace ShopifySharp
         /// <param name="productId">The product that the variants belong to.</param>
         public virtual async Task<IListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter)
         {
-            return await ListAsync(productId, (IListFilter<ProductVariant>) filter);
+            return await ListAsync(productId, filter.AsListFilter());
         }
         
 
