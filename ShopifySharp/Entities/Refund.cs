@@ -63,7 +63,8 @@ namespace ShopifySharp
         /// <summary>
         /// Whether or not the line items were added back to the store inventory.
         /// </summary>
-        [JsonProperty("restock")]
+        [JsonIgnore]
+        [Obsolete("The Restock property is now obsolete and will be removed in a future release. Attempting to use this property when creating or updating a Refund will result in the Shopify API returning an error. You must use the RestockType property instead.")]
         public bool? Restock { get; set; }
 
         /// <summary>

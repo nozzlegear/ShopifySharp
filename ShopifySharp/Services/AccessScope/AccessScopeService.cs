@@ -1,9 +1,6 @@
-﻿using ShopifySharp.Filters;
-using ShopifySharp.Infrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
