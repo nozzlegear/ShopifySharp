@@ -14,12 +14,9 @@ namespace ShopifySharp
         /// <summary>
         /// Converts the object to an array of KVPs.
         /// </summary>
-        protected virtual IEnumerable<KeyValuePair<string, object>> ToParameters()
+        public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
         {
             var output = new List<KeyValuePair<string, object>>();
-
-            // TODO: Create a recursive function that will aggregate the declaredproperties for
-            // this type and this type's base type (and that type's base type, and so on).
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
             foreach (PropertyInfo property in GetType().GetAllDeclaredProperties())
@@ -58,7 +55,7 @@ namespace ShopifySharp
         /// <param name="value">The property's value.</param>
         /// <param name="property">The property itself.</param>
         /// <returns>The new parameter.</returns>
-        protected virtual KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
+        private KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
             if (value is IEnumerable<long>)
             {

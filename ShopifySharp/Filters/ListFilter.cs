@@ -29,10 +29,5 @@ namespace ShopifySharp.Filters
             PageInfo = pageInfo;
             Limit = limit;
         }
-
-        public virtual IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            return base.ToParameters();
-        }
     }
 }

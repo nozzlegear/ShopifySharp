@@ -9,9 +9,5 @@ namespace ShopifySharp.Filters
     /// </summary>
     public class CountFilter : Parameterizable, ICountFilter
     {
-        public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            return base.ToParameters();
-        }
     }
 }
