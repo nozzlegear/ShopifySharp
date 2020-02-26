@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using ShopifySharp.Converters;
 using ShopifySharp.Enums;
 using System;
 using System.Collections.Generic;
@@ -149,6 +151,7 @@ namespace ShopifySharp
         /// An array of <see cref="TaxLine"/> objects, each of which details the taxes applicable to this <see cref="LineItem"/>.
         /// </summary>
         [JsonProperty("properties")]
+        [JsonConverter(typeof(NullOnErrorConverter))]
         public IEnumerable<LineItemProperty> Properties { get; set; }
 
         /// <summary>
