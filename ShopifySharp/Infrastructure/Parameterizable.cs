@@ -14,7 +14,7 @@ namespace ShopifySharp
         /// <summary>
         /// Converts the object to an array of KVPs.
         /// </summary>
-        public IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
+        public virtual IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
         {
             var output = new List<KeyValuePair<string, object>>();
 
@@ -55,7 +55,7 @@ namespace ShopifySharp
         /// <param name="value">The property's value.</param>
         /// <param name="property">The property itself.</param>
         /// <returns>The new parameter.</returns>
-        private KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
+        protected virtual KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
             if (value is IEnumerable<long>)
             {
