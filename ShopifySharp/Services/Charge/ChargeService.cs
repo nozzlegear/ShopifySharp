@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// Retrieves a list of all past and present <see cref="Charge"/> objects.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        private async Task<IEnumerable<Charge>> _ListAsync(IUnpaginatedListFilter<Charge> filter = null)
+        public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null)
         {
             var req = PrepareRequest("application_charges.json");
             
@@ -68,24 +68,6 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
 
             return response.Result;
-        }
-
-        /// <summary>
-        /// Retrieves a list of all past and present <see cref="Charge"/> objects.
-        /// </summary>
-        /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Charge>> ListAsync(IUnpaginatedListFilter<Charge> filter = null)
-        {
-            return await _ListAsync(filter);
-        }
-
-        /// <summary>
-        /// Retrieves a list of all past and present <see cref="Charge"/> objects.
-        /// </summary>
-        /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null)
-        {
-            return await _ListAsync(filter);
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of Recurring Charges. 
     /// </summary>
-    public class RecurringChargeListFilter : UnpaginatedListFilter<RecurringCharge>
+    public class RecurringChargeListFilter : Parameterizable
     {
         /// <summary>
         /// Restrict results to after the specified ID.

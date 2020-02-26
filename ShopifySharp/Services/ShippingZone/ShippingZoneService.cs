@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of all shipping zones. 
         /// </summary>
-        private async Task<IEnumerable<ShippingZone>> _ListAsync(IUnpaginatedListFilter<ShippingZone> filter = null)
+        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null)
         {
             var req = PrepareRequest("shipping_zones.json");
             
@@ -34,22 +34,6 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
 
             return response.Result;
-        }
-        
-        /// <summary>
-        /// Retrieves a list of all shipping zones. 
-        /// </summary>
-        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(IUnpaginatedListFilter<ShippingZone> filter = null)
-        {
-            return await _ListAsync(filter);
-        }
-
-        /// <summary>
-        /// Retrieves a list of all shipping zones. 
-        /// </summary>
-        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null)
-        {
-            return await _ListAsync(filter);
         }
     }
 }
