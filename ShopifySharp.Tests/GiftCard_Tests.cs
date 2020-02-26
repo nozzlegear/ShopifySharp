@@ -48,7 +48,7 @@ namespace ShopifySharp.Tests
                 Status = "enabled"
             });
 
-            Assert.True(list.Any());
+            Assert.True(list.Items.Any());
         }
 
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]

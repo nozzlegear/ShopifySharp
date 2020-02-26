@@ -15,5 +15,17 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("fields")]
         public string Fields { get; set; }
+
+        /// <summary>
+        /// Restrict results to after the specified ID.
+        /// </summary>
+        [JsonProperty("collection_id")]
+        public long? CollectionId { get; set; }
+
+        /// <summary>
+        /// Restrict results to after the specified ID.
+        /// </summary>
+        [JsonProperty("product_id")]
+        public long? ProductId { get; set; }
     }
 }

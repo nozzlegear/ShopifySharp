@@ -22,41 +22,16 @@ namespace ShopifySharp
         {
         }
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
+        public async Task<int> CountAsync(GiftCardCountFilter filter = null)
         {
-            var req = PrepareRequest($"gift_cards/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
+            return await ExecuteGetAsync<int>($"gift_cards/count.json", "count", filter);
         }
         
-        /// <summary>
-        /// Gets a count of all of the gift cards.
-        /// </summary>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the gift cards.
-        /// </summary>
-        public virtual async Task<int> CountAsync(GiftCardCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
         /// <summary>
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<GiftCard>> ListAsync(IListFilter<GiftCard> filter)
+        public virtual async Task<ListResult<GiftCard>> ListAsync(ListFilter<GiftCard> filter)
         {
             var req = PrepareRequest("gift_cards.json");
             
@@ -74,9 +49,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<GiftCard>> ListAsync(GiftCardListFilter filter)
+        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter)
         {
-            return await ListAsync((IListFilter<GiftCard>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>
@@ -144,7 +119,7 @@ namespace ShopifySharp
         /// Search for gift cards matching supplied query
         /// </summary>
         /// <param name="filter">Options for searching and filtering the results.</param>
-        public virtual async Task<IListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter)
+        public virtual async Task<ListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter)
         {
             if (filter == null)
             {

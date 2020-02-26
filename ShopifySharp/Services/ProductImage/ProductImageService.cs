@@ -21,30 +21,6 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ProductImageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(long productId, ICountFilter filter = null)
-        {
-            var req = PrepareRequest($"products/{productId}/images/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the shop's ProductImages.
-        /// </summary>
-        /// <param name="productId">The id of the product that counted images belong to.</param>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(long productId, ICountFilter filter = null)
-        {
-            return await _CountAsync(productId, filter);
-        }
-        
         /// <summary>
         /// Gets a count of all of the shop's ProductImages.
         /// </summary>
@@ -52,14 +28,14 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(long productId, ProductImageCountFilter filter = null)
         {
-            return await _CountAsync(productId, filter);
+            return await ExecuteGetAsync<int>($"products/{productId}/images/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, IListFilter<ProductImage> filter)        
+        public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter)        
         {
             var req = PrepareRequest($"products/{productId}/images.json");
 
@@ -71,15 +47,6 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
 
             return ParseLinkHeaderToListResult(response);
-        }
-
-        /// <summary>
-        /// Gets a list of up to 250 of the shop's ProductImages.
-        /// </summary>
-        /// <param name="productId">The id of the product that counted images belong to.</param>
-        public virtual async Task<IListResult<ProductImage>> ListAsync(long productId, ProductListFilter filter)
-        {
-            return await ListAsync(productId, (IListFilter<ProductImage>) filter);
         }
 
         /// <summary>

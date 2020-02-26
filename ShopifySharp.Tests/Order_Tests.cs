@@ -44,7 +44,7 @@ namespace ShopifySharp.Tests
                 Ids = ids
             });
 
-            Assert.All(list, o => Assert.Contains(o.Id.Value, ids));
+            Assert.All(list.Items, o => Assert.Contains(o.Id.Value, ids));
         }
 
         [Fact]

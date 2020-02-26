@@ -28,47 +28,28 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
-        public virtual async Task<int> CountAsync(long productId, ICountFilter filter = null)
+        public virtual async Task<int> CountAsync(long productId)
         {
-            var req = PrepareRequest($"products/{productId}/variants/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>($"products/{productId}/variants/count.json", "count");
         }
 
         /// <summary>
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
-        public virtual async Task<IListResult<ProductVariant>> ListAsync(long productId, IListFilter<ProductVariant> filter)
+        public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter = null)
         {
-            var req = PrepareRequest($"products/{productId}/variants.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter);
         }
 
         /// <summary>
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
-        public virtual async Task<IListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter)
+        public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter = null)
         {
-            return await ListAsync(productId, (IListFilter<ProductVariant>) filter);
+            return await ListAsync(productId, filter.AsListFilter());
         }
-        
 
         /// <summary>
         /// Retrieves the <see cref="ProductVariant"/> with the given id.
@@ -76,10 +57,7 @@ namespace ShopifySharp
         /// <param name="variantId">The id of the product variant to retrieve.</param>
         public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
-            var req = PrepareRequest($"variants/{variantId}.json");
-            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
-
-            return response.Result;
+            return await ExecuteGetAsync<ProductVariant>($"variants/{variantId}.json", "variant");
         }
 
         /// <summary>

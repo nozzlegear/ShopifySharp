@@ -22,49 +22,17 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 articles belonging to the given blog.
         /// </summary>
-        public virtual async Task<IListResult<Article>> ListAsync(long blogId, IListFilter<Article> filter)
+        public virtual async Task<ListResult<Article>> ListAsync(long blogId, ListFilter<Article> filter = null)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
-            
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Article>($"blogs/{blogId}/articles.json", "articles", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 articles belonging to the given blog.
         /// </summary>
-        public virtual async Task<IListResult<Article>> ListAsync(int blogId, ArticleListFilter filter)
+        public virtual async Task<ListResult<Article>> ListAsync(int blogId, ArticleListFilter filter)
         {
-            return await ListAsync(blogId, (IListFilter<Article>) filter);
-        }
-
-        private async Task<int> _CountAsync(long blogId, ICountFilter filter = null)
-        {
-            var req = PrepareRequest($"blogs/{blogId}/articles/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Gets a count of the articles belonging to the given blog.
-        /// </summary>
-        /// <param name="blogId">The blog that the articles belong to.</param>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(long blogId, ICountFilter filter = null)
-        {
-            return await _CountAsync(blogId, filter);
+            return await ListAsync(blogId, (ListFilter<Article>) filter);
         }
 
         /// <summary>
@@ -74,7 +42,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(long blogId, ArticleCountFilter filter = null)
         {
-            return await _CountAsync(blogId, filter);
+            return await ExecuteGetAsync<int>($"blogs/{blogId}/articles/count.json", "count", filter);
         }
 
         /// <summary>

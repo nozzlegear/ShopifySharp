@@ -23,61 +23,29 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CustomerSavedSearchService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
-        {
-            var req = PrepareRequest($"{RootResource}/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
-        }
-        
         /// <summary>
         /// Gets a count of all of the shop's customers.
         /// </summary>
         /// <returns>The count of all customers for the shop.</returns>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        public async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null)
         {
-            return await _CountAsync(filter);
-        }
-
-        /// <summary>
-        /// Gets a count of all of the shop's customers.
-        /// </summary>
-        /// <returns>The count of all customers for the shop.</returns>
-        public virtual async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
+            return await ExecuteGetAsync<int>($"{RootResource}/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(IListFilter<CustomerSavedSearch> filter)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null)
         {
-            var req = PrepareRequest($"{RootResource}.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<CustomerSavedSearch>($"{RootResource}.json", RootResource, filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
         {
-            return await ListAsync((IListFilter<CustomerSavedSearch>) filter);
+            return await ListAsync((ListFilter<CustomerSavedSearch>) filter);
         }
 
         /// <summary>

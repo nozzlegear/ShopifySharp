@@ -20,31 +20,6 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public FulfillmentService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(long orderId, ICountFilter filter = null)
-        {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the order's fulfillments.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="filter">Options for filtering the count.</param>
-        /// <returns>The count of all fulfillments for the shop.</returns>
-        public virtual async Task<int> CountAsync(long orderId, ICountFilter filter = null)
-        {
-            return await _CountAsync(orderId, filter);
-        }
-
         /// <summary>
         /// Gets a count of all of the order's fulfillments.
         /// </summary>
@@ -53,7 +28,7 @@ namespace ShopifySharp
         /// <returns>The count of all fulfillments for the shop.</returns>
         public virtual async Task<int> CountAsync(long orderId, FulfillmentCountFilter filter = null)
         {
-            return await _CountAsync(orderId, filter);
+            return await ExecuteGetAsync<int>($"orders/{orderId}/fulfillments/count.json", "count", filter);
         }
         
         /// <summary>
@@ -61,7 +36,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<Fulfillment>> ListAsync(long orderId, IListFilter<Fulfillment> filter)
+        public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, ListFilter<Fulfillment> filter)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
             
@@ -80,9 +55,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<Fulfillment>> ListAsync(long orderId, FulfillmentListFilter filter)
+        public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, FulfillmentListFilter filter)
         {
-            return await ListAsync(orderId, (IListFilter<Fulfillment>) filter);
+            return await ListAsync(orderId, (ListFilter<Fulfillment>) filter);
         }
 
         /// <summary>

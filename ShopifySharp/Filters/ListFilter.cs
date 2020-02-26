@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// A generic class for filtering the results of a .ListAsync command.
     /// </summary>
-    public class ListFilter<T> : Parameterizable, IListFilter<T>
+    public class ListFilter<T> : Parameterizable
     {
         /// <summary>
         /// A unique ID used to access a page of results. Must be present to list more than the first page of results. 
@@ -30,9 +30,6 @@ namespace ShopifySharp.Filters
             Limit = limit;
         }
 
-        public virtual IEnumerable<KeyValuePair<string, object>> ToQueryParameters()
-        {
-            return base.ToParameters();
-        }
+        public ListFilter<T> AsListFilter() => this; 
     }
 }

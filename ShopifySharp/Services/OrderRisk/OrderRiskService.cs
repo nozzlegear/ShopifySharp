@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risks belong to.</param>
         /// <param name="filter">Options for filtering the request.</param>
-        public virtual async Task<IListResult<OrderRisk>> ListAsync(long orderId, IListFilter<OrderRisk> filter)
+        public virtual async Task<ListResult<OrderRisk>> ListAsync(long orderId, ListFilter<OrderRisk> filter)
         {
             var req = PrepareRequest($"orders/{orderId}/risks.json");
 

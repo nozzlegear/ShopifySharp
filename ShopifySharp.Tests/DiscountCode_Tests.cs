@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.DiscountCodeService.ListAsync(Fixture.CreatedPriceRules.First().Id.Value);
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]

@@ -21,26 +21,17 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 custom collections.
         /// </summary>
-        public virtual async Task<IListResult<CustomCollection>> ListAsync(IListFilter<CustomCollection> filter)
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter = null)
         {
-            var req = PrepareRequest("custom_collections.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<CustomCollection>("custom_collections.json", "custom_collections", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 custom collections.
         /// </summary>
-        public virtual async Task<IListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
         {
-            return await ListAsync((IListFilter<CustomCollection>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>
@@ -61,34 +52,9 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private async Task<int> _CountAsync(ICountFilter options = null)
+        public async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
         {
-            var req = PrepareRequest("custom_collections/count.json");
-            
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the custom collections
-        /// </summary>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
-        /// <summary>
-        /// Gets a count of all of the custom collections
-        /// </summary>
-        public virtual async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
-        {
-            return await _CountAsync(filter);
+            return await ExecuteGetAsync<int>("custom_collections/count.json", "count", filter);
         }
         
         /// <summary>

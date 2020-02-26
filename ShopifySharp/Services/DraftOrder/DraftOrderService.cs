@@ -17,61 +17,29 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DraftOrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
-        {
-            var req = PrepareRequest("draft_orders/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Retrieves a count of the shop's draft orders. 
-        /// </summary>
-        /// <param name="filter">Options for filtering the count.</param>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-
         /// <summary>
         /// Retrieves a count of the shop's draft orders. 
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
         public virtual async Task<int> CountAsync(DraftOrderCountFilter filter = null)
         {
-            return await _CountAsync(filter);
+            return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter);
         }
         
         /// <summary>
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
-        public virtual async Task<IListResult<DraftOrder>> ListAsync(IListFilter<DraftOrder> filter)
+        public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter = null)
         {
-            var req = PrepareRequest("draft_orders.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<DraftOrder>("draft_orders.json", "draft_orders", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
-        public virtual async Task<IListResult<DraftOrder>> ListAsync(DraftOrderListFilter filter)
+        public virtual async Task<ListResult<DraftOrder>> ListAsync(DraftOrderListFilter filter)
         {
-            return await ListAsync((IListFilter<DraftOrder>) filter);
+            return await ListAsync((ListFilter<DraftOrder>) filter);
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text.RegularExpressions;
 using ShopifySharp.Lists;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -187,7 +188,7 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null) where T : new()
+        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
@@ -217,11 +218,35 @@ namespace ShopifySharp
             }
         }
 
+        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams)
+        {
+            var req = PrepareRequest(path);
+
+            if (queryParams != null)
+            {
+                req.QueryParams.AddRange(queryParams.ToQueryParameters());
+            }
+
+            return await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt);
+        }
+
+
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null)
+        {
+            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams)).Result;
+        }
+
+        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter)
+        {
+            var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter);
+            return ParseLinkHeaderToListResult(result);
+        }
+
         /// <summary>
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        internal static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
+        public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
             int statusCode = (int)response.StatusCode;
 
@@ -380,7 +405,7 @@ namespace ShopifySharp
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
-        protected IListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
+        protected ListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
             return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse<T>(requestResult.RawLinkHeaderValue));
         }

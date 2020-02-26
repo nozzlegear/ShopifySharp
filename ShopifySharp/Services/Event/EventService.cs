@@ -21,36 +21,13 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public EventService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(ICountFilter filter = null)
-        {
-            var req = PrepareRequest("events/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all site events.
-        /// </summary>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
-        
         /// <summary>
         /// Gets a count of all site events.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(EventCountFilter filter = null)
         {
-            return await _CountAsync(filter);
+            return await ExecuteGetAsync<int>("events/count.json", "count", filter);
         }
 
         /// <summary>
@@ -77,7 +54,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType, IListFilter<Event> filter)
+        public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType, ListFilter<Event> filter)
         {
             // Ensure the subject type is plural
             if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
@@ -100,7 +77,7 @@ namespace ShopifySharp
         /// <summary>
         /// Returns a list of events.
         /// </summary>
-        public virtual async Task<IListResult<Event>> ListAsync(IListFilter<Event> filter)
+        public virtual async Task<ListResult<Event>> ListAsync(ListFilter<Event> filter)
         {
             var req = PrepareRequest("events.json");
             
@@ -119,18 +96,18 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<IListResult<Event>> ListAsync(long subjectId, string subjectType,
+        public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType,
             EventListFilter filter)
         {
-            return await ListAsync(subjectId, subjectType, (IListFilter<Event>) filter);
+            return await ListAsync(subjectId, subjectType, (ListFilter<Event>) filter);
         }
 
         /// <summary>
         /// Returns a list of events.
         /// </summary>
-        public virtual async Task<IListResult<Event>> ListAsync(EventListFilter filter)
+        public virtual async Task<ListResult<Event>> ListAsync(EventListFilter filter)
         {
-            return await ListAsync((IListFilter<Event>) filter);
+            return await ListAsync((ListFilter<Event>) filter);
         }
     }
 }
