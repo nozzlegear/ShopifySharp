@@ -28,16 +28,7 @@ namespace ShopifySharp
         /// <returns>The count of all orders for the shop.</returns>
         public async Task<int> CountAsync(OrderCountFilter filter = null)
         {
-            var req = PrepareRequest("orders/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>("orders/count.json", "count", filter);
         }
         
         /// <summary>

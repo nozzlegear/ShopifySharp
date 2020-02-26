@@ -29,16 +29,7 @@ namespace ShopifySharp
         /// <returns>The count of all products for the shop.</returns>
         public async Task<int> CountAsync(ProductCountFilter filter = null)
         {
-            var req = PrepareRequest("products/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>("products/count.json", "count", filter);
         }
         
         /// <summary>

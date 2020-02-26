@@ -23,17 +23,9 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, the count endpoint does not support any parameters. 
         /// </remarks>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
+        public virtual async Task<int> CountAsync()
         {
-            var req = PrepareRequest("customers/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            return response.Result;
+            return await ExecuteGetAsync<int>($"customers/count.json", "count");
         }
 
         /// <summary>

@@ -28,18 +28,9 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
-        public virtual async Task<int> CountAsync(long productId, ICountFilter filter = null)
+        public virtual async Task<int> CountAsync(long productId)
         {
-            var req = PrepareRequest($"products/{productId}/variants/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>($"products/{productId}/variants/count.json", "count");
         }
 
         /// <summary>

@@ -217,6 +217,20 @@ namespace ShopifySharp
             }
         }
 
+        public async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null) where T : new()
+        {
+            var req = PrepareRequest(path);
+
+            if (queryParams != null)
+            {
+                req.QueryParams.AddRange(queryParams.ToQueryParameters());
+            }
+
+            var response = await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt);
+
+            return response.Result;
+        }
+
         /// <summary>
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
