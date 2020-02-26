@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop customer's addresses.
         /// </summary>
         /// <param name="customerId">The id of the customer to retrieve.</param>
-        public virtual async Task<IListResult<Address>> ListAsync(long customerId, IListFilter<Address> filter)
+        public virtual async Task<ListResult<Address>> ListAsync(long customerId, IListFilter<Address> filter)
         {
             var req = PrepareRequest($"customers/{customerId}/addresses.json");
             

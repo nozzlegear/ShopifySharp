@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<Fulfillment>> ListAsync(long orderId, IListFilter<Fulfillment> filter)
+        public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, IListFilter<Fulfillment> filter)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
             
@@ -81,7 +81,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IListResult<Fulfillment>> ListAsync(long orderId, FulfillmentListFilter filter)
+        public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, FulfillmentListFilter filter)
         {
             return await ListAsync(orderId, (IListFilter<Fulfillment>) filter);
         }

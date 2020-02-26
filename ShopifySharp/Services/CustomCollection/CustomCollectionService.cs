@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 custom collections.
         /// </summary>
-        public virtual async Task<IListResult<CustomCollection>> ListAsync(IListFilter<CustomCollection> filter)
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(IListFilter<CustomCollection> filter)
         {
             var req = PrepareRequest("custom_collections.json");
             
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 custom collections.
         /// </summary>
-        public virtual async Task<IListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
         {
             return await ListAsync(filter.AsListFilter());
         }

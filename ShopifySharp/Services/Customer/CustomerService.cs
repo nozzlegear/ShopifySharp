@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<IListResult<Customer>> ListAsync(IListFilter<Customer> filter)
+        public virtual async Task<ListResult<Customer>> ListAsync(IListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers.json");
             
@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<IListResult<Customer>> ListAsync(CustomerListFilter filter)
+        public virtual async Task<ListResult<Customer>> ListAsync(CustomerListFilter filter)
         {
             return await ListAsync(filter.AsListFilter());
         }
@@ -84,7 +84,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IListResult<Customer>> SearchAsync(IListFilter<Customer> filter)
+        public virtual async Task<ListResult<Customer>> SearchAsync(IListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers/search.json");
             
@@ -102,7 +102,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
+        public virtual async Task<ListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
         {
             return await SearchAsync(filter.AsListFilter());
         }

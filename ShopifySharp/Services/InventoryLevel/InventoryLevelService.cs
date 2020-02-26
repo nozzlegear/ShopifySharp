@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of inventory items. 
         /// </summary>
-        public virtual async Task<IListResult<InventoryLevel>> ListAsync(IListFilter<InventoryLevel> filter)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(IListFilter<InventoryLevel> filter)
         {
             var req = PrepareRequest($"inventory_levels.json");
 
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of inventory items
         /// </summary>
-        public virtual async Task<IListResult<InventoryLevel>> ListAsync(InventoryLevelFilter filter)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelFilter filter)
         {
             return await ListAsync(filter.AsListFilter());
         }

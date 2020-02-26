@@ -54,7 +54,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
-        public virtual async Task<IListResult<Page>> ListAsync(IListFilter<Page> filter)
+        public virtual async Task<ListResult<Page>> ListAsync(IListFilter<Page> filter)
         {
             var req = PrepareRequest("pages.json");
             
@@ -71,7 +71,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
-        public virtual async Task<IListResult<Page>> ListAsync(PageListFilter filter)
+        public virtual async Task<ListResult<Page>> ListAsync(PageListFilter filter)
         {
             return await ListAsync((IListFilter<Page>) filter);
         }

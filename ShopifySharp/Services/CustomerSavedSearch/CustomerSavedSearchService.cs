@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(IListFilter<CustomerSavedSearch> filter)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(IListFilter<CustomerSavedSearch> filter)
         {
             var req = PrepareRequest($"{RootResource}.json");
             
@@ -75,7 +75,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<IListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
         {
             return await ListAsync((IListFilter<CustomerSavedSearch>) filter);
         }

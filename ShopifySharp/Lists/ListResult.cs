@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ShopifySharp.Lists
 {
-    public class ListResult<T> : IListResult<T>
+    public class ListResult<T>
     {
         public IEnumerable<T> Items { get; }
 

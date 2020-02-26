@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's script tags.
         /// </summary>
-        public virtual async Task<IListResult<ScriptTag>> ListAsync(IListFilter<ScriptTag> filter)
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(IListFilter<ScriptTag> filter)
         {
             var req = PrepareRequest("script_tags.json");
             
@@ -73,7 +73,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's script tags.
         /// </summary>
-        public virtual async Task<IListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter)
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter)
         {
             return await ListAsync((IListFilter<ScriptTag>) filter);
         }

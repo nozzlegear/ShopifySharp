@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<IListResult<Product>> ListAsync(IListFilter<Product> filter)
+        public virtual async Task<ListResult<Product>> ListAsync(IListFilter<Product> filter)
         {
             var req = PrepareRequest("products.json");
             
@@ -61,7 +61,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<IListResult<Product>> ListAsync(ProductListFilter filter)
+        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter)
         {
             return await ListAsync(filter.AsListFilter());
         }

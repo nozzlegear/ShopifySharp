@@ -380,7 +380,7 @@ namespace ShopifySharp
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
-        protected IListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
+        protected ListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
             return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse<T>(requestResult.RawLinkHeaderValue));
         }
