@@ -21,18 +21,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop customer's addresses.
         /// </summary>
         /// <param name="customerId">The id of the customer to retrieve.</param>
-        public virtual async Task<ListResult<Address>> ListAsync(long customerId, ListFilter<Address> filter)
+        public virtual async Task<ListResult<Address>> ListAsync(long customerId, ListFilter<Address> filter = null)
         {
-            var req = PrepareRequest($"customers/{customerId}/addresses.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Address>>(req, HttpMethod.Get, rootElement: "addresses");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Address>($"customers/{customerId}/addresses.json", "addresses", filter);
         }
 
         /// <summary>

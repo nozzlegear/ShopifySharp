@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter)
+        public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter = null)
         {
             return await ExecuteGetListAsync("customers.json", "customers", filter);
         }
