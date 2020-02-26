@@ -16,9 +16,9 @@ namespace ShopifySharp
         public bool? CauseCancel { get; set; }
 
         /// <summary>
-        /// WARNING: This is an undocumented value returned by the Shopify API. Use at your own risk.
+        /// The ID of the checkout that the order risk belongs to.
         /// </summary>
-        [JsonProperty("checkout_id"), Obsolete("This is an undocumented value returned by the Shopify API. Use at your own risk.")]
+        [JsonProperty("checkout_id")]
         public long? CheckoutId { get; set; }
 
         /// <summary>
