@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter)
+        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter = null)
         {
             return await ListAsync(filter.AsListFilter());
         }

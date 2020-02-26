@@ -20,18 +20,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the discount codes belonging to the price rule.
         /// </summary>
-        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter)
+        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter = null)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<PriceRuleDiscountCode>>(req, HttpMethod.Get, rootElement: "discount_codes");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter);
         }
 
         /// <summary>
