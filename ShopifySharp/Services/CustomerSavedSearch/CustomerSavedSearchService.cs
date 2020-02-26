@@ -148,26 +148,13 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Returns a list of all <see cref="Customer"/> that are in the saved search
+        /// Returns a list of all <see cref="Customer"/> that are in the saved search.
         /// </summary>
-        /// <param name="customerSavedSearchId">Id of the Customer Saved Search</param>
-        /// <returns></returns>
-        public virtual async Task<List<Customer>> GetCustomersFromSavedSearch(long customerSavedSearchId, string query = null, ListFilter<Customer> filter = null)
+        /// <param name="customerSavedSearchId">Id of the Customer Saved Search.</param>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<IEnumerable<Customer>> GetCustomersFromSavedSearchAsync(long customerSavedSearchId, CustomerSavedSearchFilter filter = null)
         {
-            throw new NotImplementedException();
-            // var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}/customers.json");
-            //
-            // if (query != null)
-            // {
-            //     req.QueryParams.Add("query", query);
-            // }
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
+            return await ExecuteGetAsync<List<Customer>>($"{RootResource}/{customerSavedSearchId}/customers.json", "customers", filter);
         }
     }
 }
