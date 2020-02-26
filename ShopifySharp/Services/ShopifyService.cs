@@ -188,7 +188,7 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null) where T : new()
+        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
@@ -218,7 +218,7 @@ namespace ShopifySharp
             }
         }
 
-        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams) where T : new()
+        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams)
         {
             var req = PrepareRequest(path);
 
@@ -231,7 +231,7 @@ namespace ShopifySharp
         }
 
 
-        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null) where T : new()
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null)
         {
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams)).Result;
         }

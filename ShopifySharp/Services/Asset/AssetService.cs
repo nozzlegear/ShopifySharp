@@ -49,40 +49,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Asset>> _ListAsync(long themeId, IUnpaginatedListFilter<Asset> filter = null)
-        {
-            var req = PrepareRequest($"themes/{themeId}/assets.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Asset>>(req, HttpMethod.Get, rootElement: "assets");
-            
-            return response.Result;
-        }
-        
-        /// <summary>
-        /// Retrieves a list of all <see cref="Asset"/> objects. Listing theme assets only returns metadata about each asset.
-        /// You need to request assets individually in order to get their contents.
-        /// </summary>
-        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
-        /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, IUnpaginatedListFilter<Asset> filter = null)
-        {
-            return await _ListAsync(themeId, filter);
-        }
-
-        /// <summary>
-        /// Retrieves a list of all <see cref="Asset"/> objects. Listing theme assets only returns metadata about each asset.
-        /// You need to request assets individually in order to get their contents.
-        /// </summary>
-        /// <param name="themeId">The id of the theme that the asset belongs to.</param>
-        /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, AssetListFilter filter = null)
         {
-            return await _ListAsync(themeId, filter);
+            return await ExecuteGetAsync<IEnumerable<Asset>>($"themes/{themeId}/assets.json", "assets", filter);
         }
 
         /// <summary>
