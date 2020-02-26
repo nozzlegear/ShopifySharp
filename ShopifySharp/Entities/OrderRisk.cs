@@ -40,12 +40,6 @@ namespace ShopifySharp
         public string Message { get; set; }
 
         /// <summary>
-        /// WARNING: This is an undocumented field returned by the Shopify API. Use at your own risk. This value cannot be set via API. This message is shown in the merchant's admin dashboard if different from <see cref="Message" />.
-        /// </summary>
-        [JsonProperty("merchant_message"), Obsolete("This is an undocumented field returned by the Shopify API. Use at your own risk.")]
-        public string MerchantMessage { get; set; }
-
-        /// <summary>
         /// The recommended action given to the merchant. Known values are 'cancel', 'investigate' and 'accept'.
         /// </summary>
         [JsonProperty("recommendation")]

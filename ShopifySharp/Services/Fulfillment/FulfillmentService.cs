@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -127,23 +126,6 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Fulfillment"/> on the order.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
-        /// <param name="notifyCustomer">Whether the customer should be notified that the fulfillment
-        /// has been created.</param>
-        /// <returns>The new <see cref="Fulfillment"/>.</returns>
-        [Obsolete("The notifyCustomer parameter can already be found on the Fulfillment object. This extra parameter will be removed from FulfillmentService.UpdateAsync in a future release.", false)]
-        public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment fulfillment, bool notifyCustomer)
-        {
-            // Set the notifyCustomer property on the fulfillment
-            fulfillment.NotifyCustomer = notifyCustomer;
-
-            return await CreateAsync(orderId, fulfillment);
-        }
-
-        /// <summary>
         /// Updates the given <see cref="Fulfillment"/>.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
@@ -161,22 +143,6 @@ namespace ShopifySharp
 
             var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, content, "fulfillment");
             return response.Result;
-        }
-
-        /// <summary>
-        /// Updates the given <see cref="Fulfillment"/>.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillmentId">Id of the object being updated.</param>
-        /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
-        /// <returns>The updated <see cref="Fulfillment"/>.</returns>
-        [Obsolete("The notifyCustomer parameter can already be found on the Fulfillment object. This extra parameter will be removed from FulfillmentService.UpdateAsync in a future release.", false)]
-        public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment, bool notifyCustomer = false)
-        {
-            // Set the notifyCustomer property on the fulfillment
-            fulfillment.NotifyCustomer = notifyCustomer;
-
-            return await UpdateAsync(orderId, fulfillmentId, fulfillment);
         }
 
         /// <summary>

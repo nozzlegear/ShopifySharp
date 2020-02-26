@@ -1,10 +1,6 @@
 using Newtonsoft.Json;
-using ShopifySharp.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -13,10 +9,10 @@ namespace ShopifySharp
     /// </summary>
     public class Order : ShopifyObject
     {
-        [JsonProperty("app_id")]
         /// <summary>
         /// Unique identifier of the app who created the order.
         /// </summary>
+        [JsonProperty("app_id")]
         public long? AppId { get; set; }
 
         /// <summary>
@@ -69,12 +65,6 @@ namespace ShopifySharp
         public DateTimeOffset? ClosedAt { get; set; }
 
         /// <summary>
-        /// The customer's contact email address.
-        /// </summary>
-        [JsonProperty("contact_email"), Obsolete("ContactEmail is not documented by Shopify and will be removed in a future release.")]
-        public string ContactEmail { get; set; }
-
-        /// <summary>
         /// The date and time when the order was created in Shopify.
         /// </summary>
         [JsonProperty("created_at")]
@@ -92,10 +82,10 @@ namespace ShopifySharp
         [JsonProperty("customer")]
         public Customer Customer { get; set; }
 
-        [JsonProperty("customer_locale")]
         /// <summary>
         /// The two or three letter language code, optionally followed by a region modifier. Example values could be 'en', 'en-CA', 'en-PIRATE'.
         /// </summary>
+        [JsonProperty("customer_locale")]
         public string CustomerLocale { get; set; }
 
         /// <summary>
@@ -211,13 +201,6 @@ namespace ShopifySharp
         public string OrderStatusUrl { get; set; }
 
         /// <summary>
-        /// Payment details for this order. May be null if the order was created via API without payment details.
-        /// </summary>
-        [JsonProperty("payment_details"), Obsolete("PaymentDetails has been deprecated and will be removed in a future release. This data is now available via the Transaction API.")]
-        public PaymentDetails PaymentDetails { get; set; }
-
-
-        /// <summary>
         /// The list of all payment gateways used for the order.
         /// </summary>
         [JsonProperty("payment_gateway_names")]
@@ -320,12 +303,6 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_price")]
         public decimal? TotalPrice { get; set; }
-
-        /// <summary>
-        /// The sum of all the prices of all the items in the order, in USD, with taxes and discounts included (must be positive).
-        /// </summary>
-        [JsonProperty("total_price_usd"), Obsolete("TotalPriceUsd is not documented by Shopify and will be removed in a future release.")]
-        public decimal? TotalPriceUsd { get; set; }
 
         /// <summary>
         /// The sum of all the taxes applied to the order (must be positive).
