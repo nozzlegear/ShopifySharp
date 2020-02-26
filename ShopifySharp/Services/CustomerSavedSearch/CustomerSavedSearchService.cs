@@ -68,32 +68,6 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
-        /// </summary>
-        /// <param name="query">The (unencoded) search query, in format of 'Bob country:United States', which would search for customers in the United States with a name like 'Bob'.</param>
-        /// <param name="sinceId">Restricts results to after a given id.</param>
-        /// <param name="filter">Options for filtering the results.</param>
-        /// <returns>A list of matching customers.</returns>
-        public virtual Task<List<CustomerSavedSearch>> SearchAsync(string query, string sinceId = null, ListFilter<CustomerSavedSearch> filter = null)
-        {
-            throw new NotImplementedException();
-            // var req = PrepareRequest($"{RootResource}.json");
-            // req.QueryParams.Add("query", query);
-            //
-            // if (!string.IsNullOrEmpty(sinceId))
-            // {
-            //     req.QueryParams.Add("since_id", sinceId);
-            // }
-            //
-            // if (filter != null)
-            // {
-            //     req.QueryParams.AddRange(filter.ToParameters());
-            // }
-            //
-            // return ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
-        }
-
-        /// <summary>
         /// Creates a new <see cref="Customer"/> on the store.
         /// </summary>
         /// <param name="customerSavedSearch">A new <see cref="CustomerSavedSearch"/>. Id should be set to null.</param>
