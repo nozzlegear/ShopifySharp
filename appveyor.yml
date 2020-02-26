@@ -25,6 +25,7 @@ skip_commits:
     - .gitignore
     - .vscode/*
     - changelog.md
+    - appveyor.yml
 #deploy_script:
 #  - ./scripts/deploy.ps1
 deploy:
