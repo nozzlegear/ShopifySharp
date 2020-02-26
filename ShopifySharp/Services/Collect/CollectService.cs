@@ -40,18 +40,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter)
+        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter = null)
         {
-            var req = PrepareRequest("collects.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Collect>>(req, HttpMethod.Get, rootElement: "collects");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Collect>("collects.json", "collects", filter);
         }
 
         /// <summary>
