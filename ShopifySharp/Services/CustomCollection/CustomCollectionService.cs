@@ -61,18 +61,9 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
+        public async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
         {
-            var req = PrepareRequest("custom_collections/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>("custom_collections/count.json", "count", filter);
         }
         
         /// <summary>

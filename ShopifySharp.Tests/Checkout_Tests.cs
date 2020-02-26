@@ -18,14 +18,6 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
-        public async Task Counts_Checkouts()
-        {
-            var count = await Service.CountAsync();
-
-            Assert.True(count >= 0);
-        }
-
-        [Fact]
         public async Task Lists_Checkouts()
         {
             var list = await Service.ListAsync();

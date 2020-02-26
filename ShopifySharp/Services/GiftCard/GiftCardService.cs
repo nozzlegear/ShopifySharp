@@ -22,18 +22,9 @@ namespace ShopifySharp
         {
         }
 
-        private async Task<int> CountAsync(GiftCardCountFilter filter = null)
+        public async Task<int> CountAsync(GiftCardCountFilter filter = null)
         {
-            var req = PrepareRequest($"gift_cards/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
+            return await ExecuteGetAsync<int>($"gift_cards/count.json", "count", filter);
         }
         
         /// <summary>
