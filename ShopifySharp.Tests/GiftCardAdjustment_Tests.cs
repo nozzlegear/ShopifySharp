@@ -66,7 +66,7 @@ namespace ShopifySharp.Tests
             GiftCardId = (await GiftCardService.ListAsync(new Filters.GiftCardListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
 
             // Create one for use with count, list, get, etc. tests.
             await Create();

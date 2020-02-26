@@ -128,7 +128,7 @@ namespace ShopifySharp.Tests
             OrderId = (await OrderService.ListAsync(new OrderListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
 
             // Create a risk for count, list, get, etc. tests.
             await Create(OrderId);

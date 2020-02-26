@@ -246,7 +246,7 @@ namespace ShopifySharp
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        internal static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
+        public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
             int statusCode = (int)response.StatusCode;
 

@@ -39,7 +39,7 @@ namespace ShopifySharp.Tests
             long orderId = (await new OrderService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new OrderListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
             string subject = "Order";
             var list = await Fixture.Service.ListAsync(orderId, subject);
 

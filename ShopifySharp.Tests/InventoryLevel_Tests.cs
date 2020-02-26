@@ -20,7 +20,7 @@ namespace ShopifySharp.Tests
         public async Task Lists_Items()
         {
             var list = await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { Fixture.InventoryItemId } });
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace ShopifySharp.Tests
             var invLevel = (await Fixture.Service.ListAsync(new InventoryLevelFilter
             {
                 InventoryItemIds = new long[] { Fixture.InventoryItemId }
-            })).First();
+            })).Items.First();
 
             Random newRandom = new Random();
             int newQty, currQty;
@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests
             var invLevel = (await Fixture.Service.ListAsync(new InventoryLevelFilter
             {
                 InventoryItemIds = new long[] { Fixture.InventoryItemId }
-            })).First();
+            })).Items.First();
 
             var adjustInventoryLevel = new InventoryLevelAdjust()
             {
@@ -81,7 +81,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "Test appears to be broken in mysterious ways, with Shopify returning a 500 internal server error")]
         public async Task Deletes_InventoryLevel()
         {
-            var currentInvLevel = (await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { Fixture.InventoryItemId } })).First();
+            var currentInvLevel = (await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { Fixture.InventoryItemId } })).Items.First();
             //When switching from the default location to a Fulfillment location, the default InventoryLevel is deleted
             var created = await Fixture.Create();
             //Set inventory back to original location because a location is required
@@ -100,7 +100,7 @@ namespace ShopifySharp.Tests
 
             Assert.False(threw);
             //Delete will not throw an error but still will not delete if there isn't another location available for the product.
-            Assert.Equal(0, (await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { created.InventoryItemId.Value }, LocationIds = new[] { created.LocationId.Value } })).Count());
+            Assert.Equal(0, (await Fixture.Service.ListAsync(new InventoryLevelFilter { InventoryItemIds = new[] { created.InventoryItemId.Value }, LocationIds = new[] { created.LocationId.Value } })).Items.Count());
         }
     }
 

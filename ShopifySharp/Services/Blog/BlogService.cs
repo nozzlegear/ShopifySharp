@@ -24,18 +24,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 blogs belonging to the store.
         /// </summary>
-        public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter)
+        public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter = null)
         {
-            var request = PrepareRequest("blogs.json");
-
-            if (filter != null)
-            {
-                request.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Blog>>(request, HttpMethod.Get, rootElement: "blogs");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Blog>("blogs.json", "blogs", filter);
         }
 
         /// <summary>

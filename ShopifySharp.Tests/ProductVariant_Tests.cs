@@ -120,7 +120,7 @@ namespace ShopifySharp.Tests
             ProductId = (await ProductService.ListAsync(new ProductListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
 
             // Create one for use with count, list, get, etc. tests.
             await Create();

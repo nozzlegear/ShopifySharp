@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -231,7 +232,7 @@ namespace ShopifySharp.Tests
         {
             bool thrown = false;
             int requestCount = 60;
-            IEnumerable<Order>[] list = null;
+            IEnumerable<ListResult<Order>> list = null;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             service.SetExecutionPolicy(new RetryExecutionPolicy());
 
@@ -258,7 +259,7 @@ namespace ShopifySharp.Tests
         {
             bool thrown = false;
             int requestCount = 60;
-            IEnumerable<Order>[] list = null;
+            IEnumerable<ListResult<Order>> list = null;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
 
