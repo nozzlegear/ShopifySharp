@@ -3,6 +3,7 @@ image: Visual Studio 2019
 branches:
   only:
     - master
+    - v5.0
 environment:
   SHOPIFYSHARP_API_KEY:
     secure: uF/ZRFFV19rv9tyOtspau/SpzMLQaGFWgBYge7kRC4vk/HHRxKda7BaNi46QhzN/
