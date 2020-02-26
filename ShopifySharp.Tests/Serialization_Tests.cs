@@ -25,13 +25,15 @@ namespace ShopifySharp.Tests
   [
     {
       ""id"": 456,
-      ""properties"": []
+      ""properties"": [{name: ""myName"", value: ""myValue""}]
     }
   ]
 }
 ";
             var order = JsonConvert.DeserializeObject<Order>(json);
             Assert.NotNull(order.LineItems.First().Properties);
+            Assert.Equal("myName", order.LineItems.First().Properties.First().Name);
+            Assert.Equal("myValue", order.LineItems.First().Properties.First().Value);
         }
 
         [Fact]
