@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text.RegularExpressions;
 using ShopifySharp.Lists;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -217,7 +218,7 @@ namespace ShopifySharp
             }
         }
 
-        public async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null) where T : new()
+        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams) where T : new()
         {
             var req = PrepareRequest(path);
 
@@ -226,9 +227,19 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(queryParams.ToQueryParameters());
             }
 
-            var response = await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt);
+            return await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt);
+        }
 
-            return response.Result;
+
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null) where T : new()
+        {
+            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams)).Result;
+        }
+
+        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter)
+        {
+            var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter);
+            return ParseLinkHeaderToListResult(result);
         }
 
         /// <summary>

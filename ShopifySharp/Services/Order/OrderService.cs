@@ -38,16 +38,7 @@ namespace ShopifySharp
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter)
         {
-            var req = PrepareRequest("orders.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("orders.json", "orders", filter);
         }
 
         /// <summary>

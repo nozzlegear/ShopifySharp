@@ -39,16 +39,7 @@ namespace ShopifySharp
         /// <param name="productId">The product that the variants belong to.</param>
         public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter)
         {
-            var req = PrepareRequest($"products/{productId}/variants.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter);
         }
 
         /// <summary>
@@ -59,7 +50,6 @@ namespace ShopifySharp
         {
             return await ListAsync(productId, filter.AsListFilter());
         }
-        
 
         /// <summary>
         /// Retrieves the <see cref="ProductVariant"/> with the given id.
@@ -67,10 +57,7 @@ namespace ShopifySharp
         /// <param name="variantId">The id of the product variant to retrieve.</param>
         public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
-            var req = PrepareRequest($"variants/{variantId}.json");
-            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
-
-            return response.Result;
+            return await ExecuteGetAsync<ProductVariant>($"variants/{variantId}.json", "variant");
         }
 
         /// <summary>

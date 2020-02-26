@@ -37,16 +37,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter)
         {
-            var req = PrepareRequest("products.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Product>>(req, HttpMethod.Get, rootElement: "products");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("products.json", "products", filter);
         }
 
         /// <summary>

@@ -33,16 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter)
         {
-            var req = PrepareRequest("customers.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("customers.json", "customers", filter);
         }
 
         /// <summary>
