@@ -21,18 +21,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 custom collections.
         /// </summary>
-        public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter)
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter = null)
         {
-            var req = PrepareRequest("custom_collections.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<CustomCollection>("custom_collections.json", "custom_collections", filter);
         }
 
         /// <summary>
