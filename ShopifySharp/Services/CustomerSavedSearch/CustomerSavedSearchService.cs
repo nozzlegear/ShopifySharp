@@ -35,18 +35,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null)
         {
-            var req = PrepareRequest($"{RootResource}.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<CustomerSavedSearch>>(req, HttpMethod.Get, rootElement: RootResource);
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<CustomerSavedSearch>($"{RootResource}.json", RootResource, filter);
         }
 
         /// <summary>

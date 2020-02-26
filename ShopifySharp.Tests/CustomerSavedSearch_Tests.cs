@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Any());
+            Assert.True(list.Items.Any());
         }
 
         [Fact]

@@ -29,18 +29,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
-        public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter)
+        public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter = null)
         {
-            var req = PrepareRequest("draft_orders.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<DraftOrder>("draft_orders.json", "draft_orders", filter);
         }
 
         /// <summary>
