@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class WebhookCountFilter : CountFilter
+    public class WebhookCountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those with the given address. 

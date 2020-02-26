@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class OrderCountFilter : CountFilter
+    public class OrderCountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those with the given status. Known values are "open", "closed", "cancelled" and "any".

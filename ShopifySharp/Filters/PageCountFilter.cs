@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class PageCountFilter : CountFilter
+    public class PageCountFilter : Parameterizable
     {
         /// <summary>
         /// Filter by page title.

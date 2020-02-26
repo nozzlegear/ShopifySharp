@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class EventCountFilter : CountFilter
+    public class EventCountFilter : Parameterizable
     {
         /// <summary>
         /// Show events created at or after date and time

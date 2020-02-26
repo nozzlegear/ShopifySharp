@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class ArticleCountFilter : CountFilter
+    public class ArticleCountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those created after date (format: 2008-12-31 03:00).

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class CustomerSavedSearchCountFilter : CountFilter
+    public class CustomerSavedSearchCountFilter : Parameterizable
     {
         /// <summary>
         /// Restrict results to after the specified ID.

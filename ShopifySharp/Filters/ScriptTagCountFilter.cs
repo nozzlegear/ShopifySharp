@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class ScriptTagCountFilter : CountFilter
+    public class ScriptTagCountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those with the given src value.

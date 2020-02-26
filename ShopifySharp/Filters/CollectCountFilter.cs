@@ -5,7 +5,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering a count of Collects. 
     /// </summary>
-    public class CollectCountFilter : CountFilter
+    public class CollectCountFilter : Parameterizable
     {
         /// <summary>
         /// An optional product id to retrieve. 

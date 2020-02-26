@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class FulfillmentCountFilter : CountFilter
+    public class FulfillmentCountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those last updated after date and time.

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class RedirectCountFilter : CountFilter
+    public class RedirectCountFilter : Parameterizable
     {
         /// <summary>
         /// An optional parameter that filters the result to redirects with the given path.

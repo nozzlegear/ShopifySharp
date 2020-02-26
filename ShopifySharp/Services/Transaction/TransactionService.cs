@@ -22,22 +22,12 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's transactions.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="filter">Options for filtering the result.</param>
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
-        public virtual async Task<int> CountAsync(long orderId, ICountFilter filter = null)
+        public virtual async Task<int> CountAsync(long orderId)
         {
-            var req = PrepareRequest($"orders/{orderId}/transactions/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>($"orders/{orderId}/transactions/count.json", "count");
         }
 
         /// <summary>

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class ProductCountFilter : CountFilter
+    public class ProductCountFilter : Parameterizable
     {
         /// <summary>
         /// Filter by product type.

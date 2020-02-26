@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class CustomCollectionCountFilter : CountFilter
+    public class CustomCollectionCountFilter : Parameterizable
     {
         /// <summary>
         /// Restricts results to those with given title 

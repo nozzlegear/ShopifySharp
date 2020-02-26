@@ -20,29 +20,6 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public RedirectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        private async Task<int> _CountAsync(ICountFilter filter = null)
-        {
-            var req = PrepareRequest("redirects/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
-        }
-        
-        /// <summary>
-        /// Gets a count of all of the shop's redirects.
-        /// </summary>
-        /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(ICountFilter filter = null)
-        {
-            return await _CountAsync(filter);
-        }
         
         /// <summary>
         /// Gets a count of all of the shop's redirects.
@@ -50,7 +27,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(RedirectCountFilter filter = null)
         {
-            return await _CountAsync(filter);
+            return await ExecuteGetAsync<int>("redirects/count.json", "count", filter);
         }
 
         /// <summary>
