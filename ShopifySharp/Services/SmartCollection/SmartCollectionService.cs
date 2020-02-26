@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// Gets a count of all smart collections on the store.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
+        public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
         {
             var req = PrepareRequest("smart_collections/count.json");
             

@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null)
+        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions.json");
 

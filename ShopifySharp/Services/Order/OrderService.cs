@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all orders for the shop.</returns>
-        public async Task<int> CountAsync(OrderCountFilter filter = null)
+        public virtual async Task<int> CountAsync(OrderCountFilter filter = null)
         {
             return await ExecuteGetAsync<int>("orders/count.json", "count", filter);
         }

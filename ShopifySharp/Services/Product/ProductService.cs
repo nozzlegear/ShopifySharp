@@ -1,10 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using ShopifySharp.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -27,7 +22,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's products.
         /// </summary>
         /// <returns>The count of all products for the shop.</returns>
-        public async Task<int> CountAsync(ProductCountFilter filter = null)
+        public virtual async Task<int> CountAsync(ProductCountFilter filter = null)
         {
             return await ExecuteGetAsync<int>("products/count.json", "count", filter);
         }

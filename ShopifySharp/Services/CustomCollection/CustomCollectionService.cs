@@ -52,7 +52,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
         {
             return await ExecuteGetAsync<int>("custom_collections/count.json", "count", filter);
         }

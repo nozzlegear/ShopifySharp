@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's customers.
         /// </summary>
         /// <returns>The count of all customers for the shop.</returns>
-        public async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null)
         {
             return await ExecuteGetAsync<int>($"{RootResource}/count.json", "count", filter);
         }
@@ -152,7 +152,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the Customer Saved Search</param>
         /// <returns></returns>
-        public Task<List<Customer>> GetCustomersFromSavedSearch(long customerSavedSearchId, string query = null, ListFilter<Customer> filter = null)
+        public virtual async Task<List<Customer>> GetCustomersFromSavedSearch(long customerSavedSearchId, string query = null, ListFilter<Customer> filter = null)
         {
             throw new NotImplementedException();
             // var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}/customers.json");

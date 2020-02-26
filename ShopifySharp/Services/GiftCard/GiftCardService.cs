@@ -22,7 +22,7 @@ namespace ShopifySharp
         {
         }
 
-        public async Task<int> CountAsync(GiftCardCountFilter filter = null)
+        public virtual async Task<int> CountAsync(GiftCardCountFilter filter = null)
         {
             return await ExecuteGetAsync<int>($"gift_cards/count.json", "count", filter);
         }

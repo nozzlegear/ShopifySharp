@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CollectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        public async Task<int> CountAsync(CollectCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CollectCountFilter filter = null)
         {
             var req = PrepareRequest("collects/count.json");
             

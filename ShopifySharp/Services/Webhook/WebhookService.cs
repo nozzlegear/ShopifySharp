@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
         /// <returns>The count of all webhooks for the shop.</returns>
-        public async Task<int> CountAsync(WebhookCountFilter filter = null)
+        public virtual async Task<int> CountAsync(WebhookCountFilter filter = null)
         {
             var req = PrepareRequest("webhooks/count.json");
 

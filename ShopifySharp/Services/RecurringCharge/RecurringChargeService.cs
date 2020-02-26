@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
         /// </summary>
-        public async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
         {
             var req = PrepareRequest("recurring_application_charges.json");
 
