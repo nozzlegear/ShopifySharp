@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 articles belonging to the given blog.
         /// </summary>
-        public virtual async Task<ListResult<Article>> ListAsync(long blogId, IListFilter<Article> filter)
+        public virtual async Task<ListResult<Article>> ListAsync(long blogId, ListFilter<Article> filter)
         {
             var req = PrepareRequest($"blogs/{blogId}/articles.json");
 
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Article>> ListAsync(int blogId, ArticleListFilter filter)
         {
-            return await ListAsync(blogId, (IListFilter<Article>) filter);
+            return await ListAsync(blogId, (ListFilter<Article>) filter);
         }
 
         private async Task<int> _CountAsync(long blogId, ICountFilter filter = null)

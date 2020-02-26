@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<ListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(IListFilter<ShopifyPaymentsPayout> filter)
+        public virtual async Task<ListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ListFilter<ShopifyPaymentsPayout> filter)
         {
             var req = PrepareRequest("shopify_payments/payouts.json");
             
@@ -87,7 +87,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<ListResult<ShopifyPaymentsDispute>> ListDisputesAsync(IListFilter<ShopifyPaymentsDispute> filter)
+        public virtual async Task<ListResult<ShopifyPaymentsDispute>> ListDisputesAsync(ListFilter<ShopifyPaymentsDispute> filter)
         {
             var req = PrepareRequest("shopify_payments/disputes.json");
             
@@ -114,7 +114,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        public virtual async Task<ListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(IListFilter<ShopifyPaymentsTransaction> filter)
+        public virtual async Task<ListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ListFilter<ShopifyPaymentsTransaction> filter)
         {
             var req = PrepareRequest("shopify_payments/balance/transactions.json");
             

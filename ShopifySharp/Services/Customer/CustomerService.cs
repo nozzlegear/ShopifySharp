@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<ListResult<Customer>> ListAsync(IListFilter<Customer> filter)
+        public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers.json");
             
@@ -84,7 +84,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<ListResult<Customer>> SearchAsync(IListFilter<Customer> filter)
+        public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter)
         {
             var req = PrepareRequest("customers/search.json");
             
@@ -222,7 +222,7 @@ namespace ShopifySharp
         /// https://shopify.dev/docs/admin-api/rest/reference/customers/customer#orders-2020-01
         /// This list does not appear to be paginated. 
         /// </remarks>
-        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, IListFilter<Customer> filter = null)
+        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, ListFilter<Customer> filter = null)
         {
             var req = PrepareRequest($"customers/{customerId}/orders.json");
             

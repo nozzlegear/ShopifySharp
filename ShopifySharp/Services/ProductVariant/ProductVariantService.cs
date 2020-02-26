@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
-        public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, IListFilter<ProductVariant> filter)
+        public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter)
         {
             var req = PrepareRequest($"products/{productId}/variants.json");
             

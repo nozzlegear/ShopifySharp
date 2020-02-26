@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of inventory items. 
         /// </summary>
-        public virtual async Task<ListResult<InventoryLevel>> ListAsync(IListFilter<InventoryLevel> filter)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter)
         {
             var req = PrepareRequest($"inventory_levels.json");
 

@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
-        public virtual async Task<ListResult<Redirect>> ListAsync(IListFilter<Redirect> filter)
+        public virtual async Task<ListResult<Redirect>> ListAsync(ListFilter<Redirect> filter)
         {
             var req = PrepareRequest("redirects.json");
             
@@ -75,7 +75,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Redirect>> ListAsync(RedirectListFilter filter)
         {
-            return await ListAsync((IListFilter<Redirect>) filter);
+            return await ListAsync((ListFilter<Redirect>) filter);
         }
         
         /// <summary>

@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<ListResult<Order>> ListAsync(IListFilter<Order> filter)
+        public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter)
         {
             var req = PrepareRequest("orders.json");
 

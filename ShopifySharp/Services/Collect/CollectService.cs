@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        public virtual async Task<ListResult<Collect>> ListAsync(IListFilter<Collect> filter)
+        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter)
         {
             var req = PrepareRequest("collects.json");
 

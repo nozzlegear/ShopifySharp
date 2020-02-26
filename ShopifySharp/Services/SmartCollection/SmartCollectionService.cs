@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 smart collections.
         /// </summary>
-        public virtual async Task<ListResult<SmartCollection>> ListAsync(IListFilter<SmartCollection> filter)
+        public virtual async Task<ListResult<SmartCollection>> ListAsync(ListFilter<SmartCollection> filter)
         {
             var req = PrepareRequest($"smart_collections.json");
             

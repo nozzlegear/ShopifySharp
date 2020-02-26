@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's webhooks.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<Webhook>> ListAsync(IListFilter<Webhook> filter)
+        public virtual async Task<ListResult<Webhook>> ListAsync(ListFilter<Webhook> filter)
         {
             var req = PrepareRequest("webhooks.json");
             
