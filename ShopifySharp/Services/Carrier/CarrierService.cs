@@ -24,10 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<Carrier>> ListAsync()
         {
-            var req = PrepareRequest("carrier_services.json");
-            var response = await ExecuteRequestAsync<List<Carrier>>(req, HttpMethod.Get, rootElement: "carrier_services");
-
-            return response.Result;
+            return await ExecuteGetAsync< IEnumerable < Carrier >>("carrier_services.json", "carrier_services");
         }
 
         /// <summary>

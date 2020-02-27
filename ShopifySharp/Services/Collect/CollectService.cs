@@ -25,16 +25,7 @@ namespace ShopifySharp
 
         public virtual async Task<int> CountAsync(CollectCountFilter filter = null)
         {
-            var req = PrepareRequest("collects/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
+            return await ExecuteGetAsync<int>("collects/count.json", "count", filter);
         }
 
         /// <summary>

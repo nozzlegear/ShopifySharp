@@ -61,16 +61,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
         {
-            var req = PrepareRequest("recurring_application_charges.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<RecurringCharge>>(req, HttpMethod.Get, rootElement: "recurring_application_charges");
-
-            return response.Result;
+            return await ExecuteGetAsync < IEnumerable < RecurringCharge >>("recurring_application_charges.json", "recurring_application_charges", filter);
         }
 
         /// <summary>

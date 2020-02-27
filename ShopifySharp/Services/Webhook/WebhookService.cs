@@ -28,16 +28,7 @@ namespace ShopifySharp
         /// <returns>The count of all webhooks for the shop.</returns>
         public virtual async Task<int> CountAsync(WebhookCountFilter filter = null)
         {
-            var req = PrepareRequest("webhooks/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter);
         }
 
         /// <summary>

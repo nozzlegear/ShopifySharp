@@ -26,11 +26,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<User>> ListAsync()
         {
-            var req = PrepareRequest("users.json");
-
-            var response = await ExecuteRequestAsync<List<User>>(req, HttpMethod.Get, rootElement: "users");
-
-            return response.Result;
+            return await ExecuteGetAsync<IEnumerable<User>>("users.json", "users");
         }
 
         /// <summary>
@@ -40,10 +36,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="User"/>.</returns>
         public virtual async Task<User> GetAsync(long userId)
         {
-            var req = PrepareRequest($"users/{userId}.json");
-            var response = await ExecuteRequestAsync<User>(req, HttpMethod.Get, rootElement: "user");
-
-            return response.Result;
+            return await ExecuteGetAsync<User>($"users/{userId}.json", "user");
         }
 
         /// <summary>
@@ -52,10 +45,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="User"/>.</returns>
         public virtual async Task<User> GetCurrentAsync()
         {
-            var req = PrepareRequest("users/current.json");
-            var response = await ExecuteRequestAsync<User>(req, HttpMethod.Get, rootElement: "user");
-
-            return response.Result;
+            return await ExecuteGetAsync<User>("users/current.json", "user");
         }
     }
 }

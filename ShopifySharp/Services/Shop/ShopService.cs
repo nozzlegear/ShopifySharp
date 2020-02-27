@@ -17,10 +17,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<Shop> GetAsync()
         {
-            var request = PrepareRequest("shop.json");
-            var response = await ExecuteRequestAsync<Shop>(request, HttpMethod.Get, rootElement: "shop");
-
-            return response.Result;
+            return await ExecuteGetAsync<Shop>("shop.json", "shop");
         }
 
         /// <summary>

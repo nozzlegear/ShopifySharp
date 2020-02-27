@@ -52,10 +52,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="GiftCard"/>.</returns>
         public virtual async Task<GiftCard> GetAsync(long giftCardId)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}.json");
-
-            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Get, rootElement: "gift_card");
-            return response.Result;
+            return await ExecuteGetAsync<GiftCard>($"gift_cards/{giftCardId}.json", "gift_card");
         }
 
         /// <summary>

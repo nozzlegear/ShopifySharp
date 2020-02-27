@@ -40,10 +40,7 @@ namespace ShopifySharp
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
         public virtual async Task<InventoryItem> GetAsync(long inventoryItemId)
         {
-            var req = PrepareRequest($"inventory_items/{inventoryItemId}.json");
-
-            var response = await ExecuteRequestAsync<InventoryItem>(req, HttpMethod.Get, rootElement: "inventory_item");
-            return response.Result;
+            return await ExecuteGetAsync<InventoryItem>($"inventory_items/{inventoryItemId}.json", "inventory_item");
         }
 
 

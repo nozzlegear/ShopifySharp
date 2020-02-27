@@ -24,16 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ListFilter<ApplicationCredit> filter)
         {
-            var req = PrepareRequest($"application_credits.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<ApplicationCredit>>(req, HttpMethod.Get, rootElement: "application_credits");
-            
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<ApplicationCredit>("application_credits.json", "application_credits", filter);
         }
 
         /// <summary>
@@ -41,7 +32,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ApplicationCreditListFilter filter)
         {
-            return await ListAsync((ListFilter<ApplicationCredit>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>

@@ -46,10 +46,7 @@ namespace ShopifySharp
         /// <returns>The count of all fulfillments for the shop.</returns>
         public virtual async Task<IEnumerable<ShopifyPaymentsBalance>> GetBalanceAsync()
         {
-            var req = PrepareRequest($"shopify_payments/balance.json");
-            var response = await ExecuteRequestAsync<List<ShopifyPaymentsBalance>>(req, HttpMethod.Get, rootElement: "balance");
-
-            return response.Result;
+            return await ExecuteGetAsync < IEnumerable < ShopifyPaymentsBalance >>("shopify_payments/balance.json", "balance");
         }
         
         /// <summary>
@@ -87,10 +84,7 @@ namespace ShopifySharp
 
         public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
         {
-            var req = PrepareRequest($"shopify_payments/disputes/{disputeId}.json");
-            var response = await ExecuteRequestAsync<ShopifyPaymentsDispute>(req, HttpMethod.Get, rootElement: "dispute");
-
-            return response.Result;
+            return await ExecuteGetAsync< ShopifyPaymentsDispute>($"shopify_payments/disputes/{disputeId}.json", "dispute");
         }
 
         public virtual async Task<ListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ListFilter<ShopifyPaymentsTransaction> filter)

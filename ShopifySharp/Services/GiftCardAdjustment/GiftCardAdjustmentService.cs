@@ -28,10 +28,7 @@ namespace ShopifySharp
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
         public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
-            var response = await ExecuteRequestAsync<List<GiftCardAdjustment>>(req, HttpMethod.Get, rootElement: "adjustments");
-
-            return response.Result;
+            return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments");
         }
 
         /// <summary>
@@ -42,9 +39,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json");
-            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Get, rootElement: "adjustment");
-            return response.Result;
+            return await ExecuteGetAsync< GiftCardAdjustment>($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json", "adjustment");
         }
 
         /// <summary>
