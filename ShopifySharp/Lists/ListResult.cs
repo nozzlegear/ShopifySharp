@@ -15,14 +15,14 @@ namespace ShopifySharp.Lists
 
         public bool HasPreviousPage => LinkHeader?.PreviousLink != null;
 
-        public ListFilter<T> GetNextPageFilter(int? limit = null)
+        public ListFilter<T> GetNextPageFilter(int? limit = null, string fields = null)
         {
-            return LinkHeader?.NextLink?.GetFollowingPageFilter(limit);
+            return LinkHeader?.NextLink?.GetFollowingPageFilter(limit, fields);
         }
 
-        public ListFilter<T> GetPreviousPageFilter(int? limit = null)
+        public ListFilter<T> GetPreviousPageFilter(int? limit = null, string fields = null)
         {
-            return LinkHeader?.PreviousLink?.GetFollowingPageFilter(limit);
+            return LinkHeader?.PreviousLink?.GetFollowingPageFilter(limit, fields);
         }
 
         public ListResult(IEnumerable<T> items, LinkHeaderParseResult<T> linkHeader)
