@@ -22,8 +22,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_Items()
         {
-            var list = await Fixture.Service.ListAsync(new ListFilter { Ids = new[] { Fixture.Created.First().InventoryItemId.Value } });
-            Assert.True(list.Count() > 0);
+            var list = await Fixture.Service.ListAsync(new InventoryItemListFilter { Ids = new[] { Fixture.Created.First().InventoryItemId.Value } });
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
