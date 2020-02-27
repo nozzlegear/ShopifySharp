@@ -24,7 +24,7 @@ namespace ShopifySharp.Filters
         {
         }
 
-        internal ListFilter(string pageInfo, int? limit)
+        public ListFilter(string pageInfo, int? limit)
         {
             PageInfo = pageInfo;
             Limit = limit;
