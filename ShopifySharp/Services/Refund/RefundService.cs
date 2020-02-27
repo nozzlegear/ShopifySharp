@@ -27,25 +27,16 @@ namespace ShopifySharp
         /// <param name="orderId">The id of the order to list orders for.</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter)
         {
-            var req = PrepareRequest($"orders/{orderId}/refunds.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Refund>>(req, HttpMethod.Get, rootElement: "refunds");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter);
         }
 
         /// <summary>
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
-        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter)
+        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null)
         {
-            return await ListForOrderAsync(orderId, (ListFilter<Refund>) filter);
+            return await ListForOrderAsync(orderId, filter.AsListFilter());
         }
         
 
