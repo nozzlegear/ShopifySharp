@@ -33,23 +33,14 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<GiftCard>> ListAsync(ListFilter<GiftCard> filter)
         {
-            var req = PrepareRequest("gift_cards.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<GiftCard>("gift_cards.json", "gift_cards", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter)
+        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null)
         {
             return await ListAsync(filter.AsListFilter());
         }
