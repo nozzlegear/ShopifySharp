@@ -71,6 +71,21 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Lists_Products_PageAll()
+        {
+            var svc = Fixture.Service;
+            var list = await svc.ListAsync(new ProductListFilter { Limit = 5 });
+
+            while (true)
+            {
+                Assert.True(list.Items.Any());
+                list = await svc.ListAsync(list.GetNextPageFilter());
+                if (!list.HasNextPage)
+                    break;
+            }
+        }
+
+        [Fact]
         public async Task Deletes_Products()
         {
             var created = await Fixture.Create(true);
