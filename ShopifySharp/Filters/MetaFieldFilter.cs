@@ -28,12 +28,6 @@ namespace ShopifySharp.Filters
 		public string ValueType { get; set; }
 
 		/// <summary>
-		/// A comma-separated list of fields to include in the response
-		/// </summary>
-		[JsonProperty("fields")]
-		public string Fields { get; set; }
-
-		/// <summary>
 		/// Show metafields created after date
 		/// </summary>
 		[JsonProperty("created_at_min")] 

@@ -15,12 +15,6 @@ namespace ShopifySharp.Filters
         public long? SinceId { get; set; }
         
         /// <summary>
-        /// Retrieve only certain fields, specified by a comma-separated list of field names. 
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-        
-        /// <summary>
         /// Restricts results to those with the given address. 
         /// </summary>
         [JsonProperty("address")]

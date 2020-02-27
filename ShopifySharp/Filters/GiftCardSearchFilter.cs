@@ -16,11 +16,5 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("query")]
         public string Query { get; set; }
-        
-        /// <summary>
-        /// Show only certain fields, specified by a comma-separated list of field names.
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
     }
 }

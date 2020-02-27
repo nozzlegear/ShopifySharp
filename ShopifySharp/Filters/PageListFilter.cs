@@ -63,12 +63,6 @@ namespace ShopifySharp.Filters
         public DateTimeOffset? PublishedAtMax { get; set; }
         
         /// <summary>
-        /// Retrieve only certain fields, specified by a comma-separated list of field names. 
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-        
-        /// <summary>
         /// Restrict results to pages with a given published status. Known values: published, unpublished, any. Default: any. 
         /// </summary>
         [JsonProperty("status")]

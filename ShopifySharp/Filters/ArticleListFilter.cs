@@ -57,12 +57,6 @@ namespace ShopifySharp.Filters
         public long? SinceId { get; set; }
 
         /// <summary>
-        /// An optional, comma-separated list of fields to include in the response.
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-
-        /// <summary>
         /// Show objects published after date (format: 2008-12-31 03:00).
         /// </summary>
         [JsonProperty("published_at_min")]

@@ -15,12 +15,6 @@ namespace ShopifySharp.Filters
         public long? SinceId { get; set; }
         
         /// <summary>
-        /// Retrieve only certain fields, specified by a comma-separated list of field names. 
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-        
-        /// <summary>
         /// Return presentment prices in only certain currencies. Each entry must be an ISO 4217 valid currency code.
         /// </summary>
         [JsonProperty("presentment_currencies")]

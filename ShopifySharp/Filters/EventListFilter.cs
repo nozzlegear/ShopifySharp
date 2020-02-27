@@ -15,12 +15,6 @@ namespace ShopifySharp.Filters
         public long? SinceId { get; set; }
 
         /// <summary>
-        /// A comma-separated list of fields to include in the response.
-        /// </summary>
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
-
-        /// <summary>
         /// Show events created at or after date and time
         /// </summary>
         [JsonProperty("created_at_min")]

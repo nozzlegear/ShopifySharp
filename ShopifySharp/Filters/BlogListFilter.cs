@@ -6,8 +6,5 @@ namespace ShopifySharp.Filters
     {
         [JsonProperty("handle")]
         public string Handle { get; set; }
-        
-        [JsonProperty("fields")]
-        public string Fields { get; set; }
     }
 }

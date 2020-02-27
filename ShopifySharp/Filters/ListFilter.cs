@@ -19,6 +19,12 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("limit")]
         public int? Limit { get; set; }
+        
+        /// <summary>
+        /// Comma-separated list of which fields to show in the results. This parameter only works for some endpoints.
+        /// </summary>
+        [JsonProperty("fields")]
+        public string Fields { get; set; }
 
         internal ListFilter()
         {
