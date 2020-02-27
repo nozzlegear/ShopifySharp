@@ -30,10 +30,11 @@ namespace ShopifySharp.Filters
         {
         }
 
-        public ListFilter(string pageInfo, int? limit)
+        public ListFilter(string pageInfo, int? limit, string fields = null)
         {
             PageInfo = pageInfo;
             Limit = limit;
+            Fields = fields;
         }
 
         public ListFilter<T> AsListFilter() => this; 
