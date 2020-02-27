@@ -46,23 +46,14 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Webhook>> ListAsync(ListFilter<Webhook> filter)
         {
-            var req = PrepareRequest("webhooks.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var result = await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
-
-            return ParseLinkHeaderToListResult(result);
+            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's webhooks.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter)
+        public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter = null)
         {
             return await ListAsync(filter.AsListFilter());
         }
