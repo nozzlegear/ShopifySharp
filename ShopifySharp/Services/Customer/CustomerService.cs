@@ -69,16 +69,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter)
         {
-            var req = PrepareRequest("customers/search.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Customer>("customers/search.json", "customers", filter);
         }
 
         /// <summary>

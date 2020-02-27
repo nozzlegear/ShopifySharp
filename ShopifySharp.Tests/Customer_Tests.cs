@@ -1,3 +1,4 @@
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -161,7 +162,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var search = await Fixture.Service.SearchAsync("John");
+                var search = await Fixture.Service.SearchAsync(new CustomerSearchListFilter { Query = "John" });
             }
             catch (ShopifyException ex)
             {
