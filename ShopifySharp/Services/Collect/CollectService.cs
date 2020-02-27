@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter)
         {
-            return await ExecuteGetListAsync<Collect>("collects.json", "collects", filter);
+            return await ExecuteGetListAsync("collects.json", "collects", filter);
         }
 
         /// <summary>

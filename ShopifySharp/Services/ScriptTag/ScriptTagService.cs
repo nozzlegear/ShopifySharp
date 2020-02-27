@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ScriptTag>> ListAsync(ListFilter<ScriptTag> filter)
         {
-            return await ExecuteGetListAsync<ScriptTag>("script_tags.json", "script_tags", filter);
+            return await ExecuteGetListAsync("script_tags.json", "script_tags", filter);
         }
 
         /// <summary>

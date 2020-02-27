@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter)
         {
-            return await ExecuteGetListAsync<PriceRule>("price_rules.json", "price_rules", filter);
+            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter);
         }
 
         /// <summary>

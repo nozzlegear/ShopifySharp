@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Article>> ListAsync(long blogId, ListFilter<Article> filter = null)
         {
-            return await ExecuteGetListAsync<Article>($"blogs/{blogId}/articles.json", "articles", filter);
+            return await ExecuteGetListAsync($"blogs/{blogId}/articles.json", "articles", filter);
         }
 
         /// <summary>

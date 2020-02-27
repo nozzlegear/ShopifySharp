@@ -69,7 +69,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter)
         {
-            return await ExecuteGetListAsync<Customer>("customers/search.json", "customers", filter);
+            return await ExecuteGetListAsync("customers/search.json", "customers", filter);
         }
 
         /// <summary>

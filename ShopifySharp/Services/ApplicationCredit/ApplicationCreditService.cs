@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ListFilter<ApplicationCredit> filter)
         {
-            return await ExecuteGetListAsync<ApplicationCredit>("application_credits.json", "application_credits", filter);
+            return await ExecuteGetListAsync("application_credits.json", "application_credits", filter);
         }
 
         /// <summary>

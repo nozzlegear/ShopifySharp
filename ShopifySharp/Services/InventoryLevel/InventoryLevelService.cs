@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter)
         {
-            return await ExecuteGetListAsync<InventoryLevel>($"inventory_levels.json", "inventory_levels", filter);
+            return await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter);
         }
         
         /// <summary>

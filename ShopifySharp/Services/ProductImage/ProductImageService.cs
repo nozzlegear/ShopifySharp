@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter = null)
         {
-            return await ExecuteGetListAsync<ProductImage>($"products/{productId}/images.json", "images", filter);
+            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter);
         }
 
         /// <summary>

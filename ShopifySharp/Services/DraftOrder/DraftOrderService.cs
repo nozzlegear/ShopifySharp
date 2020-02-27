@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter = null)
         {
-            return await ExecuteGetListAsync<DraftOrder>("draft_orders.json", "draft_orders", filter);
+            return await ExecuteGetListAsync("draft_orders.json", "draft_orders", filter);
         }
 
         /// <summary>

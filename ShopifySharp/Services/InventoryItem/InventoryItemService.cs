@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// <param name="ids">Show only inventory items specified by a list of IDs. Maximum: 100.</param>
         public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter)
         {
-            return await ExecuteGetListAsync<InventoryItem>($"inventory_items.json", "inventory_items", filter);
+            return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter);
         }
 
         public virtual async Task<ListResult<InventoryItem>> ListAsync(InventoryItemListFilter filter)

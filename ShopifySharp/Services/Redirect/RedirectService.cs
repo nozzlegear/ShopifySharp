@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Redirect>> ListAsync(ListFilter<Redirect> filter)
         {
-            return await ExecuteGetListAsync<Redirect>("redirects.json", "redirects", filter);
+            return await ExecuteGetListAsync("redirects.json", "redirects", filter);
         }
 
         /// <summary>

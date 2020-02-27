@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Page>> ListAsync(ListFilter<Page> filter)
         {
-            return await ExecuteGetListAsync<Page>("pages.json", "pages", filter);
+            return await ExecuteGetListAsync("pages.json", "pages", filter);
         }
 
         /// <summary>

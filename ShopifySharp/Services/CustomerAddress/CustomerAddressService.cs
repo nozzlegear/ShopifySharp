@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <param name="customerId">The id of the customer to retrieve.</param>
         public virtual async Task<ListResult<Address>> ListAsync(long customerId, ListFilter<Address> filter = null)
         {
-            return await ExecuteGetListAsync<Address>($"customers/{customerId}/addresses.json", "addresses", filter);
+            return await ExecuteGetListAsync($"customers/{customerId}/addresses.json", "addresses", filter);
         }
 
         /// <summary>
