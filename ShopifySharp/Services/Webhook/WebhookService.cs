@@ -67,14 +67,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> CreateAsync(Webhook webhook)
         {
-            var req = PrepareRequest("webhooks.json");
-            var content = new JsonContent(new
-            {
-                webhook = webhook
-            });
-            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook");
-
-            return response.Result;
+            return await ExecutePostAsync<Webhook>("webhooks.json", "webhook", new { webhook = webhook });
         }
 
         /// <summary>
@@ -85,14 +78,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> UpdateAsync(long webhookId, Webhook webhook)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-            var content = new JsonContent(new
-            {
-                webhook = webhook
-            });
-            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook");
-
-            return response.Result;
+            return await ExecutePutAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", new { webhook = webhook });
         }
 
         /// <summary>
@@ -101,9 +87,7 @@ namespace ShopifySharp
         /// <param name="webhookId">The order object's Id.</param>
         public virtual async Task DeleteAsync(long webhookId)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteDeleteAsync($"webhooks/{webhookId}.json");
         }
     }
 }
