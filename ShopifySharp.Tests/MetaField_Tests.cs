@@ -46,27 +46,21 @@ namespace ShopifySharp.Tests
         public async Task Lists_Metafields()
         {
             var list = await Fixture.Service.ListAsync();
-            list = list.Where(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
-
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Any(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description));
         }
 
         [Fact]
         public async Task Lists_Metafields_On_Resources()
         {
             var list = await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType);
-            list = list.Where(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
-
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Any(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description));
         }
 
         [Fact]
         public async Task Lists_Metafields_On_Resources_And_Parent()
         {
             var list = await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
-            list = list.Where(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
-
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Any(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description));
         }
 
         [Fact]
@@ -229,8 +223,8 @@ namespace ShopifySharp.Tests
 
             // Get a product to add metafields to.
             var products = await ProductService.ListAsync();
-            ResourceId = products.First().Id.Value;
-            ChildResourceId = products.First().Variants.First().Id.Value;
+            ResourceId = products.Items.First().Id.Value;
+            ChildResourceId = products.Items.First().Variants.First().Id.Value;
 
             // Create a metafield for use in count, list, get, etc. tests.
             await Create();
