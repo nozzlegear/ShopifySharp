@@ -57,16 +57,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");
-
-            return response.Result;
+            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields);
         }
 
         /// <summary>

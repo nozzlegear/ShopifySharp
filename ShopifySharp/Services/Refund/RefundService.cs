@@ -48,15 +48,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/refunds/{refundId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Get, rootElement: "refund");
-            return response.Result;
+            return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields);
         }
 
         /// <summary>

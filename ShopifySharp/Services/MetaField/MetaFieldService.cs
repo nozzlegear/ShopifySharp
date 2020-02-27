@@ -145,15 +145,7 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null)
         {
-            var req = PrepareRequest($"metafields/{metafieldId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Get, rootElement: "metafield");
-            return response.Result;
+            return await ExecuteGetAsync<MetaField>($"metafields/{metafieldId}.json", "metafield", fields);
         }
 
         /// <summary>

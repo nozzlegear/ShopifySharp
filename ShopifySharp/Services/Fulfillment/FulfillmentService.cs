@@ -60,15 +60,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Fulfillment"/>.</returns>
         public virtual async Task<Fulfillment> GetAsync(long orderId, long fulfillmentId, string fields = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Get, rootElement: "fulfillment");
-            return response.Result;
+            return await ExecuteGetAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", "fulfillment", fields);
         }
 
         /// <summary>

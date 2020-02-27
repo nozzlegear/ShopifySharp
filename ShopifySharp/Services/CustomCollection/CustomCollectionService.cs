@@ -65,15 +65,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> GetAsync(long customCollectionId, string fields = null)
         {
-            var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var result = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Get, rootElement: "custom_collection");
-            return result.Result;
+            return await ExecuteGetAsync<CustomCollection>($"custom_collections/{customCollectionId}.json", "custom_collection", fields);
         }
 
         /// <summary>

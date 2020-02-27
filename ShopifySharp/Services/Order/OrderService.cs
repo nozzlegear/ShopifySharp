@@ -59,16 +59,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Order"/>.</returns>
         public virtual async Task<Order> GetAsync(long orderId, string fields = null)
         {
-            var req = PrepareRequest($"orders/{orderId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Get, rootElement: "order");
-            
-            return response.Result;
+            return await ExecuteGetAsync<Order>($"orders/{orderId}.json", "order", fields);
         }
 
         /// <summary>

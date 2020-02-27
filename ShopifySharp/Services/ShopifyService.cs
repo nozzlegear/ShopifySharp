@@ -218,7 +218,7 @@ namespace ShopifySharp
             }
         }
 
-        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams)
+        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams, string fields)
         {
             var req = PrepareRequest(path);
 
@@ -227,18 +227,27 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(queryParams.ToQueryParameters());
             }
 
+            if (!string.IsNullOrEmpty(fields))
+            {
+                req.QueryParams.Add("fields", fields);
+            }
+
             return await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt);
         }
 
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields)
+        {
+            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, null, fields)).Result;
+        }
 
         protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null)
         {
-            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams)).Result;
+            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams, null)).Result;
         }
 
         protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter)
         {
-            var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter);
+            var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter, null);
             return ParseLinkHeaderToListResult(result);
         }
 

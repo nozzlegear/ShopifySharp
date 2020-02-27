@@ -49,16 +49,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null)
         {
-            var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");
-
-            return response.Result;
+            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields);
         }
 
         /// <summary>

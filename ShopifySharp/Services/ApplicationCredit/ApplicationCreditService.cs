@@ -42,16 +42,7 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
         public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null)
         {
-            var req = PrepareRequest($"application_credits/{id}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Get, rootElement: "application_credit");
-
-            return response.Result;
+            return await ExecuteGetAsync<ApplicationCredit>($"application_credits/{id}.json", "application_credit", fields);
         }
 
         /// <summary>

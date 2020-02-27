@@ -38,15 +38,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Event"/>.</returns>
         public virtual async Task<Event> GetAsync(long eventId, string fields = null)
         {
-            var req = PrepareRequest($"events/{eventId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Event>(req, HttpMethod.Get, rootElement: "event");
-            return response.Result;
+            return await ExecuteGetAsync<Event>($"events/{eventId}.json", "event", fields);
         }
 
         /// <summary>

@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// Updates an existing <see cref="InventoryItem"/>.
         /// </summary>
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
-        public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem )
+        public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem)
         {
             var req = PrepareRequest( $"inventory_items/{inventoryItemId}.json" );
             var content = new JsonContent( new

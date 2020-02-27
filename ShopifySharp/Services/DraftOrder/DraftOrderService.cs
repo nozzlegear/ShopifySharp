@@ -49,15 +49,7 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<DraftOrder> GetAsync(long id, string fields = null)
         {
-            var req = PrepareRequest($"draft_orders/{id}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Get, rootElement: "draft_order");
-            return response.Result;
+            return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields);
         }
 
         /// <summary>

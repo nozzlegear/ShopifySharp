@@ -31,7 +31,7 @@ namespace ShopifySharp
             {
                 recurring_application_charge = charge
             });
-            var response= await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge");
+            var response = await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge");
 
             return response.Result;
         }
@@ -44,16 +44,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null)
         {
-            var req = PrepareRequest($"recurring_application_charges/{id}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Get, rootElement: "recurring_application_charge");
-
-            return response.Result;
+            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields);
         }
 
         /// <summary>
@@ -61,7 +52,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
         {
-            return await ExecuteGetAsync < IEnumerable < RecurringCharge >>("recurring_application_charges.json", "recurring_application_charges", filter);
+            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter);
         }
 
         /// <summary>

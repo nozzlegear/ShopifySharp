@@ -52,15 +52,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Collect"/>.</returns>
         public virtual async Task<Collect> GetAsync(long collectId, string fields = null)
         {
-            var req = PrepareRequest($"collects/{collectId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Get, rootElement: "collect");
-            return response.Result;
+            return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields);
         }
 
 
