@@ -64,6 +64,7 @@ module Charges =
             let data = dict [ "application_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge")
+            |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)
