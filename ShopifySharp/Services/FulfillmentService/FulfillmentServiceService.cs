@@ -21,15 +21,15 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
-        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null)
+        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null/*TODO create filter class*/)
         {
             var req = PrepareRequest($"fulfillment_services.json");
-            
+
             if (!string.IsNullOrEmpty(scope))
             {
                 req.QueryParams.Add("scope", scope);
             }
-            
+
             var response = await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");
 
             return response.Result;
@@ -43,15 +43,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Fulfillment"/>.</returns>
         public virtual async Task<FulfillmentServiceEntity> GetAsync(long fulfillmentServiceId, string fields = null)
         {
-            var req = PrepareRequest($"fulfillment_services/{fulfillmentServiceId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Get, rootElement: "fulfillment_service");
-            return response.Result;
+            return await ExecuteGetAsync<FulfillmentServiceEntity>($"fulfillment_services/{fulfillmentServiceId}.json", "fulfillment_service", fields);
         }
 
         /// <summary>

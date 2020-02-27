@@ -54,16 +54,7 @@ namespace ShopifySharp
                 subjectType = subjectType + "s";
             }
             
-            var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"{subjectType?.ToLower()}/{subjectId}/events.json", "events", filter);
         }
 
         /// <summary>
@@ -71,16 +62,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Event>> ListAsync(ListFilter<Event> filter)
         {
-            var req = PrepareRequest("events.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"events.json", "events", filter);
         }
 
         /// <summary>
@@ -88,8 +70,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType,
-            EventListFilter filter)
+        public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType, EventListFilter filter)
         {
             return await ListAsync(subjectId, subjectType, (ListFilter<Event>) filter);
         }

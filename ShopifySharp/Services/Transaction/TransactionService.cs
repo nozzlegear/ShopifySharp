@@ -47,7 +47,7 @@ namespace ShopifySharp
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Transaction"/>.</returns>
-        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null, bool? inShopCurrency = null)
+        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null, bool? inShopCurrency = null/*TODO Create filter class*/)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions/{transactionId}.json");
 
