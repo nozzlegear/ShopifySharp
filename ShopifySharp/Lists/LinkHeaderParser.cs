@@ -34,13 +34,20 @@ namespace ShopifySharp.Lists
             if (!Uri.TryCreate(matchedUrl, UriKind.Absolute, out var uri))
                 throw new ShopifyException($"Cannot parse page link url: '{matchedUrl}'");
 
-            string pageInfo = uri.Query.Split('?', '&')
-                                        .FirstOrDefault(p => p.StartsWith("page_info="))
-                                        ?.Substring("page_info=".Length);
+            string GetQueryParam(string name)
+            {
+                return uri.Query.Split('?', '&')
+                                .FirstOrDefault(p => p.StartsWith($"{name}="))
+                                ?.Substring($"{name}=".Length);
+            }
+
+            string pageInfo = GetQueryParam("page_info");
             if (pageInfo == null)
                 throw new ShopifyException($"Cannot parse page link's page info parameter: '{matchedUrl}'");
 
-            return new LinkHeaderParseResult<T>.PagingLink<T>(matchedUrl, pageInfo);
+            int.TryParse(GetQueryParam("limit"), out int limit);
+
+            return new LinkHeaderParseResult<T>.PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null);
         }
     }
 }
