@@ -36,18 +36,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, ListFilter<Fulfillment> filter)
+        public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, ListFilter<Fulfillment> filter = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Fulfillment>>(req, HttpMethod.Get, rootElement: "fulfillments");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Fulfillment>($"orders/{orderId}/fulfillments.json", "fulfillments", filter);
         }
 
         /// <summary>
@@ -57,7 +48,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, FulfillmentListFilter filter)
         {
-            return await ListAsync(orderId, (ListFilter<Fulfillment>) filter);
+            return await ListAsync(orderId, filter.AsListFilter());
         }
 
         /// <summary>
