@@ -34,24 +34,15 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Page>> ListAsync(ListFilter<Page> filter)
         {
-            var req = PrepareRequest("pages.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Page>>(req, HttpMethod.Get, rootElement: "pages");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync<Page>("pages.json", "pages", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
-        public virtual async Task<ListResult<Page>> ListAsync(PageListFilter filter)
+        public virtual async Task<ListResult<Page>> ListAsync(PageListFilter filter = null)
         {
-            return await ListAsync((ListFilter<Page>) filter);
+            return await ListAsync(filter.AsListFilter());
         }
 
         /// <summary>
