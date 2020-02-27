@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter = null)
         {
-            return await ExecuteGetListAsync<CustomCollection>("custom_collections.json", "custom_collections", filter);
+            return await ExecuteGetListAsync("custom_collections.json", "custom_collections", filter);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -65,15 +65,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> GetAsync(long customCollectionId, string fields = null)
         {
-            var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var result = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Get, rootElement: "custom_collection");
-            return result.Result;
+            return await ExecuteGetAsync<CustomCollection>($"custom_collections/{customCollectionId}.json", "custom_collection", fields);
         }
 
         /// <summary>

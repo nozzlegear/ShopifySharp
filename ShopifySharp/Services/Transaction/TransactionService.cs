@@ -37,16 +37,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/transactions.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<List<Transaction>>(req, HttpMethod.Get, rootElement: "transactions");
-            
-            return response.Result;
+            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter);
         }
         
         /// <summary>
@@ -56,7 +47,7 @@ namespace ShopifySharp
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Transaction"/>.</returns>
-        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null, bool? inShopCurrency = null)
+        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null, bool? inShopCurrency = null/*TODO Create filter class*/)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions/{transactionId}.json");
 

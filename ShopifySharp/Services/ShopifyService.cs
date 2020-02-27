@@ -133,10 +133,11 @@ namespace ShopifySharp
         /// </remarks>
         private string ReadLinkHeader(HttpResponseMessage response)
         {
-            var header = response.Headers.FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase));
-            var headerValue = String.Join(", ", header.Value);
+            var linkHeaderValues = response.Headers
+                                 .FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase))
+                                 .Value;
 
-            return headerValue ?? string.Empty;
+            return linkHeaderValues == null ? null : string.Join(", ", linkHeaderValues);
         }
 
         /// <summary>
@@ -192,7 +193,7 @@ namespace ShopifySharp
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
-                var policyResult = await _ExecutionPolicy.Run<T>(baseRequestMessage, async (requestMessage) =>
+                var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
                 {
                     var request = _Client.SendAsync(requestMessage);
 
@@ -203,12 +204,16 @@ namespace ShopifySharp
                         //Check for and throw exception when necessary.
                         CheckResponseExceptions(response, rawResult);
 
-                        // This method may fail when the method was Delete, which is intendend.
-                        // Delete methods should not be parsing the response JSON and should instead
-                        // be using the non-generic ExecuteRequestAsync.
-                        var reader = new JsonTextReader(new StringReader(rawResult));
-                        var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
-                        var result = data.ToObject<T>();
+                        T result = default;
+                        if (rootElement != null)
+                        {
+                            // This method may fail when the method was Delete, which is intendend.
+                            // Delete methods should not be parsing the response JSON and should instead
+                            // be using the non-generic ExecuteRequestAsync.
+                            var reader = new JsonTextReader(new StringReader(rawResult));
+                            var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
+                            result = data.ToObject<T>();
+                        }
 
                         return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
                     }
@@ -218,7 +223,29 @@ namespace ShopifySharp
             }
         }
 
-        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams)
+        private async Task<T> ExecuteWithContentCoreAsync<T>(string path, string resultRootElt, HttpMethod method, JsonContent content)
+        {
+            var req = PrepareRequest(path);
+            var response = await ExecuteRequestAsync<T>(req, method, content, resultRootElt);
+            return response.Result;
+        }
+
+        protected async Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null)
+        {
+            return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Post, jsonContent == null ? null : new JsonContent(jsonContent));
+        }
+
+        protected async Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null)
+        {
+            return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Put, jsonContent == null ? null : new JsonContent(jsonContent));
+        }
+
+        protected async Task ExecuteDeleteAsync(string path)
+        {
+            await ExecuteWithContentCoreAsync<JToken>(path, null, HttpMethod.Delete, null);
+        }
+
+        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams, string fields)
         {
             var req = PrepareRequest(path);
 
@@ -227,18 +254,27 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(queryParams.ToQueryParameters());
             }
 
+            if (!string.IsNullOrEmpty(fields))
+            {
+                req.QueryParams.Add("fields", fields);
+            }
+
             return await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt);
         }
 
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields)
+        {
+            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, null, fields)).Result;
+        }
 
         protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null)
         {
-            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams)).Result;
+            return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams, null)).Result;
         }
 
         protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter)
         {
-            var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter);
+            var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter, null);
             return ParseLinkHeaderToListResult(result);
         }
 

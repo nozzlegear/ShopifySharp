@@ -25,18 +25,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risks belong to.</param>
         /// <param name="filter">Options for filtering the request.</param>
-        public virtual async Task<ListResult<OrderRisk>> ListAsync(long orderId, ListFilter<OrderRisk> filter)
+        public virtual async Task<ListResult<OrderRisk>> ListAsync(long orderId, ListFilter<OrderRisk> filter = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/risks.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response= await ExecuteRequestAsync<List<OrderRisk>>(req, HttpMethod.Get, rootElement: "risks");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"orders/{orderId}/risks.json", "risks", filter);
         }
         
         /// <summary>
@@ -46,10 +37,7 @@ namespace ShopifySharp
         /// <param name="riskId">The id of the risk to retrieve.</param>
         public virtual async Task<OrderRisk> GetAsync(long orderId, long riskId)
         {
-            var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
-            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Get, rootElement: "risk");
-
-            return response.Result;
+            return await ExecuteGetAsync<OrderRisk>($"orders/{orderId}/risks/{riskId}.json", "risk");
         }
         
         /// <summary>

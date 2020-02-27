@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -51,16 +51,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Product"/>.</returns>
         public virtual async Task<Product> GetAsync(long productId, string fields = null)
         {
-            var req = PrepareRequest($"products/{productId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Get, rootElement: "product");
-
-            return response.Result;
+            return await ExecuteGetAsync<Product>($"products/{productId}.json", "product", fields);
         }
 
         /// <summary>

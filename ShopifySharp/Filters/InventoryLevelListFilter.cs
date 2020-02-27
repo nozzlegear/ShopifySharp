@@ -7,7 +7,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// You **must** include InventoryItemIds, LocationIds, or both as filter parameters.
     /// </summary>
-    public class InventoryLevelFilter : ListFilter<InventoryLevel>
+    public class InventoryLevelListFilter : ListFilter<InventoryLevel>
     {
         [JsonProperty("inventory_item_ids")]
         public IEnumerable<long> InventoryItemIds { get; set; }

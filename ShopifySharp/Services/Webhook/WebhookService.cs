@@ -28,16 +28,7 @@ namespace ShopifySharp
         /// <returns>The count of all webhooks for the shop.</returns>
         public virtual async Task<int> CountAsync(WebhookCountFilter filter = null)
         {
-            var req = PrepareRequest("webhooks/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter);
         }
 
         /// <summary>
@@ -46,25 +37,16 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Webhook>> ListAsync(ListFilter<Webhook> filter)
         {
-            var req = PrepareRequest("webhooks.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var result = await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
-
-            return ParseLinkHeaderToListResult(result);
+            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's webhooks.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter)
+        public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -75,16 +57,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");
-
-            return response.Result;
+            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields);
         }
 
         /// <summary>
@@ -94,14 +67,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> CreateAsync(Webhook webhook)
         {
-            var req = PrepareRequest("webhooks.json");
-            var content = new JsonContent(new
-            {
-                webhook = webhook
-            });
-            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook");
-
-            return response.Result;
+            return await ExecutePostAsync<Webhook>("webhooks.json", "webhook", new { webhook = webhook });
         }
 
         /// <summary>
@@ -112,14 +78,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> UpdateAsync(long webhookId, Webhook webhook)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-            var content = new JsonContent(new
-            {
-                webhook = webhook
-            });
-            var response = await ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook");
-
-            return response.Result;
+            return await ExecutePutAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", new { webhook = webhook });
         }
 
         /// <summary>
@@ -128,9 +87,7 @@ namespace ShopifySharp
         /// <param name="webhookId">The order object's Id.</param>
         public virtual async Task DeleteAsync(long webhookId)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteDeleteAsync($"webhooks/{webhookId}.json");
         }
     }
 }

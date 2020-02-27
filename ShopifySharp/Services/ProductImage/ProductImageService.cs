@@ -35,18 +35,9 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter)        
+        public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter = null)
         {
-            var req = PrepareRequest($"products/{productId}/images.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter);
         }
 
         /// <summary>
@@ -58,16 +49,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null)
         {
-            var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");
-
-            return response.Result;
+            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields);
         }
 
         /// <summary>

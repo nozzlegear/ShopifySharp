@@ -58,16 +58,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null)
         {
-            var req = PrepareRequest("application_charges.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Charge>>(req, HttpMethod.Get, rootElement: "application_charges");
-
-            return response.Result;
+            return await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter);
         }
 
         /// <summary>

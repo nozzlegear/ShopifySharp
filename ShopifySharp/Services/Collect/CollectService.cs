@@ -25,32 +25,23 @@ namespace ShopifySharp
 
         public virtual async Task<int> CountAsync(CollectCountFilter filter = null)
         {
-            var req = PrepareRequest("collects/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-            
-            return response.Result;
+            return await ExecuteGetAsync<int>("collects/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter = null)
+        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter)
         {
-            return await ExecuteGetListAsync<Collect>("collects.json", "collects", filter);
+            return await ExecuteGetListAsync("collects.json", "collects", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        public virtual async Task<ListResult<Collect>> ListAsync(CollectListFilter filter)
+        public virtual async Task<ListResult<Collect>> ListAsync(CollectListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -61,15 +52,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Collect"/>.</returns>
         public virtual async Task<Collect> GetAsync(long collectId, string fields = null)
         {
-            var req = PrepareRequest($"collects/{collectId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Get, rootElement: "collect");
-            return response.Result;
+            return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields);
         }
 
 

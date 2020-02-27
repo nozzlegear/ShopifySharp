@@ -35,24 +35,15 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ScriptTag>> ListAsync(ListFilter<ScriptTag> filter)
         {
-            var req = PrepareRequest("script_tags.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<ScriptTag>>(req, HttpMethod.Get, rootElement: "script_tags");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("script_tags.json", "script_tags", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's script tags.
         /// </summary>
-        public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter)
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter = null)
         {
-            return await ListAsync((ListFilter<ScriptTag>) filter);
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

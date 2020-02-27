@@ -24,10 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<AccessScope>> ListAsync()
         {
-            var req = PrepareRequest("oauth/access_scopes.json");
-            var response = await ExecuteRequestAsync<List<AccessScope>>(req, HttpMethod.Get, rootElement: "access_scopes");
-
-            return response.Result;
+            return await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes");
         }
     }
 }

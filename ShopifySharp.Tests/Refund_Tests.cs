@@ -43,10 +43,10 @@ namespace ShopifySharp.Tests
 
             //ListForOrderAsync
             var getRefundsForOrder = await Fixture.Service.ListForOrderAsync(order.Id.Value);
-            Assert.True(getRefundsForOrder.First().Id.HasValue, "No refunds received!"); //Likely the creation of a refund or the retrieval of refunds weren't successful"
+            Assert.True(getRefundsForOrder.Items.First().Id.HasValue, "No refunds received!"); //Likely the creation of a refund or the retrieval of refunds weren't successful"
 
             //GetAsync
-            var getSpecificRefund = await Fixture.Service.GetAsync(order.Id.Value, getRefundsForOrder.First().Id.Value);
+            var getSpecificRefund = await Fixture.Service.GetAsync(order.Id.Value, getRefundsForOrder.Items.First().Id.Value);
             Assert.True(getSpecificRefund.Id.HasValue, "No refund received!"); //Either refund wasn't successful or Refund Id may be incorrect."
         }
 

@@ -24,20 +24,14 @@ namespace ShopifySharp
         /// Gets a list of inventory items.
         /// </summary>
         /// <param name="ids">Show only inventory items specified by a list of IDs. Maximum: 100.</param>
-        public virtual async Task<ListResult<InventoryItem>> ListAsync(IEnumerable<long> ids, ListFilter<InventoryItem> filter)
+        public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter)
         {
-            var req = PrepareRequest($"inventory_items.json");
+            return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter);
+        }
 
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            req.QueryParams.Add("ids", string.Join(",", ids));
-            
-            var response = await ExecuteRequestAsync<List<InventoryItem>>(req, HttpMethod.Get, rootElement: "inventory_items");
-
-            return ParseLinkHeaderToListResult(response);
+        public virtual async Task<ListResult<InventoryItem>> ListAsync(InventoryItemListFilter filter)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -46,10 +40,7 @@ namespace ShopifySharp
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
         public virtual async Task<InventoryItem> GetAsync(long inventoryItemId)
         {
-            var req = PrepareRequest($"inventory_items/{inventoryItemId}.json");
-
-            var response = await ExecuteRequestAsync<InventoryItem>(req, HttpMethod.Get, rootElement: "inventory_item");
-            return response.Result;
+            return await ExecuteGetAsync<InventoryItem>($"inventory_items/{inventoryItemId}.json", "inventory_item");
         }
 
 
@@ -57,7 +48,7 @@ namespace ShopifySharp
         /// Updates an existing <see cref="InventoryItem"/>.
         /// </summary>
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
-        public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem )
+        public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem)
         {
             var req = PrepareRequest( $"inventory_items/{inventoryItemId}.json" );
             var content = new JsonContent( new

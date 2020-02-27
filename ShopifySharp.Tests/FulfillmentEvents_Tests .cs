@@ -150,7 +150,8 @@ namespace ShopifySharp.Tests
                 LineItems = CreatedOrders.First().LineItems
             };
 
-            fulfillment = await FulfillmentService.CreateAsync(orderId, fulfillment, false);
+            fulfillment.NotifyCustomer = false;
+            fulfillment = await FulfillmentService.CreateAsync(orderId, fulfillment);
 
             CreatedFulfillments.Add(fulfillment);
 

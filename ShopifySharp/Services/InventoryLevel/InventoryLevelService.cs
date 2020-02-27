@@ -25,24 +25,15 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter)
         {
-            var req = PrepareRequest($"inventory_levels.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter);
         }
         
         /// <summary>
         /// Gets a list of inventory items
         /// </summary>
-        public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelFilter filter)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelListFilter filter)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

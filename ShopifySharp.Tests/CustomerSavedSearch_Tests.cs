@@ -93,28 +93,6 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
-        public async Task Searches_For_CustomerSavedSearch()
-        {
-            // It takes anywhere between 3 seconds to 30 seconds for Shopify to index new CustomerSavedSearch for searches.
-            // Rather than putting a 20 second Thread.Sleep in the test, we'll just assume it's successful if the
-            // test doesn't throw an exception.
-            bool threw = false;
-
-            try
-            {
-                var search = await Fixture.Service.SearchAsync("-notes");
-            }
-            catch (ShopifyException ex)
-            {
-                Console.WriteLine($"{nameof(Searches_For_CustomerSavedSearch)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
-        }
-
-        [Fact]
         public async Task Can_Be_Partially_Updated()
         {
             string newQuery = "notes=yes";
@@ -139,7 +117,7 @@ namespace ShopifySharp.Tests
 
             var savedSearch = await Fixture.Create();
 
-            var customersInSearch = await Fixture.Service.GetCustomersFromSavedSearch(savedSearch.Id.Value);
+            var customersInSearch = await Fixture.Service.GetCustomersFromSavedSearchAsync(savedSearch.Id.Value);
             var actualCustomer = customersInSearch.Single();
 
             Assert.Equal(expectedCustomer.Id, actualCustomer.Id);

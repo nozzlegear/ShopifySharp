@@ -33,25 +33,16 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<GiftCard>> ListAsync(ListFilter<GiftCard> filter)
         {
-            var req = PrepareRequest("gift_cards.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("gift_cards.json", "gift_cards", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter)
+        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -61,10 +52,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="GiftCard"/>.</returns>
         public virtual async Task<GiftCard> GetAsync(long giftCardId)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}.json");
-
-            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Get, rootElement: "gift_card");
-            return response.Result;
+            return await ExecuteGetAsync<GiftCard>($"gift_cards/{giftCardId}.json", "gift_card");
         }
 
         /// <summary>

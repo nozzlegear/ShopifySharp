@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Customer>> ListAsync(CustomerListFilter filter)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -52,15 +52,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> GetAsync(long customerId, string fields = null)
         {
-            var req = PrepareRequest($"customers/{customerId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Get, rootElement: "customer");
-            return response.Result;
+            return await ExecuteGetAsync<Customer>($"customers/{customerId}.json", "customer", fields);
         }
 
         /// <summary>
@@ -69,16 +61,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter)
         {
-            var req = PrepareRequest("customers/search.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Customer>>(req, HttpMethod.Get, rootElement: "customers");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("customers/search.json", "customers", filter);
         }
 
         /// <summary>
@@ -87,7 +70,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
         {
-            return await SearchAsync(filter.AsListFilter());
+            return await SearchAsync(filter?.AsListFilter());
         }
 
         /// <summary>

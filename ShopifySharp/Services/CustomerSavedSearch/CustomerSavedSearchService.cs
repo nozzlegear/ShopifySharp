@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null)
         {
-            return await ExecuteGetListAsync<CustomerSavedSearch>($"{RootResource}.json", RootResource, filter);
+            return await ExecuteGetListAsync($"{RootResource}.json", RootResource, filter);
         }
 
         /// <summary>

@@ -35,24 +35,15 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Redirect>> ListAsync(ListFilter<Redirect> filter)
         {
-            var req = PrepareRequest("redirects.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Redirect>>(req, HttpMethod.Get, rootElement: "redirects");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("redirects.json", "redirects", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
-        public virtual async Task<ListResult<Redirect>> ListAsync(RedirectListFilter filter)
+        public virtual async Task<ListResult<Redirect>> ListAsync(RedirectListFilter filter = null)
         {
-            return await ListAsync((ListFilter<Redirect>) filter);
+            return await ListAsync(filter?.AsListFilter());
         }
         
         /// <summary>

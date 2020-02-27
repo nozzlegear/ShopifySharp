@@ -26,16 +26,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
         {
-            var req = PrepareRequest("smart_collections/count.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
-
-            return response.Result;
+            return await ExecuteGetAsync<int>("smart_collections/count.json", "count", filter);
         }
 
         /// <summary>
@@ -43,24 +34,15 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<SmartCollection>> ListAsync(ListFilter<SmartCollection> filter)
         {
-            var req = PrepareRequest($"smart_collections.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync($"smart_collections.json", "smart_collections", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 smart collections.
         /// </summary>
-        public virtual async Task<ListResult<SmartCollection>> ListAsync(SmartCollectionListFilter filter)
+        public virtual async Task<ListResult<SmartCollection>> ListAsync(SmartCollectionListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -69,10 +51,7 @@ namespace ShopifySharp
         /// <param name="collectionId">The id of the smart collection to retrieve.</param>
         public virtual async Task<SmartCollection> GetAsync(long collectionId)
         {
-            var req = PrepareRequest($"smart_collections/{collectionId}.json");
-            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Get, rootElement: "smart_collection");
-
-            return response.Result;
+            return await ExecuteGetAsync<SmartCollection>($"smart_collections/{collectionId}.json", "smart_collection");
         }
 
         /// <summary>

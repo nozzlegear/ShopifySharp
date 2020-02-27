@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter = null)
         {
-            return await ExecuteGetListAsync<Blog>("blogs.json", "blogs", filter);
+            return await ExecuteGetListAsync("blogs.json", "blogs", filter);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Blog>> ListAsync(BlogListFilter filter)
         {
-            return await ListAsync((ListFilter<Blog>) filter);
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -42,10 +42,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<int> CountAsync()
         {
-            var request = PrepareRequest("blogs/count.json");
-
-            var response = await ExecuteRequestAsync<int>(request, HttpMethod.Get, rootElement: "count");
-            return response.Result;
+            return await ExecuteGetAsync<int>("blogs/count.json", "count");
         }
 
         /// <summary>

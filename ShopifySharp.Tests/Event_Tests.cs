@@ -29,7 +29,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -44,17 +44,17 @@ namespace ShopifySharp.Tests
             var list = await Fixture.Service.ListAsync(orderId, subject);
 
             Assert.NotNull(list);
-            Assert.All(list, e => Assert.Equal(subject, e.SubjectType));
+            Assert.All(list.Items, e => Assert.Equal(subject, e.SubjectType));
         }
 
         [Fact]
         public async Task Gets_Events()
         {
-            var list = await Fixture.Service.ListAsync(options: new EventListFilter()
+            var list = await Fixture.Service.ListAsync(filter: new EventListFilter()
             {
                 Limit = 1
             });
-            var evt = await Fixture.Service.GetAsync(list.First().Id.Value);
+            var evt = await Fixture.Service.GetAsync(list.Items.First().Id.Value);
 
             Assert.NotNull(evt);
             Assert.NotNull(evt.Author);

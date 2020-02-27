@@ -24,24 +24,15 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter)
         {
-            var req = PrepareRequest("price_rules.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
-
-            return ParseLinkHeaderToListResult(response);
+            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter)
+        public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null)
         {
-            return await ListAsync((ListFilter<PriceRule>) filter);
+            return await ListAsync(filter?.AsListFilter());
         }
         
         // /// <summary>

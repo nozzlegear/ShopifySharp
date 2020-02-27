@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter = null)
         {
-            return await ExecuteGetListAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter);
+            return await ExecuteGetListAsync($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter);
         }
 
         /// <summary>
@@ -34,15 +34,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
         public virtual async Task<PriceRuleDiscountCode> GetAsync(long priceRuleId, long discountId, string fields = null)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Get, rootElement: "discount_code");
-            return response.Result;
+            return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields);
         }
 
         /// <summary>
