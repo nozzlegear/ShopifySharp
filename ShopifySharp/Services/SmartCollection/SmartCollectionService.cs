@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<SmartCollection>> ListAsync(SmartCollectionListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

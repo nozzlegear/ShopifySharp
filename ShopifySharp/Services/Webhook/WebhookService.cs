@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

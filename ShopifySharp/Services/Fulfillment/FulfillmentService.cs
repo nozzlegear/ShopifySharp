@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, FulfillmentListFilter filter)
         {
-            return await ListAsync(orderId, filter.AsListFilter());
+            return await ListAsync(orderId, filter?.AsListFilter());
         }
 
         /// <summary>

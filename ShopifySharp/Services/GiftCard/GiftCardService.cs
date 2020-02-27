@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

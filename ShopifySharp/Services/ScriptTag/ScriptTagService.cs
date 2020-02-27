@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

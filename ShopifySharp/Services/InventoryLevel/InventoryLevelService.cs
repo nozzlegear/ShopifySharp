@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelListFilter filter)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

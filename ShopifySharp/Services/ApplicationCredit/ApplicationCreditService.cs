@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ApplicationCreditListFilter filter)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

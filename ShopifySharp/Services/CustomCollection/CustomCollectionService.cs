@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>

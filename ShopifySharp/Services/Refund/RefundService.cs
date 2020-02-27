@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// <param name="orderId">The id of the order to list orders for.</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null)
         {
-            return await ListForOrderAsync(orderId, filter.AsListFilter());
+            return await ListForOrderAsync(orderId, filter?.AsListFilter());
         }
         
 

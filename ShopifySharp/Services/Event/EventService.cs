@@ -80,7 +80,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Event>> ListAsync(EventListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
     }
 }

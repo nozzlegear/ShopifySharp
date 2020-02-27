@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null)
         {
-            return await ListAsync(filter.AsListFilter());
+            return await ListAsync(filter?.AsListFilter());
         }
         
         // /// <summary>
