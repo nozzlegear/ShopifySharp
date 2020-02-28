@@ -125,6 +125,8 @@ namespace ShopifySharp.Tests
             VariantTest.ProductId = prod.Id.Value;
             var variant = prod.Variants.First();
             InventoryItemId = variant.InventoryItemId.Value;
+            // Must set variant.InventoryQuantity to null as it is now read-only. Sending the quantity accidentally will result in an exception.
+            variant.InventoryQuantity = null;
             variant.SKU = "TestSKU";//To change fulfillment, SKU is required
             variant.InventoryManagement = "Shopify";//To set inventory, InventoryManagement must be Shopify
 
