@@ -87,6 +87,8 @@ namespace ShopifySharp.Tests
 
             created.Price = newPrice;
             created.Id = null;
+            // Must set variant.InventoryQuantity to null as it is now read-only. Sending the quantity accidentally will result in an exception.
+            created.InventoryQuantity = null;
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
 
