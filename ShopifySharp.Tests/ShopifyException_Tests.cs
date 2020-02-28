@@ -34,7 +34,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public void Throws_On_OAuth_Code_Used()
         {
-            string rawBody = "{\"error\":\"invalid_request\",\"error_description\":\"The authorization code was not found or was already used\"}";
+            var rawBody = "{\"error\":\"invalid_request\",\"error_description\":\"The authorization code was not found or was already used\"}";
             var res = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.NotAcceptable,
@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(ex.RawBody);
             Assert.Equal(1, ex.Errors.Count);
             Assert.Equal("invalid_request", ex.Errors.First().Key);
-            Assert.Equal(1, ex.Errors.First().Value.Count());
+            Assert.Single(ex.Errors.First().Value);
         }
 
         [Fact]
@@ -101,8 +101,8 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(ex);
             Assert.Equal(1, ex.Errors.Count);
-            Assert.Equal("Error", ex.Errors.First().Key);
-            Assert.Equal(1, ex.Errors.First().Value.Count());
+            Assert.Equal("error", ex.Errors.First().Key);
+            Assert.Single(ex.Errors.First().Value);
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(ex);
             Assert.True(ex.Errors.Count > 0);
-            Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
+            Assert.Contains(ex.Errors, error => error.Key.Equals("order"));
             Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
             Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
             Assert.True(ex.Errors.All(err => err.Value.Count() > 0));
@@ -194,7 +194,7 @@ namespace ShopifySharp.Tests
                 while (ex == null)
                 {
                     // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
-                    using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new { order = order })))
+                    using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new {order })))
                     {
                         var req = client.SendAsync(msg);
                         response = await req;
@@ -221,7 +221,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(ex);
             Assert.True(ex.Errors.Count > 0);
             Assert.NotNull(ex.RequestId);
-            Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
+            Assert.Contains(ex.Errors, error => error.Key.Equals("order"));
             Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
             Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
             Assert.True(ex.Errors.All(err => err.Value.Count() > 0));
@@ -307,7 +307,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(ex.RawBody);
             Assert.NotNull(ex.RequestId);
             Assert.True(ex.Errors.Count > 0);
-            Assert.Equal("Error", ex.Errors.First().Key);
+            Assert.Equal("error", ex.Errors.First().Key);
             Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
         }
 
@@ -333,12 +333,12 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.IsType(typeof(ShopifyRateLimitException), ex);
+            Assert.IsType<ShopifyRateLimitException>(ex);
             Assert.Equal(429, (int)ex.HttpStatusCode);
             Assert.NotNull(ex.RawBody);
             Assert.NotNull(ex.RequestId);
             Assert.True(ex.Errors.Count > 0);
-            Assert.Equal("Error", ex.Errors.First().Key);
+            Assert.Equal("error", ex.Errors.First().Key);
             Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
         }
     }
