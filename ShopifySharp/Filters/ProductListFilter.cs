@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
@@ -79,5 +80,23 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("published_at_max")]
         public DateTimeOffset? PublishedAtMax { get; set; }
+        
+        /// <summary>
+        /// Restricts results to those with the given published status. Known values: published, unpublished, any. Default: any.
+        /// </summary>
+        [JsonProperty("published_status")]
+        public string PublishedStatus { get; set; }
+        
+        /// <summary>
+        /// Return presentment prices in only certain currencies. Each entry must be an ISO 4217 valid currency code.
+        /// </summary>
+        [JsonProperty("presentment_currencies")]
+        public IEnumerable<string> PresentmentCurrencies { get; set; }
+        
+        /// <summary>
+        /// Retrieve only those specified by a comma-separated list of order IDs.
+        /// </summary>
+        [JsonProperty("ids")]
+        public IEnumerable<long> Ids { get; set; }
     }
 }
