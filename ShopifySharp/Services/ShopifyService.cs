@@ -436,9 +436,9 @@ namespace ShopifySharp
                     return false;
                 }
             }
-            catch (Exception e)
+            catch (JsonReaderException)
             {
-                errors.Add(e.Message, new List<string>() { json });
+                return false;
             }
 
             if (!errors.Any())
