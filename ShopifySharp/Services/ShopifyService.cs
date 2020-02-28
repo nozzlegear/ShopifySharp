@@ -407,7 +407,7 @@ namespace ShopifySharp
                     {
                         //errors is type #1
 
-                        errors.Add("error", new List<string>() { parsedErrors.Value<string>() });
+                        errors.Add("errors", new List<string>() { parsedErrors.Value<string>() });
                     }
                     else
                     {
