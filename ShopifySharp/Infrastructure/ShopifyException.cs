@@ -16,7 +16,7 @@ namespace ShopifySharp
         /// <remarks>
         /// Dictionary is always initialized to ensure null reference errors won't be thrown when trying to check error messages.
         /// </remarks>
-        public Dictionary<string, IEnumerable<string>> Errors { get; set; } = new Dictionary<string, IEnumerable<string>>();
+        public IDictionary<string, IEnumerable<string>> Errors { get; set; } = new Dictionary<string, IEnumerable<string>>();
 
         /// <summary>
         /// The raw JSON string returned by Shopify.
@@ -27,7 +27,7 @@ namespace ShopifySharp
 
         public ShopifyException(string message) : base(message) { }
 
-        public ShopifyException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string rawBody, string requestId) : base(message)
+        public ShopifyException(HttpStatusCode httpStatusCode, IDictionary<string, IEnumerable<string>> errors, string message, string rawBody, string requestId) : base(message)
         {
             HttpStatusCode = httpStatusCode;
             Errors = errors;

@@ -282,9 +282,10 @@ namespace ShopifySharp
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
+        /// <<param name="rawResponse">The response body returned by Shopify.</param>
         public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
-            int statusCode = (int)response.StatusCode;
+            var statusCode = (int)response.StatusCode;
 
             // No error if response was between 200 and 300.
             if (statusCode >= 200 && statusCode < 300)
@@ -293,14 +294,14 @@ namespace ShopifySharp
             }
 
             var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
-            string requestId = requestIdHeader.Value?.FirstOrDefault();
+            var requestId = requestIdHeader.Value?.FirstOrDefault();
             var code = response.StatusCode;
 
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if ((int)code == 429 /* Too many requests */)
             {
-                string listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
-                string rateLimitMessage = $"Error: {listMessage}";
+                var listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
+                var rateLimitMessage = $"Error: {listMessage}";
 
                 // Shopify used to return JSON for rate limit exceptions, but then made an unannounced change and started returing HTML. 
                 // This dictionary is an attempt at preserving what was previously returned.
@@ -317,54 +318,51 @@ namespace ShopifySharp
 
             if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
             {
-                var errors = ParseErrorJson(rawResponse);
-                string message = defaultMessage;
+                IDictionary<string, IEnumerable<string>> errors;
+                var message = defaultMessage;
 
-                if (errors == null)
+                if (TryParseErrorJson(rawResponse, out var parsedErrors))
                 {
-                    errors = new Dictionary<string, IEnumerable<string>>()
-                        {
-                            {
-                                $"{(int)code} {response.ReasonPhrase}",
-                                new string[] { message }
-                            },
-                        };
+                    var firstError = parsedErrors.First();
+                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                    errors = parsedErrors;
                 }
                 else
                 {
-                    var firstError = errors.First();
-
-                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                    errors = new Dictionary<string, IEnumerable<string>>
+                    {
+                        { $"{(int)code} {response.ReasonPhrase}", new [] { message } },
+                    };
                 }
 
                 throw new ShopifyException(code, errors, message, rawResponse, requestId);
             }
+            
+            var customErrors = new Dictionary<string, IEnumerable<string>>
             {
-                var errors = new Dictionary<string, IEnumerable<string>>
                 {
-                    {
-                        $"{(int)code} {response.ReasonPhrase}",
-                        new string[] { defaultMessage }
-                    },
-                    {
-                        "NoJsonError",
-                        new string[] { "Response did not return JSON, unable to parse error message (if any)." }
-                    }
-                };
+                    $"{(int)code} {response.ReasonPhrase}",
+                    new [] { defaultMessage }
+                },
+                {
+                    "NoJsonError",
+                    new [] { "Response did not return JSON, unable to parse error message (if any)." }
+                }
+            };
 
-                throw new ShopifyException(code, errors, defaultMessage, rawResponse, requestId);
-            }
+            throw new ShopifyException(code, customErrors, defaultMessage, rawResponse, requestId);
         }
 
         /// <summary>
-        /// Parses a JSON string for Shopify API errors.
+        /// Attempts to parse a JSON string for Shopify API errors. Returns false if the string cannot be parsed or contains no errors. 
         /// </summary>
-        /// <returns>Returns null if the JSON could not be parsed into an error.</returns>
-        private static Dictionary<string, IEnumerable<string>> ParseErrorJson(string json)
+        public static bool TryParseErrorJson(string json, out IDictionary<string, IEnumerable<string>> dict)
         {
+            dict = null;
+            
             if (string.IsNullOrEmpty(json))
             {
-                return null;
+                return false;
             }
 
             var errors = new Dictionary<string, IEnumerable<string>>();
@@ -373,18 +371,32 @@ namespace ShopifySharp
             {
                 var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
 
+                if (parsed.Type != JTokenType.Object)
+                {
+                    return false;
+                }
+
                 // Errors can be any of the following:
-                // 1. { errors: "some error message"}
-                // 2. { errors: { "order" : "some error message" } }
-                // 3. { errors: { "order" : [ "some error message" ] } }
-                // 4. { error: "invalid_request", error_description:"The authorization code was not found or was already used" }
+                // 1. { "errors": "some error message"}
+                // 2. { "errors": { "order" : "some error message" } }
+                // 3. { "errors": { "order" : [ "some error message" ] } }
+                // 4. { "error": "invalid_request", error_description:"The authorization code was not found or was already used" }
+                // 5. { "error": "location_id must be specified when creating fulfillments." }
 
                 if (parsed.Any(p => p.Path == "error") && parsed.Any(p => p.Path == "error_description"))
                 {
                     // Error is type #4
                     var description = parsed["error_description"];
+                    var errorType = parsed["error"];
 
-                    errors.Add("invalid_request", new List<string>() { description.Value<string>() });
+                    errors.Add(errorType.Value<string>(), new List<string>() { description.Value<string>() });
+                }
+                else if (parsed.Any(p => p.Path == "error"))
+                {
+                    // Error is type #5
+                    var description = parsed["error"];
+                    
+                    errors.Add("error", new List<string> { description.Value<string>() });
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
                 {
@@ -395,7 +407,7 @@ namespace ShopifySharp
                     {
                         //errors is type #1
 
-                        errors.Add("Error", new List<string>() { parsedErrors.Value<string>() });
+                        errors.Add("error", new List<string>() { parsedErrors.Value<string>() });
                     }
                     else
                     {
@@ -421,7 +433,7 @@ namespace ShopifySharp
                 }
                 else
                 {
-                    return null;
+                    return false;
                 }
             }
             catch (Exception e)
@@ -429,13 +441,14 @@ namespace ShopifySharp
                 errors.Add(e.Message, new List<string>() { json });
             }
 
-            // KVPs are structs and can never be null. Instead, check if the first error equals the default kvp value.
-            if (errors.FirstOrDefault().Equals(default(KeyValuePair<string, IEnumerable<string>>)))
+            if (!errors.Any())
             {
-                return null;
+                return false;
             }
 
-            return errors;
+            dict = errors;
+            
+            return true;
         }
 
         /// <summary>
