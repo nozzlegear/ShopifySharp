@@ -8,7 +8,7 @@ namespace ShopifySharp.Tests
     /// </summary>
     public static class Utils
     {
-        private static Dictionary<string, string> dotEnvFile;
+        private static IDictionary<string, string> _dotEnvFile;
 
         static Utils()
         {
@@ -23,20 +23,18 @@ namespace ShopifySharp.Tests
         {
             key = key.ToUpper();
 
-            string dir = System.IO.Directory.GetCurrentDirectory();
-
-            if (dotEnvFile == null && System.IO.File.Exists("./env.yml"))
+            if (_dotEnvFile == null && System.IO.File.Exists("./env.yml"))
             {
-                dotEnvFile = DotEnvFile.DotEnvFile.LoadFile("./env.yml");
+                _dotEnvFile = DotEnvFile.LoadFile("./env.yml", true);
             }
 
-            if (dotEnvFile != null && dotEnvFile.ContainsKey(key))
+            if (_dotEnvFile != null && _dotEnvFile.ContainsKey(key))
             {
-                return dotEnvFile[key];
+                return _dotEnvFile[key];
             }
 
-            string prefix = "SHOPIFYSHARP_";
-            string value = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(prefix + key);
+            var prefix = "SHOPIFYSHARP_";
+            var value = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(prefix + key);
 
             if (string.IsNullOrEmpty(value))
             {
