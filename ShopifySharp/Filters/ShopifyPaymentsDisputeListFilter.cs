@@ -6,6 +6,12 @@ namespace ShopifySharp.Filters
     public class ShopifyPaymentsDisputeListFilter : ListFilter<ShopifyPaymentsDispute>
     {
         /// <summary>
+        /// Restrict results to after the specified ID. 
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+
+        /// <summary>
         /// Return only disputes before the specified ID.
         /// </summary>
         [JsonProperty("last_id")]

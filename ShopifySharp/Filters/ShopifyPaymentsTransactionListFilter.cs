@@ -5,6 +5,12 @@ namespace ShopifySharp.Filters
     public class ShopifyPaymentsTransactionListFilter : ListFilter<ShopifyPaymentsTransaction>
     {
         /// <summary>
+        /// Restrict results to after the specified ID. 
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+
+        /// <summary>
         /// Filter response to transactions exclusively before the specified ID
         /// </summary>
         [JsonProperty("last_id")]
