@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace ShopifySharp
@@ -14,9 +15,9 @@ namespace ShopifySharp
         public string RequestId { get; set; }
 
         /// <remarks>
-        /// Dictionary is always initialized to ensure null reference errors won't be thrown when trying to check error messages.
+        /// List is always initialized to ensure null reference errors won't be thrown when trying to check error messages.
         /// </remarks>
-        public IDictionary<string, IEnumerable<string>> Errors { get; set; } = new Dictionary<string, IEnumerable<string>>();
+        public IEnumerable<string> Errors { get; set; } = Enumerable.Empty<string>();
 
         /// <summary>
         /// The raw JSON string returned by Shopify.
@@ -27,10 +28,10 @@ namespace ShopifySharp
 
         public ShopifyException(string message) : base(message) { }
 
-        public ShopifyException(HttpStatusCode httpStatusCode, IDictionary<string, IEnumerable<string>> errors, string message, string rawBody, string requestId) : base(message)
+        public ShopifyException(HttpStatusCode httpStatusCode, IEnumerable<string> errors, string message, string rawBody, string requestId) : base(message)
         {
             HttpStatusCode = httpStatusCode;
-            Errors = errors;
+            Errors = (errors ?? Enumerable.Empty<string>()).ToArray();
             RawBody = rawBody;
             RequestId = requestId;
         }

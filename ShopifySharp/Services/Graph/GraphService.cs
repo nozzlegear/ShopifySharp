@@ -83,12 +83,7 @@ namespace ShopifySharp
 
                 var message = response["errors"].FirstOrDefault()["message"].ToString();
 
-                var errors = new Dictionary<string, IEnumerable<string>>()
-                {
-                    {"Error", errorList}
-                };
-
-                throw new ShopifyException(HttpStatusCode.OK, errors, message, JsonConvert.SerializeObject(response), "");
+                throw new ShopifyException(HttpStatusCode.OK, errorList, message, JsonConvert.SerializeObject(response), "");
             }
         }
     }

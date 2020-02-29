@@ -296,76 +296,82 @@ namespace ShopifySharp
             var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
             var requestId = requestIdHeader.Value?.FirstOrDefault();
             var code = response.StatusCode;
+            var statusMessage = $"{(int)code} {response.ReasonPhrase}";
 
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if ((int)code == 429 /* Too many requests */)
             {
-                var listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
-                var rateLimitMessage = $"Error: {listMessage}";
+                var baseMessage = "rate_limit: Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
+                var rateLimitMessage = $"({statusMessage}) {baseMessage}";
+                var errors = new List<string> { baseMessage };
 
-                // Shopify used to return JSON for rate limit exceptions, but then made an unannounced change and started returing HTML. 
-                // This dictionary is an attempt at preserving what was previously returned.
-                var rateLimitErrors = new Dictionary<string, IEnumerable<string>>()
-                {
-                    {"Error", new List<string>() {listMessage}}
-                };
-
-                throw new ShopifyRateLimitException(code, rateLimitErrors, rateLimitMessage, rawResponse, requestId);
+                throw new ShopifyRateLimitException(code, errors, rateLimitMessage, rawResponse, requestId);
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
-            var defaultMessage = $"Response did not indicate success. Status: {(int)code} {response.ReasonPhrase}.";
 
             if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
             {
-                IDictionary<string, IEnumerable<string>> errors;
-                var message = defaultMessage;
+                IEnumerable<string> errors;
+                string exceptionMessage;
 
                 if (TryParseErrorJson(rawResponse, out var parsedErrors))
                 {
                     var firstError = parsedErrors.First();
-                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                    var totalErrors = parsedErrors.Count();
+                    var baseErrorMessage = $"({statusMessage}) {firstError}";
+
+                    switch (totalErrors)
+                    {
+                        case 1 :
+                            exceptionMessage = baseErrorMessage;
+                            break;
+                        
+                        case 2:
+                            exceptionMessage = $"{baseErrorMessage} (and one other error)";
+                            break;
+                        
+                        default:
+                            exceptionMessage = $"{baseErrorMessage} (and {totalErrors} other errors)";
+                            break;
+                    }
+                    
                     errors = parsedErrors;
                 }
                 else
                 {
-                    errors = new Dictionary<string, IEnumerable<string>>
+                    exceptionMessage = $"({statusMessage}) Shopify returned {statusMessage}, but ShopifySharp was unable to parse the response JSON.";
+                    errors = new List<string>
                     {
-                        { $"{(int)code} {response.ReasonPhrase}", new [] { message } },
+                        exceptionMessage
                     };
                 }
 
-                throw new ShopifyException(code, errors, message, rawResponse, requestId);
+                throw new ShopifyException(code, errors, exceptionMessage, rawResponse, requestId);
             }
-            
-            var customErrors = new Dictionary<string, IEnumerable<string>>
+
+            var message = $"({statusMessage}) Shopify returned {statusMessage}, but there was no JSON to parse into an error message.";
+            var customErrors = new List<string>
             {
-                {
-                    $"{(int)code} {response.ReasonPhrase}",
-                    new [] { defaultMessage }
-                },
-                {
-                    "NoJsonError",
-                    new [] { "Response did not return JSON, unable to parse error message (if any)." }
-                }
+                message
             };
 
-            throw new ShopifyException(code, customErrors, defaultMessage, rawResponse, requestId);
+            throw new ShopifyException(code, customErrors, message, rawResponse, requestId);
         }
 
         /// <summary>
         /// Attempts to parse a JSON string for Shopify API errors. Returns false if the string cannot be parsed or contains no errors. 
         /// </summary>
-        public static bool TryParseErrorJson(string json, out IDictionary<string, IEnumerable<string>> dict)
+        public static bool TryParseErrorJson(string json, out IEnumerable<string> output)
         {
-            dict = null;
+            output = null;
             
             if (string.IsNullOrEmpty(json))
             {
                 return false;
             }
 
-            var errors = new Dictionary<string, IEnumerable<string>>();
+            var errors = new List<string>();
 
             try
             {
@@ -386,48 +392,50 @@ namespace ShopifySharp
                 if (parsed.Any(p => p.Path == "error") && parsed.Any(p => p.Path == "error_description"))
                 {
                     // Error is type #4
-                    var description = parsed["error_description"];
-                    var errorType = parsed["error"];
-
-                    errors.Add(errorType.Value<string>(), new List<string>() { description.Value<string>() });
+                    var description = parsed["error_description"].Value<string>();
+                    var errorType = parsed["error"].Value<string>();
+                    
+                    errors.Add($"{errorType}: {description}");
                 }
                 else if (parsed.Any(p => p.Path == "error"))
                 {
                     // Error is type #5
-                    var description = parsed["error"];
+                    var description = parsed["error"].Value<string>();
                     
-                    errors.Add("error", new List<string> { description.Value<string>() });
+                    errors.Add(description);
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
                 {
                     var parsedErrors = parsed["errors"];
 
-                    //errors can be either a single string, or an array of other errors
+                    // errors can be either a single string, or an array of other errors
                     if (parsedErrors.Type == JTokenType.String)
                     {
-                        //errors is type #1
+                        // errors is type #1
+                        var description = parsedErrors.Value<string>();
 
-                        errors.Add("errors", new List<string>() { parsedErrors.Value<string>() });
+                        errors.Add(description);
                     }
                     else
                     {
-                        //errors is type #2 or #3
-
+                        // errors is type #2 or #3
                         foreach (var val in parsedErrors.Values())
                         {
-                            string name = val.Path.Split('.').Last();
-                            var list = new List<string>();
+                            var name = val.Path.Split('.').Last();
 
                             if (val.Type == JTokenType.String)
                             {
-                                list.Add(val.Value<string>());
+                                var description = val.Value<string>();
+                                
+                                errors.Add($"{name}: {description}");
                             }
                             else if (val.Type == JTokenType.Array)
                             {
-                                list = val.Values<string>().ToList();
+                                foreach (var msg in val.Values<string>())
+                                {
+                                    errors.Add($"{name}: {msg}");
+                                }
                             }
-
-                            errors.Add(name, list);
                         }
                     }
                 }
@@ -446,7 +454,7 @@ namespace ShopifySharp
                 return false;
             }
 
-            dict = errors;
+            output = errors;
             
             return true;
         }

@@ -12,6 +12,6 @@ namespace ShopifySharp
 
         public ShopifyRateLimitException(string message): base(message) { }
 
-        public ShopifyRateLimitException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors, string message, string jsonError, string requestId) : base(httpStatusCode, errors, message, jsonError, requestId) { }
+        public ShopifyRateLimitException(HttpStatusCode httpStatusCode, IEnumerable<string> errors, string message, string jsonError, string requestId) : base(httpStatusCode, errors, message, jsonError, requestId) { }
     }
 }
