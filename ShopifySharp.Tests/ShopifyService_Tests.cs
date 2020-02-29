@@ -233,14 +233,6 @@ namespace ShopifySharp.Tests
             }
         }
         
-        // TODO: change error parsing logic to just return a List<string> instead of a dictionary?
-        // The key is often constructed by the package and only rarely comes from Shopify instead. 
-        // Instead, if there is a key it just gets added to the string e.g. "order: foo error message"
-        // Also put the status code/reason in the exception message:
-        // "(429 Too Many Requests) Rate Limit error message here"
-        // "(400 Bad Request) foo error message"
-        // "(400 Bad Request) invalid_request: The authorization code was not found or was already used"
-
         [Fact]
         public void Parses_Errors_Of_Type_Two()
         {
