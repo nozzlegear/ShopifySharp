@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
 using System.IO;
-using System.Text.RegularExpressions;
 using ShopifySharp.Lists;
 using ShopifySharp.Filters;
 
@@ -301,11 +298,22 @@ namespace ShopifySharp
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if ((int)code == 429 /* Too many requests */)
             {
-                var baseMessage = "rate_limit: Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
-                var rateLimitMessage = $"({statusMessage}) {baseMessage}";
-                var errors = new List<string> { baseMessage };
+                string rateExceptionMessage;
+                IEnumerable<string> errors;
+                
+                if (TryParseErrorJson(rawResponse, out var rateLimitErrors))
+                {
+                    rateExceptionMessage = $"({statusMessage}) {rateLimitErrors.First()}";
+                    errors = rateLimitErrors;
+                }
+                else
+                {
+                    var baseMessage = "Exceeded the rate limit for api client. Reduce request rates to resume uninterrupted service.";
+                    rateExceptionMessage = $"({statusMessage}) {baseMessage}";
+                    errors = new List<string>{ baseMessage };
+                }
 
-                throw new ShopifyRateLimitException(code, errors, rateLimitMessage, rawResponse, requestId);
+                throw new ShopifyRateLimitException(code, errors, rateExceptionMessage, rawResponse, requestId);
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
@@ -362,7 +370,7 @@ namespace ShopifySharp
         /// <summary>
         /// Attempts to parse a JSON string for Shopify API errors. Returns false if the string cannot be parsed or contains no errors. 
         /// </summary>
-        public static bool TryParseErrorJson(string json, out IEnumerable<string> output)
+        public static bool TryParseErrorJson(string json, out List<string> output)
         {
             output = null;
             

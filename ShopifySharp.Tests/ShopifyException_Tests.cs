@@ -309,8 +309,8 @@ namespace ShopifySharp.Tests
             Assert.NotNull(ex.RawBody);
             Assert.NotNull(ex.RequestId);
             Assert.Single(ex.Errors);
-            Assert.Equal("(429 Too Many Requests) rate_limit: Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Message);
-            Assert.Equal("rate_limit: Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First());
+            Assert.Equal("(429 Too Many Requests) Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Message);
+            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First());
         }
 
         [Fact]
@@ -340,8 +340,8 @@ namespace ShopifySharp.Tests
             Assert.NotNull(ex.RawBody);
             Assert.NotNull(ex.RequestId);
             Assert.Single(ex.Errors);
-            Assert.Equal("(429 Too Many Requests) rate_limit: Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Message);
-            Assert.Equal("rate_limit: Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First());
+            Assert.Equal("(429 Too Many Requests) Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Message);
+            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First());
         }
     }
 }
