@@ -6,6 +6,12 @@ namespace ShopifySharp.Filters
     public class OrderCountFilter : Parameterizable
     {
         /// <summary>
+        /// Restrict results to after the specified ID. 
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+
+        /// <summary>
         /// Restricts results to those with the given status. Known values are "open", "closed", "cancelled" and "any".
         /// </summary>
         [JsonProperty("status")]

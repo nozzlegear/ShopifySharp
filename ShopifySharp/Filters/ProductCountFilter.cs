@@ -6,6 +6,12 @@ namespace ShopifySharp.Filters
     public class ProductCountFilter : Parameterizable
     {
         /// <summary>
+        /// Restrict results to after the specified ID. 
+        /// </summary>
+        [JsonProperty("since_id")]
+        public long? SinceId { get; set; }
+
+        /// <summary>
         /// Filter by product type.
         /// </summary>
         [JsonProperty("product_type")]
