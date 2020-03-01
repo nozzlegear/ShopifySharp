@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -22,34 +23,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all smart collections on the store.
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the count.</param>
-        public virtual async Task<int> CountAsync(SmartCollectionFilter filterOptions = null)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null)
         {
-            var req = PrepareRequest("smart_collections/count.json");
-
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("smart_collections/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 smart collections.
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the result.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<SmartCollection>> ListAsync(SmartCollectionFilter filterOptions = null)
+        public virtual async Task<ListResult<SmartCollection>> ListAsync(ListFilter<SmartCollection> filter)
         {
-            var req = PrepareRequest($"smart_collections.json");
+            return await ExecuteGetListAsync($"smart_collections.json", "smart_collections", filter);
+        }
 
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<SmartCollection>>(req, HttpMethod.Get, rootElement: "smart_collections");
+        /// <summary>
+        /// Gets a list of up to 250 smart collections.
+        /// </summary>
+        public virtual async Task<ListResult<SmartCollection>> ListAsync(SmartCollectionListFilter filter = null)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -58,9 +51,7 @@ namespace ShopifySharp
         /// <param name="collectionId">The id of the smart collection to retrieve.</param>
         public virtual async Task<SmartCollection> GetAsync(long collectionId)
         {
-            var req = PrepareRequest($"smart_collections/{collectionId}.json");
-
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Get, rootElement: "smart_collection");
+            return await ExecuteGetAsync<SmartCollection>($"smart_collections/{collectionId}.json", "smart_collection");
         }
 
         /// <summary>
@@ -78,8 +69,9 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection");
+            return response.Result;
         }
 
         /// <summary>
@@ -94,7 +86,9 @@ namespace ShopifySharp
             {
                 smart_collection = collection
             });
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -113,8 +107,9 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            return response.Result;
         }
 
         /// <summary>
@@ -133,8 +128,9 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
 
-            return await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection");
+            return response.Result;
         }
 
         /// <summary>

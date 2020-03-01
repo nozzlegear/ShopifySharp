@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -18,9 +17,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<Shop> GetAsync()
         {
-            var request = PrepareRequest("shop.json");
-
-            return await ExecuteRequestAsync<Shop>(request, HttpMethod.Get, rootElement: "shop");
+            return await ExecuteGetAsync<Shop>("shop.json", "shop");
         }
 
         /// <summary>

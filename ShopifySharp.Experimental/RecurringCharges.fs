@@ -76,6 +76,7 @@ module RecurringCharges =
             let data = dict [ "recurring_application_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge")
+            |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

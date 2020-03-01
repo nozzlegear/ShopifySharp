@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync(Fixture.ProductId);
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -87,6 +87,8 @@ namespace ShopifySharp.Tests
 
             created.Price = newPrice;
             created.Id = null;
+            // Must set variant.InventoryQuantity to null as it is now read-only. Sending the quantity accidentally will result in an exception.
+            created.InventoryQuantity = null;
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
 
@@ -117,10 +119,10 @@ namespace ShopifySharp.Tests
             ProductService.SetExecutionPolicy(policy);
 
             // Get a product id to use with these tests.
-            ProductId = (await ProductService.ListAsync(new ProductFilter()
+            ProductId = (await ProductService.ListAsync(new ProductListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
 
             // Create one for use with count, list, get, etc. tests.
             await Create();

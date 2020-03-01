@@ -31,20 +31,20 @@ namespace ShopifySharp.Tests
         {
             var collects = await Fixture.Service.ListAsync();
 
-            Assert.True(collects.Count() > 0);
+            Assert.True(collects.Items.Count() > 0);
         }
 
         [Fact]
         public async Task Lists_Collects_With_A_Filter()
         {
             var productId = Fixture.Created.First().ProductId;
-            var collects = await Fixture.Service.ListAsync(new CollectFilter()
+            var collects = await Fixture.Service.ListAsync(new CollectListFilter()
             {
                 ProductId = productId,
             });
 
-            Assert.True(collects.Count() > 0);
-            Assert.All(collects, collect => Assert.True(collect.ProductId > 0));
+            Assert.True(collects.Items.Count() > 0);
+            Assert.All(collects.Items, collect => Assert.True(collect.ProductId > 0));
         }
 
         [Fact]

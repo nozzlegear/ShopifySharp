@@ -4,6 +4,7 @@ using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -23,19 +24,10 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all site events.
         /// </summary>
-        /// <param name="filter">Supports CreatedAtMin and CreatedAtMax Properties</param>
-        /// <returns>The count of all site events.</returns>
-        public virtual async Task<int> CountAsync(CountFilter filter = null)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(EventCountFilter filter = null)
         {
-            var req = PrepareRequest("events/count.json");
-
-            //Add optional parameters to request
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("events/count.json", "count", filter);
         }
 
         /// <summary>
@@ -46,58 +38,49 @@ namespace ShopifySharp
         /// <returns>The <see cref="Event"/>.</returns>
         public virtual async Task<Event> GetAsync(long eventId, string fields = null)
         {
-            var req = PrepareRequest($"events/{eventId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<Event>(req, HttpMethod.Get, rootElement: "event");
+            return await ExecuteGetAsync<Event>($"events/{eventId}.json", "event", fields);
         }
 
         /// <summary>
         /// Returns a list of events for the given subject and subject type. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event
         /// </summary>
-        /// <param name="options">Options for filtering the result.</param>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Event>> ListAsync(long subjectId, string subjectType, EventListFilter options = null)
+        public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType, ListFilter<Event> filter = null)
         {
             // Ensure the subject type is plural
-            if (!subjectType.Substring(subjectType.Length - 1).Equals("s", System.StringComparison.OrdinalIgnoreCase))
+            if (!subjectType.Substring(subjectType.Length - 1).Equals("s", StringComparison.OrdinalIgnoreCase))
             {
                 subjectType = subjectType + "s";
             }
-
-            var req = PrepareRequest($"{subjectType?.ToLower()}/{subjectId}/events.json");
-
-            //Add optional parameters to request
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+            
+            return await ExecuteGetListAsync($"{subjectType?.ToLower()}/{subjectId}/events.json", "events", filter);
         }
 
         /// <summary>
         /// Returns a list of events.
         /// </summary>
-        /// <param name="options">Options for filtering the result.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Event>> ListAsync(EventListFilter options = null)
+        public virtual async Task<ListResult<Event>> ListAsync(ListFilter<Event> filter)
         {
-            var req = PrepareRequest("events.json");
+            return await ExecuteGetListAsync($"events.json", "events", filter);
+        }
 
-            //Add optional parameters to request
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
+        /// <summary>
+        /// Returns a list of events for the given subject and subject type. A full list of supported subject types can be found at https://help.shopify.com/api/reference/event
+        /// </summary>
+        /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
+        /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
+        public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType, EventListFilter filter)
+        {
+            return await ListAsync(subjectId, subjectType, (ListFilter<Event>) filter);
+        }
 
-            return await ExecuteRequestAsync<List<Event>>(req, HttpMethod.Get, rootElement: "events");
+        /// <summary>
+        /// Returns a list of events.
+        /// </summary>
+        public virtual async Task<ListResult<Event>> ListAsync(EventListFilter filter = null)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
     }
 }

@@ -11,16 +11,16 @@ namespace ShopifySharp
         [JsonProperty("code")]
         public string Code { get; set; }
 
-        [JsonProperty("price_rule_id")]
         /// <summary>
         /// Unique numeric identifier for the price rule.
         /// </summary>
+        [JsonProperty("price_rule_id")]
         public long? PriceRuleId { get; set; }
 
-        [JsonProperty("usage_count")]
         /// <summary>
         /// Number of times the discount code has been redeemed.
         /// </summary>
+        [JsonProperty("usage_count")]
         public int? UsageCount { get; set; }
 
         /// <summary>

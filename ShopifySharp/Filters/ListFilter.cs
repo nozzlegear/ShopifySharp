@@ -1,45 +1,42 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace ShopifySharp.Filters
 {
     /// <summary>
     /// A generic class for filtering the results of a .ListAsync command.
     /// </summary>
-    public class ListFilter : CountFilter
+    public class ListFilter<T> : Parameterizable
     {
         /// <summary>
-        /// An optional array of order ids to retrieve.
+        /// A unique ID used to access a page of results. Must be present to list more than the first page of results. 
         /// </summary>
-        [JsonProperty("ids")]
-        public IEnumerable<long> Ids { get; set; }
+        [JsonProperty("page_info")]
+        public string PageInfo { get; }
 
         /// <summary>
-        /// Limit the amount of results. Default is 50, max is 250.
+        /// The number of items which should be returned. Default is 50, maximum is 250.
         /// </summary>
         [JsonProperty("limit")]
         public int? Limit { get; set; }
-
+        
         /// <summary>
-        /// Page of results to be returned. Default is 1.
-        /// </summary>
-        [JsonProperty("page")]
-        public int? Page { get; set; }
-
-        /// <summary>
-        /// An optional, comma-separated list of fields to include in the response.
+        /// Comma-separated list of which fields to show in the results. This parameter only works for some endpoints.
         /// </summary>
         [JsonProperty("fields")]
         public string Fields { get; set; }
 
-        /// <summary>
-        /// An optional field name to order by, followed by either ' asc' or ' desc'.
-        /// For example, 'created_at asc'
-        /// Not all fields are supported...
-        /// </summary>
-        [JsonProperty("order")]
-        public string Order { get; set; }
+        internal ListFilter()
+        {
+        }
 
+        public ListFilter(string pageInfo, int? limit, string fields = null)
+        {
+            PageInfo = pageInfo;
+            Limit = limit;
+            Fields = fields;
+        }
+
+        public ListFilter<T> AsListFilter() => this; 
     }
 }

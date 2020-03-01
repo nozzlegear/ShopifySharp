@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -183,7 +183,7 @@ namespace ShopifySharp.Tests
 
             //get products  - use collect service to get products so they are returned in order
             var collectService = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var collects = (await collectService.ListAsync(new CollectFilter() { CollectionId = collection.Id })).ToList();
+            var collects = (await collectService.ListAsync(new CollectListFilter { CollectionId = collection.Id })).Items.ToList();
 
             //check
             Assert.Equal("manual", collection.SortOrder);

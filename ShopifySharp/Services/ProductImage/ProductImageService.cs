@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -24,50 +25,19 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        /// <param name="filter">An optional filter that restricts the results.</param>
-        /// <returns>The count of all ProductImages for the shop.</returns>
-        public virtual async Task<int> CountAsync(long productId, PublishableCountFilter filter = null)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(long productId, ProductImageCountFilter filter = null)
         {
-            var req = PrepareRequest($"products/{productId}/images/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>($"products/{productId}/images/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        /// <param name="fields">
-        /// An optional, comma-separated list of fields to include in the response.
-        /// </param>
-        /// <param name="sinceId">
-        /// Restricts results to after the specified id.
-        /// </param>
-        /// <returns>The list of <see cref="ProductImage"/>.</returns>
-        /// <remarks>
-        /// Unlike most list commands, this one only accepts the since_id and fields filters.
-        /// </remarks>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<ProductImage>> ListAsync(long productId, long? sinceId = null, string fields = null)
+        public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter = null)
         {
-            var req = PrepareRequest($"products/{productId}/images.json");
-
-            if (sinceId.HasValue)
-            {
-                req.QueryParams.Add("since_id", sinceId.Value);
-            }
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<List<ProductImage>>(req, HttpMethod.Get, rootElement: "images");
+            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter);
         }
 
         /// <summary>
@@ -79,14 +49,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null)
         {
-            var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Get, rootElement: "image");
+            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields);
         }
 
         /// <summary>
@@ -102,8 +65,9 @@ namespace ShopifySharp
             {
                 image = image
             });
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image");
 
-            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image");
+            return response.Result;
         }
 
         /// <summary>
@@ -120,8 +84,9 @@ namespace ShopifySharp
             {
                 image = image
             });
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image");
 
-            return await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image");
+            return response.Result;
         }
 
         /// <summary>

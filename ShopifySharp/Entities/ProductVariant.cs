@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShopifySharp.Enums;
-using ShopifySharp.Converters;
 
 namespace ShopifySharp
 {
@@ -134,22 +132,6 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("inventory_quantity")]
         public int? InventoryQuantity { get; set; }
-
-        /// <summary>
-        /// The original stock level the client believes the product variant has.
-        /// This should be sent to avoid a race condition when the item being adjusted is simultaneously sold online.
-        /// </summary>
-        [JsonProperty("old_inventory_quantity")]
-        [Obsolete("Use the Inventory Level endpoint instead")]
-        public int? OldInventoryQuantity { get; set; }
-
-        /// <summary>
-        /// Instead of sending a new and old value for inventory an adjustment value can be sent.
-        /// If an adjustment value is sent it will take priority.
-        /// </summary>
-        [JsonProperty("inventory_quantity_adjustment")]
-        [Obsolete("Use the Inventory Level endpoint instead")]
-        public int? InventoryQuantityAdjustment { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for one of the product's images.

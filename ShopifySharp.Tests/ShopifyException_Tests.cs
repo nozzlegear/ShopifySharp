@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -18,7 +19,9 @@ namespace ShopifySharp.Tests
         {
             var ub = new UriBuilder(Utils.MyShopifyUrl)
             {
-                Path = $"admin/{path}"
+                Path = $"admin/{path}",
+                Scheme = "https",
+                Port = 443
             };
             var msg = new HttpRequestMessage(method, ub.ToString())
             {
@@ -33,7 +36,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public void Throws_On_OAuth_Code_Used()
         {
-            string rawBody = "{\"error\":\"invalid_request\",\"error_description\":\"The authorization code was not found or was already used\"}";
+            var rawBody = "{\"error\":\"invalid_request\",\"error_description\":\"The authorization code was not found or was already used\"}";
             var res = new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.NotAcceptable,
@@ -54,11 +57,10 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.Contains("authorization code was not found or was already used", ex.Message);
             Assert.NotNull(ex.RawBody);
-            Assert.Equal(1, ex.Errors.Count);
-            Assert.Equal("invalid_request", ex.Errors.First().Key);
-            Assert.Equal(1, ex.Errors.First().Value.Count());
+            Assert.Single(ex.Errors);
+            Assert.Equal("(406 Not Acceptable) invalid_request: The authorization code was not found or was already used", ex.Message);
+            Assert.Equal("invalid_request: The authorization code was not found or was already used", ex.Errors.First());
         }
 
         [Fact]
@@ -67,7 +69,6 @@ namespace ShopifySharp.Tests
             HttpResponseMessage response;
             string rawBody;
             ShopifyException ex = null;
-
 
             using (var client = new HttpClient())
             {
@@ -99,9 +100,9 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.Equal(1, ex.Errors.Count);
-            Assert.Equal("Error", ex.Errors.First().Key);
-            Assert.Equal(1, ex.Errors.First().Value.Count());
+            Assert.Single(ex.Errors);
+            Assert.Equal("(403 Forbidden) Scope undefined for API access: api_permissions. Valid scopes: admin_login_tokens, admin_notifications, admin_shop_settings, all_orders, analytics, analytics_overviews, apps, assigned_fulfillment_orders, billing, capital, cash_tracking, channels, checkout_settings, checkouts, checkouts_vault_tokens, content, customer_payment_methods, customer_tags, customers, delivery, discounts, disputes, domains, draft_orders, fulfillments, gdpr_data_request, gift_card_adjustments, gift_cards, home, images, inventory, kit_skills, legal_policies, locales, locations, marketing_events, media_processing, merchant_managed_fulfillment_orders, meta_tags, mobile_payments, mobile_platform_applications, notifications, online_store, online_store_bot_protection, online_store_navigation, online_store_pages, online_store_preferences, order_edits, orders, payment_gateways, payment_sessions, payment_settings, physical_receipts, point_of_sale_devices, price_rules, product_engagements, product_inventory, product_listings, product_tags, products, publications, reports, resource_feedbacks, retail_addon_subscriptions, retail_bbpos_merchant, retail_roles, script_tags, scripts, shipping, shopify_payments, shopify_payments_accounts, shopify_payments_balance_debits, shopify_payments_bank_accounts, shopify_payments_bank_accounts_sensitive, shopify_payments_disputes, shopify_payments_legal_entities, shopify_payments_payouts, shopify_payments_payouts_status, smart_grid, social_network_accounts, taxes, themes, third_party_fulfillment_orders, tracking_pixels, translations, user_private_data, and users", ex.Message);
+            Assert.Equal("Scope undefined for API access: api_permissions. Valid scopes: admin_login_tokens, admin_notifications, admin_shop_settings, all_orders, analytics, analytics_overviews, apps, assigned_fulfillment_orders, billing, capital, cash_tracking, channels, checkout_settings, checkouts, checkouts_vault_tokens, content, customer_payment_methods, customer_tags, customers, delivery, discounts, disputes, domains, draft_orders, fulfillments, gdpr_data_request, gift_card_adjustments, gift_cards, home, images, inventory, kit_skills, legal_policies, locales, locations, marketing_events, media_processing, merchant_managed_fulfillment_orders, meta_tags, mobile_payments, mobile_platform_applications, notifications, online_store, online_store_bot_protection, online_store_navigation, online_store_pages, online_store_preferences, order_edits, orders, payment_gateways, payment_sessions, payment_settings, physical_receipts, point_of_sale_devices, price_rules, product_engagements, product_inventory, product_listings, product_tags, products, publications, reports, resource_feedbacks, retail_addon_subscriptions, retail_bbpos_merchant, retail_roles, script_tags, scripts, shipping, shopify_payments, shopify_payments_accounts, shopify_payments_balance_debits, shopify_payments_bank_accounts, shopify_payments_bank_accounts_sensitive, shopify_payments_disputes, shopify_payments_legal_entities, shopify_payments_payouts, shopify_payments_payouts_status, smart_grid, social_network_accounts, taxes, themes, third_party_fulfillment_orders, tracking_pixels, translations, user_private_data, and users", ex.Errors.First());
         }
 
         [Fact]
@@ -141,11 +142,12 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.True(ex.Errors.Count > 0);
-            Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
-            Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
-            Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
-            Assert.True(ex.Errors.All(err => err.Value.Count() > 0));
+            Assert.NotEmpty(ex.Errors);
+            Assert.Equal("(400 Bad Request) order: Required parameter missing or invalid", ex.Message);
+
+            var error = ex.Errors.First();
+            
+            Assert.Equal("order: Required parameter missing or invalid", error);
         }
 
         [Fact]
@@ -193,7 +195,7 @@ namespace ShopifySharp.Tests
                 while (ex == null)
                 {
                     // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
-                    using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new { order = order })))
+                    using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new {order })))
                     {
                         var req = client.SendAsync(msg);
                         response = await req;
@@ -218,12 +220,13 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.True(ex.Errors.Count > 0);
+            Assert.NotEmpty(ex.Errors);
             Assert.NotNull(ex.RequestId);
-            Assert.True(ex.Errors.Any(error => error.Key.Equals("order")));
-            Assert.NotNull(ex.Errors.First(err => err.Key.Equals("order")).Value.First());
-            Assert.True(ex.Errors.First(err => err.Key.Equals("order")).Value.Count() > 0);
-            Assert.True(ex.Errors.All(err => err.Value.Count() > 0));
+            Assert.Equal("(422 Unprocessable Entity) order: Tax lines must be associated with either order or line item but not both", ex.Message);
+
+            var error = ex.Errors.First();
+            
+            Assert.Equal("order: Tax lines must be associated with either order or line item but not both", error);
         }
 
         [Fact]
@@ -231,13 +234,13 @@ namespace ShopifySharp.Tests
         {
             bool thrown = false;
             int requestCount = 60;
-            IEnumerable<Order>[] list = null;
+            IEnumerable<ListResult<Order>> list = null;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             service.SetExecutionPolicy(new RetryExecutionPolicy());
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -258,13 +261,13 @@ namespace ShopifySharp.Tests
         {
             bool thrown = false;
             int requestCount = 60;
-            IEnumerable<Order>[] list = null;
+            IEnumerable<ListResult<Order>> list = null;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -289,7 +292,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -305,9 +308,9 @@ namespace ShopifySharp.Tests
             Assert.Equal(429, (int)ex.HttpStatusCode);
             Assert.NotNull(ex.RawBody);
             Assert.NotNull(ex.RequestId);
-            Assert.True(ex.Errors.Count > 0);
-            Assert.Equal("Error", ex.Errors.First().Key);
-            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
+            Assert.Single(ex.Errors);
+            Assert.Equal("(429 Too Many Requests) Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Message);
+            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First());
         }
 
         [Fact]
@@ -319,7 +322,7 @@ namespace ShopifySharp.Tests
 
             try
             {
-                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderFilter()
+                var tasks = Enumerable.Range(0, requestCount).Select(_ => service.ListAsync(new OrderListFilter()
                 {
                     Limit = 1
                 }));
@@ -332,13 +335,13 @@ namespace ShopifySharp.Tests
             }
 
             Assert.NotNull(ex);
-            Assert.IsType(typeof(ShopifyRateLimitException), ex);
+            Assert.IsType<ShopifyRateLimitException>(ex);
             Assert.Equal(429, (int)ex.HttpStatusCode);
             Assert.NotNull(ex.RawBody);
             Assert.NotNull(ex.RequestId);
-            Assert.True(ex.Errors.Count > 0);
-            Assert.Equal("Error", ex.Errors.First().Key);
-            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First().Value.First());
+            Assert.Single(ex.Errors);
+            Assert.Equal("(429 Too Many Requests) Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Message);
+            Assert.Equal("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.", ex.Errors.First());
         }
     }
 }

@@ -81,12 +81,14 @@ module ScriptTags =
             let data = dict [ "script_tag" => tag ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag")
+            |> mapTask (fun response -> response.Result)
             
         member x.UpdateAsync (id : int64, tag : ScriptTagProperties) =
             let req = base.PrepareRequest (sprintf "script_tags/%i.json" id)
             let data = dict [ "script_tag" => tag ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag")
+            |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

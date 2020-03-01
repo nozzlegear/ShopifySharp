@@ -53,6 +53,17 @@ If you're using .NET Core, you can use the `dotnet` command from your favorite s
 dotnet add package shopifysharp
 ```
 
+# Version 5.0.0
+
+Doublecheck these following services to see if they use the new paginated listing. Documentation is unclear:
+
+- AssetService
+- CarrierService
+- ChargeService
+- CustomerService.ListOrdersAsync
+
+Note: OrderService.ListForCustomerAsync has been moved to CustomerService.ListOrdersForCustomerAsync. 
+
 # Version 4.0.0
 
 Version 4.0.0 is a major update to ShopifySharp, it contains breaking changes by removing the `Shopify` prefix from almost every class, interface and object (the exception being `ShopifyException` and `ShopifyRateLimitException`. On top of that, every single entity property has been made nullable to both prevent deserialization errors that have plagued us humble C# developers since 1.0.0.

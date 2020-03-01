@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain.fs" />
+    <Compile Include="Utils.fs" />
     <Compile Include="Webhooks.fs" />
     <Compile Include="Metafields.fs" />
     <Compile Include="Addresses.fs" />

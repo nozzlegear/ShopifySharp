@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -25,54 +26,29 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all orders for the shop.</returns>
-        public virtual async Task<int> CountAsync(OrderFilter filter = null)
+        public virtual async Task<int> CountAsync(OrderCountFilter filter = null)
         {
-            var req = PrepareRequest("orders/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("orders/count.json", "count", filter);
+        }
+        
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's orders.
+        /// </summary>
+        /// <param name="filter">Options for filtering the list.</param>
+        /// <returns>The list of orders matching the filter.</returns>
+        public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter)
+        {
+            return await ExecuteGetListAsync("orders.json", "orders", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's orders.
         /// </summary>
-        /// <param name="options">Options for filtering the list.</param>
+        /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Order>> ListAsync(OrderFilter options = null)
+        public virtual async Task<ListResult<Order>> ListAsync(OrderListFilter filter = null)
         {
-            var req = PrepareRequest("orders.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
-        }
-
-        /// <summary>
-        /// Gets a list of up to 250 of the customer's orders.
-        /// </summary>
-        /// <param name="customerId">The id of the customer to list orders for.</param>
-        /// <param name="options">Options for filtering the list.</param>
-        /// <returns>The list of orders matching the filter.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderFilter options = null)
-        {
-            var req = PrepareRequest("orders.json");
-            req.QueryParams.Add("customer_id", customerId);
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -83,14 +59,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Order"/>.</returns>
         public virtual async Task<Order> GetAsync(long orderId, string fields = null)
         {
-            var req = PrepareRequest($"orders/{orderId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Get, rootElement: "order");
+            return await ExecuteGetAsync<Order>($"orders/{orderId}.json", "order", fields);
         }
 
         /// <summary>
@@ -100,8 +69,9 @@ namespace ShopifySharp
         public virtual async Task<Order> CloseAsync(long id)
         {
             var req = PrepareRequest($"orders/{id}/close.json");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -111,8 +81,9 @@ namespace ShopifySharp
         public virtual async Task<Order> OpenAsync(long id)
         {
             var req = PrepareRequest($"orders/{id}/open.json");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -138,8 +109,9 @@ namespace ShopifySharp
             {
                 order = body
             });
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -155,8 +127,9 @@ namespace ShopifySharp
             {
                 order = order
             });
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order");
 
-            return await ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order");
+            return response.Result;
         }
 
         /// <summary>
@@ -191,8 +164,9 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId)
         {
             var req = PrepareRequest($"orders/{orderId}/metafields.json");
+            var response = await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
 
-            return await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
+            return response.Result;
         }
     }
 }

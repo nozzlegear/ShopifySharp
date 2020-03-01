@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -22,18 +23,9 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
-        /// <returns></returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Theme>> ListAsync(ListFilter filter = null)
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null)
         {
-            var req = PrepareRequest("themes.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Theme>>(req, HttpMethod.Get, rootElement: "themes");
+            return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter);
         }
 
         /// <summary>
@@ -51,7 +43,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
+
+            return response.Result;
         }
 
         private async Task<Theme> _CreateAsync(Theme theme, string sourceUrl = null)
@@ -68,8 +62,9 @@ namespace ShopifySharp
             {
                 theme = body
             });
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
 
-            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
+            return response.Result;
         }
 
         /// <summary>
@@ -109,8 +104,9 @@ namespace ShopifySharp
             {
                 theme = theme
             });
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme");
 
-            return await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme");
+            return response.Result;
         }
 
         /// <summary>

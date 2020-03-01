@@ -1,9 +1,5 @@
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -32,12 +28,6 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("browser_width")]
         public string BrowserWidth { get; set; }
-
-        /// <summary>
-        /// Obsolete: This property is incorrect and will be removed in a future release.
-        /// </summary>
-        [JsonProperty("session_height"), Obsolete("This property is incorrect and will be removed in a future release.")]
-        public string SessionHeight { get; set; }
 
         /// <summary>
         /// A hash of the session.

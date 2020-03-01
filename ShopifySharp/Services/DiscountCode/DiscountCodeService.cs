@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -12,21 +13,16 @@ namespace ShopifySharp
     /// </summary>
     public class DiscountCodeService : ShopifyService
     {
-
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DiscountCodeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop's discount codes.
+        /// Gets a list of up to 250 of the discount codes belonging to the price rule.
         /// </summary>
-        /// <returns></returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<PriceRuleDiscountCode>> ListAsync(long priceRuleId)
+        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter = null)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
-
-            return await ExecuteRequestAsync<List<PriceRuleDiscountCode>>(req, HttpMethod.Get, rootElement: "discount_codes");
+            return await ExecuteGetListAsync($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter);
         }
 
         /// <summary>
@@ -38,14 +34,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
         public virtual async Task<PriceRuleDiscountCode> GetAsync(long priceRuleId, long discountId, string fields = null)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Get, rootElement: "discount_code");
+            return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields);
         }
 
         /// <summary>
@@ -62,7 +51,8 @@ namespace ShopifySharp
                 discount_code = body
             });
 
-            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code");
+            return response.Result;
         }
 
         /// <summary>
@@ -78,7 +68,8 @@ namespace ShopifySharp
                 discount_code = code
             });
 
-            return await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code");
+            return response.Result;
         }
 
         /// <summary>

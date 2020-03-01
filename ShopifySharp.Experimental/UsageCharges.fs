@@ -56,6 +56,7 @@ module UsageCharges =
             let data = dict [ "usage_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, content, "usage_charge")
+            |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

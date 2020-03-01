@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Filters;
 using System.Net;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -24,7 +25,7 @@ namespace ShopifySharp
         /// Checks whether the Shopify Payments API is enabled on this store.
         /// If not enabled, all Shopify Payments API endpoints will return HTTP 404 / Not Found
         /// </summary>
-        public virtual async Task<bool> IsShopifyPaymentAPIEnabled()
+        public virtual async Task<bool> IsShopifyPaymentApiEnabledAsync()
         {
             try
             {
@@ -45,57 +46,55 @@ namespace ShopifySharp
         /// <returns>The count of all fulfillments for the shop.</returns>
         public virtual async Task<IEnumerable<ShopifyPaymentsBalance>> GetBalanceAsync()
         {
-            var req = PrepareRequest($"shopify_payments/balance.json");
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsBalance>>(req, HttpMethod.Get, rootElement: "balance");
+            return await ExecuteGetAsync < IEnumerable < ShopifyPaymentsBalance >>("shopify_payments/balance.json", "balance");
         }
-
-        public virtual async Task<IEnumerable<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutFilter options = null)
+        
+        /// <summary>
+        /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<ListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ListFilter<ShopifyPaymentsPayout> filter)
         {
-            var req = PrepareRequest("shopify_payments/payouts.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsPayout>>(req, HttpMethod.Get, rootElement: "payouts");
+            return await ExecuteGetListAsync("shopify_payments/payouts.json", "payouts", filter);
         }
 
+        /// <summary>
+        /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<ListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutListFilter filter = null)
+        {
+            return await ListPayoutsAsync(filter?.AsListFilter());
+        }
+        
         public virtual async Task<ShopifyPaymentsPayout> GetPayoutAsync(long payoutId)
         {
-            var req = PrepareRequest($"shopify_payments/payouts/{payoutId}.json");
-            return await ExecuteRequestAsync<ShopifyPaymentsPayout>(req, HttpMethod.Get, rootElement: "payout");
+            return await ExecuteGetAsync<ShopifyPaymentsPayout>($"shopify_payments/payouts/{payoutId}.json", "payout");
         }
 
-        public virtual async Task<IEnumerable<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeFilter options = null)
+        public virtual async Task<ListResult<ShopifyPaymentsDispute>> ListDisputesAsync(ListFilter<ShopifyPaymentsDispute> filter)
         {
-            var req = PrepareRequest("shopify_payments/disputes.json");
+            return await ExecuteGetListAsync("shopify_payments/disputes.json", "disputes", filter);
+        }
 
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsDispute>>(req, HttpMethod.Get, rootElement: "disputes");
+        public virtual async Task<ListResult<ShopifyPaymentsDispute>> ListDisputesAsync(ShopifyPaymentsDisputeListFilter filter = null)
+        {
+            return await ListDisputesAsync(filter?.AsListFilter());
         }
 
         public virtual async Task<ShopifyPaymentsDispute> GetDisputeAsync(long disputeId)
         {
-            var req = PrepareRequest($"shopify_payments/disputes/{disputeId}.json");
-            return await ExecuteRequestAsync<ShopifyPaymentsDispute>(req, HttpMethod.Get, rootElement: "dispute");
+            return await ExecuteGetAsync< ShopifyPaymentsDispute>($"shopify_payments/disputes/{disputeId}.json", "dispute");
         }
 
-        public virtual async Task<IEnumerable<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionFilter options = null)
+        public virtual async Task<ListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ListFilter<ShopifyPaymentsTransaction> filter)
         {
-            var req = PrepareRequest("shopify_payments/balance/transactions.json");
+            return await ExecuteGetListAsync("shopify_payments/balance/transactions.json", "transactions", filter);
+        }
 
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ShopifyPaymentsTransaction>>(req, HttpMethod.Get, rootElement: "transactions");
+        public virtual async Task<ListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionListFilter filter = null)
+        {
+            return await ListTransactionsAsync(filter?.AsListFilter());
         }
     }
 }

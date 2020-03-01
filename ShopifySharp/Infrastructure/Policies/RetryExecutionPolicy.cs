@@ -12,7 +12,7 @@ namespace ShopifySharp
     {
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(500);
 
-        public async Task<T> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             while (true)
             {
@@ -22,7 +22,7 @@ namespace ShopifySharp
                 {
                     var fullResult = await executeRequestAsync(request);
 
-                    return fullResult.Result;
+                    return fullResult;
                 }
                 catch (ShopifyRateLimitException)
                 {

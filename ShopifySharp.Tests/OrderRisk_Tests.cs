@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync(Fixture.OrderId);
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -125,10 +125,10 @@ namespace ShopifySharp.Tests
             Service.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
 
-            OrderId = (await OrderService.ListAsync(new OrderFilter()
+            OrderId = (await OrderService.ListAsync(new OrderListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
 
             // Create a risk for count, list, get, etc. tests.
             await Create(OrderId);

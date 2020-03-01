@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests
         {
             var Addresss = await Fixture.Service.ListAsync(Fixture.CustomerId.Value);
 
-            Assert.True(Addresss.Count() > 0);
+            Assert.True(Addresss.Items.Count() > 0);
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace ShopifySharp.Tests
 
             var customers = await CustomerService.ListAsync();
 
-            CustomerId = customers.First().Id;
+            CustomerId = customers.Items.First().Id;
 
             // Create at least one Address for list, count, etc commands.
             //await Create();

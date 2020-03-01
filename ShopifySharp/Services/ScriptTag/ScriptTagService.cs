@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -23,36 +24,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
-        /// <param name="src">Optionally filters the count to only those <see cref="ScriptTag"/>s with the
-        /// given <see cref="ScriptTag.Src"/> value.</param>
-        /// <returns>The count.</returns>
-        public virtual async Task<int> CountAsync(string src = null)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<int> CountAsync(ScriptTagCountFilter filter = null)
         {
-            var req = PrepareRequest("script_tags/count.json");
-
-            if (!string.IsNullOrEmpty(src))
-            {
-                req.QueryParams.Add("src", src);
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("script_tags/count.json", "count", filter);
         }
 
         /// <summary>
-        /// Gets a list of up to 250 of the shop's <see cref="ScriptTag"/>s.
+        /// Gets a list of up to 250 of the shop's script tags.
         /// </summary>
-        /// <returns></returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<ScriptTag>> ListAsync(ScriptTagFilter filter = null)
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(ListFilter<ScriptTag> filter)
         {
-            var req = PrepareRequest("script_tags.json");
+            return await ExecuteGetListAsync("script_tags.json", "script_tags", filter);
+        }
 
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ScriptTag>>(req, HttpMethod.Get, rootElement: "script_tags");
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's script tags.
+        /// </summary>
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter = null)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -70,7 +61,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -85,8 +78,9 @@ namespace ShopifySharp
             {
                 script_tag = tag
             });
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag");
 
-            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag");
+            return response.Result;
         }
 
         /// <summary>
@@ -102,8 +96,9 @@ namespace ShopifySharp
             {
                 script_tag = tag
             });
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag");
 
-            return await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag");
+            return response.Result;
         }
 
         /// <summary>

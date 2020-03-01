@@ -28,7 +28,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Counts_GiftCards_With_A_Filter()
         {
-            var enabledCount = await Fixture.Service.CountAsync("enabled");
+            var enabledCount = await Fixture.Service.CountAsync(new GiftCardCountFilter { Status = "enabled" });
             Assert.True(enabledCount > 0);
         }
 
@@ -37,18 +37,18 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Any());
+            Assert.True(list.Items.Any());
         }
 
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Lists_GiftCards_With_A_Filter()
         {
-            var list = await Fixture.Service.ListAsync(new GiftCardFilter()
+            var list = await Fixture.Service.ListAsync(new GiftCardListFilter()
             {
                 Status = "enabled"
             });
 
-            Assert.True(list.Any());
+            Assert.True(list.Items.Any());
         }
 
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
@@ -119,10 +119,9 @@ namespace ShopifySharp.Tests
             var customCode = Guid.NewGuid().ToString();
             customCode = customCode.Substring(customCode.Length - 20);
             await Fixture.Create(GiftCardValue, customCode);
-            var query = "code:" + customCode;
-            var search = await Fixture.Service.SearchAsync(query);
+            var search = await Fixture.Service.SearchAsync(new GiftCardSearchFilter { Query = "code:" + customCode });
 
-            Assert.True(search.Any());
+            Assert.True(search.Items.Any());
         }
     }
 

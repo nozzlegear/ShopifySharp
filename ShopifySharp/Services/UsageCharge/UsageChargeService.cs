@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -36,8 +37,9 @@ namespace ShopifySharp
                     price = price
                 }
             });
+            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, content, "usage_charge");
 
-            return await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, content, "usage_charge");
+            return response.Result;
         }
 
         /// <summary>
@@ -56,26 +58,28 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Get, rootElement: "usage_charge");
+            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Get, rootElement: "usage_charge");
+
+            return response.Result;
         }
 
         /// <summary>
         /// Retrieves a list of all past and present <see cref="UsageCharge"/> objects.
         /// </summary>
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="UsageCharge"/> objects.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, string fields = null)
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
 
-            if (!string.IsNullOrEmpty(fields))
+            if (filter != null)
             {
-                req.QueryParams.Add("fields", fields);
+                req.QueryParams.AddRange(filter.ToQueryParameters());
             }
+            
+            var response = await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, rootElement: "usage_charges");
 
-            return await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, rootElement: "usage_charges");
+            return response.Result;
         }
     }
 }
