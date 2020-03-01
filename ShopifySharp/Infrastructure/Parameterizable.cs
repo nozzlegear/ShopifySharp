@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -57,12 +58,27 @@ namespace ShopifySharp
         /// <returns>The new parameter.</returns>
         protected virtual KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
-            if (value is IEnumerable<long>)
+            KeyValuePair<string, object> Join<T>(IEnumerable<T> values)
             {
-                return new KeyValuePair<string, object>(propName, string.Join(",", value as IEnumerable<long>));
+                return new KeyValuePair<string, object>(propName, string.Join(",", values));
             }
 
-            Type valueType = value.GetType();
+            switch (value)
+            {
+                case IEnumerable<long> longs:
+                    return Join(longs);
+                
+                case IEnumerable<int> ints:
+                    return Join(ints);
+                
+                case IEnumerable<string> strings:
+                    return Join(strings);
+                
+                case IEnumerable<bool> bools:
+                    return Join(bools);
+            }
+
+            var valueType = value.GetType();
 
             if (valueType.GetTypeInfo().IsEnum)
             {
