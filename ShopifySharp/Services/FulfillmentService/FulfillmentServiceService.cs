@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,18 +20,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
-        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null/*TODO create filter class*/)
+        public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(FulfillmentServiceListFilter filter = null)
         {
-            var req = PrepareRequest($"fulfillment_services.json");
-
-            if (!string.IsNullOrEmpty(scope))
-            {
-                req.QueryParams.Add("scope", scope);
-            }
-
-            var response = await ExecuteRequestAsync<List<FulfillmentServiceEntity>>(req, HttpMethod.Get, rootElement: "fulfillment_services");
-
-            return response.Result;
+            return await ExecuteGetAsync<List<FulfillmentServiceEntity>>("fulfillment_services.json", "fulfillment_services", filter);
         }
 
         /// <summary>

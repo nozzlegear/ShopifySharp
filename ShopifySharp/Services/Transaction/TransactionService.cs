@@ -39,31 +39,16 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter);
         }
-        
+
         /// <summary>
         /// Retrieves the <see cref="Transaction"/> with the given id.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The <see cref="Transaction"/>.</returns>
-        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null, bool? inShopCurrency = null/*TODO Create filter class*/)
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/transactions/{transactionId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-            
-            if (inShopCurrency.HasValue)
-            {
-                req.QueryParams.Add("in_shop_currency", inShopCurrency.Value);
-            }
-
-            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Get, rootElement: "transaction");
-
-            return response.Result;
+            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter);
         }
 
         /// <summary>
