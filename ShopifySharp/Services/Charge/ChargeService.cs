@@ -55,7 +55,7 @@ namespace ShopifySharp
         /// <param name="sinceId">Restricts results to any charge after the given id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="Charge"/> objects.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Charge>> ListAsync(long? sinceId = null, string fields = null)
         {
             var req = PrepareRequest("application_charges.json");

@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">An optional filter that restricts the results.</param>
         /// <returns>The list of <see cref="Redirect"/>.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Redirect>> ListAsync(RedirectFilter filter = null)
         {
             var req = PrepareRequest("redirects.json");

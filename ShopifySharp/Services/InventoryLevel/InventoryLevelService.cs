@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// Gets a list of inventory items
         /// </summary>
         /// <param name="filterOptions">Options for filtering the result. InventoryItemIds and/or LocationIds must be populated.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<InventoryLevel>> ListAsync(InventoryLevelFilter filterOptions)
         {
             var req = PrepareRequest($"inventory_levels.json");

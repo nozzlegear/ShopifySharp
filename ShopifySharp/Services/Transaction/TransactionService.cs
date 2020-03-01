@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="sinceId">Filters the results to after the specified id.</param>
         /// <returns>The list of transactions.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, long? sinceId = null, bool? inShopCurrency = null)
         {
             var req = PrepareRequest($"orders/{orderId}/transactions.json");

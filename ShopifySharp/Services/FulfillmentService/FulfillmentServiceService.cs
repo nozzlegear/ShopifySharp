@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(string scope = null)
         {
             var req = PrepareRequest($"fulfillment_services.json");

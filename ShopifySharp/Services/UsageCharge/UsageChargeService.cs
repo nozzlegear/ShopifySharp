@@ -65,7 +65,7 @@ namespace ShopifySharp
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The list of <see cref="UsageCharge"/> objects.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, string fields = null)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");

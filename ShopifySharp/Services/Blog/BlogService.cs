@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// <param name="sinceId">Restrict results to after the specified ID</param>
         /// <param name="handle">Filter by Blog handle</param>
         /// <param name="fields">comma-separated list of fields to include in the response</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
+        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 has been published with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<Blog>> ListAsync(long? sinceId = null, string handle = null, string fields = null)
         {
             var request = PrepareRequest("blogs.json");
