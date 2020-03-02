@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -25,12 +26,9 @@ namespace ShopifySharp
         /// Gets a list of gift card adjustments belonging to the given gift card.
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
-
-            return await ExecuteRequestAsync<List<GiftCardAdjustment>>(req, HttpMethod.Get, rootElement: "adjustments");
+            return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments");
         }
 
         /// <summary>
@@ -41,9 +39,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json");
-
-            return await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Get, rootElement: "adjustment");
+            return await ExecuteGetAsync< GiftCardAdjustment>($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json", "adjustment");
         }
 
         /// <summary>
@@ -60,7 +56,8 @@ namespace ShopifySharp
                 adjustment = adjustment
             });
 
-            return await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment");
+            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment");
+            return response.Result;
         }
     }
 }

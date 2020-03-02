@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync(Fixture.ProductId);
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -113,10 +113,10 @@ namespace ShopifySharp.Tests
             ProductService.SetExecutionPolicy(policy);
 
             // Get a product to use as the parent for all images.
-            ProductId = (await ProductService.ListAsync(new ProductFilter()
+            ProductId = (await ProductService.ListAsync(new ProductListFilter()
             {
                 Limit = 1
-            })).First().Id.Value;
+            })).Items.First().Id.Value;
 
             // Create one for count, list, get, etc. orders.
             await Create();

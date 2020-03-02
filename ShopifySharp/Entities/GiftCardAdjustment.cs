@@ -1,18 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShopifySharp
 {
     public class GiftCardAdjustment : ShopifyObject
     {
-        /// <summary>
-        /// A unique numeric identifier for the adjustment.
-        /// </summary>
-        [JsonProperty("id")]
-        public long? Id{ get; set; }
-
         /// <summary>
         /// A unique numeric identifier for gift card the adjustment is applied onto.
         /// </summary>

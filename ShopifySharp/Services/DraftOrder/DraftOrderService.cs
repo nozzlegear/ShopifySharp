@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp 
 {
@@ -12,38 +13,33 @@ namespace ShopifySharp
     /// </summary>
     public class DraftOrderService : ShopifyService
     {
-
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DraftOrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
 
-        public virtual async Task<int> CountAsync(DraftOrderFilter filter = null)
+        /// <summary>
+        /// Retrieves a count of the shop's draft orders. 
+        /// </summary>
+        /// <param name="filter">Options for filtering the count.</param>
+        public virtual async Task<int> CountAsync(DraftOrderCountFilter filter = null)
         {
-            var req = PrepareRequest("draft_orders/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter);
+        }
+        
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's draft orders.
+        /// </summary>
+        public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter = null)
+        {
+            return await ExecuteGetListAsync("draft_orders.json", "draft_orders", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's draft orders.
         /// </summary>
-        /// <param name="filter">Options for filtering the list.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<DraftOrder>> ListAsync(ListFilter filter = null)
+        public virtual async Task<ListResult<DraftOrder>> ListAsync(DraftOrderListFilter filter)
         {
-            var req = PrepareRequest("draft_orders.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<DraftOrder>>(req, HttpMethod.Get, rootElement: "draft_orders");
+            return await ListAsync((ListFilter<DraftOrder>) filter);
         }
 
         /// <summary>
@@ -53,14 +49,7 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<DraftOrder> GetAsync(long id, string fields = null)
         {
-            var req = PrepareRequest($"draft_orders/{id}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Get, rootElement: "draft_order");
+            return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields);
         }
 
         /// <summary>
@@ -80,7 +69,8 @@ namespace ShopifySharp
                 draft_order = body
             });
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -96,7 +86,8 @@ namespace ShopifySharp
                 draft_order = order.ToDictionary()
             });
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -120,7 +111,8 @@ namespace ShopifySharp
             var req = PrepareRequest($"draft_orders/{id}/complete.json");
             req.QueryParams.Add("payment_pending", paymentPending);
 
-            return await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order");
+            return response.Result;
         }
 
         /// <summary>
@@ -137,7 +129,8 @@ namespace ShopifySharp
                 draft_order_invoice = body
             });
 
-            return await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice");
+            var response = await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice");
+            return response.Result;
         }
     }
 }

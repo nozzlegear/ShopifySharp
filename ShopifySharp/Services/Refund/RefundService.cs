@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -24,20 +25,20 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
-        /// <returns></returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Refund>> ListForOrderAsync(long orderId, OrderFilter options = null)
+        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter)
         {
-            var req = PrepareRequest($"orders/{orderId}/refunds.json");
-            req.QueryParams.Add("customer_id", orderId);
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Refund>>(req, HttpMethod.Get, rootElement: "refunds");
+            return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter);
         }
+
+        /// <summary>
+        /// Retrieves a list of refunds for an order.
+        /// </summary>
+        /// <param name="orderId">The id of the order to list orders for.</param>
+        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null)
+        {
+            return await ListForOrderAsync(orderId, filter?.AsListFilter());
+        }
+        
 
         /// <summary>
         /// Retrieves a specific refund.
@@ -47,14 +48,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null)
         {
-            var req = PrepareRequest($"orders/{orderId}/refunds/{refundId}.json");
-
-            if (string.IsNullOrEmpty(fields) == false)
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<Refund>(req, HttpMethod.Get, rootElement: "refund");
+            return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields);
         }
 
         /// <summary>
@@ -69,9 +63,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var result = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
 
-            return result;
+            return response.Result;
         }
 
         /// <summary>
@@ -81,9 +75,9 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var result = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
 
-            return result;
+            return response.Result;
         }
     }
 }

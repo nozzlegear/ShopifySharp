@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -25,13 +26,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> CreateAsync(RecurringCharge charge)
         {
-            var req = PrepareRequest("recurring_application_charges.json");
-            var content = new JsonContent(new
-            {
-                recurring_application_charge = charge
-            });
-
-            return await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge");
+            return await ExecutePostAsync<RecurringCharge>("recurring_application_charges.json", "recurring_application_charge", new { recurring_application_charge = charge });
         }
 
         /// <summary>
@@ -42,49 +37,24 @@ namespace ShopifySharp
         /// <returns>The <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null)
         {
-            var req = PrepareRequest($"recurring_application_charges/{id}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Get, rootElement: "recurring_application_charge");
+            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields);
         }
 
         /// <summary>
         /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
         /// </summary>
-        /// <param name="sinceId">Restricts results to any charge after the given id.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <returns>The list of <see cref="RecurringCharge"/> objects.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(long? sinceId = null, string fields = null)
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null)
         {
-            var req = PrepareRequest("recurring_application_charges.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            if (sinceId.HasValue)
-            {
-                req.QueryParams.Add("since_id", sinceId.Value);
-            }
-
-            return await ExecuteRequestAsync<List<RecurringCharge>>(req, HttpMethod.Get, rootElement: "recurring_application_charges");
+            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter);
         }
 
         /// <summary>
         /// Activates a <see cref="RecurringCharge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
-        public virtual async Task ActivateAsync(long id)
+        public virtual async Task<RecurringCharge> ActivateAsync(long id)
         {
-            var req = PrepareRequest($"recurring_application_charges/{id}/activate.json");
-
-            await ExecuteRequestAsync(req, HttpMethod.Post);
+            return await ExecutePostAsync<RecurringCharge>("recurring_application_charges/{id}/activate.json", "recurring_application_charge");
         }
 
         /// <summary>
@@ -93,9 +63,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to delete.</param>
         public virtual async Task DeleteAsync(long id)
         {
-            var req = PrepareRequest($"recurring_application_charges/{id}.json");
-
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteDeleteAsync($"recurring_application_charges/{id}.json");
         }
     }
 }

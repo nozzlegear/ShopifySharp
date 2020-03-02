@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
-using System;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -23,42 +24,29 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all of the shop's webhooks.
         /// </summary>
-        /// <param name="address">An optional filter for the address property. When used, this method will only count webhooks with the given address.</param>
-        /// <param name="topic">An optional filter for the topic property. When used, this method will only count webhooks with the given topic. A full list of topics can be found at https://help.shopify.com/api/reference/webhook. </param>
+        /// <param name="filter">Options for filtering the result.</param>
         /// <returns>The count of all webhooks for the shop.</returns>
-        public virtual async Task<int> CountAsync(string address = null, string topic = null)
+        public virtual async Task<int> CountAsync(WebhookCountFilter filter = null)
         {
-            var req = PrepareRequest("webhooks/count.json");
-
-            if (!string.IsNullOrEmpty(address))
-            {
-                req.QueryParams.Add("address", address);
-            }
-
-            if (!string.IsNullOrEmpty(topic))
-            {
-                req.QueryParams.Add("topic", topic);
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's webhooks.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        /// <returns>The list of webhooks matching the filter.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Webhook>> ListAsync(WebhookFilter filter = null)
+        public virtual async Task<ListResult<Webhook>> ListAsync(ListFilter<Webhook> filter)
         {
-            var req = PrepareRequest("webhooks.json");
+            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter);
+        }
 
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Webhook>>(req, HttpMethod.Get, rootElement: "webhooks");
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's webhooks.
+        /// </summary>
+        /// <param name="filter">Options for filtering the list.</param>
+        public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter = null)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -69,14 +57,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Get, rootElement: "webhook");
+            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields);
         }
 
         /// <summary>
@@ -86,13 +67,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> CreateAsync(Webhook webhook)
         {
-            var req = PrepareRequest("webhooks.json");
-            var content = new JsonContent(new
-            {
-                webhook = webhook
-            });
-
-            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook");
+            return await ExecutePostAsync<Webhook>("webhooks.json", "webhook", new { webhook = webhook });
         }
 
         /// <summary>
@@ -103,13 +78,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> UpdateAsync(long webhookId, Webhook webhook)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-            var content = new JsonContent(new
-            {
-                webhook = webhook
-            });
-
-            return await ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook");
+            return await ExecutePutAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", new { webhook = webhook });
         }
 
         /// <summary>
@@ -118,9 +87,7 @@ namespace ShopifySharp
         /// <param name="webhookId">The order object's Id.</param>
         public virtual async Task DeleteAsync(long webhookId)
         {
-            var req = PrepareRequest($"webhooks/{webhookId}.json");
-
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteDeleteAsync($"webhooks/{webhookId}.json");
         }
     }
 }

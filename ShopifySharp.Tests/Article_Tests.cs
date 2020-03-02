@@ -65,7 +65,7 @@ namespace ShopifySharp.Tests
         {
             var articles = await Fixture.Service.ListAsync(Fixture.BlogId.Value);
 
-            Assert.True(articles.Count() > 0);
+            Assert.True(articles.Items.Count() > 0);
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace ShopifySharp.Tests
 
             var blogs = await BlogService.ListAsync();
 
-            BlogId = blogs.First().Id;
+            BlogId = blogs.Items.First().Id;
 
             // Create at least one article for list, count, etc commands.
             await Create();

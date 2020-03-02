@@ -6,7 +6,7 @@ namespace ShopifySharp.Filters
     /// Options for filtering <see cref="CheckoutService.CountAsync(CheckoutFilter)"/> and 
     /// <see cref="CheckoutService.ListAsync(CheckoutFilter)"/> results.
     /// </summary>
-    public class CheckoutFilter : ListFilter
+    public class CheckoutFilter : ListFilter<Checkout>
     {
         /// <summary>
         /// An optional, parameter to determine which carts to retrieve.

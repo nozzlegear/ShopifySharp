@@ -63,6 +63,7 @@ module ApplicationCredits =
             let data = dict [ "application_credit" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, content, "usage_charge")
+            |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

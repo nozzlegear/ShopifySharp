@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -20,20 +21,19 @@ namespace ShopifySharp
         public InventoryLevelService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
+        /// Gets a list of inventory items. 
+        /// </summary>
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter)
+        {
+            return await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter);
+        }
+        
+        /// <summary>
         /// Gets a list of inventory items
         /// </summary>
-        /// <param name="filterOptions">Options for filtering the result. InventoryItemIds and/or LocationIds must be populated.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<InventoryLevel>> ListAsync(InventoryLevelFilter filterOptions)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelListFilter filter)
         {
-            var req = PrepareRequest($"inventory_levels.json");
-
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<InventoryLevel>>(req, HttpMethod.Get, rootElement: "inventory_levels");
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -56,9 +56,13 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"inventory_levels/set.json");
             var body = updatedInventoryLevel.ToDictionary();
+            
             body.Add("disconnect_if_necessary", disconnectIfNecessary);
-            JsonContent content = new JsonContent(body);
-            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            var content = new JsonContent(body);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -70,8 +74,10 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"inventory_levels/adjust.json");
             var body = adjustInventoryLevel.ToDictionary();
-            JsonContent content = new JsonContent(body);
-            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            var content = new JsonContent(body);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -84,13 +90,15 @@ namespace ShopifySharp
         public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false)
         {
             var req = PrepareRequest($"inventory_levels/connect.json");
-            JsonContent content = new JsonContent(new
+            var content = new JsonContent(new
             {
                 location_id = locationId,
                 inventory_item_id = inventoryItemId,
                 relocate_if_necessary = relocateIfNecessary
             });
-            return await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level");
+            
+            return response.Result;
         }
     }
 }

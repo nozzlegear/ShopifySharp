@@ -1,9 +1,9 @@
-﻿using System;
-using ShopifySharp.Filters;
+﻿using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -22,19 +22,17 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 articles belonging to the given blog.
         /// </summary>
-        /// <param name="blogId">The blog that the articles belong to.</param>
-        /// <param name="filter">Options for filtering the result.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Article>> ListAsync(long blogId, ArticleFilter filter = null)
+        public virtual async Task<ListResult<Article>> ListAsync(long blogId, ListFilter<Article> filter = null)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles.json");
+            return await ExecuteGetListAsync($"blogs/{blogId}/articles.json", "articles", filter);
+        }
 
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Article>>(req, HttpMethod.Get, rootElement: "articles");
+        /// <summary>
+        /// Gets a list of up to 250 articles belonging to the given blog.
+        /// </summary>
+        public virtual async Task<ListResult<Article>> ListAsync(int blogId, ArticleListFilter filter)
+        {
+            return await ListAsync(blogId, (ListFilter<Article>) filter);
         }
 
         /// <summary>
@@ -42,16 +40,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the articles belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(long blogId, PublishableCountFilter filter = null)
+        public virtual async Task<int> CountAsync(long blogId, ArticleCountFilter filter = null)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>($"blogs/{blogId}/articles/count.json", "count", filter);
         }
 
         /// <summary>
@@ -69,7 +60,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Article>(req, HttpMethod.Get, rootElement: "article");
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Get, rootElement: "article");
+            return response.Result;
         }
 
         /// <summary>
@@ -93,7 +85,8 @@ namespace ShopifySharp
                 article = body
             });
 
-            return await ExecuteRequestAsync<Article>(req, HttpMethod.Post, content, "article");
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Post, content, "article");
+            return response.Result;
         }
 
         /// <summary>
@@ -118,7 +111,8 @@ namespace ShopifySharp
                 article = body
             });
 
-            return await ExecuteRequestAsync<Article>(req, HttpMethod.Put, content, "article");
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Put, content, "article");
+            return response.Result;
         }
 
         /// <summary>
@@ -140,7 +134,8 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"articles/authors.json");
 
-            return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "authors");
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "authors");
+            return response.Result;
         }
 
         /// <summary>
@@ -162,7 +157,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("limit", limit.Value);
             }
 
-            return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            return response.Result;
         }
 
         /// <summary>
@@ -185,7 +181,8 @@ namespace ShopifySharp
                 req.QueryParams.Add("limit", limit.Value);
             }
 
-            return await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags");
+            return response.Result;
         }
     }
 }

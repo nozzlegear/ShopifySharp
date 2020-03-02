@@ -53,11 +53,9 @@ If you're using .NET Core, you can use the `dotnet` command from your favorite s
 dotnet add package shopifysharp
 ```
 
-# Version 4.0.0
+# Version 5.0.0
 
-Version 4.0.0 is a major update to ShopifySharp, it contains breaking changes by removing the `Shopify` prefix from almost every class, interface and object (the exception being `ShopifyException` and `ShopifyRateLimitException`. On top of that, every single entity property has been made nullable to both prevent deserialization errors that have plagued us humble C# developers since 1.0.0.
-
-Version 4.0.0 contains a bunch of great enhancements, though. Chiefly, it adds support for .NET Core apps! In addition, the library now supports sending partial classes (thanks to making properties nullable) when creating or updating a Shopify object.
+Release notes for this new major version are coming soon!
 
 # Frequently Asked Questions
 

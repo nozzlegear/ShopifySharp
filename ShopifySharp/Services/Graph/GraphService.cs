@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Net.Http;
-using ShopifySharp.Filters;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,11 +58,11 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         private async Task<JToken> SendAsync(RequestUri req, HttpContent content)
         {
-            JToken response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
 
-            await CheckForErrorsAsync(response);
+            CheckForErrors(response.RawResult);
 
-            return response["data"];
+            return response.Result["data"];
         }
 
         /// <summary>
@@ -72,11 +70,12 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="response">The JToken response from ExecuteRequestAsync.</param>
         /// <returns>Task.</returns>
-        private async Task CheckForErrorsAsync(JToken response)
+        private void CheckForErrors(JToken response)
         {
             if (response["errors"] != null)
             {
                 var errorList = new List<string>();
+                
                 foreach (var error in response["errors"])
                 {
                     errorList.Add(error["message"].ToString());
@@ -84,12 +83,7 @@ namespace ShopifySharp
 
                 var message = response["errors"].FirstOrDefault()["message"].ToString();
 
-                var errors = new Dictionary<string, IEnumerable<string>>()
-                {
-                    {"Error", errorList}
-                };
-
-                throw new ShopifyException(HttpStatusCode.OK, errors, message, JsonConvert.SerializeObject(response), "");
+                throw new ShopifyException(HttpStatusCode.OK, errorList, message, JsonConvert.SerializeObject(response), "");
             }
         }
     }

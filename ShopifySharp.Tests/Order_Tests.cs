@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -39,12 +39,12 @@ namespace ShopifySharp.Tests
         {
             var created = await Task.WhenAll(Enumerable.Range(0, 2).Select(i => Fixture.Create()));
             var ids = created.Select(o => o.Id.Value);
-            var list = await Fixture.Service.ListAsync(new OrderFilter()
+            var list = await Fixture.Service.ListAsync(new OrderListFilter()
             {
                 Ids = ids
             });
 
-            Assert.All(list, o => Assert.Contains(o.Id.Value, ids));
+            Assert.All(list.Items, o => Assert.Contains(o.Id.Value, ids));
         }
 
         [Fact]

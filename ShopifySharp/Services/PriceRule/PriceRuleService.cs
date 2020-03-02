@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
-using System;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -15,7 +15,6 @@ namespace ShopifySharp
     /// </summary>
     public class PriceRuleService : ShopifyService
     {
-
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PriceRuleService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
@@ -23,34 +22,34 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<PriceRule>> ListAsync(PriceRuleFilter options = null)
+        public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter)
         {
-            var req = PrepareRequest("price_rules.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<PriceRule>> ListAsync(Dictionary<string, object> options)
+        public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null)
         {
-            var req = PrepareRequest("price_rules.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options);
-            }
-
-            return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+            return await ListAsync(filter?.AsListFilter());
         }
+        
+        // /// <summary>
+        // /// Gets a list of up to 250 of the shop's price rules.
+        // /// </summary>
+        // public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
+        // {
+        //     throw new Exception("not yet implemented");
+        //     var req = PrepareRequest("price_rules.json");
+        //
+        //     if (options != null)
+        //     {
+        //         req.QueryParams.AddRange(options);
+        //     }
+        //
+        //     return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+        // }
 
         /// <summary>
         /// Retrieves the object with the given id.
@@ -66,7 +65,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule");
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule");
+            
+            return response.Result;
         }
 
         /// <summary>
@@ -77,13 +78,13 @@ namespace ShopifySharp
         {
             var req = PrepareRequest("price_rules.json");
             var body = rule.ToDictionary();
-
             var content = new JsonContent(new
             {
                 price_rule = body
             });
+            var response =  await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule");
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule");
+            return response.Result;
         }
 
         /// <summary>
@@ -98,8 +99,9 @@ namespace ShopifySharp
             {
                 price_rule = rule
             });
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule");
 
-            return await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule");
+            return response.Result;
         }
 
         /// <summary>

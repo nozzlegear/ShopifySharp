@@ -1,3 +1,4 @@
+using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,62 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
-        public async Task Lists_Products()
+        public async Task Lists_Products_NoFilter()
         {
             var list = await Fixture.Service.ListAsync();
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Any());
+            Assert.NotNull(list.LinkHeader.NextLink);
+            Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
+            Assert.NotNull(list.LinkHeader.NextLink.Url);
+        }
+
+        [Fact]
+        public async Task Lists_Products_ComparePagingByCursorAndBySinceId()
+        {
+            var list = await Fixture.Service.ListAsync(new ProductListFilter
+            {
+                SinceId = 0,
+                Limit = 2
+            });
+            Assert.True(list.Items.Count() == 2);
+            Assert.NotNull(list.LinkHeader.NextLink);
+            Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
+            Assert.NotNull(list.LinkHeader.NextLink.Url);
+
+            var nextPageViaCursor = await Fixture.Service.ListAsync(list.GetNextPageFilter(2));
+            Assert.True(list.Items.Count() == 2);
+            Assert.NotNull(list.LinkHeader.NextLink);
+            Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
+            Assert.NotNull(list.LinkHeader.NextLink.Url);
+
+            var nextPageViaSinceId = await Fixture.Service.ListAsync(new ProductListFilter
+            {
+                SinceId = list.Items.Last().Id.Value,
+                Limit = 2
+            });
+            Assert.True(list.Items.Count() == 2);
+            Assert.NotNull(list.LinkHeader.NextLink);
+            Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
+            Assert.NotNull(list.LinkHeader.NextLink.Url);
+
+            Assert.True(Enumerable.SequenceEqual(nextPageViaCursor.Items.Select(i => i.Id.Value),
+                                                 nextPageViaSinceId.Items.Select(i => i.Id.Value)));
+        }
+
+        [Fact]
+        public async Task Lists_Products_PageAll()
+        {
+            var svc = Fixture.Service;
+            var list = await svc.ListAsync(new ProductListFilter { Limit = 5 });
+
+            while (true)
+            {
+                Assert.True(list.Items.Any());
+                list = await svc.ListAsync(list.GetNextPageFilter());
+                if (!list.HasNextPage)
+                    break;
+            }
         }
 
         [Fact]

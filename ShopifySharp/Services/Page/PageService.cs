@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -19,38 +20,29 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        
         /// <summary>
         /// Gets a count of all of the shop's pages.
         /// </summary>
-        /// <returns>The count of all pages for the shop.</returns>
-        public virtual async Task<int> CountAsync(PageFilter filter = null)
+        public virtual async Task<int> CountAsync(PageCountFilter filter = null)
         {
-            var req = PrepareRequest("pages/count.json");
-
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("pages/count.json", "count", filter);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's pages.
         /// </summary>
-        /// <returns></returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<Page>> ListAsync(PageFilter options = null)
+        public virtual async Task<ListResult<Page>> ListAsync(ListFilter<Page> filter)
         {
-            var req = PrepareRequest("pages.json");
+            return await ExecuteGetListAsync("pages.json", "pages", filter);
+        }
 
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<Page>>(req, HttpMethod.Get, rootElement: "pages");
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's pages.
+        /// </summary>
+        public virtual async Task<ListResult<Page>> ListAsync(PageListFilter filter = null)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -68,7 +60,9 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
+
+            return response.Result;
         }
 
         /// <summary>
@@ -94,8 +88,9 @@ namespace ShopifySharp
             {
                 page = body
             });
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
 
-            return await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
+            return response.Result;
         }
 
         /// <summary>
@@ -111,8 +106,9 @@ namespace ShopifySharp
             {
                 page = page
             });
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page");
 
-            return await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page");
+            return response.Result;
         }
 
         /// <summary>

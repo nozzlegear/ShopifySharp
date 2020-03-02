@@ -5,6 +5,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -13,31 +14,24 @@ namespace ShopifySharp
     /// </summary>
     public class CustomCollectionService : ShopifyService
     {
-        /// <summary>
-        /// Creates a new instance of <see cref="CustomCollectionService" />.
-        /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CustomCollectionService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
-        /// default: 50
-        /// Gets a list of up to 250 custom collections for the corresponding productId
+        /// Gets a list of up to 250 custom collections.
         /// </summary>
-        /// <param name="filter">The <see cref="CustomCollection"/>. used to filter results</param>
-        /// <returns></returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<CustomCollection>> ListAsync(CustomCollectionFilter filter = null)
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter = null)
         {
-            var req = PrepareRequest("custom_collections.json");
+            return await ExecuteGetListAsync("custom_collections.json", "custom_collections", filter);
+        }
 
-            //Add optional parameters to request
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<CustomCollection>>(req, HttpMethod.Get, rootElement: "custom_collections");
+        /// <summary>
+        /// Gets a list of up to 250 custom collections.
+        /// </summary>
+        public virtual async Task<ListResult<CustomCollection>> ListAsync(CustomCollectionListFilter filter)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
@@ -53,25 +47,16 @@ namespace ShopifySharp
                 custom_collection = customCollection
             });
 
-            return await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Post, content, "custom_collection");
+            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Post, content, "custom_collection");
+            
+            return response.Result;
         }
 
-        /// <summary>
-        /// Gets a count of all of the custom collections
-        /// </summary>
-        /// <returns>The count of all collects for the shop.</returns>
-        public virtual async Task<int> CountAsync(CustomCollectionFilter options = null)
+        public virtual async Task<int> CountAsync(CustomCollectionCountFilter filter = null)
         {
-            var req = PrepareRequest("custom_collections/count.json");
-
-            if (options != null)
-            {
-                req.QueryParams.AddRange(options.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>("custom_collections/count.json", "count", filter);
         }
-
+        
         /// <summary>
         /// Retrieves the <see cref="CustomCollection"/> with the given id.
         /// </summary>
@@ -80,14 +65,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> GetAsync(long customCollectionId, string fields = null)
         {
-            var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
-
-            if (!string.IsNullOrEmpty(fields))
-            {
-                req.QueryParams.Add("fields", fields);
-            }
-
-            return await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Get, rootElement: "custom_collection");
+            return await ExecuteGetAsync<CustomCollection>($"custom_collections/{customCollectionId}.json", "custom_collection", fields);
         }
 
         /// <summary>
@@ -115,7 +93,8 @@ namespace ShopifySharp
                 custom_collection = customCollection
             });
 
-            return await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Put, content, "custom_collection");
+            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Put, content, "custom_collection");
+            return response.Result;
         }
     }
 }

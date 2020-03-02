@@ -16,9 +16,9 @@ namespace ShopifySharp
         public bool? CauseCancel { get; set; }
 
         /// <summary>
-        /// WARNING: This is an undocumented value returned by the Shopify API. Use at your own risk.
+        /// The ID of the checkout that the order risk belongs to.
         /// </summary>
-        [JsonProperty("checkout_id"), Obsolete("This is an undocumented value returned by the Shopify API. Use at your own risk.")]
+        [JsonProperty("checkout_id")]
         public long? CheckoutId { get; set; }
 
         /// <summary>
@@ -38,12 +38,6 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("message")]
         public string Message { get; set; }
-
-        /// <summary>
-        /// WARNING: This is an undocumented field returned by the Shopify API. Use at your own risk. This value cannot be set via API. This message is shown in the merchant's admin dashboard if different from <see cref="Message" />.
-        /// </summary>
-        [JsonProperty("merchant_message"), Obsolete("This is an undocumented field returned by the Shopify API. Use at your own risk.")]
-        public string MerchantMessage { get; set; }
 
         /// <summary>
         /// The recommended action given to the merchant. Known values are 'cancel', 'investigate' and 'accept'.

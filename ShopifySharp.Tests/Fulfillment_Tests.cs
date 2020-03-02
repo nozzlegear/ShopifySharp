@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
         {
             long orderId = Fixture.Created.First().OrderId.Value;
             var fromDate = DateTime.UtcNow.AddDays(-2);
-            var count = await Fixture.Service.CountAsync(orderId, new CountFilter()
+            var count = await Fixture.Service.CountAsync(orderId, new FulfillmentCountFilter()
             {
                 CreatedAtMin = fromDate
             });
@@ -45,7 +45,7 @@ namespace ShopifySharp.Tests
             long orderId = Fixture.Created.First().OrderId.Value;
             var list = await Fixture.Service.ListAsync(orderId);
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -53,12 +53,12 @@ namespace ShopifySharp.Tests
         {
             long orderId = Fixture.Created.First().OrderId.Value;
             var fromDate = DateTime.UtcNow.AddDays(-2);
-            var list = await Fixture.Service.ListAsync(orderId, new ListFilter()
+            var list = await Fixture.Service.ListAsync(orderId, new FulfillmentListFilter
             {
                 CreatedAtMin = fromDate
             });
 
-            Assert.True(list.Count() > 0);
+            Assert.True(list.Items.Count() > 0);
         }
 
         [Fact]
@@ -165,6 +165,8 @@ namespace ShopifySharp.Tests
         public FulfillmentService Service { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public long LocationId => 6226758;
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
@@ -291,7 +293,9 @@ namespace ShopifySharp.Tests
                 fulfillment.LineItems = items;
             }
 
-            fulfillment = await Service.CreateAsync(orderId, fulfillment, false);
+            fulfillment.NotifyCustomer = false;
+            fulfillment.LocationId = LocationId;
+            fulfillment = await Service.CreateAsync(orderId, fulfillment);
 
             Created.Add(fulfillment);
 

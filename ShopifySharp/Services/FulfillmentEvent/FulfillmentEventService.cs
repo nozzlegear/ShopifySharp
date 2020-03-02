@@ -26,12 +26,9 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillment belongs to.</param>
         /// <param name="fulfillmentId">The fulfillment id to which the fulfillment events belong to.</param>
         /// <returns>The list of fulfillment events for the given fulfillment.</returns>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
         public virtual async Task<IEnumerable<FulfillmentEvent>> ListAsync(long orderId, long fulfillmentId)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
-
-            return await ExecuteRequestAsync<List<FulfillmentEvent>>(req, HttpMethod.Get, rootElement: "fulfillment_events");
+            return await ExecuteGetAsync<IEnumerable<FulfillmentEvent>>($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json", "fulfillment_events");
         }
 
         /// <summary>
@@ -43,9 +40,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="FulfillmentEvent"/>.</returns>
         public virtual async Task<FulfillmentEvent> GetAsync(long orderId, long fulfillmentId, long fulfillmentEventId)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
-
-            return await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Get, rootElement: "fulfillment_event");
+            return await ExecuteGetAsync<FulfillmentEvent>($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json", "fulfillment_event");
         }
 
         /// <summary>
@@ -62,7 +57,8 @@ namespace ShopifySharp
                 @event
             });
 
-            return await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event");
+            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event");
+            return response.Result;
         }
 
         /// <summary>

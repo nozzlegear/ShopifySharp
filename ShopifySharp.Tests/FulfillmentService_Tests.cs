@@ -29,8 +29,10 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_All_FulfillmentServices()
         {
-            var list = await Fixture.Service.ListAsync("all");
-
+            var list = await Fixture.Service.ListAsync(new FulfillmentServiceListFilter
+            {
+                Scope = "all"
+            });
             Assert.True(list.Count() > 0);
         }
 

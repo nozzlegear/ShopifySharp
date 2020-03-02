@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -23,29 +24,31 @@ namespace ShopifySharp
         /// Gets a count of all variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
+        /// <param name="filter">Options for filtering the result.</param>
+        /// <remarks>
+        /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
+        /// </remarks>
         public virtual async Task<int> CountAsync(long productId)
         {
-            var req = PrepareRequest($"products/{productId}/variants/count.json");
-
-            return await ExecuteRequestAsync<int>(req, HttpMethod.Get, rootElement: "count");
+            return await ExecuteGetAsync<int>($"products/{productId}/variants/count.json", "count");
         }
 
         /// <summary>
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
-        /// <param name="filterOptions">Options for filtering the result.</param>
-        [Obsolete("This ListAsync method targets a version of Shopify's API which will be deprecated and cease to function in April of 2020. ShopifySharp version 5.0 will be published soon with support for the newer list API. Make sure you update before April of 2020.")]
-        public virtual async Task<IEnumerable<ProductVariant>> ListAsync(long productId, ListFilter filterOptions = null)
+        public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter)
         {
-            var req = PrepareRequest($"products/{productId}/variants.json");
+            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter);
+        }
 
-            if (filterOptions != null)
-            {
-                req.QueryParams.AddRange(filterOptions.ToParameters());
-            }
-
-            return await ExecuteRequestAsync<List<ProductVariant>>(req, HttpMethod.Get, rootElement: "variants");
+        /// <summary>
+        /// Gets a list of variants belonging to the given product.
+        /// </summary>
+        /// <param name="productId">The product that the variants belong to.</param>
+        public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter = null)
+        {
+            return await ListAsync(productId, filter?.AsListFilter());
         }
 
         /// <summary>
@@ -54,9 +57,7 @@ namespace ShopifySharp
         /// <param name="variantId">The id of the product variant to retrieve.</param>
         public virtual async Task<ProductVariant> GetAsync(long variantId)
         {
-            var req = PrepareRequest($"variants/{variantId}.json");
-
-            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Get, rootElement: "variant");
+            return await ExecuteGetAsync<ProductVariant>($"variants/{variantId}.json", "variant");
         }
 
         /// <summary>
@@ -71,8 +72,9 @@ namespace ShopifySharp
             {
                 variant = variant
             });
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
 
-            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
+            return response.Result;
         }
 
         /// <summary>
@@ -87,8 +89,9 @@ namespace ShopifySharp
             {
                 variant = variant
             });
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant");
 
-            return await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant");
+            return response.Result;
         }
 
         /// <summary>
