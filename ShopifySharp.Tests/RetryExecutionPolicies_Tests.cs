@@ -49,10 +49,35 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task NonLeakyBucketBreachShouldRetryWhenConstructorBoolIsFalse()
+        {
+            OrderService.SetExecutionPolicy(new SmartRetryExecutionPolicy(false));
+            
+            bool caught = false;
+            
+            try
+            {
+                //trip the 5 orders per minute limit on dev stores
+                foreach (var i in Enumerable.Range(0, 10))
+                {
+                    await OrderService.CreateAsync(this.Order);
+                }
+            }
+            catch (ShopifyRateLimitException)
+            {
+                caught = true;
+            }
+            
+            Assert.False(caught);
+        }
+
+        [Fact]
         public async Task LeakyBucketBreachShouldAttemptRetry()
         {
             OrderService.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            
             bool caught = false;
+            
             try
             {
                 //trip the 40/seconds bucket limit
@@ -62,6 +87,7 @@ namespace ShopifySharp.Tests
             {
                 caught = true;
             }
+            
             Assert.False(caught);
         }
     }
