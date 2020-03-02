@@ -60,7 +60,7 @@ namespace ShopifySharp
         {
             var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
 
-            CheckForErrors(response.RawResult);
+            CheckForErrors(response);
 
             return response.Result["data"];
         }
@@ -68,22 +68,22 @@ namespace ShopifySharp
         /// <summary>
         /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors. This loses the requestId, but otherwise is capable of passing along the message.
         /// </summary>
-        /// <param name="response">The JToken response from ExecuteRequestAsync.</param>
+        /// <param name="requestResult">The RequestResult<JToken> response from ExecuteRequestAsync.</param>
         /// <returns>Task.</returns>
-        private void CheckForErrors(JToken response)
+        private void CheckForErrors(RequestResult<JToken> requestResult)
         {
-            if (response["errors"] != null)
+            if (requestResult.Result["errors"] != null)
             {
                 var errorList = new List<string>();
                 
-                foreach (var error in response["errors"])
+                foreach (var error in requestResult.Result["errors"])
                 {
                     errorList.Add(error["message"].ToString());
                 }
 
-                var message = response["errors"].FirstOrDefault()["message"].ToString();
+                var message = requestResult.Result["errors"].FirstOrDefault()["message"].ToString();
 
-                throw new ShopifyException(HttpStatusCode.OK, errorList, message, JsonConvert.SerializeObject(response), "");
+                throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
             }
         }
     }
