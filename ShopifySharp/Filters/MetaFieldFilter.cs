@@ -49,6 +49,6 @@ namespace ShopifySharp.Filters
 		/// Show metafields last updated before date 
 		/// </summary>
         [JsonProperty("updated_at_max")]
-		public DateTimeOffset UpdatedAtMax { get; set; }
+		public DateTimeOffset? UpdatedAtMax { get; set; }
 	}
 }

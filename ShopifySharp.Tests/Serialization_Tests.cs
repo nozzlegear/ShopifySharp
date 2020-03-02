@@ -54,5 +54,18 @@ namespace ShopifySharp.Tests
             var order = JsonConvert.DeserializeObject<Order>(json);
             Assert.Null(order.LineItems.First().Properties);
         }
+
+        [Fact]
+        public void Ensure_Filter_Properties_Are_Nullable()
+        {
+            foreach (var pty in typeof(ShopifyService).Assembly
+                                              .DefinedTypes
+                                              .Where(t => t.Name.EndsWith("Filter"))
+                                              .SelectMany(t => t.GetProperties()))
+            {
+                bool isNullable = !pty.PropertyType.IsValueType || Nullable.GetUnderlyingType(pty.PropertyType) != null;
+                Assert.True(isNullable, $"Filter property {pty.DeclaringType.Name}.{pty.Name} is not nullable");
+            }
+        }
     }
 }
