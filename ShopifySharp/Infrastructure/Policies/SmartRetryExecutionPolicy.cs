@@ -30,6 +30,13 @@ namespace ShopifySharp
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
+        private readonly bool _retryOnlyIfLeakyBucketFull;
+
+        public SmartRetryExecutionPolicy(bool retryOnlyIfLeakyBucketFull = true)
+        {
+            _retryOnlyIfLeakyBucketFull = retryOnlyIfLeakyBucketFull;
+        }
+
         public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseRequest);
@@ -61,7 +68,7 @@ namespace ShopifySharp
 
                     return fullResult;
                 }
-                catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull)
+                catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryOnlyIfLeakyBucketFull)
                 {
                     //Only retry if breach caused by full bucket
                     //Other limits will bubble the exception because it's not clear how long the program should wait
