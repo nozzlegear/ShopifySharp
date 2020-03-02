@@ -313,7 +313,7 @@ namespace ShopifySharp
                     errors = new List<string>{ baseMessage };
                 }
 
-                throw new ShopifyRateLimitException(code, errors, rateExceptionMessage, rawResponse, requestId);
+                throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId, LeakyBucketState.Get(response));
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
@@ -355,7 +355,7 @@ namespace ShopifySharp
                     };
                 }
 
-                throw new ShopifyException(code, errors, exceptionMessage, rawResponse, requestId);
+                throw new ShopifyException(response, code, errors, exceptionMessage, rawResponse, requestId);
             }
 
             var message = $"({statusMessage}) Shopify returned {statusMessage}, but there was no JSON to parse into an error message.";
@@ -364,7 +364,7 @@ namespace ShopifySharp
                 message
             };
 
-            throw new ShopifyException(code, customErrors, message, rawResponse, requestId);
+            throw new ShopifyException(response, code, customErrors, message, rawResponse, requestId);
         }
 
         /// <summary>

@@ -24,8 +24,11 @@ namespace ShopifySharp
 
                     return fullResult;
                 }
-                catch (ShopifyRateLimitException)
+                catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull)
                 {
+                    //Only retry if breach caused by full bucket
+                    //Other limits will bubble the exception because it's not clear how long the program should wait
+                    //Even if there is a Retry-After header, we probably don't want the thread to sleep for potentially many hours
                     await Task.Delay(RETRY_DELAY);
                 }
             }
