@@ -133,12 +133,8 @@ namespace ShopifySharp.Tests
         /// </summary>
         public long? OrderId = null; 
 
-        public Refund_Tests_Fixture()
-        {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
-        }
-
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        
         public RefundService Service { get; } = new RefundService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public string Note => "This order was created while testing ShopifySharp!";
@@ -147,8 +143,14 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
+            var policy = new SmartRetryExecutionPolicy(false);
+            
+            OrderService.SetExecutionPolicy(policy);
+            Service.SetExecutionPolicy(policy);
+            
             if (!OrderId.HasValue)
                 return;
+            
             // Retrieve an order for count, list, get, etc. orders.
             await Retrieve(OrderId.Value);
         }

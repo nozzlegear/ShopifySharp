@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ShopifySharp.Filters;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -60,7 +59,7 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            var policy = new SmartRetryExecutionPolicy();
+            var policy = new SmartRetryExecutionPolicy(false);
 
             // Fulfillment API has a stricter rate limit when on a non-paid store.
             FulfillmentService.SetExecutionPolicy(policy);

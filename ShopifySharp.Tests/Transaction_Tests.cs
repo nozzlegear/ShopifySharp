@@ -121,7 +121,7 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            var policy = new SmartRetryExecutionPolicy();
+            var policy = new SmartRetryExecutionPolicy(false);
 
             Service.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);

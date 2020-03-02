@@ -13,19 +13,19 @@ namespace ShopifySharp.Tests
         private OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         private Order Order = new Order()
-                        {
-                            LineItems = new List<LineItem>()
-                                {
-                                    new LineItem()
-                                    {
-                                        Name = "Test Line Item",
-                                        Title = "Test Line Item Title",
-                                        Quantity = 2,
-                                        Price = 5
-                                    }
-                                },
-                            TotalPrice = 5.00m,
-                        };
+        {
+            LineItems = new List<LineItem>()
+            {
+                new LineItem()
+                {
+                    Name = "Test Line Item",
+                    Title = "Test Line Item Title",
+                    Quantity = 2,
+                    Price = 5
+                }
+            },
+            TotalPrice = 5.00m,
+        };
 
         [Fact]
         public async Task NonLeakyBucketBreachShouldNotAttemptRetry()

@@ -36,7 +36,10 @@ namespace ShopifySharp.Tests
         public async Task Lists_Events_For_Subjects()
         {
             // Get an order id
-            long orderId = (await new OrderService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new OrderListFilter()
+            var orderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+            orderService.SetExecutionPolicy(new SmartRetryExecutionPolicy(false));
+            
+            long orderId = (await orderService.ListAsync(new OrderListFilter()
             {
                 Limit = 1
             })).Items.First().Id.Value;
@@ -72,7 +75,7 @@ namespace ShopifySharp.Tests
 
         public Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy(false));
 
             return Task.CompletedTask;
         }
