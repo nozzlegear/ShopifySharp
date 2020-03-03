@@ -7,9 +7,8 @@ using System;
 namespace ShopifySharp
 {
     /// <summary>
-    /// A service for manipulating Shopify checkouts.
+    /// A service for working with abandoned checkouts.
     /// </summary>
-    [Obsolete("The endpoints and methods on this service no longer appear to be documented by Shopify. It may be removed in a future version of ShopifySharp.")]
     public class CheckoutService : ShopifyService
     {
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
@@ -19,6 +18,7 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a new Checkout.
         /// </summary>
+        [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
         public virtual async Task<Checkout> CreateAsync(Checkout checkout)
         {
             var req = PrepareRequest("checkout.json");
@@ -31,6 +31,7 @@ namespace ShopifySharp
         /// <summary>
         /// Completes a checkout without requiring payment.
         /// </summary>
+        [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
         public virtual async Task<Checkout> CompleteAsync(string token)
         {
             var req = PrepareRequest($"checkouts/{token}/complete.json");
@@ -42,6 +43,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets an existing, processing or completed checkout.
         /// </summary>
+        [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
         public virtual async Task<Checkout> GetAsync(string token)
         {
             var req = PrepareRequest($"checkouts/{token}.json");
@@ -53,6 +55,7 @@ namespace ShopifySharp
         /// <summary>
         /// Updates an existing checkout based on the token id.
         /// </summary>
+        [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
         public virtual async Task<Checkout> UpdateAsync(string token, Checkout updatedCheckout)
         {
             var req = PrepareRequest($"checkouts/{token}.json");
@@ -66,6 +69,7 @@ namespace ShopifySharp
         /// new subtotal price, total tax, and total price in the event that this shipping rate is selected. This can be used to update the UI without performing further API requests. To apply a 
         /// shipping rate, update the checkout's shipping line with the handle of the selected rate. 
         /// </summary>
+        [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
         public virtual async Task<IEnumerable<CheckoutShippingRate>> ListShippingRatesAsync(string token)
         {
             var req = PrepareRequest($"checkouts/{token}/shipping_rates.json");
