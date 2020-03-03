@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -31,7 +32,10 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_DiscountCodes()
         {
-            var list = await Fixture.DiscountCodeService.ListAsync(Fixture.CreatedPriceRules.First().Id.Value);
+            var list = await Fixture.DiscountCodeService.ListAsync(Fixture.CreatedPriceRules.First().Id.Value, new PriceRuleDiscountCodeListFilter
+            {
+                Limit = 5
+            });
 
             Assert.True(list.Items.Count() > 0);
         }
