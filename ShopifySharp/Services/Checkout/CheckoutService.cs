@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using ShopifySharp.Filters;
+﻿using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
@@ -11,6 +9,7 @@ namespace ShopifySharp
     /// <summary>
     /// A service for manipulating Shopify checkouts.
     /// </summary>
+    [Obsolete("The endpoints and methods on this service no longer appear to be documented by Shopify. It may be removed in a future version of ShopifySharp.")]
     public class CheckoutService : ShopifyService
     {
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
