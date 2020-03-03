@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using System;
+using ShopifySharp.Filters;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -15,6 +17,34 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CheckoutService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
+        /// <summary>
+        /// Gets a count of all of the shop's orders.
+        /// </summary>
+        /// <param name="filter">Options for filtering the count.</param>
+        /// <returns>The count of all orders for the shop.</returns>
+        public virtual async Task<int> CountAsync(CheckoutCountFilter filter = null)
+        {
+            return await ExecuteGetAsync<int>("checkouts/count.json", "count", filter);
+        }
+        
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's abandoned checkouts.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<ListResult<Checkout>> ListAsync(ListFilter<Checkout> filter)
+        {
+            return await ExecuteGetListAsync("checkouts.json", "checkouts", filter);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the shop's abandoned checkouts.
+        /// </summary>
+        /// <param name="filter">Options for filtering the result.</param>
+        public virtual async Task<ListResult<Checkout>> ListAsync(CheckoutListFilter filter = null)
+        {
+            return await ListAsync(filter?.AsListFilter());
+        }
+        
         /// <summary>
         /// Creates a new Checkout.
         /// </summary>

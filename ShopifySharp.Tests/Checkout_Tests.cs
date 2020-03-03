@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -17,16 +13,27 @@ namespace ShopifySharp.Tests
             Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
         }
 
+        [Fact]
+        public async Task Lists_Checkouts()
+        {
+            var list = await Service.ListAsync();
+            
+            Assert.NotNull(list);
+            Assert.NotNull(list.Items);
+        }
+
+        [Fact]
+        public async Task Counts_Checkouts()
+        {
+            var count = await Service.CountAsync();
+            
+            Assert.True(count >= 0);
+        }
+
         [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
         public async Task Creates_Checkouts()
         {
-            var checkout = await Service.CreateAsync(new Checkout
-            {
-                Email = "joshua@nozzlegear.com"
-            });
-
-            Assert.NotNull(checkout);
-            Assert.Equal("joshua@nozzlegear.com", checkout.Email);
+            
         }
 
         [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
