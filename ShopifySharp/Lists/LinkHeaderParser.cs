@@ -38,11 +38,12 @@ namespace ShopifySharp.Lists
                 throw new ShopifyException($"Cannot parse page link url: '{matchedUrl}'");
             }
 
-            string GetQueryParam(string name)
-            {
-                return uri.Query.Split('?', '&')
-                                .FirstOrDefault(p => p.StartsWith($"{name}="))
-                                ?.Substring($"{name}=".Length);
+            var uriQuery = Uri.UnescapeDataString(uri.Query);
+
+            string GetQueryParam (string name) {
+                return uriQuery.Split ('?', '&')
+                    .FirstOrDefault (p => p.StartsWith ($"{name}=")) ?
+                    .Substring ($"{name}=".Length);
             }
 
             string pageInfo = GetQueryParam("page_info");
@@ -55,10 +56,6 @@ namespace ShopifySharp.Lists
 
             int.TryParse(GetQueryParam("limit"), out int limit);
             
-            if (fields != null)
-            {
-                fields = fields.Replace("%2C", ",");
-            }
 
             return new LinkHeaderParseResult<T>.PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null, fields ?? null);
         }
