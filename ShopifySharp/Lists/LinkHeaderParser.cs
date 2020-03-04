@@ -54,6 +54,11 @@ namespace ShopifySharp.Lists
             }
 
             int.TryParse(GetQueryParam("limit"), out int limit);
+            
+            if (fields != null)
+            {
+                fields = fields.Replace("%2C", ",");
+            }
 
             return new LinkHeaderParseResult<T>.PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null, fields ?? null);
         }
