@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -188,18 +187,9 @@ namespace ShopifySharp
         /// https://shopify.dev/docs/admin-api/rest/reference/customers/customer#orders-2020-01
         /// This list does not appear to be paginated. 
         /// </remarks>
-        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, ListFilter<Customer> filter = null)
+        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, CustomerOrderListFilter filter = null)
         {
-            var req = PrepareRequest($"customers/{customerId}/orders.json");
-            
-            if (filter != null)
-            {
-                req.QueryParams.AddRange(filter.ToQueryParameters());
-            }
-            
-            var response = await ExecuteRequestAsync<List<Order>>(req, HttpMethod.Get, rootElement: "orders");
-
-            return response.Result;
+            return await ExecuteGetAsync<List<Order>>($"customers/{customerId}/orders.json", "orders", filter);
         }
     }
 }
