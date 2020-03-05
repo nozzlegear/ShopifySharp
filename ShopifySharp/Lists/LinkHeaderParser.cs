@@ -40,7 +40,8 @@ namespace ShopifySharp.Lists
 
             var decodedUriQuery = Uri.UnescapeDataString(uri.Query);
 
-            string GetQueryParam(string name) {
+            string GetQueryParam(string name) 
+            {
                 return decodedUriQuery.Split('?', '&')
                     .FirstOrDefault(p => p.StartsWith($"{name}="))
                     ?.Substring ($"{name}=".Length);
