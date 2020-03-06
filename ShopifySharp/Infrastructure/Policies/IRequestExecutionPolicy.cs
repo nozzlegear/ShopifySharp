@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 
@@ -14,6 +15,7 @@ namespace ShopifySharp
     {
         /// <param name="baseRequest">The base request that was built by a service to execute.</param>
         /// <param name="executeRequestAsync">A delegate that executes the request you pass to it.</param>
-        Task<RequestResult<T>> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync);
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<RequestResult<T>> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken);
     }
 }
