@@ -160,6 +160,9 @@ namespace ShopifySharp.Tests
             Assert.Equal(title, updated.Title);
         }
 
+        /// <summary>
+        /// Ensures that updating an existing object will properly update only desired fields.
+        /// </summary>
         [Fact]
         public async Task Updates_Products_SpecificFields()
         {
@@ -188,6 +191,41 @@ namespace ShopifySharp.Tests
             Assert.NotEmpty(updated.BodyHtml);
             Assert.Null(updated.TemplateSuffix);
         }
+
+        /// <summary>
+        /// Ensures that passing in a new POCO as the updating object will properly update only desired fields.
+        /// </summary>
+        [Fact]
+        public async Task Updates_Products_SpecificFieldsOnNewProduct()
+        {
+            string title = "ShopifySharp Updated Test Field Product";
+
+            var created = await Fixture.Create();
+            string existingVendor = created.Vendor;
+            long id = created.Id.Value;
+
+            var toBeUpdated = new Product()
+            {
+                Title = title,
+                ProductType = null,
+                // Validate that a field's value will not change
+                Vendor = "Should Not Update Vendor",
+                // Validate that a null field will stay null
+                TemplateSuffix = "shouldNotUpdateSuffix",
+                // Validate that a non-nulled field will retain its value
+                BodyHtml = null
+            };
+            
+            var updated = await Fixture.Service.UpdateAsync(id, toBeUpdated, new string[] { nameof(Product.Title), nameof(Product.ProductType) });
+
+            Assert.Equal(title, updated.Title);
+            Assert.Empty(updated.ProductType);
+            Assert.Equal(existingVendor, updated.Vendor);
+            Assert.NotNull(updated.BodyHtml);
+            Assert.NotEmpty(updated.BodyHtml);
+            Assert.Null(updated.TemplateSuffix);
+        }
+
 
         [Fact]
         public async Task Updates_Products_SpecificFields_Throws_When_FieldsContainsPeriod()

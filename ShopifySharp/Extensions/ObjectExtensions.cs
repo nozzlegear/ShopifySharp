@@ -21,7 +21,7 @@ namespace ShopifySharp
             {
                 if (fields.Any(f => f.Contains('.')))
                 {
-                    throw new NotImplementedException("Limiting properties of child options is not supported.");
+                    throw new NotImplementedException("Limiting properties of child objects is not supported.");
                 }
                 propInfos = propInfos.Where(pi => fields.Contains(pi.Name));
             }
@@ -31,7 +31,8 @@ namespace ShopifySharp
             {
                 object value = property.GetValue(obj, null);
                 string propName = property.Name;
-                if (value == null) continue;
+                // Allow fields explicitly included to be set as null
+                if (value == null && fields == null) continue;
 
                 if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
                 {
@@ -41,7 +42,7 @@ namespace ShopifySharp
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
 
-                if (value.GetType().GetTypeInfo().IsEnum)
+                if (value != null && value.GetType().GetTypeInfo().IsEnum)
                 {
                     value = ((Enum)value).ToSerializedString();
                 }
