@@ -3,6 +3,7 @@ using ShopifySharp.Filters;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
+using System.Collections.Generic;
 
 namespace ShopifySharp
 {
@@ -26,7 +27,7 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<int>("products/count.json", "count", filter);
         }
-        
+
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
@@ -88,13 +89,25 @@ namespace ShopifySharp
         /// <param name="productId">Id of the object being updated.</param>
         /// <param name="product">The <see cref="Product"/> to update.</param>
         /// <returns>The updated <see cref="Product"/>.</returns>
-        public virtual async Task<Product> UpdateAsync(long productId, Product product)
+        public virtual async Task<Product> UpdateAsync(long productId, Product product, IEnumerable<string> fields = null)
         {
             var req = PrepareRequest($"products/{productId}.json");
-            var content = new JsonContent(new
+            JsonContent content;
+
+            if (fields != null)
             {
-                product = product
-            });
+                content = new JsonContent(new
+                {
+                    product = product.ToDictionary(fields)
+                });
+            }
+            else
+            {
+                content = new JsonContent(new
+                {
+                    product = product
+                });
+            }
             var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
 
             return response.Result;
