@@ -9,15 +9,25 @@ namespace ShopifySharp
     internal static class ObjectExtensions
     {
         /// <summary>
-        /// Converts the object to a dictionary./>
+        /// Converts the object to a dictionary.
         /// </summary>
         /// <returns>The object as a <see cref="IDictionary{String, Object}"/>.</returns>
-        public static IDictionary<string, object> ToDictionary(this object obj)
+        public static IDictionary<string, object> ToDictionary(this object obj, IEnumerable<string> fields = null)
         {
             IDictionary<string, object> output = new Dictionary<string, object>();
+            var propInfos = obj.GetType().GetAllDeclaredProperties();
+
+            if (fields != null)
+            {
+                if (fields.Any(f => f.Contains('.')))
+                {
+                    throw new NotImplementedException("Limiting properties of child options is not supported.");
+                }
+                propInfos = propInfos.Where(pi => fields.Contains(pi.Name));
+            }
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
-            foreach (PropertyInfo property in obj.GetType().GetAllDeclaredProperties())
+            foreach (PropertyInfo property in propInfos)
             {
                 object value = property.GetValue(obj, null);
                 string propName = property.Name;
