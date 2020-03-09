@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<int> CountAsync(long productId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"products/{productId}/variants/count.json", "count");
+            return await ExecuteGetAsync<int>($"products/{productId}/variants/count.json", "count", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <param name="productId">The product that the variants belong to.</param>
         public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter);
+            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <param name="productId">The product that the variants belong to.</param>
         public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(productId, filter?.AsListFilter());
+            return await ListAsync(productId, filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// <param name="variantId">The id of the product variant to retrieve.</param>
         public virtual async Task<ProductVariant> GetAsync(long variantId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<ProductVariant>($"variants/{variantId}.json", "variant");
+            return await ExecuteGetAsync<ProductVariant>($"variants/{variantId}.json", "variant", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ShopifySharp
             {
                 variant = variant
             });
-            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant");
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -90,7 +90,7 @@ namespace ShopifySharp
             {
                 variant = variant
             });
-            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant");
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -104,7 +104,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"products/{productId}/variants/{variantId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(ScriptTagCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("script_tags/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("script_tags/count.json", "count", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ScriptTag>> ListAsync(ListFilter<ScriptTag> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("script_tags.json", "script_tags", filter);
+            return await ExecuteGetListAsync("script_tags.json", "script_tags", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag");
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Get, rootElement: "script_tag", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -79,7 +79,7 @@ namespace ShopifySharp
             {
                 script_tag = tag
             });
-            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag");
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -97,7 +97,7 @@ namespace ShopifySharp
             {
                 script_tag = tag
             });
-            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag");
+            var response = await ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -110,7 +110,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"script_tags/{tagId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

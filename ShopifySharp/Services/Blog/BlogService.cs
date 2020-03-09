@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("blogs.json", "blogs", filter);
+            return await ExecuteGetListAsync("blogs.json", "blogs", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Blog>> ListAsync(BlogListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("blogs/count.json", "count");
+            return await ExecuteGetAsync<int>("blogs/count.json", "count", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ShopifySharp
                 blog = body
             });
 
-            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, content, rootElement: "blog");
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, content, rootElement: "blog", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -91,7 +91,7 @@ namespace ShopifySharp
                 blog = body
             });
 
-            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, content, "blog");
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, content, "blog", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -103,7 +103,7 @@ namespace ShopifySharp
         {
             var request = PrepareRequest($"blogs/{id}.json");
 
-            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, rootElement: "blog");
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, rootElement: "blog", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -115,7 +115,7 @@ namespace ShopifySharp
         {
             var request = PrepareRequest($"blogs/{id}.json");
 
-            await ExecuteRequestAsync(request, HttpMethod.Delete);
+            await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

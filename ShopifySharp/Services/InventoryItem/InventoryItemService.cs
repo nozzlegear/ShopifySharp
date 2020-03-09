@@ -27,12 +27,12 @@ namespace ShopifySharp
         /// <param name="ids">Show only inventory items specified by a list of IDs. Maximum: 100.</param>
         public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter);
+            return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter, cancellationToken: cancellationToken);
         }
 
         public virtual async Task<ListResult<InventoryItem>> ListAsync(InventoryItemListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
         public virtual async Task<InventoryItem> GetAsync(long inventoryItemId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<InventoryItem>($"inventory_items/{inventoryItemId}.json", "inventory_item");
+            return await ExecuteGetAsync<InventoryItem>($"inventory_items/{inventoryItemId}.json", "inventory_item", cancellationToken: cancellationToken);
         }
 
 
@@ -57,7 +57,7 @@ namespace ShopifySharp
                 inventory_item = inventoryItem
             } );
 
-            var response = await ExecuteRequestAsync<InventoryItem>( req, HttpMethod.Put, content, rootElement: "inventory_item" );
+            var response = await ExecuteRequestAsync<InventoryItem>( req, HttpMethod.Put, content, rootElement: "inventory_item" , cancellationToken: cancellationToken);
             return response.Result;
         }
     }

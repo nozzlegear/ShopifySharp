@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<AccessScope>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes");
+            return await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes", cancellationToken: cancellationToken);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// <returns>The count of all customers for the shop.</returns>
         public virtual async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"{RootResource}/count.json", "count", filter);
+            return await ExecuteGetAsync<int>($"{RootResource}/count.json", "count", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"{RootResource}.json", RootResource, filter);
+            return await ExecuteGetListAsync($"{RootResource}.json", RootResource, filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await ListAsync((ListFilter<CustomerSavedSearch>) filter);
+            return await ListAsync((ListFilter<CustomerSavedSearch>) filter, cancellationToken);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Get, rootElement: RootElement);
+            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Get, rootElement: RootElement, cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -88,7 +88,7 @@ namespace ShopifySharp
                 customer_saved_search = body
             });
 
-            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Post, content, RootElement);
+            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Post, content, RootElement, cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -107,7 +107,7 @@ namespace ShopifySharp
                 customer_saved_search = body
             });
 
-            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Put, content, RootElement);
+            var response = await ExecuteRequestAsync<CustomerSavedSearch>(req, HttpMethod.Put, content, RootElement, cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -129,7 +129,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<IEnumerable<Customer>> GetCustomersFromSavedSearchAsync(long customerSavedSearchId, CustomerSavedSearchFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<List<Customer>>($"{RootResource}/{customerSavedSearchId}/customers.json", "customers", filter);
+            return await ExecuteGetAsync<List<Customer>>($"{RootResource}/{customerSavedSearchId}/customers.json", "customers", filter, cancellationToken: cancellationToken);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter);
+            return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -44,12 +44,12 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme");
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme", cancellationToken: cancellationToken);
 
             return response.Result;
         }
 
-        private async Task<Theme> _CreateAsync(Theme theme, string sourceUrl = null)
+        private async Task<Theme> _CreateAsync(Theme theme, CancellationToken cancellationToken, string sourceUrl = null)
         {
             var req = PrepareRequest("themes.json");
             var body = theme.ToDictionary();
@@ -63,7 +63,7 @@ namespace ShopifySharp
             {
                 theme = body
             });
-            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme");
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -77,7 +77,7 @@ namespace ShopifySharp
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
         public virtual async Task<Theme> CreateAsync(Theme theme, CancellationToken cancellationToken = default)
         {
-            return await _CreateAsync(theme);
+            return await _CreateAsync(theme, cancellationToken);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace ShopifySharp
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
         public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl, CancellationToken cancellationToken = default)
         {
-            return await _CreateAsync(theme, sourceUrl);
+            return await _CreateAsync(theme, cancellationToken, sourceUrl);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace ShopifySharp
             {
                 theme = theme
             });
-            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme");
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -118,7 +118,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"themes/{themeId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

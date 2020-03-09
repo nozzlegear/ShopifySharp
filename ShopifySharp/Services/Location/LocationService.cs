@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Location"/>.</returns>
         public virtual async Task<Location> GetAsync(long id, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Location>($"locations/{id}.json", "location");
+            return await ExecuteGetAsync<Location>($"locations/{id}.json", "location", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// <returns>The list of <see cref="Location"/> objects.</returns>
         public virtual async Task<IEnumerable<Location>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Location>>($"locations.json", "locations");
+            return await ExecuteGetAsync<IEnumerable<Location>>($"locations.json", "locations", cancellationToken: cancellationToken);
         }
     }
 }

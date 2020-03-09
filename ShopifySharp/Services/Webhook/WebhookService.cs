@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <returns>The count of all webhooks for the shop.</returns>
         public virtual async Task<int> CountAsync(WebhookCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Webhook>> ListAsync(ListFilter<Webhook> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter);
+            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<Webhook>> ListAsync(WebhookListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields);
+            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ShopifySharp
         /// <param name="webhookId">The order object's Id.</param>
         public virtual async Task DeleteAsync(long webhookId, CancellationToken cancellationToken = default)
         {
-            await ExecuteDeleteAsync($"webhooks/{webhookId}.json");
+            await ExecuteDeleteAsync($"webhooks/{webhookId}.json", cancellationToken: cancellationToken);
         }
     }
 }

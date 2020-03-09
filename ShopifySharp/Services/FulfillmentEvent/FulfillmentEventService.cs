@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <returns>The list of fulfillment events for the given fulfillment.</returns>
         public virtual async Task<IEnumerable<FulfillmentEvent>> ListAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<FulfillmentEvent>>($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json", "fulfillment_events");
+            return await ExecuteGetAsync<IEnumerable<FulfillmentEvent>>($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json", "fulfillment_events", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="FulfillmentEvent"/>.</returns>
         public virtual async Task<FulfillmentEvent> GetAsync(long orderId, long fulfillmentId, long fulfillmentEventId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<FulfillmentEvent>($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json", "fulfillment_event");
+            return await ExecuteGetAsync<FulfillmentEvent>($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json", "fulfillment_event", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShopifySharp
                 @event
             });
 
-            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event");
+            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -72,7 +72,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

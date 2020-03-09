@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<int> CountAsync(RedirectCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("redirects/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("redirects/count.json", "count", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Redirect>> ListAsync(ListFilter<Redirect> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("redirects.json", "redirects", filter);
+            return await ExecuteGetListAsync("redirects.json", "redirects", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Redirect>> ListAsync(RedirectListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
         
         /// <summary>
@@ -62,7 +62,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Get, rootElement: "redirect");
+            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Get, rootElement: "redirect", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -81,7 +81,7 @@ namespace ShopifySharp
             {
                 redirect = redirect
             });
-            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Post, content, "redirect");
+            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Post, content, "redirect", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -99,7 +99,7 @@ namespace ShopifySharp
             {
                 redirect = redirect
             });
-            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Put, content, "redirect");
+            var response = await ExecuteRequestAsync<Redirect>(req, HttpMethod.Put, content, "redirect", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -112,7 +112,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"redirects/{redirectId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

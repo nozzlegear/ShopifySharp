@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <returns>The list of fulfillment services matching the filter.</returns>
         public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(FulfillmentServiceListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<List<FulfillmentServiceEntity>>("fulfillment_services.json", "fulfillment_services", filter);
+            return await ExecuteGetAsync<List<FulfillmentServiceEntity>>("fulfillment_services.json", "fulfillment_services", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Fulfillment"/>.</returns>
         public virtual async Task<FulfillmentServiceEntity> GetAsync(long fulfillmentServiceId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<FulfillmentServiceEntity>($"fulfillment_services/{fulfillmentServiceId}.json", "fulfillment_service", fields);
+            return await ExecuteGetAsync<FulfillmentServiceEntity>($"fulfillment_services/{fulfillmentServiceId}.json", "fulfillment_service", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShopifySharp
                 fulfillment_service = body
             });
 
-            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Post, content, "fulfillment_service");
+            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Post, content, "fulfillment_service", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -73,7 +73,7 @@ namespace ShopifySharp
                 fulfillment_service = body
             });
 
-            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Put, content, "fulfillment_service");
+            var response = await ExecuteRequestAsync<FulfillmentServiceEntity>(req, HttpMethod.Put, content, "fulfillment_service", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -85,7 +85,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"fulfillment_services/{fulfillmentServiceId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

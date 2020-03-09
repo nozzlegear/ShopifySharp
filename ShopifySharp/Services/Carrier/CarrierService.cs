@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<Carrier>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync< IEnumerable < Carrier >>("carrier_services.json", "carrier_services");
+            return await ExecuteGetAsync< IEnumerable < Carrier >>("carrier_services.json", "carrier_services", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShopifySharp
                 carrier_service = carrier
             });
 
-            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service");
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -54,7 +54,7 @@ namespace ShopifySharp
         {            
             var req = PrepareRequest($"carrier_services/{carrierId}.json");
 
-            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service");
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -66,7 +66,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"carrier_services/{carrierId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace ShopifySharp
                 carrier_service = carrier
             });
 
-            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Put, content, "carrier_service");
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Put, content, "carrier_service", cancellationToken: cancellationToken);
             return response.Result;
         }
     }

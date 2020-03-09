@@ -32,7 +32,7 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
-            var response = await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
+            var response = await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones", cancellationToken: cancellationToken);
 
             return response.Result;
         }

@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<int> CountAsync(long orderId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"orders/{orderId}/transactions/count.json", "count");
+            return await ExecuteGetAsync<int>($"orders/{orderId}/transactions/count.json", "count", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter);
+            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter);
+            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace ShopifySharp
             {
                 transaction = transaction
             });
-            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, content, "transaction");
+            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, content, "transaction", cancellationToken: cancellationToken);
 
             return response.Result;
         }

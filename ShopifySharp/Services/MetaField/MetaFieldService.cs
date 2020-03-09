@@ -22,9 +22,9 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public MetaFieldService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        private async Task<int> _CountAsync(string path)
+        private async Task<int> _CountAsync(string path, CancellationToken cancellationToken)
         {
-            return await ExecuteGetAsync<int>(path, "count");
+            return await ExecuteGetAsync<int>(path, "count", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
-            return await _CountAsync("metafields/count.json");
+            return await _CountAsync("metafields/count.json", cancellationToken);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<int> CountAsync(long resourceId, string resourceType, CancellationToken cancellationToken = default)
         {
-            return await _CountAsync($"{resourceType}/{resourceId}/metafields/count.json");
+            return await _CountAsync($"{resourceType}/{resourceId}/metafields/count.json", cancellationToken);
         }
 
         /// <summary>
@@ -63,12 +63,13 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<int> CountAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, CancellationToken cancellationToken = default)
         {
-            return await _CountAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields/count.json");
+            return await _CountAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields/count.json", cancellationToken);
         }
 
-        private async Task<ListResult<MetaField>> _ListAsync(string path, ListFilter<MetaField> filter)
+        private async Task<ListResult<MetaField>> _ListAsync(string path, ListFilter<MetaField> filter,
+            CancellationToken cancellationToken)
         {
-            return await ExecuteGetListAsync(path, "metafields", filter);
+            return await ExecuteGetListAsync(path, "metafields", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace ShopifySharp
         /// <param name="filter">Options to filter the results.</param>
         public virtual async Task<ListResult<MetaField>> ListAsync(ListFilter<MetaField> filter, CancellationToken cancellationToken = default)
         {
-            return await _ListAsync("metafields.json", filter);
+            return await _ListAsync("metafields.json", filter, cancellationToken);
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace ShopifySharp
         /// <param name="filter">Options to filter the results.</param>
         public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, ListFilter<MetaField> filter, CancellationToken cancellationToken = default)
         {
-            return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
+            return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter, cancellationToken);
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace ShopifySharp
         /// <param name="filter">Options to filter the results.</param>
         public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, ListFilter<MetaField> filter, CancellationToken cancellationToken = default)
         {
-            return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
+            return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter, cancellationToken);
         }
 
 
@@ -112,7 +113,7 @@ namespace ShopifySharp
         /// <param name="filter">Options to filter the results.</param>
         public virtual async Task<ListResult<MetaField>> ListAsync(MetaFieldFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await _ListAsync("metafields.json", filter);
+            return await _ListAsync("metafields.json", filter, cancellationToken);
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace ShopifySharp
         /// <param name="filter">Options to filter the results.</param>
         public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, MetaFieldFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
+            return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter, cancellationToken);
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace ShopifySharp
         /// <param name="filter">Options to filter the results.</param>
         public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, MetaFieldFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
+            return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter, cancellationToken);
         }
 
         /// <summary>
@@ -146,7 +147,7 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<MetaField>($"metafields/{metafieldId}.json", "metafield", fields);
+            return await ExecuteGetAsync<MetaField>($"metafields/{metafieldId}.json", "metafield", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -181,7 +182,7 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -199,7 +200,7 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -215,7 +216,7 @@ namespace ShopifySharp
             {
                 metafield = metafield
             });
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, content, "metafield");
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, content, "metafield", cancellationToken: cancellationToken);
             
             return response.Result;
         }
@@ -228,7 +229,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"metafields/{metafieldId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

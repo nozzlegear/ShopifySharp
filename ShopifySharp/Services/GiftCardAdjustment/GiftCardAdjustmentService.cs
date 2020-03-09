@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
         public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments");
+            return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync< GiftCardAdjustment>($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json", "adjustment");
+            return await ExecuteGetAsync< GiftCardAdjustment>($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json", "adjustment", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ShopifySharp
                 adjustment = adjustment
             });
 
-            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment");
+            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment", cancellationToken: cancellationToken);
             return response.Result;
         }
     }

@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<Shop> GetAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Shop>("shop.json", "shop");
+            return await ExecuteGetAsync<Shop>("shop.json", "shop", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace ShopifySharp
         {
             var request = PrepareRequest("api_permissions/current.json");
 
-            await ExecuteRequestAsync(request, HttpMethod.Delete);
+            await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ShopifySharp
 
         public virtual async Task<int> CountAsync(CollectCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("collects/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("collects/count.json", "count", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("collects.json", "collects", filter);
+            return await ExecuteGetListAsync("collects.json", "collects", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Collect>> ListAsync(CollectListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Collect"/>.</returns>
         public virtual async Task<Collect> GetAsync(long collectId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields);
+            return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields, cancellationToken: cancellationToken);
         }
 
 
@@ -70,7 +70,7 @@ namespace ShopifySharp
                 collect = collect
             });
 
-            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, content, "collect");
+            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, content, "collect", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -82,7 +82,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"collects/{collectId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

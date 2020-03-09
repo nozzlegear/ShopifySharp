@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         private async Task<JToken> SendAsync(RequestUri req, HttpContent content, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, content, cancellationToken: cancellationToken);
 
             CheckForErrors(response);
 

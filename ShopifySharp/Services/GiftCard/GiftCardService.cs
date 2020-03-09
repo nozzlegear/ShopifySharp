@@ -25,7 +25,7 @@ namespace ShopifySharp
 
         public virtual async Task<int> CountAsync(GiftCardCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"gift_cards/count.json", "count", filter);
+            return await ExecuteGetAsync<int>($"gift_cards/count.json", "count", filter, cancellationToken: cancellationToken);
         }
         
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<GiftCard>> ListAsync(ListFilter<GiftCard> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("gift_cards.json", "gift_cards", filter);
+            return await ExecuteGetListAsync("gift_cards.json", "gift_cards", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the list.</param>
         public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="GiftCard"/>.</returns>
         public virtual async Task<GiftCard> GetAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<GiftCard>($"gift_cards/{giftCardId}.json", "gift_card");
+            return await ExecuteGetAsync<GiftCard>($"gift_cards/{giftCardId}.json", "gift_card", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ShopifySharp
                 gift_card = body
             });
 
-            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, content, "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, content, "gift_card", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -88,7 +88,7 @@ namespace ShopifySharp
             {
                 gift_card = giftCard
             });
-            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Put, content, "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Put, content, "gift_card", cancellationToken: cancellationToken);
             return response.Result;
         }
         
@@ -100,7 +100,7 @@ namespace ShopifySharp
         public virtual async Task<GiftCard> DisableAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}/disable.json");
-            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, rootElement: "gift_card");
+            var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, rootElement: "gift_card", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -119,7 +119,7 @@ namespace ShopifySharp
             
             req.QueryParams.AddRange(filter.ToQueryParameters());
             
-            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards");
+            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, rootElement: "gift_cards", cancellationToken: cancellationToken);
 
             return ParseLinkHeaderToListResult(response);
         }

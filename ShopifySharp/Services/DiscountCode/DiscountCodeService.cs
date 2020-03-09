@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter);
+            return await ExecuteGetListAsync($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, PriceRuleDiscountCodeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(priceRuleId, filter?.AsListFilter());
+            return await ListAsync(priceRuleId, filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
         public virtual async Task<PriceRuleDiscountCode> GetAsync(long priceRuleId, long discountId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields);
+            return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ShopifySharp
                 discount_code = body
             });
 
-            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Post, content, "discount_code", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -77,7 +77,7 @@ namespace ShopifySharp
                 discount_code = code
             });
 
-            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code");
+            var response = await ExecuteRequestAsync<PriceRuleDiscountCode>(req, HttpMethod.Put, content, "discount_code", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -90,7 +90,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountCodeId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

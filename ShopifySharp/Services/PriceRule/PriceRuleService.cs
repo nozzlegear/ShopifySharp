@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter);
+            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
         
         // /// <summary>
@@ -49,7 +49,7 @@ namespace ShopifySharp
         //         req.QueryParams.AddRange(options);
         //     }
         //
-        //     return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules");
+        //     return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules", cancellationToken: cancellationToken);
         // }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule");
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule", cancellationToken: cancellationToken);
             
             return response.Result;
         }
@@ -83,7 +83,7 @@ namespace ShopifySharp
             {
                 price_rule = body
             });
-            var response =  await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule");
+            var response =  await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -100,7 +100,7 @@ namespace ShopifySharp
             {
                 price_rule = rule
             });
-            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule");
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -113,7 +113,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"price_rules/{id}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

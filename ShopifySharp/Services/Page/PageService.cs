@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<int> CountAsync(PageCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("pages/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("pages/count.json", "count", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Page>> ListAsync(ListFilter<Page> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("pages.json", "pages", filter);
+            return await ExecuteGetListAsync("pages.json", "pages", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Page>> ListAsync(PageListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page");
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -89,7 +89,7 @@ namespace ShopifySharp
             {
                 page = body
             });
-            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page");
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -107,7 +107,7 @@ namespace ShopifySharp
             {
                 page = page
             });
-            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page");
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -120,7 +120,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"pages/{pageId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
     }
 }

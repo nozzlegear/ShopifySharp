@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"customers/count.json", "count");
+            return await ExecuteGetAsync<int>($"customers/count.json", "count", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("customers.json", "customers", filter);
+            return await ExecuteGetListAsync("customers.json", "customers", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Customer>> ListAsync(CustomerListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> GetAsync(long customerId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Customer>($"customers/{customerId}.json", "customer", fields);
+            return await ExecuteGetAsync<Customer>($"customers/{customerId}.json", "customer", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("customers/search.json", "customers", filter);
+            return await ExecuteGetListAsync("customers/search.json", "customers", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the result.</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(CustomerSearchListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await SearchAsync(filter?.AsListFilter());
+            return await SearchAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace ShopifySharp
                 customer = body
             });
 
-            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, content, "customer");
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, content, "customer", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -126,7 +126,7 @@ namespace ShopifySharp
                 customer = body
             });
 
-            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, content, "customer");
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, content, "customer", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -138,7 +138,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"customers/{customerId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
 
 
@@ -157,7 +157,7 @@ namespace ShopifySharp
                 customer_invite = invite
             });
 
-            var response = await ExecuteRequestAsync<CustomerInvite>(req, HttpMethod.Post, content, "customer_invite");
+            var response = await ExecuteRequestAsync<CustomerInvite>(req, HttpMethod.Post, content, "customer_invite", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -172,7 +172,7 @@ namespace ShopifySharp
         public virtual async Task<string> GetAccountActivationUrl(long customerid, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerid}/account_activation_url.json");
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken: cancellationToken);
 
             return response.Result.SelectToken("account_activation_url").ToString();
         }
@@ -190,7 +190,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, CustomerOrderListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<List<Order>>($"customers/{customerId}/orders.json", "orders", filter);
+            return await ExecuteGetAsync<List<Order>>($"customers/{customerId}/orders.json", "orders", filter, cancellationToken: cancellationToken);
         }
     }
 }

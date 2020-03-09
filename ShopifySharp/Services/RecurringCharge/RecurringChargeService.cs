@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields);
+            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter);
+            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to delete.</param>
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-            await ExecuteDeleteAsync($"recurring_application_charges/{id}.json");
+            await ExecuteDeleteAsync($"recurring_application_charges/{id}.json", cancellationToken: cancellationToken);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// <param name="filter">Options for filtering the count.</param>
         public virtual async Task<int> CountAsync(DraftOrderCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter, cancellationToken: cancellationToken);
         }
         
         /// <summary>
@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("draft_orders.json", "draft_orders", filter);
+            return await ExecuteGetListAsync("draft_orders.json", "draft_orders", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<DraftOrder>> ListAsync(DraftOrderListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await ListAsync((ListFilter<DraftOrder>) filter);
+            return await ListAsync((ListFilter<DraftOrder>) filter, cancellationToken);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<DraftOrder> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields);
+            return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShopifySharp
                 draft_order = body
             });
 
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -87,7 +87,7 @@ namespace ShopifySharp
                 draft_order = order.ToDictionary()
             });
 
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -99,7 +99,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"draft_orders/{id}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ShopifySharp
             var req = PrepareRequest($"draft_orders/{id}/complete.json");
             req.QueryParams.Add("payment_pending", paymentPending);
 
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order");
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order", cancellationToken: cancellationToken);
             return response.Result;
         }
 
@@ -130,7 +130,7 @@ namespace ShopifySharp
                 draft_order_invoice = body
             });
 
-            var response = await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice");
+            var response = await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice", cancellationToken: cancellationToken);
             return response.Result;
         }
     }

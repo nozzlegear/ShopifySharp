@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <returns>The count of all orders for the shop.</returns>
         public virtual async Task<int> CountAsync(OrderCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("orders/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("orders/count.json", "count", filter, cancellationToken: cancellationToken);
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("orders.json", "orders", filter);
+            return await ExecuteGetListAsync("orders.json", "orders", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<ListResult<Order>> ListAsync(OrderListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Order"/>.</returns>
         public virtual async Task<Order> GetAsync(long orderId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Order>($"orders/{orderId}.json", "order", fields);
+            return await ExecuteGetAsync<Order>($"orders/{orderId}.json", "order", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShopifySharp
         public virtual async Task<Order> CloseAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{id}/close.json");
-            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -82,7 +82,7 @@ namespace ShopifySharp
         public virtual async Task<Order> OpenAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{id}/open.json");
-            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -110,7 +110,7 @@ namespace ShopifySharp
             {
                 order = body
             });
-            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -128,7 +128,7 @@ namespace ShopifySharp
             {
                 order = order
             });
-            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order");
+            var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -141,7 +141,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ShopifySharp
             var req = PrepareRequest($"orders/{orderId}/cancel.json");
             var content = new JsonContent(options ?? new OrderCancelOptions());
 
-            await ExecuteRequestAsync(req, HttpMethod.Post, content);
+            await ExecuteRequestAsync(req, HttpMethod.Post, content, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/metafields.json");
-            var response = await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");
+            var response = await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields", cancellationToken: cancellationToken);
 
             return response.Result;
         }

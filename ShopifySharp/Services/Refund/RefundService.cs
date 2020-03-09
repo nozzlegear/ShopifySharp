@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <param name="orderId">The id of the order to list orders for.</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter);
+            return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields);
+            return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund", cancellationToken: cancellationToken);
 
             return response.Result;
         }
@@ -76,7 +76,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund");
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund", cancellationToken: cancellationToken);
 
             return response.Result;
         }

@@ -20,7 +20,7 @@ namespace ShopifySharp
         public virtual async Task<IEnumerable<Policy>> ListAsync(CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest("policies.json");
-            var response = await ExecuteRequestAsync<List<Policy>>(request, HttpMethod.Get, rootElement: "policies");
+            var response = await ExecuteRequestAsync<List<Policy>>(request, HttpMethod.Get, rootElement: "policies", cancellationToken: cancellationToken);
 
             return response.Result;
         }

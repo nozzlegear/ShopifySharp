@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<User>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<User>>("users.json", "users");
+            return await ExecuteGetAsync<IEnumerable<User>>("users.json", "users", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="User"/>.</returns>
         public virtual async Task<User> GetAsync(long userId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<User>($"users/{userId}.json", "user");
+            return await ExecuteGetAsync<User>($"users/{userId}.json", "user", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="User"/>.</returns>
         public virtual async Task<User> GetCurrentAsync(CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<User>("users/current.json", "user");
+            return await ExecuteGetAsync<User>("users/current.json", "user", cancellationToken: cancellationToken);
         }
     }
 }
