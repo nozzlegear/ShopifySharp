@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
@@ -25,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risks belong to.</param>
         /// <param name="filter">Options for filtering the request.</param>
-        public virtual async Task<ListResult<OrderRisk>> ListAsync(long orderId, ListFilter<OrderRisk> filter = null)
+        public virtual async Task<ListResult<OrderRisk>> ListAsync(long orderId, ListFilter<OrderRisk> filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"orders/{orderId}/risks.json", "risks", filter);
         }
@@ -35,7 +36,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="riskId">The id of the risk to retrieve.</param>
-        public virtual async Task<OrderRisk> GetAsync(long orderId, long riskId)
+        public virtual async Task<OrderRisk> GetAsync(long orderId, long riskId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<OrderRisk>($"orders/{orderId}/risks/{riskId}.json", "risk");
         }
@@ -45,7 +46,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="risk">A new <see cref="OrderRisk"/>. Id should be set to null.</param>
-        public virtual async Task<OrderRisk> CreateAsync(long orderId, OrderRisk risk)
+        public virtual async Task<OrderRisk> CreateAsync(long orderId, OrderRisk risk, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/risks.json");
             var content = new JsonContent(new
@@ -63,7 +64,7 @@ namespace ShopifySharp
         /// <param name="orderRiskId">Id of the object being updated.</param>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="risk">The risk to update.</param>
-        public virtual async Task<OrderRisk> UpdateAsync(long orderId, long orderRiskId, OrderRisk risk)
+        public virtual async Task<OrderRisk> UpdateAsync(long orderId, long orderRiskId, OrderRisk risk, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/risks/{orderRiskId}.json");
             var content = new JsonContent(new
@@ -80,7 +81,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order the risk belongs to.</param>
         /// <param name="riskId">The risk's id.</param>
-        public virtual async Task DeleteAsync(long orderId, long riskId)
+        public virtual async Task DeleteAsync(long orderId, long riskId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
 

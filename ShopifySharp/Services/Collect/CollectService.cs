@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -23,7 +24,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CollectService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        public virtual async Task<int> CountAsync(CollectCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CollectCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("collects/count.json", "count", filter);
         }
@@ -31,7 +32,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter)
+        public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("collects.json", "collects", filter);
         }
@@ -39,7 +40,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's collects.
         /// </summary>
-        public virtual async Task<ListResult<Collect>> ListAsync(CollectListFilter filter = null)
+        public virtual async Task<ListResult<Collect>> ListAsync(CollectListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -50,7 +51,7 @@ namespace ShopifySharp
         /// <param name="collectId">The id of the collect to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Collect"/>.</returns>
-        public virtual async Task<Collect> GetAsync(long collectId, string fields = null)
+        public virtual async Task<Collect> GetAsync(long collectId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields);
         }
@@ -61,7 +62,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="collect">A new <see cref="Collect"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="Collect"/>.</returns>
-        public virtual async Task<Collect> CreateAsync(Collect collect)
+        public virtual async Task<Collect> CreateAsync(Collect collect, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("collects.json");
             var content = new JsonContent(new
@@ -77,7 +78,7 @@ namespace ShopifySharp
         /// Deletes a collect with the given Id.
         /// </summary>
         /// <param name="collectId">The product object's Id.</param>
-        public virtual async Task DeleteAsync(long collectId)
+        public virtual async Task DeleteAsync(long collectId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"collects/{collectId}.json");
 

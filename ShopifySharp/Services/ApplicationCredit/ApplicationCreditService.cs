@@ -1,6 +1,7 @@
 ﻿using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Lists;
@@ -22,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of all past and present application credits.
         /// </summary>
-        public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ListFilter<ApplicationCredit> filter)
+        public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ListFilter<ApplicationCredit> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("application_credits.json", "application_credits", filter);
         }
@@ -30,7 +31,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of all past and present application credits.
         /// </summary>
-        public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ApplicationCreditListFilter filter)
+        public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ApplicationCreditListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -40,7 +41,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The application credit's id.</param>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
-        public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null)
+        public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<ApplicationCredit>($"application_credits/{id}.json", "application_credit", fields);
         }
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="ApplicationCredit"/>.
         /// </summary>
         /// <param name="credit">A new <see cref="ApplicationCredit"/>. Id should be set to null.</param>
-        public virtual async Task<ApplicationCredit> CreateAsync(ApplicationCredit credit)
+        public virtual async Task<ApplicationCredit> CreateAsync(ApplicationCredit credit, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"application_credits.json");
             var body = new JsonContent(new

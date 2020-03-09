@@ -260,7 +260,7 @@ namespace ShopifySharp
             return await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt, cancellationToken: cancellationToken);
         }
 
-        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields, CancellationToken cancellationToken)
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields, CancellationToken cancellationToken = default)
         {
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, null, fields, cancellationToken)).Result;
         }
@@ -270,7 +270,7 @@ namespace ShopifySharp
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams, null, cancellationToken)).Result;
         }
 
-        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter, CancellationToken cancellationToken)
+        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter, CancellationToken cancellationToken = default)
         {
             var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter, null, cancellationToken);
             return ParseLinkHeaderToListResult(result);

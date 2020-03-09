@@ -2,6 +2,7 @@
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -23,7 +24,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.
         /// </summary>
-        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null)
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter);
         }
@@ -34,7 +35,7 @@ namespace ShopifySharp
         /// <param name="themeId">The id of the theme to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Theme"/>.</returns>
-        public virtual async Task<Theme> GetAsync(long themeId, string fields = null)
+        public virtual async Task<Theme> GetAsync(long themeId, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}.json");
 
@@ -74,7 +75,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="theme">The new theme.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
-        public virtual async Task<Theme> CreateAsync(Theme theme)
+        public virtual async Task<Theme> CreateAsync(Theme theme, CancellationToken cancellationToken = default)
         {
             return await _CreateAsync(theme);
         }
@@ -86,7 +87,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="theme">The new theme.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
-        public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl)
+        public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl, CancellationToken cancellationToken = default)
         {
             return await _CreateAsync(theme, sourceUrl);
         }
@@ -97,7 +98,7 @@ namespace ShopifySharp
         /// <param name="themeId">Id of the object being updated.</param>
         /// <param name="theme">The <see cref="Theme"/> to update.</param>
         /// <returns>The updated <see cref="Theme"/>.</returns>
-        public virtual async Task<Theme> UpdateAsync(long themeId, Theme theme)
+        public virtual async Task<Theme> UpdateAsync(long themeId, Theme theme, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}.json");
             var content = new JsonContent(new
@@ -113,7 +114,7 @@ namespace ShopifySharp
         /// Deletes a Theme with the given Id.
         /// </summary>
         /// <param name="themeId">The Theme object's Id.</param>
-        public virtual async Task DeleteAsync(long themeId)
+        public virtual async Task DeleteAsync(long themeId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}.json");
 

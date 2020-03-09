@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -16,7 +17,7 @@ namespace ShopifySharp
         /// <summary>
         /// Get the policies and their contents for a shop
         /// </summary>
-        public virtual async Task<IEnumerable<Policy>> ListAsync()
+        public virtual async Task<IEnumerable<Policy>> ListAsync(CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest("policies.json");
             var response = await ExecuteRequestAsync<List<Policy>>(request, HttpMethod.Get, rootElement: "policies");

@@ -2,6 +2,7 @@
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -24,12 +25,12 @@ namespace ShopifySharp
         /// Gets a list of inventory items.
         /// </summary>
         /// <param name="ids">Show only inventory items specified by a list of IDs. Maximum: 100.</param>
-        public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter)
+        public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter);
         }
 
-        public virtual async Task<ListResult<InventoryItem>> ListAsync(InventoryItemListFilter filter)
+        public virtual async Task<ListResult<InventoryItem>> ListAsync(InventoryItemListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -38,7 +39,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="InventoryItem"/> with the given id.
         /// </summary>
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
-        public virtual async Task<InventoryItem> GetAsync(long inventoryItemId)
+        public virtual async Task<InventoryItem> GetAsync(long inventoryItemId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<InventoryItem>($"inventory_items/{inventoryItemId}.json", "inventory_item");
         }
@@ -48,7 +49,7 @@ namespace ShopifySharp
         /// Updates an existing <see cref="InventoryItem"/>.
         /// </summary>
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
-        public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem)
+        public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest( $"inventory_items/{inventoryItemId}.json" );
             var content = new JsonContent( new

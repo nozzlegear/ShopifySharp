@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Threading;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -24,7 +25,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 blogs belonging to the store.
         /// </summary>
-        public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter = null)
+        public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("blogs.json", "blogs", filter);
         }
@@ -32,7 +33,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 blogs belonging to the store.
         /// </summary>
-        public virtual async Task<ListResult<Blog>> ListAsync(BlogListFilter filter)
+        public virtual async Task<ListResult<Blog>> ListAsync(BlogListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -40,7 +41,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a count of all blogs.
         /// </summary>
-        public virtual async Task<int> CountAsync()
+        public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("blogs/count.json", "count");
         }
@@ -50,7 +51,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blog">The blog being created. Id should be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
-        public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
+        public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest("blogs.json");
             var body = blog.ToDictionary();
@@ -75,7 +76,7 @@ namespace ShopifySharp
         /// <param name="blogId">Id of the object being updated.</param>
         /// <param name="blog">The updated blog.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
-        public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<MetaField> metafields = null)
+        public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest($"blogs/{blogId}.json");
             var body = blog.ToDictionary();
@@ -98,7 +99,7 @@ namespace ShopifySharp
         /// Gets a blog with the given id.
         /// </summary>
         /// <param name="id">The id of the blog you want to retrieve.</param>
-        public virtual async Task<Blog> GetAsync(long id)
+        public virtual async Task<Blog> GetAsync(long id, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest($"blogs/{id}.json");
 
@@ -110,7 +111,7 @@ namespace ShopifySharp
         /// Deletes a blog with the given id.
         /// </summary>
         /// <param name="id">The id of the blog you want to delete.</param>
-        public virtual async Task DeleteAsync(long id)
+        public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest($"blogs/{id}.json");
 

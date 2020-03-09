@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -32,7 +33,7 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
-        public virtual async Task<int> CountAsync()
+        public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
             return await _CountAsync("metafields/count.json");
         }
@@ -45,7 +46,7 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
-        public virtual async Task<int> CountAsync(long resourceId, string resourceType)
+        public virtual async Task<int> CountAsync(long resourceId, string resourceType, CancellationToken cancellationToken = default)
         {
             return await _CountAsync($"{resourceType}/{resourceId}/metafields/count.json");
         }
@@ -60,7 +61,7 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
-        public virtual async Task<int> CountAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType)
+        public virtual async Task<int> CountAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, CancellationToken cancellationToken = default)
         {
             return await _CountAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields/count.json");
         }
@@ -74,7 +75,7 @@ namespace ShopifySharp
         /// Gets a list of the metafields for the shop itself.
         /// </summary>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<ListResult<MetaField>> ListAsync(ListFilter<MetaField> filter)
+        public virtual async Task<ListResult<MetaField>> ListAsync(ListFilter<MetaField> filter, CancellationToken cancellationToken = default)
         {
             return await _ListAsync("metafields.json", filter);
         }
@@ -85,7 +86,7 @@ namespace ShopifySharp
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, ListFilter<MetaField> filter)
+        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, ListFilter<MetaField> filter, CancellationToken cancellationToken = default)
         {
             return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
         }
@@ -98,7 +99,7 @@ namespace ShopifySharp
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, ListFilter<MetaField> filter)
+        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, ListFilter<MetaField> filter, CancellationToken cancellationToken = default)
         {
             return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
         }
@@ -109,7 +110,7 @@ namespace ShopifySharp
         /// Gets a list of the metafields for the shop itself.
         /// </summary>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<ListResult<MetaField>> ListAsync(MetaFieldFilter filter = null)
+        public virtual async Task<ListResult<MetaField>> ListAsync(MetaFieldFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await _ListAsync("metafields.json", filter);
         }
@@ -120,7 +121,7 @@ namespace ShopifySharp
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, MetaFieldFilter filter = null)
+        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, MetaFieldFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await _ListAsync($"{resourceType}/{resourceId}/metafields.json", filter);
         }
@@ -133,7 +134,7 @@ namespace ShopifySharp
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="filter">Options to filter the results.</param>
-        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, MetaFieldFilter filter = null)
+        public virtual async Task<ListResult<MetaField>> ListAsync(long resourceId, string resourceType, long parentResourceId, string parentResourceType, MetaFieldFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await _ListAsync($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json", filter);
         }
@@ -143,7 +144,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="metafieldId">The id of the metafield to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null)
+        public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<MetaField>($"metafields/{metafieldId}.json", "metafield", fields);
         }
@@ -152,7 +153,7 @@ namespace ShopifySharp
         /// Creates a new metafield on the shop itself.
         /// </summary>
         /// <param name="metafield">A new metafield. Id should be set to null.</param>
-        public virtual async Task<MetaField> CreateAsync(MetaField metafield)
+        public virtual async Task<MetaField> CreateAsync(MetaField metafield, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("metafields.json");
             var content = new JsonContent(new
@@ -172,7 +173,7 @@ namespace ShopifySharp
         /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <param name="parentResourceId">The Id of the parent resource the metafield will be associated with. This can be blogs, products.</param>
         /// <param name="parentResourceType">The resource type the metaifeld will be associated with. This can be articles, variants.</param>
-        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, long parentResourceId, string parentResourceType)
+        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, long parentResourceId, string parentResourceType, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{parentResourceType}/{parentResourceId}/{resourceType}/{resourceId}/metafields.json");
             var content = new JsonContent(new
@@ -190,7 +191,7 @@ namespace ShopifySharp
         /// <param name="metafield">A new metafield. Id should be set to null.</param>
         /// <param name="resourceId">The Id of the resource the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
         /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
-        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType)
+        public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{resourceType}/{resourceId}/metafields.json");
             var content = new JsonContent(new
@@ -207,7 +208,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="metafieldId">Id of the object being updated.</param>
         /// <param name="metafield">The metafield to update.</param>
-        public virtual async Task<MetaField> UpdateAsync(long metafieldId, MetaField metafield)
+        public virtual async Task<MetaField> UpdateAsync(long metafieldId, MetaField metafield, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"metafields/{metafieldId}.json");
             var content = new JsonContent(new
@@ -223,7 +224,7 @@ namespace ShopifySharp
         /// Deletes a metafield with the given Id.
         /// </summary>
         /// <param name="metafieldId">The metafield object's Id.</param>
-        public virtual async Task DeleteAsync(long metafieldId)
+        public virtual async Task DeleteAsync(long metafieldId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"metafields/{metafieldId}.json");
 

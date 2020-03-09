@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -25,7 +26,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(ScriptTagCountFilter filter = null)
+        public virtual async Task<int> CountAsync(ScriptTagCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("script_tags/count.json", "count", filter);
         }
@@ -33,7 +34,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's script tags.
         /// </summary>
-        public virtual async Task<ListResult<ScriptTag>> ListAsync(ListFilter<ScriptTag> filter)
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(ListFilter<ScriptTag> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("script_tags.json", "script_tags", filter);
         }
@@ -41,7 +42,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's script tags.
         /// </summary>
-        public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter = null)
+        public virtual async Task<ListResult<ScriptTag>> ListAsync(ScriptTagListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -52,7 +53,7 @@ namespace ShopifySharp
         /// <param name="tagId">The id of the <see cref="ScriptTag"/> to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="ScriptTag"/>.</returns>
-        public virtual async Task<ScriptTag> GetAsync(long tagId, string fields = null)
+        public virtual async Task<ScriptTag> GetAsync(long tagId, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"script_tags/{tagId}.json");
 
@@ -71,7 +72,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="tag">A new <see cref="ScriptTag"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="ScriptTag"/>.</returns>
-        public virtual async Task<ScriptTag> CreateAsync(ScriptTag tag)
+        public virtual async Task<ScriptTag> CreateAsync(ScriptTag tag, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("script_tags.json");
             var content = new JsonContent(new
@@ -89,7 +90,7 @@ namespace ShopifySharp
         /// <param name="scriptTagId">Id of the object being updated.</param>
         /// <param name="tag">The <see cref="ScriptTag"/> to update.</param>
         /// <returns>The updated <see cref="ScriptTag"/>.</returns>
-        public virtual async Task<ScriptTag> UpdateAsync(long scriptTagId, ScriptTag tag)
+        public virtual async Task<ScriptTag> UpdateAsync(long scriptTagId, ScriptTag tag, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"script_tags/{scriptTagId}.json");
             var content = new JsonContent(new
@@ -105,7 +106,7 @@ namespace ShopifySharp
         /// Deletes the <see cref="ScriptTag"/> with the given Id.
         /// </summary>
         /// <param name="tagId">The tag's Id.</param>
-        public virtual async Task DeleteAsync(long tagId)
+        public virtual async Task DeleteAsync(long tagId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"script_tags/{tagId}.json");
 

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using ShopifySharp.Filters;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
@@ -22,7 +23,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's products.
         /// </summary>
         /// <returns>The count of all products for the shop.</returns>
-        public virtual async Task<int> CountAsync(ProductCountFilter filter = null)
+        public virtual async Task<int> CountAsync(ProductCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("products/count.json", "count", filter);
         }
@@ -30,7 +31,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter)
+        public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("products.json", "products", filter);
         }
@@ -38,7 +39,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter = null)
+        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Product"/>.</returns>
-        public virtual async Task<Product> GetAsync(long productId, string fields = null)
+        public virtual async Task<Product> GetAsync(long productId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Product>($"products/{productId}.json", "product", fields);
         }
@@ -60,7 +61,7 @@ namespace ShopifySharp
         /// <param name="product">A new <see cref="Product"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the product.</param>
         /// <returns>The new <see cref="Product"/>.</returns>
-        public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null)
+        public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("products.json");
             var body = product.ToDictionary();
@@ -88,7 +89,7 @@ namespace ShopifySharp
         /// <param name="productId">Id of the object being updated.</param>
         /// <param name="product">The <see cref="Product"/> to update.</param>
         /// <returns>The updated <see cref="Product"/>.</returns>
-        public virtual async Task<Product> UpdateAsync(long productId, Product product)
+        public virtual async Task<Product> UpdateAsync(long productId, Product product, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}.json");
             var content = new JsonContent(new
@@ -104,7 +105,7 @@ namespace ShopifySharp
         /// Deletes a product with the given Id.
         /// </summary>
         /// <param name="productId">The product object's Id.</param>
-        public virtual async Task DeleteAsync(long productId)
+        public virtual async Task DeleteAsync(long productId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}.json");
 
@@ -116,7 +117,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The product's id.</param>
         /// <returns>The published <see cref="Product"/></returns>
-        public virtual async Task<Product> PublishAsync(long id)
+        public virtual async Task<Product> PublishAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{id}.json");
             var content = new JsonContent(new
@@ -137,7 +138,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The product's id.</param>
         /// <returns>The unpublished <see cref="Product"/></returns>
-        public virtual async Task<Product> UnpublishAsync(long id)
+        public virtual async Task<Product> UnpublishAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{id}.json");
             var content = new JsonContent(new

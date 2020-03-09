@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
@@ -26,7 +27,7 @@ namespace ShopifySharp
         /// <param name="description">The name or description of the usage charge.</param>
         /// <param name="price">The price of the usage charge.</param>
         /// <returns>The new <see cref="UsageCharge"/>.</returns>
-        public virtual async Task<UsageCharge> CreateAsync(long recurringChargeId, string description, decimal price)
+        public virtual async Task<UsageCharge> CreateAsync(long recurringChargeId, string description, decimal price, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
             var content = new JsonContent(new
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="UsageCharge"/>.</returns>
-        public virtual async Task<UsageCharge> GetAsync(long recurringChargeId, long id, string fields = null)
+        public virtual async Task<UsageCharge> GetAsync(long recurringChargeId, long id, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges/{id}.json");
 
@@ -68,7 +69,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null)
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
@@ -22,7 +23,7 @@ namespace ShopifySharp
         {
         }
 
-        public virtual async Task<int> CountAsync(GiftCardCountFilter filter = null)
+        public virtual async Task<int> CountAsync(GiftCardCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>($"gift_cards/count.json", "count", filter);
         }
@@ -31,7 +32,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<GiftCard>> ListAsync(ListFilter<GiftCard> filter)
+        public virtual async Task<ListResult<GiftCard>> ListAsync(ListFilter<GiftCard> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("gift_cards.json", "gift_cards", filter);
         }
@@ -40,7 +41,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the gift cards.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null)
+        public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -50,7 +51,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCardId">The id of the GiftCard to retrieve.</param>
         /// <returns>The <see cref="GiftCard"/>.</returns>
-        public virtual async Task<GiftCard> GetAsync(long giftCardId)
+        public virtual async Task<GiftCard> GetAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<GiftCard>($"gift_cards/{giftCardId}.json", "gift_card");
         }
@@ -60,7 +61,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCard">A new <see cref="GiftCard"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="GiftCard"/>.</returns>
-        public virtual async Task<GiftCard> CreateAsync(GiftCard giftCard)
+        public virtual async Task<GiftCard> CreateAsync(GiftCard giftCard, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("gift_cards.json");
             var body = giftCard.ToDictionary();
@@ -80,7 +81,7 @@ namespace ShopifySharp
         /// <param name="giftCardId">Id of the object being updated.</param>
         /// <param name="giftCard">The <see cref="GiftCard"/> to update.</param>
         /// <returns>The updated <see cref="GiftCard"/>.</returns>
-        public virtual async Task<GiftCard> UpdateAsync(long giftCardId, GiftCard giftCard)
+        public virtual async Task<GiftCard> UpdateAsync(long giftCardId, GiftCard giftCard, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}.json");
             var content = new JsonContent(new
@@ -96,7 +97,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCardId">The id of the GiftCard to disable.</param>
         /// <returns>The <see cref="GiftCard"/>.</returns>
-        public virtual async Task<GiftCard> DisableAsync(long giftCardId)
+        public virtual async Task<GiftCard> DisableAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}/disable.json");
             var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, rootElement: "gift_card");
@@ -107,7 +108,7 @@ namespace ShopifySharp
         /// Search for gift cards matching supplied query
         /// </summary>
         /// <param name="filter">Options for searching and filtering the results.</param>
-        public virtual async Task<ListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter)
+        public virtual async Task<ListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter, CancellationToken cancellationToken = default)
         {
             if (filter == null)
             {

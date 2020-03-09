@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -26,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
         /// <returns>The count of all orders for the shop.</returns>
-        public virtual async Task<int> CountAsync(OrderCountFilter filter = null)
+        public virtual async Task<int> CountAsync(OrderCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("orders/count.json", "count", filter);
         }
@@ -36,7 +37,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter)
+        public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("orders.json", "orders", filter);
         }
@@ -46,7 +47,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
         /// <returns>The list of orders matching the filter.</returns>
-        public virtual async Task<ListResult<Order>> ListAsync(OrderListFilter filter = null)
+        public virtual async Task<ListResult<Order>> ListAsync(OrderListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -57,7 +58,7 @@ namespace ShopifySharp
         /// <param name="orderId">The id of the order to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Order"/>.</returns>
-        public virtual async Task<Order> GetAsync(long orderId, string fields = null)
+        public virtual async Task<Order> GetAsync(long orderId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Order>($"orders/{orderId}.json", "order", fields);
         }
@@ -66,7 +67,7 @@ namespace ShopifySharp
         /// Closes an order.
         /// </summary>
         /// <param name="id">The order's id.</param>
-        public virtual async Task<Order> CloseAsync(long id)
+        public virtual async Task<Order> CloseAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{id}/close.json");
             var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
@@ -78,7 +79,7 @@ namespace ShopifySharp
         /// Opens a closed order.
         /// </summary>
         /// <param name="id">The order's id.</param>
-        public virtual async Task<Order> OpenAsync(long id)
+        public virtual async Task<Order> OpenAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{id}/open.json");
             var response = await ExecuteRequestAsync<Order>(req, HttpMethod.Post, rootElement: "order");
@@ -92,7 +93,7 @@ namespace ShopifySharp
         /// <param name="order">A new <see cref="Order"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the order.</param>
         /// <returns>The new <see cref="Order"/>.</returns>
-        public virtual async Task<Order> CreateAsync(Order order, OrderCreateOptions options = null)
+        public virtual async Task<Order> CreateAsync(Order order, OrderCreateOptions options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("orders.json");
             var body = order.ToDictionary();
@@ -120,7 +121,7 @@ namespace ShopifySharp
         /// <param name="orderId">Id of the object being updated.</param>
         /// <param name="order">The <see cref="Order"/> to update.</param>
         /// <returns>The updated <see cref="Order"/>.</returns>
-        public virtual async Task<Order> UpdateAsync(long orderId, Order order)
+        public virtual async Task<Order> UpdateAsync(long orderId, Order order, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}.json");
             var content = new JsonContent(new
@@ -136,7 +137,7 @@ namespace ShopifySharp
         /// Deletes an order with the given Id.
         /// </summary>
         /// <param name="orderId">The order object's Id.</param>
-        public virtual async Task DeleteAsync(long orderId)
+        public virtual async Task DeleteAsync(long orderId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}.json");
 
@@ -148,7 +149,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order's id.</param>
         /// <returns>The cancelled <see cref="Order"/>.</returns>
-        public virtual async Task CancelAsync(long orderId, OrderCancelOptions options = null)
+        public virtual async Task CancelAsync(long orderId, OrderCancelOptions options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/cancel.json");
             var content = new JsonContent(options ?? new OrderCancelOptions());
@@ -161,7 +162,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order's id.</param>
         /// <returns>The set of <see cref="MetaField"/> for the order.</returns>
-        public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId)
+        public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/metafields.json");
             var response = await ExecuteRequestAsync<List<MetaField>>(req, HttpMethod.Get, rootElement: "metafields");

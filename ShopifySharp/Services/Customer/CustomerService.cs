@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -22,7 +23,7 @@ namespace ShopifySharp
         /// <remarks>
         /// According to Shopify's documentation, the count endpoint does not support any parameters. 
         /// </remarks>
-        public virtual async Task<int> CountAsync()
+        public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>($"customers/count.json", "count");
         }
@@ -30,7 +31,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter = null)
+        public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("customers.json", "customers", filter);
         }
@@ -38,7 +39,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customers.
         /// </summary>
-        public virtual async Task<ListResult<Customer>> ListAsync(CustomerListFilter filter)
+        public virtual async Task<ListResult<Customer>> ListAsync(CustomerListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// <param name="customerId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Customer"/>.</returns>
-        public virtual async Task<Customer> GetAsync(long customerId, string fields = null)
+        public virtual async Task<Customer> GetAsync(long customerId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Customer>($"customers/{customerId}.json", "customer", fields);
         }
@@ -58,7 +59,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter)
+        public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("customers/search.json", "customers", filter);
         }
@@ -67,7 +68,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<ListResult<Customer>> SearchAsync(CustomerSearchListFilter filter)
+        public virtual async Task<ListResult<Customer>> SearchAsync(CustomerSearchListFilter filter, CancellationToken cancellationToken = default)
         {
             return await SearchAsync(filter?.AsListFilter());
         }
@@ -78,7 +79,7 @@ namespace ShopifySharp
         /// <param name="customer">A new <see cref="Customer"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the customer.</param>
         /// <returns>The new <see cref="Customer"/>.</returns>
-        public virtual async Task<Customer> CreateAsync(Customer customer, CustomerCreateOptions options = null)
+        public virtual async Task<Customer> CreateAsync(Customer customer, CustomerCreateOptions options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("customers.json");
             var body = customer.ToDictionary();
@@ -107,7 +108,7 @@ namespace ShopifySharp
         /// <param name="customer">The <see cref="Customer"/> to update.</param>
         /// <param name="options">Options for updating the customer.</param>
         /// <returns>The updated <see cref="Customer"/>.</returns>
-        public virtual async Task<Customer> UpdateAsync(long customerId, Customer customer, CustomerUpdateOptions options = null)
+        public virtual async Task<Customer> UpdateAsync(long customerId, Customer customer, CustomerUpdateOptions options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerId}.json");
             var body = customer.ToDictionary();
@@ -133,7 +134,7 @@ namespace ShopifySharp
         /// Deletes a customer with the given Id.
         /// </summary>
         /// <param name="customerId">The customer object's Id.</param>
-        public virtual async Task DeleteAsync(long customerId)
+        public virtual async Task DeleteAsync(long customerId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerId}.json");
 
@@ -147,7 +148,7 @@ namespace ShopifySharp
         /// <param name="customerId">The customer object's Id.</param>
         /// <param name="invite">Options for the invite email request</param>
         /// <returns></returns>
-        public virtual async Task<CustomerInvite> SendInviteAsync(long customerId, CustomerInvite invite = null)
+        public virtual async Task<CustomerInvite> SendInviteAsync(long customerId, CustomerInvite invite = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerId}/send_invite.json");
 
@@ -168,7 +169,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerId">The customer object's Id.</param>
         /// <returns></returns>
-        public virtual async Task<string> GetAccountActivationUrl(long customerid)
+        public virtual async Task<string> GetAccountActivationUrl(long customerid, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerid}/account_activation_url.json");
             var response = await ExecuteRequestAsync(req, HttpMethod.Post);
@@ -187,7 +188,7 @@ namespace ShopifySharp
         /// https://shopify.dev/docs/admin-api/rest/reference/customers/customer#orders-2020-01
         /// This list does not appear to be paginated. 
         /// </remarks>
-        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, CustomerOrderListFilter filter = null)
+        public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, CustomerOrderListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<List<Order>>($"customers/{customerId}/orders.json", "orders", filter);
         }

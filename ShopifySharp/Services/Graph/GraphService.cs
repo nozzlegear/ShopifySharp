@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
 using System.Net;
+using System.Threading;
 
 namespace ShopifySharp
 {
@@ -27,7 +28,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        public virtual async Task<JToken> PostAsync(string body)
+        public virtual async Task<JToken> PostAsync(string body, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
 
@@ -41,7 +42,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        public virtual async Task<JToken> PostAsync(JToken body)
+        public virtual async Task<JToken> PostAsync(JToken body, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
 
@@ -56,7 +57,7 @@ namespace ShopifySharp
         /// <param name="req">The RequestUri.</param>
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        private async Task<JToken> SendAsync(RequestUri req, HttpContent content)
+        private async Task<JToken> SendAsync(RequestUri req, HttpContent content, CancellationToken cancellationToken = default)
         {
             var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
 

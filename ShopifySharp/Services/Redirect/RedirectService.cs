@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -25,7 +26,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's redirects.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(RedirectCountFilter filter = null)
+        public virtual async Task<int> CountAsync(RedirectCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("redirects/count.json", "count", filter);
         }
@@ -33,7 +34,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
-        public virtual async Task<ListResult<Redirect>> ListAsync(ListFilter<Redirect> filter)
+        public virtual async Task<ListResult<Redirect>> ListAsync(ListFilter<Redirect> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("redirects.json", "redirects", filter);
         }
@@ -41,7 +42,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's redirects.
         /// </summary>
-        public virtual async Task<ListResult<Redirect>> ListAsync(RedirectListFilter filter = null)
+        public virtual async Task<ListResult<Redirect>> ListAsync(RedirectListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -52,7 +53,7 @@ namespace ShopifySharp
         /// <param name="redirectId">The id of the redirect to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Redirect"/>.</returns>
-        public virtual async Task<Redirect> GetAsync(long redirectId, string fields = null)
+        public virtual async Task<Redirect> GetAsync(long redirectId, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"redirects/{redirectId}.json");
 
@@ -73,7 +74,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="redirect">The new <see cref="Redirect"/>.</param>
         /// <returns>The new <see cref="Redirect"/>.</returns>
-        public virtual async Task<Redirect> CreateAsync(Redirect redirect)
+        public virtual async Task<Redirect> CreateAsync(Redirect redirect, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("redirects.json");
             var content = new JsonContent(new
@@ -91,7 +92,7 @@ namespace ShopifySharp
         /// <param name="redirectId">Id of the object being updated.</param>
         /// <param name="redirect">The <see cref="Redirect"/> to update.</param>
         /// <returns>The updated <see cref="Redirect"/>.</returns>
-        public virtual async Task<Redirect> UpdateAsync(long redirectId, Redirect redirect)
+        public virtual async Task<Redirect> UpdateAsync(long redirectId, Redirect redirect, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"redirects/{redirectId}.json");
             var content = new JsonContent(new
@@ -107,7 +108,7 @@ namespace ShopifySharp
         /// Deletes a redirect with the given Id.
         /// </summary>
         /// <param name="redirectId">The redirect object's Id.</param>
-        public virtual async Task DeleteAsync(long redirectId)
+        public virtual async Task DeleteAsync(long redirectId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"redirects/{redirectId}.json");
 

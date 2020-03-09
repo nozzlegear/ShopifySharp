@@ -2,6 +2,7 @@
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -20,7 +21,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the discount codes belonging to the price rule.
         /// </summary>
-        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter)
+        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter);
         }
@@ -28,7 +29,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the discount codes belonging to the price rule.
         /// </summary>
-        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, PriceRuleDiscountCodeListFilter filter = null)
+        public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, PriceRuleDiscountCodeListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(priceRuleId, filter?.AsListFilter());
         }
@@ -40,7 +41,7 @@ namespace ShopifySharp
         /// <param name="discountId">The id of the discount to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
-        public virtual async Task<PriceRuleDiscountCode> GetAsync(long priceRuleId, long discountId, string fields = null)
+        public virtual async Task<PriceRuleDiscountCode> GetAsync(long priceRuleId, long discountId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields);
         }
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// Creates a new discount code.
         /// </summary>
         /// <param name="priceRuleId">Id of an existing price rule.</param>
-        public virtual async Task<PriceRuleDiscountCode> CreateAsync(long priceRuleId, PriceRuleDiscountCode code)
+        public virtual async Task<PriceRuleDiscountCode> CreateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
             var body = code.ToDictionary();
@@ -68,7 +69,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="priceRuleId">The Id of the Price Rule being updated.</param>
         /// <param name="code">The code being updated.</param>
-        public virtual async Task<PriceRuleDiscountCode> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code)
+        public virtual async Task<PriceRuleDiscountCode> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{code.Id.Value}.json");
             var content = new JsonContent(new
@@ -85,7 +86,7 @@ namespace ShopifySharp
         /// </summary>
         /// /// <param name="priceRuleId">The price rule object's Id.</param>
         /// <param name="discountId">The discount object's Id.</param>
-        public virtual async Task DeleteAsync(long priceRuleId, long discountCodeId)
+        public virtual async Task DeleteAsync(long priceRuleId, long discountCodeId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountCodeId}.json");
 

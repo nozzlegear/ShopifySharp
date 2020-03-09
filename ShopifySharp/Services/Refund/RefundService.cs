@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -25,7 +26,7 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
-        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter)
+        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter);
         }
@@ -34,7 +35,7 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
-        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null)
+        public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListForOrderAsync(orderId, filter?.AsListFilter());
         }
@@ -46,7 +47,7 @@ namespace ShopifySharp
         /// <param name="orderId"></param>
         /// <param name="refundId"></param>
         /// <returns></returns>
-        public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null)
+        public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields);
         }
@@ -59,7 +60,7 @@ namespace ShopifySharp
         /// You can then use the response in the body of the request to create the actual refund.
         /// The response includes a transactions object with "kind": "suggested_refund", which must to be changed to "kind" : "refund" for the refund to be accepted.
         /// </summary>
-        public virtual async Task<Refund> CalculateAsync(long orderId, Refund options = null)
+        public virtual async Task<Refund> CalculateAsync(long orderId, Refund options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
@@ -71,7 +72,7 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a <see cref="Refund"/>. Use the calculate endpoint to produce the transactions to submit.
         /// </summary>
-        public virtual async Task<Refund> RefundAsync(long orderId, Refund options = null)
+        public virtual async Task<Refund> RefundAsync(long orderId, Refund options = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });

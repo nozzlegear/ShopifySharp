@@ -2,6 +2,7 @@
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -23,7 +24,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of inventory items. 
         /// </summary>
-        public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter);
         }
@@ -31,7 +32,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of inventory items
         /// </summary>
-        public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelListFilter filter)
+        public virtual async Task<ListResult<InventoryLevel>> ListAsync(InventoryLevelListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -41,7 +42,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="inventoryItemId">The ID of the inventory item.</param>
         /// <param name="locationId">The ID of the location that the inventory level belongs to.</param>
-        public virtual async Task DeleteAsync(long inventoryItemId, long locationId)
+        public virtual async Task DeleteAsync(long inventoryItemId, long locationId, CancellationToken cancellationToken = default)
         {
             await ExecuteRequestAsync(PrepareRequest($"inventory_levels.json?inventory_item_id={inventoryItemId}&location_id={locationId}"), HttpMethod.Delete);
         }
@@ -52,7 +53,7 @@ namespace ShopifySharp
         /// <param name="updatedInventoryLevel">The updated <see cref="InventoryLevel"/></param>
         /// <param name="disconnectIfNecessary">Whether inventory for any previously connected locations will be set to 0 and the locations disconnected. This property is ignored when no fulfillment service is involved.</param>
         /// <returns>The updated <see cref="InventoryLevel"/></returns>
-        public virtual async Task<InventoryLevel> SetAsync(InventoryLevel updatedInventoryLevel, bool disconnectIfNecessary = false)
+        public virtual async Task<InventoryLevel> SetAsync(InventoryLevel updatedInventoryLevel, bool disconnectIfNecessary = false, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"inventory_levels/set.json");
             var body = updatedInventoryLevel.ToDictionary();
@@ -70,7 +71,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="updatedInventoryLevel">The updated <see cref="InventoryLevel"/></param>
         /// <returns>The updated <see cref="InventoryLevel"/></returns>
-        public virtual async Task<InventoryLevel> AdjustAsync(InventoryLevelAdjust adjustInventoryLevel)
+        public virtual async Task<InventoryLevel> AdjustAsync(InventoryLevelAdjust adjustInventoryLevel, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"inventory_levels/adjust.json");
             var body = adjustInventoryLevel.ToDictionary();
@@ -87,7 +88,7 @@ namespace ShopifySharp
         /// <param name="locationId">The ID of the location that the inventory level belongs to</param>
         /// <param name="relocateIfNecessary">Whether inventory for any previously connected locations will be relocated. This property is ignored when no fulfillment service location is involved</param>
         /// <returns>The new <see cref="InventoryLevel"/>.</returns>
-        public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false)
+        public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"inventory_levels/connect.json");
             var content = new JsonContent(new

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -22,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of access scopes associated to the access token.
         /// </summary>
-        public virtual async Task<IEnumerable<AccessScope>> ListAsync()
+        public virtual async Task<IEnumerable<AccessScope>> ListAsync(CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes");
         }

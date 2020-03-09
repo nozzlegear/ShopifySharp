@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -15,7 +16,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets the shop's data.
         /// </summary>
-        public virtual async Task<Shop> GetAsync()
+        public virtual async Task<Shop> GetAsync(CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Shop>("shop.json", "shop");
         }
@@ -23,7 +24,7 @@ namespace ShopifySharp
         /// <summary>
         /// Forces the shop to uninstall your Shopify app. Uninstalling an application is an irreversible operation. Be entirely sure that you no longer need to make API calls for the shop in which the application has been installed.
         /// </summary>
-        public virtual async Task UninstallAppAsync()
+        public virtual async Task UninstallAppAsync(CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest("api_permissions/current.json");
 

@@ -2,6 +2,7 @@
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -27,7 +28,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's customers.
         /// </summary>
         /// <returns>The count of all customers for the shop.</returns>
-        public virtual async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>($"{RootResource}/count.json", "count", filter);
         }
@@ -35,7 +36,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"{RootResource}.json", RootResource, filter);
         }
@@ -43,7 +44,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's customer saved searches.
         /// </summary>
-        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter)
+        public virtual async Task<ListResult<CustomerSavedSearch>> ListAsync(CustomerSavedSearchListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync((ListFilter<CustomerSavedSearch>) filter);
         }
@@ -54,7 +55,7 @@ namespace ShopifySharp
         /// <param name="customerSearchId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Customer"/>.</returns>
-        public virtual async Task<CustomerSavedSearch> GetAsync(long customerSearchId, string fields = null)
+        public virtual async Task<CustomerSavedSearch> GetAsync(long customerSearchId, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{RootResource}/{customerSearchId}.json");
 
@@ -72,7 +73,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearch">A new <see cref="CustomerSavedSearch"/>. Id should be set to null.</param>
         /// <returns>The new <see cref="Customer"/>.</returns>
-        public virtual async Task<CustomerSavedSearch> CreateAsync(CustomerSavedSearch customerSavedSearch)
+        public virtual async Task<CustomerSavedSearch> CreateAsync(CustomerSavedSearch customerSavedSearch, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(customerSavedSearch.Name))
             {
@@ -96,7 +97,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the object being updated.</param>
         /// <param name="customerSavedSearch">The <see cref="CustomerSavedSearch"/> to update.</param>
-        public virtual async Task<CustomerSavedSearch> UpdateAsync(long customerSavedSearchId, CustomerSavedSearch customerSavedSearch)
+        public virtual async Task<CustomerSavedSearch> UpdateAsync(long customerSavedSearchId, CustomerSavedSearch customerSavedSearch, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}.json");
             var body = customerSavedSearch.ToDictionary();
@@ -126,7 +127,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the Customer Saved Search.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<IEnumerable<Customer>> GetCustomersFromSavedSearchAsync(long customerSavedSearchId, CustomerSavedSearchFilter filter = null)
+        public virtual async Task<IEnumerable<Customer>> GetCustomersFromSavedSearchAsync(long customerSavedSearchId, CustomerSavedSearchFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<List<Customer>>($"{RootResource}/{customerSavedSearchId}/customers.json", "customers", filter);
         }

@@ -4,6 +4,7 @@ using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -22,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter)
+        public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("price_rules.json", "price_rules", filter);
         }
@@ -30,7 +31,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.
         /// </summary>
-        public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null)
+        public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter());
         }
@@ -38,7 +39,7 @@ namespace ShopifySharp
         // /// <summary>
         // /// Gets a list of up to 250 of the shop's price rules.
         // /// </summary>
-        // public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter)
+        // public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter, CancellationToken cancellationToken = default)
         // {
         //     throw new Exception("not yet implemented");
         //     var req = PrepareRequest("price_rules.json");
@@ -56,7 +57,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the object to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
-        public virtual async Task<PriceRule> GetAsync(long id, string fields = null)
+        public virtual async Task<PriceRule> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
 
@@ -74,7 +75,7 @@ namespace ShopifySharp
         /// Creates a new price rule.
         /// </summary>
         /// <param name="rule">A new price rule. Id should be set to null.</param>
-        public virtual async Task<PriceRule> CreateAsync(PriceRule rule)
+        public virtual async Task<PriceRule> CreateAsync(PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("price_rules.json");
             var body = rule.ToDictionary();
@@ -92,7 +93,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">Id of the object being updated.</param>
         /// <param name="rule">The updated rule.</param>
-        public virtual async Task<PriceRule> UpdateAsync(long id, PriceRule rule)
+        public virtual async Task<PriceRule> UpdateAsync(long id, PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
             var content = new JsonContent(new
@@ -108,7 +109,7 @@ namespace ShopifySharp
         /// Deletes the object with the given Id.
         /// </summary>
         /// <param name="id">The object's Id.</param>
-        public virtual async Task DeleteAsync(long id)
+        public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
 

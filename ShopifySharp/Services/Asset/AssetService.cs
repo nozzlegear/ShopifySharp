@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Threading;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 
@@ -26,7 +27,7 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <returns>The <see cref="Asset"/>.</returns>
-        public virtual async Task<Asset> GetAsync(long themeId, string key, string fields = null)
+        public virtual async Task<Asset> GetAsync(long themeId, string key, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
 
@@ -49,7 +50,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, AssetListFilter filter = null)
+        public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, AssetListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<IEnumerable<Asset>>($"themes/{themeId}/assets.json", "assets", filter);
         }
@@ -65,7 +66,7 @@ namespace ShopifySharp
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="asset">The asset.</param>
         /// <returns>The created or updated asset.</returns>
-        public virtual async Task<Asset> CreateOrUpdateAsync(long themeId, Asset asset)
+        public virtual async Task<Asset> CreateOrUpdateAsync(long themeId, Asset asset, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
             var content = new JsonContent(new
@@ -82,7 +83,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
-        public virtual async Task DeleteAsync(long themeId, string key)
+        public virtual async Task DeleteAsync(long themeId, string key, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
 
