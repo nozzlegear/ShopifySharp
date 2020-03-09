@@ -24,6 +24,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="Location"/> with the given id.
         /// </summary>
         /// <param name="id">The id of the charge to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Location"/>.</returns>
         public virtual async Task<Location> GetAsync(long id, CancellationToken cancellationToken = default)
         {

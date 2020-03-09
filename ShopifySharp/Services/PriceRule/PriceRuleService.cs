@@ -57,6 +57,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the object to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<PriceRule> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
@@ -75,6 +76,7 @@ namespace ShopifySharp
         /// Creates a new price rule.
         /// </summary>
         /// <param name="rule">A new price rule. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<PriceRule> CreateAsync(PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("price_rules.json");
@@ -93,6 +95,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">Id of the object being updated.</param>
         /// <param name="rule">The updated rule.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<PriceRule> UpdateAsync(long id, PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
@@ -109,6 +112,7 @@ namespace ShopifySharp
         /// Deletes the object with the given Id.
         /// </summary>
         /// <param name="id">The object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");

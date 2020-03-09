@@ -26,6 +26,7 @@ namespace ShopifySharp
         /// Gets a count of all site events.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(EventCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("events/count.json", "count", filter, cancellationToken: cancellationToken);
@@ -36,6 +37,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="eventId">The id of the event to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Event"/>.</returns>
         public virtual async Task<Event> GetAsync(long eventId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -47,6 +49,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType, ListFilter<Event> filter = null, CancellationToken cancellationToken = default)
         {
             // Ensure the subject type is plural
@@ -71,6 +74,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="subjectId">Restricts results to just one subject item, e.g. all changes on a product.</param>
         /// <param name="subjectType">The subject's type, e.g. 'Order' or 'Product'. Known subject types are 'Articles', 'Blogs', 'Custom_Collections', 'Comments', 'Orders', 'Pages', 'Products' and 'Smart_Collections'.  A current list of subject types can be found at https://help.shopify.com/api/reference/event </param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Event>> ListAsync(long subjectId, string subjectType, EventListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(subjectId, subjectType, (ListFilter<Event>) filter, cancellationToken);

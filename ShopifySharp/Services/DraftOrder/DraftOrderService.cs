@@ -22,6 +22,7 @@ namespace ShopifySharp
         /// Retrieves a count of the shop's draft orders. 
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(DraftOrderCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter, cancellationToken: cancellationToken);
@@ -48,6 +49,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the object to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<DraftOrder> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields, cancellationToken: cancellationToken);
@@ -58,6 +60,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="order">A new DraftOrder. Id should be set to null.</param>
         /// <param name="useCustomerDefaultAddress">Optional boolean that you can send as part of a draft order object to load customer shipping information. Defaults to false.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<DraftOrder> CreateAsync(DraftOrder order, bool useCustomerDefaultAddress = false, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("draft_orders.json");
@@ -79,6 +82,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the item being updated.</param>
         /// <param name="order">The updated draft order.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<DraftOrder> UpdateAsync(long id, DraftOrder order, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"draft_orders/{id}.json");
@@ -95,6 +99,7 @@ namespace ShopifySharp
         /// Deletes the draft order with the given id.
         /// </summary>
         /// <param name="id">The id of the item being deleted.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"draft_orders/{id}.json");
@@ -107,6 +112,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the item being completed.</param>
         /// <param name="paymentPending">A bool indicating whether payment is pending or not. True if payment is pending, false if payment is not pending and order has been paid. Defaults to false (payment not pending).</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<DraftOrder> CompleteAsync(long id, bool paymentPending = false, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"draft_orders/{id}/complete.json");
@@ -120,6 +126,7 @@ namespace ShopifySharp
         /// Send an invoice for the draft order.
         /// </summary>
         /// <param name="id">The id of the item with the invoice.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<DraftOrderInvoice> SendInvoiceAsync(long id, DraftOrderInvoice customInvoice = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"draft_orders/{id}/send_invoice.json");

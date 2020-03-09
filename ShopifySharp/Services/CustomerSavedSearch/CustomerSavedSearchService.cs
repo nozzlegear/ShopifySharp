@@ -54,6 +54,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSearchId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Customer"/>.</returns>
         public virtual async Task<CustomerSavedSearch> GetAsync(long customerSearchId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -72,6 +73,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="Customer"/> on the store.
         /// </summary>
         /// <param name="customerSavedSearch">A new <see cref="CustomerSavedSearch"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Customer"/>.</returns>
         public virtual async Task<CustomerSavedSearch> CreateAsync(CustomerSavedSearch customerSavedSearch, CancellationToken cancellationToken = default)
         {
@@ -97,6 +99,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the object being updated.</param>
         /// <param name="customerSavedSearch">The <see cref="CustomerSavedSearch"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<CustomerSavedSearch> UpdateAsync(long customerSavedSearchId, CustomerSavedSearch customerSavedSearch, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}.json");
@@ -127,6 +130,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerSavedSearchId">Id of the Customer Saved Search.</param>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<Customer>> GetCustomersFromSavedSearchAsync(long customerSavedSearchId, CustomerSavedSearchFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<List<Customer>>($"{RootResource}/{customerSavedSearchId}/customers.json", "customers", filter, cancellationToken: cancellationToken);

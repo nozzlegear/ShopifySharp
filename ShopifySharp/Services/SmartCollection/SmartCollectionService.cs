@@ -25,6 +25,7 @@ namespace ShopifySharp
         /// Gets a count of all smart collections on the store.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("smart_collections/count.json", "count", filter, cancellationToken: cancellationToken);
@@ -50,6 +51,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="SmartCollection"/> with the given id.
         /// </summary>
         /// <param name="collectionId">The id of the smart collection to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<SmartCollection> GetAsync(long collectionId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<SmartCollection>($"smart_collections/{collectionId}.json", "smart_collection", cancellationToken: cancellationToken);
@@ -59,6 +61,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="SmartCollection"/>.
         /// </summary>
         /// <param name="collection">A new <see cref="SmartCollection"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<SmartCollection> CreateAsync(SmartCollection collection, bool published = true, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"smart_collections.json");
@@ -80,6 +83,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="smartCollectionId">Id of the object being updated.</param>
         /// <param name="collection">The smart collection to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<SmartCollection> UpdateAsync(long smartCollectionId, SmartCollection collection, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
@@ -96,6 +100,7 @@ namespace ShopifySharp
         /// Publishes an unpublished smart collection.
         /// </summary>
         /// <param name="smartCollectionId">The collection's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<SmartCollection> PublishAsync(long smartCollectionId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
@@ -117,6 +122,7 @@ namespace ShopifySharp
         /// Publishes an unpublished smart collection.
         /// </summary>
         /// <param name="smartCollectionId">The collection's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<SmartCollection> UnpublishAsync(long smartCollectionId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
@@ -172,6 +178,7 @@ namespace ShopifySharp
         /// Deletes a smart collection with the given Id.
         /// </summary>
         /// <param name="collectionId">The smart collection's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long collectionId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"smart_collections/{collectionId}.json");

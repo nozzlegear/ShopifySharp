@@ -41,6 +41,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The application credit's id.</param>
         /// <param name="fields">A comma-separated list of fields to include in the response.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<ApplicationCredit>($"application_credits/{id}.json", "application_credit", fields, cancellationToken: cancellationToken);
@@ -50,6 +51,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="ApplicationCredit"/>.
         /// </summary>
         /// <param name="credit">A new <see cref="ApplicationCredit"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ApplicationCredit> CreateAsync(ApplicationCredit credit, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"application_credits.json");

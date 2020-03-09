@@ -26,6 +26,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(ScriptTagCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("script_tags/count.json", "count", filter, cancellationToken: cancellationToken);
@@ -52,6 +53,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="tagId">The id of the <see cref="ScriptTag"/> to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="ScriptTag"/>.</returns>
         public virtual async Task<ScriptTag> GetAsync(long tagId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -71,6 +73,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="ScriptTag"/> on the store.
         /// </summary>
         /// <param name="tag">A new <see cref="ScriptTag"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="ScriptTag"/>.</returns>
         public virtual async Task<ScriptTag> CreateAsync(ScriptTag tag, CancellationToken cancellationToken = default)
         {
@@ -89,6 +92,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="scriptTagId">Id of the object being updated.</param>
         /// <param name="tag">The <see cref="ScriptTag"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="ScriptTag"/>.</returns>
         public virtual async Task<ScriptTag> UpdateAsync(long scriptTagId, ScriptTag tag, CancellationToken cancellationToken = default)
         {
@@ -106,6 +110,7 @@ namespace ShopifySharp
         /// Deletes the <see cref="ScriptTag"/> with the given Id.
         /// </summary>
         /// <param name="tagId">The tag's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long tagId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"script_tags/{tagId}.json");

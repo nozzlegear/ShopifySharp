@@ -27,6 +27,7 @@ namespace ShopifySharp
         /// Gets a list of gift card adjustments belonging to the given gift card.
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments", cancellationToken: cancellationToken);
@@ -37,6 +38,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
         /// <param name="adjustmentId">The id of the adjustment to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
         public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId, CancellationToken cancellationToken = default)
         {
@@ -48,6 +50,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
         /// <param name="adjustment">A new <see cref="GiftCardAdjustment"/>. Signed amount and note should be the only properties set.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
         public virtual async Task<GiftCardAdjustment> CreateAsync(long giftCardId, GiftCardAdjustment adjustment, CancellationToken cancellationToken = default)
         {

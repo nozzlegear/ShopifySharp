@@ -26,6 +26,7 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter, cancellationToken: cancellationToken);
@@ -35,6 +36,7 @@ namespace ShopifySharp
         /// Retrieves a list of refunds for an order.
         /// </summary>
         /// <param name="orderId">The id of the order to list orders for.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListForOrderAsync(orderId, filter?.AsListFilter());
@@ -46,6 +48,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId"></param>
         /// <param name="refundId"></param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
         public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null, CancellationToken cancellationToken = default)
         {

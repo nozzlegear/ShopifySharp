@@ -25,6 +25,7 @@ namespace ShopifySharp
         /// Gets a list of inventory items.
         /// </summary>
         /// <param name="ids">Show only inventory items specified by a list of IDs. Maximum: 100.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter, cancellationToken: cancellationToken);
@@ -39,6 +40,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="InventoryItem"/> with the given id.
         /// </summary>
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<InventoryItem> GetAsync(long inventoryItemId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<InventoryItem>($"inventory_items/{inventoryItemId}.json", "inventory_item", cancellationToken: cancellationToken);
@@ -49,6 +51,7 @@ namespace ShopifySharp
         /// Updates an existing <see cref="InventoryItem"/>.
         /// </summary>
         /// <param name="inventoryItemId">The id of the inventory item to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest( $"inventory_items/{inventoryItemId}.json" );

@@ -26,6 +26,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's orders.
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The count of all orders for the shop.</returns>
         public virtual async Task<int> CountAsync(OrderCountFilter filter = null, CancellationToken cancellationToken = default)
         {
@@ -36,6 +37,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's orders.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<ListResult<Order>> ListAsync(ListFilter<Order> filter, CancellationToken cancellationToken = default)
         {
@@ -46,6 +48,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's orders.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The list of orders matching the filter.</returns>
         public virtual async Task<ListResult<Order>> ListAsync(OrderListFilter filter = null, CancellationToken cancellationToken = default)
         {
@@ -57,6 +60,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The id of the order to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Order"/>.</returns>
         public virtual async Task<Order> GetAsync(long orderId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -67,6 +71,7 @@ namespace ShopifySharp
         /// Closes an order.
         /// </summary>
         /// <param name="id">The order's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Order> CloseAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{id}/close.json");
@@ -79,6 +84,7 @@ namespace ShopifySharp
         /// Opens a closed order.
         /// </summary>
         /// <param name="id">The order's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Order> OpenAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{id}/open.json");
@@ -92,6 +98,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="order">A new <see cref="Order"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the order.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Order"/>.</returns>
         public virtual async Task<Order> CreateAsync(Order order, OrderCreateOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -120,6 +127,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">Id of the object being updated.</param>
         /// <param name="order">The <see cref="Order"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Order"/>.</returns>
         public virtual async Task<Order> UpdateAsync(long orderId, Order order, CancellationToken cancellationToken = default)
         {
@@ -137,6 +145,7 @@ namespace ShopifySharp
         /// Deletes an order with the given Id.
         /// </summary>
         /// <param name="orderId">The order object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long orderId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}.json");
@@ -148,6 +157,7 @@ namespace ShopifySharp
         /// Cancels an order.
         /// </summary>
         /// <param name="orderId">The order's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The cancelled <see cref="Order"/>.</returns>
         public virtual async Task CancelAsync(long orderId, OrderCancelOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -161,6 +171,7 @@ namespace ShopifySharp
         /// Get MetaField's for an order.
         /// </summary>
         /// <param name="orderId">The order's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The set of <see cref="MetaField"/> for the order.</returns>
         public virtual async Task<IEnumerable<MetaField>> GetMetaFieldsAsync(long orderId, CancellationToken cancellationToken = default)
         {

@@ -51,6 +51,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blog">The blog being created. Id should be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest("blogs.json");
@@ -76,6 +77,7 @@ namespace ShopifySharp
         /// <param name="blogId">Id of the object being updated.</param>
         /// <param name="blog">The updated blog.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest($"blogs/{blogId}.json");
@@ -99,6 +101,7 @@ namespace ShopifySharp
         /// Gets a blog with the given id.
         /// </summary>
         /// <param name="id">The id of the blog you want to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Blog> GetAsync(long id, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest($"blogs/{id}.json");
@@ -111,6 +114,7 @@ namespace ShopifySharp
         /// Deletes a blog with the given id.
         /// </summary>
         /// <param name="id">The id of the blog you want to delete.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var request = PrepareRequest($"blogs/{id}.json");

@@ -49,6 +49,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The id of the product to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Product"/>.</returns>
         public virtual async Task<Product> GetAsync(long productId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -60,6 +61,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="product">A new <see cref="Product"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the product.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Product"/>.</returns>
         public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -88,6 +90,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">Id of the object being updated.</param>
         /// <param name="product">The <see cref="Product"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Product"/>.</returns>
         public virtual async Task<Product> UpdateAsync(long productId, Product product, CancellationToken cancellationToken = default)
         {
@@ -105,6 +108,7 @@ namespace ShopifySharp
         /// Deletes a product with the given Id.
         /// </summary>
         /// <param name="productId">The product object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long productId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}.json");
@@ -116,6 +120,7 @@ namespace ShopifySharp
         /// Publishes an unpublished <see cref="Product"/>.
         /// </summary>
         /// <param name="id">The product's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The published <see cref="Product"/></returns>
         public virtual async Task<Product> PublishAsync(long id, CancellationToken cancellationToken = default)
         {
@@ -137,6 +142,7 @@ namespace ShopifySharp
         /// Unpublishes an published <see cref="Product"/>.
         /// </summary>
         /// <param name="id">The product's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The unpublished <see cref="Product"/></returns>
         public virtual async Task<Product> UnpublishAsync(long id, CancellationToken cancellationToken = default)
         {

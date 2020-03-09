@@ -24,6 +24,7 @@ namespace ShopifySharp
         /// Creates a <see cref="RecurringCharge"/>.
         /// </summary>
         /// <param name="charge">The <see cref="RecurringCharge"/> to create.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> CreateAsync(RecurringCharge charge, CancellationToken cancellationToken = default)
         {
@@ -35,6 +36,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -53,6 +55,7 @@ namespace ShopifySharp
         /// Activates a <see cref="RecurringCharge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<RecurringCharge> ActivateAsync(long id, CancellationToken cancellationToken = default)
         {
             return await ExecutePostAsync<RecurringCharge>($"recurring_application_charges/{id}/activate.json", "recurring_application_charge");
@@ -62,6 +65,7 @@ namespace ShopifySharp
         /// Deletes a <see cref="RecurringCharge"/>.
         /// </summary>
         /// <param name="id">The id of the charge to delete.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             await ExecuteDeleteAsync($"recurring_application_charges/{id}.json", cancellationToken: cancellationToken);

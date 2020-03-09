@@ -20,6 +20,7 @@ namespace ShopifySharp
         /// Gets a list of your app's FulfillmentServices.
         /// </summary>
         /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
         public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(FulfillmentServiceListFilter filter = null, CancellationToken cancellationToken = default)
         {
@@ -31,6 +32,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="fulfillmentServiceId">The if of the fulfillment service.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Fulfillment"/>.</returns>
         public virtual async Task<FulfillmentServiceEntity> GetAsync(long fulfillmentServiceId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -62,6 +64,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="fulfillmentServiceId">Id of the fulfillment service being updated.</param>
         /// <param name="fulfillmentServiceEntity">The <see cref="FulfillmentServiceEntity"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="FulfillmentServiceEntity"/>.</returns>
         public virtual async Task<FulfillmentServiceEntity> UpdateAsync(long fulfillmentServiceId, FulfillmentServiceEntity fulfillmentServiceEntity, CancellationToken cancellationToken = default)
         {
@@ -81,6 +84,7 @@ namespace ShopifySharp
         /// Deletes a fulfillment service with the given Id.
         /// </summary>
         /// <param name="fulfillmentServiceId">The fulfillment service object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long fulfillmentServiceId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"fulfillment_services/{fulfillmentServiceId}.json");

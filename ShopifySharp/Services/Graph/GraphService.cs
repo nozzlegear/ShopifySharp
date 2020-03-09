@@ -27,6 +27,7 @@ namespace ShopifySharp
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(string body, CancellationToken cancellationToken = default)
         {
@@ -41,6 +42,7 @@ namespace ShopifySharp
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(JToken body, CancellationToken cancellationToken = default)
         {

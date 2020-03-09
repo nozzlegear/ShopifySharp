@@ -39,6 +39,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="CustomCollection"/> Custom Collection
         /// </summary>
         /// <param name="customCollection">A new <see cref="CustomCollection"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> CreateAsync(CustomCollection customCollection, CancellationToken cancellationToken = default)
         {
@@ -63,6 +64,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customCollectionId">The id of the custom collection to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> GetAsync(long customCollectionId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -73,6 +75,7 @@ namespace ShopifySharp
         /// Deletes a custom collection with the given Id.
         /// </summary>
         /// <param name="customCollectionId">The custom collection's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long customCollectionId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
@@ -85,6 +88,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customCollectionId">Id of the object being updated.</param>
         /// <param name="customCollection">The <see cref="CustomCollection"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> UpdateAsync(long customCollectionId, CustomCollection customCollection, CancellationToken cancellationToken = default)
         {

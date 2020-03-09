@@ -38,6 +38,7 @@ namespace ShopifySharp
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter, cancellationToken: cancellationToken);
@@ -47,6 +48,7 @@ namespace ShopifySharp
         /// Gets a list of variants belonging to the given product.
         /// </summary>
         /// <param name="productId">The product that the variants belong to.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ProductVariantListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(productId, filter?.AsListFilter(), cancellationToken);
@@ -56,6 +58,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="ProductVariant"/> with the given id.
         /// </summary>
         /// <param name="variantId">The id of the product variant to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ProductVariant> GetAsync(long variantId, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<ProductVariant>($"variants/{variantId}.json", "variant", cancellationToken: cancellationToken);
@@ -66,6 +69,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The product that the new variant will belong to.</param>
         /// <param name="variant">A new <see cref="ProductVariant"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ProductVariant> CreateAsync(long productId, ProductVariant variant, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}/variants.json");
@@ -83,6 +87,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productVariantId">Id of the object being updated.</param>
         /// <param name="variant">The variant to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ProductVariant> UpdateAsync(long productVariantId, ProductVariant variant, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"variants/{productVariantId}.json");
@@ -100,6 +105,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The product that the variant belongs to.</param>
         /// <param name="variantId">The product variant's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long productId, long variantId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}/variants/{variantId}.json");

@@ -22,6 +22,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's orders.
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The count of all orders for the shop.</returns>
         public virtual async Task<int> CountAsync(CheckoutCountFilter filter = null, CancellationToken cancellationToken = default)
         {
@@ -32,6 +33,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's abandoned checkouts.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Checkout>> ListAsync(ListFilter<Checkout> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("checkouts.json", "checkouts", filter, cancellationToken: cancellationToken);
@@ -41,6 +43,7 @@ namespace ShopifySharp
         /// Gets a list of up to 250 of the shop's abandoned checkouts.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Checkout>> ListAsync(CheckoutListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter(), cancellationToken);

@@ -34,6 +34,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">The id of the theme to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Theme"/>.</returns>
         public virtual async Task<Theme> GetAsync(long themeId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -75,6 +76,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="theme">The new theme.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Theme> CreateAsync(Theme theme, CancellationToken cancellationToken = default)
         {
             return await _CreateAsync(theme, cancellationToken);
@@ -87,6 +89,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="theme">The new theme.</param>
         /// <param name="sourceUrl">A URL that points to the .zip file containing the theme's source files.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Theme> CreateAsync(Theme theme, string sourceUrl, CancellationToken cancellationToken = default)
         {
             return await _CreateAsync(theme, cancellationToken, sourceUrl);
@@ -97,6 +100,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="themeId">Id of the object being updated.</param>
         /// <param name="theme">The <see cref="Theme"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Theme"/>.</returns>
         public virtual async Task<Theme> UpdateAsync(long themeId, Theme theme, CancellationToken cancellationToken = default)
         {
@@ -114,6 +118,7 @@ namespace ShopifySharp
         /// Deletes a Theme with the given Id.
         /// </summary>
         /// <param name="themeId">The Theme object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long themeId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}.json");

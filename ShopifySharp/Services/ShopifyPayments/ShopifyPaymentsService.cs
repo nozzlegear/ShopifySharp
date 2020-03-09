@@ -44,6 +44,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's transactions.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The count of all fulfillments for the shop.</returns>
         public virtual async Task<IEnumerable<ShopifyPaymentsBalance>> GetBalanceAsync(CancellationToken cancellationToken = default)
         {
@@ -54,6 +55,7 @@ namespace ShopifySharp
         /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ListFilter<ShopifyPaymentsPayout> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("shopify_payments/payouts.json", "payouts", filter, cancellationToken: cancellationToken);
@@ -63,6 +65,7 @@ namespace ShopifySharp
         /// Retrieves a list of all payouts ordered by payout date, with the most recent being first.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<ShopifyPaymentsPayout>> ListPayoutsAsync(ShopifyPaymentsPayoutListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListPayoutsAsync(filter?.AsListFilter(), cancellationToken);

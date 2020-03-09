@@ -32,6 +32,7 @@ namespace ShopifySharp
         /// Creates a new <see cref="Carrier"/> Carrier
         /// </summary>
         /// <param name="carrier">A new <see cref="Carrier"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Carrier"/>.</returns>
         public virtual async Task<Carrier> CreateAsync(Carrier carrier, CancellationToken cancellationToken = default)
         {
@@ -49,6 +50,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="Carrier"/> with the given id.
         /// </summary>
         /// <param name="carrierId">The id of the Carrier to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Carrier"/>.</returns>
         public virtual async Task<Carrier> GetAsync(long carrierId, CancellationToken cancellationToken = default)
         {            
@@ -62,6 +64,7 @@ namespace ShopifySharp
         /// Deletes a Carruer with the given Id.
         /// </summary>
         /// <param name="carrierId">The Carrier's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long carrierId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"carrier_services/{carrierId}.json");
@@ -74,6 +77,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="carrierId">Id of the Carrier being updated.</param>
         /// <param name="carrier">The <see cref="Carrier"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Carrier"/>.</returns>
         public virtual async Task<Carrier> UpdateAsync(long carrierId, Carrier carrier, CancellationToken cancellationToken = default)
         {

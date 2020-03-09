@@ -49,6 +49,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerId">The id of the customer to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> GetAsync(long customerId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -59,6 +60,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("customers/search.json", "customers", filter, cancellationToken: cancellationToken);
@@ -68,6 +70,7 @@ namespace ShopifySharp
         /// Searches through a shop's customers for the given search query. NOTE: Assumes the <paramref name="query"/> and <paramref name="order"/> strings are not encoded.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(CustomerSearchListFilter filter, CancellationToken cancellationToken = default)
         {
             return await SearchAsync(filter?.AsListFilter(), cancellationToken);
@@ -78,6 +81,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customer">A new <see cref="Customer"/>. Id should be set to null.</param>
         /// <param name="options">Options for creating the customer.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> CreateAsync(Customer customer, CustomerCreateOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -107,6 +111,7 @@ namespace ShopifySharp
         /// <param name="customerId">Id of the object being updated.</param>
         /// <param name="customer">The <see cref="Customer"/> to update.</param>
         /// <param name="options">Options for updating the customer.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> UpdateAsync(long customerId, Customer customer, CustomerUpdateOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -134,6 +139,7 @@ namespace ShopifySharp
         /// Deletes a customer with the given Id.
         /// </summary>
         /// <param name="customerId">The customer object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long customerId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerId}.json");
@@ -147,6 +153,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerId">The customer object's Id.</param>
         /// <param name="invite">Options for the invite email request</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
         public virtual async Task<CustomerInvite> SendInviteAsync(long customerId, CustomerInvite invite = null, CancellationToken cancellationToken = default)
         {
@@ -168,6 +175,7 @@ namespace ShopifySharp
         /// If you make a new POST request to this endpoint, a new URL will be generated which will be again valid for 7 days, but the previous URL will no longer be valid.
         /// </summary>
         /// <param name="customerId">The customer object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
         public virtual async Task<string> GetAccountActivationUrl(long customerid, CancellationToken cancellationToken = default)
         {

@@ -26,6 +26,7 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's redirects.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(RedirectCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>("redirects/count.json", "count", filter, cancellationToken: cancellationToken);
@@ -52,6 +53,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="redirectId">The id of the redirect to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Redirect"/>.</returns>
         public virtual async Task<Redirect> GetAsync(long redirectId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -73,6 +75,7 @@ namespace ShopifySharp
         /// files have been extracted and stored by Shopify (which might take a couple of minutes).
         /// </summary>
         /// <param name="redirect">The new <see cref="Redirect"/>.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Redirect"/>.</returns>
         public virtual async Task<Redirect> CreateAsync(Redirect redirect, CancellationToken cancellationToken = default)
         {
@@ -91,6 +94,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="redirectId">Id of the object being updated.</param>
         /// <param name="redirect">The <see cref="Redirect"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Redirect"/>.</returns>
         public virtual async Task<Redirect> UpdateAsync(long redirectId, Redirect redirect, CancellationToken cancellationToken = default)
         {
@@ -108,6 +112,7 @@ namespace ShopifySharp
         /// Deletes a redirect with the given Id.
         /// </summary>
         /// <param name="redirectId">The redirect object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long redirectId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"redirects/{redirectId}.json");

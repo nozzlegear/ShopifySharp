@@ -24,6 +24,7 @@ namespace ShopifySharp
         /// Creates a <see cref="Charge"/>.
         /// </summary>
         /// <param name="charge">The <see cref="Charge"/> to create.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Charge"/>.</returns>
         public virtual async Task<Charge> CreateAsync(Charge charge, CancellationToken cancellationToken = default)
         {
@@ -39,6 +40,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Charge"/>.</returns>
         public virtual async Task<Charge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -57,6 +59,7 @@ namespace ShopifySharp
         /// Retrieves a list of all past and present <see cref="Charge"/> objects.
         /// </summary>
         /// <param name="filter">Options for filtering the list.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter, cancellationToken: cancellationToken);
@@ -66,6 +69,7 @@ namespace ShopifySharp
         /// Activates a <see cref="Charge"/> that the shop owner has accepted.
         /// </summary>
         /// <param name="id">The id of the charge to activate.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task ActivateAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"application_charges/{id}/activate.json");

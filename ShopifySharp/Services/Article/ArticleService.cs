@@ -41,6 +41,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the articles belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(long blogId, ArticleCountFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<int>($"blogs/{blogId}/articles/count.json", "count", filter, cancellationToken: cancellationToken);
@@ -52,6 +53,7 @@ namespace ShopifySharp
         /// <param name="blogId">The blog that the article belongs to.</param>
         /// <param name="articleId">The article's id.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Article> GetAsync(long blogId, long articleId, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
@@ -71,6 +73,7 @@ namespace ShopifySharp
         /// <param name="blogId">The blog that the article will belong to.</param>
         /// <param name="article">The article being created. Id should be null.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Article> CreateAsync(long blogId, Article article, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"blogs/{blogId}/articles.json");
@@ -97,6 +100,7 @@ namespace ShopifySharp
         /// <param name="articleId">Id of the object being updated.</param>
         /// <param name="article">The article being updated.</param>
         /// <param name="metafields">Optional metafield data that can be returned by the <see cref="MetaFieldService"/>.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Article> UpdateAsync(long blogId, long articleId, Article article, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
@@ -121,6 +125,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="blogId">The blog that the article belongs to.</param>
         /// <param name="articleId">The article benig deleted.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long blogId, long articleId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
@@ -144,6 +149,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="limit">The number of tags to return</param>
         /// <param name="popular">A flag to indicate only to a certain number of the most popular tags.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<string>> ListTagsAsync(int? popular = null, int? limit = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"articles/tags.json");
@@ -168,6 +174,7 @@ namespace ShopifySharp
         /// <param name="blogId">The blog that the tags belong to.</param>
         /// <param name="limit">The number of tags to return</param>
         /// <param name="popular">A flag to indicate only to a certain number of the most popular tags.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<string>> ListTagsForBlogAsync(long blogId, int? popular = null, int? limit = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"blogs/{blogId}/articles/tags.json");

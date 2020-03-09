@@ -34,6 +34,7 @@ namespace ShopifySharp
         /// Retrieves the <see cref="User"/> with the given id.
         /// </summary>
         /// <param name="userId">The id of the User to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="User"/>.</returns>
         public virtual async Task<User> GetAsync(long userId, CancellationToken cancellationToken = default)
         {

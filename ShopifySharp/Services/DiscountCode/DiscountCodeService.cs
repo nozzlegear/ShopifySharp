@@ -40,6 +40,7 @@ namespace ShopifySharp
         /// <param name="priceRuleId">The id of the associated price rule.</param>
         /// <param name="discountId">The id of the discount to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
         public virtual async Task<PriceRuleDiscountCode> GetAsync(long priceRuleId, long discountId, string fields = null, CancellationToken cancellationToken = default)
         {
@@ -50,6 +51,7 @@ namespace ShopifySharp
         /// Creates a new discount code.
         /// </summary>
         /// <param name="priceRuleId">Id of an existing price rule.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<PriceRuleDiscountCode> CreateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
@@ -69,6 +71,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="priceRuleId">The Id of the Price Rule being updated.</param>
         /// <param name="code">The code being updated.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<PriceRuleDiscountCode> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{code.Id.Value}.json");
@@ -86,6 +89,7 @@ namespace ShopifySharp
         /// </summary>
         /// /// <param name="priceRuleId">The price rule object's Id.</param>
         /// <param name="discountId">The discount object's Id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long priceRuleId, long discountCodeId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountCodeId}.json");

@@ -36,6 +36,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken: cancellationToken);
@@ -47,6 +48,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken: cancellationToken);
@@ -57,6 +59,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="transaction">The transaction.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Transaction"/>.</returns>
         public virtual async Task<Transaction> CreateAsync(long orderId, Transaction transaction, CancellationToken cancellationToken = default)
         {
