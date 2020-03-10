@@ -13,8 +13,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "ExecuteRequestCancellation")]
     public class ExecuteRequestCancellation_Tests
     {
-
-        public class TestService : ShopifyService
+        private class TestService : ShopifyService
         {
             public TestService() : base("someurl", "sometoken")
             {
@@ -169,7 +168,7 @@ namespace ShopifySharp.Tests
             });
         }
         
-        private OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        private static OrderService OrderService => new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         [Fact]
         public async Task Cancelling_An_OrderService_List_Terminates_HttpRequest()
