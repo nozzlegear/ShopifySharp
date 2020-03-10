@@ -145,7 +145,8 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null, CancellationToken cancellationToken = default)
+        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method,
+            CancellationToken cancellationToken, HttpContent content = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
@@ -187,7 +188,8 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null, CancellationToken cancellationToken = default)
+        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method,
+            CancellationToken cancellationToken, HttpContent content = null, string rootElement = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
@@ -224,16 +226,16 @@ namespace ShopifySharp
         private async Task<T> ExecuteWithContentCoreAsync<T>(string path, string resultRootElt, HttpMethod method, JsonContent content, CancellationToken cancellationToken)
         {
             var req = PrepareRequest(path);
-            var response = await ExecuteRequestAsync<T>(req, method, content, resultRootElt, cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<T>(req, method, cancellationToken: cancellationToken, content: content, rootElement: resultRootElt);
             return response.Result;
         }
 
-        protected async Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
+        protected async Task<T> ExecutePostAsync<T>(string path, string resultRootElt, CancellationToken cancellationToken, object jsonContent = null)
         {
             return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Post, jsonContent == null ? null : new JsonContent(jsonContent), cancellationToken);
         }
 
-        protected async Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
+        protected async Task<T> ExecutePutAsync<T>(string path, string resultRootElt, CancellationToken cancellationToken, object jsonContent = null)
         {
             return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Put, jsonContent == null ? null : new JsonContent(jsonContent), cancellationToken);
         }
@@ -257,7 +259,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<T>(req, HttpMethod.Get, rootElement: resultRootElt, cancellationToken: cancellationToken);
+            return await ExecuteRequestAsync<T>(req, HttpMethod.Get, cancellationToken: cancellationToken, rootElement: resultRootElt);
         }
 
         protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields, CancellationToken cancellationToken = default)

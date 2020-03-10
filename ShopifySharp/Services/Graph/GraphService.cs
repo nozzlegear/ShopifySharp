@@ -35,7 +35,7 @@ namespace ShopifySharp
 
             var content = new StringContent(body, Encoding.UTF8, "application/graphql");
 
-            return await SendAsync(req, content);
+            return await SendAsync(req, content, cancellationToken);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         private async Task<JToken> SendAsync(RequestUri req, HttpContent content, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, content, cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content);
 
             CheckForErrors(response);
 

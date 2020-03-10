@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<ApplicationCredit>> ListAsync(ListFilter<ApplicationCredit> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("application_credits.json", "application_credits", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("application_credits.json", "application_credits", filter, cancellationToken);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ApplicationCredit> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<ApplicationCredit>($"application_credits/{id}.json", "application_credit", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<ApplicationCredit>($"application_credits/{id}.json", "application_credit", fields, cancellationToken);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ShopifySharp
                 application_credit = credit,
             });
 
-            var response = await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, body, "application_credit", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, cancellationToken, body, "application_credit");
 
             return response.Result;
         }

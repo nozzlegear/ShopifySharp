@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<int> CountAsync(PageCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("pages/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("pages/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Page>> ListAsync(ListFilter<Page> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("pages.json", "pages", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("pages.json", "pages", filter, cancellationToken);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Get, rootElement: "page", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Get, cancellationToken, rootElement: "page");
 
             return response.Result;
         }
@@ -91,7 +91,7 @@ namespace ShopifySharp
             {
                 page = body
             });
-            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Post, content, "page", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Post, cancellationToken, content, "page");
 
             return response.Result;
         }
@@ -110,7 +110,7 @@ namespace ShopifySharp
             {
                 page = page
             });
-            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Put, content, "page", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Page>(req, HttpMethod.Put, cancellationToken, content, "page");
 
             return response.Result;
         }
@@ -124,7 +124,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"pages/{pageId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<InventoryItem>> ListAsync(ListFilter<InventoryItem> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"inventory_items.json", "inventory_items", filter, cancellationToken);
         }
 
         public virtual async Task<ListResult<InventoryItem>> ListAsync(InventoryItemListFilter filter, CancellationToken cancellationToken = default)
@@ -60,7 +60,7 @@ namespace ShopifySharp
                 inventory_item = inventoryItem
             } );
 
-            var response = await ExecuteRequestAsync<InventoryItem>( req, HttpMethod.Put, content, rootElement: "inventory_item" , cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<InventoryItem>( req, HttpMethod.Put, cancellationToken, content, "inventory_item");
             return response.Result;
         }
     }

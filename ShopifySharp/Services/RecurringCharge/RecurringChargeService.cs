@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> CreateAsync(RecurringCharge charge, CancellationToken cancellationToken = default)
         {
-            return await ExecutePostAsync<RecurringCharge>("recurring_application_charges.json", "recurring_application_charge", new { recurring_application_charge = charge });
+            return await ExecutePostAsync<RecurringCharge>("recurring_application_charges.json", "recurring_application_charge", cancellationToken, new { recurring_application_charge = charge });
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="RecurringCharge"/>.</returns>
         public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields, cancellationToken);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter, cancellationToken);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<RecurringCharge> ActivateAsync(long id, CancellationToken cancellationToken = default)
         {
-            return await ExecutePostAsync<RecurringCharge>($"recurring_application_charges/{id}/activate.json", "recurring_application_charge");
+            return await ExecutePostAsync<RecurringCharge>($"recurring_application_charges/{id}/activate.json", "recurring_application_charge", cancellationToken);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-            await ExecuteDeleteAsync($"recurring_application_charges/{id}.json", cancellationToken: cancellationToken);
+            await ExecuteDeleteAsync($"recurring_application_charges/{id}.json", cancellationToken);
         }
     }
 }

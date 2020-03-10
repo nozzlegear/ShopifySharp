@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<OrderRisk>> ListAsync(long orderId, ListFilter<OrderRisk> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"orders/{orderId}/risks.json", "risks", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"orders/{orderId}/risks.json", "risks", filter, cancellationToken);
         }
         
         /// <summary>
@@ -56,7 +56,7 @@ namespace ShopifySharp
             {
                 risk = risk
             });
-            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Post, content, "risk", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Post, cancellationToken, content, "risk");
 
             return response.Result;
         }
@@ -76,7 +76,7 @@ namespace ShopifySharp
                 risk = risk
             });
 
-            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Put, content, "risk", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<OrderRisk>(req, HttpMethod.Put, cancellationToken, content, "risk");
             return response.Result;
         }
 
@@ -90,7 +90,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

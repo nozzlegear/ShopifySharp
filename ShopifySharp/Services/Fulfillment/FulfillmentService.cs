@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// <returns>The count of all fulfillments for the shop.</returns>
         public virtual async Task<int> CountAsync(long orderId, FulfillmentCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"orders/{orderId}/fulfillments/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>($"orders/{orderId}/fulfillments/count.json", "count", filter, cancellationToken);
         }
         
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Fulfillment>> ListAsync(long orderId, ListFilter<Fulfillment> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"orders/{orderId}/fulfillments.json", "fulfillments", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"orders/{orderId}/fulfillments.json", "fulfillments", filter, cancellationToken);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Fulfillment"/>.</returns>
         public virtual async Task<Fulfillment> GetAsync(long orderId, long fulfillmentId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", "fulfillment", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", "fulfillment", fields, cancellationToken);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ShopifySharp
                 fulfillment = body
             });
 
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, content, "fulfillment", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, content, "fulfillment");
             return response.Result;
         }
 
@@ -106,7 +106,7 @@ namespace ShopifySharp
                 fulfillment = body
             });
 
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, content, "fulfillment", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, cancellationToken, content, "fulfillment");
             return response.Result;
         }
 
@@ -120,7 +120,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/complete.json");
 
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
             return response.Result;
         }
 
@@ -134,7 +134,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel.json");
 
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
             return response.Result;
         }
 
@@ -148,7 +148,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/open.json");
 
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, rootElement: "fulfillment", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
             return response.Result;
         }
     }

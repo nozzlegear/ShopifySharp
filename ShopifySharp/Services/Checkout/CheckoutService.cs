@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// <returns>The count of all orders for the shop.</returns>
         public virtual async Task<int> CountAsync(CheckoutCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("checkouts/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("checkouts/count.json", "count", filter, cancellationToken);
         }
         
         /// <summary>
@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Checkout>> ListAsync(ListFilter<Checkout> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("checkouts.json", "checkouts", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("checkouts.json", "checkouts", filter, cancellationToken);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShopifySharp
             var req = PrepareRequest("checkout.json");
             var body = checkout.ToDictionary();
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, new JsonContent(checkout), rootElement: "checkout", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, new JsonContent(checkout), "checkout");
             return response.Result;
         }
 
@@ -70,7 +70,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}/complete.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, rootElement: "checkout", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, rootElement: "checkout");
             return response.Result;
         }
 
@@ -82,7 +82,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Get, rootElement: "checkout", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Get, cancellationToken, rootElement: "checkout");
             return response.Result;
         }
 
@@ -94,7 +94,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, new JsonContent(updatedCheckout), rootElement: "checkout", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, cancellationToken, new JsonContent(updatedCheckout), "checkout");
             return response.Result;
         }
 
@@ -108,7 +108,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}/shipping_rates.json");
 
-            var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, rootElement: "shipping_rates", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, cancellationToken, rootElement: "shipping_rates");
             return response.Result;
         }
     }

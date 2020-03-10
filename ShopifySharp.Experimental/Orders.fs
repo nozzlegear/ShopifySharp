@@ -2,6 +2,9 @@
 
 open System.Collections.Generic
 open System.Net.Http
+open System.Threading
+open System.Threading
+open System.Threading
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -274,21 +277,21 @@ module Orders =
             let req = base.PrepareRequest "orders.json"
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order")
+            base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, CancellationToken.None, content, "order")
             |> mapTask (fun response -> response.Result)
             
         member x.CreateAsync(order: OrderProperties, options: CreationOptions.CreationOptionProperties) =
             let req = base.PrepareRequest "orders.json"
             let data = dict [ "order", mergeOrderAndCreationOptions order options |> JsonValue.MapPropertyValuesToObjects ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, content, "order")
+            base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, CancellationToken.None, content, "order")
             |> mapTask (fun response -> response.Result)
             
         member x.UpdateAsync (id: int64, order: OrderProperties) =
             let req = base.PrepareRequest (sprintf "orders/%i.json" id)
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Order>(req, HttpMethod.Put, content, "order")
+            base.ExecuteRequestAsync<Order>(req, HttpMethod.Put, CancellationToken.None, content, "order")
             |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)

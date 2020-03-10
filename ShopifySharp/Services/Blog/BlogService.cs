@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Blog>> ListAsync(ListFilter<Blog> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("blogs.json", "blogs", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("blogs.json", "blogs", filter, cancellationToken);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ShopifySharp
                 blog = body
             });
 
-            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, content, rootElement: "blog", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Post, cancellationToken, content, "blog");
             return response.Result;
         }
 
@@ -93,7 +93,7 @@ namespace ShopifySharp
                 blog = body
             });
 
-            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, content, "blog", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Put, cancellationToken, content, "blog");
             return response.Result;
         }
 
@@ -106,7 +106,7 @@ namespace ShopifySharp
         {
             var request = PrepareRequest($"blogs/{id}.json");
 
-            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, rootElement: "blog", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, cancellationToken, rootElement: "blog");
             return response.Result;
         }
 
@@ -119,7 +119,7 @@ namespace ShopifySharp
         {
             var request = PrepareRequest($"blogs/{id}.json");
 
-            await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken);
         }
     }
 }

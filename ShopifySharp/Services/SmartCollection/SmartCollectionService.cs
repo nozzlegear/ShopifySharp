@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(SmartCollectionCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("smart_collections/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("smart_collections/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<SmartCollection>> ListAsync(ListFilter<SmartCollection> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"smart_collections.json", "smart_collections", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"smart_collections.json", "smart_collections", filter, cancellationToken);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
-            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, content, "smart_collection", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Post, cancellationToken, content, "smart_collection");
 
             return response.Result;
         }
@@ -91,7 +91,7 @@ namespace ShopifySharp
             {
                 smart_collection = collection
             });
-            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, cancellationToken, content, "smart_collection");
 
             return response.Result;
         }
@@ -113,7 +113,7 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
-            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, cancellationToken, content, "smart_collection");
 
             return response.Result;
         }
@@ -135,7 +135,7 @@ namespace ShopifySharp
             {
                 smart_collection = body
             });
-            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, content, "smart_collection", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<SmartCollection>(req, HttpMethod.Put, cancellationToken, content, "smart_collection");
 
             return response.Result;
         }
@@ -154,13 +154,14 @@ namespace ShopifySharp
                 sort_order = sortOrder,
                 products = productIds
             });
-            await ExecuteRequestAsync(req, HttpMethod.Put, content);
+            await ExecuteRequestAsync(req, HttpMethod.Put, CancellationToken.None, content);
         }
-        
+
         /// <summary>
         /// Updates the order of products when a SmartCollection's sort-by method is set to "manual".
         /// </summary>
         /// <param name="smartCollectionId">Id of the object being updated.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <param name="sortOrder">The order in which products in the smart collection appear. Note that specifying productIds parameter will have no effect unless the sort order is "manual"</param>
         /// <param name="productIds">An array of product ids sorted in the order you want them to appear in.</param>
         public virtual async Task UpdateProductOrderAsync(long smartCollectionId, CancellationToken cancellationToken, string sortOrder = null, params long[] productIds)
@@ -171,7 +172,7 @@ namespace ShopifySharp
                 sort_order = sortOrder,
                 products = productIds
             });
-            await ExecuteRequestAsync(req, HttpMethod.Put, content, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Put, cancellationToken, content);
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"smart_collections/{collectionId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ShopifySharp
             {
                 transaction = transaction
             });
-            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, content, "transaction", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, cancellationToken, content, "transaction");
 
             return response.Result;
         }

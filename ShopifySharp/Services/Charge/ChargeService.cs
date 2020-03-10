@@ -31,7 +31,7 @@ namespace ShopifySharp
             var req = PrepareRequest("application_charges.json");
             var content = new JsonContent(new { application_charge = charge });
 
-            var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, cancellationToken, content, "application_charge");
             return response.Result;
         }
 
@@ -51,7 +51,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Get, rootElement: "application_charge", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Get, cancellationToken, rootElement: "application_charge");
             return response.Result;
         }
 
@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter, cancellationToken);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"application_charges/{id}/activate.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken);
         }
     }
 }

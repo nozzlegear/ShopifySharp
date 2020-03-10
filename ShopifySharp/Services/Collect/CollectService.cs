@@ -26,7 +26,7 @@ namespace ShopifySharp
 
         public virtual async Task<int> CountAsync(CollectCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("collects/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("collects/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Collect>> ListAsync(ListFilter<Collect> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("collects.json", "collects", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("collects.json", "collects", filter, cancellationToken);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Collect"/>.</returns>
         public virtual async Task<Collect> GetAsync(long collectId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Collect>($"collects/{collectId}.json", "collect", fields, cancellationToken);
         }
 
 
@@ -72,7 +72,7 @@ namespace ShopifySharp
                 collect = collect
             });
 
-            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, content, "collect", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Collect>(req, HttpMethod.Post, cancellationToken, content, "collect");
             return response.Result;
         }
 
@@ -85,7 +85,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"collects/{collectId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, ListFilter<Refund> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"orders/{orderId}/refunds.json", "refunds", filter, cancellationToken);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Refund>> ListForOrderAsync(long orderId, RefundListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListForOrderAsync(orderId, filter?.AsListFilter());
+            return await ListForOrderAsync(orderId, filter?.AsListFilter(), cancellationToken);
         }
         
 
@@ -52,7 +52,7 @@ namespace ShopifySharp
         /// <returns></returns>
         public virtual async Task<Refund> GetAsync(long orderId, long refundId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Refund>($"orders/{orderId}/refunds/{refundId}.json", "refund", fields, cancellationToken);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, cancellationToken, content, "refund");
 
             return response.Result;
         }
@@ -79,7 +79,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
             var content = new JsonContent(new { refund = options ?? new Refund() });
-            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, content, "refund", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, cancellationToken, content, "refund");
 
             return response.Result;
         }

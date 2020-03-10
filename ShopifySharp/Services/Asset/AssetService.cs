@@ -40,7 +40,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, rootElement: "asset", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Get, cancellationToken, rootElement: "asset");
             
             return response.Result;
         }
@@ -54,7 +54,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, AssetListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Asset>>($"themes/{themeId}/assets.json", "assets", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<IEnumerable<Asset>>($"themes/{themeId}/assets.json", "assets", filter, cancellationToken);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace ShopifySharp
                 asset = asset
             });
 
-            var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Put, content, "asset", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Asset>(req, HttpMethod.Put, cancellationToken, content, "asset");
             return response.Result;
         }
 
@@ -93,7 +93,7 @@ namespace ShopifySharp
 
             req = SetAssetQuerystring(req, key, themeId);
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>

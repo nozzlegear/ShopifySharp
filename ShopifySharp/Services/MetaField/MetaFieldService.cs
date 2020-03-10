@@ -43,6 +43,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="resourceType">The type of shopify resource to obtain metafields for. This could be variants, products, orders, customers, custom_collections.</param>
         /// <param name="resourceId">The Id for the resource type.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
@@ -58,6 +59,7 @@ namespace ShopifySharp
         /// <param name="resourceId">The Id for the resource type.</param>
         /// <param name="parentResourceType">The type of shopify parent resource to obtain metafields for. This could be blogs, products.</param>
         /// <param name="parentResourceId">The Id for the resource type.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <remarks>
         /// According to Shopify's documentation, this endpoint does not currently support any additional filter parameters for counting.
         /// </remarks>
@@ -69,7 +71,7 @@ namespace ShopifySharp
         private async Task<ListResult<MetaField>> _ListAsync(string path, ListFilter<MetaField> filter,
             CancellationToken cancellationToken)
         {
-            return await ExecuteGetListAsync(path, "metafields", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync(path, "metafields", filter, cancellationToken);
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<MetaField> GetAsync(long metafieldId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<MetaField>($"metafields/{metafieldId}.json", "metafield", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<MetaField>($"metafields/{metafieldId}.json", "metafield", fields, cancellationToken);
         }
 
         /// <summary>
@@ -170,7 +172,7 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, cancellationToken, content, "metafield");
             return response.Result;
         }
 
@@ -191,7 +193,7 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, cancellationToken, content, "metafield");
             return response.Result;
         }
 
@@ -210,7 +212,7 @@ namespace ShopifySharp
                 metafield = metafield
             });
 
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, content, "metafield", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Post, cancellationToken, content, "metafield");
             return response.Result;
         }
 
@@ -227,7 +229,7 @@ namespace ShopifySharp
             {
                 metafield = metafield
             });
-            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, content, "metafield", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<MetaField>(req, HttpMethod.Put, cancellationToken, content, "metafield");
             
             return response.Result;
         }
@@ -241,7 +243,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"metafields/{metafieldId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

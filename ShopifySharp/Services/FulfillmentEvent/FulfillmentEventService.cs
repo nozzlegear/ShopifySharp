@@ -61,7 +61,7 @@ namespace ShopifySharp
                 @event
             });
 
-            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, content, "fulfillment_event", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<FulfillmentEvent>(req, HttpMethod.Post, cancellationToken, content, "fulfillment_event");
             return response.Result;
         }
 
@@ -76,7 +76,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

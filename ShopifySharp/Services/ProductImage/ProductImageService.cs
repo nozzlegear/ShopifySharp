@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(long productId, ProductImageCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"products/{productId}/images/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>($"products/{productId}/images/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter, cancellationToken);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields, cancellationToken);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShopifySharp
             {
                 image = image
             });
-            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, cancellationToken, content, "image");
 
             return response.Result;
         }
@@ -90,7 +90,7 @@ namespace ShopifySharp
             {
                 image = image
             });
-            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, cancellationToken, content, "image");
 
             return response.Result;
         }
@@ -105,7 +105,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

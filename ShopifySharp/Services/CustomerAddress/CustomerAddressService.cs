@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Address>> ListAsync(long customerId, ListFilter<Address> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"customers/{customerId}/addresses.json", "addresses", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"customers/{customerId}/addresses.json", "addresses", filter, cancellationToken);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Get, rootElement: "customer_address", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Get, cancellationToken, rootElement: "customer_address");
             return response.Result;
         }
 
@@ -66,7 +66,7 @@ namespace ShopifySharp
                 address = addressBody
             });
 
-            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Post, content, "customer_address", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Post, cancellationToken, content, "customer_address");
             return response.Result;
         }
 
@@ -88,7 +88,7 @@ namespace ShopifySharp
                 address = addressBody
             });
 
-            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, content, "customer_address", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, cancellationToken, content, "customer_address");
             return response.Result;
         }
 
@@ -102,7 +102,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}/default.json");
 
-            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, rootElement: "customer_address", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, cancellationToken, rootElement: "customer_address");
             return response.Result;
         }
     }

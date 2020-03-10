@@ -30,7 +30,7 @@ namespace ShopifySharp
         /// <returns>The count of all webhooks for the shop.</returns>
         public virtual async Task<int> CountAsync(WebhookCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("webhooks/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Webhook>> ListAsync(ListFilter<Webhook> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("webhooks.json", "webhooks", filter, cancellationToken);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> GetAsync(long webhookId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", fields, cancellationToken);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ShopifySharp
         /// <returns>The new <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> CreateAsync(Webhook webhook, CancellationToken cancellationToken = default)
         {
-            return await ExecutePostAsync<Webhook>("webhooks.json", "webhook", new { webhook = webhook });
+            return await ExecutePostAsync<Webhook>("webhooks.json", "webhook", cancellationToken, new { webhook = webhook });
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ShopifySharp
         /// <returns>The updated <see cref="Webhook"/>.</returns>
         public virtual async Task<Webhook> UpdateAsync(long webhookId, Webhook webhook, CancellationToken cancellationToken = default)
         {
-            return await ExecutePutAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", new { webhook = webhook });
+            return await ExecutePutAsync<Webhook>($"webhooks/{webhookId}.json", "webhook", cancellationToken, new { webhook = webhook });
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long webhookId, CancellationToken cancellationToken = default)
         {
-            await ExecuteDeleteAsync($"webhooks/{webhookId}.json", cancellationToken: cancellationToken);
+            await ExecuteDeleteAsync($"webhooks/{webhookId}.json", cancellationToken);
         }
     }
 }

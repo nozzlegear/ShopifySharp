@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<ProductVariant>> ListAsync(long productId, ListFilter<ProductVariant> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"products/{productId}/variants.json", "variants", filter, cancellationToken);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace ShopifySharp
             {
                 variant = variant
             });
-            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, content, "variant", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Post, cancellationToken, content, "variant");
 
             return response.Result;
         }
@@ -95,7 +95,7 @@ namespace ShopifySharp
             {
                 variant = variant
             });
-            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, content, "variant", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<ProductVariant>(req, HttpMethod.Put, cancellationToken, content, "variant");
 
             return response.Result;
         }
@@ -110,7 +110,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"products/{productId}/variants/{variantId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

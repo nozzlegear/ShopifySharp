@@ -60,7 +60,7 @@ namespace ShopifySharp
                 adjustment = adjustment
             });
 
-            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, cancellationToken, content, "adjustment");
             return response.Result;
         }
     }

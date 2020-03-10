@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Article>> ListAsync(long blogId, ListFilter<Article> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"blogs/{blogId}/articles.json", "articles", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"blogs/{blogId}/articles.json", "articles", filter, cancellationToken);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(long blogId, ArticleCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"blogs/{blogId}/articles/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>($"blogs/{blogId}/articles/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Get, rootElement: "article", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Get, cancellationToken, rootElement: "article");
             return response.Result;
         }
 
@@ -89,7 +89,7 @@ namespace ShopifySharp
                 article = body
             });
 
-            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Post, content, "article", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Post, cancellationToken, content, "article");
             return response.Result;
         }
 
@@ -116,7 +116,7 @@ namespace ShopifySharp
                 article = body
             });
 
-            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Put, content, "article", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Article>(req, HttpMethod.Put, cancellationToken, content, "article");
             return response.Result;
         }
 
@@ -130,7 +130,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"articles/authors.json");
 
-            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "authors", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, cancellationToken, rootElement: "authors");
             return response.Result;
         }
 
@@ -164,7 +164,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("limit", limit.Value);
             }
 
-            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, cancellationToken, rootElement: "tags");
             return response.Result;
         }
 
@@ -189,7 +189,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("limit", limit.Value);
             }
 
-            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, rootElement: "tags", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, cancellationToken, rootElement: "tags");
             return response.Result;
         }
     }

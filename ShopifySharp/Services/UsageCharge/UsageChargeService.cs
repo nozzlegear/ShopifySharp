@@ -39,7 +39,7 @@ namespace ShopifySharp
                     price = price
                 }
             });
-            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, content, "usage_charge", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, cancellationToken, content, "usage_charge");
 
             return response.Result;
         }
@@ -61,7 +61,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Get, rootElement: "usage_charge", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Get, cancellationToken, rootElement: "usage_charge");
 
             return response.Result;
         }
@@ -81,7 +81,7 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
-            var response = await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, rootElement: "usage_charges", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, cancellationToken, rootElement: "usage_charges");
 
             return response.Result;
         }

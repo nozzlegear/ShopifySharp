@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// <returns>The count of all products for the shop.</returns>
         public virtual async Task<int> CountAsync(ProductCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("products/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("products/count.json", "count", filter, cancellationToken);
         }
         
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("products.json", "products", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("products.json", "products", filter, cancellationToken);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Product"/>.</returns>
         public virtual async Task<Product> GetAsync(long productId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Product>($"products/{productId}.json", "product", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Product>($"products/{productId}.json", "product", fields, cancellationToken);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace ShopifySharp
             {
                 product = body
             });
-            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Post, content, "product", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Post, cancellationToken, content, "product");
 
             return response.Result;
         }
@@ -99,7 +99,7 @@ namespace ShopifySharp
             {
                 product = product
             });
-            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, cancellationToken, content, "product");
 
             return response.Result;
         }
@@ -113,7 +113,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"products/{productId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace ShopifySharp
                     published = true
                 }
             });
-            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, cancellationToken, content, "product");
 
             return response.Result;
         }
@@ -155,7 +155,7 @@ namespace ShopifySharp
                     published = false
                 }
             });
-            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, cancellationToken, content, "product");
 
             return response.Result;
         }

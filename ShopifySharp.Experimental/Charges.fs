@@ -1,6 +1,7 @@
 ﻿namespace ShopifySharp.Experimental
 
 open System.Net.Http
+open System.Threading
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -63,7 +64,7 @@ module Charges =
             let req = base.PrepareRequest "application_charges.json"
             let data = dict [ "application_charge" => data ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<Charge>(req, HttpMethod.Post, content, "application_charge")
+            base.ExecuteRequestAsync<Charge>(req, HttpMethod.Post, CancellationToken.None, content, "application_charge")
             |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)

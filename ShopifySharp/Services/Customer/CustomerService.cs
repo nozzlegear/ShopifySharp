@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("customers.json", "customers", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("customers.json", "customers", filter, cancellationToken);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="Customer"/>.</returns>
         public virtual async Task<Customer> GetAsync(long customerId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Customer>($"customers/{customerId}.json", "customer", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<Customer>($"customers/{customerId}.json", "customer", fields, cancellationToken);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<ListResult<Customer>> SearchAsync(ListFilter<Customer> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("customers/search.json", "customers", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("customers/search.json", "customers", filter, cancellationToken);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace ShopifySharp
                 customer = body
             });
 
-            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, content, "customer", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Post, cancellationToken, content, "customer");
             return response.Result;
         }
 
@@ -131,7 +131,7 @@ namespace ShopifySharp
                 customer = body
             });
 
-            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, content, "customer", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Customer>(req, HttpMethod.Put, cancellationToken, content, "customer");
             return response.Result;
         }
 
@@ -164,7 +164,7 @@ namespace ShopifySharp
                 customer_invite = invite
             });
 
-            var response = await ExecuteRequestAsync<CustomerInvite>(req, HttpMethod.Post, content, "customer_invite", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<CustomerInvite>(req, HttpMethod.Post, cancellationToken, content, "customer_invite");
             return response.Result;
         }
 
@@ -180,7 +180,7 @@ namespace ShopifySharp
         public virtual async Task<string> GetAccountActivationUrl(long customerid, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"customers/{customerid}/account_activation_url.json");
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken);
 
             return response.Result.SelectToken("account_activation_url").ToString();
         }
@@ -190,6 +190,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="customerId">The id of the customer to list orders for.</param>
         /// <param name="filter">Options for filtering the result.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <remarks>
         /// Previously this was part of the OrderService, and was documented under the Orders API in Shopify.
         /// Shopify appears to have moved it to the Customers API.
@@ -198,7 +199,7 @@ namespace ShopifySharp
         /// </remarks>
         public virtual async Task<IEnumerable<Order>> ListOrdersForCustomerAsync(long customerId, CustomerOrderListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<List<Order>>($"customers/{customerId}/orders.json", "orders", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<List<Order>>($"customers/{customerId}/orders.json", "orders", filter, cancellationToken);
         }
     }
 }

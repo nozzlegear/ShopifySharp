@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<int> CountAsync(DraftOrderCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("draft_orders/count.json", "count", filter, cancellationToken);
         }
         
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<DraftOrder>> ListAsync(ListFilter<DraftOrder> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("draft_orders.json", "draft_orders", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("draft_orders.json", "draft_orders", filter, cancellationToken);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task<DraftOrder> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<DraftOrder>($"draft_orders/{id}.json", "draft_order", fields, cancellationToken);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ShopifySharp
                 draft_order = body
             });
 
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, content, "draft_order", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Post, cancellationToken, content, "draft_order");
             return response.Result;
         }
 
@@ -91,7 +91,7 @@ namespace ShopifySharp
                 draft_order = order.ToDictionary()
             });
 
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, content, "draft_order", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, cancellationToken, content, "draft_order");
             return response.Result;
         }
 
@@ -104,7 +104,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"draft_orders/{id}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ShopifySharp
             var req = PrepareRequest($"draft_orders/{id}/complete.json");
             req.QueryParams.Add("payment_pending", paymentPending);
 
-            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, rootElement: "draft_order", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, cancellationToken, rootElement: "draft_order");
             return response.Result;
         }
 
@@ -137,7 +137,7 @@ namespace ShopifySharp
                 draft_order_invoice = body
             });
 
-            var response = await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, content, "draft_order_invoice", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<DraftOrderInvoice>(req, HttpMethod.Post, cancellationToken, content, "draft_order_invoice");
             return response.Result;
         }
     }

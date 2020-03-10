@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("custom_collections.json", "custom_collections", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("custom_collections.json", "custom_collections", filter, cancellationToken);
         }
 
         /// <summary>
@@ -49,14 +49,14 @@ namespace ShopifySharp
                 custom_collection = customCollection
             });
 
-            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Post, content, "custom_collection", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Post, cancellationToken, content, "custom_collection");
             
             return response.Result;
         }
 
         public virtual async Task<int> CountAsync(CustomCollectionCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("custom_collections/count.json", "count", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<int>("custom_collections/count.json", "count", filter, cancellationToken);
         }
         
         /// <summary>
@@ -68,7 +68,7 @@ namespace ShopifySharp
         /// <returns>The <see cref="CustomCollection"/>.</returns>
         public virtual async Task<CustomCollection> GetAsync(long customCollectionId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<CustomCollection>($"custom_collections/{customCollectionId}.json", "custom_collection", fields, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<CustomCollection>($"custom_collections/{customCollectionId}.json", "custom_collection", fields, cancellationToken);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace ShopifySharp
                 custom_collection = customCollection
             });
 
-            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Put, content, "custom_collection", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<CustomCollection>(req, HttpMethod.Put, cancellationToken, content, "custom_collection");
             return response.Result;
         }
     }

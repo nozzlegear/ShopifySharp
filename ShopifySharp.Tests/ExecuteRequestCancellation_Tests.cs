@@ -38,12 +38,12 @@ namespace ShopifySharp.Tests
             
             public new Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
             {
-                return base.ExecutePostAsync<T>(path, resultRootElt, jsonContent, cancellationToken);
+                return base.ExecutePostAsync<T>(path, resultRootElt, cancellationToken, jsonContent);
             }
 
             public new Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
             {
-                return base.ExecutePutAsync<T>(path, resultRootElt, jsonContent, cancellationToken);
+                return base.ExecutePutAsync<T>(path, resultRootElt, cancellationToken, jsonContent);
             }
 
             public new Task ExecuteDeleteAsync(string path, CancellationToken cancellationToken)
@@ -53,7 +53,7 @@ namespace ShopifySharp.Tests
 
             public new Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null, CancellationToken cancellationToken = default)
             {
-                return base.ExecuteRequestAsync(uri, method, content, cancellationToken);
+                return base.ExecuteRequestAsync(uri, method, cancellationToken, content);
             }
         }
 

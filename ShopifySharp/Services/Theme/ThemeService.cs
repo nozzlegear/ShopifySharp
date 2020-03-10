@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter, cancellationToken);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, rootElement: "theme", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Get, cancellationToken, rootElement: "theme");
 
             return response.Result;
         }
@@ -64,7 +64,7 @@ namespace ShopifySharp
             {
                 theme = body
             });
-            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, content, "theme", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Post, cancellationToken, content, "theme");
 
             return response.Result;
         }
@@ -109,7 +109,7 @@ namespace ShopifySharp
             {
                 theme = theme
             });
-            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, content, "theme", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Theme>(req, HttpMethod.Put, cancellationToken, content, "theme");
 
             return response.Result;
         }
@@ -123,7 +123,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"themes/{themeId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

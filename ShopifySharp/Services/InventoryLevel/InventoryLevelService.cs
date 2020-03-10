@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter, cancellationToken);
         }
         
         /// <summary>
@@ -45,7 +45,7 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         public virtual async Task DeleteAsync(long inventoryItemId, long locationId, CancellationToken cancellationToken = default)
         {
-            await ExecuteRequestAsync(PrepareRequest($"inventory_levels.json?inventory_item_id={inventoryItemId}&location_id={locationId}"), HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(PrepareRequest($"inventory_levels.json?inventory_item_id={inventoryItemId}&location_id={locationId}"), HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ShopifySharp
             body.Add("disconnect_if_necessary", disconnectIfNecessary);
             
             var content = new JsonContent(body);
-            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, cancellationToken, content, "inventory_level");
             
             return response.Result;
         }
@@ -79,7 +79,7 @@ namespace ShopifySharp
             var req = PrepareRequest($"inventory_levels/adjust.json");
             var body = adjustInventoryLevel.ToDictionary();
             var content = new JsonContent(body);
-            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, cancellationToken, content, "inventory_level");
             
             return response.Result;
         }
@@ -101,7 +101,7 @@ namespace ShopifySharp
                 inventory_item_id = inventoryItemId,
                 relocate_if_necessary = relocateIfNecessary
             });
-            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, content, "inventory_level", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, cancellationToken, content, "inventory_level");
             
             return response.Result;
         }

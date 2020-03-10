@@ -42,7 +42,7 @@ namespace ShopifySharp
                 carrier_service = carrier
             });
 
-            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, content, "carrier_service", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Post, cancellationToken, content, "carrier_service");
             return response.Result;
         }
 
@@ -56,7 +56,7 @@ namespace ShopifySharp
         {            
             var req = PrepareRequest($"carrier_services/{carrierId}.json");
 
-            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, rootElement: "carrier_service", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, cancellationToken, rootElement: "carrier_service");
             return response.Result;
         }
 
@@ -69,7 +69,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"carrier_services/{carrierId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace ShopifySharp
                 carrier_service = carrier
             });
 
-            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Put, content, "carrier_service", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Put, cancellationToken, content, "carrier_service");
             return response.Result;
         }
     }

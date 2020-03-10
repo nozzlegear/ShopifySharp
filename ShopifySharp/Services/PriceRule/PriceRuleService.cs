@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// </summary>
         public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter, cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("price_rules.json", "price_rules", filter, cancellationToken);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, rootElement: "price_rule", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Get, cancellationToken, rootElement: "price_rule");
             
             return response.Result;
         }
@@ -85,7 +85,7 @@ namespace ShopifySharp
             {
                 price_rule = body
             });
-            var response =  await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, content, "price_rule", cancellationToken: cancellationToken);
+            var response =  await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Post, cancellationToken, content, "price_rule");
 
             return response.Result;
         }
@@ -103,7 +103,7 @@ namespace ShopifySharp
             {
                 price_rule = rule
             });
-            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, content, "price_rule", cancellationToken: cancellationToken);
+            var response = await ExecuteRequestAsync<PriceRule>(req, HttpMethod.Put, cancellationToken, content, "price_rule");
 
             return response.Result;
         }
@@ -117,7 +117,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"price_rules/{id}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }
