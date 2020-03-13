@@ -12,27 +12,16 @@ namespace ShopifySharp
         /// Converts the object to a dictionary.
         /// </summary>
         /// <returns>The object as a <see cref="IDictionary{String, Object}"/>.</returns>
-        public static IDictionary<string, object> ToDictionary(this object obj, IEnumerable<string> fields = null)
+        public static IDictionary<string, object> ToDictionary(this object obj)
         {
             IDictionary<string, object> output = new Dictionary<string, object>();
-            var propInfos = obj.GetType().GetAllDeclaredProperties();
-
-            if (fields != null)
-            {
-                if (fields.Any(f => f.Contains('.')))
-                {
-                    throw new NotImplementedException("Limiting properties of child objects is not supported.");
-                }
-                propInfos = propInfos.Where(pi => fields.Contains(pi.Name));
-            }
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
-            foreach (PropertyInfo property in propInfos)
+            foreach (PropertyInfo property in obj.GetType().GetAllDeclaredProperties())
             {
                 object value = property.GetValue(obj, null);
                 string propName = property.Name;
-                // Allow fields explicitly included to be set as null
-                if (value == null && fields == null) continue;
+                if (value == null) continue;
 
                 if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
                 {
@@ -42,7 +31,7 @@ namespace ShopifySharp
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
 
-                if (value != null && value.GetType().GetTypeInfo().IsEnum)
+                if (value.GetType().GetTypeInfo().IsEnum)
                 {
                     value = ((Enum)value).ToSerializedString();
                 }

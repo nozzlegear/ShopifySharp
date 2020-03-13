@@ -89,28 +89,28 @@ namespace ShopifySharp
         /// <param name="productId">Id of the object being updated.</param>
         /// <param name="product">The <see cref="Product"/> to update.</param>
         /// <returns>The updated <see cref="Product"/>.</returns>
-        public virtual async Task<Product> UpdateAsync(long productId, Product product, IEnumerable<string> fields = null)
+        public virtual async Task<Product> UpdateAsync(long productId, Product product)
         {
             var req = PrepareRequest($"products/{productId}.json");
-            JsonContent content;
-
-            if (fields != null)
+            JsonContent content = new JsonContent(new
             {
-                content = new JsonContent(new
-                {
-                    product = product.ToDictionary(fields)
-                });
-            }
-            else
-            {
-                content = new JsonContent(new
-                {
-                    product = product
-                });
-            }
+                product = product
+            });
             var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
 
             return response.Result;
+        }
+
+        /// <summary>
+        /// Updates a <see cref="Product"/>, changing only the fields specified by the <see cref="UpdateBuilder{T}"/>.
+        /// </summary>
+        /// <param name="productId">Id of the object being updated.</param>
+        /// <param name="builder">The fields to update and their values.</param>
+        /// <returns>The updated <see cref="Product"/>.</returns>
+        public virtual async Task<Product> UpdateAsync(long productId, UpdateBuilder<Product> builder)
+        {
+            var response = await ExecutePutAsync($"products/{productId}.json", "product", builder);
+            return response;
         }
 
         /// <summary>

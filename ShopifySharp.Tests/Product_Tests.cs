@@ -192,6 +192,29 @@ namespace ShopifySharp.Tests
             Assert.Null(updated.TemplateSuffix);
         }
 
+        [Fact]
+        public async Task Updates_Products_UsingUpdateBuilder()
+        {
+            string title = "ShopifySharp Updated Test Field Product";
+            string productType = "Test Field Product";
+
+            var created = await Fixture.Create();
+
+            var builder = new UpdateBuilder<Product>()
+                .Update(prod => prod.Title, title)
+                .Update(prod => prod.ProductType, productType);
+
+            var updated = await Fixture.Service.UpdateAsync(created.Id.Value, builder);
+
+            Assert.Equal(title, updated.Title);
+            Assert.NotEqual(created.Title, updated.Title);
+            Assert.Equal(productType, updated.ProductType);
+            Assert.NotEqual(created.ProductType, updated.ProductType);
+            Assert.NotNull(updated.BodyHtml);
+            Assert.NotEmpty(updated.BodyHtml);
+            Assert.Null(updated.TemplateSuffix);
+        }
+
         /// <summary>
         /// Ensures that passing in a new POCO as the updating object will properly update only desired fields.
         /// </summary>

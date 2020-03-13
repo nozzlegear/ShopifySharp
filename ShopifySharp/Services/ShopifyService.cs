@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ShopifySharp.Filters;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using ShopifySharp.Infrastructure;
-using Newtonsoft.Json;
-using System.IO;
-using ShopifySharp.Lists;
-using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
@@ -230,6 +230,12 @@ namespace ShopifySharp
         protected async Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null)
         {
             return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Post, jsonContent == null ? null : new JsonContent(jsonContent));
+        }
+
+        protected async Task<T> ExecutePutAsync<T>(string path, string resultRootElt, UpdateBuilder<T> builder) where T : ShopifyObject
+        {
+            var content = builder.BuildContent(resultRootElt);
+            return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Put, content);
         }
 
         protected async Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null)
