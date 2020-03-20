@@ -14,35 +14,39 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        public virtual string APIVersion => "2019-10";
+        public virtual string APIVersion => "2020-01";
+        protected virtual bool SupportsAPIVersioning => true;
 
-        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+        private static ShopifySharp.IRequestExecutionPolicy _GlobalExecutionPolicy = new ShopifySharp.DefaultRequestExecutionPolicy();
 
-        private IRequestExecutionPolicy _ExecutionPolicy;
-
-        private static JsonSerializer _Serializer = Serializer.JsonSerializer;
+        private static JsonSerializer _Serializer = new JsonSerializer { DateParseHandling = DateParseHandling.DateTimeOffset };
 
         private static HttpClient _Client { get; } = new HttpClient();
+
+        private static HttpClient _ClientAllowRedirect { get; } = new HttpClient(new ShopifyRedirectHandler());
+
+        private ShopifySharp.IRequestExecutionPolicy _ExecutionPolicy;
 
         protected Uri _ShopUri { get; set; }
 
         protected string _AccessToken { get; set; }
 
-        protected virtual bool SupportsAPIVersioning => true;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Creates a new instance of <see cref="ShopifyService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        protected ShopifyService(string myShopifyUrl, string shopAccessToken)
+        protected ShopifyService(string myShopifyUrl, string shopAccessToken, ILogger logger)
         {
             _ShopUri = BuildShopUri(myShopifyUrl, false);
             _AccessToken = shopAccessToken;
 
             // If there's a global execution policy it should be set as this instance's policy.
             // User can override it with instance-specific execution policy.
-            _ExecutionPolicy = _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
+            _ExecutionPolicy = _GlobalExecutionPolicy ?? new ShopifySharp.DefaultRequestExecutionPolicy();
+            _logger = logger;
         }
 
         /// <summary>
@@ -79,16 +83,16 @@ namespace ShopifySharp
         /// Sets the execution policy for this instance only. This policy will always be used over the global execution policy.
         /// The instance will revert back to the global execution policy if you pass null to this method.
         /// </summary>
-        public void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
+        public void SetExecutionPolicy(ShopifySharp.IRequestExecutionPolicy executionPolicy)
         {
             // If the user passes null, revert to the global execution policy.
-            _ExecutionPolicy = executionPolicy ?? _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
+            _ExecutionPolicy = executionPolicy ?? _GlobalExecutionPolicy ?? new ShopifySharp.DefaultRequestExecutionPolicy();
         }
 
         /// <summary>
         /// Sets the global execution policy for all *new* instances. Current instances are unaffected, but you can call .SetExecutionPolicy on them.
         /// </summary>
-        public static void SetGlobalExecutionPolicy(IRequestExecutionPolicy globalExecutionPolicy)
+        public static void SetGlobalExecutionPolicy(ShopifySharp.IRequestExecutionPolicy globalExecutionPolicy)
         {
             _GlobalExecutionPolicy = globalExecutionPolicy;
         }
@@ -108,9 +112,9 @@ namespace ShopifySharp
         /// <summary>
         /// Prepares a request to the path and appends the shop's access token header if applicable.
         /// </summary>
-        protected CloneableRequestMessage PrepareRequestMessage(RequestUri uri, HttpMethod method, HttpContent content = null)
+        protected ShopifySharp.Infrastructure.CloneableRequestMessage PrepareRequestMessage(RequestUri uri, HttpMethod method, HttpContent content = null)
         {
-            var msg = new CloneableRequestMessage(uri.ToUri(), method, content);
+            var msg = new ShopifySharp.Infrastructure.CloneableRequestMessage(uri.ToUri(), method, content);
 
             if (!string.IsNullOrEmpty(_AccessToken))
             {
@@ -144,20 +148,54 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null)
+        protected async Task<ShopifySharp.RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null)
         {
+            bool isGraphRequest = uri.ToString().EndsWith("/graphql.json");
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
+                if (_logger != null)
+                {
+                    _logger.LogInformation(LoggingEvents.BeginRequest, "Shopify API Begin request {METHOD} {path}", method, uri.ToString());
+                    //string rawBodyContent = null;
+                    //if (content != null)
+                    //{
+                    //    rawBodyContent = await content.ReadAsStringAsync();
+                    //}
+                    //_logger.LogDebug(LoggingEvents.BeginRequest, "Shopify API Begin request {METHOD} {path} {REQUESTBODY}", method, uri.ToString(), content != null ? content.ToString() : "");
+                }
+
                 var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
                 {
                     var request = _Client.SendAsync(requestMessage);
 
                     using (var response = await request)
                     {
-                        var rawResult = await response.Content.ReadAsStringAsync();
+                        string rawResult = await response.Content.ReadAsStringAsync();
 
-                        //Check for and throw exception when necessary.
-                        CheckResponseExceptions(response, rawResult);
+                        try
+                        {
+                            //Check for and throw exception when necessary.
+                            CheckResponseExceptions<ShopifySharp.RequestResult<JToken>>(response, rawResult, isGraphRequest);
+                            CheckResponseWarnings(response, _logger);
+                            if (_logger != null)
+                            {
+                                _logger.LogInformation(LoggingEvents.BeginRequest, "Shopify API request processed {METHOD} {path} {responseBody}", method, uri.ToString(), rawResult);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            if (_logger != null)
+                            {
+                                string rawBodyContent = null;
+                                if (content != null)
+                                {
+                                    rawBodyContent = await content.ReadAsStringAsync();
+                                }
+                                _logger.LogError(LoggingEvents.RequestFailed, ex, "Shopify API request failed {METHOD} {path} {body} {responseBody}", method, uri.ToString(), rawBodyContent, rawResult);
+                            }
+
+                            throw ex;
+                        }
 
                         JToken jtoken = null;
 
@@ -171,7 +209,7 @@ namespace ShopifySharp
                             }
                         }
 
-                        return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
+                        return new ShopifySharp.RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
                     }
                 });
 
@@ -186,20 +224,56 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null)
+        protected async Task<ShopifySharp.RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method, HttpContent content = null, string rootElement = null, bool allowRedirect = false)
         {
+            bool isGraphRequest = uri.ToString().EndsWith("/graphql.json");
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content))
             {
+                if (_logger != null)
+                {
+                    _logger.LogInformation(LoggingEvents.BeginRequest, "Shopify API Begin request {METHOD} {path}", method, uri.ToString());
+                    //string rawBodyContent = null;
+                    //if (content != null)
+                    //{
+                    //    rawBodyContent = await content.ReadAsStringAsync();
+                    //}
+                    //_logger.LogDebug(LoggingEvents.BeginRequest, "Shopify API Begin request {METHOD} {path} {body}", method, uri.ToString(), rawBodyContent);
+                }
+
                 var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
                 {
-                    var request = _Client.SendAsync(requestMessage);
+                    var request = allowRedirect ?
+                        _ClientAllowRedirect.SendAsync(requestMessage)
+                        : _Client.SendAsync(requestMessage);
 
                     using (var response = await request)
                     {
                         var rawResult = await response.Content.ReadAsStringAsync();
+                        try
+                        {
+                            //Check for and throw exception when necessary.
+                            CheckResponseExceptions<T>(response, rawResult, isGraphRequest);
+                            CheckResponseWarnings(response, _logger);
 
-                        //Check for and throw exception when necessary.
-                        CheckResponseExceptions(response, rawResult);
+                            if (_logger != null)
+                            {
+                                _logger.LogInformation(LoggingEvents.BeginRequest, "Shopify API request processed {METHOD} {path} {responseBody}", method, uri.ToString(), rawResult);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            if (_logger != null)
+                            {
+                                string rawBodyContent = null;
+                                if (content != null)
+                                {
+                                    rawBodyContent = await content.ReadAsStringAsync();
+                                }
+                                _logger.LogError(LoggingEvents.RequestFailed, ex, "Shopify API request failed {METHOD} {path} {body} {responseBody}", method, uri.ToString(), rawBodyContent, rawResult);
+                            }
+
+                            throw ex;
+                        }
 
                         T result = default;
                         if (rootElement != null)
@@ -212,7 +286,7 @@ namespace ShopifySharp
                             result = data.ToObject<T>();
                         }
 
-                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
+                        return new ShopifySharp.RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
                     }
                 });
 
@@ -242,7 +316,7 @@ namespace ShopifySharp
             await ExecuteWithContentCoreAsync<JToken>(path, null, HttpMethod.Delete, null);
         }
 
-        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams, string fields)
+        private async Task<ShopifySharp.RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, ShopifySharp.Parameterizable queryParams, string fields)
         {
             var req = PrepareRequest(path);
 
@@ -264,12 +338,12 @@ namespace ShopifySharp
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, null, fields)).Result;
         }
 
-        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null)
+        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, ShopifySharp.Parameterizable queryParams = null)
         {
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams, null)).Result;
         }
 
-        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter)
+        protected async Task<Models.Lists.ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, Filters.ListFilter<T> filter)
         {
             var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter, null);
             return ParseLinkHeaderToListResult(result);
@@ -279,10 +353,33 @@ namespace ShopifySharp
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        /// <<param name="rawResponse">The response body returned by Shopify.</param>
-        public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
+        public static void CheckResponseExceptions<T>(HttpResponseMessage response, string rawResponse, bool isGraphRequest)
         {
-            var statusCode = (int)response.StatusCode;
+            int statusCode = (int)response.StatusCode;
+
+            var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
+            string requestId = requestIdHeader.Value?.FirstOrDefault();
+            var code = response.StatusCode;
+            var statusMessage = $"{(int)code} {response.ReasonPhrase}";
+
+            if (isGraphRequest)
+            {
+                var errors = ParseGraphErrorJson(rawResponse);
+                if (errors != null && errors.Any())
+                {
+                    if (errors.Any(x => x.StartsWith("Throttled")))
+                    {
+                        var requestResponse = new ShopifySharp.RequestResult<T>(response, default, rawResponse, null);
+                        throw new ShopifyRateLimitException(response, code, errors, "Graph response throttled", rawResponse, requestId, GraphQLResponseCost.Get(requestResponse));
+                    }
+                    else if (errors.Any(x => x.StartsWith("Access denied", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        throw new ShopifyAccessDeniedException(response, HttpStatusCode.OK, errors, errors.First(), rawResponse, requestId);
+                    }
+                    else//This will not let us parse bucket state properly. So we check other errors on GraphService
+                        throw new ShopifyException(response, HttpStatusCode.OK, errors, errors.First(), rawResponse, requestId);
+                }
+            }
 
             // No error if response was between 200 and 300.
             if (statusCode >= 200 && statusCode < 300)
@@ -290,17 +387,12 @@ namespace ShopifySharp
                 return;
             }
 
-            var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
-            var requestId = requestIdHeader.Value?.FirstOrDefault();
-            var code = response.StatusCode;
-            var statusMessage = $"{(int)code} {response.ReasonPhrase}";
-
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if ((int)code == 429 /* Too many requests */)
             {
                 string rateExceptionMessage;
                 IEnumerable<string> errors;
-                
+
                 if (TryParseErrorJson(rawResponse, out var rateLimitErrors))
                 {
                     rateExceptionMessage = $"({statusMessage}) {rateLimitErrors.First()}";
@@ -310,10 +402,11 @@ namespace ShopifySharp
                 {
                     var baseMessage = "Exceeded the rate limit for api client. Reduce request rates to resume uninterrupted service.";
                     rateExceptionMessage = $"({statusMessage}) {baseMessage}";
-                    errors = new List<string>{ baseMessage };
+                    errors = new List<string> { baseMessage };
                 }
 
-                throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId, LeakyBucketState.Get(response));
+                var requestResponse = new ShopifySharp.RequestResult<T>(response, default, rawResponse, null);
+                throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId, LeakyBucketState.Get(requestResponse));
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
@@ -325,25 +418,31 @@ namespace ShopifySharp
 
                 if (TryParseErrorJson(rawResponse, out var parsedErrors))
                 {
+                    if (parsedErrors != null && parsedErrors.Any(x => x.StartsWith("Throttled")))
+                    {
+                        var requestResponse = new ShopifySharp.RequestResult<T>(response, default, rawResponse, null);
+                        throw new ShopifyRateLimitException(response, code, parsedErrors, "Graph response throttled", rawResponse, requestId, GraphQLResponseCost.Get(requestResponse));
+                    }
+
                     var firstError = parsedErrors.First();
                     var totalErrors = parsedErrors.Count();
                     var baseErrorMessage = $"({statusMessage}) {firstError}";
 
                     switch (totalErrors)
                     {
-                        case 1 :
+                        case 1:
                             exceptionMessage = baseErrorMessage;
                             break;
-                        
+
                         case 2:
                             exceptionMessage = $"{baseErrorMessage} (and one other error)";
                             break;
-                        
+
                         default:
                             exceptionMessage = $"{baseErrorMessage} (and {totalErrors} other errors)";
                             break;
                     }
-                    
+
                     errors = parsedErrors;
                 }
                 else
@@ -355,7 +454,10 @@ namespace ShopifySharp
                     };
                 }
 
-                throw new ShopifyException(response, code, errors, exceptionMessage, rawResponse, requestId);
+                if (errors.Any(x => x.IndexOf("Access denied", StringComparison.OrdinalIgnoreCase) > -1))
+                    throw new ShopifyAccessDeniedException(response, code, errors, exceptionMessage, rawResponse, requestId);
+                else
+                    throw new ShopifyException(response, code, errors, exceptionMessage, rawResponse, requestId);
             }
 
             var message = $"({statusMessage}) Shopify returned {statusMessage}, but there was no JSON to parse into an error message.";
@@ -367,13 +469,27 @@ namespace ShopifySharp
             throw new ShopifyException(response, code, customErrors, message, rawResponse, requestId);
         }
 
+        private void CheckResponseWarnings(HttpResponseMessage response, ILogger logger)
+        {
+            if (logger == null)
+                return;
+
+            var apiVersionWarning = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Shopify-Api-Version-Warning", StringComparison.OrdinalIgnoreCase));
+            if (apiVersionWarning.Value != null)
+                logger.LogWarning("API version warning {reason}", apiVersionWarning.Value?.FirstOrDefault());
+
+            var apiDeprecatedReason = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Shopify-API-Deprecated-Reason", StringComparison.OrdinalIgnoreCase));
+            if (apiDeprecatedReason.Value != null)
+                logger.LogWarning("API version deprecated {reason}", apiDeprecatedReason.Value?.FirstOrDefault());
+        }
+
         /// <summary>
         /// Attempts to parse a JSON string for Shopify API errors. Returns false if the string cannot be parsed or contains no errors. 
         /// </summary>
         public static bool TryParseErrorJson(string json, out List<string> output)
         {
             output = null;
-            
+
             if (string.IsNullOrEmpty(json))
             {
                 return false;
@@ -397,26 +513,29 @@ namespace ShopifySharp
                 // 4. { "error": "invalid_request", error_description:"The authorization code was not found or was already used" }
                 // 5. { "error": "location_id must be specified when creating fulfillments." }
 
+                // 6. { "errors": { "discount": { "code": [{"code": "discount_limit_reached", "message": "This discount has reached its usage limit", "options": {}}]}
+                // 7. { "errors": { "discount_code":[{"code":"discount_not_found","message":"Unable to find a valid discount matching the code entered","options":{}}]}}                
+
                 if (parsed.Any(p => p.Path == "error") && parsed.Any(p => p.Path == "error_description"))
                 {
                     // Error is type #4
                     var description = parsed["error_description"].Value<string>();
                     var errorType = parsed["error"].Value<string>();
-                    
+
                     errors.Add($"{errorType}: {description}");
                 }
                 else if (parsed.Any(p => p.Path == "error"))
                 {
                     // Error is type #5
                     var description = parsed["error"].Value<string>();
-                    
+
                     errors.Add(description);
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
                 {
                     var parsedErrors = parsed["errors"];
 
-                    // errors can be either a single string, or an array of other errors
+                    //errors can be either a single string, or an array of other errors
                     if (parsedErrors.Type == JTokenType.String)
                     {
                         // errors is type #1
@@ -426,22 +545,45 @@ namespace ShopifySharp
                     }
                     else
                     {
-                        // errors is type #2 or #3
+                        //errors is type #2 or #3 or #7 or #6
                         foreach (var val in parsedErrors.Values())
                         {
-                            var name = val.Path.Split('.').Last();
+                            string name = val.Path.Split('.').Last();
 
                             if (val.Type == JTokenType.String)
                             {
                                 var description = val.Value<string>();
-                                
+
                                 errors.Add($"{name}: {description}");
                             }
                             else if (val.Type == JTokenType.Array)
                             {
-                                foreach (var msg in val.Values<string>())
+                                if (val.First().Type == JTokenType.String)
                                 {
-                                    errors.Add($"{name}: {msg}");
+                                    foreach (var msg in val.Values<string>())
+                                    {
+                                        errors.Add($"{name}: {msg}");
+                                    }
+                                }
+                                else
+                                {
+                                    //#
+                                    var firsChild = val.First();
+                                    var messageNode = firsChild.FirstOrDefault(x => x.Path.EndsWith("message"));
+                                    if (messageNode != null)
+                                        errors.Add($"{name}: {messageNode.First.ToString()}");
+                                }
+                            }
+                            else if (val.Type == JTokenType.Object)
+                            {
+                                //#
+                                var firsChild = val.First();
+                                name = firsChild.Path.Split('.').Last();
+                                if (name.Equals("code") && !errors.Any(x => x.StartsWith("code")))
+                                {
+                                    var messageNode = firsChild.Values().First().FirstOrDefault(x => x.Path.EndsWith("message"));
+                                    if (messageNode != null)
+                                        errors.Add($"{name}: {messageNode.First.ToString()}");
                                 }
                             }
                         }
@@ -463,16 +605,69 @@ namespace ShopifySharp
             }
 
             output = errors;
-            
+
             return true;
+        }
+
+        /// <summary>
+        /// Parses a JSON string for Shopify API errors.
+        /// </summary>
+        /// <returns>Returns null if the JSON could not be parsed into an error.</returns>
+        public static List<string> ParseGraphErrorJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+
+            var errorList = new List<string>();
+
+            try
+            {
+                var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
+
+                // Errors can be any of the following:
+                // 1. {errors: [{ message: "Throttled" }]}
+
+                if (parsed["errors"] != null)
+                {
+                    foreach (var error in parsed["errors"])
+                    {
+                        errorList.Add(error["message"].ToString());
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                errorList.Add(e.Message + " " + json);
+            }
+
+            // KVPs are structs and can never be null. Instead, check if the first error equals the default kvp value.
+            if (errorList.FirstOrDefault().Equals(default(KeyValuePair<string, IEnumerable<string>>)))
+            {
+                return null;
+            }
+
+            return errorList;
         }
 
         /// <summary>
         /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
         /// </summary>
-        protected ListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
+        protected ListResult<T> ParseLinkHeaderToListResult<T>(ShopifySharp.RequestResult<List<T>> requestResult)
         {
-            return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse<T>(requestResult.RawLinkHeaderValue));
+            return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : ShopifySharp.Lists.LinkHeaderParser.Parse<T>(requestResult.RawLinkHeaderValue));
+        }
+
+        private class LoggingEvents
+        {
+            public const int BeginRequest = 1000;
+            public const int RequestFailed = 1001;
+            public const int RequestSuccesfull = 1002;
         }
     }
 }

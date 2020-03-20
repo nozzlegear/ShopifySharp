@@ -1,13 +1,20 @@
-﻿using System;
+﻿using GlobalE.Shopify.Service.APIs.Models;
+using GlobalE.Shopify.Service.APIs.ShopifyAPI.Infrastructure.Policies;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopifySharp
+namespace Globale.Shopify.Service.APIs.ShopifyAPI.Infrastructure.Policies
 {
     public partial class SmartRetryExecutionPolicy
     {
-        private class LeakyBucket
+       
+        private class LeakyBucket : ILeakyBucket
         {
             private const int DEFAULT_BUCKET_CAPACITY = 40;
 
@@ -26,12 +33,13 @@ namespace ShopifySharp
                 _allLeakyBuckets.Add(this);
             }
 
-            public Task GrantAsync()
+            public async Task<int> GrantAsync(ShopifySharp.Infrastructure.CloneableRequestMessage request)
             {
-                return _semaphore.WaitAsync();
+                await _semaphore.WaitAsync();
+                return 1;
             }
 
-            public void SetState(LeakyBucketState bucketInfo)
+            private void SetState(LeakyBucketState bucketInfo)
             {
                 //Shopify Plus customers have a bucket that is twice the size (80) so we resize the bucket capacity accordingly
                 //It is apparently possible to request the bucket size to be even larger
@@ -60,6 +68,18 @@ namespace ShopifySharp
                     //We refill the virtual bucket accordingly.
                     _semaphore.Wait();
                 }
+            }
+
+            internal LeakyBucketStateModel GetState()
+            {
+                return new LeakyBucketStateModel(_bucketCapacity, _bucketCapacity - _semaphore.CurrentCount);
+            }
+
+            public void UpdateState<T>(ShopifySharp.RequestResult<T> fullResult, int myExpectedQueryCost)
+            {
+                var bucketState = LeakyBucketState.Get(fullResult);
+                if (bucketState != null)
+                    SetState(bucketState);
             }
 
             private void Drip()

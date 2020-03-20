@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 
-namespace ShopifySharp
+namespace GlobalE.Shopify.Service.APIs.ShopifyAPI.Infrastructure.Policies
 {
-    public class LeakyBucketState
+    public class LeakyBucketState : ILeakyBucketState
     {
         private const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
 
@@ -19,9 +22,9 @@ namespace ShopifySharp
             this.CurrentFillLevel = currentFillLevel;
         }
 
-        public static LeakyBucketState Get(HttpResponseMessage response)
+        public static LeakyBucketState Get<T>(ShopifySharp.RequestResult<T> requestResult)
         {
-            var headers = response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT);
+            var headers = requestResult.Response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT);
             var apiCallLimitHeaderValue = headers.Value?.FirstOrDefault();
 
             if (apiCallLimitHeaderValue != null)

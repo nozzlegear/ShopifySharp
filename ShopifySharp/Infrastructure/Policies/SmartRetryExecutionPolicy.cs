@@ -4,9 +4,16 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using ShopifySharp.Infrastructure;
+using System.Threading;
+using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Text;
+using Newtonsoft.Json.Linq;
+using GlobalE.Shopify.Service.APIs.Models;
+using ShopifySharp;
+using GlobalE.Shopify.Service.APIs.ShopifyAPI.Infrastructure.Policies;
 
-namespace ShopifySharp
+namespace Globale.Shopify.Service.APIs.ShopifyAPI.Infrastructure.Policies
 {
     /// <summary>
     /// A retry policy that attemps to pro-actively limit the number of requests that will result in a ShopifyRateLimitException
@@ -29,6 +36,7 @@ namespace ShopifySharp
         private static readonly TimeSpan THROTTLE_DELAY = TimeSpan.FromMilliseconds(500);
 
         private static ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
+        private static ConcurrentDictionary<string, GraphLeakyBucket> _shopAccessTokenToGraphLeakyBucket = new ConcurrentDictionary<string, GraphLeakyBucket>();
 
         private readonly bool _retryOnlyIfLeakyBucketFull;
 
@@ -37,35 +45,58 @@ namespace ShopifySharp
             _retryOnlyIfLeakyBucketFull = retryOnlyIfLeakyBucketFull;
         }
 
-        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
+        public static Dictionary<string, Tuple<LeakyBucketStateModel, LeakyBucketStateModel>> GetLeakyBucketStates() {
+            var keys = _shopAccessTokenToLeakyBucket.Keys.ToList();
+            keys.AddRange(_shopAccessTokenToGraphLeakyBucket.Keys.ToList());
+
+            var dict = new Dictionary<string, Tuple<LeakyBucketStateModel, LeakyBucketStateModel>>();
+            foreach (string key in keys)
+            {
+                LeakyBucketStateModel state1 = null, state2 = null;
+                if (_shopAccessTokenToLeakyBucket.ContainsKey(key))
+                    state1 = _shopAccessTokenToLeakyBucket[key].GetState();
+
+                if (_shopAccessTokenToGraphLeakyBucket.ContainsKey(key))
+                    state2 = _shopAccessTokenToGraphLeakyBucket[key].GetState();
+
+                dict[key] = new Tuple<LeakyBucketStateModel, LeakyBucketStateModel>(state1, state2);
+            }
+
+            return dict;
+        }
+
+        ILogger _logger;
+        public SmartRetryExecutionPolicy(ILogger logger) {
+            _logger = logger;
+        }
+
+        public async Task<ShopifySharp.RequestResult<T>> Run<T>(ShopifySharp.Infrastructure.CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseRequest);
-            LeakyBucket bucket = null;
+            var isGraphRequest = IsGraphRequest(baseRequest);
+            ILeakyBucket bucket = null;
 
             if (accessToken != null)
             {
-                bucket = _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new LeakyBucket());
+                bucket = isGraphRequest 
+                    ? (ILeakyBucket)_shopAccessTokenToGraphLeakyBucket.GetOrAdd(accessToken, _ => new GraphLeakyBucket(_logger))
+                    : (ILeakyBucket)_shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new LeakyBucket());
             }
 
             while (true)
             {
                 var request = baseRequest.Clone();
 
+                int expectedQueryCost = 0;
                 if (accessToken != null)
                 {
-                    await bucket.GrantAsync();
+                    expectedQueryCost = await bucket.GrantAsync(request);
                 }
 
                 try
                 {
                     var fullResult = await executeRequestAsync(request);
-                    var bucketState = LeakyBucketState.Get(fullResult.Response);
-
-                    if (bucketState != null)
-                    {
-                        bucket?.SetState(bucketState);
-                    }
-
+                    bucket?.UpdateState(fullResult, expectedQueryCost);
                     return fullResult;
                 }
                 catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryOnlyIfLeakyBucketFull)
@@ -80,9 +111,15 @@ namespace ShopifySharp
                     //-There may be timing and latency delays
                     //-Multiple programs may use the same access token
                     //-Multiple instances of the same program may use the same access token
+                    _logger.LogWarning(ex, "Shopify API call rate limit reached. Task delayed. {RequestUri}", request.RequestUri);
                     await Task.Delay(THROTTLE_DELAY);
                 }
             }
+        }
+
+        private bool IsGraphRequest(ShopifySharp.Infrastructure.CloneableRequestMessage baseRequest)
+        {
+            return baseRequest.RequestUri.ToString().EndsWith("/graphql.json");
         }
 
         private string GetAccessToken(HttpRequestMessage client)
