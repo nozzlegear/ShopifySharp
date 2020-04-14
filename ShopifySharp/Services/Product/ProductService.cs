@@ -3,6 +3,7 @@ using ShopifySharp.Filters;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
+using System.Collections.Generic;
 
 namespace ShopifySharp
 {
@@ -26,7 +27,7 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<int>("products/count.json", "count", filter);
         }
-        
+
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
@@ -91,13 +92,25 @@ namespace ShopifySharp
         public virtual async Task<Product> UpdateAsync(long productId, Product product)
         {
             var req = PrepareRequest($"products/{productId}.json");
-            var content = new JsonContent(new
+            JsonContent content = new JsonContent(new
             {
                 product = product
             });
             var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, content, "product");
 
             return response.Result;
+        }
+
+        /// <summary>
+        /// Updates a <see cref="Product"/>, changing only the fields specified by the <see cref="UpdateBuilder{T}"/>.
+        /// </summary>
+        /// <param name="productId">Id of the object being updated.</param>
+        /// <param name="builder">The fields to update and their values.</param>
+        /// <returns>The updated <see cref="Product"/>.</returns>
+        public virtual async Task<Product> UpdateAsync(long productId, UpdateBuilder<Product> builder)
+        {
+            var response = await ExecutePutAsync($"products/{productId}.json", "product", builder);
+            return response;
         }
 
         /// <summary>

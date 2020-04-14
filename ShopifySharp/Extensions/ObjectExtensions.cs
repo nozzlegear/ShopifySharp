@@ -9,7 +9,7 @@ namespace ShopifySharp
     internal static class ObjectExtensions
     {
         /// <summary>
-        /// Converts the object to a dictionary./>
+        /// Converts the object to a dictionary.
         /// </summary>
         /// <returns>The object as a <see cref="IDictionary{String, Object}"/>.</returns>
         public static IDictionary<string, object> ToDictionary(this object obj)
