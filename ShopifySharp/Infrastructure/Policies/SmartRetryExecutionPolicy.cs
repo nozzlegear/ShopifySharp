@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
@@ -37,7 +38,7 @@ namespace ShopifySharp
             _retryOnlyIfLeakyBucketFull = retryOnlyIfLeakyBucketFull;
         }
 
-        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken)
         {
             var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;
@@ -80,7 +81,7 @@ namespace ShopifySharp
                     //-There may be timing and latency delays
                     //-Multiple programs may use the same access token
                     //-Multiple instances of the same program may use the same access token
-                    await Task.Delay(THROTTLE_DELAY);
+                    await Task.Delay(THROTTLE_DELAY, cancellationToken);
                 }
             }
         }

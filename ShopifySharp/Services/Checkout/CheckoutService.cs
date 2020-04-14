@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using System;
+using System.Threading;
 using ShopifySharp.Filters;
 using ShopifySharp.Lists;
 
@@ -21,40 +22,43 @@ namespace ShopifySharp
         /// Gets a count of all of the shop's orders.
         /// </summary>
         /// <param name="filter">Options for filtering the count.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The count of all orders for the shop.</returns>
-        public virtual async Task<int> CountAsync(CheckoutCountFilter filter = null)
+        public virtual async Task<int> CountAsync(CheckoutCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>("checkouts/count.json", "count", filter);
+            return await ExecuteGetAsync<int>("checkouts/count.json", "count", filter, cancellationToken);
         }
         
         /// <summary>
         /// Gets a list of up to 250 of the shop's abandoned checkouts.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<ListResult<Checkout>> ListAsync(ListFilter<Checkout> filter)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<ListResult<Checkout>> ListAsync(ListFilter<Checkout> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("checkouts.json", "checkouts", filter);
+            return await ExecuteGetListAsync("checkouts.json", "checkouts", filter, cancellationToken);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's abandoned checkouts.
         /// </summary>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<ListResult<Checkout>> ListAsync(CheckoutListFilter filter = null)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<ListResult<Checkout>> ListAsync(CheckoutListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter());
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
         
         /// <summary>
         /// Creates a new Checkout.
         /// </summary>
         [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
-        public virtual async Task<Checkout> CreateAsync(Checkout checkout)
+        public virtual async Task<Checkout> CreateAsync(Checkout checkout, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("checkout.json");
             var body = checkout.ToDictionary();
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, new JsonContent(checkout), rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, new JsonContent(checkout), "checkout");
             return response.Result;
         }
 
@@ -62,11 +66,11 @@ namespace ShopifySharp
         /// Completes a checkout without requiring payment.
         /// </summary>
         [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
-        public virtual async Task<Checkout> CompleteAsync(string token)
+        public virtual async Task<Checkout> CompleteAsync(string token, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"checkouts/{token}/complete.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, rootElement: "checkout");
             return response.Result;
         }
 
@@ -74,11 +78,11 @@ namespace ShopifySharp
         /// Gets an existing, processing or completed checkout.
         /// </summary>
         [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
-        public virtual async Task<Checkout> GetAsync(string token)
+        public virtual async Task<Checkout> GetAsync(string token, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Get, rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Get, cancellationToken, rootElement: "checkout");
             return response.Result;
         }
 
@@ -86,11 +90,11 @@ namespace ShopifySharp
         /// Updates an existing checkout based on the token id.
         /// </summary>
         [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
-        public virtual async Task<Checkout> UpdateAsync(string token, Checkout updatedCheckout)
+        public virtual async Task<Checkout> UpdateAsync(string token, Checkout updatedCheckout, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, new JsonContent(updatedCheckout), rootElement: "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, cancellationToken, new JsonContent(updatedCheckout), "checkout");
             return response.Result;
         }
 
@@ -100,11 +104,11 @@ namespace ShopifySharp
         /// shipping rate, update the checkout's shipping line with the handle of the selected rate. 
         /// </summary>
         [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
-        public virtual async Task<IEnumerable<CheckoutShippingRate>> ListShippingRatesAsync(string token)
+        public virtual async Task<IEnumerable<CheckoutShippingRate>> ListShippingRatesAsync(string token, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"checkouts/{token}/shipping_rates.json");
 
-            var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, rootElement: "shipping_rates");
+            var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, cancellationToken, rootElement: "shipping_rates");
             return response.Result;
         }
     }

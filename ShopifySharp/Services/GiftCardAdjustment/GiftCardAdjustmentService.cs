@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 
@@ -26,9 +27,10 @@ namespace ShopifySharp
         /// Gets a list of gift card adjustments belonging to the given gift card.
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
-        public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments");
+            return await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -36,10 +38,11 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
         /// <param name="adjustmentId">The id of the adjustment to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId)
+        public virtual async Task<GiftCardAdjustment> GetAsync(long giftCardId, long adjustmentId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync< GiftCardAdjustment>($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json", "adjustment");
+            return await ExecuteGetAsync< GiftCardAdjustment>($"gift_cards/{giftCardId}/adjustments/{adjustmentId}.json", "adjustment", cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -47,8 +50,9 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="giftCardId">The gift card that the adjustment was applied to.</param>
         /// <param name="adjustment">A new <see cref="GiftCardAdjustment"/>. Signed amount and note should be the only properties set.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public virtual async Task<GiftCardAdjustment> CreateAsync(long giftCardId, GiftCardAdjustment adjustment)
+        public virtual async Task<GiftCardAdjustment> CreateAsync(long giftCardId, GiftCardAdjustment adjustment, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
             var content = new JsonContent(new
@@ -56,7 +60,7 @@ namespace ShopifySharp
                 adjustment = adjustment
             });
 
-            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, content, "adjustment");
+            var response = await ExecuteRequestAsync<GiftCardAdjustment>(req, HttpMethod.Post, cancellationToken, content, "adjustment");
             return response.Result;
         }
     }

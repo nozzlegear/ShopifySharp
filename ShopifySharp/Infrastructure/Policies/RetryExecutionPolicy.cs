@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 
@@ -19,7 +20,7 @@ namespace ShopifySharp
             _retryOnlyIfLeakyBucketFull = retryOnlyIfLeakyBucketFull;
         }
 
-        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken)
         {
             while (true)
             {
@@ -36,7 +37,7 @@ namespace ShopifySharp
                     //Only retry if breach caused by full bucket
                     //Other limits will bubble the exception because it's not clear how long the program should wait
                     //Even if there is a Retry-After header, we probably don't want the thread to sleep for potentially many hours
-                    await Task.Delay(RETRY_DELAY);
+                    await Task.Delay(RETRY_DELAY, cancellationToken);
                 }
             }
         }

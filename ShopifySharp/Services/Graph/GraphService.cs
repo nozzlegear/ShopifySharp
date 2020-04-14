@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
 using System.Net;
+using System.Threading;
 
 namespace ShopifySharp
 {
@@ -26,22 +27,24 @@ namespace ShopifySharp
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        public virtual async Task<JToken> PostAsync(string body)
+        public virtual async Task<JToken> PostAsync(string body, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, "application/graphql");
 
-            return await SendAsync(req, content);
+            return await SendAsync(req, content, cancellationToken);
         }
 
         /// <summary>
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        public virtual async Task<JToken> PostAsync(JToken body)
+        public virtual async Task<JToken> PostAsync(JToken body, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
 
@@ -56,9 +59,9 @@ namespace ShopifySharp
         /// <param name="req">The RequestUri.</param>
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        private async Task<JToken> SendAsync(RequestUri req, HttpContent content)
+        private async Task<JToken> SendAsync(RequestUri req, HttpContent content, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, content);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content);
 
             CheckForErrors(response);
 

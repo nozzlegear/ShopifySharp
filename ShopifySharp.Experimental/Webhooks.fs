@@ -1,6 +1,8 @@
 namespace ShopifySharp.Experimental
 
 open System.Net.Http
+open System.Threading
+open System.Threading
 open System.Threading.Tasks
 open ShopifySharp
 open ShopifySharp.Infrastructure
@@ -82,7 +84,7 @@ module Webhooks =
             let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)
             
-            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, content, "webhook")
+            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, CancellationToken.None, content, "webhook")
             |> mapTask (fun response -> response.Result)
             
         member x.UpdateAsync (id: int64, webhook: WebhookProperties) =
@@ -90,7 +92,7 @@ module Webhooks =
             let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)
             
-            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, content, "webhook")
+            base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, CancellationToken.None, content, "webhook")
             |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)

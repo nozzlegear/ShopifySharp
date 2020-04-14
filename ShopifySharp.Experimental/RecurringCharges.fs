@@ -1,6 +1,7 @@
 ﻿namespace ShopifySharp.Experimental
 
 open System.Net.Http
+open System.Threading
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -75,7 +76,7 @@ module RecurringCharges =
             let req = base.PrepareRequest "recurring_application_charges.json"
             let data = dict [ "recurring_application_charge" => data ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, content, "recurring_application_charge")
+            base.ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, CancellationToken.None, content, "recurring_application_charge")
             |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
@@ -25,8 +26,9 @@ namespace ShopifySharp
         /// <param name="recurringChargeId">The id of the <see cref="UsageCharge"/> that this usage charge belongs to.</param>
         /// <param name="description">The name or description of the usage charge.</param>
         /// <param name="price">The price of the usage charge.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="UsageCharge"/>.</returns>
-        public virtual async Task<UsageCharge> CreateAsync(long recurringChargeId, string description, decimal price)
+        public virtual async Task<UsageCharge> CreateAsync(long recurringChargeId, string description, decimal price, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
             var content = new JsonContent(new
@@ -37,7 +39,7 @@ namespace ShopifySharp
                     price = price
                 }
             });
-            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, content, "usage_charge");
+            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, cancellationToken, content, "usage_charge");
 
             return response.Result;
         }
@@ -48,8 +50,9 @@ namespace ShopifySharp
         /// <param name="recurringChargeId">The id of the recurring charge that this usage charge belongs to.</param>
         /// <param name="id">The id of the charge to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="UsageCharge"/>.</returns>
-        public virtual async Task<UsageCharge> GetAsync(long recurringChargeId, long id, string fields = null)
+        public virtual async Task<UsageCharge> GetAsync(long recurringChargeId, long id, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges/{id}.json");
 
@@ -58,7 +61,7 @@ namespace ShopifySharp
                 req.QueryParams.Add("fields", fields);
             }
 
-            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Get, rootElement: "usage_charge");
+            var response = await ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Get, cancellationToken, rootElement: "usage_charge");
 
             return response.Result;
         }
@@ -68,7 +71,8 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="recurringChargeId">The id of the recurring charge that these usage charges belong to.</param>
         /// <param name="filter">Options for filtering the list.</param>
-        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
 
@@ -77,7 +81,7 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
-            var response = await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, rootElement: "usage_charges");
+            var response = await ExecuteRequestAsync<List<UsageCharge>>(req, HttpMethod.Get, cancellationToken, rootElement: "usage_charges");
 
             return response.Result;
         }

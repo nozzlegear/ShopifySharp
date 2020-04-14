@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -26,18 +27,20 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="filter">Options for filtering the result.</param>
-        public virtual async Task<int> CountAsync(long productId, ProductImageCountFilter filter = null)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<int> CountAsync(long productId, ProductImageCountFilter filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<int>($"products/{productId}/images/count.json", "count", filter);
+            return await ExecuteGetAsync<int>($"products/{productId}/images/count.json", "count", filter, cancellationToken);
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's ProductImages.
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
-        public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter = null)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<ListResult<ProductImage>> ListAsync(long productId, ListFilter<ProductImage> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter);
+            return await ExecuteGetListAsync($"products/{productId}/images.json", "images", filter, cancellationToken);
         }
 
         /// <summary>
@@ -46,10 +49,11 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="imageId">The id of the ProductImage to retrieve.</param>
         /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="ProductImage"/>.</returns>
-        public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null)
+        public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields);
+            return await ExecuteGetAsync<ProductImage>($"products/{productId}/images/{imageId}.json", "image", fields, cancellationToken);
         }
 
         /// <summary>
@@ -57,15 +61,16 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="image">The new <see cref="ProductImage"/>.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="ProductImage"/>.</returns>
-        public virtual async Task<ProductImage> CreateAsync(long productId, ProductImage image)
+        public virtual async Task<ProductImage> CreateAsync(long productId, ProductImage image, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}/images.json");
             var content = new JsonContent(new
             {
                 image = image
             });
-            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, content, "image");
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Post, cancellationToken, content, "image");
 
             return response.Result;
         }
@@ -76,15 +81,16 @@ namespace ShopifySharp
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="productImageId">Id of the object being updated.</param>
         /// <param name="image">The <see cref="ProductImage"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="ProductImage"/>.</returns>
-        public virtual async Task<ProductImage> UpdateAsync(long productId, long productImageId, ProductImage image)
+        public virtual async Task<ProductImage> UpdateAsync(long productId, long productImageId, ProductImage image, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}/images/{productImageId}.json");
             var content = new JsonContent(new
             {
                 image = image
             });
-            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, content, "image");
+            var response = await ExecuteRequestAsync<ProductImage>(req, HttpMethod.Put, cancellationToken, content, "image");
 
             return response.Result;
         }
@@ -94,11 +100,12 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="productId">The id of the product that counted images belong to.</param>
         /// <param name="imageId">The ProductImage object's Id.</param>
-        public virtual async Task DeleteAsync(long productId, long imageId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task DeleteAsync(long productId, long imageId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
 
-            await ExecuteRequestAsync(req, HttpMethod.Delete);
+            await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
     }
 }

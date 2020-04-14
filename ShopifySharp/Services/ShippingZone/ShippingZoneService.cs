@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 
@@ -22,7 +23,7 @@ namespace ShopifySharp
         /// <summary>
         /// Retrieves a list of all shipping zones. 
         /// </summary>
-        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null)
+        public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("shipping_zones.json");
             
@@ -31,7 +32,7 @@ namespace ShopifySharp
                 req.QueryParams.AddRange(filter.ToQueryParameters());
             }
             
-            var response = await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, rootElement: "shipping_zones");
+            var response = await ExecuteRequestAsync<List<ShippingZone>>(req, HttpMethod.Get, cancellationToken, rootElement: "shipping_zones");
 
             return response.Result;
         }

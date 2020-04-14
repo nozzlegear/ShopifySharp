@@ -1,6 +1,8 @@
 ﻿namespace ShopifySharp.Experimental
 
 open System.Net.Http
+open System.Threading
+open System.Threading
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -80,14 +82,14 @@ module ScriptTags =
             let req = base.PrepareRequest "script_tags.json"
             let data = dict [ "script_tag" => tag ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, content, "script_tag")
+            base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, CancellationToken.None, content, "script_tag")
             |> mapTask (fun response -> response.Result)
             
         member x.UpdateAsync (id : int64, tag : ScriptTagProperties) =
             let req = base.PrepareRequest (sprintf "script_tags/%i.json" id)
             let data = dict [ "script_tag" => tag ]
             let content = new JsonContent(data)
-            base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, content, "script_tag")
+            base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, CancellationToken.None, content, "script_tag")
             |> mapTask (fun response -> response.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
