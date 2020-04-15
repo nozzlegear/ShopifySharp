@@ -62,7 +62,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecuteGetListAsync<object>(string.Empty, string.Empty, null, cts.Token);
 
@@ -78,7 +78,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecuteGetAsync<object>(string.Empty, string.Empty, string.Empty, cts.Token);
 
@@ -94,7 +94,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecuteGetAsync<object>(string.Empty, string.Empty, new PageCountFilter(), cts.Token);
 
@@ -110,7 +110,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecutePutAsync<object>(string.Empty, string.Empty, null, cts.Token);
 
@@ -126,7 +126,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecutePostAsync<object>(string.Empty, string.Empty, null, cts.Token);
 
@@ -142,7 +142,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecuteDeleteAsync(string.Empty, cts.Token);
 
@@ -158,7 +158,7 @@ namespace ShopifySharp.Tests
             var service = new TestService();
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = service.ExecuteRequestAsync(new RequestUri(new Uri("http://unreachable")), HttpMethod.Get, null, cts.Token);
 
@@ -175,7 +175,7 @@ namespace ShopifySharp.Tests
         {
             var cts = new CancellationTokenSource();
 
-            await Assert.ThrowsAsync<OperationCanceledException>(async () =>
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
             {
                 var task = OrderService.ListAsync(cancellationToken: cts.Token);
 
