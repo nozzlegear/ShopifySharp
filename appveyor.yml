@@ -36,4 +36,4 @@ deploy:
    on:
      branch: master
    # Only automatically publish prerelease packages (ShopifySharp.b012345.nupkg and ShpoifySharp.Experimental.b012345.nupkg)
-   artifacts: /ShopifySharp.*\.b.*\.nupkg/
+   artifact: /ShopifySharp.*\.b.*\.nupkg/
