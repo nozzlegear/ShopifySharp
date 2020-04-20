@@ -35,3 +35,5 @@ deploy:
      secure: uUJ91Fu+H69EdZ8RTYIa7G7UufCgCw1UXfZ2jAOEWJfKi8KNwDTFYaEDQCJS9xOc
    on:
      branch: master
+   # Only automatically publish prerelease packages (ShopifySharp.b012345.nupkg and ShpoifySharp.Experimental.b012345.nupkg)
+   artifacts: /ShopifySharp.*\.b.*\.nupkg/
