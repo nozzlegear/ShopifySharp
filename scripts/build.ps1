@@ -44,17 +44,19 @@ $projects | % {
     write-host "Packed $($_.Name) for prerelease." -ForegroundColor "green"
 }
 
+write-host "============================= PACKING RELEASE PACKAGES ==========================="
 # Source for getting git tag: https://github.com/another-guy/Mirror/blob/9034cd0d6ee6ec072469f6c0f07bdb16b4b5764e/Build.ps1
 $tagOfHead = iex 'git tag -l --contains HEAD'
+if (![string]::IsNullOrEmpty($tagOfHead))
+{
+    # Unused, but we could also compare that the VersionSuffix attributes of a project match the tag and refuse if they don't.
+    $projects | % {
+        [xml]$projectFile = Get-Content $_
+        $projectVersion = $projectFile.Project.PropertyGroup.VersionPrefix.Get(0)
 
-write-host "============================= PACKING RELEASE PACKAGES ==========================="
-# Unused, but we could also compare that the VersionSuffix attributes of a project match the tag and refuse if they don't.
-$projects | % {
-    [xml]$projectFile = Get-Content $_
-    $projectVersion = $projectFile.Project.PropertyGroup.VersionPrefix.Get(0)
-
-    if ($tagOfHead.Trim() -ne $projectVersion.Trim()) {
-        write-host "WARNING: Version $projectVersion of project $($_.Name) does not match git tag $tagOfHead." -ForegroundColor yellow
+        if ($tagOfHead.Trim() -ne $projectVersion.Trim()) {
+            write-host "WARNING: Version $projectVersion of project $($_.Name) does not match git tag $tagOfHead." -ForegroundColor yellow
+        }
     }
 }
 
