@@ -81,6 +81,84 @@ namespace ShopifySharp.Tests
             Assert.True(created.Id.HasValue);
             Assert.Equal("success", created.Status);
         }
+        
+        [Fact]
+        public async Task Creates_Fulfillments_With_Tracking_Number()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value, false);
+            
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);
+            Assert.NotEmpty(created.TrackingCompany);
+            Assert.NotEmpty(created.TrackingNumber);
+            Assert.NotEmpty(created.TrackingNumbers);
+            Assert.NotEmpty(created.TrackingUrl);
+            Assert.NotEmpty(created.TrackingUrls);
+        }
+
+        [Fact]
+        public async Task Creates_Fulfillments_With_Unrecognized_Tracking_Number()
+        {
+            // If you create a fulfillment without a tracking company, Shopify will try to parse the tracking number
+            // to figure out the shipping company. If it doesn't recognize it, the tracking numbers will still be 
+            // populated -- and will still appear in the order dashboard -- but there will be no tracking URLs
+            // or tracking company. 
+            
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Service.CreateAsync(order.Id.Value, new Fulfillment
+            {
+                TrackingNumbers = new []{ "shopify_wont_recognize_this" },
+                TrackingUrl = null,
+                TrackingCompany = null,
+                NotifyCustomer = false,
+                LocationId = Fixture.LocationId
+            });
+            
+            // Add created fulfillment to fixture's created list so it can clean them up after test run
+            Fixture.Created.Add(created);
+            
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);
+            Assert.NotEmpty(created.TrackingNumber);
+            Assert.NotEmpty(created.TrackingNumbers);
+            Assert.Null(created.TrackingCompany);
+            Assert.Null(created.TrackingUrl);
+            Assert.Empty(created.TrackingUrls);
+        }
+
+        [Fact]
+        public async Task Creates_Fulfillments_With_Unrecognized_Tracking_Number_And_Url()
+        {
+            // If you create a fulfillment without a tracking company, Shopify will try to parse the tracking number
+            // to figure out the shipping company. If it doesn't recognize it, the tracking numbers will still be 
+            // populated -- and will still appear in the order dashboard -- but there will be no tracking URLs
+            // or tracking company **unless you add a URL when creating the fulfillment**.
+            
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Service.CreateAsync(order.Id.Value, new Fulfillment
+            {
+                TrackingNumbers = new []{ "shopify_wont_recognize_this" },
+                TrackingUrl = "https://example.com/my-custom-tracking-url/with-tracking-number",
+                TrackingCompany = null,
+                NotifyCustomer = false,
+                LocationId = Fixture.LocationId
+            });
+            
+            // Add created fulfillment to fixture's created list so it can clean them up after test run
+            Fixture.Created.Add(created);
+            
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);
+            Assert.NotEmpty(created.TrackingNumber);
+            Assert.NotEmpty(created.TrackingNumbers);
+            Assert.Null(created.TrackingCompany);
+            Assert.Equal("https://example.com/my-custom-tracking-url/with-tracking-number", created.TrackingUrl);
+            Assert.NotEmpty(created.TrackingUrls);
+        }
 
         [Fact]
         public async Task Creates_Fulfillments_With_Tracking_Numbers()
