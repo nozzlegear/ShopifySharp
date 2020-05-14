@@ -19,6 +19,8 @@ build_script:
 - ps: ./scripts/build.ps1
 test_script:
 - ps: ./scripts/test.ps1
+deploy_script:
+  - ps: ./scripts/deploy.ps1
 skip_commits:
   message: /\[skip\]/
   files:
@@ -28,5 +30,3 @@ skip_commits:
     - .vscode/*
     - changelog.md
     - appveyor.yml
-#deploy_script:
-#  - ./scripts/deploy.ps1
