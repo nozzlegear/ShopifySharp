@@ -13,6 +13,8 @@ environment:
     secure: Lt70HrGBrQwKIFWE13zFZRGGwRoPKi1VKjtqBzuR3rdz3w6zD1YXXXe/Zb7xaqX+
   SHOPIFYSHARP_MY_SHOPIFY_URL:
     secure: aWjxVhXImxXX98GcYDmAbGVDxZk9kRaMKGnhm0CLuJ0aFYs0OMNaJOqyT8S4sh9P
+  NUGET_API_KEY:
+    secure: uUJ91Fu+H69EdZ8RTYIa7G7UufCgCw1UXfZ2jAOEWJfKi8KNwDTFYaEDQCJS9xOc 
 build_script:
 - ps: ./scripts/build.ps1
 test_script:
