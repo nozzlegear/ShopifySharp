@@ -32,9 +32,15 @@ foreach ($artifactName in $artifacts.keys) {
     $artifact = $artifacts[$artifactName]
     $artifactPath = $artifact.path
     
+    write-host "Found artifact $artifactName"
+    
     if ($artifactName -like "ShopifySharp.*.*.*.b*.nupkg" -or $artifactName -like "ShopifySharp.Experimental.*.*.*.b*.nupkg") {
-        # TODO: publish package to nuget using dotnet publish
+        write-host "Pushing $artifactName"
         exec { & dotnet nuget push -k "$env:NUGET_API_KEY" -s "https://nuget.org" "$artifactPath" }
         write-host "Pushed $($_.Name) artifact."
+    } else {
+        write-host "$artifactName does not look like a prerelease package. Skipping push."
     }
 }
+write-host ""
+write-host "============================ FINISHED DEPLOYING PRERELEASE PACKAGES TO NUGET ==========================="
