@@ -25,6 +25,7 @@ function Exec
 }
 
 write-host "============================ DEPLOYING PRERELEASE PACKAGES TO NUGET ==========================="
+write-host ""
 # Appveyor pushes a $artifacts variable which contains all artifacts pushed from the build script. 
 # Prerelease artifacts are named like "ShopifySharp.1.2.3.b456789.npukg" or "ShopifySharp.Experimental.1.2.3.b456789.nupkg"
 # Only publish those prerelease packages, and require manualy publishing for full releases. 
@@ -32,14 +33,11 @@ foreach ($artifactName in $artifacts.keys) {
     $artifact = $artifacts[$artifactName]
     $artifactPath = $artifact.path
     
-    write-host "Found artifact $artifactName"
-    
-    if ($artifactName -like "ShopifySharp.*.*.*.b*.nupkg" -or $artifactName -like "ShopifySharp.Experimental.*.*.*.b*.nupkg") {
-        write-host "Pushing $artifactName"
+    if ($artifactName -like "ShopifySharp.*.*.*-b*.nupkg" -or $artifactName -like "ShopifySharp.Experimental.*.*.*.b-.nupkg") {
+        write-host -ForegroundColor "green" "Pushing $artifactName"
         exec { & dotnet nuget push -k "$env:NUGET_API_KEY" -s "https://nuget.org" "$artifactPath" }
-        write-host "Pushed $($_.Name) artifact."
     } else {
-        write-host "$artifactName does not look like a prerelease package. Skipping push."
+        write-host -ForegroundColor "yellow" "Artifact $artifactName does not look like a prerelease package. Skipping push."
     }
 }
 write-host ""
