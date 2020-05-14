@@ -25,9 +25,15 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("fields")]
         public string Fields { get; set; }
-
-        internal ListFilter()
+        
+        /// <remarks>
+        /// This constructor is protected to prevent developers from using `new ListFilter()`, but to make creating your
+        /// own ListFilter easier.
+        /// https://github.com/nozzlegear/shopifysharp/issues/515
+        /// </remarks>
+        protected ListFilter()
         {
+            
         }
 
         public ListFilter(string pageInfo, int? limit, string fields = null)
