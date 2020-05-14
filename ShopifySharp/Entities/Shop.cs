@@ -255,5 +255,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("weight_unit")]
         public string WeightUnit { get; set; }
+
+        /// <summary>
+        /// The date and time when the shop was last updated. 
+        /// </summary>
+        [JsonProperty("updated_at")]
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

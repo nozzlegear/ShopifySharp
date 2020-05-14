@@ -133,10 +133,10 @@ namespace ShopifySharp
         [JsonProperty("fulfillment_status")]
         public string FulfillmentStatus { get; set; }
 
-        [JsonProperty("phone")]
         /// <summary>
         /// The customer's phone number.
         /// </summary>
+        [JsonProperty("phone")]
         public string Phone { get; set; }
 
         /// <summary>
