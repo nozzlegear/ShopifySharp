@@ -131,7 +131,7 @@ namespace ShopifySharp
         /// NOTE: After 2018-07-01, this field will be read-only in the Shopify API. Use the `InventoryLevelService` instead.
         /// </summary>
         [JsonProperty("inventory_quantity")]
-        public int? InventoryQuantity { get; set; }
+        public long? InventoryQuantity { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for one of the product's images.
