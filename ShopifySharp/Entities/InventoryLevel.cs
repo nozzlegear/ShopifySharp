@@ -24,7 +24,7 @@ namespace ShopifySharp
         /// The quantity of inventory items available for sale. Returns null if the inventory item is not tracked.
         /// </summary>
         [JsonProperty("available")]
-        public int? Available { get; set; }
+        public long? Available { get; set; }
 
         /// <summary>
         /// The date and time when the inventory level was last modified.
