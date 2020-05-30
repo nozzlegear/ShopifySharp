@@ -31,8 +31,7 @@ namespace ShopifySharp
 
         public ShopifyException(string message) : base(message) { }
 
-        public ShopifyException(HttpResponseMessage response, HttpStatusCode httpStatusCode, IEnumerable<string> errors, string message, string rawBody, string requestId) : 
-            base($"Request-Id: {requestId ?? "None"}\r\n{message}")
+        public ShopifyException(HttpResponseMessage response, HttpStatusCode httpStatusCode, IEnumerable<string> errors, string message, string rawBody, string requestId) : base(message)
         {
             HttpResponse = response;
             HttpStatusCode = httpStatusCode;
