@@ -39,7 +39,7 @@ namespace ShopifySharp.Tests
             })).Items.First();
 
             Random newRandom = new Random();
-            int newQty, currQty;
+            long newQty, currQty;
             newQty = currQty = invLevel.Available ?? 0;
             while (newQty == currQty)
             {
@@ -68,7 +68,7 @@ namespace ShopifySharp.Tests
                 LocationId = invLevel.LocationId
             };
 
-            int newQty, currQty;
+            long newQty, currQty;
             currQty = invLevel.Available ?? 0;
             newQty = currQty + availableAdjustment;
 
