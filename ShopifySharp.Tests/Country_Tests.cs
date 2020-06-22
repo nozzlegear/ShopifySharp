@@ -76,7 +76,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Deletes_Countries()
         {
-            var created = await Fixture.Create(true);
+            var customName = "Germany_" + Guid.NewGuid();
+            var created = await Fixture.Create(customName, true);
             bool threw = false;
 
             try
@@ -101,15 +102,15 @@ namespace ShopifySharp.Tests
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
             Assert.Equal(Fixture.Code, obj.Code);
-            Assert.Equal(Fixture.Name, obj.Name);
+            Assert.NotEmpty(obj.Name);
             Assert.Equal(Fixture.Tax, obj.Tax);
         }
 
         [Fact]
         public async Task Creates_Countries()
         {
-            var customName = Fixture.Name + "_" + Guid.NewGuid();
-            var obj = await Fixture.Create(false, customName);
+            var customName = "Germany" + Guid.NewGuid();
+            var obj = await Fixture.Create(customName);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
@@ -121,11 +122,12 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Countries()
         {
-            string name = "ShopifySharp Updated Test Country";
-            var created = await Fixture.Create();
-            long id = created.Id.Value;
+            var originalName = "Germany_" + Guid.NewGuid();
+            var created = await Fixture.Create(originalName);
+            var updatedName = "ShopifySharp Updated Test Country";
+            var id = created.Id.Value;
 
-            created.Name = name;
+            created.Name = updatedName;
             created.Id = null;
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
@@ -133,7 +135,7 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(name, updated.Name);
+            Assert.Equal(updatedName, updated.Name);
         }
     }
 
@@ -145,8 +147,6 @@ namespace ShopifySharp.Tests
 
         public string Code => "DE";
 
-        public string Name = "Germany";
-
         public decimal Tax = (decimal)0.14;
 
         public string TaxName = "VAT";
@@ -156,7 +156,7 @@ namespace ShopifySharp.Tests
             Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
 
             // Create one for count, list, get, etc. orders.
-            await Create();
+            await Create("Germany_" + Guid.NewGuid());
         }
 
         public async Task DisposeAsync()
@@ -180,12 +180,12 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<Country> Create(bool skipAddToCreateList = false, string customName = null)
+        public async Task<Country> Create(string customName, bool skipAddToCreateList = false)
         {
             var obj = await Service.CreateAsync(new Country()
             {
                 Code = Code,
-                Name = customName ?? Name,
+                Name = customName,
                 Tax = Tax
             });
 
