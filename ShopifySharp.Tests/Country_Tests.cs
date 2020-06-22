@@ -108,12 +108,13 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_Countries()
         {
-            var obj = await Fixture.Create();
+            var customName = Fixture.Name + "_" + Guid.NewGuid();
+            var obj = await Fixture.Create(false, customName);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
             Assert.Equal(Fixture.Code, obj.Code);
-            Assert.Equal(Fixture.Name, obj.Name);
+            Assert.Equal(customName, obj.Name);
             Assert.Equal(Fixture.Tax, obj.Tax);
         }
 
@@ -179,12 +180,12 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<Country> Create(bool skipAddToCreateList = false)
+        public async Task<Country> Create(bool skipAddToCreateList = false, string customName = null)
         {
             var obj = await Service.CreateAsync(new Country()
             {
                 Code = Code,
-                Name = Name,
+                Name = customName ?? Name,
                 Tax = Tax
             });
 
