@@ -82,7 +82,7 @@ namespace ShopifySharp
         /// Details the shipping method used.
         /// </summary>
         [JsonProperty("shipping_line")]
-        public ShippingLine ShippingLine { get; set; }
+        public DraftShippingLine ShippingLine { get; set; }
 
         /// <summary>
         /// Tags are additional short descriptors, commonly used for filtering and searching, formatted as a string of comma-separated values.
