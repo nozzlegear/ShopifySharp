@@ -1,4 +1,3 @@
-using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,57 +26,10 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
-        public async Task Lists_Countries_NoFilter()
-        {
-            var list = await Fixture.Service.ListAsync();
-
-            Assert.True(list.Items.Any());
-        }
-
-        [Fact]
-        public async Task Lists_Countries_ComparePagingByCursorAndBySinceId()
-        {
-            var list = await Fixture.Service.ListAsync(new CountryListFilter
-            {
-                SinceId = 0,
-                Limit = 2
-            });
-            Assert.True(list.Items.Count() == 2);
-
-            var nextPageViaCursor = await Fixture.Service.ListAsync(list.GetNextPageFilter(2));
-            Assert.True(list.Items.Count() == 2);
-
-            var nextPageViaSinceId = await Fixture.Service.ListAsync(new CountryListFilter
-            {
-                SinceId = list.Items.Last().Id.Value,
-                Limit = 2
-            });
-            Assert.True(list.Items.Count() == 2);
-
-            Assert.True(Enumerable.SequenceEqual(nextPageViaCursor.Items.Select(i => i.Id.Value),
-                                                 nextPageViaSinceId.Items.Select(i => i.Id.Value)));
-        }
-
-        [Fact]
-        public async Task Lists_Countries_PageAll()
-        {
-            var svc = Fixture.Service;
-            var list = await svc.ListAsync(new CountryListFilter { Limit = 5 });
-
-            while (true)
-            {
-                Assert.True(list.Items.Any());
-                list = await svc.ListAsync(list.GetNextPageFilter());
-                if (!list.HasNextPage)
-                    break;
-            }
-        }
-
-        [Fact]
         public async Task Deletes_Countries()
         {
-            var customName = "Germany_" + Guid.NewGuid();
-            var created = await Fixture.Create(customName, true);
+            var countryCode = "CA";
+            var created = await Fixture.Create(countryCode, true);
             bool threw = false;
 
             try
@@ -101,7 +53,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(Fixture.Code, obj.Code);
+            Assert.NotEmpty(obj.Name);
             Assert.NotEmpty(obj.Name);
             Assert.Equal(Fixture.Tax, obj.Tax);
         }
@@ -109,25 +61,25 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Creates_Countries()
         {
-            var customName = "Germany" + Guid.NewGuid();
-            var obj = await Fixture.Create(customName);
+            var countryCode = "AU";
+            var obj = await Fixture.Create(countryCode);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
-            Assert.Equal(Fixture.Code, obj.Code);
-            Assert.Equal(customName, obj.Name);
+            Assert.Equal("AU", obj.Code);
+            Assert.Equal("Australia", obj.Name);
             Assert.Equal(Fixture.Tax, obj.Tax);
         }
 
         [Fact]
         public async Task Updates_Countries()
         {
-            var originalName = "Germany_" + Guid.NewGuid();
-            var created = await Fixture.Create(originalName);
-            var updatedName = "ShopifySharp Updated Test Country";
+            var countryCode = "MX";
+            var created = await Fixture.Create(countryCode);
+            var newTax = 0.2M;
             var id = created.Id.Value;
 
-            created.Name = updatedName;
+            created.Tax = newTax;
             created.Id = null;
 
             var updated = await Fixture.Service.UpdateAsync(id, created);
@@ -135,7 +87,16 @@ namespace ShopifySharp.Tests
             // Reset the id so the Fixture can properly delete this object.
             created.Id = id;
 
-            Assert.Equal(updatedName, updated.Name);
+            Assert.Equal(newTax, updated.Tax);
+        }
+
+        [Fact(Skip = "The Shopify API will randomly get 'stuck' and not return any countries when listing. It will return only empty arrays.")]
+        public async Task Lists_Countries()
+        {
+            var createdCountry = await Fixture.Create("PT");
+            var list = await Fixture.Service.ListAsync();
+            
+            Assert.True(list.Items.Any());
         }
     }
 
@@ -145,8 +106,6 @@ namespace ShopifySharp.Tests
 
         public List<Country> Created { get; } = new List<Country>();
 
-        public string Code => "DE";
-
         public decimal Tax = (decimal)0.14;
 
         public string TaxName = "VAT";
@@ -155,8 +114,8 @@ namespace ShopifySharp.Tests
         {
             Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
 
-            // Create one for count, list, get, etc. orders.
-            await Create("Germany_" + Guid.NewGuid());
+            // Create one for count, list, get, etc. 
+            await Create("IT");
         }
 
         public async Task DisposeAsync()
@@ -180,12 +139,11 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<Country> Create(string customName, bool skipAddToCreateList = false)
+        public async Task<Country> Create(string countryCode, bool skipAddToCreateList = false)
         {
             var obj = await Service.CreateAsync(new Country()
             {
-                Code = Code,
-                Name = customName,
+                Code = countryCode,
                 Tax = Tax
             });
 
