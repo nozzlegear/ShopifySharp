@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netstandard1.4;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netstandard1.4;</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
-    <VersionPrefix>5.2.0</VersionPrefix>
+    <VersionPrefix>5.3.0</VersionPrefix>
   </PropertyGroup>
   <PropertyGroup>
     <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
