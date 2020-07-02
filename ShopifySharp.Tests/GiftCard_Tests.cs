@@ -84,14 +84,21 @@ namespace ShopifySharp.Tests
         }
 
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
-        public async Task Creates_GiftCards_With_ExpiresOn()
+        public async Task Updates_GiftCards_With_ExpiresOn()
         {
-            var date = DateTimeOffset.UtcNow.AddDays(1);
-            var created = await Fixture.Create(GiftCardValue, expiresOn: date);
+            var date = new DateTimeOffset(DateTimeOffset.UtcNow.Year, DateTimeOffset.UtcNow.Month, DateTimeOffset.UtcNow.Day, 0, 0, 0, TimeSpan.Zero);
+            var created = await Fixture.Create(GiftCardValue);
+            long id = created.Id.Value;
 
-            Assert.NotNull(created);
-            Assert.True(created.Id.HasValue);
-            Assert.Equal(date, created.ExpiresOn);
+            created.ExpiresOn = date;
+            created.Id = null;
+
+            var updated = await Fixture.Service.UpdateAsync(id, created);
+
+            // Reset the id so the Fixture can properly delete this object.
+            created.Id = id;
+
+            Assert.Equal(date.Date, updated.ExpiresOn.Value.Date);
         }
 
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
@@ -129,7 +136,7 @@ namespace ShopifySharp.Tests
             var customCode = Guid.NewGuid().ToString();
             customCode = customCode.Substring(customCode.Length - 20);
             await Fixture.Create(GiftCardValue, customCode);
-            var search = await Fixture.Service.SearchAsync(new GiftCardSearchFilter { Query = "code:" + customCode });
+            var search = await Fixture.Service.SearchAsync(new GiftCardSearchFilter { Query = "initial_value:" + GiftCardValue });
 
             Assert.True(search.Items.Any());
         }
