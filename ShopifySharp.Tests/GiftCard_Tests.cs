@@ -83,6 +83,16 @@ namespace ShopifySharp.Tests
             Assert.Equal(lastFour, created.LastCharacters);
         }
 
+        [Fact(Skip = "Cannot run without a Shopify Plus account.")]
+        public async Task Creates_GiftCards_With_ExpiresOn()
+        {
+            var date = DateTimeOffset.UtcNow.AddDays(1);
+            var created = await Fixture.Create(GiftCardValue, expiresOn: date);
+
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal(date, created.ExpiresOn);
+        }
 
         [Fact(Skip = "Cannot run without a Shopify Plus account.")]
         public async Task Updates_GiftCards()
@@ -153,7 +163,7 @@ namespace ShopifySharp.Tests
                 }
             }
         }
-        public async Task<GiftCard> Create(decimal value, string code = null)
+        public async Task<GiftCard> Create(decimal value, string code = null, DateTimeOffset? expiresOn = null)
         {
             var giftCardRequest = new GiftCard() { InitialValue = value };
             if (!string.IsNullOrEmpty(code))
@@ -163,6 +173,10 @@ namespace ShopifySharp.Tests
             if (giftCardRequest.Code != null && giftCardRequest.Code.Length > 20)
             {
                 giftCardRequest.Code = giftCardRequest.Code.Substring(giftCardRequest.Code.Length - 20);
+            }
+            if (expiresOn.HasValue)
+            {
+                giftCardRequest.ExpiresOn = expiresOn;
             }
             var giftCard = await Service.CreateAsync(giftCardRequest);
 

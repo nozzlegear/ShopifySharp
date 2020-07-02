@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using ShopifySharp.Converters;
 
 namespace ShopifySharp
 {
@@ -47,6 +48,7 @@ namespace ShopifySharp
         /// The date and time when the gift card will expire. 
         /// </summary>
         [JsonProperty("expires_on")]
+        [JsonConverter(typeof(DateFormatConverter),"yyyy-MM-dd")]
         public DateTimeOffset? ExpiresOn { get; set; }
 
         /// <summary>
