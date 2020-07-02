@@ -170,7 +170,7 @@ namespace ShopifySharp.Tests
                 }
             }
         }
-        public async Task<GiftCard> Create(decimal value, string code = null, DateTimeOffset? expiresOn = null)
+        public async Task<GiftCard> Create(decimal value, string code = null)
         {
             var giftCardRequest = new GiftCard() { InitialValue = value };
             if (!string.IsNullOrEmpty(code))
@@ -181,10 +181,7 @@ namespace ShopifySharp.Tests
             {
                 giftCardRequest.Code = giftCardRequest.Code.Substring(giftCardRequest.Code.Length - 20);
             }
-            if (expiresOn.HasValue)
-            {
-                giftCardRequest.ExpiresOn = expiresOn;
-            }
+            
             var giftCard = await Service.CreateAsync(giftCardRequest);
 
             Created.Add(giftCard);
