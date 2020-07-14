@@ -75,7 +75,16 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "TODO: Generate a real query string with the shop and secret key used by the build server, which contains an ids[] parameter")]
         public void Validates_Web_Requests_WithArrayParameter()
         {
-            string query = "hmac=123....";
+            string query = "hmac=...";
+            var qs = QueryHelpers.ParseQuery(query);
+            bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
+            Assert.True(isValid);
+        }
+
+        [Fact(Skip = "TODO: Generate a real query string with the shop and secret key used by the build server, which contains an ids[] parameter with a single value")]
+        public void Validates_Web_Requests_WithArrayParameter_SingleValue()
+        {
+            string query = "hmac=...";
             var qs = QueryHelpers.ParseQuery(query);
             bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
             Assert.True(isValid);

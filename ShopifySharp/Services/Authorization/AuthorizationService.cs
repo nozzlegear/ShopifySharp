@@ -41,35 +41,46 @@ namespace ShopifySharp
             return paramaters;
         }
 
-        private static string EncodeQuery(StringValues values, bool isKey)
+        private static string EncodeQuery(string key, StringValues values, bool isKey)
         {
-            //array parameters are handled differently: see https://community.shopify.com/c/Shopify-APIs-SDKs/HMAC-calculation-vs-ids-arrays/td-p/261154
-            string s = values.Count <= 1 ?
+            string result = null;
+
+            if (isKey)
+            {
+                result = key;
+            }
+            else
+            {
+                //array parameters are handled differently: see https://community.shopify.com/c/Shopify-APIs-SDKs/HMAC-calculation-vs-ids-arrays/td-p/261154
+                //https://github.com/nozzlegear/ShopifySharp/pull/437
+                //https://github.com/nozzlegear/ShopifySharp/issues/530
+                result = values.Count <= 1 && !key.EndsWith("[]") ?
                             values.FirstOrDefault() :
                             '[' + string.Join(", ", values.Select(v => '"' + v + '"')) + ']';
+            }
 
-            if (string.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(result))
             {
                 return "";
             }
 
             //Important: Replace % before replacing &. Else second replace will replace those %25s.
-            string output = (s.Replace("%", "%25").Replace("&", "%26")) ?? "";
+            result = (result.Replace("%", "%25").Replace("&", "%26")) ?? "";
 
             if (isKey)
             {
-                output = output.Replace("=", "%3D").Replace("[]", "");
+                result = result.Replace("=", "%3D").Replace("[]", "");
             }
 
-            return output;
+            return result;
         }
 
         private static string PrepareQuerystring(IEnumerable<KeyValuePair<string, StringValues>> querystring, string joinWith)
         {
             var kvps = querystring.Select(kvp => new
             {
-                Key = EncodeQuery(kvp.Key, true),
-                Value = EncodeQuery(kvp.Value, false)
+                Key = EncodeQuery(kvp.Key, kvp.Value, true),
+                Value = EncodeQuery(kvp.Key, kvp.Value, false)
             })
                 .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
                 .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
