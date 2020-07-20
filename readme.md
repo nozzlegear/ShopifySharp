@@ -260,8 +260,11 @@ var scopes = new List<string>()
     "write_customers"
 }
 
+//You can find your API key over at https://shopify.dev/tutorials/authenticate-a-private-app-with-shopify-admin
+string shopifyApiKey = "";
+
 //All AuthorizationService methods are static.
-string authUrl = AuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey, redirectUrl);
+Uri authUrl = AuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey, redirectUrl);
 ```
 
 ### Authorize an installation and generate an access token
