@@ -96,5 +96,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("amount")]
         public decimal? Amount { get; set; }
+
+        /// <summary>
+        /// The maximum amount that can be refunded
+        /// </summary>
+        [JsonProperty("maximum_refundable")]
+        public decimal? MaximumRefundable { get; set; }
     }
 }
