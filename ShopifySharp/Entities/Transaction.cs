@@ -121,5 +121,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("parent_id")]
         public long? ParentId { get; set; }
+
+        /// <summary>
+        /// The maximum amount that can be refunded
+        /// </summary>
+        [JsonProperty("maximum_refundable")]
+        public decimal? MaximumRefundable { get; set; }
     }
 }
