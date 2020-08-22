@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netstandard1.4;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
     <VersionPrefix>5.4.0</VersionPrefix>
