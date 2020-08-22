@@ -55,7 +55,7 @@ dotnet add package shopifysharp
 
 # Version 5.0.0
 
-**A complete migration guide for going from v4.x to v5.x is coming soon!** The biggest change by far is the way you'll list objects in v5. Shopify has implemented a sort of "linked list" pagination, which means you _cannot_ request arbitrary pages any longer (e.g. "give me page 5 of orders").
+**A complete migration guide for going from v4.x to v5.x is located here:** [https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide](https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide). The biggest change by far is the way you'll list objects in v5. Shopify has implemented a sort of "linked list" pagination, which means you _cannot_ request arbitrary pages any longer (e.g. "give me page 5 of orders").
 
 Instead, you now have to walk through each page, following the link from one page to the next, to get where you need to go. As long as Shopify is caching the results, this should improve the speed with which your application can list large swathes of objects at once (e.g. when importing all of a user's orders into your application). However, this makes things like letting your users navigate to an arbitrary page of orders in your app impossible. At best, you'll only be able to show links to the next page or previous page.
 
@@ -82,14 +82,12 @@ while (true)
 }
 ```
 
-Again, a more complete migration guide is coming soon and will be linked right here. In the meantime, please [check this issue for commonly asked questions about v5.0](https://github.com/nozzlegear/ShopifySharp/issues/462).
+You can also [check this issue for commonly asked questions about v5.0](https://github.com/nozzlegear/ShopifySharp/issues/462).
 
 # Frequently Asked Questions
 
 - **Question**: How do I look up a Shopify order by its name?
     - **Answer**: [See this article to learn how to look up a Shopify order by its name property.](https://nozzlegear.com/shopify/looking-up-a-shopify-order-by-its-name)
-- **Question**: The `XyzService.ListAsync()` method only returns 50 objects, how do I list all orders/customers/articles/etc?
-    - **Answer**: [See this article to learn how to list all objects using any ShopifySharp service.](https://nozzlegear.com/shopify/listing-all-orders-customers-articles-or-anything-else-with-the-shopify-api)
 - **Question**: How do I use ShopifySharp with a private app?
     - **Answer**: ShopifySharp works with any private Shopify app, no extra configuration needed. All you need to do is pass in your private app's password wherever ShopifySharp asks for an access token. For example: `var service = new ShopifySharp.OrderService("mydomain.myshopify.com", "PRIVATE APP PASSWORD HERE")`. This package's test suite uses a private app for testing API calls, so this method is confirmed working.
 
@@ -139,6 +137,7 @@ ShopifySharp currently supports the following Shopify APIs:
 -   [Draft Orders](#draft-orders)
 -   [Access Scopes](#access-scopes)
 -   [Checkouts](#checkouts)
+-   [Collections](#collections)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -2507,6 +2506,36 @@ var checkout = await service.UpdateAsync(checkoutToken, new Checkout
 var service = new CheckoutService(myShopifyUrl, shopAccessToken);
 var checkoutToken = "token";
 var shippingRates = await service.ListShippingRatesAsync(checkoutToken);
+```
+
+## Collections
+
+API version 2020-01 introduces the new "Collections" endpoint, which can be used to get the base details and list of products associated with either a [Custom Collection](#custom-collections) or [Smart Collection](#smart-collections). 
+
+This endpoint **cannot** be used to manipulate the products, collects, custom collections or smart collections. You must use the entity's respective ShopifySharp service to do that (i.e. `CollectService`, `ProductService`, `CustomCollectionService` and `SmartCollectionService`).
+
+### Getting a Collection
+
+```cs
+var service = new CollectionService(myShopifyUrl, shopAccessToken);
+var collection = await service.GetAsync(collectionId);
+```
+
+### Listing products belonging to a Collection
+
+```cs
+var service = new CollectionService(myShopifyUrl, shopAccessToken);
+var products = await service.ListAsync(collectionId);
+```
+
+### Create Checkouts
+
+```cs
+var service = new CheckoutService(myShopifyUrl, shopAccessToken);
+var checkout = await service.CreateAsync(new Checkout
+{
+    Email = "joshua@nozzlegear.com"
+});
 ```
 
 # Handling Shopify's API rate limit
