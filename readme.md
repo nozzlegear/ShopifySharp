@@ -141,20 +141,6 @@ ShopifySharp currently supports the following Shopify APIs:
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
-### Unimplemented APIs
-
-The following APIs are not yet implemented by ShopifySharp, but I'm slowly working through the list to reach 100% API parity. APIs are implemented in random order (mostly based on how much I need them in my own apps). **Need one of these APIs right now?** Please open an issue or make a pull request! I'm happy to offer guidance or help with writing tests.
-
-| API                                                                             | Notes                                                                                                                                     |
-| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| [CarrierService](https://help.shopify.com/api/reference/carrierservice)         |                                                                                                                                           |
-| [Comments](https://help.shopify.com/api/reference/comment)                      |                                                                                                                                           |
-| [Country](https://help.shopify.com/api/reference/country)                       |                                                                                                                                           |
-| [FulfillmentService](https://help.shopify.com/api/reference/fulfillmentservice) | Not [FulfillmentService](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Services/Fulfillment/FulfillmentService.cs). |
-| [Multipass](https://help.shopify.com/api/reference/multipass)                   | Requires Shopify Plus.                                                                                                                    |
-| [Province](https://help.shopify.com/api/reference/province)                     |                                                                                                                                           |
-| [Refund](https://help.shopify.com/api/reference/refund)                         |                                                                                                                                           |
-
 ### Contributors
 
 These generous people have contributed their own hard work and time to improving ShopifySharp:
@@ -2526,16 +2512,6 @@ var collection = await service.GetAsync(collectionId);
 ```cs
 var service = new CollectionService(myShopifyUrl, shopAccessToken);
 var products = await service.ListAsync(collectionId);
-```
-
-### Create Checkouts
-
-```cs
-var service = new CheckoutService(myShopifyUrl, shopAccessToken);
-var checkout = await service.CreateAsync(new Checkout
-{
-    Email = "joshua@nozzlegear.com"
-});
 ```
 
 # Handling Shopify's API rate limit
