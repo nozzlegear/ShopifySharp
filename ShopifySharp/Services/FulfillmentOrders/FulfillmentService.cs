@@ -14,6 +14,11 @@ namespace ShopifySharp
     /// </summary>
     public class FulfillmentOrderService : ShopifyService
     {
+        /// <remarks>
+        /// This endpoint is not supported in 2019-10.
+        /// </remarks>
+        public override string APIVersion => "2020-07";
+
         /// <summary>
         /// Creates a new instance of <see cref="FulfillmentOrderService" />.
         /// </summary>
