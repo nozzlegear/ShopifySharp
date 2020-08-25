@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <summary>
         /// A historical record of each item in the fulfillment.
         /// </summary>
-        [JsonProperty("destination")]
+        [JsonProperty("line_items")]
         public IEnumerable<LineItem> LineItems { get; set; }
 
         /// <summary>
