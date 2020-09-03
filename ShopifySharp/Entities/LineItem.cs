@@ -174,5 +174,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("price_set")]
         public PriceSet PriceSet { get; set; }
+
+        /// <summary>
+        /// A list of duty objects, each containing information about a duty on the line item
+        /// </summary>
+        [JsonProperty("duties")]
+        public IEnumerable<LineItemDuty> Duties { get; set; }
     }
 }

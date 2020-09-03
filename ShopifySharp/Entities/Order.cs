@@ -342,5 +342,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("metafields")]
         public IEnumerable<MetaField> Metafields { get; set; }
+
+        /// <summary>
+        /// The current total duties charged on the order in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("current_total_duties_set")]
+        public PriceSet CurrentTotalDutiesSet { get; set; }
+
+        /// <summary>
+        /// The original total duties charged on the order in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("original_total_duties_set")]
+        public PriceSet OriginalTotalDutiesSet { get; set; }
     }
 }
