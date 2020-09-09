@@ -97,5 +97,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("legacy")]
         public bool? Legacy { get; set; }
+
+        /// <summary>
+        /// The localized name of the location's country.
+        /// </summary>
+        [JsonProperty("localized_country_name")]
+        public string LocalizedCountryName { get; set; }
+
+        /// <summary>
+        /// The localized name of the location's region. Typically a province, state, or prefecture.
+        /// </summary>
+        [JsonProperty("localized_province_name")]
+        public string LocalizedProvinceName { get; set; }
     }
 }

@@ -184,7 +184,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_discounts")]
         public decimal? TotalDiscounts { get; set; }
-        
+
+        /// <summary>
+        /// The total duties of the checkout in presentment currency.
+        /// </summary>
+        [JsonProperty("total_duties")]
+        public decimal? TotalDuties { get; set; }
+
         /// <summary>
         /// The sum of all the prices of all the items in the order.
         /// </summary>
