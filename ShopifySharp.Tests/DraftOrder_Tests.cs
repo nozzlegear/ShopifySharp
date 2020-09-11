@@ -151,7 +151,7 @@ namespace ShopifySharp.Tests
 
     public class DraftOrder_Tests_Fixture : IAsyncLifetime
     {
-        public DraftOrderService Service => new DraftOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public DraftOrderService Service { get; } = new DraftOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<DraftOrder> Created { get; } = new List<DraftOrder>();
 
