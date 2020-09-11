@@ -33,7 +33,7 @@ foreach ($artifactName in $artifacts.keys) {
     $artifact = $artifacts[$artifactName]
     $artifactPath = $artifact.path
     
-    if ($artifactName -like "ShopifySharp.*.*.*-b*.nupkg" -or $artifactName -like "ShopifySharp.Experimental.*.*.*.b-.nupkg") {
+    if ($artifactName -like "ShopifySharp.*.*.*-b*.*nupkg" -or $artifactName -like "ShopifySharp.Experimental.*.*.*.b-.*nupkg") {
         write-host -ForegroundColor "green" "Pushing $artifactName"
         exec { & dotnet nuget push -k "$env:NUGET_API_KEY" -s "https://nuget.org" "$artifactPath" }
     } else {

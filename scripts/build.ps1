@@ -68,11 +68,11 @@ $projects | % {
 write-host "============================= PUSHING APPVEYOR ARTIFACTS ==========================="
 # Gather all nuget packages and push them to AppVeyor artifacts
 # Depending on the version of dotnet, the artifacts folder may either be at root level, or in each project's own folder
-$packedPath = "./ShopifySharp*/$artifactsFolder/*.nupkg"
+$packedPath = "./ShopifySharp*/$artifactsFolder/*.*nupkg"
 
 if (! (test-path $packedPath)) 
 {
-    $packedPath = "$artifactsFolder/*.nupkg"
+    $packedPath = "$artifactsFolder/*.*nupkg"
     
     if (! (test-path $packedPath)) 
     {
