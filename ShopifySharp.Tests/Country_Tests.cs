@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(Skip = "The country API often throws errors stating that a country already exists, but that country is never returned when attempting to list/get/delete it.")]
         public async Task Counts_Countries()
         {
             var count = await Fixture.Service.CountAsync();
@@ -25,7 +25,7 @@ namespace ShopifySharp.Tests
             Assert.True(count > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "The country API often throws errors stating that a country already exists, but that country is never returned when attempting to list/get/delete it.")]
         public async Task Deletes_Countries()
         {
             var countryCode = "CA";
@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests
             Assert.False(threw);
         }
 
-        [Fact]
+        [Fact(Skip = "The country API often throws errors stating that a country already exists, but that country is never returned when attempting to list/get/delete it.")]
         public async Task Gets_Countries()
         {
             var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
@@ -58,7 +58,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Tax, obj.Tax);
         }
 
-        [Fact]
+        [Fact(Skip = "The country API often throws errors stating that a country already exists, but that country is never returned when attempting to list/get/delete it.")]
         public async Task Creates_Countries()
         {
             var countryCode = "AU";
@@ -71,7 +71,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Tax, obj.Tax);
         }
 
-        [Fact]
+        [Fact(Skip = "The country API often throws errors stating that a country already exists, but that country is never returned when attempting to list/get/delete it.")]
         public async Task Updates_Countries()
         {
             var countryCode = "MX";
@@ -113,7 +113,7 @@ namespace ShopifySharp.Tests
         public async Task InitializeAsync()
         {
             Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
-
+            
             // Create one for count, list, get, etc. 
             await Create("IT");
         }
