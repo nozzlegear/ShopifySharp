@@ -53,6 +53,16 @@ If you're using .NET Core, you can use the `dotnet` command from your favorite s
 dotnet add package shopifysharp
 ```
 
+# API support
+
+Shopify has begun versioning their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
+
+| ShopifySharp version | Shopify API version |
+| -------------------- | ------------------- |
+| 4.* and below        | None, unsupported   |
+| 5.0.0 - 5.5.0        | 2019-10             |
+| 5.6.0                | 2020-07             |
+
 # Version 5.0.0
 
 **A complete migration guide for going from v4.x to v5.x is located here:** [https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide](https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide). The biggest change by far is the way you'll list objects in v5. Shopify has implemented a sort of "linked list" pagination, which means you _cannot_ request arbitrary pages any longer (e.g. "give me page 5 of orders").
