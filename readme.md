@@ -63,7 +63,7 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 5.0.0 - 5.5.0        | 2019-10             |
 | 5.6.0                | 2020-07             |
 
-# Version 5.0.0
+# Migrating from version 4.x to version 5.0.0
 
 **A complete migration guide for going from v4.x to v5.x is located here:** [https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide](https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide). The biggest change by far is the way you'll list objects in v5. Shopify has implemented a sort of "linked list" pagination, which means you _cannot_ request arbitrary pages any longer (e.g. "give me page 5 of orders").
 
