@@ -43,14 +43,20 @@ It's difficult to find blog posts or tutorials about building Shopify apps, and 
 ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager
 console in Visual Studio to install it:
 
-```
+```pwsh
 Install-Package ShopifySharp
 ```
 
 If you're using .NET Core, you can use the `dotnet` command from your favorite shell:
 
-```
+```sh
 dotnet add package shopifysharp
+```
+
+If you're using Paket with an F# project, use this command:
+
+```sh
+paket add shopifysharp --project /path/to/project.fsproj
 ```
 
 # API support
