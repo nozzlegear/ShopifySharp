@@ -104,10 +104,10 @@ namespace ShopifySharp.Enums
         WriteDraftOrders,
 
         [EnumMember(Value = "write_merchant_managed_fulfillment_orders")]
-        WriteMerchantManagedOrders,
+        WriteMerchantManagedFulfillmentOrders,
 
         [EnumMember(Value = "read_merchant_managed_fulfillment_orders")]
-        ReadMerchantManagedOrders,
+        ReadMerchantManagedFulfillmentOrders,
 
         [EnumMember(Value = "read_marketing_events")]
         ReadMarketingEvents,
