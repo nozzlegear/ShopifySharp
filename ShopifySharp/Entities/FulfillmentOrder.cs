@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ShopifySharp.Entities;
 
 namespace ShopifySharp
 {
@@ -9,22 +10,22 @@ namespace ShopifySharp
     public class FulfillmentOrder : ShopifyObject
     {
         /// <summary>
-        /// The unique numeric identifier for the shop.
+        /// The ID of the shop that's associated with the fulfillment order.
         /// </summary>
         [JsonProperty("shop_id")]
         public long? ShopId { get; set; }
 
         /// <summary>
-        /// The unique numeric identifier for the order.
+        /// The ID of the order that's associated with the fulfillment order.
         /// </summary>
         [JsonProperty("order_id")]
         public long? OrderId { get; set; }
 
         /// <summary>
-        /// The unique numeric identifier for the location.
+        /// The ID of the location that has been assigned to do the work.
         /// </summary>
         [JsonProperty("assigned_location_id")]
-        public long? LocationId { get; set; }
+        public long? AssignedLocationId { get; set; }
 
         /// <summary>
         /// "mars-fulfillment".
@@ -33,7 +34,7 @@ namespace ShopifySharp
         public string FulfillmentServiceHandle { get; set; }
 
         /// <summary>
-        /// "submitted".
+        /// The status of the fulfillment order. 
         /// </summary>
         [JsonProperty("request_status")]
         public string RequestStatus { get; set; }
@@ -48,31 +49,34 @@ namespace ShopifySharp
         /// Destination for the fulfillment.
         /// </summary>
         [JsonProperty("destination")]
-        public Address Destination { get; set; }
+        public FulfillmentOrderDestination FulfillmentOrderDestination { get; set; }
 
         /// <summary>
-        /// A historical record of each item in the fulfillment.
+        /// Represents line items belonging to a fulfillment order:
         /// </summary>
         [JsonProperty("line_items")]
-        public IEnumerable<LineItem> LineItems { get; set; }
+        public IEnumerable<FulfillmentOrderLineItem> FulfillmentOrderLineItems { get; set; }
 
         /// <summary>
-        /// "create_fulfillment", "request_fulfillment", "cancel_fulfillment_order", "request_cancellation"
+        /// Followings actions can be performed on this fulfillment order.
+        /// <br>create_fulfillment</br>
+        /// <br>request_fulfillment</br>
+        /// <br>cancel_fulfillment_order</br>
+        /// <br>request_cancellation</br>
         /// </summary>
         [JsonProperty("supported_actions")]
         public IEnumerable<string> SupportedActions { get; set; }
 
         /// <summary>
-        /// ???
+        /// A list of requests sent by the merchant to the fulfillment service for this fulfillment order.
         /// </summary>
         [JsonProperty("merchant_requests")]
-        public IEnumerable<object> MerchantRequests { get; set; }
+        public IEnumerable<MerchantRequest> MerchantRequests { get; set; }
 
         /// <summary>
-        /// Destination for the fulfillment.
+        /// The fulfillment order's assigned location
         /// </summary>
         [JsonProperty("assigned_location")]
         public AssignedLocation AssignedLocation { get; set; }
-
     }
 }
