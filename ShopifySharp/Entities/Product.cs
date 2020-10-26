@@ -85,6 +85,12 @@ namespace ShopifySharp
         public string Tags { get; set; }
 
         /// <summary>
+        /// The status of the product
+        /// </summary>
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        /// <summary>
         /// A list of variant objects, each one representing a slightly different version of the product.
         /// For example, if a product comes in different sizes and colors, each size and color permutation (such as "small black", "medium black", "large blue"), would be a variant.
         /// To reorder variants, update the product with the variants in the desired order.The position attribute on the variant will be ignored.
