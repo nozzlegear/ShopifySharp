@@ -354,5 +354,48 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("original_total_duties_set")]
         public PriceSet OriginalTotalDutiesSet { get; set; }
+
+        /// <summary>
+        /// The three letter code (ISO 4217) for the currency used used to display prices to the customer.
+        /// </summary>
+        [JsonProperty("presentment_currency")]
+        public string PresentmentCurrency { get; set; }
+ 
+        /// <summary>
+        /// The total of all line item prices in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("total_line_items_price_set")]
+        public PriceSet TotalLineItemsPriceSet { get; set; }
+ 
+        /// <summary>
+        /// The total discounts applied to the price of the order in shop and presentment currencies.
+        /// </summary>        
+        [JsonProperty("total_discounts_set")]
+        public PriceSet TotalDiscountsSet { get; set; }
+ 
+        /// <summary>
+        /// The total shipping price of the order, excluding discounts and returns, in shop and presentment currencies.
+        /// If taxes_included is set to true, then total_shipping_price_set includes taxes.
+        /// </summary>
+        [JsonProperty("total_shipping_price_set")]
+        public PriceSet TotalShippingPriceSet { get; set; }
+ 
+        /// <summary>
+        /// The subtotal of the order in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("subtotal_price_set")]
+        public PriceSet SubtotalPriceSet { get; set; }
+
+        /// <summary>
+        /// The total price of the order in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("total_price_set")]
+        public PriceSet TotalPriceSet { get; set; }
+
+        /// <summary>
+        /// The total tax applied to the order in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("total_tax_set")]
+        public PriceSet TotalTaxSet { get; set; }
     }
 }
