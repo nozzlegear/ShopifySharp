@@ -19,6 +19,13 @@ namespace ShopifySharp
         public string Attachment { get; set; }
 
         /// <summary>
+        /// The MD5 representation of the content, consisting of a string of 32 hexadecimal digits.
+        /// May be null if an asset has not been updated recently.
+        /// </summary>
+        [JsonProperty("checksum")]
+        public string Checksum { get; set; }
+
+        /// <summary>
         /// MIME representation of the content, consisting of the type and subtype of the asset, 
         /// e.g. "image/gif"
         /// </summary>
