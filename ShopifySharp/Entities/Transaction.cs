@@ -51,6 +51,12 @@ namespace ShopifySharp
         public string SourceName { get; private set; }
 
         /// <summary>
+        /// The origin of the transaction. Set to "external" to create a cash transaction for the associated order.
+        /// </summary>
+        [JsonProperty("source")]
+        public string Source { get; set; }
+
+        /// <summary>
         /// An object containing information about the credit card used for this transaction.
         /// </summary>
         [JsonProperty("payment_details")]
