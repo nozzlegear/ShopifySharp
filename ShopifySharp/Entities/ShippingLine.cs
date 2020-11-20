@@ -62,5 +62,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("tax_lines")]
         public IEnumerable<TaxLine> TaxLines { get; set; }
+
+        /// <summary>
+        /// The price of the shipping method in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("price_set")]
+        public PriceSet PriceSet { get; set; }
+
+        /// <summary>
+        /// The price of the shipping method in both shop and presentment currencies after line-level discounts have been applied.
+        /// </summary>
+        [JsonProperty("discounted_price_set")]
+        public PriceSet DiscountedPriceSet { get; set; }
     }
 }
