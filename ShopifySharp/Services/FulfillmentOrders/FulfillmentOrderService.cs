@@ -26,10 +26,12 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<ListResult<FulfillmentOrder>> ListAsync(long orderId, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<FulfillmentOrder>> ListAsync(long orderId, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync<FulfillmentOrder>($"orders/{orderId}/fulfillment_orders.json", "fulfillment_orders",null, cancellationToken);
-        }
+            var req = PrepareRequest($"orders/{orderId}/fulfillment_orders.json");
+            var response = await ExecuteRequestAsync<IEnumerable<FulfillmentOrder>>(req, HttpMethod.Get, cancellationToken, rootElement: "fulfillment_orders");
 
+            return response.Result;
+        }
     }
 }
