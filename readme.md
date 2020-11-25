@@ -67,7 +67,8 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | -------------------- | ------------------- |
 | 4.* and below        | None, unsupported   |
 | 5.0.0 - 5.5.0        | 2019-10             |
-| 5.6.0 and above      | 2020-07             |
+| 5.6.0 - 5.7.0        | 2020-07             |
+| 5.8.0 and above      | 2020-10             |
 
 # Migrating from version 4.x to version 5.0.0
 
