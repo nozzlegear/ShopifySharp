@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
 
-namespace ShopifySharp 
+namespace ShopifySharp
 {
-    public class DraftOrder : ShopifyObject 
+    public class DraftOrder : ShopifyObject
     {
         /// <summary>
         /// The unique numeric identifier for the order associated to the draft order, once created.
@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// The mailing address to where the order will be shipped. This address is optional and will not be available on orders that do not require one.
         /// </summary>
         [JsonProperty("shipping_address")]
-        public Address ShippingAddress { get; set; } 
+        public Address ShippingAddress { get; set; }
 
         /// <summary>
         /// The mailing address associated with the payment method. This address is an optional field that will not be available on orders that do not require one. 
@@ -164,5 +164,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("metafields")]
         public IEnumerable<MetaField> Metafields { get; set; }
+
+        /// <summary>
+        /// An optional boolean that you can send as part of a draft order object to load customer shipping information.
+        /// </summary>
+        [JsonProperty("use_customer_default_address")]
+        public bool? UseCustomerDefaultAddress { get; set; }
     }
 }
