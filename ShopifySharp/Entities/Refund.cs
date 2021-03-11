@@ -52,6 +52,14 @@ namespace ShopifySharp
         public string Note { get; set; }
 
         /// <summary>
+        /// An optional comment that explains a discrepancy between calculated and actual refund amounts. 
+        /// Used to populate the reason property of the resulting order adjustment object attached to the refund.
+        /// </summary>
+        /// <value>restock, damage, customer, and other.</value>
+        [JsonProperty("discrepancy_reason")]
+        public string DiscrepancyReason { get; set; }
+
+        /// <summary>
         /// The list of <see cref="RefundLineItem"/> objects
         /// </summary>
         [JsonProperty("refund_line_items")]
