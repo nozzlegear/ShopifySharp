@@ -7,6 +7,12 @@ namespace ShopifySharp
     public class Refund : ShopifyObject
     {
         /// <summary>
+        /// The unique identifier of the order.
+        /// </summary>
+        [JsonProperty("order_id")]
+        public long? OrderId { get; set; }
+
+        /// <summary>
         /// The date and time when the refund was created. 
         /// </summary>
         [JsonProperty("created_at")]
