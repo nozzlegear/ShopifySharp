@@ -63,10 +63,10 @@ namespace ShopifySharp
         /// You can then use the response in the body of the request to create the actual refund.
         /// The response includes a transactions object with "kind": "suggested_refund", which must to be changed to "kind" : "refund" for the refund to be accepted.
         /// </summary>
-        public virtual async Task<Refund> CalculateAsync(long orderId, Refund options = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Refund> CalculateAsync(long orderId, Refund options, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
-            var content = new JsonContent(new { refund = options ?? new Refund() });
+            var content = new JsonContent(new { refund = options });
             var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, cancellationToken, content, "refund");
 
             return response.Result;
@@ -75,10 +75,10 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a <see cref="Refund"/>. Use the calculate endpoint to produce the transactions to submit.
         /// </summary>
-        public virtual async Task<Refund> RefundAsync(long orderId, Refund options = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Refund> RefundAsync(long orderId, Refund options, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/refunds.json");
-            var content = new JsonContent(new { refund = options ?? new Refund() });
+            var content = new JsonContent(new { refund = options });
             var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, cancellationToken, content, "refund");
 
             return response.Result;
