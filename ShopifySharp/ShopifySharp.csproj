@@ -3,7 +3,7 @@
     <TargetFrameworks>netcoreapp2.1;netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
-    <VersionPrefix>5.9.0</VersionPrefix>
+    <VersionPrefix>5.10.0</VersionPrefix>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
