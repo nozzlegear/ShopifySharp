@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// This auto-generated property is the date and time when the invoice was emailed to the customer, in ISO 8601 format. 
         /// </summary>
         [JsonProperty("invoice_sent_at")]
-        public DateTime? InvoiceSentAt { get; set; }
+        public DateTimeOffset? InvoiceSentAt { get; set; }
 
         /// <summary>
         /// The URL for the invoice.
@@ -95,6 +95,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("tax_exempt")]
         public bool? TaxExempt { get; set; }
+
+        /// <summary>
+        /// Whether the customer is exempt from paying specific taxes on their order
+        /// </summary>
+        [JsonProperty("tax_exemptions")]
+        public string[] TaxExemptions { get; set; }
 
         /// <summary>
         /// An array of tax_line objects, each of which details the total taxes applicable to the order. When creating an order through the API, tax lines may be specified on the order or the line items but not both. Tax lines specified on the order are split on the taxable line items in the created order. 
@@ -136,19 +142,19 @@ namespace ShopifySharp
         /// Date at which order is created and the draft order changes to completed status. The API returns this value in ISO 8601 format. 
         /// </summary>
         [JsonProperty("completed_at")]
-        public DateTime? CompletedAt { get; set; }
+        public DateTimeOffset? CompletedAt { get; set; }
 
         /// <summary>
         /// This auto-generated property is the date and time when the draft order was created in Shopify, in ISO 8601 format. 
         /// </summary>
         [JsonProperty("created_at")]
-        public DateTime? CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time when the order was last modified. The API returns this value in ISO 8601 format. 
         /// </summary>
         [JsonProperty("updated_at")]
-        public DateTime? UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// Once a draft order is set to status completed the only further draft order modifications that can be made are adding tags or metafields. No other draft order actions are permitted.

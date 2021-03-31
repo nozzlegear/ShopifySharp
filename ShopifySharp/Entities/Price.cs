@@ -11,9 +11,9 @@ namespace ShopifySharp
         public string CurrencyCode { get; set; }
 
         /// <summary>
-        /// The variant's price or compare-at price in the currency.
+        /// The amount in the currency.
         /// </summary>
         [JsonProperty("amount")]
-        public string Amount { get; set; }
+        public decimal? Amount { get; set; }
     }
 }
