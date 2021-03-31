@@ -100,7 +100,7 @@ namespace ShopifySharp
         /// Whether the customer is exempt from paying specific taxes on their order
         /// </summary>
         [JsonProperty("tax_exemptions")]
-        public string[] TaxExemptions { get; set; }
+        public IEnumerable<string> TaxExemptions { get; set; }
 
         /// <summary>
         /// An array of tax_line objects, each of which details the total taxes applicable to the order. When creating an order through the API, tax lines may be specified on the order or the line items but not both. Tax lines specified on the order are split on the taxable line items in the created order. 
