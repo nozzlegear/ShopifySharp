@@ -4,6 +4,7 @@ using ShopifySharp.Filters;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
+using System.Collections.Generic;
 
 namespace ShopifySharp
 {
@@ -31,17 +32,17 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter, CancellationToken cancellationToken = default)
+        public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter, bool includePresentmentPrices = false, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetListAsync("products.json", "products", filter, cancellationToken);
+            return await ExecuteGetListAsync("products.json", "products", filter, cancellationToken, GetHeaders(includePresentmentPrices));
         }
 
         /// <summary>
         /// Gets a list of up to 250 of the shop's products.
         /// </summary>
-        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter = null, CancellationToken cancellationToken = default)
+        public virtual async Task<ListResult<Product>> ListAsync(ProductListFilter filter = null, bool includePresentmentPrices = false, CancellationToken cancellationToken = default)
         {
-            return await ListAsync(filter?.AsListFilter(), cancellationToken);
+            return await ListAsync(filter?.AsListFilter(), includePresentmentPrices, cancellationToken);
         }
 
         /// <summary>
@@ -51,9 +52,9 @@ namespace ShopifySharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="Product"/>.</returns>
-        public virtual async Task<Product> GetAsync(long productId, string fields = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Product> GetAsync(long productId, string fields = null, bool includePresentmentPrices = false, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Product>($"products/{productId}.json", "product", fields, cancellationToken);
+            return await ExecuteGetAsync<Product>($"products/{productId}.json", "product", fields, cancellationToken, GetHeaders(includePresentmentPrices));
         }
 
         /// <summary>
@@ -158,6 +159,17 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<Product>(req, HttpMethod.Put, cancellationToken, content, "product");
 
             return response.Result;
+        }
+
+        private Dictionary<string, string> GetHeaders(bool includePresentmentPrices)
+        {
+            if (!includePresentmentPrices)
+                return null;
+
+            return new Dictionary<string, string>
+            {
+                { "X-Shopify-Api-Features", "include-presentment-prices" }
+            };
         }
     }
 }

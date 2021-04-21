@@ -37,9 +37,9 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="filter">Options for filtering the list.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null, bool includeCurrencyExchangeAdjustments = false, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken);
+            return await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken, GetHeaders(includeCurrencyExchangeAdjustments));
         }
 
         /// <summary>
@@ -49,9 +49,9 @@ namespace ShopifySharp
         /// <param name="transactionId">The id of the Transaction to retrieve.</param>
         /// <param name="filter">Options for filtering the result.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null, bool includeCurrencyExchangeAdjustments = false, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken);
+            return await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken, GetHeaders(includeCurrencyExchangeAdjustments));
         }
 
         /// <summary>
@@ -71,6 +71,17 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<Transaction>(req, HttpMethod.Post, cancellationToken, content, "transaction");
 
             return response.Result;
+        }
+
+        private Dictionary<string, string> GetHeaders(bool includeCurrencyExchangeAdjustments)
+        {
+            if (!includeCurrencyExchangeAdjustments)
+                return null;
+
+            return new Dictionary<string, string>
+            {
+                { "X-Shopify-Api-Features", "include-currency-exchange-adjustments" }
+            };
         }
     }
 }
