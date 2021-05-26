@@ -133,5 +133,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("maximum_refundable")]
         public decimal? MaximumRefundable { get; set; }
+
+        /// <summary>
+        /// An adjustment on the transaction showing the amount lost or gained due to fluctuations in the currency exchange rate
+        /// Requires the header X-Shopify-Api-Features = include-currency-exchange-adjustments
+        /// </summary>
+        [JsonProperty("currency_exchange_adjustment")]
+        public CurrencyExchangeAdjustment CurrencyExchangeAdjustment { get; set; }
     }
 }
