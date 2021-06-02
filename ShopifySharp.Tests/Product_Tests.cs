@@ -86,6 +86,31 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task List_Products_By_Status()
+        {
+            var svc = Fixture.Service;
+            var list = await svc.ListAsync(new ProductListFilter { Limit = 5 });
+            Assert.True(list.Items.Any()); //if we get something here, then...
+
+            list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "active" });
+            bool anyActive = list.Items.Any();
+            if (anyActive)
+                Assert.True(list.Items.All(x => x.Status == "active"));
+            
+            list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "draft" });
+            bool anyDraft = list.Items.Any();
+            if (anyDraft)
+                Assert.True(list.Items.All(x => x.Status == "draft"));
+
+            list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "archived" });
+            bool anyArchive = list.Items.Any();
+            if (anyDraft)
+                Assert.True(list.Items.All(x => x.Status == "archived"));
+
+            Assert.False(!anyActive && !anyDraft && !anyArchive); //we should make sure we get something here (these represent all statuses for a product)
+        }
+
+        [Fact]
         public async Task Deletes_Products()
         {
             var created = await Fixture.Create(true);
