@@ -397,5 +397,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_tax_set")]
         public PriceSet TotalTaxSet { get; set; }
+
+        /// <summary>
+        /// Indicates whether taxes on an order are estimated. Will be set to false when taxes on an order are finalized and aren't subject to any change.
+        /// </summary>
+        [JsonProperty("estimated_taxes")]
+        public bool? EstimatedTaxes { get; set; }
     }
 }
