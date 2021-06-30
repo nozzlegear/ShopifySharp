@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests
             Assert.True(list.Items.Count() > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Deletes_DraftOrders()
         {
             var created = await Fixture.Create(true);
@@ -53,7 +53,7 @@ namespace ShopifySharp.Tests
             Assert.False(threw);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Gets_DraftOrders()
         {
             var created = await Fixture.Create();
@@ -72,7 +72,7 @@ namespace ShopifySharp.Tests
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Creates_DraftOrders()
         {
             var created = await Fixture.Create();
@@ -90,7 +90,7 @@ namespace ShopifySharp.Tests
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Updates_DraftOrders()
         {
             string newNote = $"New note value {Guid.NewGuid()}";
@@ -128,7 +128,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(message, result.CustomMessage);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Completes_DraftOrder()
         {
             var created = await Fixture.Create();
@@ -138,7 +138,7 @@ namespace ShopifySharp.Tests
             Assert.Equal("completed", created.Status);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Completes_DraftOrder_With_Pending_Payment()
         {
             var created = await Fixture.Create();
