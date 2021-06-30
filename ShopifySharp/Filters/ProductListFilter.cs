@@ -40,6 +40,15 @@ namespace ShopifySharp.Filters
         public string ProductType { get; set; }
 
         /// <summary>
+        /// The status of the product. Valid Values:
+        /// active: The product is ready to sell and is available to customers on the online store, sales channels, and apps. By default, existing products are set to active.
+        /// archived: The product is no longer being sold and isn't available to customers on sales channels and apps.
+        /// draft: The product isn't ready to sell and is unavailable to customers on sales channels and apps. By default, duplicated and unarchived products are set to draft.
+        /// </summary>
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        /// <summary>
         /// Filter by collection id.
         /// </summary>
         [JsonProperty("collection_id")]

@@ -59,6 +59,12 @@ namespace ShopifySharp
         /// <para>applications: Can authorize the installation of third party applications</para> 
         /// <para>preferences: Can view the preferences and configuration of a shop</para> 
         /// <para>reports: Can view and create reports</para> 
+        /// <para>billing_charges: The user can view and export billing charges.</para>
+        /// <para>billing_invoices_view: The user can view billing invoices.</para>
+        /// <para>billing_payment_methods_view: The user can view billing payment methods.</para>
+        /// <para>staff_management_activation: The user can activate or deactivate staff in the store.</para>
+        /// <para>staff_management_create: The user can add staff to the store.</para>
+        /// <para>staff_management_delete: The user can delete staff from the store.</para>
         /// </summary>
         [JsonProperty("permissions")]
         public string[] Permissions { get; set; }

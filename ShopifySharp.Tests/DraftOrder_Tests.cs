@@ -108,7 +108,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(newNote, updated.Note);
         }
 
-        [Fact(Skip = "Cannot test with my dev store since the trial has expired.")]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Sends_Invoice()
         {
             var created = await Fixture.Create();
@@ -128,7 +128,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(message, result.CustomMessage);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Completes_DraftOrder()
         {
             var created = await Fixture.Create();
@@ -138,7 +138,7 @@ namespace ShopifySharp.Tests
             Assert.Equal("completed", created.Status);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled for ShopifySharp's dev store")]
         public async Task Completes_DraftOrder_With_Pending_Payment()
         {
             var created = await Fixture.Create();
