@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using ShopifySharp.Filters;
+using ShopifySharp.Lists;
 using System.Threading.Tasks;
-using ShopifySharp.Filters;
-using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -22,11 +19,19 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets all the users.
+        /// Gets a list of up to 250 of the users.
         /// </summary>
-        public virtual async Task<IEnumerable<User>> ListAsync()
+        public virtual async Task<ListResult<User>> ListAsync(ListFilter<User> filter = null)
         {
-            return await ExecuteGetAsync<IEnumerable<User>>("users.json", "users");
+            return await ExecuteGetListAsync("users.json", "users", filter);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the users.
+        /// </summary>
+        public virtual async Task<ListResult<User>> ListAsync(UserListFilter filter)
+        {
+            return await ListAsync(filter?.AsListFilter());
         }
 
         /// <summary>
