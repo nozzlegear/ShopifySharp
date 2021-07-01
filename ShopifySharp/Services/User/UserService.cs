@@ -22,10 +22,7 @@ namespace ShopifySharp
         {
         }
 
-        /// <summary>
-        /// Gets a list of up to 250 of the users.
-        /// </summary>
-        public virtual async Task<ListResult<User>> ListAsync(ListFilter<User> filter = null, CancellationToken cancellationToken = null)
+        protected virtual async Task<ListResult<User>> _ListAsync(ListFilter<User> filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("users.json", "users", filter, cancellationToken);
         }
@@ -33,7 +30,26 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the users.
         /// </summary>
-        public virtual async Task<ListResult<User>> ListAsync(UserListFilter filter, CancellationToken cancellationToken = null)
+        /// <remarks>
+        /// To be removed in 6.0, only exists for backwards compatibility.
+        /// </remarks>
+        public virtual async Task<ListResult<User>> ListAsync(CancellationToken cancellationToken)
+        {
+            return await ListAsync(null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the users.
+        /// </summary>
+        public virtual async Task<ListResult<User>> ListAsync(ListFilter<User> filter = null, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteGetListAsync("users.json", "users", filter, cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the users.
+        /// </summary>
+        public virtual async Task<ListResult<User>> ListAsync(UserListFilter filter, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
