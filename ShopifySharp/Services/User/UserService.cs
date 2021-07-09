@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using ShopifySharp.Filters;
-using ShopifySharp.Infrastructure;
+using ShopifySharp.Lists;
+using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -23,11 +23,19 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Gets all the users.
+        /// Gets a list of up to 250 of the users.
         /// </summary>
-        public virtual async Task<IEnumerable<User>> ListAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<ListResult<User>> ListAsync(ListFilter<User> filter = null, CancellationToken cancellationToken = null)
         {
-            return await ExecuteGetAsync<IEnumerable<User>>("users.json", "users", cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("users.json", "users", filter, cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the users.
+        /// </summary>
+        public virtual async Task<ListResult<User>> ListAsync(UserListFilter filter, CancellationToken cancellationToken = null)
+        {
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
         /// <summary>
