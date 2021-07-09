@@ -52,16 +52,6 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Activates a <see cref="RecurringCharge"/> that the shop owner has accepted.
-        /// </summary>
-        /// <param name="id">The id of the charge to activate.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<RecurringCharge> ActivateAsync(long id, CancellationToken cancellationToken = default)
-        {
-            return await ExecutePostAsync<RecurringCharge>($"recurring_application_charges/{id}/activate.json", "recurring_application_charge", cancellationToken);
-        }
-
-        /// <summary>
         /// Deletes a <see cref="RecurringCharge"/>.
         /// </summary>
         /// <param name="id">The id of the charge to delete.</param>
