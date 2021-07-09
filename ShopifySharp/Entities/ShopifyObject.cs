@@ -24,5 +24,41 @@ namespace ShopifySharp
 
         [JsonProperty("admin_graphql_api_id")]
         public string AdminGraphQLAPIId { get; set; }
+
+        /// <summary>
+        /// Converts the object to an IDictionary<string, object> for eventual serialization to JSON. Can be overridden for fine-grained control of the object's serialization.
+        /// </summary>
+        public virtual IDictionary<string, object> ToJsonDictionary()
+        {
+            IDictionary<string, object> output = new Dictionary<string, object>();
+
+            // Inspiration for this code from https://github.com/jaymedavis/stripe.net
+            foreach (PropertyInfo property in obj.GetType().GetAllDeclaredProperties())
+            {
+                object value = property.GetValue(obj, null);
+                string propName = property.Name;
+                if (value == null) continue;
+
+                if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
+                {
+                    // Get the JsonPropertyAttribute for this property, which will give us its JSON name
+                    JsonPropertyAttribute attribute = property
+                        .GetCustomAttributes(typeof(JsonPropertyAttribute), false)
+                        .Cast<JsonPropertyAttribute>()
+                        .FirstOrDefault();
+
+                    propName = attribute != null ? attribute.PropertyName : property.Name;
+                }
+
+                if (value.GetType().GetTypeInfo().IsEnum)
+                {
+                    value = ((Enum)value).ToSerializedString();
+                }
+
+                output.Add(propName, value);
+            }
+
+            return output;
+        }
     }
 }
