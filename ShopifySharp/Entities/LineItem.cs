@@ -180,5 +180,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("duties")]
         public IEnumerable<LineItemDuty> Duties { get; set; }
+
+        /// <summary>
+        /// The location of the line item's fulfillment origin.
+        /// </summary>
+        [JsonProperty("origin_location")]
+        public LineItemOriginLocation OriginLocation { get; set; }
     }
 }
