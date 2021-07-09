@@ -64,17 +64,5 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter, cancellationToken);
         }
-
-        /// <summary>
-        /// Activates a <see cref="Charge"/> that the shop owner has accepted.
-        /// </summary>
-        /// <param name="id">The id of the charge to activate.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task ActivateAsync(long id, CancellationToken cancellationToken = default)
-        {
-            var req = PrepareRequest($"application_charges/{id}/activate.json");
-
-            await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken);
-        }
     }
 }
