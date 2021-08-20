@@ -137,6 +137,12 @@ namespace ShopifySharp.Enums
         UnauthenticatedReadContent,
 
         [EnumMember(Value = "read_locations")]
-        ReadLocations
+        ReadLocations,
+
+        [EnumMember(Value = "read_translations")]
+        ReadTranslations,
+
+        [EnumMember(Value = "write_translations")]
+        WriteTranslations
     }
 }
