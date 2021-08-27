@@ -51,13 +51,21 @@ namespace ShopifySharp
         /// Retrieves the <see cref="PriceRuleDiscountCode"/> with the given code.
         /// </summary>
         /// <param name="code">The code of the associated price rule.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
-        public virtual async Task<PriceRuleDiscountCode> GetAsync(string code, string fields = null, CancellationToken cancellationToken = default)
+        public virtual async Task<PriceRuleDiscountCode> GetAsync(string code, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<PriceRuleDiscountCode>($"/discount_codes/lookup.json?code={code}", "discount_code", fields, cancellationToken);
+            return await ExecuteGetAsync<PriceRuleDiscountCode>($"discount_codes/lookup.json","discount_code",queryParams: new DiscountCodeFilter { Code=code},cancellationToken);
         }
+        
+        class DiscountCodeFilter : Parameterizable
+            {
+                /// <summary>
+                /// Restrict results to the specified Code.
+                /// </summary>
+                [JsonProperty("code")]
+                public string Code { get; set; }
+            }
 
         /// <summary>
         /// Creates a new discount code.
