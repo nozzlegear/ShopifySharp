@@ -46,6 +46,18 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields, cancellationToken);
         }
+        
+        /// <summary>
+        /// Retrieves the <see cref="PriceRuleDiscountCode"/> with the given code.
+        /// </summary>
+        /// <param name="code">The code of the associated price rule.</param>
+        /// <param name="fields">A comma-separated list of fields to return.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
+        public virtual async Task<PriceRuleDiscountCode> GetAsync(string code, string fields = null, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteGetAsync<PriceRuleDiscountCode>($"/discount_codes/lookup.json?code={code}", "discount_code", fields, cancellationToken);
+        }
 
         /// <summary>
         /// Creates a new discount code.
