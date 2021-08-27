@@ -52,5 +52,17 @@ namespace ShopifySharp.Filters
         /// </summary>
         [JsonProperty("updated_at_max")]
         public DateTimeOffset? UpdatedAtMax { get; set; }
+
+        /// <summary>
+        /// Restrict results to those processed at or before date.
+        /// </summary>
+        [JsonProperty("processed_at_min")]
+        public DateTimeOffset? ProcessedAtMin { get; set; }
+
+        /// <summary>
+        /// Restrict results to those last processed at or before date.
+        /// </summary>
+        [JsonProperty("processed_at_max")]
+        public DateTimeOffset? ProcessedAtMax { get; set; }
     }
 }
