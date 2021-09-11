@@ -123,6 +123,12 @@ namespace ShopifySharp
         public bool? TaxExempt { get; set; }
 
         /// <summary>
+        /// Whether the customer is exempt from paying specific taxes on their order. Canadian taxes only
+        /// </summary>
+        [JsonProperty("tax_exemptions")]
+        public string[] TaxExemptions { get; set; }
+
+        /// <summary>
         /// The total amount of money that the customer has spent at the shop.
         /// </summary>
         /// <remarks>The Shopify API actually returns this value as a string, but Json.Net can automatically convert to decimal.</remarks>
