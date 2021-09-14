@@ -152,7 +152,7 @@ namespace ShopifySharp
         /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
         /// </remarks>
         protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method,
-            CancellationToken cancellationToken, HttpContent content = null, Dictionary<string, string> headers = null)
+            CancellationToken cancellationToken, HttpContent content = null, Dictionary<string, string> headers = null, int? graphqlQueryCost = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers))
             {
@@ -181,7 +181,7 @@ namespace ShopifySharp
 
                         return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
                     }
-                }, cancellationToken);
+                }, cancellationToken, graphqlQueryCost);
 
                 return policyResult;
             }

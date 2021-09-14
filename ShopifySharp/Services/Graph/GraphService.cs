@@ -59,9 +59,9 @@ namespace ShopifySharp
         /// <param name="req">The RequestUri.</param>
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        private async Task<JToken> SendAsync(RequestUri req, HttpContent content, CancellationToken cancellationToken = default)
+        private async Task<JToken> SendAsync(RequestUri req, HttpContent content, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content, graphqlQueryCost: graphqlQueryCost);
 
             CheckForErrors(response);
 
