@@ -322,7 +322,7 @@ namespace ShopifySharp
                     errors = new List<string>{ baseMessage };
                 }
 
-                throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId, LeakyBucketState.Get(response));
+                throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId);
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();

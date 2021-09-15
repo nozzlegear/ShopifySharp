@@ -21,12 +21,16 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public GraphService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
+        public GraphService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
+        /// <param name="graphqlQueryCost">
+        /// The requestedQueryCost available at extensions.cost.requestedQueryCost.
+        /// While it is optional, it is recommended to provide it to avoid wasting resources to issue API calls that will be throttled
+        /// </param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
@@ -42,6 +46,10 @@ namespace ShopifySharp
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
+        /// <param name="graphqlQueryCost">
+        /// The requestedQueryCost available at extensions.cost.requestedQueryCost.
+        /// While it is optional, it is recommended to provide it to avoid wasting resources to issue API calls that will be throttled
+        /// </param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
         public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)

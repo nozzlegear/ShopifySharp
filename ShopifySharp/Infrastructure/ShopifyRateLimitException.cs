@@ -10,23 +10,19 @@ namespace ShopifySharp
     /// </summary>
     public class ShopifyRateLimitException : ShopifyException
     {
-        public LeakyBucketState LeakyBucket { get; }
-
         public int? RetryAfterSeconds { get; private set; }
 
         //When a 429 is returned because the bucket is full, Shopify doesn't include the X-Shopify-Shop-Api-Call-Limit header in the response
-        public ShopifyRateLimitReason Reason => LeakyBucket == null || LeakyBucket.IsFull ? ShopifyRateLimitReason.BucketFull : ShopifyRateLimitReason.Other;
+        public ShopifyRateLimitReason Reason => HttpResponse.Headers.Contains(LeakyBucketExecutionPolicy.RESPONSE_HEADER_API_CALL_LIMIT) ? ShopifyRateLimitReason.Other : ShopifyRateLimitReason.BucketFull;
 
         public ShopifyRateLimitException(HttpResponseMessage response, 
                                          HttpStatusCode httpStatusCode,
                                          IEnumerable<string> errors,
                                          string message,
                                          string jsonError,
-                                         string requestId,
-                                         LeakyBucketState leakyBucket) 
+                                         string requestId) 
             : base(response, httpStatusCode, errors, message, jsonError, requestId)
         {
-            LeakyBucket = leakyBucket;
             ExtractRetryAfterSeconds(response);
         }
 
