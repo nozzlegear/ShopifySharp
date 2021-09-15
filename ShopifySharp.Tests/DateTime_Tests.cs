@@ -35,6 +35,7 @@ namespace ShopifySharp.Tests
             await Task.Delay(TimeSpan.FromSeconds(11));
 
             var graphService = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+            graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
             var graphQlOrder = await graphService.PostAsync(
                                    @"
 {

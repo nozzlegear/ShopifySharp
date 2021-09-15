@@ -64,7 +64,7 @@ namespace ShopifySharp.Tests
 
         public Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             return Task.CompletedTask;
         }

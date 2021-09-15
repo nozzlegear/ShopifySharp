@@ -16,7 +16,7 @@ namespace ShopifySharp.Tests
 
         public ShopifyPayments_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact]

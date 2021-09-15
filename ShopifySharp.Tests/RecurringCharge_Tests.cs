@@ -9,7 +9,7 @@ namespace ShopifySharp.Tests
 
         public RecurringCharge_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact(Skip = "Recurring charges cannot be tested with a private application.")]
