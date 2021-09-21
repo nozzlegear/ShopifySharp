@@ -263,7 +263,7 @@ namespace ShopifySharp.Tests
             int requestCount = 60;
             IEnumerable<ListResult<Order>> list = null;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             try
             {

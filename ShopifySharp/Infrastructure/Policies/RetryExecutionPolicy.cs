@@ -20,7 +20,7 @@ namespace ShopifySharp
             _retryOnlyIfLeakyBucketFull = retryOnlyIfLeakyBucketFull;
         }
 
-        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken)
+        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null)
         {
             while (true)
             {

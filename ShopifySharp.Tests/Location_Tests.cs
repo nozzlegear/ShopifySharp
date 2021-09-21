@@ -11,7 +11,7 @@ namespace ShopifySharp.Tests
 
         public Location_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact]

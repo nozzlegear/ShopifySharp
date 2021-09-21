@@ -14,7 +14,7 @@ namespace ShopifySharp.Tests
 
         public ShippingZone_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact]

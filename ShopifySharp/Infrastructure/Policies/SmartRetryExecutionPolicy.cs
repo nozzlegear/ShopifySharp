@@ -23,6 +23,7 @@ namespace ShopifySharp
     /// See https://help.shopify.com/api/guides/api-call-limit
     /// https://en.wikipedia.org/wiki/Leaky_bucket
     /// </remarks>
+    [Obsolete("LeakyBucketExecutionPolicy is recommended as it handles properly both REST and GraphQL calls")]
     public partial class SmartRetryExecutionPolicy : IRequestExecutionPolicy
     {
         private const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
@@ -38,7 +39,7 @@ namespace ShopifySharp
             _retryOnlyIfLeakyBucketFull = retryOnlyIfLeakyBucketFull;
         }
 
-        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken)
+        public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null)
         {
             var accessToken = GetAccessToken(baseRequest);
             LeakyBucket bucket = null;

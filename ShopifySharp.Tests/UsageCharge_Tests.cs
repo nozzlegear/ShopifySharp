@@ -9,7 +9,7 @@ namespace ShopifySharp.Tests
 
         UsageCharge_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact(Skip = "Usage charges cannot be tested with a private application.")]

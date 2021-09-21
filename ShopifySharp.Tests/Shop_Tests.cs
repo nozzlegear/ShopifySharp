@@ -12,7 +12,7 @@ namespace ShopifySharp.Tests
 
         public Shop_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact]

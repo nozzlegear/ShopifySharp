@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests
         public async Task InitializeAsync()
         {
             // Fulfillment API has a stricter rate limit when on a non-paid store.
-            var policy = new SmartRetryExecutionPolicy(false);
+            var policy = new LeakyBucketExecutionPolicy(false);
 
             FulfillmentService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
