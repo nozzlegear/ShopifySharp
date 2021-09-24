@@ -22,10 +22,9 @@ namespace ShopifySharp
             await RESTBucket.WaitForAvailableAsync(1, cancellationToken);
         }
 
-        public async Task WaitForAvailableGraphQLAsync(int? queryCost, CancellationToken cancellationToken)
+        public async Task WaitForAvailableGraphQLAsync(int queryCost, CancellationToken cancellationToken)
         {
-            //if the user didn't pass a request query cost, we assume a cost of 1
-            await GraphQLBucket.WaitForAvailableAsync(queryCost ?? 1, cancellationToken);
+            await GraphQLBucket.WaitForAvailableAsync(queryCost, cancellationToken);
         }
 
         public void SetRESTBucketState(int maximumAvailable, int currentlyAvailable)
@@ -43,8 +42,9 @@ namespace ShopifySharp
             RESTBucket.SetState(maximumAvailable, restoreRatePerSecond, currentlyAvailable);
         }
 
-        public void SetGraphQLBucketState(int maximumAvailable, int restoreRatePerSecond, int currentlyAvailable)
+        public void SetGraphQLBucketState(int maximumAvailable, int restoreRatePerSecond, int currentlyAvailable, int refund)
         {
+            currentlyAvailable = Math.Max(0, Math.Min(currentlyAvailable, GraphQLBucket.ComputedCurrentlyAvailable + refund));
             GraphQLBucket.SetState(maximumAvailable, restoreRatePerSecond, currentlyAvailable);
         }
     }

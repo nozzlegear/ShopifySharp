@@ -41,16 +41,28 @@ namespace ShopifySharp
 
                 if (isGraphQL)
                 {
+                    //if the user didn't pass a request query cost, we assume a cost of 50
+                    graphqlQueryCost = graphqlQueryCost ?? 50;
                     if (bucket != null)
-                        await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost, cancellationToken);
+                        await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost.Value, cancellationToken);
 
                     var res = await executeRequestAsync(request);
                     var json = res.Result as JToken;
 
                     if (bucket != null)
                     {
-                        var cost = json.SelectToken("extensions.cost.throttleStatus");
-                        bucket.SetGraphQLBucketState((int)cost["maximumAvailable"], (int)cost["restoreRate"], (int)cost["currentlyAvailable"]);
+                        var cost = json.SelectToken("extensions.cost");
+                        var throttleStatus = cost["throttleStatus"];
+                        int maximumAvailable = (int)throttleStatus["maximumAvailable"];
+                        int restoreRate = (int)throttleStatus["restoreRate"];
+                        int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
+                        int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
+                        int currentlyAvailable = (int)cost["currentlyAvailable"];
+                        bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
+
+                        //The user might have supplied no cost or an invalid cost
+                        //We fix the query cost so the correct value is used if a retry is needed
+                        graphqlQueryCost = (int)cost["requestedQueryCost"];
                     }
 
                     if (json.SelectToken("errors")
