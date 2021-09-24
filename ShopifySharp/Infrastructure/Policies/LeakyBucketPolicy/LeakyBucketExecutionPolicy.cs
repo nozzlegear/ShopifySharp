@@ -79,10 +79,10 @@ namespace ShopifySharp
                             if (apiCallLimitHeaderValue != null)
                             {
                                 var split = apiCallLimitHeaderValue.Split('/');
-                                if (split.Length == 2 && int.TryParse(split[0], out int currentlyAvailable) &&
+                                if (split.Length == 2 && int.TryParse(split[0], out int currentlyUsed) &&
                                                          int.TryParse(split[1], out int maxAvailable))
                                 {
-                                    bucket.SetRESTBucketState(maxAvailable, currentlyAvailable);
+                                    bucket.SetRESTBucketState(maxAvailable, maxAvailable - currentlyUsed);
                                 }
                             }
                         }
