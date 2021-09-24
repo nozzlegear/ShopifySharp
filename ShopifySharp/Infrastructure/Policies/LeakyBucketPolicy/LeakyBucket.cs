@@ -24,16 +24,16 @@ namespace ShopifySharp
 
         internal int RestoreRatePerSecond { get; private set; }
 
-        internal int LastCurrentlyAvailable { get; private set; }
+        internal double LastCurrentlyAvailable { get; private set; }
 
         internal DateTime LastUpdatedAt { get; private set; }
 
-        internal int ComputedCurrentlyAvailable => Math.Min(MaximumAvailable,
-                                                          LastCurrentlyAvailable + ((int)(_getTime() - LastUpdatedAt).TotalSeconds * RestoreRatePerSecond));
+        internal double ComputedCurrentlyAvailable => Math.Min(MaximumAvailable,
+                                                              LastCurrentlyAvailable + ((_getTime() - LastUpdatedAt).TotalSeconds * RestoreRatePerSecond));
 
         private Func<DateTime> _getTime;
 
-        private Queue<Request> _pendingRequests = new Queue<Request>();
+        private Queue<Request> _waitingRequests = new Queue<Request>();
 
         private object _lock = new object();
 
@@ -46,31 +46,37 @@ namespace ShopifySharp
 
         internal LeakyBucket(int maximumAvailable, int restoreRatePerSecond, Func<DateTime> getTime)
         {
+            if (maximumAvailable <= 0 || restoreRatePerSecond <= 0)
+                throw new ArgumentOutOfRangeException();
+
             _getTime = getTime;
-            SetState(maximumAvailable, restoreRatePerSecond, maximumAvailable);
+            MaximumAvailable = maximumAvailable;
+            RestoreRatePerSecond = restoreRatePerSecond;
+            LastCurrentlyAvailable = maximumAvailable;
+            LastUpdatedAt = _getTime();
         }
 
-        public void SetState(int maximumAvailable, int restoreRatePerSecond, int currentlyAvailable)
+        public void SetState(int maximumAvailable, int restoreRatePerSecond, double currentlyAvailable)
         {
             if (maximumAvailable <= 0 || currentlyAvailable < 0 || restoreRatePerSecond <= 0 || currentlyAvailable > maximumAvailable)
                 throw new ArgumentOutOfRangeException();
 
             lock (_lock)
             {
-                this.MaximumAvailable = maximumAvailable;
-                this.RestoreRatePerSecond = restoreRatePerSecond;
-                this.LastCurrentlyAvailable = currentlyAvailable;
-                this.LastUpdatedAt = _getTime();
+                MaximumAvailable = maximumAvailable;
+                RestoreRatePerSecond = restoreRatePerSecond;
+                LastCurrentlyAvailable = currentlyAvailable;
+                LastUpdatedAt = _getTime();
             }
-            this.TryGrantNextPendingRequest();
+            TryGrantNextPendingRequest();
         }
 
         private void ConsumeAvailable(Request r)
         {
             lock (_lock)
             {
-                this.LastCurrentlyAvailable = this.ComputedCurrentlyAvailable - r.cost;
-                this.LastUpdatedAt = _getTime();
+                LastCurrentlyAvailable = this.ComputedCurrentlyAvailable - r.cost;
+                LastUpdatedAt = _getTime();
             }
         }
 
@@ -83,15 +89,15 @@ namespace ShopifySharp
 
             lock (_lock)
             {
-                if (ComputedCurrentlyAvailable > requestCost && _pendingRequests.Count == 0)
+                if (ComputedCurrentlyAvailable >= requestCost && _waitingRequests.Count == 0)
                 {
                     ConsumeAvailable(r);
                     return;
                 }
 
-                _pendingRequests.Enqueue(r);
+                _waitingRequests.Enqueue(r);
 
-                if (_pendingRequests.Count == 1)
+                if (_waitingRequests.Count == 1)
                     ScheduleTryGrantNextPendingRequest(r);
             }
             await r.semaphore.WaitAsync(cancellationToken);
@@ -103,26 +109,27 @@ namespace ShopifySharp
             _cancelNextSchedule = new CancellationTokenSource();
             var waitFor = TimeSpan.FromSeconds(Math.Max(0, (r.cost - ComputedCurrentlyAvailable) / (float)RestoreRatePerSecond));
             _ = Task.Delay(waitFor, _cancelNextSchedule.Token)
-                                  .ContinueWith(_ => TryGrantNextPendingRequest(), TaskContinuationOptions.OnlyOnRanToCompletion);
+                                  .ContinueWith(_ => TryGrantNextPendingRequest(),
+                                                     TaskContinuationOptions.OnlyOnRanToCompletion);
         }
 
         private void TryGrantNextPendingRequest()
         {
             lock (_lock)
             {
-                while (_pendingRequests.Count > 0 &&
-                       (_pendingRequests.Peek().cancelToken.IsCancellationRequested || ComputedCurrentlyAvailable >= _pendingRequests.Peek().cost))
+                while (_waitingRequests.Count > 0 &&
+                       (_waitingRequests.Peek().cancelToken.IsCancellationRequested || ComputedCurrentlyAvailable >= _waitingRequests.Peek().cost))
                 {
-                    var r = _pendingRequests.Dequeue();
+                    var r = _waitingRequests.Dequeue();
                     if (!r.cancelToken.IsCancellationRequested)
                     {
                         r.semaphore.Release();
-                        this.ConsumeAvailable(r);
+                        ConsumeAvailable(r);
                     }
                 }
 
-                if (_pendingRequests.Count > 0)
-                    ScheduleTryGrantNextPendingRequest(_pendingRequests.Peek());
+                if (_waitingRequests.Count > 0)
+                    ScheduleTryGrantNextPendingRequest(_waitingRequests.Peek());
             }
         }
     }
