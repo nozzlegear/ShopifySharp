@@ -28,8 +28,8 @@ namespace ShopifySharp
 
         internal DateTime LastUpdatedAt { get; private set; }
 
-        internal int ComputedCurrentlyAvailable => Math.Min(MaximumAvailable,
-                                                          LastCurrentlyAvailable + ((int)(_getTime() - LastUpdatedAt).TotalSeconds * RestoreRatePerSecond));
+        internal int ComputedCurrentlyAvailable => (int)Math.Min(MaximumAvailable,
+                                                          LastCurrentlyAvailable + ((_getTime() - LastUpdatedAt).TotalSeconds * RestoreRatePerSecond));
 
         private Func<DateTime> _getTime;
 
