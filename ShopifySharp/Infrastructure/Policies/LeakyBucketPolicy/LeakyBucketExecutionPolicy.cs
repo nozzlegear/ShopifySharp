@@ -55,9 +55,9 @@ namespace ShopifySharp
                         var throttleStatus = cost["throttleStatus"];
                         int maximumAvailable = (int)throttleStatus["maximumAvailable"];
                         int restoreRate = (int)throttleStatus["restoreRate"];
+                        int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
                         int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
                         int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
-                        int currentlyAvailable = (int)cost["currentlyAvailable"];
                         bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
 
                         //The user might have supplied no cost or an invalid cost
