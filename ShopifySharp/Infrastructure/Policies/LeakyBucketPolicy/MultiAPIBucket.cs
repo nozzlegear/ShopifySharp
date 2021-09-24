@@ -27,7 +27,7 @@ namespace ShopifySharp
             await GraphQLBucket.WaitForAvailableAsync(queryCost, cancellationToken);
         }
 
-        public void SetRESTBucketState(int maximumAvailable, int currentlyAvailable)
+        public void SetRESTBucketState(int maximumAvailable, double currentlyAvailable)
         {
             //Shopify Plus customers have a bucket that is twice the size (80) so we resize the bucket capacity accordingly
             //It is apparently possible to request the bucket size to be even larger
@@ -42,7 +42,7 @@ namespace ShopifySharp
             RESTBucket.SetState(maximumAvailable, restoreRatePerSecond, currentlyAvailable);
         }
 
-        public void SetGraphQLBucketState(int maximumAvailable, int restoreRatePerSecond, int currentlyAvailable, int refund)
+        public void SetGraphQLBucketState(int maximumAvailable, int restoreRatePerSecond, double currentlyAvailable, int refund)
         {
             currentlyAvailable = Math.Max(0, Math.Min(currentlyAvailable, GraphQLBucket.ComputedCurrentlyAvailable + refund));
             GraphQLBucket.SetState(maximumAvailable, restoreRatePerSecond, currentlyAvailable);

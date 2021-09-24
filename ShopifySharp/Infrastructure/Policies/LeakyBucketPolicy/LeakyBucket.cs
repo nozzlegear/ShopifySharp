@@ -24,11 +24,11 @@ namespace ShopifySharp
 
         internal int RestoreRatePerSecond { get; private set; }
 
-        internal int LastCurrentlyAvailable { get; private set; }
+        internal double LastCurrentlyAvailable { get; private set; }
 
         internal DateTime LastUpdatedAt { get; private set; }
 
-        internal int ComputedCurrentlyAvailable => (int)Math.Min(MaximumAvailable,
+        internal double ComputedCurrentlyAvailable => Math.Min(MaximumAvailable,
                                                           LastCurrentlyAvailable + ((_getTime() - LastUpdatedAt).TotalSeconds * RestoreRatePerSecond));
 
         private Func<DateTime> _getTime;
@@ -56,7 +56,7 @@ namespace ShopifySharp
             LastUpdatedAt = _getTime();
         }
 
-        public void SetState(int maximumAvailable, int restoreRatePerSecond, int currentlyAvailable)
+        public void SetState(int maximumAvailable, int restoreRatePerSecond, double currentlyAvailable)
         {
             if (maximumAvailable <= 0 || currentlyAvailable < 0 || restoreRatePerSecond <= 0 || currentlyAvailable > maximumAvailable)
                 throw new ArgumentOutOfRangeException();
