@@ -41,7 +41,7 @@ namespace ShopifySharp
 
                 if (isGraphQL)
                 {
-                    if (accessToken != null)
+                    if (bucket != null)
                         await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost, cancellationToken);
 
                     var res = await executeRequestAsync(request);
@@ -68,7 +68,7 @@ namespace ShopifySharp
                 {
                     try
                     {
-                        if (accessToken != null)
+                        if (bucket != null)
                             await bucket.WaitForAvailableRESTAsync(cancellationToken);
 
                         var res = await executeRequestAsync(request);

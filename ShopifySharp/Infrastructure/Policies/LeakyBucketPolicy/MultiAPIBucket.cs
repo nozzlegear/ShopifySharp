@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopifySharp
@@ -34,6 +35,11 @@ namespace ShopifySharp
             //https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/what-is-the-default-api-call-limit-on-shopify-stores-407292
             //Note that when the capacity doubles, the leak rate also doubles. So, not only can request bursts be larger, it is also possible to sustain a faster rate over the long term.
             int restoreRatePerSecond = maximumAvailable / DEFAULT_REST_MAX_AVAILABLE * DEFAULT_REST_RESTORE_RATE;
+
+            //Shopify might not have yet 'seen' requests in flight that were issued during the current request
+            //i.e. multiple requests can receive their response out of order, causing the latest response bucket information to be incorrect (it is stale)
+            currentlyAvailable = Math.Min(RESTBucket.ComputedCurrentlyAvailable, currentlyAvailable);
+
             RESTBucket.SetState(maximumAvailable, restoreRatePerSecond, currentlyAvailable);
         }
 
