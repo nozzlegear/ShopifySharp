@@ -32,7 +32,7 @@ namespace ShopifySharp
 
 
         /// <summary>
-        /// Accepts a fulfillment request sent to a fulfillment service for a fulfillment order.
+        /// Rejects a fulfillment request sent to a fulfillment service for a fulfillment order.
         /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/assignedfulfillmentorder#index-2021-07 ">API Reference</see>
         /// </summary>
         /// <param name="fulfillmentOrderId"></param>
