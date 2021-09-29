@@ -1,6 +1,4 @@
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 
 namespace ShopifySharp
 {
@@ -83,6 +81,10 @@ namespace ShopifySharp
         [JsonProperty("service_name")]
         public string ServiceName { get; set; }
 
-
+        /// <summary>
+        /// Whether the fulfillment service wants to register for APIs related to fulfillment orders.
+        /// </summary>
+        [JsonProperty("fulfillment_orders_opt_in")]
+        public bool? FulfillmentOrdersOptIn { get; set; }
     }
 }

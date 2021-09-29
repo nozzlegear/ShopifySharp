@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace ShopifySharp.Entities
+namespace ShopifySharp
 {
     public class MerchantRequestOptions
     {

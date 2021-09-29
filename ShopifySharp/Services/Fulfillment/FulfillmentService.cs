@@ -69,7 +69,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Fulfillment"/> on the order.
+        /// Creates a new <see cref="Fulfillment"/> on the order.<see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillment#createV2-2021-07">API Reference</see>
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
@@ -78,6 +78,27 @@ namespace ShopifySharp
         public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment fulfillment, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
+            var body = fulfillment.ToDictionary();
+
+            var content = new JsonContent(new
+            {
+                fulfillment = body
+            });
+
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, content, "fulfillment");
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Fulfillment"/> on the order.
+        /// </summary>
+        /// <param name="orderId">The order id to which the fulfillments belong.</param>
+        /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The new <see cref="Fulfillment"/>.</returns>
+        public virtual async Task<Fulfillment> CreateForFulfillmentAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
+        {
+            var req = PrepareRequest($"fulfillments.json");
             var body = fulfillment.ToDictionary();
 
             var content = new JsonContent(new

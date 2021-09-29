@@ -137,6 +137,51 @@ namespace ShopifySharp.Enums
         UnauthenticatedReadContent,
 
         [EnumMember(Value = "read_locations")]
-        ReadLocations
+        ReadLocations,
+
+        [EnumMember(Value = "write_order_edits")]
+        WriteOrderEdits,
+
+        [EnumMember(Value = "read_assigned_fulfillment_orders")]
+        ReadAssignedFulfillmentOrders,
+
+        [EnumMember(Value = "write_assigned_fulfillment_orders")]
+        WriteAssignedFulfillmentOrders,
+
+        [EnumMember(Value = "read_third_party_fulfillment_orders")]
+        ReadThirdPartyFulfillmentOrders,
+
+        [EnumMember(Value = "write_third_party_fulfillment_orders")]
+        WriteThirdPartyFulfillmentOrders,
+        
+        [EnumMember(Value = "read_gift_cards")]
+        ReadGiftCards,
+
+        [EnumMember(Value = "write_gift_cards")]
+        WriteGiftCards,
+
+        [EnumMember(Value = "read_discounts")]
+        ReadDiscounts,
+
+        [EnumMember(Value = "write_discounts")]
+        WriteDiscounts, 
+
+        [EnumMember(Value = "read_shopify_payments_payouts")]
+        ReadShopifyPaymentsPayouts, 
+
+        [EnumMember(Value = "read_shopify_payments_disputes")]
+        ReadShopifyPaymentsDisputes,
+
+        [EnumMember(Value = "read_translations")]
+        ReadTranslations,
+
+        [EnumMember(Value = "write_translations")]
+        WriteTranslations, 
+
+        [EnumMember(Value = "read_locales")]
+        ReadLocales,
+
+        [EnumMember(Value = "write_locales")]
+        WriteLocales
     }
 }

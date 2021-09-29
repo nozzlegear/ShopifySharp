@@ -199,6 +199,7 @@ namespace ShopifySharp.Tests
                 },
                 Email = Guid.NewGuid().ToString() + "@example.com",
                 Note = "Test note about the customer.",
+                Test = true
             }, new OrderCreateOptions()
             {
                 SendFulfillmentReceipt = false,

@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
-    public class MerchantRequest
+    public class OutgoingRequest
     {
         /// <summary>
         /// The message returned by the merchant, if any.
@@ -14,7 +15,10 @@ namespace ShopifySharp
         /// The request options returned by the merchant, if any.
         /// </summary>
         [JsonProperty("request_options")]
-        public MerchantRequestOptions RequestOptions { get; set; }
+        public OutgoingRequestOptions RequestOptions { get; set; }
+
+        [JsonProperty("sent_at")]
+        public DateTimeOffset? SentAt { get; set; }
 
         /// <summary>
         /// The kind of request. Known valid values: "fulfillment_request", "cancellation_request", or "legacy_fulfill_request".

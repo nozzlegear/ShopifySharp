@@ -25,6 +25,7 @@ namespace ShopifySharp.Tests
                 }
             },
             TotalPrice = 5.00m,
+            Test = true
         };
 
         [Fact]

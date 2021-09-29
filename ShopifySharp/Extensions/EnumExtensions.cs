@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
 namespace ShopifySharp
@@ -37,7 +35,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Convert list of Enums to a comma seperated string
+        /// Convert list of Enums to a comma separated string
         /// </summary>
         public static string EnumListToString<T>(IEnumerable<T> enumList)
         {

@@ -2,33 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ShopifySharp.Filters;
 using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "FulfillmentOrder")]
-    public class FulfillmentOrder_Tests : IClassFixture<FulfillmentOrder_Tests_Fixture>
+    [Trait("Category", "AssignedFulfillmentOrder")]
+    public class AssignedFulfillmentOrder_Tests : IClassFixture<AssignedFulfillmentOrder_Tests_Fixture>
     {
-        private FulfillmentOrder_Tests_Fixture Fixture { get; }
+        private AssignedFulfillmentOrder_Tests_Fixture Fixture { get; }
 
-        public FulfillmentOrder_Tests(FulfillmentOrder_Tests_Fixture fixture)
+        public AssignedFulfillmentOrder_Tests(AssignedFulfillmentOrder_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
 
         [Fact]
-        public async Task Lists_FulfillmentOrders()
+        public async Task ListsCancellationRequests_AssignedFulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
-            var result = await Fixture.Service.ListAsync(order.Id.Value);
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter(){AssignmentStatus = "cancellation_requested" });
             
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ListsRequests_AssignedFulfillmentOrders()
+        {
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_requested" });
+
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task ListsAcceptedRequests_AssignedFulfillmentOrders()
+        {
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_accepted" });
+
             Assert.NotNull(result);
         }
     }
 
-    public class FulfillmentOrder_Tests_Fixture : IAsyncLifetime
+    public class AssignedFulfillmentOrder_Tests_Fixture : IAsyncLifetime
     {
-        public FulfillmentOrderService Service { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public AssignedFulfillmentOrderService Service { get; } = new AssignedFulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -52,8 +67,8 @@ namespace ShopifySharp.Tests
             OrderService.SetExecutionPolicy(policy);
 
             // Create an order and fulfillment for count, list, get, etc. tests.
-            var order = await CreateOrder();
-            var fulfillment = await CreateFulfillment(order.Id.Value);
+            //var order = await CreateOrder();
+            //var fulfillment = await CreateFulfillment(order.Id.Value);
         }
 
         public async Task DisposeAsync()
@@ -98,7 +113,6 @@ namespace ShopifySharp.Tests
                         Name = "Test Line Item",
                         Title = "Test Line Item Title",
                         Quantity = 2,
-                        Price = 5
                     },
                     new LineItem()
                     {

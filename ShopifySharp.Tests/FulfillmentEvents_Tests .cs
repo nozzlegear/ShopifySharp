@@ -128,6 +128,7 @@ namespace ShopifySharp.Tests
                 TotalPrice = 5.00m,
                 Email = Guid.NewGuid().ToString() + "@example.com",
                 Note = "Test note about the customer.",
+                Test = true
             }, new OrderCreateOptions()
             {
                 SendReceipt = false,
