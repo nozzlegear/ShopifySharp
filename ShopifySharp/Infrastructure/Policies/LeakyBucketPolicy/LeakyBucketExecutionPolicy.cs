@@ -23,16 +23,32 @@ namespace ShopifySharp
         private static ConcurrentDictionary<string, MultiShopifyAPIBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, MultiShopifyAPIBucket>();
 
         private readonly bool _retryRESTOnlyIfLeakyBucketFull;
+        private readonly Func<RequestContext> _getRequestContext;
 
-        public LeakyBucketExecutionPolicy(bool retryRESTOnlyIfLeakyBucketFull = true)
+        /// <summary>
+        /// Creates a new LeakyBucketExecutionPolicy.
+        /// It is not recommended to create multiple instances for different access tokens because each instance maintain that leaky bucket state
+        /// and is not aware of other instances
+        /// </summary>
+        /// <param name="retryRESTOnlyIfLeakyBucketFull">Controls when the request should be retried when a Shopify returns an HTTP 429 to a REST request.
+        /// If true (default), then the policy only retries if the 429 is due to a empty bucket.
+        /// If false, then the policy also retries for other types of 429. For example, Shopify will return a 429 if one tries to create too many products too quickly on dev stores
+        /// </param>
+        /// <param name="getRequestContext">Indicates the current request context, either Foreground or Background.
+        /// Foreground requests will be priortized to execute before any background requests can run.
+        /// RequestContext.Foregroud can be used for requests where a user is waiting (e.g loading a web page to show results of query).
+        /// RequestContext.Background can be used for background requests triggered by job, where no user is waiting.
+        /// By default, all requests are served in FIFO order</param>
+        public LeakyBucketExecutionPolicy(bool retryRESTOnlyIfLeakyBucketFull = true, Func<RequestContext> getRequestContext = null)
         {
             _retryRESTOnlyIfLeakyBucketFull = retryRESTOnlyIfLeakyBucketFull;
+            _getRequestContext = getRequestContext ?? new Func<RequestContext>(() => RequestContext.Foreground);
         }
 
         public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null)
         {
             var accessToken = GetAccessToken(baseRequest);
-            var bucket = accessToken == null ? null : _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new MultiShopifyAPIBucket());
+            var bucket = accessToken == null ? null : _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new MultiShopifyAPIBucket(_getRequestContext));
             bool isGraphQL = baseRequest.RequestUri.AbsolutePath.EndsWith("graphql.json");
 
             while (true)
