@@ -27,6 +27,12 @@ namespace ShopifySharp
         public string Authorization { get; set; }
 
         /// <summary>
+        /// The date and time when the Shopify Payments authorization expires.
+        /// </summary>
+        [JsonProperty("authorization_expires_at")]
+        public DateTimeOffset? AuthorizationExpiresAt { get; set; }
+
+        /// <summary>
         /// The date and time when the transaction was created.
         /// </summary>
         [JsonProperty("created_at")]

@@ -403,5 +403,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("estimated_taxes")]
         public bool? EstimatedTaxes { get; set; }
+
+        /// <summary>
+        /// The terms and conditions under which a payment should be processed.
+        /// </summary>
+        [JsonProperty("payment_terms")]
+        public PaymentTerms PaymentTerms { get; set; }
     }
 }
