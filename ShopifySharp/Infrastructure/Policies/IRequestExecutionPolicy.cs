@@ -16,6 +16,7 @@ namespace ShopifySharp
         /// <param name="baseRequest">The base request that was built by a service to execute.</param>
         /// <param name="executeRequestAsync">A delegate that executes the request you pass to it.</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task<RequestResult<T>> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken);
+        /// <param name="graphqlQueryCost">Optional expected QraphQL query cost (as seen in GraphQL response at extensions.cost.requestedQueryCost</param>
+        Task<RequestResult<T>> Run<T>(CloneableRequestMessage requestMessage, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null);
     }
 }

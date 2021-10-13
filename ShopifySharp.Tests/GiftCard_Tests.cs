@@ -150,7 +150,7 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             // Create an giftCard.
             var giftCard = await Create(GiftCard_Tests.GiftCardValue);

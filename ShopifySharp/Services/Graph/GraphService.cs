@@ -21,36 +21,44 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public GraphService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
+        public GraphService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <summary>
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
+        /// <param name="graphqlQueryCost">
+        /// The requestedQueryCost available at extensions.cost.requestedQueryCost.
+        /// While it is optional, it is recommended to provide it to avoid wasting resources to issue API calls that will be throttled
+        /// </param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        public virtual async Task<JToken> PostAsync(string body, CancellationToken cancellationToken = default)
+        public virtual async Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, "application/graphql");
 
-            return await SendAsync(req, content, cancellationToken);
+            return await SendAsync(req, content, graphqlQueryCost, cancellationToken);
         }
 
         /// <summary>
         /// Executes a Graph API Call.
         /// </summary>
         /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
+        /// <param name="graphqlQueryCost">
+        /// The requestedQueryCost available at extensions.cost.requestedQueryCost.
+        /// While it is optional, it is recommended to provide it to avoid wasting resources to issue API calls that will be throttled
+        /// </param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        public virtual async Task<JToken> PostAsync(JToken body, CancellationToken cancellationToken = default)
+        public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
 
             var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
-            return await SendAsync(req, content);
+            return await SendAsync(req, content, graphqlQueryCost, cancellationToken);
         }
 
         /// <summary>
@@ -59,9 +67,9 @@ namespace ShopifySharp
         /// <param name="req">The RequestUri.</param>
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        private async Task<JToken> SendAsync(RequestUri req, HttpContent content, CancellationToken cancellationToken = default)
+        private async Task<JToken> SendAsync(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content, graphqlQueryCost: graphqlQueryCost);
 
             CheckForErrors(response);
 

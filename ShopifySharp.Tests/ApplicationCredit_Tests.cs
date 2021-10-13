@@ -11,7 +11,7 @@ namespace ShopifySharp.Tests
 
         public ApplicationCredit_Tests()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact(Skip = "Application Credits cannot be tested because they're unusable in a private application.")]

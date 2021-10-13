@@ -104,7 +104,7 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new SmartRetryExecutionPolicy());
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             // Create one blog for methods like count, get, list, etc.
             await Create();
