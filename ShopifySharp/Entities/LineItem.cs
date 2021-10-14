@@ -186,5 +186,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("origin_location")]
         public LineItemOriginLocation OriginLocation { get; set; }
+
+        /// <summary>
+        /// A unique identifier for a quantity of items within a single fulfillment. An order can have multiple fulfillment line items.
+        /// </summary>
+        [JsonProperty("fulfillment_line_item_id")]
+        public long? FulfillmentLineItemId { get; set; }
     }
 }
