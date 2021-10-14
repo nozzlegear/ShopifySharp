@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests
             try
             {
                 //trip the 5 orders per minute limit on dev stores
-                foreach (var i in Enumerable.Range(0, 10))
+                foreach (var i in Enumerable.Range(0, 6))
                 {
                     await OrderService.CreateAsync(this.Order);
                 }
@@ -130,6 +130,30 @@ namespace ShopifySharp.Tests
             }
 
             Assert.False(caught);
+        }
+
+
+        [Fact]
+        public async Task ForegroundRequestsMustRunBeforeBackgroundRequests()
+        {
+            var context = RequestContext.Background;
+            DateTime? backgroundCompletedAt = null;
+            DateTime? foregroundCompletedAt = null;
+
+
+            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(getRequestContext: () => context));
+
+            //kick off background requests, which will trigger a throttle
+            var bgTask = Task.WhenAll(Enumerable.Range(0, 50).Select(async _ => await OrderService.ListAsync()))
+                             .ContinueWith(_ => backgroundCompletedAt = DateTime.UtcNow);
+
+            context = RequestContext.Foreground;
+            var fgTask = Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await OrderService.ListAsync(new Filters.OrderListFilter { Status = "any" })))
+                             .ContinueWith(_ => foregroundCompletedAt = DateTime.UtcNow);
+
+            await Task.WhenAll(bgTask, fgTask);
+
+            Assert.True(foregroundCompletedAt < backgroundCompletedAt);
         }
     }
 }
