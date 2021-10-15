@@ -31,25 +31,26 @@ namespace ShopifySharp
         internal double ComputedCurrentlyAvailable => Math.Min(MaximumAvailable,
                                                               LastCurrentlyAvailable + ((_getTime() - LastUpdatedAt).TotalSeconds * RestoreRatePerSecond));
 
-        private Func<DateTime> _getTime;
+        private readonly Func<DateTime> _getTime;
 
-        private Queue<Request> _waitingRequests = new Queue<Request>();
+        private readonly ContextAwareQueue<Request> _waitingRequests;
 
         private object _lock = new object();
 
         private CancellationTokenSource _cancelNextSchedule;
 
-        public LeakyBucket(int maximumAvailable, int restoreRatePerSecond)
-            : this(maximumAvailable, restoreRatePerSecond, () => DateTime.UtcNow)
+        public LeakyBucket(int maximumAvailable, int restoreRatePerSecond, Func<RequestContext> getRequestContext)
+            : this(maximumAvailable, restoreRatePerSecond, () => DateTime.UtcNow, getRequestContext)
         {
         }
 
-        internal LeakyBucket(int maximumAvailable, int restoreRatePerSecond, Func<DateTime> getTime)
+        internal LeakyBucket(int maximumAvailable, int restoreRatePerSecond, Func<DateTime> getTime, Func<RequestContext> getRequestContext = null)
         {
             if (maximumAvailable <= 0 || restoreRatePerSecond <= 0)
                 throw new ArgumentOutOfRangeException();
 
             _getTime = getTime;
+            _waitingRequests = new ContextAwareQueue<Request>(getRequestContext ?? (new Func<RequestContext>(() => RequestContext.Foreground)));
             MaximumAvailable = maximumAvailable;
             RestoreRatePerSecond = restoreRatePerSecond;
             LastCurrentlyAvailable = maximumAvailable;

@@ -469,6 +469,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("current_total_tax_set")]
         public PriceSet CurrentTotalTaxSet { get; set; }
-
+        
+ 		/// <summary>
+        /// The terms and conditions under which a payment should be processed.
+        /// </summary>
+        [JsonProperty("payment_terms")]
+        public PaymentTerms PaymentTerms { get; set; }
     }
 }
