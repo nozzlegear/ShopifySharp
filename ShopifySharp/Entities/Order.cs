@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// A unique value when referencing the <see cref="ShopifySharp.Checkout"/> that's associated with the order. 
         /// </summary>
         [JsonProperty("checkout_token")]
-        public object CheckoutToken { get; set; }
+        public string CheckoutToken { get; set; }
 
         /// <summary>
         /// A <see cref="ShopifySharp.ClientDetails"/> object containing information about the client.
@@ -74,7 +74,7 @@ namespace ShopifySharp
         /// Whether inventory has been reserved for the order.
         /// </summary>
         [JsonProperty("confirmed")]
-        public bool Confirmed { get; set; }
+        public bool? Confirmed { get; set; }
         
         /// <summary>
         /// The date and time when the order was created in Shopify.

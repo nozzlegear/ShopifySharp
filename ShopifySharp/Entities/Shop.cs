@@ -103,31 +103,31 @@ namespace ShopifySharp
         /// Whether the shop is eligible to receive a free credit card reader from Shopify.
         /// </summary>
         [JsonProperty("eligible_for_card_reader_giveaway")]
-        public bool EligibleForCardReaderGiveaway { get; set; }
+        public bool? EligibleForCardReaderGiveaway { get; set; }
         
         /// <summary>
         /// Whether the shop is eligible to use Shopify Payments.
         /// </summary>
         [JsonProperty("eligible_for_payments")]
-        public bool EligibleForPayments { get; set; }
+        public bool? EligibleForPayments { get; set; }
 
         /// <summary>
         /// Whether the shop is capable of accepting payments directly through the Checkout API.
         /// </summary>
         [JsonProperty("checkout_api_supported")]
-        public bool CheckoutApiSupported { get; set; }
+        public bool? CheckoutApiSupported { get; set; }
 
         /// <summary>
         /// Whether any active discounts exist for the shop.
         /// </summary>
         [JsonProperty("has_discounts")]
-        public bool HasDiscounts { get; set; }
+        public bool? HasDiscounts { get; set; }
         
         /// <summary>
         /// Whether any active gift cards exist for the shop.
         /// </summary>
         [JsonProperty("has_gift_cards")]
-        public bool HasGiftCards { get; set; }
+        public bool? HasGiftCards { get; set; }
         
         /// <summary>
         /// Geographic coordinate specifying the north/south location of a shop.
@@ -177,13 +177,13 @@ namespace ShopifySharp
         /// Whether the pre-launch page is enabled on the online storefront.
         /// </summary>
         [JsonProperty("pre_launch_enabled")]
-        public bool PreLaunchEnabled { get; set; }
+        public bool? PreLaunchEnabled { get; set; }
         
         /// <summary>
         /// Whether the shop requires an extra Shopify Payments agreement.
         /// </summary>
         [JsonProperty("requires_extra_payments_agreement")]
-        public bool RequiresExtraPaymentsAgreement { get; set; }
+        public bool? RequiresExtraPaymentsAgreement { get; set; }
 
         /// <summary>
         /// The shop's 'myshopify.com' domain.
