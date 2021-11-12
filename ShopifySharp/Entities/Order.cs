@@ -53,6 +53,18 @@ namespace ShopifySharp
         public string CartToken { get; set; }
 
         /// <summary>
+        /// A unique value when referencing the checkout that's associated with the order.
+        /// </summary>
+        [JsonProperty("checkout_token")]
+        public string CheckoutToken { get; set; }
+
+        /// <summary>
+        /// ID of the checkout that's associated with the order.
+        /// </summary>
+        [JsonProperty("checkout_id")]
+        public long? CheckoutId { get; set; }
+
+        /// <summary>
         /// A <see cref="ShopifySharp.ClientDetails"/> object containing information about the client.
         /// </summary>
         [JsonProperty("client_details")]
