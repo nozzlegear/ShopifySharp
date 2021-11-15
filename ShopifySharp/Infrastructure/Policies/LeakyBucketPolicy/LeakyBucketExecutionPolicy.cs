@@ -68,23 +68,26 @@ namespace ShopifySharp
                     if (bucket != null)
                     {
                         var cost = json.SelectToken("extensions.cost");
-                        var throttleStatus = cost["throttleStatus"];
-                        int maximumAvailable = (int)throttleStatus["maximumAvailable"];
-                        int restoreRate = (int)throttleStatus["restoreRate"];
-                        int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
-                        int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
-                        int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
-                        bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
+                        if (cost != null)
+                        {
+                            var throttleStatus = cost["throttleStatus"];
+                            int maximumAvailable = (int)throttleStatus["maximumAvailable"];
+                            int restoreRate = (int)throttleStatus["restoreRate"];
+                            int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
+                            int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
+                            int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
+                            bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
 
-                        //The user might have supplied no cost or an invalid cost
-                        //We fix the query cost so the correct value is used if a retry is needed
-                        graphqlQueryCost = (int)cost["requestedQueryCost"];
+                            //The user might have supplied no cost or an invalid cost
+                            //We fix the query cost so the correct value is used if a retry is needed
+                            graphqlQueryCost = (int)cost["requestedQueryCost"];
+                        }
                     }
 
                     if (json.SelectToken("errors")
-                            ?.Children()
-                            .Any(r => r.SelectToken("extensions.code")?.Value<string>() == "THROTTLED") 
-                            == true)
+                        ?.Children()
+                        .Any(r => r.SelectToken("extensions.code")?.Value<string>() == "THROTTLED")
+                        == true)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                         continue;

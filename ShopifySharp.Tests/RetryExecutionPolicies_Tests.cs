@@ -53,9 +53,9 @@ namespace ShopifySharp.Tests
         public async Task NonFullLeakyBucketBreachShouldRetryWhenConstructorBoolIsFalse()
         {
             OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
-            
+
             bool caught = false;
-            
+
             try
             {
                 //trip the 5 orders per minute limit on dev stores
@@ -68,7 +68,7 @@ namespace ShopifySharp.Tests
             {
                 caught = true;
             }
-            
+
             Assert.False(caught);
         }
 
@@ -76,9 +76,9 @@ namespace ShopifySharp.Tests
         public async Task LeakyBucketRESTBreachShouldAttemptRetry()
         {
             OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-            
+
             bool caught = false;
-            
+
             try
             {
                 //trip the 40/seconds bucket limit
@@ -88,7 +88,7 @@ namespace ShopifySharp.Tests
             {
                 caught = true;
             }
-            
+
             Assert.False(caught);
         }
 
@@ -154,6 +154,48 @@ namespace ShopifySharp.Tests
             await Task.WhenAll(bgTask, fgTask);
 
             Assert.True(foregroundCompletedAt < backgroundCompletedAt);
+        }
+
+        [Fact]
+        public async Task UnparsableQueryShouldThrowError()
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            {
+                GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+                string query = "!#@$%$#%";
+                await GraphService.PostAsync(query, 1);
+            });
+        }
+
+        [Fact]
+        public async Task UnknownFieldShouldThrowError()
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            {
+                GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+                string query = @"{
+  products(first: 20) {
+    edges {
+      node {
+        title
+        variants(first:40)
+        {
+          edges
+          {
+            node
+            {
+              title
+              unknown_field
+            }
+          }
+        }
+      }
+    }
+  }
+}
+";
+                await GraphService.PostAsync(query, 1);
+            });
         }
     }
 }
