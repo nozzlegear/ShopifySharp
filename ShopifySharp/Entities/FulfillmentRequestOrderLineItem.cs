@@ -5,7 +5,7 @@ namespace ShopifySharp
     /// <summary>
     /// An object representing a Shopify fulfillment request order line items.
     /// </summary>
-    public class FulfillmentRequestOrderLineItems
+    public class FulfillmentRequestOrderLineItem
     {
         /// <summary>
         /// The ID of the fulfillment order line item.
