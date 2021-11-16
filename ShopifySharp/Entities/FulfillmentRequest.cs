@@ -18,6 +18,6 @@ namespace ShopifySharp
         /// The fulfillment order line items to be requested for fulfillment. If left blank, all line items of the fulfillment order are requested for fulfillment.
         /// </summary>
         [JsonProperty("fulfillment_order_line_items")]
-        public IEnumerable<FulfillmentRequestOrderLineItems> FulfillmentRequestOrderLineItems { get; set; }
+        public IEnumerable<FulfillmentRequestOrderLineItem> FulfillmentRequestOrderLineItems { get; set; }
     }
 }

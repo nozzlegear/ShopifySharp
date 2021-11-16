@@ -92,7 +92,6 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a new <see cref="Fulfillment"/> on the order.
         /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>

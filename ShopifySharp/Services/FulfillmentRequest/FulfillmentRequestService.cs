@@ -27,8 +27,7 @@ namespace ShopifySharp
                 fulfillment_service = body
             });
 
-            var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, rootElement: "original_fulfillment_order");
-            //var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "original_fulfillment_order");
+            var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "original_fulfillment_order");
             return response.Result;
         }
 
@@ -43,8 +42,7 @@ namespace ShopifySharp
                 fulfillment_service = body
             });
 
-            var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment_order");
-            //var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "fulfillment_order");
+            var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "fulfillment_order");
             return response.Result;
         }
 
