@@ -36,8 +36,6 @@ namespace ShopifySharp.Tests
                 Assert.NotNull(location.Address1);
                 Assert.True(location.Id.HasValue);
                 Assert.NotNull(location.City);
-                Assert.NotNull(location.Province);
-                Assert.NotNull(location.ProvinceCode);
                 Assert.NotNull(location.Zip);
                 Assert.NotNull(location.Country);
                 Assert.NotNull(location.CountryCode);

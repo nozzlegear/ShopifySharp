@@ -51,6 +51,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("cart_token")]
         public string CartToken { get; set; }
+        
+        /// <summary>
+        /// A unique value when referencing the <see cref="ShopifySharp.Checkout"/> that's associated with the order. 
+        /// </summary>
+        [JsonProperty("checkout_token")]
+        public string CheckoutToken { get; set; }
 
         /// <summary>
         /// A unique value when referencing the checkout that's associated with the order.
@@ -75,7 +81,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("closed_at")]
         public DateTimeOffset? ClosedAt { get; set; }
-
+        
+        /// <summary>
+        /// Whether inventory has been reserved for the order.
+        /// </summary>
+        [JsonProperty("confirmed")]
+        public bool? Confirmed { get; set; }
+        
         /// <summary>
         /// The date and time when the order was created in Shopify.
         /// </summary>
@@ -403,6 +415,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("total_price_set")]
         public PriceSet TotalPriceSet { get; set; }
+        
+        /// <summary>
+        /// The total outstanding amount of the order in the shop currency.
+        /// </summary>
+        [JsonProperty("total_outstanding")]
+        public string TotalOutstanding { get; set; }
 
         /// <summary>
         /// The total tax applied to the order in shop and presentment currencies.
@@ -415,8 +433,56 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("estimated_taxes")]
         public bool? EstimatedTaxes { get; set; }
+        
+        /// <summary>
+        /// The current subtotal price of the order in the shop currency. The value of this field reflects order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_subtotal_price")]
+        public decimal? CurrentSubtotalPrice { get; set; }
 
         /// <summary>
+        /// The current subtotal price of the order in shop and presentment currencies. The amount values associated with this field reflect order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_subtotal_price_set")]
+        public PriceSet CurrentSubtotalPriceSet { get; set; }
+        
+        /// <summary>
+        /// The current total discounts on the order in the shop currency. The value of this field reflects order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_total_discounts")]
+        public decimal? CurrentTotalDiscounts { get; set; }
+
+        /// <summary>
+        /// The current total discounts on the order in shop and presentment currencies. The amount values associated with this field reflect order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_total_discounts_set")]
+        public PriceSet CurrentTotalDiscountsSet { get; set; }
+        
+        /// <summary>
+        /// The current total price of the order in the shop currency. The value of this field reflects order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_total_price")]
+        public decimal? CurrentTotalPrice { get; set; }
+
+        /// <summary>
+        /// The current total price of the order in shop and presentment currencies. The amount values associated with this field reflect order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_total_price_set")]
+        public PriceSet CurrentTotalPriceSet { get; set; }
+        
+        /// <summary>
+        /// The current total taxes charged on the order in the shop currency. The value of this field reflects order edits, returns, or refunds.
+        /// </summary>
+        [JsonProperty("current_total_tax")]
+        public decimal? CurrentTotalTax { get; set; }
+
+        /// <summary>
+        /// The current total taxes charged on the order in shop and presentment currencies. The amount values associated with this field reflect order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_total_tax_set")]
+        public PriceSet CurrentTotalTaxSet { get; set; }
+        
+ 		/// <summary>
         /// The terms and conditions under which a payment should be processed.
         /// </summary>
         [JsonProperty("payment_terms")]

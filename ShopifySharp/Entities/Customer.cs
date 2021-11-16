@@ -14,7 +14,19 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("accepts_marketing")]
         public bool? AcceptsMarketing { get; set; }
-
+        
+        /// <summary>
+        /// The date and time when the customer consented or objected to receiving marketing material by email. Set this value whenever the customer consents or objects to marketing materials.
+        /// </summary>
+        [JsonProperty("accepts_marketing_updated_at")]
+        public DateTimeOffset? AcceptsMarketingUpdatedAt { get; set; }
+        
+        /// <summary>
+        /// The marketing subscription opt-in level (as described by the M3AAWG best practices guideline) that the customer gave when they consented to receive marketing material by email. If the customer does not accept email marketing, then this property will be set to null. Valid values: single_opt_in, confirmed_opt_in, unknown.
+        /// </summary>
+        [JsonProperty("marketing_opt_in_level")]
+        public string MarketingOptInLevel { get; set; }
+        
         /// <summary>
         /// A list of addresses for the customer.
         /// </summary>
