@@ -46,6 +46,17 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<PriceRuleDiscountCode>($"price_rules/{priceRuleId}/discount_codes/{discountId}.json", "discount_code", fields, cancellationToken);
         }
+
+        /// <summary>
+        /// Retrieves the <see cref="PriceRuleDiscountCode"/> with the given code.
+        /// </summary>
+        /// <param name="filter">A filter with the code of the associated price rule.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
+        public virtual async Task<PriceRuleDiscountCode> GetAsync(PriceRuleDiscountCodeFilter filter, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteGetAsync<PriceRuleDiscountCode>($"discount_codes/lookup.json", "discount_code", queryParams: filter, cancellationToken);
+        }
         
         /// <summary>
         /// Retrieves the <see cref="PriceRuleDiscountCode"/> with the given code.
@@ -55,17 +66,13 @@ namespace ShopifySharp
         /// <returns>The <see cref="PriceRuleDiscountCode"/>.</returns>
         public virtual async Task<PriceRuleDiscountCode> GetAsync(string code, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<PriceRuleDiscountCode>($"discount_codes/lookup.json","discount_code",queryParams: new DiscountCodeFilter { Code=code},cancellationToken);
-        }
-        
-        class DiscountCodeFilter : Parameterizable
+            var filter = new PriceRuleDiscountCodeFilter
             {
-                /// <summary>
-                /// Restrict results to the specified Code.
-                /// </summary>
-                [JsonProperty("code")]
-                public string Code { get; set; }
-            }
+                Code = code
+            };
+
+            return await GetAsync(filter, cancellationToken);
+        }
 
         /// <summary>
         /// Creates a new discount code.
