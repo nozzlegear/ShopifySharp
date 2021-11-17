@@ -44,10 +44,7 @@ namespace ShopifySharp
             _ShopUri = BuildShopUri(myShopifyUrl, false);
             _AccessToken = shopAccessToken;
             _Client = _HttpClientFactory.CreateClient();
-
-            // If there's a global execution policy it should be set as this instance's policy.
-            // User can override it with instance-specific execution policy.
-            _ExecutionPolicy = _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
+            _ExecutionPolicy = _GlobalExecutionPolicy;
         }
 
         /// <summary>
@@ -87,15 +84,16 @@ namespace ShopifySharp
         public void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
         {
             // If the user passes null, revert to the global execution policy.
-            _ExecutionPolicy = executionPolicy ?? _GlobalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
+            _ExecutionPolicy = executionPolicy ?? _GlobalExecutionPolicy;
         }
 
         /// <summary>
         /// Sets the global execution policy for all *new* instances. Current instances are unaffected, but you can call .SetExecutionPolicy on them.
+        /// The execution policy will revert back to the <see cref="DefaultRequestExecutionPolicy" /> if you pass null to this method.
         /// </summary>
         public static void SetGlobalExecutionPolicy(IRequestExecutionPolicy globalExecutionPolicy)
         {
-            _GlobalExecutionPolicy = globalExecutionPolicy;
+            _GlobalExecutionPolicy = globalExecutionPolicy ?? new DefaultRequestExecutionPolicy();
         }
 
         /// <summary>
