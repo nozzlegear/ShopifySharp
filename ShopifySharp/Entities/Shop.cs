@@ -16,7 +16,7 @@ namespace ShopifySharp
         public string Address1 { get; set; }
         
         /// <summary>
-        /// The the optional second line of the shop's street address.
+        /// The optional second line of the shop's street address.
         /// </summary>
         [JsonProperty("address2")]
         public string Address2 { get; set; }
