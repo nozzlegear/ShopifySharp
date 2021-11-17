@@ -59,12 +59,6 @@ namespace ShopifySharp
         public string CheckoutToken { get; set; }
 
         /// <summary>
-        /// A unique value when referencing the checkout that's associated with the order.
-        /// </summary>
-        [JsonProperty("checkout_token")]
-        public string CheckoutToken { get; set; }
-
-        /// <summary>
         /// ID of the checkout that's associated with the order.
         /// </summary>
         [JsonProperty("checkout_id")]
