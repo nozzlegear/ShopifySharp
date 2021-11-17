@@ -1,19 +1,10 @@
 # ShopifySharp: A .NET library for Shopify.
 
-### Now with .NET Core support!
-
 [![NuGet](https://img.shields.io/nuget/v/ShopifySharp.svg?maxAge=3600)](https://www.nuget.org/packages/ShopifySharp/)
 [![Build status](https://ci.appveyor.com/api/projects/status/58l0gs6cqak3xtlf/branch/master?svg=true)](https://ci.appveyor.com/project/nozzlegear/shopifysharp/branch/master)
 [![license](https://img.shields.io/github/license/nozzlegear/shopifysharp.svg?maxAge=3600)](https://github.com/nozzlegear/shopifysharp/blob/master/LICENSE)
 
-ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for
-building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify
-using this library.
-
-**IMPORTANT**: If you're using .NET Framework 4.5, calls to the Shopify API may fail with `SocketException` errors and "Response does not indicate success: Status: 0" after May 31st, 2018. This is because Shopify has deprecated TLS 1.0 and TLS 1.1 which are used by .NET Framework. To fix this, you can do one of the following:
-
-1. Update your project to target .NET Framework 4.6 or newer.
-2. Add the following to your global.asax.cs file to explicitly enable the newer protocols: `System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;`
+ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify using this library.
 
 # The Shopify Development Handbook
 
