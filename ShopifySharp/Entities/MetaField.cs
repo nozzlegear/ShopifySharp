@@ -30,9 +30,15 @@ namespace ShopifySharp
         public object Value { get; set; }
 
         /// <summary>
+        /// The metafield's information type. See https://shopify.dev/apps/metafields/definitions/types for a full list of types.
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
         /// States whether the information in the value is stored as a 'string' or 'integer.'
         /// </summary>
         [JsonProperty("value_type")]
+        [Obsolete("ValueType is deprecated and replaced by Type.")]
         public string ValueType { get; set; }
 
         /// <summary>
