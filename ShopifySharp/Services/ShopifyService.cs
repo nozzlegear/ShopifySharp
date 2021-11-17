@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading;
 using ShopifySharp.Lists;
 using ShopifySharp.Filters;
+using Microsoft.Extensions.Http;
 
 namespace ShopifySharp
 {
@@ -17,13 +18,15 @@ namespace ShopifySharp
     {
         public virtual string APIVersion => "2021-10";
 
-        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
-
-        private IRequestExecutionPolicy _ExecutionPolicy;
-
         private static JsonSerializer _Serializer = Serializer.JsonSerializer;
 
-        private static HttpClient _Client { get; } = new HttpClient();
+        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+
+        private static IHttpClientFactory _HttpClientFactory = new DefaultHttpClientFactory();
+
+        private HttpClient _Client;
+
+        private IRequestExecutionPolicy _ExecutionPolicy;
 
         protected Uri _ShopUri { get; set; }
 
@@ -40,6 +43,7 @@ namespace ShopifySharp
         {
             _ShopUri = BuildShopUri(myShopifyUrl, false);
             _AccessToken = shopAccessToken;
+            _Client = _HttpClientFactory.CreateClient();
 
             // If there's a global execution policy it should be set as this instance's policy.
             // User can override it with instance-specific execution policy.
@@ -78,7 +82,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// Sets the execution policy for this instance only. This policy will always be used over the global execution policy.
-        /// The instance will revert back to the global execution policy if you pass null to this method.
+        /// This instance will revert back to the global execution policy if you pass null to this method.
         /// </summary>
         public void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
         {
@@ -92,6 +96,25 @@ namespace ShopifySharp
         public static void SetGlobalExecutionPolicy(IRequestExecutionPolicy globalExecutionPolicy)
         {
             _GlobalExecutionPolicy = globalExecutionPolicy;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="HttpClient" /> for this instance only. This client will always be used over the one from the global <see cref="IHttpClientFactory" />.
+        /// This instance will revert back to the global execution policy if you pass null to this method.
+        /// </summary>
+        public void SetHttpClient(HttpClient client)
+        {
+            // If the user passes null, revert to the client factory's client.
+            _Client = client ?? _HttpClientFactory.CreateClient();
+        }
+
+        /// <summary>
+        /// Sets the global <see cref="IHttpClientFactory" /> for all *new* instances. Current instances are unaffected, but you can call <see cref="SetHttpClient(HttpClient)" /> on them.
+        /// The factory will revert back to the <see cref="DefaultHttpClientFactory" /> if you pass null to this method.
+        /// </summary>
+        public static void SetGlobalHttpClientFactory(IHttpClientFactory factory)
+        {
+            _HttpClientFactory = factory ?? new DefaultHttpClientFactory();
         }
 
         protected RequestUri PrepareRequest(string path)
