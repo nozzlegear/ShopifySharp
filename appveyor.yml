@@ -14,7 +14,7 @@ environment:
   SHOPIFYSHARP_MY_SHOPIFY_URL:
     secure: aWjxVhXImxXX98GcYDmAbGVDxZk9kRaMKGnhm0CLuJ0aFYs0OMNaJOqyT8S4sh9P
   NUGET_API_KEY:
-    secure: 5pYXU7B8TPMjbBhtoK6uEZkv8hzhQgO4zGRV4wjbRmPoNZ4a9acMQpPBQu8+IuCK
+    secure: A3dvCtb/myNn5AbPCDXZ4oxsfALZxO1V1NyasJyznSPlrL1wc2wjQdNDu86Hq84S
 build_script:
 - ps: ./scripts/build.ps1
 test_script:
