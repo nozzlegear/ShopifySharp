@@ -60,7 +60,10 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 5.0.0 - 5.5.0        | 2019-10             |
 | 5.6.0 - 5.7.0        | 2020-07             |
 | 5.8.0 - 5.10.0       | 2020-10             |
-| 5.11.0 and above     | 2021-07             |
+| 5.11.0 - 5.13.1      | 2021-07             |
+| 5.14.0 and above     | 2021-10             |
+
+**Note:** ShopifySharp dropped support for .NET Framework 4.5 in version 5.14.0. [More details in #438.](https://github.com/nozzlegear/ShopifySharp/issues/438)
 
 # Migrating from version 4.x to version 5.0.0
 
