@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace ShopifySharp
         /// The date and time when the customer consented or objected to receiving marketing material by email. Set this value whenever the customer consents or objects to marketing materials.
         /// </summary>
         [JsonProperty("accepts_marketing_updated_at")]
+        [JsonConverter(typeof(InvalidDateToNullConverter))]
         public DateTimeOffset? AcceptsMarketingUpdatedAt { get; set; }
         
         /// <summary>
