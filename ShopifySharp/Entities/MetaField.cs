@@ -32,6 +32,7 @@ namespace ShopifySharp
         /// <summary>
         /// The metafield's information type. See https://shopify.dev/apps/metafields/definitions/types for a full list of types.
         /// </summary>
+        [JsonProperty("type")]
         public string Type { get; set; }
 
         /// <summary>
