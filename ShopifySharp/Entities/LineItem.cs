@@ -128,6 +128,14 @@ namespace ShopifySharp
         public string TipPaymentMethod { get; set; }
 
         /// <summary>
+        /// Whether the tip_payment_gateway field is present or not
+        /// If true, the line is a tip line
+        /// For a tip line, tip_payment_gateway is always specified (though it can be null)
+        /// For a non tip line, tip_payment_gateway is never specified
+        /// </summary>
+        public bool TipPaymentGatewaySpecified { get; set; }
+
+        /// <summary>
         /// The total discount amount applied to this line item. This value is not subtracted in the line item price.
         /// </summary>
         [JsonProperty("total_discount")]
