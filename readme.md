@@ -380,6 +380,8 @@ for building Shopify apps with C# and ASP.NET).
 
 [Just head over here to get your free guide to the Shopify billing API.](https://nozzlegear.com/landing/shopify-billing-101?ref=ShopifySharp)
 
+Note that recurring charges are activated immediately after a user accepts them. At one time it was necessary to activate the charge after it was accepted, but Shopify has changed this behavior and it's no longer required or possible.
+
 ### Create a recurring charge
 
 ```c#
@@ -409,17 +411,6 @@ var charge = await service.GetAsync(chargeId);
 var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
 
 IEnumerable<RecurringCharge> charges = await service.ListAsync();
-```
-
-### Activating a charge
-
-Creating a charge does not actually charge the shop owner or even start their free trial. You need to
-send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
-
-```c#
-var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
-
-await service.ActivateAsync(chargeId);
 ```
 
 ### Deleting a charge
