@@ -143,6 +143,12 @@ namespace ShopifySharp.Enums
         ReadTranslations,
 
         [EnumMember(Value = "write_translations")]
-        WriteTranslations
+        WriteTranslations,
+
+        [EnumMember(Value = "read_discounts")]
+        ReadDiscounts,
+
+        [EnumMember(Value = "write_discounts")]
+        WriteDiscounts
     }
 }
