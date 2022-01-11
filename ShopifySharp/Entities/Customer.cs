@@ -162,6 +162,12 @@ namespace ShopifySharp
         public bool? VerifiedEmail { get; set; }
 
         /// <summary>
+        /// The marketing consent information when the customer consented to receiving marketing material by SMS. The phone property is required to create a customer with SMS consent information and to perform an SMS update on a customer that doesn't have a phone number recorded. 
+        /// </summary>
+        [JsonProperty("sms_marketing_consent")]
+        public CustomerSmsMarketingConsent SmsMarketingConsent { get; set; }
+
+        /// <summary>
         /// Additional metadata about the <see cref="Customer"/>. Note: This is not naturally returned with a <see cref="Customer"/> response, as
         /// Shopify will not return <see cref="Customer"/> metafields unless specified. Instead, you need to query metafields with <see cref="MetaFieldService"/>. 
         /// Uses include: Creating, updating, & deserializing webhook bodies that include them.
