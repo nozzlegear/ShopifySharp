@@ -128,13 +128,15 @@ namespace ShopifySharp
         public string TipPaymentMethod { get; set; }
 
         /// <summary>
-        /// Whether the tip_payment_gateway field is present or not
-        /// If true, the line is a tip line
-        /// For a tip line, tip_payment_gateway is always specified (though it can be null)
-        /// For a non tip line, tip_payment_gateway is never specified
+        /// Whether the tip_payment_gateway field is present or not.  If true, the line is a tip line.
+        /// For a tip line, tip_payment_gateway is always specified (though it can be null).
+        /// For a non tip line, tip_payment_gateway is never specified.
         /// </summary>
-        [JsonProperty("tip_payment_gateway_specified")] 
-        public bool? TipPaymentGatewaySpecified { get; set; }
+        /// <remarks>
+        /// This is a Json.Net feature and not a Shopify API property. Refer to #706 for more details.
+        /// </remarks>
+        [JsonIgnore]
+        public bool TipPaymentGatewaySpecified { get; set; }
 
         /// <summary>
         /// The total discount amount applied to this line item. This value is not subtracted in the line item price.
