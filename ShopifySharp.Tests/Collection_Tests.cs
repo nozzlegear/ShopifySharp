@@ -88,7 +88,7 @@ namespace ShopifySharp.Tests
                 BodyHtml = "<h1>Hello from ShopifySharp</h1>",
                 Image = new CustomCollectionImage()
                 {
-                    Src = "http://placehold.it/250x250"
+                    Src = "https://placekitten.com/250x250"
                 }
             });
 

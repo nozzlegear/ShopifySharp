@@ -1550,7 +1550,7 @@ var collection = await service.CreateAsync(new CustomCollection()
     PublishedAt = DateTime.UtcNow,
     Image = new CustomCollectionImage()
     {
-        Src = "http://placehold.it/250x250"
+        Src = "https://placekitten.com/250x250"
     }
 });
 ```
@@ -1614,7 +1614,7 @@ var image = await service.CreateAsync(productId, new ProductImage()
             Namespace = "tags"
         }
     },
-    Src = "http://placehold.it/200/300"
+    Src = "https://placekitten.com/200/300"
 });
 ```
 
