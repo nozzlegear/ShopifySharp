@@ -133,6 +133,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("parent_id")]
         public long? ParentId { get; set; }
+        
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        [JsonProperty("processed_at")]
+        public DateTimeOffset? ProcessedAt { get; set; }
 
         /// <summary>
         /// The maximum amount that can be refunded
