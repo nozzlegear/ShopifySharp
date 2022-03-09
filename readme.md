@@ -612,6 +612,13 @@ var service =  new CustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<Customer> customers = await Service.ListAsync();
 ```
 
+### Listing orders for a customer
+
+```c#
+var service =  new CustomerService(myShopifyUrl, shopAccessToken);
+IEnumerable<Order> orders = await service.ListOrdersForCustomerAsync(customerId);
+```
+
 ### Searching customers
 
 ```c#
@@ -701,13 +708,6 @@ int orderCount = await service.CountAsync();
 ```c#
 var service = new OrderService(myShopifyUrl, shopAccessToken);
 IEnumerable<Order> orders = await service.ListAsync();
-```
-
-### List orders for a certain customer
-
-```c#
-var service = new OrderService(myShopifyUrl, shopAccessToken);
-IEnumerable<Order> orders = await service.ListForCustomerAsync(customerId);
 ```
 
 ### Close an order
