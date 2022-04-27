@@ -18,23 +18,6 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        //[Fact]
-        //public async Task Lists_Checkouts()
-        //{
-        //    var list = await Service.ListAsync();
-            
-        //    Assert.NotNull(list);
-        //    Assert.NotNull(list.Items);
-        //}
-
-        //[Fact]
-        //public async Task Counts_Checkouts()
-        //{
-        //    var count = await Service.CountAsync();
-            
-        //    Assert.True(count >= 0);
-        //}
-
         [Fact]
         public async Task Creates_Checkouts()
         {
@@ -57,10 +40,13 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        [Fact]
         public async Task Gets_Checkouts()
         {
+            var checkout = await Fixture.Create();
+            checkout = await Fixture.Service.GetAsync(checkout.Token);
 
+            Assert.NotNull(checkout);
         }
 
         [Fact]

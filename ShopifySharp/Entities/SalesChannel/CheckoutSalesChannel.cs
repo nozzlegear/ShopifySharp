@@ -144,7 +144,7 @@ namespace ShopifySharp.Entities.SalesChannel
         public Uri WebUrl { get; set; }
 
         [JsonProperty("line_items")]
-        public CheckoutSalesChannelLineItem[] LineItems { get; set; }
+        public IEnumerable<CheckoutSalesChannelLineItem> LineItems { get; set; }
 
         [JsonProperty("gift_cards")]
         public object[] GiftCards { get; set; }

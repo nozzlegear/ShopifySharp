@@ -19,6 +19,17 @@ namespace ShopifySharp
         { }
 
         /// <summary>
+        /// Gets an existing, processing or completed checkout.
+        /// </summary>
+        public virtual async Task<CheckoutSalesChannel> GetAsync(string token, CancellationToken cancellationToken = default)
+        {
+            var req = PrepareRequest($"checkouts/{token}.json");
+
+            var response = await ExecuteRequestAsync<CheckoutSalesChannel>(req, HttpMethod.Get, cancellationToken, rootElement: "checkout");
+            return response.Result;
+        }
+
+        /// <summary>
         /// Creates a new Checkout.
         /// </summary>
         public virtual async Task<CheckoutSalesChannel> CreateAsync(CheckoutSalesChannel checkout,
