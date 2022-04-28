@@ -6,9 +6,15 @@ namespace ShopifySharp
     public class ProductListingVariant
     {
         /// <summary>
+        /// The object's unique id.
+        /// </summary>
+        [JsonProperty("id")]
+        public long Id { get; set; }
+        
+        /// <summary>
         /// Available current product variant
         /// </summary>
-        [JsonProperty("availabel")]
+        [JsonProperty("available")]
         public bool Available { get; set; }
 
         /// <summary>
