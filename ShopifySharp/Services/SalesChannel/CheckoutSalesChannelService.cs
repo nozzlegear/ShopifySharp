@@ -78,5 +78,18 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, cancellationToken, rootElement: "shipping_rates");
             return response.Result;
         }
+
+        /// <summary>
+        /// Creates a payment on a checkout using the session ID returned by the card vault
+        /// </summary>
+        public virtual async Task<PaymentSalesChannel> CreatePaymentAsync(string token, CreatePayment createPayment,
+            CancellationToken cancellationToken = default)
+        {
+            var req = PrepareRequest($"checkouts/{token}/payments.json");
+
+            var response = await ExecuteRequestAsync<PaymentSalesChannel>(req, HttpMethod.Post, cancellationToken,
+                new JsonContent(new {payment = createPayment}), "payment");
+            return response.Result;
+        }
     }
 }
