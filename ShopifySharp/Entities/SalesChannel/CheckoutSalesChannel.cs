@@ -66,10 +66,10 @@ namespace ShopifySharp.Entities.SalesChannel
         public Uri PaymentUrl { get; set; }
 
         [JsonProperty("payments")]
-        public object[] Payments { get; set; }
+        public PaymentSalesChannel[] Payments { get; set; }
 
         [JsonProperty("phone")]
-        public object Phone { get; set; }
+        public string Phone { get; set; }
 
         [JsonProperty("shopify_payments_account_id")]
         public object ShopifyPaymentsAccountId { get; set; }
