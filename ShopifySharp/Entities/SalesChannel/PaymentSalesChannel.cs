@@ -26,13 +26,13 @@ namespace ShopifySharp.Entities.SalesChannel
         public Transaction Transaction { get; set; }
 
         [JsonProperty("credit_card")]
-        public CreditCard CreditCard { get; set; }
+        public PaymentCreditCard CreditCard { get; set; }
 
         [JsonProperty("checkout")]
         public CheckoutSalesChannel Checkout { get; set; }
     }
 
-    public class CreditCard
+    public class PaymentCreditCard
     {
         [JsonProperty("first_name")]
         public string FirstName { get; set; }

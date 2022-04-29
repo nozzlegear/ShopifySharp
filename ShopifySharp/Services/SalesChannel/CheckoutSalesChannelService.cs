@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -89,6 +90,25 @@ namespace ShopifySharp
 
             var response = await ExecuteRequestAsync<PaymentSalesChannel>(req, HttpMethod.Post, cancellationToken,
                 new JsonContent(new {payment = createPayment}), "payment");
+            return response.Result;
+        }
+
+        /// <summary>
+        /// Stores a credit card in the card vault. Credit cards cannot be sent to the Checkout API directly.
+        /// They must be sent to the card vault, which in response will return a session ID.
+        /// This session ID can then be used when calling the POST #{token}/payments.json endpoint <see cref="CreatePaymentAsync" />.
+        /// A session ID is valid only for a single call to the endpoint.
+        /// The card vault has a static URL and is located at https://elb.deposit.shopifycs.com/sessions.
+        /// It is also provided via the payment_url property on the Checkout resource.
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<CardVault> StoreCreditCard(CreditCard creditCard, CancellationToken cancellationToken = default)
+        {
+            var req = new RequestUri(new Uri("https://elb.deposit.shopifycs.com/sessions"));
+
+            var response = await ExecuteRequestAsync<CardVault>(req, HttpMethod.Post, cancellationToken,
+                new JsonContent(new { credit_card = creditCard }));
+
             return response.Result;
         }
     }

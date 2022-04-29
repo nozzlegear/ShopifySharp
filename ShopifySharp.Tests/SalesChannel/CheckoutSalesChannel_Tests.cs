@@ -69,6 +69,24 @@ namespace ShopifySharp.Tests
 
             Assert.NotEmpty(shippingRates);
         }
+
+        
+        [Fact]
+        public async Task Stores_CreditCards()
+        {
+            var card = new CreditCard()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Month = 3,
+                Year = 25,
+                Number = 4242424242424242,
+                VerificationValue = 123
+            };
+            var cardVault = await Fixture.Service.StoreCreditCard(card);
+
+            Assert.NotNull(cardVault);
+        }
     }
 
     public class CheckoutSalesChannel_Fixture : IAsyncLifetime
