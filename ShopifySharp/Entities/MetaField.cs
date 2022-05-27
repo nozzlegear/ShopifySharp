@@ -36,13 +36,6 @@ namespace ShopifySharp
         public string Type { get; set; }
 
         /// <summary>
-        /// States whether the information in the value is stored as a 'string' or 'integer.'
-        /// </summary>
-        [JsonProperty("value_type")]
-        [Obsolete("ValueType is deprecated and replaced by Type.")]
-        public string ValueType { get; set; }
-
-        /// <summary>
         /// Container for a set of metadata. Namespaces help distinguish between metadata you created and metadata created by another individual with a similar namespace (maximum of 20 characters).
         /// </summary>
         [JsonProperty("namespace")]

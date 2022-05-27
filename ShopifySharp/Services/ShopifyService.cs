@@ -16,7 +16,7 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        public virtual string APIVersion => "2021-10";
+        public virtual string APIVersion => "2022-04";
 
         private static JsonSerializer _Serializer = Serializer.JsonSerializer;
 
