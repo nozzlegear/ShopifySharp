@@ -1,0 +1,45 @@
+name: Build Pipeline
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-20.04
+    environment: "Build Environment"
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@v3
+
+    - name: Restore packages
+      run: dotnet restore
+
+    - name: Build and pack
+      run: dotnet pack -c Release --version-suffix "${{ github.run_number }}"
+
+  test:
+    name: "Automated unit tests"
+    runs-on: ubuntu-20.04
+    # Do not run this job until the build job completes
+    needs: build
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Execute unit test script
+      run: scripts/test.ps1
+
+  publish:
+    name: "Publish package to Nuget"
+    runs-on: ubuntu-20.04
+    needs: test
+    environment: "Nuget deployment environment"
+
+  create-release:
+    name: "Create Github release"
+    runs-on: ubuntu-20.04
+    needs: publish
