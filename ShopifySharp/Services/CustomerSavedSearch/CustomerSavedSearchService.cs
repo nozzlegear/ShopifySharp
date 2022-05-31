@@ -12,6 +12,7 @@ namespace ShopifySharp
     /// <summary>
     /// A service for manipulating Shopify saved searches.
     /// </summary>
+    [Obsolete("Customer saved searches were deprecated in version 2022-04. Use the GraphQL customer Segment object instead.")]
     public class CustomerSavedSearchService : ShopifyService
     {
         private const string RootResource = "customer_saved_searches";
