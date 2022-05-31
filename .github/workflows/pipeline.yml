@@ -1,0 +1,52 @@
+name: Build Pipeline
+
+on:
+  push:
+    branches: [ master, setup-github-actions ]
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-20.04
+    environment: "Build Environment"
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@v3
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          "6.x"
+          "3.1.x"
+
+    - name: Build and pack
+      run: dotnet pack -c Release --version-suffix "${{ github.run_number }}" -o "./artifacts"
+
+  test:
+    name: "Unit tests"
+    runs-on: ubuntu-20.04
+    # Do not run this job until the build job completes
+    needs: build
+    environment: "Unit test environment"
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Execute unit test script
+      run: scripts/test.ps1
+
+  publish:
+    name: "Publish and release"
+    runs-on: ubuntu-20.04
+    needs: test
+    environment: "Nuget deployment environment"
+
+    steps:
+    - name: Publish package to Nuget
+      run: echo "would publish to nuget here. need to set up conditions so that only release tags are published." #dotnet nuget push */bin/Release/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json"
+
+    - name: Create Github release
+      run: echo "would create github release here"
