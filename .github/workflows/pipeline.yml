@@ -31,6 +31,12 @@ jobs:
     needs: build
     environment: "Unit test environment"
 
+    env:
+      SHOPIFYSHARP_ACCESS_TOKEN: "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
+      SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
+      SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
+      SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+
     steps:
     - name: Checkout branch
       uses: actions/checkout@master
