@@ -1,14 +1,22 @@
 $config = "Release";
+$framework = "netcoreapp3.1"
 
 write-host "============================= BUILDING TEST PROJECTS ==========================="
 
 # Build the project once, then let all tests skip build.
-dotnet build -c $config --verbosity quiet;
+dotnet build \
+    -c $config \
+    -f "$framework" \
+    --verbosity quiet;
 
 write-host "============================= RUNNING EXPERIMENTAL TESTS ==========================="
 
 # Run the unit tests in the experimental project first 
-dotnet test -c $config --no-build "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
+dotnet test \
+    -c $config \
+    -f "$framework" \
+    --no-build \
+    "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 
 if ($LastExitCode -ne 0) {
     $message = "Experimental project tests failed with exit code $LastExitCode.";
@@ -33,7 +41,12 @@ foreach ($test in $tests) {
     write-host "";
     write-host "Running $categoryName tests.";
 
-    $testOutput = dotnet test -c $config --filter "Category=$categoryName" --no-build "$dir/$dir.csproj";
+    $testOutput = dotnet test \
+        -c $config \
+        -f "$framework" \
+        --filter "Category=$categoryName" \
+        --no-build \
+        "$dir/$dir.csproj";
     $testExitCode = $LastExitCode;
     $totalTestsLine = $testOutput -match "^Total tests:";
     
