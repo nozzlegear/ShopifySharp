@@ -33,7 +33,7 @@ foreach ($test in $tests) {
     write-host "";
     write-host "Running $categoryName tests.";
 
-    $testOutput = dotnet test -c $config --filter "Category=$categoryName" --no-build "$dir/$dir.csproj";
+    $testOutput = dotnet test -c $config --filter "Category=$categoryName"  "$dir/$dir.csproj";
     $testExitCode = $LastExitCode;
     $totalTestsLine = $testOutput -match "^Total tests:";
     
