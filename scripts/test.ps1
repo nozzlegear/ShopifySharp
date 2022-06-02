@@ -4,18 +4,18 @@ $framework = "netcoreapp3.1"
 write-host "============================= BUILDING TEST PROJECTS ==========================="
 
 # Build the project once, then let all tests skip build.
-dotnet build \
-    -c $config \
-    -f "$framework" \
+dotnet build `
+    -c $config `
+    -f "$framework" `
     --verbosity quiet;
 
 write-host "============================= RUNNING EXPERIMENTAL TESTS ==========================="
 
 # Run the unit tests in the experimental project first 
-dotnet test \
-    -c $config \
-    -f "$framework" \
-    --no-build \
+dotnet test `
+    -c $config `
+    -f "$framework" `
+    --no-build `
     "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 
 if ($LastExitCode -ne 0) {
@@ -41,11 +41,11 @@ foreach ($test in $tests) {
     write-host "";
     write-host "Running $categoryName tests.";
 
-    $testOutput = dotnet test \
-        -c $config \
-        -f "$framework" \
-        --filter "Category=$categoryName" \
-        --no-build \
+    $testOutput = dotnet test `
+        -c $config `
+        -f "$framework" `
+        --filter "Category=$categoryName" `
+        --no-build `
         "$dir/$dir.csproj";
     $testExitCode = $LastExitCode;
     $totalTestsLine = $testOutput -match "^Total tests:";
