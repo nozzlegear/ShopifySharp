@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "FalseToNullConverter")]
+    [Trait("Category", "FalseToNullConverter"), Trait("Category", "DotNetFramework")]
     public class FalseToNullConverter_Tests
     {
         public FalseToNullConverter_Tests()

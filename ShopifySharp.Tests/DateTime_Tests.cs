@@ -1,19 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+using System;
+using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Linq;
-    using System.Net;
-    using System.Threading.Tasks;
 
-    using Newtonsoft.Json;
-
-    using Xunit;
-
+    [Trait("Category", "DateTime"), Trait("Category", "DotNetFramework")]
     public class DateTime_Tests : IClassFixture<Order_Tests_Fixture>
     {
         public DateTime_Tests(Order_Tests_Fixture orderTestsFixture)
