@@ -37,6 +37,7 @@ jobs:
 
     - name: Execute unit test script
       run: scripts/test.ps1
+      shell: pwsh
 
   publish:
     name: "Publish and release"
