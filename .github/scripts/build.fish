@@ -32,5 +32,4 @@ for project in $projects
     success "Packed $project for release."
 end
 
-success "Exiting successfully"
 exit 0
