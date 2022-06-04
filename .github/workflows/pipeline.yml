@@ -22,7 +22,8 @@ jobs:
           3.1.x
 
     - name: Build and pack
-      run: dotnet pack -c Release --version-suffix "${{ github.run_number }}" -o "./artifacts"
+      run: .github/scripts/build.fish
+      shell: fish {0}
 
   test:
     name: "Unit tests"
