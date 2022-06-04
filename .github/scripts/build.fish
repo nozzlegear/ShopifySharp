@@ -25,11 +25,9 @@ set outputDir "artifacts"
 set projects "ShopifySharp/ShopifySharp.csproj" "ShopifySharp.Experimental/ShopifySharp.Experimental.fsproj"
 
 for project in $projects
-    dotnet pack -c Release --version-suffix "$revision" -o "$outputDir" "$project"
-    or exit 1
+    dotnet pack -c Release --version-suffix "$revision" -o "$outputDir" "$project"; or exit 1;
     success "Packed $project for prerelease."
 
-    dotnet pack -c Release -o "$outputDir" "$project"
-    or exit 1
+    dotnet pack -c Release -o "$outputDir" "$project"; or exit 1;
     success "Packed $project for release."
 end
