@@ -12,7 +12,10 @@ jobs:
 
     steps:
     - name: Install fish
-      run: sudo apt-get -qq update && sudo apt-get -qq install fish 
+      run: |
+        sudo apt-add-repository ppa:fish-shell/release-3 \
+        && sudo apt-get -qq update \
+        && sudo apt-get -qq install fish 
 
     - name: Checkout branch
       uses: actions/checkout@v3
