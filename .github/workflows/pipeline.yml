@@ -11,6 +11,9 @@ jobs:
     environment: "Build Environment"
 
     steps:
+    - name: Install fish
+      uses: sudo apt-get update && sudo apt-get install fish 
+
     - name: Checkout branch
       uses: actions/checkout@v3
 
