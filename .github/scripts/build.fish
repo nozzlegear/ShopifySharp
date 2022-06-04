@@ -1,5 +1,7 @@
 #! /usr/bin/env fish
 
+echo "Using $(fish --version)"
+
 function success
     set_color green
     echo "$argv"
