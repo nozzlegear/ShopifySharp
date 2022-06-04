@@ -31,3 +31,6 @@ for project in $projects
     dotnet pack -c Release -o "$outputDir" "$project"; or exit 1;
     success "Packed $project for release."
 end
+
+success "Exiting successfully"
+exit 0
