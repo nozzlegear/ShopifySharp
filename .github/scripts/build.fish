@@ -6,12 +6,6 @@ function success
     set_color normal
 end
 
-function warn
-    set_color yellow
-    echo "[warning] $argv"
-    set_color normal
-end
-
 function error
     set_color error
     echo "[error] $argv"
