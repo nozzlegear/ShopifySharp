@@ -18,12 +18,12 @@ function error
     set_color normal
 end
 
-if ! set -q "github_run_number"
-    error "Github run number (\$github_run_number) environment variable not set, cannot create prerelease build."
+if ! set -q "GITHUB_RUN_NUMBER"
+    error "Github run number (\$GITHUB_RUN_NUMBER) environment variable not set, cannot create prerelease build."
     exit 1
 end
 
-set revision "b$github_run_number"
+set revision "b$GITHUB_RUN_NUMBER"
 set outputDir "artifacts"
 # Each project should be separated by a space. In Fish, this creates an array.
 set projects "ShopifySharp/ShopifySharp.csproj" "ShopifySharp.Experimental/ShopifySharp.Experimental.fsproj"

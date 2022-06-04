@@ -27,6 +27,8 @@ jobs:
     - name: Build and pack
       run: .github/scripts/build.fish
       shell: fish {0}
+      env:
+        GITHUB_RUN_NUMBER: "${{ github.run_number }}"
 
   test:
     name: "Unit tests"
