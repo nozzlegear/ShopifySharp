@@ -7,13 +7,8 @@ namespace ShopifySharp
     /// <summary>
     /// An entity representing a Shopify product listing.
     /// </summary>
-    public class ProductListing
+    public class ProductListing: ShopifyObject
     {
-        /// <summary>
-        /// The object's unique id.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; set; }
         /// <summary>
         /// Available current product
         /// </summary>

@@ -1,27 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
-    public class ProductListingVariant
+    public class ProductListingVariant: ShopifyObject
     {
-        /// <summary>
-        /// The object's unique id.
-        /// </summary>
-        [JsonProperty("id")]
-        public long Id { get; set; }
         
         /// <summary>
         /// Available current product variant
         /// </summary>
         [JsonProperty("available")]
-        public bool Available { get; set; }
+        public bool? Available { get; set; }
 
         /// <summary>
         /// Custom properties that a shop owner can use to define product variants.
         /// </summary>
         [JsonProperty("option_values")]
-        public OptionValue[] OptionValues { get; set; }
+        public IEnumerable<OptionValue> OptionValues { get; set; }
 
         /// <summary>
         /// The title of the product variant.

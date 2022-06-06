@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Entities.SalesChannel;
-using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
-using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {

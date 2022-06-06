@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace ShopifySharp.Entities.SalesChannel
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public partial class CheckoutSalesChannel
+    public class CheckoutSalesChannel
     {
         [JsonProperty("completed_at")]
         public DateTimeOffset? CompletedAt { get; set; }
@@ -27,10 +27,10 @@ namespace ShopifySharp.Entities.SalesChannel
         public string CustomerLocale { get; set; }
 
         [JsonProperty("device_id")]
-        public object DeviceId { get; set; }
+        public string DeviceId { get; set; }
 
         [JsonProperty("discount_code")]
-        public object DiscountCode { get; set; }
+        public string DiscountCode { get; set; }
 
         [JsonProperty("email")]
         public string Email { get; set; }
@@ -39,7 +39,7 @@ namespace ShopifySharp.Entities.SalesChannel
         public Uri LegalNoticeUrl { get; set; }
 
         [JsonProperty("location_id")]
-        public object LocationId { get; set; }
+        public string LocationId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -48,16 +48,16 @@ namespace ShopifySharp.Entities.SalesChannel
         public string Note { get; set; }
 
         [JsonProperty("note_attributes")]
-        public NoteAttributes NoteAttributes { get; set; }
+        public Dictionary<string, string> NoteAttributes { get; set; }
 
         [JsonProperty("order_id")]
-        public object OrderId { get; set; }
+        public string OrderId { get; set; }
 
         [JsonProperty("order_status_url")]
-        public object OrderStatusUrl { get; set; }
+        public Uri OrderStatusUrl { get; set; }
 
         [JsonProperty("order")]
-        public object Order { get; set; }
+        public Order Order { get; set; }
 
         [JsonProperty("payment_due")]
         public string PaymentDue { get; set; }
@@ -72,7 +72,7 @@ namespace ShopifySharp.Entities.SalesChannel
         public string Phone { get; set; }
 
         [JsonProperty("shopify_payments_account_id")]
-        public object ShopifyPaymentsAccountId { get; set; }
+        public string ShopifyPaymentsAccountId { get; set; }
 
         [JsonProperty("privacy_policy_url")]
         public Uri PrivacyPolicyUrl { get; set; }
@@ -86,11 +86,15 @@ namespace ShopifySharp.Entities.SalesChannel
         [JsonProperty("reservation_time_left")]
         public long ReservationTimeLeft { get; set; }
 
+        /// <summary>
+        /// The reservation time in seconds for the line item products. Default value: null. This property is not writable.
+        /// </summary>
         [JsonProperty("reservation_time")]
-        public object ReservationTime { get; set; }
+        [Obsolete]
+        public long? ReservationTime { get; set; }
 
         [JsonProperty("source_identifier")]
-        public object SourceIdentifier { get; set; }
+        public string SourceIdentifier { get; set; }
 
         [JsonProperty("source_name")]
         public string SourceName { get; set; }
@@ -138,7 +142,7 @@ namespace ShopifySharp.Entities.SalesChannel
         public DateTimeOffset? UpdatedAt { get; set; }
 
         [JsonProperty("user_id")]
-        public object UserId { get; set; }
+        public string UserId { get; set; }
 
         [JsonProperty("web_url")]
         public Uri WebUrl { get; set; }
@@ -147,13 +151,13 @@ namespace ShopifySharp.Entities.SalesChannel
         public IEnumerable<CheckoutSalesChannelLineItem> LineItems { get; set; }
 
         [JsonProperty("gift_cards")]
-        public object[] GiftCards { get; set; }
+        public IEnumerable<GiftCard> GiftCards { get; set; }
 
         [JsonProperty("tax_lines")]
-        public object[] TaxLines { get; set; }
+        public IEnumerable<TaxLine> TaxLines { get; set; }
 
-        [JsonProperty("tax_manipulations")]
-        public object[] TaxManipulations { get; set; }
+        //[JsonProperty("tax_manipulations")]
+        //public object[] TaxManipulations { get; set; }
 
         [JsonProperty("shipping_line")]
         public CheckoutShippingRate ShippingLine { get; set; }
@@ -165,85 +169,12 @@ namespace ShopifySharp.Entities.SalesChannel
         public Address ShippingAddress { get; set; }
 
         [JsonProperty("credit_card")]
-        public object CreditCard { get; set; }
+        public CreditCard CreditCard { get; set; }
 
         [JsonProperty("billing_address")]
         public Address BillingAddress { get; set; }
 
         [JsonProperty("applied_discount")]
-        public object AppliedDiscount { get; set; }
-    }
-
-    public partial class CheckoutSalesChannelLineItem
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("key")]
-        public string Key { get; set; }
-
-        [JsonProperty("product_id")]
-        public long? ProductId { get; set; }
-
-        [JsonProperty("variant_id")]
-        public long VariantId { get; set; }
-
-        [JsonProperty("sku")]
-        public string Sku { get; set; }
-
-        [JsonProperty("vendor")]
-        public string Vendor { get; set; }
-
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("variant_title")]
-        public string VariantTitle { get; set; }
-
-        [JsonProperty("image_url")]
-        public Uri ImageUrl { get; set; }
-
-        [JsonProperty("taxable")]
-        public bool Taxable { get; set; }
-
-        [JsonProperty("requires_shipping")]
-        public bool RequiresShipping { get; set; }
-
-        [JsonProperty("gift_card")]
-        public bool GiftCard { get; set; }
-
-        [JsonProperty("price")]
-        public string Price { get; set; }
-
-        [JsonProperty("compare_at_price")]
-        public object CompareAtPrice { get; set; }
-
-        [JsonProperty("line_price")]
-        public string LinePrice { get; set; }
-
-        [JsonProperty("properties")]
-        public NoteAttributes Properties { get; set; }
-
-        [JsonProperty("quantity")]
-        public long Quantity { get; set; }
-
-        [JsonProperty("grams")]
-        public long? Grams { get; set; }
-
-        [JsonProperty("fulfillment_service")]
-        public string FulfillmentService { get; set; }
-
-        [JsonProperty("applied_discounts")]
-        public object[] AppliedDiscounts { get; set; }
-
-        [JsonProperty("discount_allocations")]
-        public object[] DiscountAllocations { get; set; }
-
-        [JsonProperty("tax_lines")]
-        public object[] TaxLines { get; set; }
-    }
-
-    public partial class NoteAttributes
-    {
+        public AppliedDiscount AppliedDiscount { get; set; }
     }
 }

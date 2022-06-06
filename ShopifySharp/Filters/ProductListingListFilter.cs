@@ -8,7 +8,7 @@ namespace ShopifySharp.Filters
     /// <summary>
     /// Options for filtering lists of ProductListings. 
     /// </summary>
-    public class ProductLististingListFilter : ListFilter<ProductListing>
+    public class ProductListingListFilter : ListFilter<ProductListing>
     {
         /// <summary>
         /// Filter by collection id.

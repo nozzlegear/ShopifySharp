@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 1000 default 50 of the shop's product listings.
         /// </summary>
-        public virtual Task<ListResult<ProductListing>> ListAsync(ProductLististingListFilter filter = null, CancellationToken cancellationToken = default)
+        public virtual Task<ListResult<ProductListing>> ListAsync(ProductListingListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return ListAsync(filter?.AsListFilter(), cancellationToken);
         }

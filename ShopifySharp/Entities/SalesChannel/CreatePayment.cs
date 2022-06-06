@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Entities.SalesChannel
 {
-    public partial class CreatePayment
+    public class CreatePayment
     {
         [JsonProperty("request_details")]
-        public RequestDetails RequestDetails { get; set; }
+        public SalesChannelPaymentRequestDetails SalesChannelPaymentRequestDetails { get; set; }
 
         [JsonProperty("amount")]
         public string Amount { get; set; }
@@ -18,17 +18,5 @@ namespace ShopifySharp.Entities.SalesChannel
 
         [JsonProperty("unique_token")]
         public string UniqueToken { get; set; }
-    }
-
-    public partial class RequestDetails
-    {
-        [JsonProperty("ip_address")]
-        public string IpAddress { get; set; }
-
-        [JsonProperty("accept_language")]
-        public string AcceptLanguage { get; set; }
-
-        [JsonProperty("user_agent")]
-        public string UserAgent { get; set; }
     }
 }

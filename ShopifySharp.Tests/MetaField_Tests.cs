@@ -260,7 +260,7 @@ namespace ShopifySharp.Tests
                 Namespace = Namespace,
                 Key = Guid.NewGuid().ToString().Substring(0, 25),
                 Value = "5",
-                ValueType = "integer",
+                //ValueType = "integer",
                 Description = Description,
             });
 
@@ -282,7 +282,7 @@ namespace ShopifySharp.Tests
                 Namespace = Namespace,
                 Key = Guid.NewGuid().ToString().Substring(0, 25),
                 Value = "5",
-                ValueType = "integer",
+                //ValueType = "integer",
                 Description = Description,
             }, targetId, resourceType);
 
@@ -304,7 +304,7 @@ namespace ShopifySharp.Tests
                 Namespace = Namespace,
                 Key = Guid.NewGuid().ToString().Substring(0, 25),
                 Value = "5",
-                ValueType = "integer",
+                //ValueType = "integer",
                 Description = Description,
             }, targetId, resourceType, parentTargetId, parentResourceType);
 
