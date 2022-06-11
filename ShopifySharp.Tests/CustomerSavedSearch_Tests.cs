@@ -166,7 +166,7 @@ namespace ShopifySharp.Tests
         {
             var obj = await Service.CreateAsync(new CustomerSavedSearch()
             {
-                Name = "My Test",
+                Name = "My Test Search - " + Guid.NewGuid(),
                 Query = "-notes"
             });
 
