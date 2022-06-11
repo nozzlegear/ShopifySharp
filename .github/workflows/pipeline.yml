@@ -28,8 +28,8 @@ jobs:
           3.1.x
 
     - name: Build and pack
-      run: .github/scripts/build.fish
-      shell: fish {0}
+      run: fish .github/scripts/build.fish
+      shell: bash
       env:
         GITHUB_RUN_NUMBER: "${{ github.run_number }}"
 
@@ -57,8 +57,8 @@ jobs:
       uses: actions/checkout@master
 
     - name: Execute unit test script
-      run: .github/scripts/test.fish
-      shell: fish {0}
+      run: fish .github/scripts/test.fish
+      shell: bash
 
   publish:
     name: "Publish and release"
