@@ -35,7 +35,7 @@ function executeTests -a category -a framework
     if test -z "$category"
         set_color red
         echo "[error] Empty category passed to test function."
-        return 1
+        exit 1
     end
 
     echo ""
@@ -53,13 +53,13 @@ function executeTests -a category -a framework
     )"; or begin
         echo "$testOutput"
         error "$category tests failed!"
-        return 1
+        exit 1
     end
 
     if string match "No test is available" "$testOutput"
         # Bad category name, no test was run
         error "$category test was not run! Category may not exist."
-        return 1
+        exit 1
     end
 
     success "$category tests passed."
@@ -116,16 +116,12 @@ end
 # Run category tests
 for category in $categories
     executeTests "$category" "$netCoreApp"
-
-    if test $status -ne 1
-        exit 1
-    end
 end
 
 # Run .NET Framework tests using .NET Framework 4.7.2
-executeTests "DotNetFramework" "$netFramework"; or exit 1
+executeTests "DotNetFramework" "$netFramework"
 
 # Run Shopify exception tests which attempt to trip the rate limit
-executeTests "ShopifyException" "$netCoreApp"; or exit 1
+executeTests "ShopifyException" "$netCoreApp"
 
 exit 0
