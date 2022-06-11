@@ -115,7 +115,11 @@ end
 
 # Run category tests
 for category in $categories
-    executeTests "$category" "$netCoreApp"; or exit 1
+    executeTests "$category" "$netCoreApp"
+
+    if test $status -ne 1
+        exit 1
+    end
 end
 
 # Run .NET Framework tests using .NET Framework 4.7.2
