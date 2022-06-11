@@ -166,7 +166,8 @@ namespace ShopifySharp.Tests
         {
             var obj = await Service.CreateAsync(new CustomerSavedSearch()
             {
-                Name = "My Test Search - " + Guid.NewGuid(),
+                // Max length for a saved search is 40 chars
+                Name = ("Test " + Guid.NewGuid()).Substring(0, 39),
                 Query = "-notes"
             });
 
