@@ -9,11 +9,11 @@ using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "CustomerSavedSearchavedSearch")]
-    public class CustomerSavedSearchavedSearch_Tests : IClassFixture<Customer_Tests_Fixture>
+    public class CustomerSavedSearch_Tests : IClassFixture<CustomerSavedSearch_Tests_Fixture>
     {
-        private CustomerSavedSearchavedSearch_Tests_Fixture Fixture { get; }
+        private CustomerSavedSearch_Tests_Fixture Fixture { get; }
 
-        public CustomerSavedSearchavedSearch_Tests(CustomerSavedSearchavedSearch_Tests_Fixture fixture)
+        public CustomerSavedSearch_Tests(CustomerSavedSearch_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
@@ -127,7 +127,7 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class CustomerSavedSearchavedSearch_Tests_Fixture : IAsyncLifetime
+    public class CustomerSavedSearch_Tests_Fixture : IAsyncLifetime
     {
         public CustomerSavedSearchService Service { get; } = new CustomerSavedSearchService(Utils.MyShopifyUrl, Utils.AccessToken);
 
