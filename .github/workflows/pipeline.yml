@@ -51,8 +51,8 @@ jobs:
       uses: actions/checkout@master
 
     - name: Execute unit test script
-      run: scripts/test.ps1
-      shell: pwsh
+      run: .github/scripts/test.fish
+      shell: fish {0}
 
   publish:
     name: "Publish and release"
