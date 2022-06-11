@@ -45,7 +45,7 @@ function executeTests -a category -a framework
         -c "$config" \
         -f "$framework" \
         --verbosity "$verbosity" \
-        --logger "trx;LogFileName=<$category.trx>" \
+        --logger "trx;LogFileName=$category.trx" \
         --results-directory "TestResults" \
         --filter "Category=$category" \
         --no-build \
@@ -72,7 +72,7 @@ dotnet test \
     -c "$config" \
     -f "$netCoreApp" \
     --verbosity "$verbosity" \
-    --logger "trx" \
+    --logger "trx;LogFileName=ShopifySharp.Experimental.trx" \
     "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 or exit 1
 
