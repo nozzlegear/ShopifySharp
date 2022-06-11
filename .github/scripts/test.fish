@@ -115,14 +115,13 @@ end
 
 # Run category tests
 for category in $categories
-    executeTests "$category" "$netCoreApp"
-    or exit 1
+    executeTests "$category" "$netCoreApp"; or exit 1
 end
 
 # Run .NET Framework tests using .NET Framework 4.7.2
-executeTests "DotNetFramework" "$netFramework"
+executeTests "DotNetFramework" "$netFramework"; or exit 1
 
 # Run Shopify exception tests which attempt to trip the rate limit
-executeTests "ShopifyException" "$netCoreApp"
+executeTests "ShopifyException" "$netCoreApp"; or exit 1
 
 exit 0
