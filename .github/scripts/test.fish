@@ -86,8 +86,6 @@ echo "Building test project."
 # Build the test project once, then let all individual test runs skip build.
 dotnet build \
     -c "$config" \
-    -f "$netCoreApp" \
-    -f "$netFramework" \
     --verbosity "$verbosity" \
     "$testProjectFile"
 or exit 1
