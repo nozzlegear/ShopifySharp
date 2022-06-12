@@ -58,7 +58,7 @@ namespace ShopifySharp.Tests
             var customerSavedSearch = await Fixture.Create();
 
             Assert.NotNull(customerSavedSearch.Name);
-            Assert.StartsWith(Fixture.Name, customerSavedSearch.Name);
+            Assert.StartsWith(Fixture.NamePrefix, customerSavedSearch.Name);
             Assert.Equal(Fixture.Query, customerSavedSearch.Query);
         }
 
