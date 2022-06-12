@@ -38,20 +38,8 @@ namespace ShopifySharp.Tests
         public async Task Deletes_CustomerSavedSearch()
         {
             var created = await Fixture.Create();
-            bool threw = false;
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
-            }
-            catch (ShopifyException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_CustomerSavedSearch)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
+            await Fixture.Service.DeleteAsync(created.Id.Value);
         }
 
         [Fact]
@@ -60,7 +48,7 @@ namespace ShopifySharp.Tests
             var customerSavedSearch = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
 
             Assert.NotNull(customerSavedSearch);
-            Assert.Equal(Fixture.Name, customerSavedSearch.Name);
+            Assert.StartsWith(Fixture.NamePrefix, customerSavedSearch.Name);
             Assert.Equal(Fixture.Query, customerSavedSearch.Query);
         }
 
@@ -70,7 +58,7 @@ namespace ShopifySharp.Tests
             var customerSavedSearch = await Fixture.Create();
 
             Assert.NotNull(customerSavedSearch.Name);
-            Assert.Equal(Fixture.Name, customerSavedSearch.Name);
+            Assert.StartsWith(Fixture.Name, customerSavedSearch.Name);
             Assert.Equal(Fixture.Query, customerSavedSearch.Query);
         }
 
@@ -104,8 +92,6 @@ namespace ShopifySharp.Tests
 
             Assert.Equal(created.Id, updated.Id);
             Assert.Equal(newQuery, updated.Query);
-
-            // In previous versions of ShopifySharp, the updated JSON would have sent 'email=null' or 'note=null', clearing out the email address.
             Assert.Equal(created.Name, updated.Name);
         }
 
@@ -114,7 +100,6 @@ namespace ShopifySharp.Tests
         {
             var customerFixture = new Customer_Tests_Fixture();
             var expectedCustomer = customerFixture.Create();
-
             var savedSearch = await Fixture.Create();
 
             var customersInSearch = await Fixture.Service.GetCustomersFromSavedSearchAsync(savedSearch.Id.Value);
@@ -133,7 +118,7 @@ namespace ShopifySharp.Tests
 
         public List<CustomerSavedSearch> Created { get; } = new List<CustomerSavedSearch>();
 
-        public string Name => "My Test";
+        public string NamePrefix => "Test Notes ";
         public string Query => "-notes";
 
         public async Task InitializeAsync()
@@ -167,7 +152,7 @@ namespace ShopifySharp.Tests
             var obj = await Service.CreateAsync(new CustomerSavedSearch()
             {
                 // Max length for a saved search is 40 chars
-                Name = ("Test " + Guid.NewGuid()).Substring(0, 39),
+                Name = (NamePrefix + Guid.NewGuid()).Substring(0, 39),
                 Query = "-notes"
             });
 
