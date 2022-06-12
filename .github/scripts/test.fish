@@ -87,6 +87,7 @@ echo "Building test project."
 dotnet build \
     -c "$config" \
     -f "$netCoreApp" \
+    -f "$netFramework" \
     --verbosity "$verbosity" \
     "$testProjectFile"
 or exit 1
