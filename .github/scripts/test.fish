@@ -14,14 +14,18 @@ function success
 end
 
 function warn
+    # Surface warning messages in Github Actions: 
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-setting-a-warning-message
     set_color yellow
-    echo "[warn] $argv"
+    echo "::warning ::$argv"
     set_color normal
 end
 
 function error
-    set_color "red"
-    echo "[error] $argv"
+    # Surface error messages in Github Actions:
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-setting-an-error-message
+    set_color red
+    echo "::error ::$argv"
     set_color normal
 end
 
