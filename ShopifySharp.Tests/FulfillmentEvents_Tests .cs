@@ -48,6 +48,8 @@ namespace ShopifySharp.Tests
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public long LocationId => 6226758;
+
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
         /// </summary>
@@ -141,16 +143,15 @@ namespace ShopifySharp.Tests
 
         public async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
         {
-            Fulfillment fulfillment = new Fulfillment()
+            var fulfillment = await FulfillmentService.CreateAsync(orderId, new Fulfillment()
             {
                 TrackingCompany = "Jack Black's Pack, Stack and Track",
                 TrackingUrl = "https://example.com/123456789",
                 TrackingNumber = "123456789",
-                LineItems = CreatedOrders.First().LineItems
-            };
-
-            fulfillment.NotifyCustomer = false;
-            fulfillment = await FulfillmentService.CreateAsync(orderId, fulfillment);
+                LineItems = CreatedOrders.First().LineItems,
+                NotifyCustomer = false,
+                LocationId = LocationId
+            });
 
             CreatedFulfillments.Add(fulfillment);
 
