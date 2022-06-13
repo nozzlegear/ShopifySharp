@@ -13,10 +13,25 @@ function success
     set_color normal
 end
 
+function warn
+    set_color yellow
+    echo "[warn] $argv"
+    set_color normal
+end
+
 function error
     set_color "red"
     echo "[error] $argv"
     set_color normal
+end
+
+function isArm64
+    # Note that functions in fish return exit codes -- success is 0, failure is anything > 0
+    if test (uname -m) = "arm64"
+        return 0
+    else
+        return 1
+    end
 end
 
 function printTestResults -a testOutput
@@ -118,7 +133,11 @@ for category in $categories
 end
 
 # Run .NET Framework tests using .NET Framework 4.7.2
-executeTests "DotNetFramework" "$netFramework"
+if ! isArm64
+    executeTests "DotNetFramework" "$netFramework"
+else
+    warn "Machine is running on arm64 which does not support .NET Framework. Unable to run .NET Framework tests."
+end
 
 # Run Shopify exception tests which attempt to trip the rate limit
 executeTests "ShopifyException" "$netCoreApp"
