@@ -134,7 +134,9 @@ end
 
 # Run .NET Framework tests using .NET Framework 4.7.2
 if ! isArm64
-    executeTests "DotNetFramework" "$netFramework"
+    # TODO: these tests need to be run on a Windows machine, they do not run on Linux/macOS
+    warn ".NET Framework tests are temporarily disabled."
+    #executeTests "DotNetFramework" "$netFramework"
 else
     warn "Machine is running on arm64 which does not support .NET Framework. Unable to run .NET Framework tests."
 end
