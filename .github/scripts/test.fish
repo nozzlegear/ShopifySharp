@@ -138,7 +138,7 @@ if command -q parallel
 
     parallel -j "$threads" --halt-on-error 1 executeTests "{}" "$netCoreApp" ::: $categories
 
-    if $status -ne 0
+    if test $status -ne 0
         exit $status
     end
 else
