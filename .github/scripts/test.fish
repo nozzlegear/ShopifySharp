@@ -54,12 +54,8 @@ if command -q parallel
         --halt-on-error 1 \
         fish -c \"$fishCommand\" \
         ::: $categories
+    or exit 1;
 
-    if test $status -ne 0
-        exit 1
-    else
-        echo "parallel status was $status"
-    end
 else
     warn "GNU Parallel is not installed or could not be found. Testing categories one by one."
 
