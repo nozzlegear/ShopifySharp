@@ -56,7 +56,7 @@ if command -q parallel
         ::: $categories
 
     if test $status -ne 0
-        exit $status
+        exit 1
     else
         echo "parallel status was $status"
     end
