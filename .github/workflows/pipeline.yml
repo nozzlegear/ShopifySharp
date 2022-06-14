@@ -15,7 +15,7 @@ jobs:
       run: |
         sudo apt-add-repository ppa:fish-shell/release-3 \
         && sudo apt-get -qq update \
-        && sudo apt-get -qq install fish 
+        && sudo apt-get -qq install fish parallel
 
     - name: Checkout branch
       uses: actions/checkout@v3
@@ -51,7 +51,7 @@ jobs:
       run: |
         sudo apt-add-repository ppa:fish-shell/release-3 \
         && sudo apt-get -qq update \
-        && sudo apt-get -qq install fish 
+        && sudo apt-get -qq install fish parallel
 
     - name: Checkout branch
       uses: actions/checkout@master

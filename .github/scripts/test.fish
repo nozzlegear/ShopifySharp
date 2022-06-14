@@ -132,8 +132,17 @@ for file in (ls ./ShopifySharp.Tests/*.cs)
 end
 
 # Run category tests
-for category in $categories
-    executeTests "$category" "$netCoreApp"
+if command -q parallel
+    # Tests can be run in parallel. Run up to three test categories at once.
+    set threads 3
+
+    parallel -j "$threads" executeTests "{}" "$netCoreApp" ::: $categories
+else
+    warn "GNU Parallel is not installed or could not be found. Testing categories one by one."
+
+    for category in $categories
+        executeTests "$category" "$netCoreApp"
+    end
 end
 
 # Run .NET Framework tests using .NET Framework 4.7.2
