@@ -2,113 +2,24 @@
 
 echo "Using $(fish --version)"
 
-set config "Release"
-set verbosity "quiet"
-set netCoreApp "netcoreapp3.1"
-set netFramework "net472"
+set experimentalTestProject "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 
-function success
-    set_color green
-    echo "$argv"
-    set_color normal
-end
+# Load utility functions
+set utilsFilePath (dirname (status --current-filename))"/utils.fish"
+source "$utilsFilePath"
 
-function warn
-    # Surface warning messages in Github Actions: 
-    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-setting-a-warning-message
-    set_color yellow
-    echo "::warning ::$argv"
-    set_color normal
-end
-
-function error
-    # Surface error messages in Github Actions:
-    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#example-setting-an-error-message
-    set_color red
-    echo "::error ::$argv"
-    set_color normal
-end
-
-function isArm64
-    # Note that functions in fish return exit codes -- success is 0, failure is anything > 0
-    if test (uname -m) = "arm64"
-        return 0
-    else
-        return 1
-    end
-end
-
-function printTestResults -a testOutput
-    # Parse the test output for the line indicating how many tests were run
-    # The `string match` function will automatically write to console if a match is found
-    string match -er "Total tests:|Passed!|Failed!|Skipped!" "$line"
-
-    echo "$testOutput" > testoutput.txt
-end
-
-function executeTests -a category -a framework
-    if test -z "$framework"
-        set framework "$netCoreApp"
-    end
-
-    if test -z "$category"
-        set_color red
-        echo "[error] Empty category passed to test function."
-        exit 1
-    end
-
-    echo ""
-    echo "Running $category tests..."
-
-    set testOutput "$(dotnet test \
-        -c "$config" \
-        -f "$framework" \
-        --verbosity "$verbosity" \
-        --logger "trx;LogFileName=$category.trx" \
-        --results-directory "TestResults" \
-        --filter "Category=$category" \
-        --no-build \
-        "$testProjectFile"
-    )"; or begin
-        echo "$testOutput"
-        error "$category tests failed!"
-        exit 1
-    end
-
-    if string match "No test is available" "$testOutput"
-        # Bad category name, no test was run
-        error "$category test was not run! Category may not exist."
-        exit 1
-    end
-
-    success "$category tests passed."
-end
-
+# Build and run the experimental project's tests all at once
 echo "Testing experimental project."
-
-# Run the experimental project's tests all at once
-dotnet test \
-    -c "$config" \
-    -f "$netCoreApp" \
-    --verbosity "$verbosity" \
-    --logger "trx;LogFileName=ShopifySharp.Experimental.trx" \
-    "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
-or exit 1
-
+buildProject "$experimentalTestProject"; or exit 1;
+executeTests \
+    "ShopifySharp.Experimental" \
+    "$netCoreApp" \
+    "$experimentalTestProject"
 success "Experimental tests succeeded."
 
-set testDir "ShopifySharp.Tests"
-set testProjectFile "$testDir/ShopifySharp.Tests.csproj"
-
-echo "Building test project."
-
 # Build the test project once, then let all individual test runs skip build.
-dotnet build \
-    -c "$config" \
-    --verbosity "$verbosity" \
-    "$testProjectFile"
-or exit 1
-
+echo "Building test project."
+buildProject "$testProjectFile"; or exit 1;
 success "Test project build succeeded."
 
 # Regex for parsing categories from Trait attributes in test files
