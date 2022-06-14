@@ -137,6 +137,10 @@ if command -q parallel
     set threads 3
 
     parallel -j "$threads" --halt-on-error 1 executeTests "{}" "$netCoreApp" ::: $categories
+
+    if $status -ne 0
+        exit $status
+    end
 else
     warn "GNU Parallel is not installed or could not be found. Testing categories one by one."
 
