@@ -86,6 +86,7 @@ function executeTests -a category -a framework -a projectFile
     end
 
     success "$category tests passed."
+    return 0
 end
 
 function buildProject -a projectFile
