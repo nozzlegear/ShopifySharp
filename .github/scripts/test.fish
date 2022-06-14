@@ -136,7 +136,7 @@ if command -q parallel
     # Tests can be run in parallel. Run up to three test categories at once.
     set threads 3
 
-    parallel -j "$threads" executeTests "{}" "$netCoreApp" ::: $categories
+    parallel -j "$threads" --halt-on-error 1 executeTests "{}" "$netCoreApp" ::: $categories
 else
     warn "GNU Parallel is not installed or could not be found. Testing categories one by one."
 
