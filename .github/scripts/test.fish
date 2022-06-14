@@ -46,8 +46,14 @@ end
 if command -q parallel
     # Tests can be run in parallel. Run up to three test categories at once.
     set threads 3
+    # This is a little weird, but parallel needs to run fish and source the utils file so it can call the executeTests function
+    set fishCommand "source $utilsFilePath; and executeTests {} $netCoreApp"
 
-    parallel -j "$threads" --halt-on-error 1 executeTests "{}" "$netCoreApp" ::: $categories
+    parallel \
+        -j "$threads" \
+        --halt-on-error 1 \
+        fish -c \"$fishCommand\" \
+        ::: $categories
 
     if test $status -ne 0
         exit $status
