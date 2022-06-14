@@ -214,7 +214,7 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
             
             // Create an order for count, list, get, etc. orders.
             await Create();

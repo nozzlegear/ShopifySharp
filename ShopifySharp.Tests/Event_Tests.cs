@@ -37,7 +37,7 @@ namespace ShopifySharp.Tests
         {
             // Get an order id
             var orderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+            orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
             
             long orderId = (await orderService.ListAsync(new OrderListFilter()
             {
@@ -75,7 +75,7 @@ namespace ShopifySharp.Tests
 
         public Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             return Task.CompletedTask;
         }

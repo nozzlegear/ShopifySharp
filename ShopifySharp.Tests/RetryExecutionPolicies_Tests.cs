@@ -52,7 +52,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task NonFullLeakyBucketBreachShouldRetryWhenConstructorBoolIsFalse()
         {
-            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             bool caught = false;
 

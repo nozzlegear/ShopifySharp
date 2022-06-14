@@ -121,7 +121,7 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            var policy = new LeakyBucketExecutionPolicy(false);
+            var policy = new LeakyBucketExecutionPolicy();
 
             Service.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
