@@ -57,6 +57,8 @@ if command -q parallel
 
     if test $status -ne 0
         exit $status
+    else
+        echo "parallel status was $status"
     end
 else
     warn "GNU Parallel is not installed or could not be found. Testing categories one by one."
