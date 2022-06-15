@@ -89,7 +89,7 @@ namespace ShopifySharp.Tests
                 BodyHtml = "<h1>Hello from ShopifySharp</h1>",
                 Image = new CustomCollectionImage()
                 {
-                    Src = "https://placekitten.com/250/250"
+                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
                 }
             });
 
