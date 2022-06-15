@@ -118,7 +118,10 @@ namespace ShopifySharp.Tests
             }
 
             // Delete the collection
-            await CustomCollectionService.DeleteAsync(CollectionId);
+            if (CollectionId != 0)
+            {
+                await CustomCollectionService.DeleteAsync(CollectionId);
+            }
         }
 
         /// <summary>
