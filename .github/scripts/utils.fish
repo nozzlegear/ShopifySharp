@@ -58,7 +58,12 @@ function executeTests -a category -a framework -a projectFile
     if test -z "$category"
         set_color red
         echo "[error] Empty category passed to test function."
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     echo ""
@@ -76,13 +81,23 @@ function executeTests -a category -a framework -a projectFile
     )"; or begin
         echo "$testOutput"
         error "$category tests failed!"
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     if string match "No test is available" "$testOutput"
         # Bad category name, no test was run
         error "$category test was not run! Category may not exist."
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     success "$category tests passed."
@@ -92,7 +107,12 @@ end
 function buildProject -a projectFile
     if ! test -e "$projectFile"
         error "Project file at $projectFile does not exist"
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     dotnet build \
@@ -101,24 +121,43 @@ function buildProject -a projectFile
         "$projectFile"
 
     if test $status -ne 0
-        exit 1
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 end
 
 function packProject -a revision -a outputDir -a projectFile
     if test -z "$revision"
         error "revision value is empty."
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     if test -z "$outputDir"
         error "outputDir value is empty."
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     if ! test -e "$projectFile"
         error "Project file at $projectFile does not exist"
-        exit 1
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
     end
 
     dotnet pack \
@@ -126,7 +165,13 @@ function packProject -a revision -a outputDir -a projectFile
         --version-suffix "$revision" \
         -o "$outputDir" \
         "$projectFile";
-    or exit 1;
+    or begin
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
+    end
 
     success "Packed $project for prerelease."
 
@@ -134,7 +179,13 @@ function packProject -a revision -a outputDir -a projectFile
         -c Release \
         -o "$outputDir" \
         "$projectFile"; 
-    or exit 1;
+    or begin
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
+    end
 
     success "Packed $projectFile for release."
 end
