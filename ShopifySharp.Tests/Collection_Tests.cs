@@ -77,8 +77,9 @@ namespace ShopifySharp.Tests
             var policy = new LeakyBucketExecutionPolicy();
 
             Service.SetExecutionPolicy(policy);
-            CustomCollectionService.SetExecutionPolicy(policy);
+            CollectService.SetExecutionPolicy(policy);
             ProductService.SetExecutionPolicy(policy);
+            CustomCollectionService.SetExecutionPolicy(policy);
 
             // Create a custom collection to use with these tests.
             var collection = await CustomCollectionService.CreateAsync(new CustomCollection()
@@ -117,7 +118,7 @@ namespace ShopifySharp.Tests
             }
 
             // Delete the collection
-            await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(CollectionId);
+            await CustomCollectionService.DeleteAsync(CollectionId);
         }
 
         /// <summary>
