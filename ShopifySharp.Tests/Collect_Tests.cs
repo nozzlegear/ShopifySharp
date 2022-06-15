@@ -120,7 +120,7 @@ namespace ShopifySharp.Tests
                 Published = false,
                 Image = new CustomCollectionImage()
                 {
-                    Src = "https://placekitten.com/250/250"
+                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
                 }
             });
 
