@@ -43,7 +43,7 @@ namespace ShopifySharp.Tests
             {
                 Limit = 1
             })).Items.First().Id.Value;
-            string subject = "Order";
+            var subject = "Order";
             var list = await Fixture.Service.ListAsync(orderId, subject);
 
             Assert.NotNull(list);
@@ -69,7 +69,7 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class Event_Tests_Fixture
+    public class Event_Tests_Fixture : IAsyncLifetime
     {
         public EventService Service { get; } = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -77,6 +77,8 @@ namespace ShopifySharp.Tests
         {
             Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
+        public Task DisposeAsync()
+        {
             return Task.CompletedTask;
         }
     }
