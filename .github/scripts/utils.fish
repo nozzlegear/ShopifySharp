@@ -189,3 +189,24 @@ function packProject -a revision -a outputDir -a projectFile
 
     success "Packed $projectFile for release."
 end
+
+function countMissingPolicies -a file -d "Counts the number of missing execution policies compared to the number of new ShopifySharp services instantiated in a file."
+    if ! test -e "$file"
+        error "File at $file does not exist."
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
+    end
+
+    set totalNewServices (count (rg "new \w+Service\(" "$file"))
+    set totalPoliciesSet (count (rg "\.SetExecutionPolicy\(" "$file"))
+
+    if test $totalPoliciesSet -ge $totalNewServices
+        echo 0
+    else
+        echo (math $totalNewServices - $totalPoliciesSet)
+    end
+end
