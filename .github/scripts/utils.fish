@@ -210,3 +210,25 @@ function countMissingPolicies -a file -d "Counts the number of missing execution
         echo (math $totalNewServices - $totalPoliciesSet)
     end
 end
+
+function countMisconfiguredFixtures -a file -d "Counts the number of missing or misconfigured test fixture classes in a file."
+    if ! test -e "$file"
+        error "File at $file does not exist."
+
+        if status --is-interactive
+            return 1
+        else
+            exit 1
+        end
+    end
+
+    set totalAsyncLifetimes (count (rg "class \w+ *: *IAsyncLifetime" "$file"))
+    set totalTestClasses (count (rg "class \w+ *: *IClassFixture<\w+>" "$file"))
+
+    if test $totalAsyncLifetimes -gt $totalTestClasses
+        # There are more IAsyncLifetime fixtures defined in this file than are used, which could indicate a misconfiguration
+        echo (math $totalAsyncLifetimes - $totalTestClasses)
+    else
+        echo (math $totalTestClasses - $totalAsyncLifetimes)
+    end
+end
