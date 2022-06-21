@@ -32,6 +32,15 @@ jobs:
       shell: bash
       env:
         GITHUB_RUN_NUMBER: "${{ github.run_number }}"
+        ARTIFACT_DIR: "./artifacts"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        path: |
+          "./artifacts/*.nupkg"
+          "./artifacts/*.snupkg"
 
   test:
     name: "Unit tests"

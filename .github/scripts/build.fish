@@ -12,7 +12,7 @@ if ! set -q "GITHUB_RUN_NUMBER"
 end
 
 set revision "b$GITHUB_RUN_NUMBER"
-set outputDir "artifacts"
+set outputDir "$ARTIFACT_DIR"
 
 # Pack the projects
 packProject "$revision" "$outputDir" "ShopifySharp/ShopifySharp.csproj"
