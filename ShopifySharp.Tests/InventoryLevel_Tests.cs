@@ -196,6 +196,10 @@ namespace ShopifySharp.Tests
                 {
                     await Service.DeleteAsync(created.InventoryItemId.Value, created.LocationId.Value);
                 }
+                catch (ShopifyException ex) when ((int) ex.HttpStatusCode == 406)
+                {
+                    // The last inventory level for an item cannot be deleted. In this case, Shopify will return a 406.
+                }
                 catch (ShopifyException ex)
                 {
                     Console.WriteLine($"Failed to delete inventory level with item id {created.InventoryItemId} and location id {created.LocationId}. {ex.Message}");
