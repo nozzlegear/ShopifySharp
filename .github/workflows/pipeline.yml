@@ -38,9 +38,10 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: artifacts
+        if-no-files-found: error
         path: |
-          "./artifacts/*.nupkg"
-          "./artifacts/*.snupkg"
+          ./artifacts/*.nupkg
+          ./artifacts/*.snupkg
 
   test:
     name: "Unit tests"
