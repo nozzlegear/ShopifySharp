@@ -71,14 +71,33 @@ jobs:
       shell: bash
 
   publish:
-    name: "Publish and release"
+    name: "Publish prerelease packages"
     runs-on: ubuntu-20.04
     needs: test
-    environment: "Nuget deployment environment"
+    environment: "Prerelease deployment environment"
 
     steps:
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          6.0.x
+          3.1.x
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+        path: ./artifacts
+
+    - name: List files in artifacts folder
+      run: ls ./artifacts
+
     - name: Publish package to Nuget
-      run: echo "would publish to nuget here. need to set up conditions so that only release tags are published." #dotnet nuget push */bin/Release/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json"
+      # Prerelease packages have a `-bxx.[s]nupkg` suffix
+      run: |
+        dotnet nuget push ./artifacts/*-b*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json"
+        dotnet nuget push ./artifacts/*-b*.snupkg -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json"
 
     - name: Create Github release
-      run: echo "would create github release here"
+      run: echo "would create github prerelease here"
