@@ -95,9 +95,7 @@ jobs:
 
     - name: Publish package to Nuget
       # Prerelease packages have a `-bxx.[s]nupkg` suffix
-      run: |
-        dotnet nuget push ./artifacts/*-b*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json"
-        dotnet nuget push ./artifacts/*-b*.snupkg -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json"
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg 
 
     - name: Create Github release
       run: echo "would create github prerelease here"
