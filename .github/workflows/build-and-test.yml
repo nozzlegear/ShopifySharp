@@ -1,4 +1,4 @@
-name: Build Pipeline
+name: Build/Test Pipeline
 
 on:
   push:
