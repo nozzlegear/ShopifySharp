@@ -70,10 +70,30 @@ jobs:
       run: fish .github/scripts/test.fish
       shell: bash
 
+  test-windows:
+    name: "Unit tests (.NET Framework)"
+    runs-on: "windows-2022"
+    needs: test
+    environment: "Unit test environment"
+
+    env:
+      SHOPIFYSHARP_ACCESS_TOKEN: "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
+      SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
+      SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
+      SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Execute .NET Framework unit tests
+      run: dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+      shell: pwsh
+
   publish:
     name: "Publish prerelease packages"
     runs-on: ubuntu-20.04
-    needs: test
+    needs: test-windows
     environment: "Prerelease deployment environment"
 
     steps:
