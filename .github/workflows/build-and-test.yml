@@ -87,7 +87,8 @@ jobs:
       uses: actions/checkout@master
 
     - name: Execute .NET Framework unit tests
-      run: dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+      run: |
+        dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework&Category!=ShopifyService&Category!=ShopifyException" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
       shell: pwsh
 
   publish:
