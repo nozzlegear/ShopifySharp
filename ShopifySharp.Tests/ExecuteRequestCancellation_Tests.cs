@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "ExecuteRequestCancellation"), Trait("Category", "DotNetFramework")]
+    [Trait("Category", "ExecuteRequestCancellation"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class ExecuteRequestCancellation_Tests
     {
         private class TestService : ShopifyService

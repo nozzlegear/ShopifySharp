@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "ShopifyService"), Trait("Category", "DotNetFramework"), Trait("Category", "Exclusive")]
+    [Trait("Category", "ShopifyService"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class ShopifyService_Tests
     {
         string ReasonPhrase(HttpStatusCode code)

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "InvalidDateToNullConverter"), Trait("Category", "DotNetFramework")]
+    [Trait("Category", "InvalidDateToNullConverter"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class InvalidDateToNullConverter_Tests
     {
         [Fact]

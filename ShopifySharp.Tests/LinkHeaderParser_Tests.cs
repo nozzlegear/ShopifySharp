@@ -10,7 +10,7 @@ using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "Link header parsing"), Trait("Category", "DotNetFramework")]
+    [Trait("Category", "Link header parsing"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class LinkHeaderParser_Tests
     {
         [Fact]

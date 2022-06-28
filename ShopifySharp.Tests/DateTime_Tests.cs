@@ -12,7 +12,7 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
 
-    [Trait("Category", "DateTime"), Trait("Category", "DotNetFramework")]
+    [Trait("Category", "DateTime"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class DateTime_Tests : IClassFixture<Order_Tests_Fixture>
     {
         public DateTime_Tests(Order_Tests_Fixture orderTestsFixture)
