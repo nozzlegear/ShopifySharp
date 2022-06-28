@@ -7,7 +7,7 @@ using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "Retry policies"), Trait("Category", "DotNetFramework")]
+    [Trait("Category", "Retry policies"), Trait("Category", "DotNetFramework"), Trait("Category", "Exclusive")]
     public class RetryExecutionPolicies_Tests
     {
         private OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);

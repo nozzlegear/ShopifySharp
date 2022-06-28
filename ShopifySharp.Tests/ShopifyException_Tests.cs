@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "ShopifyException"), Trait("Category", "DotNetFramework")]
+    [Trait("Category", "ShopifyException"), Trait("Category", "DotNetFramework"), Trait("Category", "Exclusive")]
     public class ShopifyException_Tests
     {
         private HttpRequestMessage PrepareRequest(HttpMethod method, string path, HttpContent content = null)
