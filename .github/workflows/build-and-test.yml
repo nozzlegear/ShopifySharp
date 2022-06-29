@@ -43,11 +43,23 @@ jobs:
           ./artifacts/*.nupkg
           ./artifacts/*.snupkg
 
+  test-windows:
+    name: "Unit tests (.NET Framework)"
+    runs-on: "windows-2022"
+    needs: build
+    environment: "Unit test environment"
+
+    env:
+      SHOPIFYSHARP_ACCESS_TOKEN: "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
+      SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
+      SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
+      SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+
   test:
     name: "Unit tests"
     runs-on: ubuntu-20.04
     # Do not run this job until the build job completes
-    needs: build
+    needs: test-windows
     environment: "Unit test environment"
 
     env:
@@ -70,18 +82,6 @@ jobs:
       run: fish .github/scripts/test.fish
       shell: bash
 
-  test-windows:
-    name: "Unit tests (.NET Framework)"
-    runs-on: "windows-2022"
-    needs: test
-    environment: "Unit test environment"
-
-    env:
-      SHOPIFYSHARP_ACCESS_TOKEN: "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
-      SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
-      SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
-      SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
-
     steps:
     - name: Checkout branch
       uses: actions/checkout@master
@@ -94,7 +94,7 @@ jobs:
   publish:
     name: "Publish prerelease packages"
     runs-on: ubuntu-20.04
-    needs: test-windows
+    needs: test
     environment: "Prerelease deployment environment"
 
     steps:
