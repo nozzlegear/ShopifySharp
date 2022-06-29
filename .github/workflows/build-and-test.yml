@@ -55,6 +55,15 @@ jobs:
       SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
       SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
 
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Execute .NET Framework unit tests
+      run: |
+        dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+      shell: pwsh
+
   test:
     name: "Unit tests"
     runs-on: ubuntu-20.04
@@ -81,15 +90,6 @@ jobs:
     - name: Execute unit test script
       run: fish .github/scripts/test.fish
       shell: bash
-
-    steps:
-    - name: Checkout branch
-      uses: actions/checkout@master
-
-    - name: Execute .NET Framework unit tests
-      run: |
-        dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
-      shell: pwsh
 
   publish:
     name: "Publish prerelease packages"
