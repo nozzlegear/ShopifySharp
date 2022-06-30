@@ -187,6 +187,10 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(backgroundCompletedAt);
             Assert.NotNull(foregroundCompletedAt);
+
+            Console.WriteLine("Foreground completed at {0}", foregroundCompletedAt);
+            Console.WriteLine("Background completed at {0}", backgroundCompletedAt);
+
             Assert.True(foregroundCompletedAt < backgroundCompletedAt);
         }
 
