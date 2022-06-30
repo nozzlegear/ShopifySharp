@@ -137,7 +137,7 @@ namespace ShopifySharp.Tests
         }
 
 
-        [Fact]
+        [Fact(Skip = "Temporarily disabled, see #755 on Github")]
         public async Task ForegroundRequestsMustRunBeforeBackgroundRequests()
         {
             var context = RequestContext.Background;
