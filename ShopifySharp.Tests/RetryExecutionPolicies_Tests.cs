@@ -152,16 +152,36 @@ namespace ShopifySharp.Tests
             DateTime? backgroundCompletedAt = null;
             DateTime? foregroundCompletedAt = null;
 
+            async Task ListInBackground()
+            {
+                var tasks = Enumerable.Range(0, 50)
+                    .Select(_ => Fixture.OrderService.ListAsync(filter));
+
+                await Task.WhenAll(tasks);
+
+                backgroundCompletedAt = DateTime.UtcNow;
+            };
+
+            async Task ListInForeground()
+            {
+                var tasks = Enumerable.Range(0, 10)
+                    .Select(_ => Fixture.OrderService.ListAsync(filter));
+
+                await Task.WhenAll(tasks);
+
+                foregroundCompletedAt = DateTime.UtcNow;
+            }
+
             Fixture.OrderService.SetExecutionPolicy(policy);
 
-            //kick off background requests, which will trigger a throttle
-            var bgTask = Task.WhenAll(Enumerable.Range(0, 50).Select(async _ => await Fixture.OrderService.ListAsync(filter)))
-                .ContinueWith(_ => backgroundCompletedAt = DateTime.UtcNow);
+            // Kick off background requests, which will trigger a throttle
+            var bgTask = ListInBackground();
 
+            // Change the context
             context = RequestContext.Foreground;
 
-            var fgTask = Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await Fixture.OrderService.ListAsync(filter)))
-                .ContinueWith(_ => foregroundCompletedAt = DateTime.UtcNow);
+            // Now list in foreground, which should finish before the background tasks
+            var fgTask = ListInForeground();
 
             await Task.WhenAll(bgTask, fgTask);
 
