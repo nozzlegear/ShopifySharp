@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "Parameterizable")]
+    [Trait("Category", "Parameterizable"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class Parameterizable_Tests
     {
         class TestFilter : Parameterizable

@@ -110,8 +110,8 @@ namespace ShopifySharp.Tests
             var policy = new LeakyBucketExecutionPolicy();
 
             Service.SetExecutionPolicy(policy);
-            CustomCollectionService.SetExecutionPolicy(policy);
             ProductService.SetExecutionPolicy(policy);
+            CustomCollectionService.SetExecutionPolicy(policy);
 
             // Create a collection to use with these tests.
             var collection = await CustomCollectionService.CreateAsync(new CustomCollection()
@@ -120,7 +120,7 @@ namespace ShopifySharp.Tests
                 Published = false,
                 Image = new CustomCollectionImage()
                 {
-                    Src = "https://placekitten.com/250/250"
+                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
                 }
             });
 
@@ -149,7 +149,14 @@ namespace ShopifySharp.Tests
             }
 
             // Delete the collection
-            await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(CollectionId);
+            try
+            {
+                await CustomCollectionService.DeleteAsync(CollectionId);
+            }
+            catch (ShopifyException ex) when ((int)ex.HttpStatusCode == 404)
+            {
+                // Collection has already been deleted
+            }
         }
 
         /// <summary>

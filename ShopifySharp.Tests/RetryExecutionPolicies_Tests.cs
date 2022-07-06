@@ -7,13 +7,10 @@ using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "Retry policies")]
-    public class RetryExecutionPolicies_Tests
+    [Trait("Category", "Retry policies"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
+    public class RetryExecutionPolicies_Tests : IClassFixture<RetryExecutionPolicies_Tests_Fixture>
     {
-        private OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        private GraphService GraphService { get; } = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-        private Order Order = new Order()
+        private readonly Order Order = new Order()
         {
             LineItems = new List<LineItem>()
             {
@@ -28,17 +25,24 @@ namespace ShopifySharp.Tests
             TotalPrice = 5.00m,
         };
 
+        private readonly RetryExecutionPolicies_Tests_Fixture Fixture;
+
+        public RetryExecutionPolicies_Tests(RetryExecutionPolicies_Tests_Fixture fixture)
+        {
+            Fixture = fixture;
+        }
+
         [Fact]
         public async Task NonFullLeakyBucketBreachShouldNotAttemptRetry()
         {
-            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            Fixture.OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
             bool caught = false;
             try
             {
                 //trip the 5 orders per minute limit on dev stores
                 foreach (var i in Enumerable.Range(0, 10))
                 {
-                    await OrderService.CreateAsync(this.Order);
+                    await Fixture.OrderService.CreateAsync(this.Order);
                 }
             }
             catch (ShopifyRateLimitException ex)
@@ -52,7 +56,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task NonFullLeakyBucketBreachShouldRetryWhenConstructorBoolIsFalse()
         {
-            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+            Fixture.OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
 
             bool caught = false;
 
@@ -61,7 +65,7 @@ namespace ShopifySharp.Tests
                 //trip the 5 orders per minute limit on dev stores
                 foreach (var i in Enumerable.Range(0, 6))
                 {
-                    await OrderService.CreateAsync(this.Order);
+                    await Fixture.OrderService.CreateAsync(this.Order);
                 }
             }
             catch (ShopifyRateLimitException)
@@ -75,14 +79,14 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task LeakyBucketRESTBreachShouldAttemptRetry()
         {
-            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            Fixture.OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             bool caught = false;
 
             try
             {
                 //trip the 40/seconds bucket limit
-                await Task.WhenAll(Enumerable.Range(0, 45).Select(async _ => await OrderService.ListAsync()));
+                await Task.WhenAll(Enumerable.Range(0, 45).Select(async _ => await Fixture.OrderService.ListAsync()));
             }
             catch (ShopifyRateLimitException)
             {
@@ -95,7 +99,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task LeakyBucketGraphQLBreachShouldAttemptRetry()
         {
-            GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            Fixture.GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
             bool caught = false;
 
@@ -122,7 +126,7 @@ namespace ShopifySharp.Tests
   }
 }
 ";
-                await Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await GraphService.PostAsync(query, queryCost)));
+                await Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await Fixture.GraphService.PostAsync(query, queryCost)));
             }
             catch (ShopifyRateLimitException)
             {
@@ -133,25 +137,59 @@ namespace ShopifySharp.Tests
         }
 
 
-        [Fact]
+        [Fact(Skip = "Temporarily disabled, see #755 on Github")]
         public async Task ForegroundRequestsMustRunBeforeBackgroundRequests()
         {
             var context = RequestContext.Background;
+            var policy = new LeakyBucketExecutionPolicy(getRequestContext: () => context);
+            var filter = new Filters.OrderListFilter
+            {
+                Status = "any",
+                Limit = 1,
+                Fields = "id"
+            };
+
             DateTime? backgroundCompletedAt = null;
             DateTime? foregroundCompletedAt = null;
 
+            async Task ListInBackground()
+            {
+                var tasks = Enumerable.Range(0, 50)
+                    .Select(_ => Fixture.OrderService.ListAsync(filter));
 
-            OrderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(getRequestContext: () => context));
+                await Task.WhenAll(tasks);
 
-            //kick off background requests, which will trigger a throttle
-            var bgTask = Task.WhenAll(Enumerable.Range(0, 50).Select(async _ => await OrderService.ListAsync()))
-                             .ContinueWith(_ => backgroundCompletedAt = DateTime.UtcNow);
+                backgroundCompletedAt = DateTime.UtcNow;
+            };
 
+            async Task ListInForeground()
+            {
+                var tasks = Enumerable.Range(0, 10)
+                    .Select(_ => Fixture.OrderService.ListAsync(filter));
+
+                await Task.WhenAll(tasks);
+
+                foregroundCompletedAt = DateTime.UtcNow;
+            }
+
+            Fixture.OrderService.SetExecutionPolicy(policy);
+
+            // Kick off background requests, which will trigger a throttle
+            var bgTask = ListInBackground();
+
+            // Change the context
             context = RequestContext.Foreground;
-            var fgTask = Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await OrderService.ListAsync(new Filters.OrderListFilter { Status = "any" })))
-                             .ContinueWith(_ => foregroundCompletedAt = DateTime.UtcNow);
+
+            // Now list in foreground, which should finish before the background tasks
+            var fgTask = ListInForeground();
 
             await Task.WhenAll(bgTask, fgTask);
+
+            Assert.NotNull(backgroundCompletedAt);
+            Assert.NotNull(foregroundCompletedAt);
+
+            Console.WriteLine("Foreground completed at {0}", foregroundCompletedAt);
+            Console.WriteLine("Background completed at {0}", backgroundCompletedAt);
 
             Assert.True(foregroundCompletedAt < backgroundCompletedAt);
         }
@@ -161,9 +199,9 @@ namespace ShopifySharp.Tests
         {
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
-                GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+                Fixture.GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
                 string query = "!#@$%$#%";
-                await GraphService.PostAsync(query, 1);
+                await Fixture.GraphService.PostAsync(query, 1);
             });
         }
 
@@ -172,7 +210,7 @@ namespace ShopifySharp.Tests
         {
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
-                GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+                Fixture.GraphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
                 string query = @"{
   products(first: 20) {
     edges {
@@ -194,8 +232,25 @@ namespace ShopifySharp.Tests
   }
 }
 ";
-                await GraphService.PostAsync(query, 1);
+                await Fixture.GraphService.PostAsync(query, 1);
             });
+        }
+    }
+
+    public class RetryExecutionPolicies_Tests_Fixture : IAsyncLifetime
+    {
+        public readonly OrderService OrderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public GraphService GraphService = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public Task InitializeAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

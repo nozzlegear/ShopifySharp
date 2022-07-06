@@ -77,8 +77,9 @@ namespace ShopifySharp.Tests
             var policy = new LeakyBucketExecutionPolicy();
 
             Service.SetExecutionPolicy(policy);
-            CustomCollectionService.SetExecutionPolicy(policy);
+            CollectService.SetExecutionPolicy(policy);
             ProductService.SetExecutionPolicy(policy);
+            CustomCollectionService.SetExecutionPolicy(policy);
 
             // Create a custom collection to use with these tests.
             var collection = await CustomCollectionService.CreateAsync(new CustomCollection()
@@ -88,7 +89,7 @@ namespace ShopifySharp.Tests
                 BodyHtml = "<h1>Hello from ShopifySharp</h1>",
                 Image = new CustomCollectionImage()
                 {
-                    Src = "https://placekitten.com/250/250"
+                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
                 }
             });
 
@@ -117,7 +118,10 @@ namespace ShopifySharp.Tests
             }
 
             // Delete the collection
-            await new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken).DeleteAsync(CollectionId);
+            if (CollectionId != 0)
+            {
+                await CustomCollectionService.DeleteAsync(CollectionId);
+            }
         }
 
         /// <summary>
