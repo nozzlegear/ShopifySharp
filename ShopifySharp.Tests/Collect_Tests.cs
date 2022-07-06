@@ -149,7 +149,14 @@ namespace ShopifySharp.Tests
             }
 
             // Delete the collection
-            await CustomCollectionService.DeleteAsync(CollectionId);
+            try
+            {
+                await CustomCollectionService.DeleteAsync(CollectionId);
+            }
+            catch (ShopifyException ex) when ((int)ex.HttpStatusCode == 404)
+            {
+                // Collection has already been deleted
+            }
         }
 
         /// <summary>
