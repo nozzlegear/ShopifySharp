@@ -64,6 +64,14 @@ jobs:
         dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
       shell: pwsh
 
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: framework-test-results
+        path: TestResults
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
+
   test:
     name: "Unit tests"
     runs-on: ubuntu-20.04
@@ -90,6 +98,14 @@ jobs:
     - name: Execute unit test script
       run: fish .github/scripts/test.fish
       shell: bash
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: core-test-results
+        path: TestResults
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
 
   publish:
     name: "Publish prerelease packages"
