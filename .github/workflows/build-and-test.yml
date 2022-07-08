@@ -60,8 +60,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Execute .NET Framework unit tests
-      run: |
-        dotnet test -c Release -f "net472" --verbosity "quiet" --logger "trx;LogFileName=DotNetFramework.trx" --results-directory "TestResults" --filter "Category=DotNetFramework" "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+      run: .github/scripts/test-dnf.ps1
       shell: pwsh
 
     - name: Upload test results
