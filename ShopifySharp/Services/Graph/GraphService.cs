@@ -16,12 +16,19 @@ namespace ShopifySharp
     /// </summary>
     public class GraphService : ShopifyService
     {
+        private readonly string _apiVersion;
+
+        public override string APIVersion => _apiVersion ?? base.APIVersion;
+
         /// <summary>
         /// Creates a new instance of <see cref="GraphService" />.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public GraphService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+        public GraphService(string myShopifyUrl, string shopAccessToken, string apiVersion = null) : base(myShopifyUrl, shopAccessToken) 
+        {
+            _apiVersion = apiVersion;
+        }
 
         /// <summary>
         /// Executes a Graph API Call.
