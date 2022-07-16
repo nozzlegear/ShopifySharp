@@ -4,11 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "CustomerSavedSearchavedSearch")]
+    [Trait("Category", "CustomerSavedSearch")]
     public class CustomerSavedSearch_Tests : IClassFixture<CustomerSavedSearch_Tests_Fixture>
     {
         private CustomerSavedSearch_Tests_Fixture Fixture { get; }
@@ -18,7 +17,7 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Counts_CustomerSavedSearch()
         {
             var count = await Fixture.Service.CountAsync();
@@ -26,7 +25,7 @@ namespace ShopifySharp.Tests
             Assert.True(count > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Lists_CustomerSavedSearch()
         {
             var list = await Fixture.Service.ListAsync();
@@ -34,7 +33,7 @@ namespace ShopifySharp.Tests
             Assert.True(list.Items.Any());
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Deletes_CustomerSavedSearch()
         {
             var created = await Fixture.Create();
@@ -42,17 +41,18 @@ namespace ShopifySharp.Tests
             await Fixture.Service.DeleteAsync(created.Id.Value);
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Gets_CustomerSavedSearch()
         {
-            var customerSavedSearch = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+            var id = Fixture.Created.First().Id.Value;
+            var customerSavedSearch = await Fixture.Service.GetAsync(id);
 
             Assert.NotNull(customerSavedSearch);
             Assert.StartsWith(Fixture.NamePrefix, customerSavedSearch.Name);
             Assert.Equal(Fixture.Query, customerSavedSearch.Query);
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Creates_CustomerSavedSearch()
         {
             var customerSavedSearch = await Fixture.Create();
@@ -62,7 +62,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Query, customerSavedSearch.Query);
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Updates_CustomerSavedSearch()
         {
             string name = "newName";
@@ -80,7 +80,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(name, updated.Name);
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Can_Be_Partially_Updated()
         {
             string newQuery = "notes=yes";
@@ -95,7 +95,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(created.Name, updated.Name);
         }
 
-        [Fact]
+        [Fact(Skip = "This endpoint appears to have been removed despite it still being supported (though deprecated) in API version 2022-04 and 2022-07")]
         public async Task Retrieves_Customers_In_A_Saved_Search()
         {
             var savedSearch = await Fixture.Create();
