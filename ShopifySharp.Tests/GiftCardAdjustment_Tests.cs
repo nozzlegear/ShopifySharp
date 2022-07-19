@@ -86,7 +86,9 @@ namespace ShopifySharp.Tests
             var obj = await Service.CreateAsync(GiftCardId, new GiftCardAdjustment()
             {
                 Amount = 1.00m,
-                Note = "Integration test from ShopifySharp"
+                Note = "Integration test from ShopifySharp",
+                UserId = 5756037562530,
+                OrderTransactionId = 6756037562532
             });
 
             if (! skipAddToCreateList)
