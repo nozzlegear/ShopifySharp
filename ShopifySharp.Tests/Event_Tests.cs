@@ -36,14 +36,11 @@ namespace ShopifySharp.Tests
         public async Task Lists_Events_For_Subjects()
         {
             // Get an order id
-            var orderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-            orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
-            
-            long orderId = (await orderService.ListAsync(new OrderListFilter()
+            var orderId = (await this.Fixture.OrderService.ListAsync(new OrderListFilter()
             {
                 Limit = 1
             })).Items.First().Id.Value;
-            string subject = "Order";
+            var subject = "Order";
             var list = await Fixture.Service.ListAsync(orderId, subject);
 
             Assert.NotNull(list);
@@ -69,14 +66,24 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class Event_Tests_Fixture
+    public class Event_Tests_Fixture : IAsyncLifetime
     {
         public EventService Service { get; } = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+            var policy = new LeakyBucketExecutionPolicy(false);
 
+            Service.SetExecutionPolicy(policy);
+            OrderService.SetExecutionPolicy(policy);
+
+            return Task.CompletedTask;
+        }
+
+        public Task DisposeAsync()
+        {
             return Task.CompletedTask;
         }
     }

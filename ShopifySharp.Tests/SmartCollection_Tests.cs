@@ -160,11 +160,10 @@ namespace ShopifySharp.Tests
             });
 
             //create 4 products with unique tag
-            var productService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
             var products = new List<Product>();
             for (var i = 0; i < 4; i++)
             {
-                var product = await productService.CreateAsync(new Product()
+                var product = await Fixture.ProductService.CreateAsync(new Product()
                 {
                     Title = Guid.NewGuid().ToString(),
                     Tags = tag
@@ -182,8 +181,7 @@ namespace ShopifySharp.Tests
             collection = await Fixture.Service.GetAsync(collection.Id.Value);
 
             //get products  - use collect service to get products so they are returned in order
-            var collectService = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
-            var collects = (await collectService.ListAsync(new CollectListFilter { CollectionId = collection.Id })).Items.ToList();
+            var collects = (await Fixture.CollectService.ListAsync(new CollectListFilter { CollectionId = collection.Id })).Items.ToList();
 
             //check
             Assert.Equal("manual", collection.SortOrder);
@@ -191,14 +189,18 @@ namespace ShopifySharp.Tests
 
             //delete the objects
             await Fixture.Service.DeleteAsync(collection.Id.Value);
-            products.ForEach(async x => await productService.DeleteAsync(x.Id.Value));
+            products.ForEach(async x => await Fixture.ProductService.DeleteAsync(x.Id.Value));
 
         }
     }
 
     public class SmartCollection_Tests_Fixture : IAsyncLifetime
     {
-        public SmartCollectionService Service { get; } = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public readonly SmartCollectionService Service = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public readonly ProductService ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public readonly CollectService CollectService = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<SmartCollection> Created { get; } = new List<SmartCollection>();
 
@@ -210,7 +212,11 @@ namespace ShopifySharp.Tests
 
         public async Task InitializeAsync()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            var policy = new LeakyBucketExecutionPolicy();
+
+            Service.SetExecutionPolicy(policy);
+            ProductService.SetExecutionPolicy(policy);
+            CollectService.SetExecutionPolicy(policy);
 
             // Create one collection for use with count, list, get, etc. tests.
             await Create();

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "InvalidDateToNullConverter")]
+    [Trait("Category", "InvalidDateToNullConverter"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class InvalidDateToNullConverter_Tests
     {
         [Fact]
@@ -15,10 +15,10 @@ namespace ShopifySharp.Tests
             DateTimeOffset validNowOffset = DateTimeOffset.Now;
 
             string serializedJson = JsonConvert.SerializeObject(new TestObject()
-                                                                    {
-                                                                        DateTime = validNow,
-                                                                        DateTimeOffset = validNowOffset,
-                                                                    }, new InvalidDateToNullConverter());
+            {
+                DateTime = validNow,
+                DateTimeOffset = validNowOffset,
+            }, new InvalidDateToNullConverter());
             var deserialized = JsonConvert.DeserializeObject<TestObject>(serializedJson, new InvalidDateToNullConverter());
 
             Assert.Equal(validNow, deserialized.DateTime);
@@ -30,11 +30,11 @@ namespace ShopifySharp.Tests
         {
             string strInvalidISODate = "\"0000-12-31T18:09:24+01:00\"";
             string serializedJson = JsonConvert.SerializeObject(new TestObject()
-                                                {
-                                                    DateTime = null,
-                                                    DateTimeOffset = null,
-                                                }, new InvalidDateToNullConverter())
-                                                .Replace("null", strInvalidISODate);
+            {
+                DateTime = null,
+                DateTimeOffset = null,
+            }, new InvalidDateToNullConverter())
+                .Replace("null", strInvalidISODate);
 
             var deserialized = JsonConvert.DeserializeObject<TestObject>(serializedJson, new InvalidDateToNullConverter());
 

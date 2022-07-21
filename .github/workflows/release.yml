@@ -1,0 +1,63 @@
+name: Release Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning' 
+        type: choice
+        options:
+        - info
+        - warning
+        - debug 
+      print_tags:
+        description: 'True to print to STDOUT'
+        required: true 
+        type: boolean 
+      tags:
+        description: 'Test scenario tags'
+        required: true 
+        type: string
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true 
+      package_version:
+        description: "New package version"
+        type: string
+        required: true
+
+jobs:
+  print-tag:
+    runs-on: ubuntu-latest
+    if:  ${{ inputs.print_tags }} 
+    steps:
+      - name: Print the input tag to STDOUT
+        run: echo  The tags are ${{ inputs.tags }} 
+
+  publish:
+    name: "Publish release packages"
+    runs-on: ubuntu-20.04
+    environment: "Release deployment environment"
+
+    steps:
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          6.0.x
+          3.1.x
+
+    - name: Download artifacts
+      run: echo "Would download latest prerelease here. Would fail if no prerelease found."
+
+    - name: Bump package version
+      run: echo "Would bump package version to {{ inputs.package_version }} and tag commit here."
+
+    - name: Publish package to Nuget
+      run: echo "Would publish to nuget here."
+
+    - name: Swap prerelease to release
+      run: echo "Would swap the prerelease to a release with tag/name {{ inputs.package_version }} here."

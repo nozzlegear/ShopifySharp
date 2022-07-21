@@ -87,7 +87,7 @@ namespace ShopifySharp.Tests
         }
     }
 
-    public class Carrier_Tests_Fixture
+    public class Carrier_Tests_Fixture : IAsyncLifetime
     {
         public CarrierService Service { get; } = new CarrierService(Utils.MyShopifyUrl, Utils.AccessToken);
 

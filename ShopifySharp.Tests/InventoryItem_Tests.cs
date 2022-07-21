@@ -56,6 +56,8 @@ namespace ShopifySharp.Tests
     {
         public InventoryItemService Service { get; } = new InventoryItemService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public ProductVariantService VariantService { get; } = new ProductVariantService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<ProductVariant> Created { get; } = new List<ProductVariant>();
@@ -69,10 +71,11 @@ namespace ShopifySharp.Tests
             var policy = new LeakyBucketExecutionPolicy();
 
             Service.SetExecutionPolicy(policy);
+            ProductService.SetExecutionPolicy(policy);
             VariantService.SetExecutionPolicy(policy);
 
             // Get a product id to use with these tests.
-            ProductId = (await new ProductService(Utils.MyShopifyUrl, Utils.AccessToken).ListAsync(new ProductListFilter()
+            ProductId = (await ProductService.ListAsync(new ProductListFilter()
             {
                 Limit = 1
             })).Items.First().Id.Value;
