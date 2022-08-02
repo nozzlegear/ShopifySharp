@@ -3,46 +3,24 @@ name: Release Pipeline
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning' 
-        type: choice
-        options:
-        - info
-        - warning
-        - debug 
-      print_tags:
-        description: 'True to print to STDOUT'
-        required: true 
-        type: boolean 
-      tags:
-        description: 'Test scenario tags'
-        required: true 
-        type: string
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true 
       package_version:
         description: "New package version"
         type: string
         required: true
 
 jobs:
-  print-tag:
-    runs-on: ubuntu-latest
-    if:  ${{ inputs.print_tags }} 
-    steps:
-      - name: Print the input tag to STDOUT
-        run: echo  The tags are ${{ inputs.tags }} 
-
   publish:
     name: "Publish release packages"
     runs-on: ubuntu-20.04
     environment: "Release deployment environment"
 
     steps:
+    - name: Install fish
+      run: |
+        sudo apt-add-repository ppa:fish-shell/release-3 \
+        && sudo apt-get -qq update \
+        && sudo apt-get -qq install fish parallel
+
     - name: Setup dotnet
       uses: actions/setup-dotnet@v2
       with:
@@ -50,14 +28,52 @@ jobs:
           6.0.x
           3.1.x
 
-    - name: Download artifacts
-      run: echo "Would download latest prerelease here. Would fail if no prerelease found."
+    - name: Clone repository
+      uses: actions/checkout@v3
 
     - name: Bump package version
-      run: echo "Would bump package version to {{ inputs.package_version }} and tag commit here."
+      run:
+        fish .github/scripts/bump-version.fish "${{ inputs.package_version }}"
+      shell: bash
+
+    - name: Build and pack
+      run: fish .github/scripts/build.fish
+      shell: bash
+      env:
+        GITHUB_RUN_NUMBER: "${{ github.run_number }}"
+        ARTIFACT_DIR: "./artifacts"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        if-no-files-found: error
+        path: |
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.snupkg
+
+    - name: Commit package version change
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: ./ShopifySharp/ShopifySharp.csproj
+        commit: --signoff
+        message: "Bump version to ${{ inputs.package_version }}"
+        pathspec_error_handling: exitAtEnd
+        default_author: github_actions
+        push: true
 
     - name: Publish package to Nuget
-      run: echo "Would publish to nuget here."
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
 
-    - name: Swap prerelease to release
-      run: echo "Would swap the prerelease to a release with tag/name {{ inputs.package_version }} here."
+    - name: Create Github release
+      # This step will create a new Github release and tag it with the input tag. 
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ inputs.package_version }}"
+        prerelease: false
+        draft: true
+        title: "${{ inputs.package_version }}"
+        files: |
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.snupkg
