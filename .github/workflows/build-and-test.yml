@@ -4,6 +4,12 @@ on:
   push:
     branches: [ master, setup-github-actions ]
 
+# Cancel any in-progress build/test runs 
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: "Build"
