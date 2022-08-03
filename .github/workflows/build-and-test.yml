@@ -129,16 +129,6 @@ jobs:
     - name: List files in artifacts folder
       run: ls ./artifacts
 
-    - name: Create Github prerelease
-      # This step will create a new Github prerelease and tag it as `latest`. If a prerelease already exists with the `latest` tag, it will be updated.
-      uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development build"
-        files: ./artifacts/*
-
     - name: Publish package to Nuget
       # Prerelease packages have a `-b*.nupkg` suffix
       run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg 
