@@ -187,6 +187,18 @@ namespace ShopifySharp
         public PriceSet PriceSet { get; set; }
 
         /// <summary>
+        /// The price per item, excluding taxes and excluding discounts.
+        /// </summary>
+        [JsonProperty("pre_tax_price")]
+        public decimal? PreTaxPrice { get; set; }
+
+        /// <summary>
+        /// The price per item, excluding taxes and excluding discounts in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("pre_tax_price_set")]
+        public PriceSet PreTaxPriceSet { get; set; }
+        
+        /// <summary>
         /// A list of duty objects, each containing information about a duty on the line item
         /// </summary>
         [JsonProperty("duties")]
