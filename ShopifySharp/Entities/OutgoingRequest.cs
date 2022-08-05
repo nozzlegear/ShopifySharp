@@ -15,7 +15,7 @@ namespace ShopifySharp
         /// The request options returned by the merchant, if any.
         /// </summary>
         [JsonProperty("request_options")]
-        public OutgoingRequestOptions RequestOptions { get; set; }
+        public OutgoingFulfillmentRequestOptions RequestOptions { get; set; }
 
         [JsonProperty("sent_at")]
         public DateTimeOffset? SentAt { get; set; }

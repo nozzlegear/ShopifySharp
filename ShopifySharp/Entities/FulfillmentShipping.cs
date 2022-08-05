@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ShopifySharp
 {
     /// <summary>
-    /// An object representing a Shopify fulfillment request.
+    /// An object representing Shopify fulfillment shipping options.
     /// </summary>
     public class FulfillmentShipping
     {

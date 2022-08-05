@@ -2,14 +2,8 @@
 
 namespace ShopifySharp
 {
-    public class FulfillmentOrderDestination
+    public class FulfillmentOrderDestination : ShopifyObject
     {
-        /// <summary>
-        /// The ID of the fulfillment order destination.
-        /// </summary>
-        [JsonProperty("id")]
-        public long? Id { get; set; }
-
         /// <summary>
         /// The street address of the assigned location.
         /// </summary>

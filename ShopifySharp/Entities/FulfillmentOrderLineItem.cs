@@ -2,14 +2,8 @@
 
 namespace ShopifySharp
 {
-    public class FulfillmentOrderLineItem
+    public class FulfillmentOrderLineItem : ShopifyObject
     {
-        /// <summary>
-        /// The ID of the fulfillment order line item.
-        /// </summary>
-        [JsonProperty("id")]
-        public long? Id { get; set; }
-
         /// <summary>
         /// The ID of the shop associated with the fulfillment order line item.
         /// </summary>

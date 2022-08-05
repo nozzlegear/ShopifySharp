@@ -69,7 +69,8 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Fulfillment"/> on the order.<see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillment#createV2-2021-07">API Reference</see>
+        /// Creates a new <see cref="Fulfillment"/> on the order.
+        /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillment#createV2-2021-07">API Reference</see>
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
