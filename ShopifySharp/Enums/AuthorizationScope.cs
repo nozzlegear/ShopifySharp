@@ -148,12 +148,6 @@ namespace ShopifySharp.Enums
         [EnumMember(Value = "write_order_edits")]
         WriteOrderEdits,
 
-        [EnumMember(Value = "read_assigned_fulfillment_orders")]
-        ReadAssignedFulfillmentOrders,
-
-        [EnumMember(Value = "write_assigned_fulfillment_orders")]
-        WriteAssignedFulfillmentOrders,
-
         [EnumMember(Value = "read_third_party_fulfillment_orders")]
         ReadThirdPartyFulfillmentOrders,
 
@@ -189,10 +183,5 @@ namespace ShopifySharp.Enums
 
         [EnumMember(Value = "write_locales")]
         WriteLocales
-        [EnumMember(Value = "read_discounts")]
-        ReadDiscounts,
-
-        [EnumMember(Value = "write_discounts")]
-        WriteDiscounts
     }
 }
