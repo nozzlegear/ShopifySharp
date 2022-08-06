@@ -22,8 +22,8 @@ namespace ShopifySharp.Tests
         public async Task Accept_FulfillmentOrders()
         {
             var order = await Fixture.CreateOrder();
-            var fulfillment = await Fixture.CreateFulfillment(order.Id.Value);
-            var result = await Fixture.Service.AcceptAsync(fulfillment.Id.Value, "Unit Test: Accepted", CancellationToken.None);
+            var fulfillmentOrder = await Fixture.CreateFulfillmentOrder(order.Id.Value);
+            var result = await Fixture.Service.AcceptAsync(fulfillmentOrder.Id.Value, "Unit Test: Accepted", CancellationToken.None);
 
             Assert.NotNull(result);
         }
@@ -32,8 +32,8 @@ namespace ShopifySharp.Tests
         public async Task Reject_FulfillmentOrders()
         {
             var order = await Fixture.CreateOrder();
-            var fulfillment = await Fixture.CreateFulfillment(order.Id.Value);
-            var result = await Fixture.Service.RejectAsync(fulfillment.Id.Value, "Unit Test: Rejected", CancellationToken.None);
+            var fulfillmentOrder = await Fixture.CreateFulfillmentOrder(order.Id.Value);
+            var result = await Fixture.Service.RejectAsync(fulfillmentOrder.Id.Value, "Unit Test: Rejected", CancellationToken.None);
 
             Assert.NotNull(result);
         }
@@ -43,6 +43,8 @@ namespace ShopifySharp.Tests
         public readonly FulfillmentRequestService Service = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public readonly FulfillmentService FulfillmentService = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+        public readonly FulfillmentOrderService FulfillmentOrderService = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public readonly OrderService OrderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -64,6 +66,7 @@ namespace ShopifySharp.Tests
 
             Service.SetExecutionPolicy(policy);
             FulfillmentService.SetExecutionPolicy(policy);
+            FulfillmentOrderService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
             LocationService.SetExecutionPolicy(policy);
 
@@ -140,7 +143,7 @@ namespace ShopifySharp.Tests
             return obj;
         }
 
-        public async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
+        async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
         {
             Fulfillment fulfillment;
 
@@ -185,6 +188,14 @@ namespace ShopifySharp.Tests
             CreatedFulfillments.Add(fulfillment);
 
             return fulfillment;
+        }
+
+        public async Task<FulfillmentOrder> CreateFulfillmentOrder(long orderId)
+        {
+            var fulfillment = await CreateFulfillment(orderId);
+            var fulfillmentOrders = await FulfillmentOrderService.ListAsync(orderId);
+
+            return fulfillmentOrders.First();
         }
     }
 }
