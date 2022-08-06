@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,20 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("accepts_marketing")]
         public bool? AcceptsMarketing { get; set; }
-
+        
+        /// <summary>
+        /// The date and time when the customer consented or objected to receiving marketing material by email. Set this value whenever the customer consents or objects to marketing materials.
+        /// </summary>
+        [JsonProperty("accepts_marketing_updated_at")]
+        [JsonConverter(typeof(InvalidDateToNullConverter))]
+        public DateTimeOffset? AcceptsMarketingUpdatedAt { get; set; }
+        
+        /// <summary>
+        /// The marketing subscription opt-in level (as described by the M3AAWG best practices guideline) that the customer gave when they consented to receive marketing material by email. If the customer does not accept email marketing, then this property will be set to null. Valid values: single_opt_in, confirmed_opt_in, unknown.
+        /// </summary>
+        [JsonProperty("marketing_opt_in_level")]
+        public string MarketingOptInLevel { get; set; }
+        
         /// <summary>
         /// A list of addresses for the customer.
         /// </summary>
@@ -146,6 +160,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("verified_email")]
         public bool? VerifiedEmail { get; set; }
+
+        /// <summary>
+        /// The marketing consent information when the customer consented to receiving marketing material by SMS. The phone property is required to create a customer with SMS consent information and to perform an SMS update on a customer that doesn't have a phone number recorded. 
+        /// </summary>
+        [JsonProperty("sms_marketing_consent")]
+        public CustomerSmsMarketingConsent SmsMarketingConsent { get; set; }
 
         /// <summary>
         /// Additional metadata about the <see cref="Customer"/>. Note: This is not naturally returned with a <see cref="Customer"/> response, as

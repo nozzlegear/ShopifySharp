@@ -54,14 +54,14 @@ namespace ShopifySharp
         /// A unique numeric identifier of the user that issued the adjustment (if it was issued by a user).
         /// </summary>
         [JsonProperty("user_id")]
-        public int? UserId { get; set; }
+        public long? UserId { get; set; }
 
         /// <summary>
         /// A unique numeric identifier of the order transaction that issued the adjustment 
         /// (if it was caused by an application of a gift card to an order).
         /// </summary>
         [JsonProperty("order_transaction_id")]
-        public int? OrderTransactionId { get; set; }
+        public long? OrderTransactionId { get; set; }
 
         /// <summary>
         /// The date and time when the adjustment was created. The API returns this value in ISO 8601 format.

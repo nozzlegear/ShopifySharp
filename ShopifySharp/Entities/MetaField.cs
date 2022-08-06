@@ -30,10 +30,10 @@ namespace ShopifySharp
         public object Value { get; set; }
 
         /// <summary>
-        /// States whether the information in the value is stored as a 'string' or 'integer.'
+        /// The metafield's information type. See https://shopify.dev/apps/metafields/definitions/types for a full list of types.
         /// </summary>
-        [JsonProperty("value_type")]
-        public string ValueType { get; set; }
+        [JsonProperty("type")]
+        public string Type { get; set; }
 
         /// <summary>
         /// Container for a set of metadata. Namespaces help distinguish between metadata you created and metadata created by another individual with a similar namespace (maximum of 20 characters).

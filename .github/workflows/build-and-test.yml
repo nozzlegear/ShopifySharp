@@ -1,0 +1,140 @@
+name: Build/Test Pipeline
+
+on:
+  push:
+    branches: [ master, setup-github-actions ]
+
+# Cancel any in-progress build/test runs 
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-20.04
+    environment: "Build Environment"
+
+    steps:
+    - name: Install fish
+      run: |
+        sudo apt-add-repository ppa:fish-shell/release-3 \
+        && sudo apt-get -qq update \
+        && sudo apt-get -qq install fish parallel
+
+    - name: Checkout branch
+      uses: actions/checkout@v3
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          6.0.x
+          3.1.x
+
+    - name: Build and pack
+      run: fish .github/scripts/build.fish
+      shell: bash
+      env:
+        GITHUB_RUN_NUMBER: "${{ github.run_number }}"
+        ARTIFACT_DIR: "./artifacts"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        if-no-files-found: error
+        path: |
+          ./artifacts/*.nupkg
+          ./artifacts/*.snupkg
+
+  test-windows:
+    name: "Unit tests (.NET Framework)"
+    runs-on: "windows-2022"
+    needs: build
+    environment: "Unit test environment"
+
+    env:
+      SHOPIFYSHARP_ACCESS_TOKEN: "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
+      SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
+      SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
+      SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Execute .NET Framework unit tests
+      run: .github/scripts/test-dnf.ps1
+      shell: pwsh
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: framework-test-results
+        path: TestResults
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
+
+  test:
+    name: "Unit tests"
+    runs-on: ubuntu-20.04
+    # Do not run this job until the build job completes
+    needs: test-windows
+    environment: "Unit test environment"
+
+    env:
+      SHOPIFYSHARP_ACCESS_TOKEN: "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
+      SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
+      SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
+      SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+
+    steps:
+    - name: Install fish
+      run: |
+        sudo apt-add-repository ppa:fish-shell/release-3 \
+        && sudo apt-get -qq update \
+        && sudo apt-get -qq install fish parallel
+
+    - name: Checkout branch
+      uses: actions/checkout@master
+
+    - name: Execute unit test script
+      run: fish .github/scripts/test.fish
+      shell: bash
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: core-test-results
+        path: TestResults
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
+
+  publish:
+    name: "Publish prerelease packages"
+    runs-on: ubuntu-20.04
+    needs: test
+    environment: "Prerelease deployment environment"
+
+    steps:
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          6.0.x
+          3.1.x
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: artifacts
+        path: ./artifacts
+
+    - name: List files in artifacts folder
+      run: ls ./artifacts
+
+    - name: Publish package to Nuget
+      # Prerelease packages have a `-b*.nupkg` suffix
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg 

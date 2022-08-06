@@ -1,0 +1,79 @@
+name: Release Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_version:
+        description: "New package version"
+        type: string
+        required: true
+
+jobs:
+  publish:
+    name: "Publish release packages"
+    runs-on: ubuntu-20.04
+    environment: "Release deployment environment"
+
+    steps:
+    - name: Install fish
+      run: |
+        sudo apt-add-repository ppa:fish-shell/release-3 \
+        && sudo apt-get -qq update \
+        && sudo apt-get -qq install fish parallel
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          6.0.x
+          3.1.x
+
+    - name: Clone repository
+      uses: actions/checkout@v3
+
+    - name: Bump package version
+      run:
+        fish .github/scripts/bump-version.fish "${{ inputs.package_version }}"
+      shell: bash
+
+    - name: Build and pack
+      run: fish .github/scripts/build.fish
+      shell: bash
+      env:
+        GITHUB_RUN_NUMBER: "${{ github.run_number }}"
+        ARTIFACT_DIR: "./artifacts"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts
+        if-no-files-found: error
+        path: |
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.snupkg
+
+    - name: Commit package version change
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: ./ShopifySharp/ShopifySharp.csproj
+        commit: --signoff
+        message: "Bump version to ${{ inputs.package_version }}"
+        pathspec_error_handling: exitAtEnd
+        default_author: github_actions
+        push: true
+
+    - name: Publish package to Nuget
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
+
+    - name: Create Github release
+      # This step will create a new Github release and tag it with the input tag. 
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ inputs.package_version }}"
+        prerelease: false
+        draft: true
+        title: "${{ inputs.package_version }}"
+        files: |
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
+          ./artifacts/ShopifySharp.${{ inputs.package_version }}.snupkg

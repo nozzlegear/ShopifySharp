@@ -27,6 +27,12 @@ namespace ShopifySharp
         public string Authorization { get; set; }
 
         /// <summary>
+        /// The date and time when the Shopify Payments authorization expires.
+        /// </summary>
+        [JsonProperty("authorization_expires_at")]
+        public DateTimeOffset? AuthorizationExpiresAt { get; set; }
+
+        /// <summary>
         /// The date and time when the transaction was created.
         /// </summary>
         [JsonProperty("created_at")]
@@ -127,6 +133,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("parent_id")]
         public long? ParentId { get; set; }
+        
+        /// <summary>
+        /// This property is undocumented by Shopify.
+        /// </summary>
+        [JsonProperty("processed_at")]
+        public DateTimeOffset? ProcessedAt { get; set; }
 
         /// <summary>
         /// The maximum amount that can be refunded

@@ -31,6 +31,7 @@ namespace ShopifySharp
         /// "mars-fulfillment".
         /// </summary>
         [JsonProperty("fulfillment_service_handle")]
+        [Obsolete("FulfillmentServiceHandle is deprecated and will be removed in a future release.")]
         public string FulfillmentServiceHandle { get; set; }
 
         /// <summary>

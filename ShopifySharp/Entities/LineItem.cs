@@ -128,6 +128,17 @@ namespace ShopifySharp
         public string TipPaymentMethod { get; set; }
 
         /// <summary>
+        /// Whether the tip_payment_gateway field is present or not.  If true, the line is a tip line.
+        /// For a tip line, tip_payment_gateway is always specified (though it can be null).
+        /// For a non tip line, tip_payment_gateway is never specified.
+        /// </summary>
+        /// <remarks>
+        /// This is a Json.Net feature and not a Shopify API property. Refer to #706 for more details.
+        /// </remarks>
+        [JsonIgnore]
+        public bool TipPaymentGatewaySpecified { get; set; }
+
+        /// <summary>
         /// The total discount amount applied to this line item. This value is not subtracted in the line item price.
         /// </summary>
         [JsonProperty("total_discount")]
@@ -176,6 +187,18 @@ namespace ShopifySharp
         public PriceSet PriceSet { get; set; }
 
         /// <summary>
+        /// The price per item, excluding taxes and excluding discounts.
+        /// </summary>
+        [JsonProperty("pre_tax_price")]
+        public decimal? PreTaxPrice { get; set; }
+
+        /// <summary>
+        /// The price per item, excluding taxes and excluding discounts in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("pre_tax_price_set")]
+        public PriceSet PreTaxPriceSet { get; set; }
+        
+        /// <summary>
         /// A list of duty objects, each containing information about a duty on the line item
         /// </summary>
         [JsonProperty("duties")]
@@ -186,5 +209,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("origin_location")]
         public LineItemOriginLocation OriginLocation { get; set; }
+
+        /// <summary>
+        /// A unique identifier for a quantity of items within a single fulfillment. An order can have multiple fulfillment line items.
+        /// </summary>
+        [JsonProperty("fulfillment_line_item_id")]
+        public long? FulfillmentLineItemId { get; set; }
     }
 }

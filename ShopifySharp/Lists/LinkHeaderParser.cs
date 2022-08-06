@@ -22,7 +22,7 @@ namespace ShopifySharp.Lists
             return new LinkHeaderParseResult<T>(prevLink, nextLink);
         }
 
-        private static LinkHeaderParseResult<T>.PagingLink<T> GetPageInfoParam<T>(string linkHeaderValue, Regex linkRegex)
+        private static PagingLink<T> GetPageInfoParam<T>(string linkHeaderValue, Regex linkRegex)
         {
             var match = linkRegex.Match(linkHeaderValue);
 
@@ -58,7 +58,7 @@ namespace ShopifySharp.Lists
             int.TryParse(GetQueryParam("limit"), out int limit);
             
 
-            return new LinkHeaderParseResult<T>.PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null, fields ?? null);
+            return new PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null, fields ?? null);
         }
     }
 }

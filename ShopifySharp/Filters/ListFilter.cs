@@ -44,5 +44,7 @@ namespace ShopifySharp.Filters
         }
 
         public ListFilter<T> AsListFilter() => this; 
+
+        public static readonly ListFilter<T> Empty = new ListFilter<T>();
     }
 }

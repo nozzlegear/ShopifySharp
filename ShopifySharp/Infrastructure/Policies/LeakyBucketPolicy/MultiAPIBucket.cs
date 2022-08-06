@@ -12,9 +12,15 @@ namespace ShopifySharp
         private const int DEFAULT_GRAPHQL_MAX_AVAILABLE = 1_000;
         private const int DEFAULT_GRAPHQL_RESTORE_RATE = 50;
 
-        private LeakyBucket RESTBucket { get; } = new LeakyBucket(DEFAULT_REST_MAX_AVAILABLE, DEFAULT_REST_RESTORE_RATE);
+        private LeakyBucket RESTBucket { get; }
 
-        private LeakyBucket GraphQLBucket { get; } = new LeakyBucket(DEFAULT_GRAPHQL_MAX_AVAILABLE, DEFAULT_GRAPHQL_RESTORE_RATE);
+        private LeakyBucket GraphQLBucket { get; }
+
+        public MultiShopifyAPIBucket(Func<RequestContext> getRequestContext)
+        {
+            RESTBucket = new LeakyBucket(DEFAULT_REST_MAX_AVAILABLE, DEFAULT_REST_RESTORE_RATE, getRequestContext);
+            GraphQLBucket = new LeakyBucket(DEFAULT_GRAPHQL_MAX_AVAILABLE, DEFAULT_GRAPHQL_RESTORE_RATE, getRequestContext);
+        }
 
         public async Task WaitForAvailableRESTAsync(CancellationToken cancellationToken)
         {

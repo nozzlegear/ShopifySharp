@@ -14,6 +14,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("address1")]
         public string Address1 { get; set; }
+        
+        /// <summary>
+        /// The optional second line of the shop's street address.
+        /// </summary>
+        [JsonProperty("address2")]
+        public string Address2 { get; set; }
 
         /// <summary>
         /// The city in which the shop is located.
@@ -92,7 +98,37 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("google_apps_login_enabled")]
         public string GoogleAppsLoginEnabled { get; set; }
+        
+        /// <summary>
+        /// Whether the shop is eligible to receive a free credit card reader from Shopify.
+        /// </summary>
+        [JsonProperty("eligible_for_card_reader_giveaway")]
+        public bool? EligibleForCardReaderGiveaway { get; set; }
+        
+        /// <summary>
+        /// Whether the shop is eligible to use Shopify Payments.
+        /// </summary>
+        [JsonProperty("eligible_for_payments")]
+        public bool? EligibleForPayments { get; set; }
 
+        /// <summary>
+        /// Whether the shop is capable of accepting payments directly through the Checkout API.
+        /// </summary>
+        [JsonProperty("checkout_api_supported")]
+        public bool? CheckoutApiSupported { get; set; }
+
+        /// <summary>
+        /// Whether any active discounts exist for the shop.
+        /// </summary>
+        [JsonProperty("has_discounts")]
+        public bool? HasDiscounts { get; set; }
+        
+        /// <summary>
+        /// Whether any active gift cards exist for the shop.
+        /// </summary>
+        [JsonProperty("has_gift_cards")]
+        public bool? HasGiftCards { get; set; }
+        
         /// <summary>
         /// Geographic coordinate specifying the north/south location of a shop.
         /// </summary>
@@ -110,18 +146,44 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("money_format")]
         public string MoneyFormat { get; set; }
-
+        
+        /// <summary>
+        /// A string representing the way currency is formatted in email notifications when the currency isn't specified.
+        /// </summary>
+        [JsonProperty("money_in_emails_format")]
+        public string MoneyInEmailsFormat { get; set; }
+        
         /// <summary>
         /// A string representing the way currency is formatted when the currency is specified.
         /// </summary>
         [JsonProperty("money_with_currency_format")]
         public string MoneyWithCurrencyFormat { get; set; }
+        
+        /// <summary>
+        /// A string representing the way currency is formatted in email notifications when the currency is specified.
+        /// </summary>
+        [JsonProperty("money_with_currency_in_emails_format")]
+        public string MoneyWithCurrencyInEmailsFormat { get; set; }
+        
+        
 
         /// <summary>
         /// Whether multi-location is enabled
         /// </summary>
         [JsonProperty("multi_location_enabled")]
         public bool? MultiLocationEnabled { get; set; }
+        
+        /// <summary>
+        /// Whether the pre-launch page is enabled on the online storefront.
+        /// </summary>
+        [JsonProperty("pre_launch_enabled")]
+        public bool? PreLaunchEnabled { get; set; }
+        
+        /// <summary>
+        /// Whether the shop requires an extra Shopify Payments agreement.
+        /// </summary>
+        [JsonProperty("requires_extra_payments_agreement")]
+        public bool? RequiresExtraPaymentsAgreement { get; set; }
 
         /// <summary>
         /// The shop's 'myshopify.com' domain.

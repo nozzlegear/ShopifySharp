@@ -13,7 +13,7 @@ namespace ShopifySharp
         /// Refers to a certain event and its resources.
         /// </summary>
         [JsonProperty("arguments")]
-        public IEnumerable<string> Arguments { get; set; }
+        public IEnumerable<object> Arguments { get; set; }
 
         /// <summary>
         /// A text field containing information about the event.

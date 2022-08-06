@@ -1,19 +1,10 @@
 # ShopifySharp: A .NET library for Shopify.
 
-### Now with .NET Core support!
-
 [![NuGet](https://img.shields.io/nuget/v/ShopifySharp.svg?maxAge=3600)](https://www.nuget.org/packages/ShopifySharp/)
-[![Build status](https://ci.appveyor.com/api/projects/status/58l0gs6cqak3xtlf/branch/master?svg=true)](https://ci.appveyor.com/project/nozzlegear/shopifysharp/branch/master)
+[![Build status](https://github.com/nozzlegear/ShopifySharp/actions/workflows/build-and-test.yml/badge.svg?branch=master)](https://github.com/nozzlegear/ShopifySharp/actions/workflows/build-and-test.yml)
 [![license](https://img.shields.io/github/license/nozzlegear/shopifysharp.svg?maxAge=3600)](https://github.com/nozzlegear/shopifysharp/blob/master/LICENSE)
 
-ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for
-building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify
-using this library.
-
-**IMPORTANT**: If you're using .NET Framework 4.5, calls to the Shopify API may fail with `SocketException` errors and "Response does not indicate success: Status: 0" after May 31st, 2018. This is because Shopify has deprecated TLS 1.0 and TLS 1.1 which are used by .NET Framework. To fix this, you can do one of the following:
-
-1. Update your project to target .NET Framework 4.6 or newer.
-2. Add the following to your global.asax.cs file to explicitly enable the newer protocols: `System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;`
+ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify using this library.
 
 # The Shopify Development Handbook
 
@@ -69,7 +60,11 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 5.0.0 - 5.5.0        | 2019-10             |
 | 5.6.0 - 5.7.0        | 2020-07             |
 | 5.8.0 - 5.10.0       | 2020-10             |
-| 5.11.0 and above     | 2021-07             |
+| 5.11.0 - 5.13.1      | 2021-07             |
+| 5.14.0 - 5.15.0      | 2021-10             |
+| 5.16.0 and above     | 2022-04             |
+
+**Note:** ShopifySharp dropped support for .NET Framework 4.5 in version 5.14.0. [More details in #438.](https://github.com/nozzlegear/ShopifySharp/issues/438)
 
 # Migrating from version 4.x to version 5.0.0
 
@@ -429,6 +424,8 @@ for building Shopify apps with C# and ASP.NET).
 
 [Just head over here to get your free guide to the Shopify billing API.](https://nozzlegear.com/landing/shopify-billing-101?ref=ShopifySharp)
 
+Note that recurring charges are activated immediately after a user accepts them. At one time it was necessary to activate the charge after it was accepted, but Shopify has changed this behavior and it's no longer required or possible.
+
 ### Create a recurring charge
 
 ```c#
@@ -458,17 +455,6 @@ var charge = await service.GetAsync(chargeId);
 var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
 
 IEnumerable<RecurringCharge> charges = await service.ListAsync();
-```
-
-### Activating a charge
-
-Creating a charge does not actually charge the shop owner or even start their free trial. You need to
-send them to the charge's `ConfirmationUrl`, have them accept the charge, then activate it.
-
-```c#
-var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
-
-await service.ActivateAsync(chargeId);
 ```
 
 ### Deleting a charge
@@ -670,6 +656,13 @@ var service =  new CustomerService(myShopifyUrl, shopAccessToken);
 IEnumerable<Customer> customers = await Service.ListAsync();
 ```
 
+### Listing orders for a customer
+
+```c#
+var service =  new CustomerService(myShopifyUrl, shopAccessToken);
+IEnumerable<Order> orders = await service.ListOrdersForCustomerAsync(customerId);
+```
+
 ### Searching customers
 
 ```c#
@@ -759,13 +752,6 @@ int orderCount = await service.CountAsync();
 ```c#
 var service = new OrderService(myShopifyUrl, shopAccessToken);
 IEnumerable<Order> orders = await service.ListAsync();
-```
-
-### List orders for a certain customer
-
-```c#
-var service = new OrderService(myShopifyUrl, shopAccessToken);
-IEnumerable<Order> orders = await service.ListForCustomerAsync(customerId);
 ```
 
 ### Close an order
@@ -1809,7 +1795,7 @@ var collection = await service.CreateAsync(new CustomCollection()
     PublishedAt = DateTime.UtcNow,
     Image = new CustomCollectionImage()
     {
-        Src = "http://placehold.it/250x250"
+        Src = "https://placekitten.com/250/250"
     }
 });
 ```
@@ -1873,7 +1859,7 @@ var image = await service.CreateAsync(productId, new ProductImage()
             Namespace = "tags"
         }
     },
-    Src = "http://placehold.it/200/300"
+    Src = "https://placekitten.com/200/300"
 });
 ```
 

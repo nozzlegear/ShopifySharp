@@ -176,5 +176,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("use_customer_default_address")]
         public bool? UseCustomerDefaultAddress { get; set; }
+
+        /// <summary>
+        /// The terms and conditions under which a payment should be processed.
+        /// </summary>
+        [JsonProperty("payment_terms")]
+        public PaymentTerms PaymentTerms { get; set; }
     }
 }

@@ -37,14 +37,14 @@ namespace ShopifySharp.Tests
         public async Task Gets_Transactions()
         {
             var order = await Fixture.CreateOrder();
-            var created = await Fixture.Create(order.Id.Value);
+            var created = await Fixture.Create(order.Id.Value, currency: order.Currency);
             var obj = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
             Assert.Null(obj.ErrorCode);
             Assert.Equal(Fixture.Amount, obj.Amount);
-            Assert.Equal(Fixture.Currency, obj.Currency);
+            Assert.Equal(order.Currency, obj.Currency);
             Assert.Equal(Fixture.Status, obj.Status);
         }
 
@@ -52,13 +52,13 @@ namespace ShopifySharp.Tests
         public async Task Creates_Transactions()
         {
             var order = await Fixture.CreateOrder();
-            var obj = await Fixture.Create(order.Id.Value);
+            var obj = await Fixture.Create(order.Id.Value, currency: order.Currency);
 
             Assert.NotNull(obj);
             Assert.True(obj.Id.HasValue);
             Assert.Null(obj.ErrorCode);
             Assert.Equal(Fixture.Amount, obj.Amount);
-            Assert.Equal(Fixture.Currency, obj.Currency);
+            Assert.Equal(order.Currency, obj.Currency);
             Assert.Equal(Fixture.Status, obj.Status);
         }
 
@@ -67,7 +67,7 @@ namespace ShopifySharp.Tests
         {
             string kind = "capture";
             var order = await Fixture.CreateOrder();
-            var obj = await Fixture.Create(order.Id.Value, kind);
+            var obj = await Fixture.Create(order.Id.Value, kind, currency: order.Currency);
 
             Assert.Equal("success", obj.Status);
             Assert.Equal(kind, obj.Kind);
@@ -128,7 +128,7 @@ namespace ShopifySharp.Tests
 
             // Create one collection for use with count, list, get, etc. tests.
             var order = await CreateOrder();
-            await Create(order.Id.Value);
+            await Create(order.Id.Value, currency: order.Currency);
         }
 
         public async Task DisposeAsync()
@@ -214,12 +214,12 @@ namespace ShopifySharp.Tests
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
         /// </summary>
-        public async Task<Transaction> Create(long orderId, string kind = "capture", bool skipAddToCreatedList = false)
+        public async Task<Transaction> Create(long orderId, string kind = "capture", bool skipAddToCreatedList = false, string currency = "USD")
         {
             var obj = await Service.CreateAsync(orderId, new Transaction()
             {
                 Amount = Amount,
-                Currency = Currency,
+                Currency = currency,
                 Gateway = Gateway,
                 Status = Status,
                 Test = true,
