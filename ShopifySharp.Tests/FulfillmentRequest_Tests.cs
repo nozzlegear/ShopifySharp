@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(Skip = "Fulfillment Orders/Requests cannot be used until the app migrates from fulfillments to fulfillment orders. https://shopify.dev/apps/fulfillment/migrate")]
         public async Task Accept_FulfillmentOrders()
         {
             var order = await Fixture.CreateOrder();
@@ -28,7 +28,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(result);
         }
 
-        [Fact]
+        [Fact(Skip = "Fulfillment Orders/Requests cannot be used until the app migrates from fulfillments to fulfillment orders. https://shopify.dev/apps/fulfillment/migrate")]
         public async Task Reject_FulfillmentOrders()
         {
             var order = await Fixture.CreateOrder();
