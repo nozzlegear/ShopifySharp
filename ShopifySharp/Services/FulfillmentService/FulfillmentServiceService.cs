@@ -19,7 +19,7 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of your app's FulfillmentServices.
         /// </summary>
-        /// <param name="scope">Set scope to all to retrieve all of the store's fulfillment services</param>
+        /// <param name="filter">Set scope to all to retrieve all of the store's fulfillment services</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The list of fulfillment services matching the filter.</returns>
         public virtual async Task<IEnumerable<FulfillmentServiceEntity>> ListAsync(FulfillmentServiceListFilter filter = null, CancellationToken cancellationToken = default)
@@ -44,7 +44,6 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="fulfillmentServiceEntity">A new <see cref="FulfillmentServiceEntity"/>. Id should be set to null.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// has been created.</param>
         /// <returns>The new <see cref="FulfillmentServiceEntity"/>.</returns>
         public virtual async Task<FulfillmentServiceEntity> CreateAsync(FulfillmentServiceEntity fulfillmentServiceEntity, CancellationToken cancellationToken = default)
         {

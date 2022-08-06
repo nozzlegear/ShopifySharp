@@ -1,11 +1,8 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using ShopifySharp.Filters;
+﻿using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp
 {
@@ -49,6 +46,8 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a new <see cref="FulfillmentEvent"/> on the fulfillment.
         /// </summary>
+        /// <param name="orderId">The order id to which the fulfillment belongs to.</param>
+        /// <param name="fulfillmentId">The id of the fulfillment to which the event belongs to.</param>
         /// <param name="event">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="FulfillmentEvent"/>.</returns>

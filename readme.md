@@ -110,48 +110,91 @@ I first started working on ShopifySharp because .NET developers need a fully-fea
 
 ShopifySharp currently supports the following Shopify APIs:
 
--   [OAuth authentication](#authorization-and-authentication).
--   [Application charges (in-app purchases)](#one-time-application-charges)
--   [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
--   [Usage charges](#usage-charges)
--   [Shops](#shops)
--   [Customers](#customers)
--   [Orders](#orders)
--   [Products](#products)
--   [Webhooks](#webhooks)
--   [Script Tags](#script-tags)
--   [Assets](#assets)
--   [Themes](#themes)
--   [Redirects](#redirects)
--   [Collects](#collects)
--   [Fulfillments](#fulfillments)
--   Fulfillment Events (docs not yet written) (List/Get only. Create/Delete not implemented yet)
--   [Transactions](#transactions)
--   [Pages](#pages)
+-   Access
+    -   [OAuth authentication](#authorization-and-authentication).
+    -   [Access Scopes](#access-scopes)
+    -   [StorefrontAccessTokens](#storefrontaccesstokens)
+-   Analytics
+    -   Report (not implimented yet)
+-   Billing
+    -   [Application charges (in-app purchases)](#one-time-application-charges)
+    -   [Application Credits](#application-credits)
+    -   [Recurring application charges (subscriptions)](#recurring-application-charges-charge-shop-owners-to-use-your-app)
+    -   [Usage charges](#usage-charges)
+-   Customers
+    -   [Customers](#customers)
+    -   Customer Address (docs not yet written)
+    -   Customer Saved Search (docs not yet written)
+-   Discounts
+    -   [Discounts](#discounts)
+    -   [Price Rules](#price-rules)
+-   Events
+    -   [Events](#events)
+    -   [Webhooks](#webhooks)
+-   Inventory  
+    -   Inventory Item (docs not yet written)
+    -   Inventory Level (docs not yet written)
+    -   [Locations](#locations)
+-   Marketing Event (not implimented yet)
 -   [Metafields](#metafields)
--   [Custom Collections](#custom-collections)
--   [Product Images](#product-images)
--   [Locations](#locations)
--   [Events](#events)
--   [Order Risks](#order-risks)
--   [Smart Collections](#smart-collections)
--   [Product Variants](#product-variants)
--   [Blogs](#blogs)
--   [Application Credits](#application-credits)
--   [Articles](#articles)
--   [Discounts](#discounts)
--   [Policies](#policies)
--   [ShippingZones](#shipping-zones)
--   [GiftCards](#gift-cards)
--   [Price Rules](#price-rules)
--   [User](#users)
--   [Abandoned Checkouts](#abandoned-checkouts)
--   CustomerSavedSearch (docs not yet written)
--   [Draft Orders](#draft-orders)
--   [Access Scopes](#access-scopes)
--   [Checkouts](#checkouts)
--   [Collections](#collections)
--   [StorefrontAccessTokens](#storefrontaccesstokens)
+-   Online Store
+    -   [Articles](#articles)
+    -   [Assets](#assets)
+    -   [Blogs](#blogs)
+    -   Comment (not implimented yet)
+    -   [Pages](#pages)
+    -   [Redirects](#redirects)
+    -   [Script Tags](#script-tags)
+    -   [Themes](#themes)
+-   Orders
+    -   [Abandoned Checkouts](#abandoned-checkouts)
+    -   [Draft Orders](#draft-orders)
+    -   [Orders](#orders)
+    -   [Order Risks](#order-risks)
+    -   Refund (docs not yet written)
+    -   [Transactions](#transactions)
+-   Plus
+    -   [GiftCards](#gift-cards)
+    -   [User](#users)
+-   Products
+    -   [Collects](#collects)
+    -   [Collections](#collections)
+    -   [Custom Collections](#custom-collections)
+    -   [Products](#products)
+    -   [Product Images](#product-images)
+    -   [Product Variants](#product-variants)
+    -   [Smart Collections](#smart-collections)
+-   Sales Channels
+    -   [Checkouts](#checkouts)
+    -   Collection Listing (not implimented yet)
+    -   Mobile Platform Application (not implimented yet)
+    -   Payment (not implimented yet)
+    -   Product Resource Feedback (not implimented yet)
+    -   Product Listing (not implimented yet)
+    -   Resource Feedback (not implimented yet)
+-   Shipping and Fulfillment
+    -   [Assigned Fulfillment Orders](#assigned-fulfillment-orders)
+    -   Cancellation Request (not implimented yet)
+    -   Carrier Service (docs not yet written)
+    -   [Fulfillments](#fulfillments)
+    -   [Fulfillment Events](#fulfillment-events)
+    -   [Fulfillment Orders](#fulfillment-orders) (List/Get only. Create/Delete not implemented yet)
+    -   [Fulfillment Requests](#fulfillment-requests)
+    -   [Fulfillment Services](#fulfillment-services)
+    -   Locations For Move (not implimented yet)
+-   Shopify Payments
+    -   Balance (docs not yet written)
+    -   Dispute (docs not yet written)
+    -   Payouts (docs not yet written)
+    -   Transactions (docs not yet written)
+-   Store Properties
+    -   Country (docs not yet written)
+    -   Currency (not implimented yet)
+    -   [Policies](#policies)
+    -   Province (not implimented yet)
+    -   [Shipping Zones](#shipping-zones)
+    -   [Shops](#shops)
+-   Tender Transaction (not implimented yet)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -1209,6 +1252,8 @@ var filteredCollects = await service.CountAsync(new CollectFilterOptions()
 });
 ```
 
+---
+
 ## Fulfillments
 
 A fulfillment represents a shipment of one or more items in an order. All fulfillments are tied to a single order.
@@ -1324,6 +1369,205 @@ Fulfillments can only be cancelled if their `Status` is `pending`.
 var service = new FulfillmentService(myShopifyUrl, shopAccessToken);
 await service.CancelAsync(orderId, fulfillmentId)
 ```
+
+---
+
+## Assigned Fulfillment Orders
+
+The AssignedFulfillmentOrder resource allows you to retrieve all the fulfillment orders that are assigned to an app at the shop level.
+
+### Listing assigned fulfillment orders
+
+Retrieves a list of fulfillment orders on a shop for a specific app.
+
+```c#
+var service = new AssignedFulfillmentOrderService(myShopifyUrl, shopAccessToken);
+
+//Optionally filter the list to only those assigned fulfillments with a specific status
+var filterStatus = new AssignedFulfillmentOrderFilter()
+{
+    AssignmentStatus = "fulfillment_requested"
+});
+
+var assignedFulfillments = await service.ListAsync(filterStatus);
+```
+
+---
+
+## Fulfillment Events
+
+The FulfillmentEvent resource represents tracking events that belong to a fulfillment of one or more items in an order.
+
+### Creates a fulfillment event
+
+Creates a new FulfillmentEvent on the fulfillment.
+
+```c#
+var service = new FulfillmentEventService(myShopifyUrl, shopAccessToken);
+var fulfillmentEvent = new FulfillmentEvent()
+{
+    OrderId = 1234532,
+    FulfillmentId = 156185165,
+    Status = "confirmed"
+}
+
+fulfillmentEvent = await service.CreateAsync(orderId, fulfillmentId, fulfillmentEvent);
+```
+
+### List fulfillment events
+
+Retrieves a list of fulfillment events for a specific fulfillment
+
+```c#
+var service = new FulfillmentEventService(myShopifyUrl, shopAccessToken);
+var fulfillmentEvents = await service.ListAsync(orderId, fulfillmentId);
+```
+
+### Get a Fulfillment Event
+
+Retrieves a specific fulfillment event
+
+```c#
+var service = new FulfillmentEventService(myShopifyUrl, shopAccessToken);
+var fulfillmentEvent = await service.GetAsync(orderId, fulfillmentId, fulfillmentEventId);
+```
+
+### Delete A Fulfillment Event
+
+```cs
+var service = new FulfillmentEventService(myShopifyUrl, shopAccessToken);
+await service.DeleteAsync(orderId, fulfillmentId, fulfillmentEventId)
+```
+
+--
+
+## Fulfillment Orders
+
+The FulfillmentOrder resource represents either an item or a group of items in an order that are to 
+be fulfilled from the same location. There can be more than one fulfillment order for an order at a given location.
+
+> **TODO**
+> - [ ] Cancel a fulfillment order
+> - [ ] Mark a fulfillment order as incomplete
+> - [ ] Move a fulfillment order to a new location
+> - [ ] Mark the fulfillment order as open
+> - [ ] Reschedule the fulfill_at time of a scheduled fulfillment order
+> - [ ] Retrieve a specific fulfillment order
+
+### List Fulfillment Orders
+
+Retrieves a list of fulfillment orders for a specific order
+
+```c#
+var service = new FulfillmentOrderService(myShopifyUrl, shopAccessToken);
+var fulfillmentOrders = await service.ListAsync(orderId);
+```
+
+---
+
+## Fulfillment Requests
+
+The FulfillmentRequest resource represents a fulfillment request made by the merchant to a 
+fulfillment service for a fulfillment order.
+
+### Create A Fulfillment Request
+
+Sends a fulfillment request to the fulfillment service of a fulfillment order
+
+```c#
+var service = new FulfillmentRequestService(myShopifyUrl, shopAccessToken);
+
+// Optionally, you can request only specific item to fulfilled.
+var fulfillmentRequest = new FulfillmentRequest()
+{
+    FulfillmentRequestOrderLineItems = new List<FulfillmentRequestOrderLineItems>(){}
+};
+var fulfillmentOrder = await service.CreateAsync(fulfillmentOrderId, fulfillmentRequest);
+```
+
+### Accept A Fulfillment Request
+
+Accepts a fulfillment request sent to a fulfillment service for a fulfillment order
+
+```c#
+var service = new FulfillmentRequestService(myShopifyUrl, shopAccessToken);
+var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "Your order will be filled shortly.");
+```
+
+### Reject A Fulfillment Request
+
+Reject a fulfillment request sent to a fulfillment service for a fulfillment order
+
+```c#
+var service = new FulfillmentRequestService(myShopifyUrl, shopAccessToken);
+var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "Fulfillment services have been suspended for this store.");
+```
+
+---
+
+## Fulfillment Services
+
+A Fulfillment Service is a third party warehouse that prepares and ships orders on behalf of the store owner. 
+Fulfillment services charge a fee to package and ship items and update product inventory levels. 
+Some well known fulfillment services with Shopify integrations include: Amazon, Shipwire, and Rakuten. 
+When an app registers a new FulfillmentService on a store, Shopify automatically creates a Location 
+that's associated to that fulfillment service.
+
+### Create a Fulfillment Service
+
+```c#
+var service = new FulfillmentServiceService(myShopifyUrl, shopAccessToken);
+var fulfillmentService = await service.CreateAsync(new FulfillmentServiceEntity()
+{
+    Name = "Your Company Name", 
+    CallbackUrl = "http://yourcompany.com", 
+    InventoryManagement = true,
+    TrackingSupport = true,
+    FulfillmentOrdersOptIn = true,
+    RequiresShippingMethod = true, 
+    Format = "json"
+});
+```
+
+### List Fulfillment Services
+
+Retrieves a list of fulfillment orders for a specific order
+
+```c#
+var service = new FulfillmentServiceService(myShopifyUrl, shopAccessToken);
+// Optional Filter
+var filter = new FulfillmentServiceListFilter(){ Scope = "all"};
+var fulfillmentServices = await service.ListAsync(filter);
+```
+
+### Get a Fulfillment Service
+
+Retrieves a single Fulfillment Service
+
+```c#
+var service = new FulfillmentServiceService(myShopifyUrl, shopAccessToken);
+// Optional Filter
+var fields = "id,name,email";
+var fulfillmentService = await service.GetAsync(fulfillmentServiceId, fields);
+```
+
+### Modify a Fulfillment Service
+
+Update a Fulfillment Service. Not all fields are updatable
+
+```c#
+var service = new FulfillmentServiceService(myShopifyUrl, shopAccessToken);
+var fulfillmentService = await service.UpdateAsync(fulfillmentServiceId, fulfillmentServiceEntity);
+```
+
+### Delete a Fulfillment Service
+
+```c#
+var service = new FulfillmentServiceService(myShopifyUrl, shopAccessToken);
+var fulfillmentService = await service.DeleteAsync(fulfillmentServiceId);
+```
+
+---
 
 ## Transactions
 

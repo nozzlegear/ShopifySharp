@@ -1,40 +1,51 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ShopifySharp.Tests
 {
-    [Trait("Category", "FulfillmentOrder")]
-    public class FulfillmentOrder_Tests : IClassFixture<FulfillmentOrder_Tests_Fixture>
+    [Trait("Category", "FulfillmentRequest")]
+    public class FulfillmentRequest_Tests : IClassFixture<FulfillmentRequest_Tests_Fixture>
     {
-        private FulfillmentOrder_Tests_Fixture Fixture { get; }
+        private FulfillmentRequest_Tests_Fixture Fixture { get; }
 
-        public FulfillmentOrder_Tests(FulfillmentOrder_Tests_Fixture fixture)
+        public FulfillmentRequest_Tests(FulfillmentRequest_Tests_Fixture fixture)
         {
             this.Fixture = fixture;
         }
 
         [Fact]
-        public async Task Lists_FulfillmentOrders()
+        public async Task Accept_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
-            var result = await Fixture.Service.ListAsync(order.Id.Value);
-            
+            var fulfillment = Fixture.CreatedFulfillments.First();
+            var result = await Fixture.Service.AcceptAsync(fulfillment.Id.Value, "Unit Test: Accepted", CancellationToken.None);
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task Reject_FulfillmentOrders()
+        {
+            var fulfillment = Fixture.CreatedFulfillments.First();
+            var result = await Fixture.Service.RejectAsync(fulfillment.Id.Value, "Unit Test: Rejected", CancellationToken.None);
+
             Assert.NotNull(result);
         }
     }
-
-    public class FulfillmentOrder_Tests_Fixture : IAsyncLifetime
+    public class FulfillmentRequest_Tests_Fixture : IAsyncLifetime
     {
-        public FulfillmentOrderService Service { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        
+        public FulfillmentRequestService Service { get; } = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
+
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public long LocationId => 6226758;
+        public long LocationId => 6226758; 
+
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
@@ -46,9 +57,8 @@ namespace ShopifySharp.Tests
         public async Task InitializeAsync()
         {
             // Fulfillment API has a stricter rate limit when on a non-paid store.
-            var policy = new LeakyBucketExecutionPolicy(false);
+            var policy = new LeakyBucketExecutionPolicy();
 
-            Service.SetExecutionPolicy(policy);
             FulfillmentService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
 
@@ -112,7 +122,7 @@ namespace ShopifySharp.Tests
                 FinancialStatus = "paid",
                 TotalPrice = 5.00m,
                 Email = Guid.NewGuid().ToString() + "@example.com",
-                Note = "Test note about the customer.",
+                Note = "Test note about the customer.", 
                 Test = true
             }, new OrderCreateOptions()
             {

@@ -112,16 +112,16 @@ namespace ShopifySharp
         [JsonProperty("variant_inventory_management")]
         public string VariantInventoryManagement { get; set; }
 
-        [JsonProperty("service")]
         /// <summary>
         /// This property is undocumented by Shopify.
         /// </summary>
+        [JsonProperty("service")]
         public string Service { get; set; }
 
-        [JsonProperty("shipment_status")]
         /// <summary>
         /// This property is undocumented by Shopify.
         /// </summary>
+        [JsonProperty("shipment_status")]
         public string ShipmentStatus { get; set; }
 
         [JsonProperty("name")]

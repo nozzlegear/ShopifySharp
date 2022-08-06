@@ -23,6 +23,7 @@ namespace ShopifySharp.Tests
                 }
             },
             TotalPrice = 5.00m,
+            Test = true
         };
 
         private readonly RetryExecutionPolicies_Tests_Fixture Fixture;
