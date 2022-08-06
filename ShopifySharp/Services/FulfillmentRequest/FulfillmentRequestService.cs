@@ -33,7 +33,7 @@ namespace ShopifySharp
 
         public virtual async Task<FulfillmentOrder> AcceptAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request/accept.json");
+            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request/accept.json");
             var fulfillmentRequest = new FulfillmentRequest { Message = message };
             var body = fulfillmentRequest.ToDictionary();
 
