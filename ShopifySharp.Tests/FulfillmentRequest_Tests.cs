@@ -21,7 +21,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Accept_FulfillmentOrders()
         {
-            var fulfillment = Fixture.CreatedFulfillments.First();
+            var order = await Fixture.CreateOrder();
+            var fulfillment = await Fixture.CreateFulfillment(order.Id.Value);
             var result = await Fixture.Service.AcceptAsync(fulfillment.Id.Value, "Unit Test: Accepted", CancellationToken.None);
 
             Assert.NotNull(result);
@@ -30,7 +31,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Reject_FulfillmentOrders()
         {
-            var fulfillment = Fixture.CreatedFulfillments.First();
+            var order = await Fixture.CreateOrder();
+            var fulfillment = await Fixture.CreateFulfillment(order.Id.Value);
             var result = await Fixture.Service.RejectAsync(fulfillment.Id.Value, "Unit Test: Rejected", CancellationToken.None);
 
             Assert.NotNull(result);
@@ -68,23 +70,19 @@ namespace ShopifySharp.Tests
             // Get a location id to use in these tests
             var locations = await LocationService.ListAsync();
             LocationId = locations.First().Id.Value;
-
-            // Create an order and fulfillment for count, list, get, etc. tests.
-            var order = await CreateOrder();
-            var fulfillment = await CreateFulfillment(order.Id.Value);
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in CreatedFulfillments)
+            foreach (var order in CreatedOrders)
             {
                 try
                 {
-                    await OrderService.DeleteAsync(obj.Id.Value);
+                    await OrderService.DeleteAsync(order.Id.Value);
                 }
                 catch (ShopifyException ex)
                 {
-                    Console.WriteLine($"Failed to delete order with id {obj.Id.Value}. {ex.Message}");
+                    Console.WriteLine($"Failed to delete order with id {order.Id.Value}. {ex.Message}");
                 }
             }
         }
