@@ -38,14 +38,15 @@ namespace ShopifySharp.Tests
     }
     public class FulfillmentRequest_Tests_Fixture : IAsyncLifetime
     {
-        public FulfillmentRequestService Service { get; } = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public readonly FulfillmentRequestService Service = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public readonly FulfillmentService FulfillmentService = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public readonly OrderService OrderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public long LocationId => 6226758; 
+        public readonly LocationService LocationService = new LocationService(Utils.MyShopifyUrl, Utils.AccessToken);
 
+        public long LocationId { get; private set; }
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
@@ -59,8 +60,14 @@ namespace ShopifySharp.Tests
             // Fulfillment API has a stricter rate limit when on a non-paid store.
             var policy = new LeakyBucketExecutionPolicy();
 
+            Service.SetExecutionPolicy(policy);
             FulfillmentService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
+            LocationService.SetExecutionPolicy(policy);
+
+            // Get a location id to use in these tests
+            var locations = await LocationService.ListAsync();
+            LocationId = locations.First().Id.Value;
 
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
