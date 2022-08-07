@@ -1,60 +1,63 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
-    public class MultipassService
+    public static class MultipassService
     {
         private const int FixedKeySize = 16;
 
-        private string ShopifyUrl { get; set; }
-
-        private string MultipassSecret { get; set; }
-
-        public MultipassService(string myShopifyUrl, string multipassSecret)
+        public static string GetMultipassUrl(
+            Customer userData,
+            string shopifyUrl, 
+            string multipassSecret
+            )
         {
-            if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
-            {
-                //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.
-                //Try to fix that by adding a scheme and checking again.
-                if (Uri.IsWellFormedUriString("https://" + myShopifyUrl, UriKind.Absolute) == false)
-                {
-                    throw new ShopifyException($"The given {nameof(myShopifyUrl)} cannot be converted into a well-formed URI.");
-                }
+            string validatedShopifyUrl = ValidateShopifyUrl(shopifyUrl);
 
-                myShopifyUrl = "https://" + myShopifyUrl;
-            }
-
-
-            if (string.IsNullOrEmpty(MultipassSecret))
-            {
-                throw new ShopifyException($"The given {nameof(MultipassSecret)} is empty.");
-            }
-
-            ShopifyUrl = myShopifyUrl;
-            MultipassSecret = multipassSecret;
-        }
-
-        public string GetMultipassUrl(Customer userData)
-        {
             if (userData == null)
             {
                 throw new ShopifyException($"The given {nameof(userData)} is empty.");
             }
 
-            return Encrypt(JsonConvert.SerializeObject(userData, new JsonSerializerSettings()
+            if (string.IsNullOrEmpty(multipassSecret))
             {
-                NullValueHandling = NullValueHandling.Ignore
-            }));
+                throw new ShopifyException($"The given {nameof(multipassSecret)} is empty.");
+            }
+
+            return Encrypt(
+                JsonConvert.SerializeObject(userData, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }),
+                validatedShopifyUrl,
+                multipassSecret
+            );
+        }
+        private static string ValidateShopifyUrl(string shopifyUrl)
+        {
+            if (Uri.IsWellFormedUriString(shopifyUrl, UriKind.Absolute) == false)
+            {
+                //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.
+                //Try to fix that by adding a scheme and checking again.
+                if (Uri.IsWellFormedUriString("https://" + shopifyUrl, UriKind.Absolute) == false)
+                {
+                    throw new ShopifyException($"The given {nameof(shopifyUrl)} cannot be converted into a well-formed URI.");
+                }
+
+                return "https://" + shopifyUrl;
+            }
+
+            return shopifyUrl;
         }
 
-        private string Encrypt(string json)
+        private static string Encrypt(string json, string shopifyUrl, string multipassSecret)
         {
-            byte[] hash = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(MultipassSecret));
+            byte[] hash = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(multipassSecret));
             byte[] encryptionKey = new ArraySegment<byte>(hash, 0, FixedKeySize).ToArray();
             byte[] signatureKey = new ArraySegment<byte>(hash, FixedKeySize, FixedKeySize).ToArray();
 
@@ -93,7 +96,7 @@ namespace ShopifySharp
             byte[] signature = new HMACSHA256(signatureKey).ComputeHash(cipher);
             string token = Convert.ToBase64String(cipher.Concat(signature).ToArray()).Replace("+", "-").Replace("/", "_");
 
-            return $"{ShopifyUrl}/account/login/multipass/{token}";
+            return $"{shopifyUrl}/account/login/multipass/{token}";
         }
     }
 }

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using ShopifySharp.Filters;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -21,7 +18,11 @@ namespace ShopifySharp.Tests
         [Fact]
         public void Link_Multipass()
         {
-            string url = Fixture.Service.GetMultipassUrl(Fixture.Create());
+            string url = MultipassService.GetMultipassUrl(
+                Fixture.Create(),
+                Utils.MyShopifyUrl,
+                Utils.AccessToken
+            );
 
             Assert.True(!string.IsNullOrEmpty(url));
         }
@@ -29,8 +30,6 @@ namespace ShopifySharp.Tests
 
     public class Multipass_Tests_Fixture : IAsyncLifetime
     {
-        public MultipassService Service { get; } = new MultipassService(Utils.MyShopifyUrl, Utils.AccessToken);
-
         public Guid Guid = Guid.NewGuid();
 
         public Customer Create() => new Customer()
