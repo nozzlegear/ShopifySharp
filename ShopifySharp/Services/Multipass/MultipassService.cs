@@ -29,15 +29,17 @@ namespace ShopifySharp
                 throw new ShopifyException($"The given {nameof(multipassSecret)} is empty.");
             }
 
-            return Encrypt(
+            string token = Encrypt(
                 JsonConvert.SerializeObject(userData, new JsonSerializerSettings()
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 }),
-                validatedShopifyUrl,
                 multipassSecret
             );
+
+            return $"{validatedShopifyUrl}/account/login/multipass/{token}";
         }
+
         private static string ValidateShopifyUrl(string shopifyUrl)
         {
             if (Uri.IsWellFormedUriString(shopifyUrl, UriKind.Absolute) == false)
@@ -55,7 +57,7 @@ namespace ShopifySharp
             return shopifyUrl;
         }
 
-        private static string Encrypt(string json, string shopifyUrl, string multipassSecret)
+        private static string Encrypt(string json, string multipassSecret)
         {
             byte[] hash = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(multipassSecret));
             byte[] encryptionKey = new ArraySegment<byte>(hash, 0, FixedKeySize).ToArray();
@@ -94,9 +96,9 @@ namespace ShopifySharp
             })(initVector, encryptionKey);
             byte[] cipher = initVector.Concat(cipherData).ToArray();
             byte[] signature = new HMACSHA256(signatureKey).ComputeHash(cipher);
-            string token = Convert.ToBase64String(cipher.Concat(signature).ToArray()).Replace("+", "-").Replace("/", "_");
-
-            return $"{shopifyUrl}/account/login/multipass/{token}";
+            return Convert.ToBase64String(cipher.Concat(signature).ToArray())
+                          .Replace("+", "-")
+                          .Replace("/", "_");
         }
     }
 }
