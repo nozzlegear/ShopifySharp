@@ -36,6 +36,7 @@ namespace ShopifySharp.Tests
         public Customer Create() => new Customer()
         {
             Email = Guid.NewGuid().ToString() + "@example.com",
+            CreatedAt = DateTimeOffset.Now,
             FirstName = "John",
             LastName = "Doe",
             VerifiedEmail = true,
