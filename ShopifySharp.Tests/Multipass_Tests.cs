@@ -25,6 +25,7 @@ namespace ShopifySharp.Tests
             );
 
             Assert.True(!string.IsNullOrEmpty(url));
+            Assert.Contains($"{Utils.MyShopifyUrl}/account/login/multipass", url);
         }
     }
 
@@ -62,13 +63,12 @@ namespace ShopifySharp.Tests
 
         public Task InitializeAsync()
         {
-            return null;
+            return Task.CompletedTask;
         }
 
         public Task DisposeAsync()
         {
-            //not sure how to find created user;
-            return null;
+            return Task.CompletedTask;
         }
     }
 }
