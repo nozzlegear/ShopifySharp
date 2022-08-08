@@ -78,7 +78,8 @@ namespace ShopifySharp
         public string LastName { get; set; }
 
         /// <summary>
-        /// The id of the customer's last order.
+        /// The id of the customer's last order. 
+        /// **Note**: this value is deprecated specifically when the customer is returned using the Orders API. In that case, the value will always be null. The property is still available via the Customers API.
         /// </summary>
         /// <remarks>Property can be null or longer than max int32 value. Set to nullable long instead.</remarks>
         [JsonProperty("last_order_id")]
@@ -86,6 +87,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// The name of the customer's last order. This is directly related to the Order's name field.
+        /// **Note**: this value is deprecated specifically when the customer is returned using the Orders API. In that case, the value will always be null. The property is still available via the Customers API.
         /// </summary>
         [JsonProperty("last_order_name")]
         public string LastOrderName { get; set; }
@@ -98,6 +100,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// The number of orders associated with this customer.
+        /// **Note**: this value is deprecated specifically when the customer is returned using the Orders API. In that case, the value will always be null. The property is still available via the Customers API.
         /// </summary>
         [JsonProperty("orders_count")]
         public int? OrdersCount { get; set; }
@@ -144,6 +147,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// The total amount of money that the customer has spent at the shop.
+        /// **Note**: this value is deprecated specifically when the customer is returned using the Orders API. In that case, the value will always be null. The property is still available via the Customers API.
         /// </summary>
         /// <remarks>The Shopify API actually returns this value as a string, but Json.Net can automatically convert to decimal.</remarks>
         [JsonProperty("total_spent")]
