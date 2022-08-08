@@ -195,6 +195,7 @@ ShopifySharp currently supports the following Shopify APIs:
     -   [Shipping Zones](#shipping-zones)
     -   [Shops](#shops)
 -   Tender Transaction (not implimented yet)
+-   [Multipass (Shopify Plus)](#multipass)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
 
@@ -2795,6 +2796,27 @@ var service = new StorefrontAccessTokenService(myShopifyUrl, shopAccessToken);
 var list = await service.ListAsync();
 ```
 
+## Multipass
+
+Multipass login is for store owners who have a separate website and a Shopify store. It redirects users from the website to the Shopify store and seamlessly logs them in with the same email address they used to sign up for the original website. If no account with that email address exists yet, one is created. There is no need to synchronize any customer databases.
+
+### Creating a Multipass redirect url
+
+To create a multipass redirect url 
+
+```cs
+string url = MultipassService.GetMultipassUrl(
+	new Customer() {
+		Email = "test@example.com",
+		MultipassIdentifier = Guid.Tostring(),
+		CreatedAt = DateTimeOffset.Now
+		....
+	},
+	Utils.MyShopifyUrl,
+	Utils.AccessToken
+);
+```
+
 # Handling Shopify's API rate limit
 
 The Shopify API allows for an average of 2 API calls per second, with a burst limit of up to 40 API calls. Once you hit that 40 burst limit, Shopify will return a 429 Too Many Requests result. The limit is there to prevent you and thousands of other developers from overloading Shopify's servers by going hard in the paint with hundreds of requests every second. Unfortunately, it's pretty easy to write a `for` loop while trying to close a list of orders, and then start getting exceptions after closing the first 40.
@@ -2902,6 +2924,8 @@ SHOPIFYSHARP_API_KEY = value
 SHOPIFYSHARP_SECRET_KEY = value
 
 SHOPIFYSHARP_ACCESS_TOKEN = value
+
+SHOPIFYSHARP_MULTIPASS_SECRET = value
 
 SHOPIFYSHARP_MY_SHOPIFY_URL = value
 ```
