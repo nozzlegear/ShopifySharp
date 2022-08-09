@@ -194,7 +194,7 @@ ShopifySharp currently supports the following Shopify APIs:
     -   Province (not implimented yet)
     -   [Shipping Zones](#shipping-zones)
     -   [Shops](#shops)
--   Tender Transaction (not implimented yet)
+-   [Tender Transactions](#tender-transactions)
 -   [Multipass (Shopify Plus)](#multipass)
 
 More functionality will be added each week until it reaches full parity with Shopify's REST API.
@@ -1665,6 +1665,23 @@ var transactions = await service.ListAsync(orderId);
 
 //Optionally filter the list to those after the given id
 var transactions = await service.ListAsync(orderId, sinceId);
+```
+
+## Tender Transactions
+
+Each tender transaction represents money passing between the merchant and a customer. A tender transaction with a positive amount represents a transaction where the customer paid money to the merchant. A negative amount represents a transaction where the merchant refunded money back to the customer. Tender transactions represent transactions that modify the shop's balance.
+
+### Listing tender transactions
+
+```cs
+var service = new TenderTransactionService(myShopifyUrl, shopAccessToken);
+var tenderTransactions = await service.ListAsync();
+
+//Optionally filter the list to transactions processed after the specified date/time
+var transactions = await service.ListAsync(new TenderTransactionListFilter
+{
+    ProcessedAtMin = DateTimeOffset.Now.AddHours(-1)
+});
 ```
 
 ## Pages
