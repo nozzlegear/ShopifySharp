@@ -2,7 +2,7 @@
 
 set config "Release"
 set verbosity "quiet"
-set netCoreApp "netcoreapp3.1"
+set netCoreApp "net6.0"
 set netFramework "net472"
 set testDir "ShopifySharp.Tests"
 set testProjectFile "$testDir/ShopifySharp.Tests.csproj"
