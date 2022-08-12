@@ -21,7 +21,28 @@ That said, if you feel the change should be made anyway, please open an issue so
 
 Shopify often introduces new endpoints, so we often accept pull requests with new services for these endpoints! In general, if you're creating a new service, please try to implement all of the endpoints for the service as described in Shopify's docs. Take a look at the other service classes to get an idea for how they should be implemented.
 
-- Always implement two list filters when the endpoint supports paginated listing: the generic filter, and the dedicated entity filter.
+**If your new service uses Shopify's paginated list endpoint, always implement two methods for listing:** the first method should use the generic `ListFilter<EntityType>`, and the second method should use a more dedicated `EntityTypeListFilter`. 
+
+[The `CustomerService` is a good example of this pattern:](https://github.com/nozzlegear/ShopifySharp/blob/d0e747abbf34e946f4b22a092fd47415ee974437/ShopifySharp/Services/Customer/CustomerService.cs#L34)
+
+```cs
+using ShopifySharp.Filters;
+
+public class CustomerService : ShopifyService
+{
+    // ...
+
+    public async Task<IEnumerable<Customer>> ListAsync(ListFilter<Customer>> filter = null, CancellationToken token = default)
+    {
+        // ...
+    }
+
+    public async Task<IEnumerable<Customer>> ListAsync(CustomerListFilter filter, CancellationToken token = default)
+    {
+        return await ListAsync(filter?.AsListFilter(), token);
+    }
+}
+```
 
 Make sure you follow the sections below pertaining to adding new model classes and testing your changes!
 
