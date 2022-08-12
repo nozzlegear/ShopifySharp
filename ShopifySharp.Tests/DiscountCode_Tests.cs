@@ -18,10 +18,13 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
+        private string UniqueCode(string prefix) =>
+            prefix + Guid.NewGuid().ToString().Substring(0, 6);
+
         [Fact]
         public async Task Creates_DiscountCode()
         {
-            var code = "UNITTEST2";
+            var code = UniqueCode("UNIT_TEST_CREATE");
             var created = await Fixture.Create(code);
 
             Assert.NotNull(created);
@@ -32,27 +35,32 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Lists_DiscountCodes()
         {
-            var list = await Fixture.DiscountCodeService.ListAsync(Fixture.CreatedPriceRules.First().Id.Value, new PriceRuleDiscountCodeListFilter
+            var code = UniqueCode("UNIT_TEST_LIST");
+            var created = await Fixture.Create(code);
+            var priceRuleId = created.PriceRuleId.Value;
+            var list = await Fixture.DiscountCodeService.ListAsync(priceRuleId, new PriceRuleDiscountCodeListFilter
             {
                 Limit = 5
             });
 
-            Assert.True(list.Items.Count() > 0);
+            Assert.NotEmpty(list.Items);
         }
 
         [Fact]
         public async Task Gets_DiscountCode()
         {
-            var obj = await Fixture.DiscountCodeService.GetAsync(Fixture.CreatedPriceRules.First().Id.Value, Fixture.CreatedDiscountCodes.First().Id.Value);
+            var code = UniqueCode("UNIT_TEST_GET");
+            var created = await Fixture.Create(code);
+            var discount = await Fixture.DiscountCodeService.GetAsync(created.PriceRuleId.Value, created.Id.Value);
 
-            Assert.NotNull(obj);
-            Assert.Equal(Fixture.Code, obj.Code);
+            Assert.NotNull(discount);
+            Assert.Equal(code, discount.Code);
         }
 
         [Fact]
         public async Task Gets_DiscountCode_By_Code()
         {
-            var code = "UNIT_TEST_GET_BY_CODE";
+            var code = UniqueCode("UNIT_TEST_GET_BY_CODE");
             var created = await Fixture.Create(code);
             var retrieved = await Fixture.DiscountCodeService.GetAsync(code);
 
@@ -64,12 +72,14 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_DiscountCode()
         {
-            var newCode = "UNITTEST-AFTER-UPDATE";
-            var created = await Fixture.Create("UNITTEST-BEFORE-UPDATE");
+            var oldCode = UniqueCode("UNIT_TEST_UPDATE_BEFORE");
+            var newCode = UniqueCode("UNIT_TEST_UPDATE_AFTER");
+            var created = await Fixture.Create(oldCode);
             created.Code = newCode;
 
             var updated = await Fixture.DiscountCodeService.UpdateAsync(created.PriceRuleId.Value, created);
 
+            Assert.NotNull(updated);
             Assert.Equal(newCode, updated.Code);
         }
     }
@@ -90,12 +100,7 @@ namespace ShopifySharp.Tests
 
             DiscountCodeService.SetExecutionPolicy(policy);
             PriceRuleService.SetExecutionPolicy(policy);
-
-            // Create one for count, list, get, etc. orders.
-            await Create(Code);
         }
-
-        public string Code { get; } = "UNITTEST";
 
         /// <summary>
         /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish. 
