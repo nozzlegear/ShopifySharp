@@ -51,7 +51,7 @@ namespace ShopifySharp
                 fulfillment_order = body,
             });
 
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/hold.json");
+            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/close.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -71,7 +71,7 @@ namespace ShopifySharp
                 fulfillment_hold = body,
             });
 
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/close.json");
+            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/hold.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
 
             return response.Result;

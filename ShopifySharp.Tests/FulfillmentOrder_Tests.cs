@@ -25,6 +25,20 @@ namespace ShopifySharp.Tests
             Assert.NotNull(result);
             Assert.NotEmpty(result);
         }
+
+        [Fact]
+        public async Task Get_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            var fulfillmentOrder = fulfillmentOrders.First();
+
+            var result = await Fixture.Service.GetAsync(fulfillmentOrder.Id.Value);
+
+            Assert.Equal(fulfillmentOrder.Id.Value, result.Id.Value);
+        }
+        }
+
     }
 
     public class FulfillmentOrder_Tests_Fixture : IAsyncLifetime
@@ -32,10 +46,14 @@ namespace ShopifySharp.Tests
         public FulfillmentOrderService Service { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public FulfillmentServiceService FulfillmentServiceService { get; } = new FulfillmentServiceService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public long LocationId => 6226758;
+        public FulfillmentRequestService FulfillmentRequestService { get; } = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+
+        public long? LocationId => FulfillmentServiceEntity?.LocationId;
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
@@ -43,6 +61,8 @@ namespace ShopifySharp.Tests
         public List<Order> CreatedOrders { get; } = new List<Order>();
 
         public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
+
+        public FulfillmentServiceEntity FulfillmentServiceEntity { get; private set; }
 
         public async Task InitializeAsync()
         {
@@ -53,10 +73,11 @@ namespace ShopifySharp.Tests
             FulfillmentService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
 
+            await CreateFulfillmentService();
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
-            var fulfillmentOrder = await GetFulfillmentOrder(order.Id.Value);
-            var fulfillment = await CreateFulfillment(fulfillmentOrder.Id.Value, fulfillmentOrder.FulfillmentOrderLineItems);
+            //var fulfillmentOrder = await GetFulfillmentOrder(order.Id.Value);
+            //var fulfillment = await CreateFulfillment(fulfillmentOrder.Id.Value, fulfillmentOrder.FulfillmentOrderLineItems);
         }
 
         public async Task DisposeAsync()
@@ -101,25 +122,26 @@ namespace ShopifySharp.Tests
                         Name = "Test Line Item",
                         Title = "Test Line Item Title",
                         Quantity = 2,
-                        Price = 5
+                        Price = 5,
                     },
                     new LineItem()
                     {
                         Name = "Test Line Item 2",
                         Title = "Test Line Item Title 2",
                         Quantity = 2,
-                        Price = 5
+                        Price = 5,
                     }
                 },
                 FinancialStatus = "paid",
                 TotalPrice = 5.00m,
                 Email = Guid.NewGuid().ToString() + "@example.com",
                 Note = "Test note about the customer.",
-                Test = true
+                Test = true,
             }, new OrderCreateOptions()
             {
                 SendReceipt = false,
-                SendFulfillmentReceipt = false
+                SendFulfillmentReceipt = false,
+                SendWebhooks = false,
             });
 
             CreatedOrders.Add(obj);
@@ -172,5 +194,30 @@ namespace ShopifySharp.Tests
 
             return fulfillment;
         }
+
+        public async Task<FulfillmentServiceEntity> CreateFulfillmentService()
+        {
+            var fulfillmentServiceName = "ShopifySharpTesting";
+
+            var fulfillmentServiceEntities = await FulfillmentServiceService.ListAsync(new Filters.FulfillmentServiceListFilter());
+            FulfillmentServiceEntity fulfillmentServiceEntity = fulfillmentServiceEntities.FirstOrDefault(x=>x.Name == fulfillmentServiceName);
+
+            if(fulfillmentServiceEntity == null)
+            {
+                fulfillmentServiceEntity = await FulfillmentServiceService.CreateAsync(new FulfillmentServiceEntity()
+                {
+                    Name = fulfillmentServiceName,
+                    //CallbackUrl = "https://example.com/fulfillmentService",
+                    InventoryManagement = false,
+                    TrackingSupport = false,
+                    RequiresShippingMethod = false,
+                    Format = "json",
+                });
+            }
+
+            FulfillmentServiceEntity = fulfillmentServiceEntity;
+            return fulfillmentServiceEntity;
+        }
+
     }
 }
