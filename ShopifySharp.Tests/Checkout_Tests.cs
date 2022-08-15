@@ -30,31 +30,31 @@ namespace ShopifySharp.Tests
             Assert.True(count >= 0);
         }
 
-        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
         public async Task Creates_Checkouts()
         {
             
         }
 
-        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
         public async Task Completes_Checkouts()
         {
 
         }
 
-        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
         public async Task Gets_Checkouts()
         {
 
         }
 
-        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
         public async Task Updates_Checkouts()
         {
 
         }
 
-        [Fact(Skip = "You can't use the Checkout API to create a new checkout user experience for an individual store.")]
+        [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
         public async Task Lists_Checkout_Shipping_Rates()
         {
 
