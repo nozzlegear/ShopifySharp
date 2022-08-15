@@ -23,6 +23,7 @@ namespace ShopifySharp.Tests
             var result = await Fixture.Service.ListAsync(order.Id.Value);
             
             Assert.NotNull(result);
+            Assert.NotEmpty(result);
         }
     }
 
@@ -54,12 +55,13 @@ namespace ShopifySharp.Tests
 
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
-            var fulfillment = await CreateFulfillment(order.Id.Value);
+            var fulfillmentOrder = await GetFulfillmentOrder(order.Id.Value);
+            var fulfillment = await CreateFulfillment(fulfillmentOrder.Id.Value, fulfillmentOrder.FulfillmentOrderLineItems);
         }
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in CreatedFulfillments)
+            foreach (var obj in CreatedOrders)
             {
                 try
                 {
@@ -125,47 +127,46 @@ namespace ShopifySharp.Tests
             return obj;
         }
 
-        public async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
+        public async Task<FulfillmentOrder> GetFulfillmentOrder(long orderId)
+        {
+            var list = await Service.ListAsync(orderId);
+            return list.First();
+        }
+
+        public async Task<Fulfillment> CreateFulfillment(long fulfillmentOrderId, IEnumerable<FulfillmentOrderLineItem> items = null)
         {
             Fulfillment fulfillment;
 
-            if (multipleTrackingNumbers)
+            var fulfillmentShipping = new FulfillmentShipping()
             {
-                fulfillment = new Fulfillment()
+                TrackingInfo = new TrackingInfo()
                 {
-                    TrackingCompany = "Jack Black's Pack, Stack and Track",
-                    TrackingUrls = new string[]
-                    {
-                        "https://example.com/da10038ee679f9afc93a785cafdd8d52",
-                        "https://example.com/6349a40313ae3c7544331ff9fb44f28c",
-                        "https://example.com/ca0b2d7bcccec4b58a94a24fa04101d3"
-                    },
-                    TrackingNumbers = new string[]
-                    {
-                        "da10038ee679f9afc93a785cafdd8d52",
-                        "6349a40313ae3c7544331ff9fb44f28c",
-                        "ca0b2d7bcccec4b58a94a24fa04101d3"
-                    }
-                };
-            }
-            else
+                    Company = "Jack Black's Pack, Stack and Track",
+                    Url = "https://example.com/6349a40313ae3c7544331ff9fb44f28c",
+                    Number = "da10038ee679f9afc93a785cafdd8d52",
+                },
+            };
+
+            var fulfillmentLineItems = new LineItemsByFulfillmentOrder()
             {
-                fulfillment = new Fulfillment()
-                {
-                    TrackingCompany = "Jack Black's Pack, Stack and Track",
-                    TrackingUrl = "https://example.com/123456789",
-                    TrackingNumber = "123456789",
-                };
-            }
+                FulfillmentOrderId = fulfillmentOrderId,
+                FulfillmentRequestOrderLineItems = new List<FulfillmentRequestOrderLineItem>(),
+            };
 
             if (items != null)
             {
-                fulfillment.LineItems = items;
+                var requestLines = items.Select(i => new FulfillmentRequestOrderLineItem()
+                {
+                    Id = i.Id,
+                    Quantity = i.FulfillableQuantity,
+                });
+                fulfillmentLineItems.FulfillmentRequestOrderLineItems = requestLines;
             }
+            fulfillmentShipping.FulfillmentRequestOrderLineItems = new List<LineItemsByFulfillmentOrder>() { fulfillmentLineItems };
 
-            fulfillment.NotifyCustomer = false;
-            fulfillment.LocationId = LocationId;
-            fulfillment = await FulfillmentService.CreateAsync(orderId, fulfillment);
+            fulfillmentShipping.NotifyCustomer = false;
+            //fulfillment.LocationId = LocationId;
+            fulfillment = await FulfillmentService.CreateForFulfillmentAsync(fulfillmentShipping);
 
             CreatedFulfillments.Add(fulfillment);
 
