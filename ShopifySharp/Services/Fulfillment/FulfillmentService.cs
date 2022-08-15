@@ -68,6 +68,7 @@ namespace ShopifySharp
             return await ExecuteGetAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", "fulfillment", fields, cancellationToken);
         }
 
+        [Obsolete]
         /// <summary>
         /// Creates a new <see cref="Fulfillment"/> on the order.
         /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillment#createV2-2021-07">API Reference</see>
@@ -110,6 +111,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        [Obsolete]
         /// <summary>
         /// Updates the given <see cref="Fulfillment"/>.
         /// </summary>
@@ -132,6 +134,27 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Updates tracking for the given <see cref="Fulfillment"/>.
+        /// </summary>
+        /// <param name="fulfillmentId">Id of the object being updated.</param>
+        /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated <see cref="Fulfillment"/>.</returns>
+        public virtual async Task<Fulfillment> UpdateTrackingAsync(long fulfillmentId, FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
+        {
+            var req = PrepareRequest($"fulfillments/{fulfillmentId}/update_tracking.json");
+            var body = fulfillment.ToDictionary();
+            var content = new JsonContent(new
+            {
+                fulfillment = body
+            });
+
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, content, "fulfillment");
+            return response.Result;
+        }
+
+        [Obsolete]
+        /// <summary>
         /// Completes a pending fulfillment with the given id.
         /// </summary>
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
@@ -145,6 +168,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        [Obsolete]
         /// <summary>
         /// Cancels a pending fulfillment with the given id.
         /// </summary>
@@ -159,6 +183,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        [Obsolete]
         /// <summary>
         /// Opens a pending fulfillment with the given id.
         /// </summary>
