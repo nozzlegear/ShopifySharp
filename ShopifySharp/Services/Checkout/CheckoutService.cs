@@ -55,7 +55,7 @@ namespace ShopifySharp
         [Obsolete("This endpoint does not appear to be documented by Shopify. It may no longer work, use with caution. This method may be removed in a future version of ShopifySharp.")]
         public virtual async Task<Checkout> CreateAsync(Checkout checkout, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("checkout.json");
+            var req = PrepareRequest("checkouts.json");
             var body = checkout.ToDictionary();
 
             var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, new JsonContent(checkout), "checkout");
