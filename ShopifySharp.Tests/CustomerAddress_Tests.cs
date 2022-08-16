@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
@@ -12,10 +13,12 @@ namespace ShopifySharp.Tests
     public class CustomerAddress_Tests : IClassFixture<CustomerAddress_Tests_Fixture>
     {
         private CustomerAddress_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public CustomerAddress_Tests(CustomerAddress_Tests_Fixture fixture)
+        public CustomerAddress_Tests(CustomerAddress_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -38,7 +41,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Addresses)} threw exception. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Addresses)} threw exception. {ex.Message}");
 
                 threw = true;
             }

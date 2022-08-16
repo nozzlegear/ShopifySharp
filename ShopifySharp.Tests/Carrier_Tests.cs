@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
@@ -12,10 +13,12 @@ namespace ShopifySharp.Tests
     public class Carrier_Tests : IClassFixture<Carrier_Tests_Fixture>
     {
         private Carrier_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public Carrier_Tests(Carrier_Tests_Fixture fixture)
+        public Carrier_Tests(Carrier_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact(Skip = "Shopify won't let us create more than one random carrier.")]
@@ -50,7 +53,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Carriers)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Carriers)} failed. {ex.Message}");
 
                 threw = true;
             }

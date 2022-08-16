@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
@@ -13,10 +14,12 @@ namespace ShopifySharp.Tests
     public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
     {
         private Customer_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public Customer_Tests(Customer_Tests_Fixture fixture)
+        public Customer_Tests(Customer_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
-            this.Fixture = fixture;
+            Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -47,7 +50,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Customers)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Customers)} failed. {ex.Message}");
 
                 threw = true;
             }
@@ -166,7 +169,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Searches_For_Customers)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Searches_For_Customers)} failed. {ex.Message}");
 
                 threw = true;
             }
@@ -204,7 +207,6 @@ namespace ShopifySharp.Tests
             var invite = await Fixture.Service.SendInviteAsync(created.Id.Value);
 
             Assert.NotNull(invite);
-
         }
 
         [Fact]
@@ -224,7 +226,6 @@ namespace ShopifySharp.Tests
             Assert.NotNull(invite);
             Assert.Equal(options.Subject, invite.Subject);
             Assert.Equal(options.CustomMessage, invite.CustomMessage);
-
         }
 
         [Fact]
@@ -237,7 +238,6 @@ namespace ShopifySharp.Tests
 
             Assert.NotEmpty(url);
             Assert.Contains("account/activate", url);
-
         }
     }
 

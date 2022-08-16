@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
@@ -8,10 +9,12 @@ namespace ShopifySharp.Tests
     [Trait("Category", "Shop")]
     public class Shop_Tests
     {
+        private readonly ITestOutputHelper _testOutputHelper;
         ShopService Service { get; } = new ShopService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public Shop_Tests()
+        public Shop_Tests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
             Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
@@ -37,7 +40,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Uninstalls_Apps)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Uninstalls_Apps)} failed. {ex.Message}");
 
                 threw = true;
             }

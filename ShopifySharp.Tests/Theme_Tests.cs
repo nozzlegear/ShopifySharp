@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests
 {
@@ -11,10 +12,12 @@ namespace ShopifySharp.Tests
     public class Theme_Tests : IClassFixture<Theme_Tests_Fixture>
     {
         private Theme_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public Theme_Tests(Theme_Tests_Fixture fixture)
+        public Theme_Tests(Theme_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -37,7 +40,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Themes)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Themes)} failed. {ex.Message}");
 
                 threw = true;
             }

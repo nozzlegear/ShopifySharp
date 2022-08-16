@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
+using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
@@ -13,10 +14,12 @@ namespace ShopifySharp.Tests
     public class ProductVariant_Tests : IClassFixture<ProductVariant_Tests_Fixture>
     {
         private ProductVariant_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public ProductVariant_Tests(ProductVariant_Tests_Fixture fixture)
+        public ProductVariant_Tests(ProductVariant_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -47,7 +50,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Variants)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Variants)} failed. {ex.Message}");
 
                 threw = true;
             }

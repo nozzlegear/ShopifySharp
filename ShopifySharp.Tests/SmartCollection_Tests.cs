@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests
 {
@@ -12,10 +13,12 @@ namespace ShopifySharp.Tests
     public class SmartCollection_Tests : IClassFixture<SmartCollection_Tests_Fixture>
     {
         private SmartCollection_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public SmartCollection_Tests(SmartCollection_Tests_Fixture fixture)
+        public SmartCollection_Tests(SmartCollection_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -46,7 +49,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_SmartCollections)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_SmartCollections)} failed. {ex.Message}");
 
                 threw = true;
             }

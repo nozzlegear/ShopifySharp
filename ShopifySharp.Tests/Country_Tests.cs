@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests
 {
@@ -11,10 +12,12 @@ namespace ShopifySharp.Tests
     public class Country_Tests : IClassFixture<Country_Tests_Fixture>
     {
         private Country_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public Country_Tests(Country_Tests_Fixture fixture)
+        public Country_Tests(Country_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact(Skip = "The country API often throws errors stating that a country already exists, but that country is never returned when attempting to list/get/delete it.")]
@@ -38,7 +41,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Countries)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Countries)} failed. {ex.Message}");
 
                 threw = true;
             }

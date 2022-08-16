@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests
 {
@@ -12,10 +13,12 @@ namespace ShopifySharp.Tests
     public class OrderRisk_Tests : IClassFixture<OrderRisk_Tests_Fixture>
     {
         private OrderRisk_Tests_Fixture Fixture { get; }
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public OrderRisk_Tests(OrderRisk_Tests_Fixture fixture)
+        public OrderRisk_Tests(OrderRisk_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             this.Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -38,7 +41,7 @@ namespace ShopifySharp.Tests
             }
             catch (ShopifyException ex)
             {
-                Console.WriteLine($"{nameof(Deletes_Risks)} failed. {ex.Message}");
+                _testOutputHelper.WriteLine($"{nameof(Deletes_Risks)} failed. {ex.Message}");
 
                 threw = true;
             }

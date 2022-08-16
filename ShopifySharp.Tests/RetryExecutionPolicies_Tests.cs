@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests
@@ -27,10 +28,12 @@ namespace ShopifySharp.Tests
         };
 
         private readonly RetryExecutionPolicies_Tests_Fixture Fixture;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public RetryExecutionPolicies_Tests(RetryExecutionPolicies_Tests_Fixture fixture)
+        public RetryExecutionPolicies_Tests(RetryExecutionPolicies_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
         {
             Fixture = fixture;
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -189,8 +192,8 @@ namespace ShopifySharp.Tests
             Assert.NotNull(backgroundCompletedAt);
             Assert.NotNull(foregroundCompletedAt);
 
-            Console.WriteLine("Foreground completed at {0}", foregroundCompletedAt);
-            Console.WriteLine("Background completed at {0}", backgroundCompletedAt);
+            _testOutputHelper.WriteLine("Foreground completed at {0}", foregroundCompletedAt);
+            _testOutputHelper.WriteLine("Background completed at {0}", backgroundCompletedAt);
 
             Assert.True(foregroundCompletedAt < backgroundCompletedAt);
         }
