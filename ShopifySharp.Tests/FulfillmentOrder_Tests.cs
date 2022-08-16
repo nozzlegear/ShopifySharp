@@ -46,8 +46,14 @@ namespace ShopifySharp.Tests
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest() 
+            {
+                Message = "Testing Fulfillment Order",
+            });
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
             var result = await Fixture.Service.CloseAsync(fulfillmentOrder.Id.Value, "Testing Done");
             Assert.NotNull(result);
+            Assert.Equal("incomplete", result.Status);
         }
 
     }
@@ -65,7 +71,7 @@ namespace ShopifySharp.Tests
 
 
         public long? LocationId => FulfillmentServiceEntity?.LocationId;
-        public string FulfillmentServiceName { get; } = "ShopifySharpTesting";
+        public string FulfillmentServiceName { get; } = "ShopifySharpTesting4";
 
 
         /// <summary>
@@ -232,11 +238,12 @@ namespace ShopifySharp.Tests
                 fulfillmentServiceEntity = await FulfillmentServiceService.CreateAsync(new FulfillmentServiceEntity()
                 {
                     Name = FulfillmentServiceName,
-                    //CallbackUrl = "https://example.com/fulfillmentService",
-                    InventoryManagement = false,
-                    TrackingSupport = false,
+                    CallbackUrl = "https://test.test/fulfillmentService",
+                    InventoryManagement = true,
+                    TrackingSupport = true,
                     RequiresShippingMethod = false,
                     Format = "json",
+                    FulfillmentOrdersOptIn = true,
                 });
             }
 
