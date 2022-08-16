@@ -84,6 +84,41 @@ namespace ShopifySharp.Tests
             Assert.Equal("on_hold", result.Status);
         }
 
+        [Fact(Skip = "Requires api upgrade to 2022-07 for requires_sku_sharing on FulfillmentService.")]
+        public async Task Move_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest()
+            {
+                Message = "Testing Fulfillment Order",
+            });
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
+            Assert.Equal(Fixture.LocationId.Value, fulfillmentOrder.AssignedLocationId.Value);
+            var result = await Fixture.Service.MoveAsync(fulfillmentOrder.Id.Value,  Fixture.OtherLocationId);
+            Assert.NotNull(result);
+            Assert.Equal(Fixture.OtherLocationId, result.AssignedLocationId.Value);
+        }
+
+        [Fact(Skip = "Requires Subscription setup.")]
+        public async Task Open_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest()
+            {
+                Message = "Testing Fulfillment Order",
+            });
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
+            var result = await Fixture.Service.OpenAsync(fulfillmentOrder.Id.Value);
+            Assert.NotNull(result);
+            Assert.Equal("scheduled", result.Status);
+        }
+
         [Fact]
         public async Task Release_Hold_FulfillmentOrders()
         {
@@ -134,11 +169,10 @@ namespace ShopifySharp.Tests
         public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
         public FulfillmentRequestService FulfillmentRequestService { get; } = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-
-        public long? LocationId => FulfillmentServiceEntity?.LocationId;
-        public string FulfillmentServiceName { get; } = "ShopifySharpTesting4";
+        public long? LocationId => FulfillmentServiceEntities[0]?.LocationId;
         public long OtherLocationId => 62885986369;//6226758;
 
+        public string FulfillmentServiceName { get; } = "ShopifySharpTesting4";
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
@@ -147,7 +181,7 @@ namespace ShopifySharp.Tests
 
         public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
 
-        public FulfillmentServiceEntity FulfillmentServiceEntity { get; private set; }
+        public List<FulfillmentServiceEntity> FulfillmentServiceEntities { get; } = new List<FulfillmentServiceEntity>();
 
         public async Task InitializeAsync()
         {
@@ -159,6 +193,7 @@ namespace ShopifySharp.Tests
             OrderService.SetExecutionPolicy(policy);
 
             await CreateFulfillmentService();
+
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
             //var fulfillmentOrder = await GetFulfillmentOrder(order.Id.Value);
@@ -313,7 +348,8 @@ namespace ShopifySharp.Tests
                 });
             }
 
-            FulfillmentServiceEntity = fulfillmentServiceEntity;
+            FulfillmentServiceEntities.Add(fulfillmentServiceEntity);
+
             return fulfillmentServiceEntity;
         }
 
