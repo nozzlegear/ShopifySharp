@@ -38,6 +38,18 @@ namespace ShopifySharp.Tests
             Assert.Equal(fulfillmentOrder.Id.Value, result.Id.Value);
         }
 
+        [Fact]
+        public async Task Cancel_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            //for canceling, RequestStatus must be unsubmitted
+            var result = await Fixture.Service.CancelAsync(fulfillmentOrder.Id.Value);
+            Assert.NotNull(result);
+            Assert.Equal("closed", result.Status);
+        }
 
         [Fact]
         public async Task Close_FulfillmentOrders()

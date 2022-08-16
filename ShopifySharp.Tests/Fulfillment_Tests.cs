@@ -276,7 +276,7 @@ namespace ShopifySharp.Tests
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public long LocationId => 6226758;
+        public long LocationId => 62885986369;
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
