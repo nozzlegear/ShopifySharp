@@ -41,7 +41,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Cancel_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -54,7 +54,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Close_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -71,7 +71,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Hold_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -87,7 +87,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "Requires api upgrade to 2022-07 for requires_sku_sharing on FulfillmentService.")]
         public async Task Move_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -105,7 +105,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "Requires Subscription setup.")]
         public async Task Open_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -122,7 +122,7 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Release_Hold_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -142,7 +142,7 @@ namespace ShopifySharp.Tests
         [Fact(Skip = "Requires Subscription setup.")]
         public async Task Reschedule_FulfillmentOrders()
         {
-            var order = Fixture.CreatedOrders.First();
+            var order = await Fixture.CreateOrder();
             var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
             Assert.NotEmpty(fulfillmentOrders);
             var fulfillmentOrder = fulfillmentOrders.First();
@@ -178,6 +178,7 @@ namespace ShopifySharp.Tests
         /// Fulfillments must be part of an order and cannot be deleted.
         /// </summary>
         public List<Order> CreatedOrders { get; } = new List<Order>();
+        public List<Product> Products { get; } = new List<Product>();
 
         public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
 
@@ -190,7 +191,10 @@ namespace ShopifySharp.Tests
 
             Service.SetExecutionPolicy(policy);
             FulfillmentService.SetExecutionPolicy(policy);
+            FulfillmentServiceService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
+            ProductService.SetExecutionPolicy(policy);
+            FulfillmentRequestService.SetExecutionPolicy(policy);
 
             await CreateFulfillmentService();
 
@@ -217,23 +221,27 @@ namespace ShopifySharp.Tests
 
         public async Task<Order> CreateOrder()
         {
-            var products = await ProductService.ListAsync(new Filters.ProductListFilter() { Title = "Test Item Title" });
-            var product = products.Items.FirstOrDefault();
-            if (product == null)
+            var product = Products.FirstOrDefault();
+            if(product == null)
             {
-                product = await ProductService.CreateAsync(new Product()
+                var products = await ProductService.ListAsync(new Filters.ProductListFilter() { Title = "Test Item Title" });
+                product = products.Items.FirstOrDefault();
+                if (product == null)
                 {
-                    Title = "Test Item Title",
-                    Variants = new List<ProductVariant>()
+                    product = await ProductService.CreateAsync(new Product()
                     {
-                        new ProductVariant()
+                        Title = "Test Item Title",
+                        Variants = new List<ProductVariant>()
                         {
-                            SKU = "Test-Item",
-                            InventoryManagement = FulfillmentServiceName,
-                            FulfillmentService = FulfillmentServiceName,
-                        }
-                    },
-                }, new ProductCreateOptions() { Published = true, });
+                            new ProductVariant()
+                            {
+                                SKU = "Test-Item",
+                                InventoryManagement = FulfillmentServiceName,
+                                FulfillmentService = FulfillmentServiceName,
+                            }
+                        },
+                    }, new ProductCreateOptions() { Published = true, });
+                }
             }
 
             var obj = await OrderService.CreateAsync(new Order()
