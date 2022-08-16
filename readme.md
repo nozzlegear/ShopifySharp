@@ -1448,12 +1448,12 @@ The FulfillmentOrder resource represents either an item or a group of items in a
 be fulfilled from the same location. There can be more than one fulfillment order for an order at a given location.
 
 > **TODO**
-> - [ ] Cancel a fulfillment order
-> - [ ] Mark a fulfillment order as incomplete
+> - [X] Cancel a fulfillment order
+> - [X] Mark a fulfillment order as incomplete
 > - [ ] Move a fulfillment order to a new location
-> - [ ] Mark the fulfillment order as open
+> - [X] Mark the fulfillment order as open
 > - [ ] Reschedule the fulfill_at time of a scheduled fulfillment order
-> - [ ] Retrieve a specific fulfillment order
+> - [X] Retrieve a specific fulfillment order
 
 ### List Fulfillment Orders
 
