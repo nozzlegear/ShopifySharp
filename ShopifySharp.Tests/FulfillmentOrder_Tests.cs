@@ -68,6 +68,59 @@ namespace ShopifySharp.Tests
             Assert.Equal("incomplete", result.Status);
         }
 
+        [Fact]
+        public async Task Hold_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            var result = await Fixture.Service.HoldAsync(fulfillmentOrder.Id.Value, new FulfillmentHold()
+            {
+                Reason = "other",
+                ReasonNotes = "Testing Hold",
+            });
+            Assert.NotNull(result);
+            Assert.Equal("on_hold", result.Status);
+        }
+
+        [Fact]
+        public async Task Release_Hold_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            fulfillmentOrder = await Fixture.Service.HoldAsync(fulfillmentOrder.Id.Value, new FulfillmentHold()
+            {
+                Reason = "other",
+                ReasonNotes = "Testing Hold",
+            });
+            Assert.NotNull(fulfillmentOrder);
+            Assert.Equal("on_hold", fulfillmentOrder.Status);
+
+            var result = await Fixture.Service.ReleaseHoldAsync(fulfillmentOrder.Id.Value);
+            Assert.NotNull(result);
+            Assert.Equal("open", result.Status);
+        }
+
+        [Fact(Skip = "Requires Subscription setup.")]
+        public async Task Reschedule_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest()
+            {
+                Message = "Testing Fulfillment Order",
+            });
+            fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
+            var result = await Fixture.Service.RescheduleAsync(fulfillmentOrder.Id.Value, DateTimeOffset.UtcNow.AddDays(1));
+            Assert.NotNull(result);
+            Assert.Equal("scheduled", result.Status);
+        }
+
     }
 
     public class FulfillmentOrder_Tests_Fixture : IAsyncLifetime
@@ -84,6 +137,7 @@ namespace ShopifySharp.Tests
 
         public long? LocationId => FulfillmentServiceEntity?.LocationId;
         public string FulfillmentServiceName { get; } = "ShopifySharpTesting4";
+        public long OtherLocationId => 62885986369;//6226758;
 
 
         /// <summary>

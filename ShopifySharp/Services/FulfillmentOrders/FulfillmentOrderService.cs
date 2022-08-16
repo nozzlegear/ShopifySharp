@@ -63,7 +63,7 @@ namespace ShopifySharp
         /// <param name="fulfillmentOrderId">The fulfillment order id.</param>
         /// <param name="fulfillmentHold">The fulfillment hold.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<FulfillmentOrder> HoldAsync(long fulfillmentOrderId, FulfillmentHold fulfillmentHold, string message, CancellationToken cancellationToken = default)
+        public virtual async Task<FulfillmentOrder> HoldAsync(long fulfillmentOrderId, FulfillmentHold fulfillmentHold, CancellationToken cancellationToken = default)
         {
             var body = fulfillmentHold.ToDictionary();
             var content = new JsonContent(new
