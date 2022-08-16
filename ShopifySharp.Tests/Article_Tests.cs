@@ -93,6 +93,7 @@ namespace ShopifySharp.Tests
             Assert.True(tags.Count() > 0);
         }
 
+        [Fact]
         public async Task Updates_Articles()
         {
             string html = "<h1>Updated!</h1>";
