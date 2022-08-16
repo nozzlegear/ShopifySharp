@@ -170,7 +170,7 @@ namespace ShopifySharp.Tests
         public FulfillmentRequestService FulfillmentRequestService { get; } = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public long? LocationId => FulfillmentServiceEntities[0]?.LocationId;
-        public long OtherLocationId => 62885986369;//6226758;
+        public long OtherLocationId => 6226758;
 
         public string FulfillmentServiceName { get; } = "ShopifySharpTesting4";
 
