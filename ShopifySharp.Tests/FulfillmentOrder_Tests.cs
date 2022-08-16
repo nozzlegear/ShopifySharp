@@ -37,6 +37,17 @@ namespace ShopifySharp.Tests
 
             Assert.Equal(fulfillmentOrder.Id.Value, result.Id.Value);
         }
+
+
+        [Fact]
+        public async Task Close_FulfillmentOrders()
+        {
+            var order = Fixture.CreatedOrders.First();
+            var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+            Assert.NotEmpty(fulfillmentOrders);
+            var fulfillmentOrder = fulfillmentOrders.First();
+            var result = await Fixture.Service.CloseAsync(fulfillmentOrder.Id.Value, "Testing Done");
+            Assert.NotNull(result);
         }
 
     }
@@ -49,11 +60,13 @@ namespace ShopifySharp.Tests
         public FulfillmentServiceService FulfillmentServiceService { get; } = new FulfillmentServiceService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-
+        public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
         public FulfillmentRequestService FulfillmentRequestService { get; } = new FulfillmentRequestService(Utils.MyShopifyUrl, Utils.AccessToken);
 
 
         public long? LocationId => FulfillmentServiceEntity?.LocationId;
+        public string FulfillmentServiceName { get; } = "ShopifySharpTesting";
+
 
         /// <summary>
         /// Fulfillments must be part of an order and cannot be deleted.
@@ -97,6 +110,25 @@ namespace ShopifySharp.Tests
 
         public async Task<Order> CreateOrder()
         {
+            var products = await ProductService.ListAsync(new Filters.ProductListFilter() { Title = "Test Item Title" });
+            var product = products.Items.FirstOrDefault();
+            if (product == null)
+            {
+                product = await ProductService.CreateAsync(new Product()
+                {
+                    Title = "Test Item Title",
+                    Variants = new List<ProductVariant>()
+                    {
+                        new ProductVariant()
+                        {
+                            SKU = "Test-Item",
+                            InventoryManagement = FulfillmentServiceName,
+                            FulfillmentService = FulfillmentServiceName,
+                        }
+                    },
+                }, new ProductCreateOptions() { Published = true, });
+            }
+
             var obj = await OrderService.CreateAsync(new Order()
             {
                 CreatedAt = DateTime.UtcNow,
@@ -123,14 +155,8 @@ namespace ShopifySharp.Tests
                         Title = "Test Line Item Title",
                         Quantity = 2,
                         Price = 5,
+                        VariantId = product.Variants.First().Id,
                     },
-                    new LineItem()
-                    {
-                        Name = "Test Line Item 2",
-                        Title = "Test Line Item Title 2",
-                        Quantity = 2,
-                        Price = 5,
-                    }
                 },
                 FinancialStatus = "paid",
                 TotalPrice = 5.00m,
@@ -197,16 +223,15 @@ namespace ShopifySharp.Tests
 
         public async Task<FulfillmentServiceEntity> CreateFulfillmentService()
         {
-            var fulfillmentServiceName = "ShopifySharpTesting";
 
             var fulfillmentServiceEntities = await FulfillmentServiceService.ListAsync(new Filters.FulfillmentServiceListFilter());
-            FulfillmentServiceEntity fulfillmentServiceEntity = fulfillmentServiceEntities.FirstOrDefault(x=>x.Name == fulfillmentServiceName);
+            FulfillmentServiceEntity fulfillmentServiceEntity = fulfillmentServiceEntities.FirstOrDefault(x=>x.Name == FulfillmentServiceName);
 
             if(fulfillmentServiceEntity == null)
             {
                 fulfillmentServiceEntity = await FulfillmentServiceService.CreateAsync(new FulfillmentServiceEntity()
                 {
-                    Name = fulfillmentServiceName,
+                    Name = FulfillmentServiceName,
                     //CallbackUrl = "https://example.com/fulfillmentService",
                     InventoryManagement = false,
                     TrackingSupport = false,
