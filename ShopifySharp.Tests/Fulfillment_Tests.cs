@@ -207,6 +207,38 @@ namespace ShopifySharp.Tests
             Assert.Equal(company, updated.TrackingCompany);
         }
 
+        [Fact]
+        public async Task Updates_Tracking_Fulfillments()
+        {
+            string company = "Auntie Dot's Shipping Company";
+            string trackingNum = "123456789";
+            string trackingUrl = "https://example.com/123456789";
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value, false);
+            long id = created.Id.Value;
+
+            var update = new FulfillmentShipping()
+            {
+                NotifyCustomer = true,
+                TrackingInfo = new TrackingInfo()
+                {
+                    Company = company,
+                    Number = trackingNum,
+                    Url = trackingUrl,
+                }
+            };
+
+            var updated = await Fixture.Service.UpdateTrackingAsync(id, update);
+
+            Assert.Equal(company, updated.TrackingCompany);
+            Assert.Equal(trackingNum, updated.TrackingNumber);
+            Assert.Equal(trackingUrl, updated.TrackingUrl);
+            Assert.Single(updated.TrackingNumbers);
+            Assert.Single(updated.TrackingUrls);
+            Assert.Equal(trackingNum, updated.TrackingNumbers.First());
+            Assert.Equal(trackingUrl, updated.TrackingUrls.First());
+        }
+
         [Fact(Skip = "Can't complete/cancel/open a fulfillment whose status is not 'pending'. It's not clear how to create a fulfillment that's pending.")]
         public async Task Opens_Fulfillments()
         {
