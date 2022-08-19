@@ -308,7 +308,10 @@ namespace ShopifySharp.Tests
                 }
                 catch (ShopifyException ex)
                 {
-                    Console.WriteLine($"Failed to delete order with id {obj.Id.Value}. {ex.Message}");
+                    if ((int)ex.HttpStatusCode != 404)
+                    {
+                        Console.WriteLine($"Failed to delete order with id {obj.Id.Value}. {ex.Message}");
+                    }
                 }
             }
         }
