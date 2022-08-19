@@ -2,9 +2,6 @@ using Newtonsoft.Json;
 using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -14,6 +11,7 @@ namespace ShopifySharp
         /// Indicates whether the customer has consented to be sent marketing material via email.
         /// </summary>
         [JsonProperty("accepts_marketing")]
+        [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
         public bool? AcceptsMarketing { get; set; }
         
         /// <summary>
@@ -21,12 +19,14 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("accepts_marketing_updated_at")]
         [JsonConverter(typeof(InvalidDateToNullConverter))]
+        [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
         public DateTimeOffset? AcceptsMarketingUpdatedAt { get; set; }
         
         /// <summary>
         /// The marketing subscription opt-in level (as described by the M3AAWG best practices guideline) that the customer gave when they consented to receive marketing material by email. If the customer does not accept email marketing, then this property will be set to null. Valid values: single_opt_in, confirmed_opt_in, unknown.
         /// </summary>
         [JsonProperty("marketing_opt_in_level")]
+        [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
         public string MarketingOptInLevel { get; set; }
         
         /// <summary>
@@ -178,5 +178,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("metafields")]
         public IEnumerable<MetaField> Metafields { get; set; }
+
+        /// <summary>
+        /// The marketing consent information when the customer consented to receiving marketing material by email. The email property is required to create a customer with email consent information and to update a customer for email consent that doesn't have an email recorded.
+        /// </summary>
+        [JsonProperty("email_marketing_consent")]
+        public CustomerEmailMarketingConsent EmailMarketingConsent { get; set; }
     }
 }
