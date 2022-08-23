@@ -666,13 +666,16 @@ IEnumerable<Order> orders = await service.ListOrdersForCustomerAsync(customerId)
 
 ### Searching customers
 
-```c#
-var service =  new CustomerService(myShopifyUrl, shopAccessToken);
-IEnumerable<Customer> customers = await Service.SearchAsync("Jane country:United States");
+Use a `CustomerSearchListFilter` to perform searches for customers. There is a noticeable 3-30 second delay between creating a new customer and Shopify indexing it for a search.
 
-//Searches for a customer from the United States with a name like 'Jane'.
-//There is a noticeable 3-30 second delay between creating a customer and Shopify
-//indexing it for a search.
+```c#
+var service = new CustomerService(myShopifyUrl, shopAccessToken); 
+var filter = new CustomerSearchListFilter
+{
+  //Searches for a customer from the United States with a name like 'Jane'.
+  Query = "Jane country:United States"
+};
+IEnumerable<Customer> customers = await Service.SearchAsync(filter);
 ```
 
 ## Orders
