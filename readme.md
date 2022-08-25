@@ -66,37 +66,6 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 
 **Note:** ShopifySharp dropped support for .NET Framework 4.5 in version 5.14.0. [More details in #438.](https://github.com/nozzlegear/ShopifySharp/issues/438)
 
-# Migrating from version 4.x to version 5.0.0
-
-**A complete migration guide for going from v4.x to v5.x is located here:** [https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide](https://nozzlegear.com/shopify/shopifysharp-version-5-migration-guide). The biggest change by far is the way you'll list objects in v5. Shopify has implemented a sort of "linked list" pagination, which means you _cannot_ request arbitrary pages any longer (e.g. "give me page 5 of orders").
-
-Instead, you now have to walk through each page, following the link from one page to the next, to get where you need to go. As long as Shopify is caching the results, this should improve the speed with which your application can list large swathes of objects at once (e.g. when importing all of a user's orders into your application). However, this makes things like letting your users navigate to an arbitrary page of orders in your app impossible. At best, you'll only be able to show links to the next page or previous page.
-
-An example for listing all orders on a Shopify shop:
-
-```cs
-var allOrders = new List<Order>();
-var service = new OrderService(domain, accessToken);
-var page = await service.ListAsync(new OrderListFilter
-{
-    Limit = 250,
-});
-
-while (true)
-{
-    allOrders.AddRange(page.Items);
-
-    if (!page.HasNextPage)
-    {
-        break;
-    }
-
-    page = await service.ListAsync(page.GetNextPageFilter());
-}
-```
-
-You can also [check this issue for commonly asked questions about v5.0](https://github.com/nozzlegear/ShopifySharp/issues/462).
-
 # Frequently Asked Questions
 
 - **Question**: How do I look up a Shopify order by its name?
