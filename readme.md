@@ -68,6 +68,8 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 
 # Frequently Asked Questions
 
+- **Question**: How do I contribute to ShopifySharp?
+    - **Answer**: [Check out our contribution guide!](https://github.com/nozzlegear/ShopifySharp/blob/master/docs/contribution-guide.md) Is the guide missing anything? Please let me know by opening an issue!
 - **Question**: How do I look up a Shopify order by its name?
     - **Answer**: [See this article to learn how to look up a Shopify order by its name property.](https://nozzlegear.com/shopify/looking-up-a-shopify-order-by-its-name)
 - **Question**: How do I use ShopifySharp with a private app?
@@ -2899,28 +2901,6 @@ Enums would be much better suited to ShopifySharp if Shopify themselves used API
 
 What were previously enums in ShopifySharp 1.x and 2.x are now string properties. This change will prevent breaking your app when an enum value changes, and will allow you to quickly update your app when a new enum value is released without waiting on an update to ShopifySharp first.
 
-# Tests
+# Contributing to ShopifySharp
 
-The test suite relies on your own Shopify credentials, including your Shopify API key, a shop's \*.myshopify.com URL, and an access
-token with full permissions for that shop. [This blog post](https://nozzlegear.com/blog/generating-shopify-authorization-credentials)
-will show you exactly what you need to do to get a shop access token with full permissions.
-
-Once you have those credentials you'll need to the following keys/values to your environment variables:
-
-```
-SHOPIFYSHARP_API_KEY = value
-
-SHOPIFYSHARP_SECRET_KEY = value
-
-SHOPIFYSHARP_ACCESS_TOKEN = value
-
-SHOPIFYSHARP_MULTIPASS_SECRET = value
-
-SHOPIFYSHARP_MY_SHOPIFY_URL = value
-```
-
-**New features will not be published until they have test coverage**. If you'd like your pull request to be published, make sure you write tests for it!
-
-ShopifySharp is now using [xUnit](https://xunit.github.io/) for tests. New tests should all follow the format of other tests in 4.0. You can use the [Article](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp.Tests/Article_Tests.cs) test as an example, **but I would highly recommend that you [use the provided ShopifySharp Test snippet in the VSCode folder instead](https://github.com/nozzlegear/ShopifySharp/blob/master/.vscode/snippets.csharp.json)**. Create a new `*_Tests.cs` file and type `test-shopifysharp` in VSCode:
-
-![shopifysharp-test](https://cloud.githubusercontent.com/assets/2417276/25457929/94bc71dc-2a9d-11e7-80ac-72352715504e.gif)
+Check out our [contribution guide](https://github.com/nozzlegear/ShopifySharp/blob/master/docs/contribution-guide.md) for guidance on contributing new features, services, classes and bugfixes to ShopifySharp! The guide also contains details on how to set up and run ShopifySharp's test suite.
