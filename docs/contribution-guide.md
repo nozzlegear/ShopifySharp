@@ -21,6 +21,8 @@ That said, if you feel the change should be made anyway, please open an issue so
 
 Shopify often introduces new endpoints, so we often accept pull requests with new services for these endpoints! In general, if you're creating a new service, please try to implement all of the endpoints for the service as described in Shopify's docs. Take a look at the other service classes to get an idea for how they should be implemented.
 
+> Note that new services must have tests! Even if they're unable to run due to permission issues or requiring a Shopify Plus account, we'd still like the tests to be implemented to confirm that everything works and builds as expected. See the section below on writing tests.
+
 **If your new service uses Shopify's paginated list endpoint, always implement two methods for listing:** the first method should use the generic `ListFilter<EntityType>`, and the second method should use a more dedicated `EntityTypeListFilter`. 
 
 [The `CustomerService` is a good example of this pattern:](https://github.com/nozzlegear/ShopifySharp/blob/d0e747abbf34e946f4b22a092fd47415ee974437/ShopifySharp/Services/Customer/CustomerService.cs#L34)
@@ -62,6 +64,14 @@ Before you contribute a big new feature or make huge changes to classes that are
 
 We don't reject these outright -- improvements are always welcome -- but anything that breaks builds and would cause a lot of refactoring for developers will need approval before merging.
 
+## Writing tests
+
+ShopifySharp is uses [xUnit](https://xunit.github.io/) for tests. New tests should all follow the format of other, existing tests. You can use the [Article](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp.Tests/Article_Tests.cs) test as an example. 
+
+If you're using VS Code, I would highly recommend that you [use the provided ShopifySharp Test snippet in the VSCode folder](https://github.com/nozzlegear/ShopifySharp/blob/master/.vscode/snippets.csharp.json). This snippet will set up a new test file for you when you type `test-shopifysharp`:
+
+![shopifysharp-test](https://cloud.githubusercontent.com/assets/2417276/25457929/94bc71dc-2a9d-11e7-80ac-72352715504e.gif)
+
 ## Testing your changes
 
 If you want to test your changes, you'll need to get a Shopify access token with permissions granted for all the relevant endpoints/resources. You can do that by either creating a public Shopify app and grabbing the token from the oauth process, or by [creating a custom app](https://help.shopify.com/en/manual/apps/custom-apps) on a dev store.
@@ -100,7 +110,7 @@ That command will run all of the tests in the solution using the `net6.0` (.NET 
 
 ### Running tests for specific categories/services
 
-Every test file in the _ShopifySharp.Tests_ folder has its own category. For example, tests for the order service use the `Order` category. We use Xunit as our test runner, which means you can run all the tests in just one category using this command:
+Every test file in the _ShopifySharp.Tests_ folder has its own category. For example, tests for the order service use the `Order` category. We use xUnit as our test runner, which means you can run all the tests in just one category using this command:
 
 ```sh
 dotnet test --framework net6.0 --filter "Category=Order"
