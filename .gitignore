@@ -218,6 +218,7 @@ ModelManifest.xml
 # Ignore IDE settings
 .ionide
 .idea
+.vim
  
 # Ignore signing keys
 *.snk
