@@ -20,10 +20,11 @@ namespace ShopifySharp.Tests
                 {"shop", "stages-test-shop-2.myshopify.com"},
                 {"path_prefix", "/apps/stages-order-tracker"},
                 {"timestamp", "1459781841"},
-                {"signature", "239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a"},
+                {"logged_in_customer_id", string.Empty},
+                {"signature", "c79b2e8038b24d9f12dbb6a1308f490a7c81c2d0089fb5f81a13bb4fdef230c9"},
             };
 
-            bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+            var isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
 
             Assert.True(isValid);
         }
@@ -37,10 +38,11 @@ namespace ShopifySharp.Tests
                 {"shop", "stages-test-shop-2.myshopify.com"},
                 {"path_prefix", "/apps/stages-order-tracker"},
                 {"timestamp", "1459781841"},
-                {"signature", "239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a"},
+                {"logged_in_customer_id", "123456789"},
+                {"signature", "4d67f9147404a4ac61ec5ca82c3fe6015497564d0c6aea7075cf23257c9b2400"},
             };
 
-            bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+            var isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
 
             Assert.True(isValid);
         }
@@ -49,9 +51,18 @@ namespace ShopifySharp.Tests
         public void Validates_Proxy_Requests_With_Raw_QueryString()
         {
             //Configure querystring
-            var qs = "shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&signature=239813a42e1164a9f52e85b2119b752774fafb26d0f730359c86572e1791854a";
+            var qs = "shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&logged_in_customer_id=123456789&signature=4d67f9147404a4ac61ec5ca82c3fe6015497564d0c6aea7075cf23257c9b2400";
 
-            bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+            var isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
+        public void Validates_Proxy_Requests_With_Raw_QueryString_And_Null_Customer_Id()
+        {
+            var qs = "shop=stages-test-shop-2.myshopify.com&logged_in_customer_id=&path_prefix=%2Fapps%2Fstages-tracking-widget-1&timestamp=1661887935&signature=4876ab17e7af88772fb3f020925a98fbce10b9276db7637d285155c6c8f64e7c";
+            var isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
 
             Assert.True(isValid);
         }
