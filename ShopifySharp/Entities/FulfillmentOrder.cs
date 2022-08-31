@@ -116,7 +116,7 @@ namespace ShopifySharp
         /// <br>DAP: Delivered at place.</br>
         /// <br>DDP: Delivered duty paid.</br>
         /// </summary>
-        [JsonProperty("incoterm")]
-        public string InternationalDuties { get; set; }
+        [JsonProperty("international_duties")]
+        public FulfillmentInternationalDuties InternationalDuties { get; set; }
     }
 }
