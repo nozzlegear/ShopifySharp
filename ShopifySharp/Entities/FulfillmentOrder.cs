@@ -100,11 +100,23 @@ namespace ShopifySharp
         public DateTimeOffset? FulfillAt { get; set; }
 
         /// <summary>
+        /// The latest date and time by which all items in the fulfillment order need to be fulfilled.
+        /// </summary>
+        [JsonProperty("fulfill_by")]
+        public DateTimeOffset? FulfilledBy { get; set; }
+
+        /// <summary>
+        /// A list of requests sent by the merchant to the fulfillment service for this fulfillment order.
+        /// </summary>
+        [JsonProperty("fulfillment_holds")]
+        public IEnumerable<FulfillmentHold> FulfillmentHolds { get; set; }
+
+        /// <summary>
         /// The international duties relevant to the fulfillment order. The method of duties payment.Valid values:
         /// <br>DAP: Delivered at place.</br>
         /// <br>DDP: Delivered duty paid.</br>
         /// </summary>
-        [JsonProperty("incoterm")]
-        public string InternationalDuties { get; set; }
+        [JsonProperty("international_duties")]
+        public FulfillmentInternationalDuties InternationalDuties { get; set; }
     }
 }
