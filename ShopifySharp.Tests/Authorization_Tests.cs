@@ -68,6 +68,15 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public void Validates_Proxy_Requests_With_Raw_QueryString_Beginning_With_Question_Mark()
+        {
+            var qs = "?shop=stages-test-shop-2.myshopify.com&logged_in_customer_id=&path_prefix=%2Fapps%2Fstages-tracking-widget-1&timestamp=1661887935&signature=4876ab17e7af88772fb3f020925a98fbce10b9276db7637d285155c6c8f64e7c";
+            var isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.SecretKey);
+
+            Assert.True(isValid);
+        }
+
+        [Fact]
         public void Validates_Web_Requests()
         {
             var qs = new Dictionary<string, StringValues>()
