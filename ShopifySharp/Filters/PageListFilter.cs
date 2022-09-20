@@ -65,7 +65,7 @@ namespace ShopifySharp.Filters
         /// <summary>
         /// Restrict results to pages with a given published status. Known values: published, unpublished, any. Default: any. 
         /// </summary>
-        [JsonProperty("status")]
+        [JsonProperty("published_status")]
         public string PublishedStatus { get; set; }
     }
 }
