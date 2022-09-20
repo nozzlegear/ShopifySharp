@@ -75,7 +75,7 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 - **Question**: How do I use ShopifySharp with a private app?
     - **Answer**: ShopifySharp works with any private Shopify app, no extra configuration needed. All you need to do is pass in your private app's password wherever ShopifySharp asks for an access token. For example: `var service = new ShopifySharp.OrderService("mydomain.myshopify.com", "PRIVATE APP PASSWORD HERE")`. This package's test suite uses a private app for testing API calls, so this method is confirmed working.
 - **Question**: X method or Y endpoint randomly 404s/throws exceptions for some shops.
-    - **Answer**: Make sure that you're always using a \*.myshopify.com domain! While a "real" domain like "example.com" will often work with the API, there are some API endpoints that will randomly return redirects or 404s if you aren't using the \*.myshopify.com domain. [See this post by @dnatabar for more information.](https://github.com/nozzlegear/ShopifySharp/issues/286#issuecomment-1248952763)
+    - **Answer**: Make sure that you're always using a \*.myshopify.com domain! While a "real" domain like "example.com" will often work with the API, there are some API endpoints that will randomly return redirects or 404s if you aren't using the \*.myshopify.com domain. [See this post by @dnatabar](https://github.com/nozzlegear/ShopifySharp/issues/286#issuecomment-1248952763) and [this post by @flgatormike](https://github.com/nozzlegear/ShopifySharp/issues/723#issuecomment-1074623062) for more information.
 
 # A work-in-progress
 
