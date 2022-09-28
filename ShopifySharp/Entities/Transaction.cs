@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// The unique identifier for the device.
         /// </summary>
         [JsonProperty("device_id")]
-        public string DeviceId { get; set; }
+        public long? DeviceId { get; set; }
 
         /// <summary>
         /// The name of the gateway the transaction was issued through.

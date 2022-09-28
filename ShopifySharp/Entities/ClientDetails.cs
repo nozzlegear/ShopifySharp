@@ -15,7 +15,7 @@ namespace ShopifySharp
         /// The browser screen height in pixels, if available.
         /// </summary>
         [JsonProperty("browser_height")]
-        public string BrowserHeight { get; set; }
+        public int? BrowserHeight { get; set; }
 
         /// <summary>
         /// The browser IP address.
@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// The browser screen width in pixels, if available.
         /// </summary>
         [JsonProperty("browser_width")]
-        public string BrowserWidth { get; set; }
+        public int? BrowserWidth { get; set; }
 
         /// <summary>
         /// A hash of the session.
