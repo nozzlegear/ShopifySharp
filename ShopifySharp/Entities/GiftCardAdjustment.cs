@@ -48,7 +48,7 @@ namespace ShopifySharp
         /// A unique numeric identifier of the application that issued the adjustment (if it was issued by an application).
         /// </summary>
         [JsonProperty("api_client_id")]
-        public int? ApiClientId { get; set; }
+        public long? ApiClientId { get; set; }
 
         /// <summary>
         /// A unique numeric identifier of the user that issued the adjustment (if it was issued by a user).
