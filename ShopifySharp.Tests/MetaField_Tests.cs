@@ -49,28 +49,31 @@ namespace ShopifySharp.Tests
         public async Task Lists_Metafields()
         {
             var list = await Fixture.Service.ListAsync();
-            Assert.True(list.Items.Any(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description));
+            
+            Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
         }
 
         [Fact]
         public async Task Lists_Metafields_On_Resources()
         {
             var list = await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType);
-            Assert.True(list.Items.Any(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description));
+            
+            Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
         }
 
         [Fact]
         public async Task Lists_Metafields_On_Resources_And_Parent()
         {
             var list = await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
-            Assert.True(list.Items.Any(i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description));
+            
+            Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
         }
 
         [Fact]
         public async Task Deletes_Metafields()
         {
             var created = await Fixture.Create(true);
-            bool threw = false;
+            var threw = false;
 
             try
             {
@@ -108,7 +111,7 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Description, created.Description);
             EmptyAssert.NotNullOrEmpty(created.Key);
             Assert.NotNull(created.Value);
-            Assert.True(new string[] { Fixture.ResourceType, Fixture.ResourceType.Substring(0, Fixture.ResourceType.Length - 1) }.Contains(created.OwnerResource));
+            Assert.Contains(created.OwnerResource, new [] { Fixture.ResourceType, Fixture.ResourceType.Substring(0, Fixture.ResourceType.Length - 1) });
             Assert.Equal(Fixture.ResourceId, created.OwnerId);
         }
 
@@ -122,16 +125,16 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.Description, created.Description);
             EmptyAssert.NotNullOrEmpty(created.Key);
             Assert.NotNull(created.Value);
-            Assert.True(new string[] { Fixture.ChildResourceType, Fixture.ChildResourceType.Substring(0, Fixture.ChildResourceType.Length - 1) }.Contains(created.OwnerResource));
+            Assert.Contains(created.OwnerResource, new [] { Fixture.ChildResourceType, Fixture.ChildResourceType.Substring(0, Fixture.ChildResourceType.Length - 1) });
             Assert.Equal(Fixture.ChildResourceId, created.OwnerId);
         }
 
         [Fact]
         public async Task Updates_Metafields()
         {
-            string value = "10";
+            var value = "10";
             var created = await Fixture.Create();
-            long id = created.Id.Value;
+            var id = created.Id.Value;
 
             created.Value = value;
             created.Id = null;
@@ -147,9 +150,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Metafields_On_Resources()
         {
-            string value = "10";
+            var value = "10";
             var created = await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType);
-            long id = created.Id.Value;
+            var id = created.Id.Value;
 
             created.Value = value;
             created.Id = null;
@@ -165,9 +168,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Metafields_On_Child_Resources()
         {
-            string value = "10";
+            var value = "10";
             var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType);
-            long id = created.Id.Value;
+            var id = created.Id.Value;
 
             created.Value = value;
             created.Id = null;
@@ -183,9 +186,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_Metafields_On_Resources_And_Parent()
         {
-            string value = "10";
+            var value = "10";
             var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
-            long id = created.Id.Value;
+            var id = created.Id.Value;
 
             created.Value = value;
             created.Id = null;
@@ -205,15 +208,12 @@ namespace ShopifySharp.Tests
 
         public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public List<ShopifySharp.MetaField> Created { get; } = new List<ShopifySharp.MetaField>();
+        public List<MetaField> Created { get; } = new List<MetaField>();
 
         public string Namespace => "testing";
-
         public string Description => "This is a test meta field. It is an integer value.";
-
         public string ResourceType => "products";
         public string ChildResourceType => "variants";
-
         public long ResourceId { get; set; }
         public long ChildResourceId { get; set; }
 
