@@ -38,6 +38,14 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Counting_Metafields_On_Resources_Downcases_ResourceType()
+        {
+            var exn = await Record.ExceptionAsync(async () => await Fixture.Service.CountAsync(Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+
+            Assert.Null(exn);
+        }
+
+        [Fact]
         public async Task Counts_Metafields_On_Resources_And_Parent()
         {
             var count = await Fixture.Service.CountAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
@@ -46,10 +54,18 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Counting_Metafields_On_Resources_And_Parent_Downcases_ResourceTypes()
+        {
+            var exn = await Record.ExceptionAsync(async () => await Fixture.Service.CountAsync(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+
+            Assert.Null(exn);
+        }
+
+        [Fact]
         public async Task Lists_Metafields()
         {
             var list = await Fixture.Service.ListAsync();
-            
+
             Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
         }
 
@@ -57,16 +73,32 @@ namespace ShopifySharp.Tests
         public async Task Lists_Metafields_On_Resources()
         {
             var list = await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType);
-            
+
             Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
+        }
+
+        [Fact]
+        public async Task Listing_Metafields_On_Resources_Downcases_ResourceType()
+        {
+            var exn = await Record.ExceptionAsync(async () => await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+
+            Assert.Null(exn);
         }
 
         [Fact]
         public async Task Lists_Metafields_On_Resources_And_Parent()
         {
             var list = await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
-            
+
             Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
+        }
+
+        [Fact]
+        public async Task Listing_Metafields_On_Resources_And_Parent_Downcases_ResourceTypes()
+        {
+            var exn = await Record.ExceptionAsync(async () => await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+
+            Assert.Null(exn);
         }
 
         [Fact]
@@ -116,6 +148,14 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Creating_Metafields_On_Resources_Downcases_ResourceType()
+        {
+            var exn = await Record.ExceptionAsync(async () => await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+
+            Assert.Null(exn);
+        }
+
+        [Fact]
         public async Task Creates_Metafields_On_Resources_And_Parent()
         {
             var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
@@ -127,6 +167,14 @@ namespace ShopifySharp.Tests
             Assert.NotNull(created.Value);
             Assert.Contains(created.OwnerResource, new [] { Fixture.ChildResourceType, Fixture.ChildResourceType.Substring(0, Fixture.ChildResourceType.Length - 1) });
             Assert.Equal(Fixture.ChildResourceId, created.OwnerId);
+        }
+
+        [Fact]
+        public async Task Creating_Metafields_On_Resources_And_Parent_Downcases_ResourceTypes()
+        {
+            var exn = await Record.ExceptionAsync(async () => await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+
+            Assert.Null(exn);
         }
 
         [Fact]
