@@ -57,7 +57,7 @@ namespace ShopifySharp
             var req = PrepareRequest("checkouts.json");
             var body = checkout.ToDictionary();
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, new JsonContent(checkout), "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Post, cancellationToken, new JsonContent(new { checkout }), "checkout");
             return response.Result;
         }
 
@@ -90,7 +90,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, cancellationToken, new JsonContent(updatedCheckout), "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, cancellationToken, new JsonContent(new { updatedCheckout }), "checkout");
             return response.Result;
         }
 
