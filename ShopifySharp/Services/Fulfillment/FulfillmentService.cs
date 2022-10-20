@@ -67,14 +67,14 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", "fulfillment", fields, cancellationToken);
         }
-
+        
         /// <summary>
         /// Creates a fulfillment for one or many fulfillment orders.
         /// </summary>
         /// <param name="fulfillment">An object containing fulfillment order and tracking data.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>
-        public virtual async Task<Fulfillment> CreateForFulfillmentAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
+        public virtual async Task<Fulfillment> CreateAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"fulfillments.json");
             var body = fulfillment.ToDictionary();
@@ -106,6 +106,18 @@ namespace ShopifySharp
 
             var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, content, "fulfillment");
             return response.Result;
+        }
+
+        /// <summary>
+        /// Creates a fulfillment for one or many fulfillment orders.
+        /// </summary>
+        /// <param name="fulfillment">An object containing fulfillment order and tracking data.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The new <see cref="Fulfillment"/>.</returns>
+        [Obsolete("This method has been renamed to CreateAsync and will be removed in a future release.")]
+        public virtual async Task<Fulfillment> CreateForFulfillmentAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
+        {
+            return await CreateAsync(fulfillment, cancellationToken);
         }
 
         /// <summary>
