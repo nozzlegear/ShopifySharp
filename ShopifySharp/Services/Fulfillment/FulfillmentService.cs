@@ -128,7 +128,7 @@ namespace ShopifySharp
         /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>
-        [Obsolete("This method will be removed in API version 2022-10 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
+        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
         public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment fulfillment, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
@@ -151,7 +151,7 @@ namespace ShopifySharp
         /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Fulfillment"/>.</returns>
-        [Obsolete("This method will be removed in API version 2022-10 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
+        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
         public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json");
@@ -171,7 +171,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillmentId">The fulfillment's id.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        [Obsolete("This method will be removed in API version 2022-10 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
+        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
         public virtual async Task<Fulfillment> CompleteAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/complete.json");
@@ -186,7 +186,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillmentId">The fulfillment's id.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        [Obsolete("This method will be removed in API version 2022-10 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
+        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
         public virtual async Task<Fulfillment> CancelAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel.json");
@@ -201,7 +201,7 @@ namespace ShopifySharp
         /// <param name="orderId">The order id to which the fulfillments belong.</param>
         /// <param name="fulfillmentId">The fulfillment's id.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        [Obsolete("This method will be removed in API version 2022-10 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
+        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
         public virtual async Task<Fulfillment> OpenAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/open.json");
