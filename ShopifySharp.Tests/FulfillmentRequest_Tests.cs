@@ -22,7 +22,8 @@ namespace ShopifySharp.Tests
         public async Task Accept_FulfillmentOrders()
         {
             var order = await Fixture.CreateOrder();
-            var fulfillmentOrder = await Fixture.CreateFulfillmentOrder(order.Id.Value);
+            var fulfillmentOrders = await Fixture.ListFulfillmentOrders(order.Id.Value);
+            var fulfillmentOrder = fulfillmentOrders.First();
             var result = await Fixture.Service.AcceptAsync(fulfillmentOrder.Id.Value, "Unit Test: Accepted", CancellationToken.None);
 
             Assert.NotNull(result);
@@ -32,7 +33,8 @@ namespace ShopifySharp.Tests
         public async Task Reject_FulfillmentOrders()
         {
             var order = await Fixture.CreateOrder();
-            var fulfillmentOrder = await Fixture.CreateFulfillmentOrder(order.Id.Value);
+            var fulfillmentOrders = await Fixture.ListFulfillmentOrders(order.Id.Value);
+            var fulfillmentOrder = fulfillmentOrders.First();
             var result = await Fixture.Service.RejectAsync(fulfillmentOrder.Id.Value, "Unit Test: Rejected", CancellationToken.None);
 
             Assert.NotNull(result);
@@ -143,59 +145,35 @@ namespace ShopifySharp.Tests
             return obj;
         }
 
-        async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
+        public async Task<IEnumerable<FulfillmentOrder>> ListFulfillmentOrders(long orderId)
         {
-            Fulfillment fulfillment;
+            var orders = await FulfillmentOrderService.ListAsync(orderId);
 
-            if (multipleTrackingNumbers)
+            return orders;
+        }
+
+        public async Task<Fulfillment> CreateFulfillment(long orderId)
+        {
+            var fulfillmentOrders = await ListFulfillmentOrders(orderId);
+            var fulfillment = await FulfillmentService.CreateAsync(new FulfillmentShipping
             {
-                fulfillment = new Fulfillment()
+                Message = "Items are shipping now!",
+                FulfillmentRequestOrderLineItems = fulfillmentOrders.Select(o => new LineItemsByFulfillmentOrder
                 {
-                    TrackingCompany = "Jack Black's Pack, Stack and Track",
-                    TrackingUrls = new string[]
-                    {
-                        "https://example.com/da10038ee679f9afc93a785cafdd8d52",
-                        "https://example.com/6349a40313ae3c7544331ff9fb44f28c",
-                        "https://example.com/ca0b2d7bcccec4b58a94a24fa04101d3"
-                    },
-                    TrackingNumbers = new string[]
-                    {
-                        "da10038ee679f9afc93a785cafdd8d52",
-                        "6349a40313ae3c7544331ff9fb44f28c",
-                        "ca0b2d7bcccec4b58a94a24fa04101d3"
-                    }
-                };
-            }
-            else
-            {
-                fulfillment = new Fulfillment()
+                    FulfillmentOrderId = o.Id.Value
+                }),
+                NotifyCustomer = false,
+                TrackingInfo = new TrackingInfo
                 {
-                    TrackingCompany = "Jack Black's Pack, Stack and Track",
-                    TrackingUrl = "https://example.com/123456789",
-                    TrackingNumber = "123456789",
-                };
-            }
-
-            if (items != null)
-            {
-                fulfillment.LineItems = items;
-            }
-
-            fulfillment.NotifyCustomer = false;
-            fulfillment.LocationId = LocationId;
-            fulfillment = await FulfillmentService.CreateAsync(orderId, fulfillment);
+                    Company = "Jack Black's Pack, Stack and Track",
+                    Url = "https://example.com/123456789",
+                    Number = "123456789"
+                }
+            });
 
             CreatedFulfillments.Add(fulfillment);
 
             return fulfillment;
-        }
-
-        public async Task<FulfillmentOrder> CreateFulfillmentOrder(long orderId)
-        {
-            var fulfillment = await CreateFulfillment(orderId);
-            var fulfillmentOrders = await FulfillmentOrderService.ListAsync(orderId);
-
-            return fulfillmentOrders.First();
         }
     }
 }
