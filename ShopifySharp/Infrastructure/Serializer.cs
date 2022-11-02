@@ -1,4 +1,7 @@
 using Newtonsoft.Json;
+using ShopifySharp.Converters;
+using System;
+using System.Collections.Generic;
 
 namespace ShopifySharp.Infrastructure
 {
@@ -7,18 +10,23 @@ namespace ShopifySharp.Infrastructure
     /// </summary>
     public static class Serializer
     {
-        public static JsonSerializerSettings Settings { get; } = new JsonSerializerSettings()
+        private static JsonSerializerSettings CreateSettings()
         {
-            NullValueHandling = NullValueHandling.Ignore
-        };
+            return new JsonSerializerSettings 
+            {
+                DateParseHandling = DateParseHandling.DateTimeOffset,
+                NullValueHandling = NullValueHandling.Ignore, 
+                Converters = new List<JsonConverter> 
+                { 
+                    new InvalidDateConverter()
+                }
+            };
+        }
 
-        public static JsonSerializer JsonSerializer { get; } = new JsonSerializer
-        {
-            DateParseHandling = DateParseHandling.DateTimeOffset
-        };
+        public static string Serialize(object data) => JsonConvert.SerializeObject(data, CreateSettings());
 
-        public static string Serialize(object data) => JsonConvert.SerializeObject(data, Settings);
+        public static T Deserialize<T>(string json) => JsonConvert.DeserializeObject<T>(json, CreateSettings());
 
-        public static T Deserialize<T>(string json) => JsonConvert.DeserializeObject<T>(json, Settings);
+        public static object Deserialize(string json, Type objectType) => JsonConvert.DeserializeObject(json, objectType, CreateSettings());
     }
 }

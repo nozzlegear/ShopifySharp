@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using ShopifySharp.Converters;
+using ShopifySharp.Infrastructure;
 using System;
 using Xunit;
 
@@ -14,12 +15,12 @@ namespace ShopifySharp.Tests
             DateTime validNow = DateTime.Now;
             DateTimeOffset validNowOffset = DateTimeOffset.Now;
 
-            string serializedJson = JsonConvert.SerializeObject(new TestObject()
+            string serializedJson = Serializer.Serialize(new TestObject
             {
                 DateTime = validNow,
-                DateTimeOffset = validNowOffset,
-            }, new InvalidDateToNullConverter());
-            var deserialized = JsonConvert.DeserializeObject<TestObject>(serializedJson, new InvalidDateToNullConverter());
+                DateTimeOffset = validNowOffset
+            });
+            var deserialized = Serializer.Deserialize<TestObject>(serializedJson);
 
             Assert.Equal(validNow, deserialized.DateTime);
             Assert.Equal(validNowOffset, deserialized.DateTimeOffset);
@@ -33,13 +34,12 @@ namespace ShopifySharp.Tests
             {
                 DateTime = null,
                 DateTimeOffset = null,
-            }, new InvalidDateToNullConverter())
-                .Replace("null", strInvalidISODate);
+            }).Replace("null", strInvalidISODate);
 
-            var deserialized = JsonConvert.DeserializeObject<TestObject>(serializedJson, new InvalidDateToNullConverter());
+            var deserialized = Serializer.Deserialize<TestObject>(serializedJson);
 
-            Assert.Equal(null, deserialized.DateTime);
-            Assert.Equal(null, deserialized.DateTimeOffset);
+            Assert.Null(deserialized.DateTime);
+            Assert.Null(deserialized.DateTimeOffset);
         }
 
         class TestObject
