@@ -99,7 +99,6 @@ namespace ShopifySharp
         /// The estimated date of delivery.
         /// </summary>
         [JsonProperty("estimated_delivery_at")]
-        [JsonConverter(typeof(InvalidDateToNullConverter))]
         public DateTimeOffset? EstimatedDeliveryAt { get; set; }
 
         /// <summary>

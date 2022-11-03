@@ -18,7 +18,6 @@ namespace ShopifySharp
         /// The date and time when the customer consented or objected to receiving marketing material by email. Set this value whenever the customer consents or objects to marketing materials.
         /// </summary>
         [JsonProperty("accepts_marketing_updated_at")]
-        [JsonConverter(typeof(InvalidDateToNullConverter))]
         [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
         public DateTimeOffset? AcceptsMarketingUpdatedAt { get; set; }
         
