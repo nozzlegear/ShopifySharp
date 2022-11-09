@@ -235,8 +235,7 @@ namespace ShopifySharp
                             // This method may fail when the method was Delete, which is intendend.
                             // Delete methods should not be parsing the response JSON and should instead
                             // be using the non-generic ExecuteRequestAsync.
-                            var data = Serializer.Deserialize<JObject>(rawResult).SelectToken(rootElement);
-                            result = data.ToObject<T>();
+                            result = Serializer.Deserialize<T>(rawResult, rootElement);
                         }
 
                         return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
