@@ -55,7 +55,7 @@ namespace ShopifySharp
         /// States whether or not the application charge is a test transaction.
         /// </summary>
         /// <remarks>Valid values are 'true' or null. Needs a special converter to convert null to false and vice-versa.</remarks>
-        [JsonProperty("test"), JsonConverter(typeof(FalseToNullConverter))]
+        [JsonProperty("test", NullValueHandling = NullValueHandling.Include), JsonConverter(typeof(FalseToNullConverter))]
         public bool? Test { get; set; }
 
         /// <summary>
