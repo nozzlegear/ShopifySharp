@@ -32,7 +32,7 @@ namespace ShopifySharp.Infrastructure
 
         public static T Deserialize<T>(string json, string rootElementPath)
         {
-            var jToken = JObject.Parse(json).SelectToken(rootElementPath);
+            var jToken = Deserialize<JToken>(json).SelectToken(rootElementPath);
             return jToken.ToObject<T>(JsonSerializer.Create(CreateSettings()));
         }
     }
