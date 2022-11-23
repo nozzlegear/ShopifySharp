@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -83,7 +83,7 @@ namespace ShopifySharp
         /// <param name="fulfillmentOrderId">The fulfillment order id.</param>
         /// <param name="newLocationId">The new fulfillment order location.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<FulfillmentOrder> MoveAsync(long fulfillmentOrderId, long newLocationId, CancellationToken cancellationToken = default)
+        public virtual async Task<FulfillmentOrderMove> MoveAsync(long fulfillmentOrderId, long newLocationId, CancellationToken cancellationToken = default)
         {
             var body = new
             {
@@ -97,7 +97,7 @@ namespace ShopifySharp
             var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/move.json");
 
             //needs to be original_fulfillment_order
-            var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
+            var response = await ExecuteRequestAsync<FulfillmentOrderMove>(req, HttpMethod.Post, cancellationToken, content);
 
             return response.Result;
         }
