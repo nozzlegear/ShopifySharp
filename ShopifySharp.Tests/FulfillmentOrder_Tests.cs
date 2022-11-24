@@ -99,7 +99,8 @@ namespace ShopifySharp.Tests
             Assert.Equal(Fixture.LocationId.Value, fulfillmentOrder.AssignedLocationId.Value);
             var result = await Fixture.Service.MoveAsync(fulfillmentOrder.Id.Value,  Fixture.OtherLocationId);
             Assert.NotNull(result);
-            Assert.Equal(Fixture.OtherLocationId, result.AssignedLocationId.Value);
+            Assert.NotNull(result.MovedFulfillmentOrder);
+            Assert.Equal(Fixture.OtherLocationId, result.MovedFulfillmentOrder.AssignedLocationId.Value);
         }
 
         [Fact(Skip = "Requires Subscription setup.")]
