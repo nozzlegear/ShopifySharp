@@ -118,7 +118,7 @@ namespace ShopifySharp
         /// <summary>
         /// The payment gateway used to tender the tip, such as shopify_payments. Present only on tips.
         /// </summary>
-        [JsonProperty("tip_payment_gateway")]
+        [JsonProperty("tip_payment_gateway", NullValueHandling = NullValueHandling.Include)]
         public string TipPaymentGateway { get; set; }
 
         /// <summary>
