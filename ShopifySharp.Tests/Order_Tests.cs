@@ -205,6 +205,24 @@ namespace ShopifySharp.Tests
             // In previous versions of ShopifySharp, the updated JSON would have sent 'email=null', clearing out the email address.
             Assert.Equal(created.Email, updated.Email);
         }
+
+        [Fact]
+        public void TipPaymentGatewaySpecified_GetDeserialized()
+        {
+            string orderJson = @"{
+  ""id"": 123,
+  ""line_items"": [
+    {
+      ""id"": 123,
+      ""tip_payment_gateway"": null
+    }
+  ]
+}
+";
+            var order = Infrastructure.Serializer.Deserialize<Order>(orderJson);
+            Assert.Null(order.LineItems.First().TipPaymentGateway);
+            Assert.True(order.LineItems.First().TipPaymentGatewaySpecified);
+        }
     }
 
     public class Order_Tests_Fixture : IAsyncLifetime
