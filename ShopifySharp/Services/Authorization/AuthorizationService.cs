@@ -405,5 +405,43 @@ namespace ShopifySharp
                 return new AuthorizationResult(json.Value<string>("access_token"), json.Value<string>("scope").Split(','));
             }
         }
+
+        /// <summary>
+        /// Refreshes an existing store access token using the app's client secret and a refresh token
+        /// For more info on rotating tokens, see https://shopify.dev/apps/auth/oauth/rotate-revoke-client-credentials
+        /// </summary>
+        /// <param name="myShopifyUrl">The store's *.myshopify.com url</param>
+        /// <param name="clientId">The app's client ID, also known as API key</param>
+        /// <param name="clientSecret">The app's secret key</param>
+        /// <param name="refreshToken">The app's refresh token</param>
+        /// <param name="existingStoreAccessToken">The existing store access token</param>
+        /// <returns></returns>
+        public static async Task<AuthorizationResult> RefreshAccessToken(string myShopifyUrl, string clientId, string clientSecret, string refreshToken, string existingStoreAccessToken)
+        {
+            var ub = new UriBuilder(ShopifyService.BuildShopUri(myShopifyUrl, false))
+            {
+                Path = "admin/oauth/access_token"
+            };
+            var content = new JsonContent(new
+            {
+                client_id = clientId,
+                client_secret = clientSecret,
+                refresh_token = refreshToken,
+                access_token = existingStoreAccessToken
+            });
+
+            using (var client = new HttpClient())
+            using (var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content))
+            {
+                var request = client.SendAsync(msg);
+                var response = await request;
+                var rawDataString = await response.Content.ReadAsStringAsync();
+
+                ShopifyService.CheckResponseExceptions(response, rawDataString);
+
+                var json = JToken.Parse(rawDataString);
+                return new AuthorizationResult(json.Value<string>("access_token"), json.Value<string>("scope").Split(','));
+            }
+        }
     }
 }
