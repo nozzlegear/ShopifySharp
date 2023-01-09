@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ShopifySharp.Converters;
+using ShopifySharp.Infrastructure;
 using Xunit;
 
 namespace ShopifySharp.Tests
@@ -10,6 +12,25 @@ namespace ShopifySharp.Tests
         public FalseToNullConverter_Tests()
         {
 
+        }
+
+        [Fact]
+        public void SerializeChargeTest()
+        {
+            var charge = Serializer.Deserialize<RecurringCharge>("{ \"test\" : true }");
+            Assert.True(charge.Test);
+
+            charge = Serializer.Deserialize<RecurringCharge>("{ \"test\" : null }");
+            Assert.False(charge.Test);
+            
+            charge = Serializer.Deserialize<RecurringCharge>("{ \"test\" : false }");
+            Assert.False(charge.Test);
+
+            Assert.True(JObject.Parse(Serializer.Serialize(new RecurringCharge { Test = true })).Value<bool?>("test"));
+
+            Assert.Null(JObject.Parse(Serializer.Serialize(new RecurringCharge { Test = false })).Value<bool?>("test"));
+
+            Assert.Null(JObject.Parse(Serializer.Serialize(new RecurringCharge { Test = null })).Value<bool?>("test"));
         }
 
         [Fact]

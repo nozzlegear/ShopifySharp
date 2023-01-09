@@ -18,8 +18,6 @@ namespace ShopifySharp
     {
         public virtual string APIVersion => "2022-04";
 
-        private static JsonSerializer _Serializer = Serializer.JsonSerializer;
-
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
 
         private static IHttpClientFactory _HttpClientFactory = new DefaultHttpClientFactory();
@@ -237,9 +235,7 @@ namespace ShopifySharp
                             // This method may fail when the method was Delete, which is intendend.
                             // Delete methods should not be parsing the response JSON and should instead
                             // be using the non-generic ExecuteRequestAsync.
-                            var reader = new JsonTextReader(new StringReader(rawResult));
-                            var data = _Serializer.Deserialize<JObject>(reader).SelectToken(rootElement);
-                            result = data.ToObject<T>();
+                            result = Serializer.Deserialize<T>(rawResult, rootElement);
                         }
 
                         return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
