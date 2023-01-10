@@ -31,7 +31,7 @@ namespace ShopifySharp.Tests
         {
             var list = await Fixture.Service.ListAsync(new TenderTransactionListFilter
             {
-                ProcessedAtMin = DateTime.MaxValue
+                ProcessedAtMin = DateTime.Now.AddDays(30)
             });
 
             Assert.True(!list.Items.Any());

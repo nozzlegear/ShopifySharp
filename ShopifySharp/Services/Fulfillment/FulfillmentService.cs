@@ -67,14 +67,14 @@ namespace ShopifySharp
         {
             return await ExecuteGetAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", "fulfillment", fields, cancellationToken);
         }
-
+        
         /// <summary>
         /// Creates a fulfillment for one or many fulfillment orders.
         /// </summary>
         /// <param name="fulfillment">An object containing fulfillment order and tracking data.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>
-        public virtual async Task<Fulfillment> CreateForFulfillmentAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
+        public virtual async Task<Fulfillment> CreateAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"fulfillments.json");
             var body = fulfillment.ToDictionary();
@@ -109,93 +109,15 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Creates a new <see cref="Fulfillment"/> on the order.
-        /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillment#createV2-2021-07">API Reference</see>
+        /// Creates a fulfillment for one or many fulfillment orders.
         /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillment">A new <see cref="Fulfillment"/>. Id should be set to null.</param>
+        /// <param name="fulfillment">An object containing fulfillment order and tracking data.</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new <see cref="Fulfillment"/>.</returns>
-        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
-        public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment fulfillment, CancellationToken cancellationToken = default)
+        [Obsolete("This method has been renamed to CreateAsync and will be removed in a future release.")]
+        public virtual async Task<Fulfillment> CreateForFulfillmentAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments.json");
-            var body = fulfillment.ToDictionary();
-
-            var content = new JsonContent(new
-            {
-                fulfillment = body
-            });
-
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, content, "fulfillment");
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Updates the given <see cref="Fulfillment"/>.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillmentId">Id of the object being updated.</param>
-        /// <param name="fulfillment">The <see cref="Fulfillment"/> to update.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The updated <see cref="Fulfillment"/>.</returns>
-        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
-        public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment fulfillment, CancellationToken cancellationToken = default)
-        {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}.json");
-            var body = fulfillment.ToDictionary();
-            var content = new JsonContent(new
-            {
-                fulfillment = body
-            });
-
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Put, cancellationToken, content, "fulfillment");
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Completes a pending fulfillment with the given id.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillmentId">The fulfillment's id.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
-        public virtual async Task<Fulfillment> CompleteAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
-        {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/complete.json");
-
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Cancels a pending fulfillment with the given id.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillmentId">The fulfillment's id.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
-        public virtual async Task<Fulfillment> CancelAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
-        {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel.json");
-
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
-            return response.Result;
-        }
-
-        /// <summary>
-        /// Opens a pending fulfillment with the given id.
-        /// </summary>
-        /// <param name="orderId">The order id to which the fulfillments belong.</param>
-        /// <param name="fulfillmentId">The fulfillment's id.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        [Obsolete("This method will be removed in API version 2022-07 and ShopifySharp v5.19.0. Use the FulfillmentOrderService instead.")]
-        public virtual async Task<Fulfillment> OpenAsync(long orderId, long fulfillmentId, CancellationToken cancellationToken = default)
-        {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/open.json");
-
-            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
-            return response.Result;
+            return await CreateAsync(fulfillment, cancellationToken);
         }
     }
 }

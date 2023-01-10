@@ -45,6 +45,8 @@ namespace ShopifySharp.Tests
         public FulfillmentEventService FulfillmentEventService { get; } = new FulfillmentEventService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+        
+        public FulfillmentOrderService FulfillmentOrderService { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -65,6 +67,7 @@ namespace ShopifySharp.Tests
 
             // Fulfillment API has a stricter rate limit when on a non-paid store.
             FulfillmentService.SetExecutionPolicy(policy);
+            FulfillmentOrderService.SetExecutionPolicy(policy);
             FulfillmentEventService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
 
@@ -142,16 +145,30 @@ namespace ShopifySharp.Tests
             return obj;
         }
 
-        public async Task<Fulfillment> CreateFulfillment(long orderId, bool multipleTrackingNumbers = false, IEnumerable<LineItem> items = null)
+        public async Task<IEnumerable<FulfillmentOrder>> ListFulfillmentOrders(long orderId)
         {
-            var fulfillment = await FulfillmentService.CreateAsync(orderId, new Fulfillment()
+            var orders = await FulfillmentOrderService.ListAsync(orderId);
+
+            return orders;
+        }
+
+        public async Task<Fulfillment> CreateFulfillment(long orderId)
+        {
+            var fulfillmentOrders = await ListFulfillmentOrders(orderId);
+            var fulfillment = await FulfillmentService.CreateAsync(new FulfillmentShipping
             {
-                TrackingCompany = "Jack Black's Pack, Stack and Track",
-                TrackingUrl = "https://example.com/123456789",
-                TrackingNumber = "123456789",
-                LineItems = CreatedOrders.First().LineItems,
+                Message = "Items are shipping now!",
+                FulfillmentRequestOrderLineItems = fulfillmentOrders.Select(o => new LineItemsByFulfillmentOrder
+                {
+                    FulfillmentOrderId = o.Id.Value
+                }),
                 NotifyCustomer = false,
-                LocationId = LocationId
+                TrackingInfo = new TrackingInfo
+                {
+                    Company = "Jack Black's Pack, Stack and Track",
+                    Url = "https://example.com/123456789",
+                    Number = "123456789"
+                }
             });
 
             CreatedFulfillments.Add(fulfillment);

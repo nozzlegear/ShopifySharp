@@ -16,7 +16,7 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService
     {
-        public virtual string APIVersion => "2022-04";
+        public virtual string APIVersion => "2022-07";
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
 
