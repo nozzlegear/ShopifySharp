@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
         public async Task Creates_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
         public async Task Completes_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
         public async Task Gets_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -49,7 +49,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
         public async Task Updates_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -61,7 +61,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout.ShippingLine);
         }
 
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
         public async Task Lists_Checkout_Shipping_Rates()
         {
             var checkout = await Fixture.Create();
@@ -71,7 +71,7 @@ namespace ShopifySharp.Tests
         }
 
         
-        [Fact]
+        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
         public async Task Stores_CreditCards()
         {
             var card = new CreditCard()
