@@ -17,7 +17,8 @@ namespace ShopifySharp.Tests
         {
             this.Fixture = fixture;
         }
-        [Fact]
+        
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Counts_Products()
         {
             var count = await Fixture.Service.CountAsync();
@@ -25,7 +26,7 @@ namespace ShopifySharp.Tests
             Assert.True(count > 0);
         }
 
-        [Fact]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Lists_Products_NoFilter()
         {
             var list = await Fixture.Service.ListAsync();

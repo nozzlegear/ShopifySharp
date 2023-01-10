@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
-        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Creates_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Completes_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -40,7 +40,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Gets_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -49,7 +49,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout);
         }
 
-        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Updates_Checkouts()
         {
             var checkout = await Fixture.Create();
@@ -61,7 +61,7 @@ namespace ShopifySharp.Tests
             Assert.NotNull(checkout.ShippingLine);
         }
 
-        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Lists_Checkout_Shipping_Rates()
         {
             var checkout = await Fixture.Create();
@@ -70,8 +70,7 @@ namespace ShopifySharp.Tests
             Assert.NotEmpty(shippingRates);
         }
 
-        
-        [Fact(Skip = "Checkouts are disabled on the ShopifySharp development store.")]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Stores_CreditCards()
         {
             var card = new CreditCard()

@@ -18,7 +18,7 @@ namespace ShopifySharp.Tests.SalesChannel
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Lists_Collections_NoFilter()
         {
             var list = await Fixture.Service.ListAsync();
@@ -32,7 +32,7 @@ namespace ShopifySharp.Tests.SalesChannel
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Lists_Collection_ProductIds_NoFilter()
         {
             var list = await Fixture.Service.ListAsync();
@@ -49,8 +49,7 @@ namespace ShopifySharp.Tests.SalesChannel
             }
         }
 
-
-        [Fact]
+        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
         public async Task Retrieve_Specific_Collection()
         {
             var list = await Fixture.Service.ListAsync();
