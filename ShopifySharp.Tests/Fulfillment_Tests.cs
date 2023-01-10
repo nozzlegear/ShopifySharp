@@ -251,18 +251,21 @@ namespace ShopifySharp.Tests
         public async Task<Fulfillment> Create(long orderId, bool partialFulfillment = false)
         {
             var fulfillmentOrders = await ListFulfillmentOrders(orderId);
+            var lineItems = fulfillmentOrders.Select(o => new LineItemsByFulfillmentOrder
+            {
+                FulfillmentOrderId = o.Id.Value,
+                FulfillmentRequestOrderLineItems = partialFulfillment == false
+                    ? null
+                    : o.FulfillmentOrderLineItems.Select(li => new FulfillmentRequestOrderLineItem
+                    {
+                        Id = li.Id,
+                        Quantity = li.FulfillableQuantity - 1
+                    })
+            });
             var fulfillment = await Service.CreateAsync(new FulfillmentShipping
             {
                 Message = "Items are shipping now!",
-                FulfillmentRequestOrderLineItems = fulfillmentOrders.Select(o => new LineItemsByFulfillmentOrder
-                {
-                    FulfillmentOrderId = o.Id.Value,
-                    FulfillmentRequestOrderLineItems = partialFulfillment == false ? null : o.FulfillmentOrderLineItems.Select(li => new FulfillmentRequestOrderLineItem
-                    {
-                        Id = li.LineItemId,
-                        Quantity = li.FulfillableQuantity - 1
-                    })
-                }),
+                FulfillmentRequestOrderLineItems = lineItems,
                 NotifyCustomer = false,
                 TrackingInfo = new TrackingInfo
                 {
