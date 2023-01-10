@@ -164,6 +164,7 @@ namespace ShopifySharp.Tests
 
             Service.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
+            FulfillmentOrderService.SetExecutionPolicy(policy);
 
             // Create an order and fulfillment for count, list, get, etc. tests.
             var order = await CreateOrder();
