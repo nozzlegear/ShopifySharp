@@ -47,8 +47,6 @@ namespace ShopifySharp.Tests
         
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public FulfillmentOrderService FulfillmentOrderService { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
@@ -58,6 +56,7 @@ namespace ShopifySharp.Tests
             // Fulfillment API has a stricter rate limit when on a non-paid store.
             var policy = new LeakyBucketExecutionPolicy();
 
+            Service.SetExecutionPolicy(policy);
             FulfillmentService.SetExecutionPolicy(policy);
             OrderService.SetExecutionPolicy(policy);
 
