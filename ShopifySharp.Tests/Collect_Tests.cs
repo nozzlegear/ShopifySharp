@@ -117,9 +117,11 @@ namespace ShopifySharp.Tests
             CustomCollectionService.SetExecutionPolicy(policy);
 
             // Create a collection to use with these tests.
+            var collectionHandle = Guid.NewGuid().ToString();
             var collection = await CustomCollectionService.CreateAsync(new CustomCollection()
             {
                 Title = "Things",
+                Handle = collectionHandle,
                 Published = false,
                 Image = new CustomCollectionImage()
                 {
