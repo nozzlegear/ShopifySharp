@@ -90,7 +90,7 @@ namespace ShopifySharp
         {
             var req = PrepareRequest($"checkouts/{token}.json");
 
-            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, cancellationToken, new JsonContent(new { updatedCheckout }), "checkout");
+            var response = await ExecuteRequestAsync<Checkout>(req, HttpMethod.Put, cancellationToken, new JsonContent(new { checkout = updatedCheckout }), "checkout");
             return response.Result;
         }
 
