@@ -31,7 +31,6 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
-          3.1.x
 
     - name: Build and pack
       run: fish .github/scripts/build.fish

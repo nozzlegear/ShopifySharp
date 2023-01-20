@@ -26,7 +26,6 @@ jobs:
       with:
         dotnet-version: |
           6.0.x
-          3.1.x
 
     - name: Clone repository
       uses: actions/checkout@v3
