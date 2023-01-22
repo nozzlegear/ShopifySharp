@@ -67,7 +67,7 @@ namespace ShopifySharp.Tests
             long orderId = Fixture.Created.First().OrderId.Value;
             var fulfillmentOrder = await Fixture.GetFulfillmentOrder(orderId);
             long fulfillmentOrderId = fulfillmentOrder.Id.Value;
-            var list = await Fixture.Service.ListForFulfillmentAsync(fulfillmentOrderId);
+            var list = await Fixture.Service.ListForFulfillmentOrderAsync(fulfillmentOrderId);
 
             Assert.True(list.Items.Any());
         }
