@@ -151,6 +151,16 @@ namespace ShopifySharp.Tests
             Assert.Equal(trackingNum, updated.TrackingNumbers.First());
             Assert.Equal(trackingUrl, updated.TrackingUrls.First());
         }
+
+        [Fact]
+        public async Task Cancels_Fulfillments()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value);
+            var cancelled = await Fixture.Service.CancelAsync(created.Id.Value);
+
+            Assert.Equal("cancelled", cancelled.Status);
+        }
     }
 
     public class Fulfillment_Tests_Fixture : IAsyncLifetime
