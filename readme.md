@@ -1346,7 +1346,7 @@ Fulfillments can only be cancelled if their `Status` is `pending`.
 
 ```cs
 var service = new FulfillmentService(myShopifyUrl, shopAccessToken);
-await service.CancelAsync(orderId, fulfillmentId);
+await service.CancelAsync(fulfillmentId)
 ```
 
 ---
