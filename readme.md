@@ -1398,7 +1398,7 @@ var assignedFulfillments = await service.ListAsync(filterStatus);
 The CancellationRequest resource represents a cancellation request made by the merchant or 
 an order management app to a fulfillment service for a fulfillment order.
 
-### Create A Fulfillment Request
+### Create A Cancellation Request
 
 Send a cancellation request to the fulfillment service of a fulfillment order.
 
@@ -1407,7 +1407,7 @@ var service = new CancellationRequestService(myShopifyUrl, shopAccessToken);
 var fulfillmentOrder = await service.CreateAsync(fulfillmentOrderId, "The customer changed his mind.");
 ```
 
-### Accept A Fulfillment Request
+### Accept A Cancellation Request
 
 Accept a cancellation request sent to a fulfillment service for a fulfillment order.
 
@@ -1416,13 +1416,13 @@ var service = new CancellationRequestService(myShopifyUrl, shopAccessToken);
 var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "We had not started any processing yet.");
 ```
 
-### Reject A Fulfillment Request
+### Reject A Cancellation Request
 
 Reject a cancellation request sent to a fulfillment service for a fulfillment order.
 
 ```c#
 var service = new CancellationRequestService(myShopifyUrl, shopAccessToken);
-var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "We have already send the shipment out.");
+var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "We have already sent the shipment out.");
 ```
 
 ---
