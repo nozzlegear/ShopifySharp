@@ -169,7 +169,7 @@ ShopifySharp currently supports the following Shopify APIs:
     -   Resource Feedback (not implimented yet)
 -   Shipping and Fulfillment
     -   [Assigned Fulfillment Orders](#assigned-fulfillment-orders)
-    -   Cancellation Request (not implimented yet)
+    -   [Cancellation Requests](#cancellation-requests)
     -   Carrier Service (docs not yet written)
     -   [Fulfillments](#fulfillments)
     -   [Fulfillment Events](#fulfillment-events)
@@ -1389,6 +1389,40 @@ var filterStatus = new AssignedFulfillmentOrderFilter()
 });
 
 var assignedFulfillments = await service.ListAsync(filterStatus);
+```
+
+---
+
+## Cancellation Requests
+
+The CancellationRequest resource represents a cancellation request made by the merchant or 
+an order management app to a fulfillment service for a fulfillment order.
+
+### Create A Fulfillment Request
+
+Send a cancellation request to the fulfillment service of a fulfillment order.
+
+```c#
+var service = new CancellationRequestService(myShopifyUrl, shopAccessToken);
+var fulfillmentOrder = await service.CreateAsync(fulfillmentOrderId, "The customer changed his mind.");
+```
+
+### Accept A Fulfillment Request
+
+Accept a cancellation request sent to a fulfillment service for a fulfillment order.
+
+```c#
+var service = new CancellationRequestService(myShopifyUrl, shopAccessToken);
+var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "We had not started any processing yet.");
+```
+
+### Reject A Fulfillment Request
+
+Reject a cancellation request sent to a fulfillment service for a fulfillment order.
+
+```c#
+var service = new CancellationRequestService(myShopifyUrl, shopAccessToken);
+var fulfillmentOrder = await service.AcceptAsync(fulfillmentOrderId, "We have already send the shipment out.");
 ```
 
 ---
