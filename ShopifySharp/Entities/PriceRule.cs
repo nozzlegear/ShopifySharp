@@ -6,6 +6,9 @@ namespace ShopifySharp
 {
     public class PriceRule : ShopifyObject
     {
+        /**
+        * The title of the price rule.
+        */
         [JsonProperty("title")]
         public string Title { get; set; }
 
