@@ -49,83 +49,100 @@ namespace ShopifySharp
         {
             var accessToken = GetAccessToken(baseRequest);
             var bucket = accessToken == null ? null : _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new MultiShopifyAPIBucket(_getRequestContext));
-            bool isGraphQL = baseRequest.RequestUri.AbsolutePath.EndsWith("graphql.json");
+            APIType apiType = APIType.RESTAdmin;
+            if (baseRequest.RequestUri.AbsolutePath.EndsWith("graphql.json"))
+                apiType = baseRequest.RequestUri.Host == "partners.shopify.com" ? APIType.GraphQLPartner : APIType.GraphQLAdmin;
 
             while (true)
             {
                 var request = baseRequest.Clone();
 
-                if (isGraphQL)
+                switch (apiType)
                 {
-                    //if the user didn't pass a request query cost, we assume a cost of 50
-                    graphqlQueryCost = graphqlQueryCost ?? 50;
-                    if (bucket != null)
-                        await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost.Value, cancellationToken);
-
-                    var res = await executeRequestAsync(request);
-                    var json = res.Result as JToken;
-
-                    if (bucket != null)
-                    {
-                        var cost = json.SelectToken("extensions.cost");
-                        if (cost != null)
-                        {
-                            var throttleStatus = cost["throttleStatus"];
-                            int maximumAvailable = (int)throttleStatus["maximumAvailable"];
-                            int restoreRate = (int)throttleStatus["restoreRate"];
-                            int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
-                            int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
-                            int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
-                            bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
-
-                            //The user might have supplied no cost or an invalid cost
-                            //We fix the query cost so the correct value is used if a retry is needed
-                            graphqlQueryCost = (int)cost["requestedQueryCost"];
-                        }
-                    }
-
-                    if (json.SelectToken("errors")
-                        ?.Children()
-                        .Any(r => r.SelectToken("extensions.code")?.Value<string>() == "THROTTLED")
-                        == true)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                        continue;
-                    }
-
-                    return res;
-                }
-                else //REST
-                {
-                    try
-                    {
+                    case APIType.GraphQLAdmin:
+                        //if the user didn't pass a request query cost, we assume a cost of 50
+                        graphqlQueryCost = graphqlQueryCost ?? 50;
                         if (bucket != null)
-                            await bucket.WaitForAvailableRESTAsync(cancellationToken);
+                            await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost.Value, cancellationToken);
 
-                        var res = await executeRequestAsync(request);
+                        var graphRes = await executeRequestAsync(request);
+                        var json = graphRes.Result as JToken;
 
                         if (bucket != null)
                         {
-                            var apiCallLimitHeaderValue = GetRestCallLimit(res.Response);
-                            if (apiCallLimitHeaderValue != null)
+                            var cost = json.SelectToken("extensions.cost");
+                            if (cost != null)
                             {
-                                var split = apiCallLimitHeaderValue.Split('/');
-                                if (split.Length == 2 && int.TryParse(split[0], out int currentlyUsed) &&
-                                                         int.TryParse(split[1], out int maxAvailable))
-                                {
-                                    bucket.SetRESTBucketState(maxAvailable, maxAvailable - currentlyUsed);
-                                }
+                                var throttleStatus = cost["throttleStatus"];
+                                int maximumAvailable = (int)throttleStatus["maximumAvailable"];
+                                int restoreRate = (int)throttleStatus["restoreRate"];
+                                int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
+                                int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
+                                int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
+                                bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
+
+                                //The user might have supplied no cost or an invalid cost
+                                //We fix the query cost so the correct value is used if a retry is needed
+                                graphqlQueryCost = (int)cost["requestedQueryCost"];
                             }
                         }
 
-                        return res;
-                    }
-                    catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
-                    {
-                        //Only retry if breach caused by full bucket
-                        //Shopify sometimes return 429 for other limits (e.g if too many variants are created)
-                        await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                    }
+                        if (json.SelectToken("errors")
+                            ?.Children()
+                            .Any(r => r.SelectToken("extensions.code")?.Value<string>() == "THROTTLED")
+                            == true)
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                            break;
+                        }
+
+                        return graphRes;
+
+                    case APIType.RESTAdmin:
+                        try
+                        {
+                            if (bucket != null)
+                                await bucket.WaitForAvailableRESTAsync(cancellationToken);
+
+                            var restRes = await executeRequestAsync(request);
+
+                            if (bucket != null)
+                            {
+                                var apiCallLimitHeaderValue = GetRestCallLimit(restRes.Response);
+                                if (apiCallLimitHeaderValue != null)
+                                {
+                                    var split = apiCallLimitHeaderValue.Split('/');
+                                    if (split.Length == 2 && int.TryParse(split[0], out int currentlyUsed) &&
+                                                             int.TryParse(split[1], out int maxAvailable))
+                                    {
+                                        bucket.SetRESTBucketState(maxAvailable, maxAvailable - currentlyUsed);
+                                    }
+                                }
+                            }
+
+                            return restRes;
+                        }
+                        catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
+                        {
+                            //Only retry if breach caused by full bucket
+                            //Shopify sometimes return 429 for other limits (e.g if too many variants are created)
+                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                            break;
+                        }
+
+                    case APIType.GraphQLPartner:
+                        try
+                        {
+                            if (bucket != null)
+                                await bucket.WaitForAvailableGraphQLPartnerAsync(cancellationToken);
+
+                            return await executeRequestAsync(request);
+                        }
+                        catch (ShopifyRateLimitException)
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                            break;
+                        }
                 }
             }
         }

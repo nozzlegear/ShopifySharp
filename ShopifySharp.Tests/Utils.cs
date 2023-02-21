@@ -54,5 +54,9 @@ namespace ShopifySharp.Tests
         public static string MultipassSecret => Get("MULTIPASS_SECRET");
 
         public static string MyShopifyUrl => Get("MY_SHOPIFY_URL");
+
+        public static long OrganizationId => long.Parse(Get("ORG_ID"));
+
+        public static string OrganizationToken => Get("ORG_TOKEN");
     }
 }
