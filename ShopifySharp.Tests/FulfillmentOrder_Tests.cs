@@ -330,7 +330,7 @@ namespace ShopifySharp.Tests
 
             fulfillmentShipping.NotifyCustomer = false;
             //fulfillment.LocationId = LocationId;
-            fulfillment = await FulfillmentService.CreateForFulfillmentAsync(fulfillmentShipping);
+            fulfillment = await FulfillmentService.CreateAsync(fulfillmentShipping);
 
             CreatedFulfillments.Add(fulfillment);
 

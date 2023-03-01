@@ -86,13 +86,6 @@ namespace ShopifySharp.Entities.SalesChannel
         [JsonProperty("reservation_time_left")]
         public long ReservationTimeLeft { get; set; }
 
-        /// <summary>
-        /// The reservation time in seconds for the line item products. Default value: null. This property is not writable.
-        /// </summary>
-        [JsonProperty("reservation_time")]
-        [Obsolete]
-        public long? ReservationTime { get; set; }
-
         [JsonProperty("source_identifier")]
         public string SourceIdentifier { get; set; }
 

@@ -205,13 +205,6 @@ namespace ShopifySharp
         public IEnumerable<LineItemDuty> Duties { get; set; }
 
         /// <summary>
-        /// The location of the line item's fulfillment origin.
-        /// </summary>
-        [JsonProperty("origin_location")]
-        [Obsolete("This field is deprecated in the API and will be removed in an upcoming release")]
-        public LineItemOriginLocation OriginLocation { get; set; }
-
-        /// <summary>
         /// A unique identifier for a quantity of items within a single fulfillment. An order can have multiple fulfillment line items.
         /// </summary>
         [JsonProperty("fulfillment_line_item_id")]

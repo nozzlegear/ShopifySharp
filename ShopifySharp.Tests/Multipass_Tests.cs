@@ -41,7 +41,6 @@ namespace ShopifySharp.Tests
             LastName = "Doe",
             VerifiedEmail = true,
             MultipassIdentifier = Guid.ToString(),
-            AcceptsMarketing = true,
             Addresses = new List<Address>()
             {
                 new Address()
