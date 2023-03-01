@@ -159,8 +159,6 @@ namespace ShopifySharp.Tests
         private OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         private FulfillmentOrderService FulfillmentOrderService { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        public FulfillmentOrderService FulfillmentOrderService { get; } = new FulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-
         public long LocationId => 6226758;
 
         /// <summary>
