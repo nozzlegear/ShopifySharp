@@ -1,3 +1,4 @@
+using ShopifySharp.Filters;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,9 +29,9 @@ namespace ShopifySharp.Tests
             var list = await Service.ListAsync();
 
             // Not all shops have a location.
-            if (list.Count() > 0)
+            if (list.Items.Count() > 0)
             {
-                long id = list.First().Id.Value;
+                long id = list.Items.First().Id.Value;
                 var location = await Service.GetAsync(id);
 
                 Assert.NotNull(location.Address1);

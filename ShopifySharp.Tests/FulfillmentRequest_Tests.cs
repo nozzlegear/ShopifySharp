@@ -74,7 +74,7 @@ namespace ShopifySharp.Tests
 
             // Get a location id to use in these tests
             var locations = await LocationService.ListAsync();
-            LocationId = locations.First().Id.Value;
+            LocationId = locations.Items.First().Id.Value;
         }
 
         public async Task DisposeAsync()

@@ -50,7 +50,7 @@ namespace ShopifySharp.Tests
             var cancellationToken = new CancellationTokenSource().Token;
             
             var result = await Fixture.Service.ListAsync();
-            result = await Fixture.Service.ListAsync(cancellationToken);
+            result = await Fixture.Service.ListAsync(cancellationToken: cancellationToken);
             result = await Fixture.Service.ListAsync(userFilter);
             result = await Fixture.Service.ListAsync(userFilter, cancellationToken);
             result = await Fixture.Service.ListAsync(listFilter);

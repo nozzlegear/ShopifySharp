@@ -152,5 +152,13 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("currency_exchange_adjustment")]
         public CurrencyExchangeAdjustment CurrencyExchangeAdjustment { get; set; }
+
+        /// <summary>
+        /// Unique ID is now sent to payment providers when a customer pays at checkout. 
+        /// This ID can be used to match order information between Shopify and payment providers. An Order can have more than one Payment ID. 
+        /// It only includes successful or pending payments. It does not include captures and refunds.
+        /// </summary>
+        [JsonProperty("payment_id")]
+        public string PaymentId { get; set; }
     }
 }

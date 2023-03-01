@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
+using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
@@ -32,12 +33,19 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Retrieves a list of all <see cref="Location"/> objects.
+        /// Gets a list of up to 250 of the locations.
         /// </summary>
-        /// <returns>The list of <see cref="Location"/> objects.</returns>
-        public virtual async Task<IEnumerable<Location>> ListAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<ListResult<Location>> ListAsync(ListFilter<Location> filter = null, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<IEnumerable<Location>>($"locations.json", "locations", cancellationToken: cancellationToken);
+            return await ExecuteGetListAsync("locations.json", "locations", filter, cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets a list of up to 250 of the locations.
+        /// </summary>
+        public virtual async Task<ListResult<Location>> ListAsync(LocationListFilter filter, CancellationToken cancellationToken = default)
+        {
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
     }
 }

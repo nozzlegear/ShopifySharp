@@ -323,5 +323,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("primary_location_id")]
         public long? PrimaryLocationId { get; set; }
+
+        /// <summary>
+        /// Whether transactional SMS sent by Shopify are disabled on the shop's online store
+        /// </summary>
+        [JsonProperty("transactional_sms_disabled")]
+        public bool? TransactionalSmsDisabled { get; set; }
+
+        /// <summary>
+        /// Whether SMS marketing has been enabled on the shop's checkout configuration settings
+        /// </summary>
+        [JsonProperty("marketing_sms_consent_enabled_at_checkout")]
+        public bool? MarketingSmsConsentEnabledAtCheckout { get; set; }
     }
 }

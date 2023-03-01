@@ -208,6 +208,7 @@ namespace ShopifySharp
         /// The location of the line item's fulfillment origin.
         /// </summary>
         [JsonProperty("origin_location")]
+        [Obsolete("This field is deprecated in the API and will be removed in an upcoming release")]
         public LineItemOriginLocation OriginLocation { get; set; }
 
         /// <summary>
