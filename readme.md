@@ -1258,6 +1258,10 @@ var filteredCollects = await service.CountAsync(new CollectFilterOptions()
 
 ## Fulfillments
 
+> **NOTE**: Shopify has changed how fulfillments are done in API version **2022-07 and above**. This takes affect in [ShopifySharp versions **5.19.0 and above**](#API-support). If you're using these versions of ShopifySharp, you should use fulfillment orders to create fulfillments, rather than the `FulfillmentService`. 
+> 
+> [Follow the example code in this issue](https://github.com/nozzlegear/ShopifySharp/issues/828) until our fulfillment documentation is updated.
+
 A fulfillment represents a shipment of one or more items in an order. All fulfillments are tied to a single order.
 
 ### Creating a fulfillment
