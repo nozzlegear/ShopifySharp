@@ -111,5 +111,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("international_duties")]
         public FulfillmentInternationalDuties InternationalDuties { get; set; }
+        
+        /// <summary>
+        /// The date and time when the fulfillment order was created in Shopify.
+        /// </summary>
+        [JsonProperty("created_at")]
+        public DateTimeOffset? CreatedAt { get; set; }
+
+        /// <summary>
+        /// The date and time when the fulfillment order was last modified.
+        /// </summary>
+        [JsonProperty("updated_at")]
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }
