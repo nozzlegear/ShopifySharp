@@ -29,12 +29,21 @@ namespace ShopifySharp.Tests
                 _dotEnvFile = DotEnvFile.LoadFile("./env.yml", true);
             }
 
-            if (_dotEnvFile != null && _dotEnvFile.ContainsKey(key))
+            var prefix = "SHOPIFYSHARP_";
+
+            if (_dotEnvFile != null)
             {
-                return _dotEnvFile[key];
+                if (_dotEnvFile.ContainsKey(key))
+                {
+                    return _dotEnvFile[key];
+                }
+
+                if (_dotEnvFile.ContainsKey(prefix + key))
+                {
+                    return _dotEnvFile[prefix + key];
+                }
             }
 
-            var prefix = "SHOPIFYSHARP_";
             var value = Environment.GetEnvironmentVariable(key) ?? Environment.GetEnvironmentVariable(prefix + key);
 
             if (string.IsNullOrEmpty(value))
