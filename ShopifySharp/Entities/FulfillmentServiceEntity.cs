@@ -55,6 +55,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("requires_shipping_method")]
         public bool? RequiresShippingMethod { get; set; }
+                
+        /// <summary>
+        /// States if the fulfillment service allows products to have more than 1 shipping location
+        /// </summary>
+        [JsonProperty("permits_sku_sharing")]
+        public bool? PermitsSkuSharing { get; set; }
 
         /// <summary>
         /// States if the fulfillment service provides tracking numbers for packages.
