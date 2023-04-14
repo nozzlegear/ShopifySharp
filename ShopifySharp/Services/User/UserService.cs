@@ -25,17 +25,6 @@ namespace ShopifySharp
         /// <summary>
         /// Gets a list of up to 250 of the users.
         /// </summary>
-        /// <remarks>
-        /// To be removed in 6.0, only exists for backwards compatibility.
-        /// </remarks>
-        public virtual async Task<ListResult<User>> ListAsync(CancellationToken cancellationToken)
-        {
-            return await ListAsync(null, cancellationToken);
-        }
-
-        /// <summary>
-        /// Gets a list of up to 250 of the users.
-        /// </summary>
         public virtual async Task<ListResult<User>> ListAsync(ListFilter<User> filter = null, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("users.json", "users", filter, cancellationToken);

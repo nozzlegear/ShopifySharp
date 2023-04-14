@@ -28,13 +28,6 @@ namespace ShopifySharp
         public long? AssignedLocationId { get; set; }
 
         /// <summary>
-        /// "mars-fulfillment".
-        /// </summary>
-        [JsonProperty("fulfillment_service_handle")]
-        [Obsolete("FulfillmentServiceHandle is deprecated and will be removed in a future release.")]
-        public string FulfillmentServiceHandle { get; set; }
-
-        /// <summary>
         /// The status of the fulfillment order.
         /// </summary>
         [JsonProperty("request_status")]
@@ -118,5 +111,17 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("international_duties")]
         public FulfillmentInternationalDuties InternationalDuties { get; set; }
+        
+        /// <summary>
+        /// The date and time when the fulfillment order was created in Shopify.
+        /// </summary>
+        [JsonProperty("created_at")]
+        public DateTimeOffset? CreatedAt { get; set; }
+
+        /// <summary>
+        /// The date and time when the fulfillment order was last modified.
+        /// </summary>
+        [JsonProperty("updated_at")]
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

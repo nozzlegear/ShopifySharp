@@ -12,14 +12,22 @@ namespace ShopifySharp
         private const int DEFAULT_GRAPHQL_MAX_AVAILABLE = 1_000;
         private const int DEFAULT_GRAPHQL_RESTORE_RATE = 50;
 
+        //https://shopify.dev/api/partner#rate_limits
+        private const int DEFAULT_GRAPHQL_PARTNER_MAX_AVAILABLE = 4;
+        private const int DEFAULT_GRAPHQL_PARTNER_RESTORE_RATE = 4;
+
+
         private LeakyBucket RESTBucket { get; }
 
         private LeakyBucket GraphQLBucket { get; }
+
+        private LeakyBucket GraphQLPartnersBucket { get; }
 
         public MultiShopifyAPIBucket(Func<RequestContext> getRequestContext)
         {
             RESTBucket = new LeakyBucket(DEFAULT_REST_MAX_AVAILABLE, DEFAULT_REST_RESTORE_RATE, getRequestContext);
             GraphQLBucket = new LeakyBucket(DEFAULT_GRAPHQL_MAX_AVAILABLE, DEFAULT_GRAPHQL_RESTORE_RATE, getRequestContext);
+            GraphQLPartnersBucket = new LeakyBucket(DEFAULT_GRAPHQL_PARTNER_MAX_AVAILABLE, DEFAULT_GRAPHQL_PARTNER_RESTORE_RATE, getRequestContext);
         }
 
         public async Task WaitForAvailableRESTAsync(CancellationToken cancellationToken)
@@ -31,6 +39,11 @@ namespace ShopifySharp
         public async Task WaitForAvailableGraphQLAsync(int queryCost, CancellationToken cancellationToken)
         {
             await GraphQLBucket.WaitForAvailableAsync(queryCost, cancellationToken);
+        }
+
+        public async Task WaitForAvailableGraphQLPartnerAsync(CancellationToken cancellationToken)
+        {
+            await GraphQLPartnersBucket.WaitForAvailableAsync(1, cancellationToken);
         }
 
         public void SetRESTBucketState(int maximumAvailable, double currentlyAvailable)

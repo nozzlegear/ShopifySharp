@@ -62,6 +62,17 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Lists_Fulfillments_For_A_FulfillmentOrder()
+        {
+            long orderId = Fixture.Created.First().OrderId.Value;
+            var fulfillmentOrder = await Fixture.GetFulfillmentOrder(orderId);
+            long fulfillmentOrderId = fulfillmentOrder.Id.Value;
+            var list = await Fixture.Service.ListForFulfillmentOrderAsync(fulfillmentOrderId);
+
+            Assert.True(list.Items.Any());
+        }
+
+        [Fact]
         public async Task Gets_Fulfillments()
         {
             // Find an id 
@@ -279,6 +290,12 @@ namespace ShopifySharp.Tests
             Created.Add(fulfillment);
 
             return fulfillment;
+        }
+
+        public async Task<FulfillmentOrder> GetFulfillmentOrder(long orderId)
+        {
+            var list = await FulfillmentOrderService.ListAsync(orderId);
+            return list.First();
         }
     }
 }

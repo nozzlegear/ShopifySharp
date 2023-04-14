@@ -59,6 +59,8 @@ jobs:
       SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
       SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
       SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+      SHOPIFYSHARP_ORG_ID: "${{ secrets.SHOPIFYSHARP_ORG_ID }}"
+      SHOPIFYSHARP_ORG_TOKEN: "${{ secrets.SHOPIFYSHARP_ORG_TOKEN }}"
 
     steps:
     - name: Checkout branch
@@ -88,6 +90,8 @@ jobs:
       SHOPIFYSHARP_API_KEY: "${{ secrets.SHOPIFYSHARP_API_KEY }}"
       SHOPIFYSHARP_SECRET_KEY: "${{ secrets.SHOPIFYSHARP_SECRET_KEY }}"
       SHOPIFYSHARP_MY_SHOPIFY_URL: "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}"
+      SHOPIFYSHARP_ORG_ID: "${{ secrets.SHOPIFYSHARP_ORG_ID }}"
+      SHOPIFYSHARP_ORG_TOKEN: "${{ secrets.SHOPIFYSHARP_ORG_TOKEN }}"
 
     steps:
     - name: Install fish

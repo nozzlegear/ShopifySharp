@@ -1,9 +1,4 @@
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -23,5 +18,17 @@ namespace ShopifySharp
 
         [JsonProperty("credit_card_company")]
         public string CreditCardCompany { get; set; }
+
+        [JsonProperty("credit_card_name")]
+        public string CreditCardName { get; set; }
+
+        [JsonProperty("credit_card_wallet")]
+        public string CreditCardWallet { get; set; }
+
+        [JsonProperty("credit_card_expiration_month")]
+        public int? CreditCardExpirationMonth { get; set; }
+
+        [JsonProperty("credit_card_expiration_year")]
+        public int? CreditCardExpirationYear { get; set; }
     }
 }

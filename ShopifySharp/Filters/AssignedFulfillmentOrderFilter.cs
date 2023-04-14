@@ -25,7 +25,7 @@ namespace ShopifySharp.Filters
         /// <summary>
         /// The IDs of the assigned locations of the fulfillment orders that should be returned.
         /// </summary>
-        [JsonProperty("location_ids")]
+        [JsonProperty("location_ids[]")]
         public IEnumerable<long> LocationIds { get; set; }
     }
 }

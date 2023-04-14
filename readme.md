@@ -63,9 +63,12 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 5.11.0 - 5.13.1      | 2021-07             |
 | 5.14.0 - 5.15.0      | 2021-10             |
 | 5.16.0 - 5.18.11     | 2022-04             |
-| 5.19.0 and above     | 2022-07             |
+| 5.19.0 - 5.19.1      | 2022-07             |
+| 6.0.1 and above      | 2023-01             |
 
 **Note:** ShopifySharp dropped support for .NET Framework 4.5 in version 5.14.0. [More details in #438.](https://github.com/nozzlegear/ShopifySharp/issues/438)
+
+**A migration guide for migrating from ShopifySharp 5.x to ShopifySharp 6.0+ is coming soon.**
 
 # Frequently Asked Questions
 
@@ -1254,6 +1257,10 @@ var filteredCollects = await service.CountAsync(new CollectFilterOptions()
 ---
 
 ## Fulfillments
+
+> **NOTE**: Shopify has changed how fulfillments are done in API version **2022-07 and above**. This takes affect in [ShopifySharp versions **5.19.0 and above**](#API-support). If you're using these versions of ShopifySharp, you should use fulfillment orders to create fulfillments, rather than the `FulfillmentService`. 
+> 
+> [Follow the example code in this issue](https://github.com/nozzlegear/ShopifySharp/issues/828) until our fulfillment documentation is updated.
 
 A fulfillment represents a shipment of one or more items in an order. All fulfillments are tied to a single order.
 

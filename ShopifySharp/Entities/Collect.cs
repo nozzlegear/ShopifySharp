@@ -25,13 +25,6 @@ namespace ShopifySharp
         public long? ProductId { get; set; }
 
         /// <summary>
-        /// States whether or not the collect is featured.
-        /// </summary>
-        [Obsolete]
-        [JsonProperty("featured")]
-        public bool? Featured { get; set; }
-
-        /// <summary>
         /// The date and time when the collect was created. The API returns this value in ISO 8601 format.
         /// </summary>
         [JsonProperty("created_at")]

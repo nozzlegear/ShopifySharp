@@ -116,6 +116,7 @@ namespace ShopifySharp.Tests
                 TrackingSupport = false,
                 RequiresShippingMethod = false,
                 Format = "json",
+                FulfillmentOrdersOptIn= true,//mandatory to set this to true starting from API 2022-10
             });
 
             if (!skipAddToCreateList) Created.Add(fulfillmentServiceEntity);

@@ -8,27 +8,6 @@ namespace ShopifySharp
     public class Customer : ShopifyObject
     {
         /// <summary>
-        /// Indicates whether the customer has consented to be sent marketing material via email.
-        /// </summary>
-        [JsonProperty("accepts_marketing")]
-        [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
-        public bool? AcceptsMarketing { get; set; }
-        
-        /// <summary>
-        /// The date and time when the customer consented or objected to receiving marketing material by email. Set this value whenever the customer consents or objects to marketing materials.
-        /// </summary>
-        [JsonProperty("accepts_marketing_updated_at")]
-        [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
-        public DateTimeOffset? AcceptsMarketingUpdatedAt { get; set; }
-        
-        /// <summary>
-        /// The marketing subscription opt-in level (as described by the M3AAWG best practices guideline) that the customer gave when they consented to receive marketing material by email. If the customer does not accept email marketing, then this property will be set to null. Valid values: single_opt_in, confirmed_opt_in, unknown.
-        /// </summary>
-        [JsonProperty("marketing_opt_in_level")]
-        [Obsolete("As of API version 2022-04, this property is deprecated. Use email_marketing_consent instead.")]
-        public string MarketingOptInLevel { get; set; }
-        
-        /// <summary>
         /// A list of addresses for the customer.
         /// </summary>
         [JsonProperty("addresses")]
