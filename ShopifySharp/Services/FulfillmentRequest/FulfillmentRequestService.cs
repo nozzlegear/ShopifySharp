@@ -24,7 +24,7 @@ namespace ShopifySharp
 
             var content = new JsonContent(new
             {
-                fulfillment_service = body
+                fulfillment_request = body
             });
 
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "original_fulfillment_order");
@@ -39,7 +39,7 @@ namespace ShopifySharp
 
             var content = new JsonContent(new
             {
-                fulfillment_service = body
+                fulfillment_request = body
             });
 
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "fulfillment_order");
@@ -54,7 +54,7 @@ namespace ShopifySharp
 
             var content = new JsonContent(new
             {
-                fulfillment_service = body
+                fulfillment_request = body
             });
 
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, "fulfillment_order");
