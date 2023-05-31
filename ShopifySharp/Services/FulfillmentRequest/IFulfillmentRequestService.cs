@@ -5,14 +5,14 @@ namespace ShopifySharp
 {
     /// <summary>
     /// The FulfillmentRequest resource represents a fulfillment request made by the merchant to a fulfillment service for a fulfillment order.
-    /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillmentrequest">API Reference</see>
+    /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest">API Reference</see>
     /// </summary>
     public interface IFulfillmentRequestService
     {
 
         /// <summary>
         /// Accepts a fulfillment request sent to a fulfillment service for a fulfillment order.
-        /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillmentrequest#accept-2021-07">API Reference</see>
+        /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest#post-fulfillment-orders-fulfillment-order-id-fulfillment-request-accept">API Reference</see>
         /// </summary>
         /// <param name="fulfillmentOrderId"></param>
         /// <param name="message">An optional reason for accepting the fulfillment request</param>
@@ -22,7 +22,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// Sends a fulfillment request to the fulfillment service of a fulfillment order.
-        /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/fulfillmentrequest#create-2021-07">API Reference</see>
+        /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest#post-fulfillment-orders-fulfillment-order-id-fulfillment-request">API Reference</see>
         /// </summary>
         /// <param name="fulfillmentOrderId"></param>
         /// <param name="fulfillmentRequest">A new <see cref="FulfillmentRequest"/>.</param>
@@ -33,7 +33,7 @@ namespace ShopifySharp
 
         /// <summary>
         /// Rejects a fulfillment request sent to a fulfillment service for a fulfillment order.
-        /// <see href="https://shopify.dev/api/admin/rest/reference/shipping-and-fulfillment/assignedfulfillmentorder#index-2021-07 ">API Reference</see>
+        /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest#post-fulfillment-orders-fulfillment-order-id-fulfillment-request-reject">API Reference</see>
         /// </summary>
         /// <param name="fulfillmentOrderId"></param>
         /// <param name="message">An optional reason for accepting the fulfillment request</param>
