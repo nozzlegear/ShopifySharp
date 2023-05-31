@@ -17,7 +17,7 @@ namespace ShopifySharp
         /// Required for multi-currency orders whenever the `amount` property is provided.
         /// </summary>
         [JsonProperty("currency")]
-        public string RefundCurrency { get; set; }
+        public string Currency { get; set; }
 
         /// <summary>
         /// Restock the items for this order back to your store.
