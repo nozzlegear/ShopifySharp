@@ -12,6 +12,14 @@ namespace ShopifySharp
         public decimal? RefundAmount { get; set; }
 
         /// <summary>
+        /// The three letter code (ISO 4217) for the currency used for the refund.
+        /// The currency of the refund that's issued when the order is canceled. 
+        /// Required for multi-currency orders whenever the `amount` property is provided.
+        /// </summary>
+        [JsonProperty("currency")]
+        public string Currency { get; set; }
+
+        /// <summary>
         /// Restock the items for this order back to your store.
         /// </summary>
         [JsonProperty("restock")]
