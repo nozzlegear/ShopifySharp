@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using ShopifySharp.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -94,7 +95,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("refund_duties")]
         public IEnumerable<RefundDutyType> RefundDuties { get; set; }
-        
+
+        /// <summary>
+        /// Unique identifiers for the return.
+        /// </summary>
+        [JsonProperty("return")]
+        public Return Return { get; set; }
     }
 
     public class Shipping
