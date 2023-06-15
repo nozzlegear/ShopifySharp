@@ -182,6 +182,12 @@ namespace ShopifySharp.Enums
         ReadLocales,
 
         [EnumMember(Value = "write_locales")]
-        WriteLocales
+        WriteLocales,
+
+        [EnumMember(Value = "read_gates")]
+        ReadGates,
+
+        [EnumMember(Value = "write_gates")]
+        WriteGates
     }
 }
