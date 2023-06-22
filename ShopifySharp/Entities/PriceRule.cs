@@ -78,6 +78,9 @@ namespace ShopifySharp
         [JsonProperty("prerequisite_shipping_price_range")]
         public PrerequisiteValueRange PrerequisiteShippingPriceRange { get; set; }
 
+        /**
+        * Prerequisite cart quantity range.
+        */
         [JsonProperty("prerequisite_quantity_range")]
         public PrerequisiteQuantityRange PrerequisiteQuantityRange { get; set; }
 
@@ -102,11 +105,12 @@ namespace ShopifySharp
 
         [JsonProperty("prerequisite_collection_ids")]
         public List<object> PrerequisiteCollectionIds { get; set; }
+
         [JsonProperty("prerequisite_to_entitlement_quantity_ratio")]
         public PrerequisiteToEntitlementQuantityRatio PrerequisiteToEntitlementQuantityRatio { get; set; }
 
         [JsonProperty("allocation_limit")]
-        public int AllocationLimit { get; set; }
+        public int? AllocationLimit { get; set; }
 
 
 
