@@ -78,8 +78,11 @@ namespace ShopifySharp
         [JsonProperty("prerequisite_shipping_price_range")]
         public PrerequisiteValueRange PrerequisiteShippingPriceRange { get; set; }
 
+        /**
+        * Prerequisite cart quantity range.
+        */
         [JsonProperty("prerequisite_quantity_range")]
-        public PrerequisiteQuantityRange prerequisite_quantity_range { get; set; }
+        public PrerequisiteQuantityRange PrerequisiteQuantityRange { get; set; }
 
         /**
         * A list of prerequisite customer saved search ids. For the price rule to be applicable,
@@ -89,24 +92,25 @@ namespace ShopifySharp
         public IEnumerable<long> PrerequisiteSavedSearchIds { get; set; }
 
         [JsonProperty("customer_segment_prerequisite_ids")]
-        public IEnumerable<long> customer_segment_prerequisite_ids { get; set; }
+        public IEnumerable<long> CustomerSegmentPrerequisiteIds { get; set; }
 
         [JsonProperty("prerequisite_to_entitlement_purchase")]
-        public PrerequisiteToEntitlementPurchase prerequisite_to_entitlement_purchase { get; set; }
+        public PrerequisiteToEntitlementPurchase PrerequisiteToEntitlementPurchase { get; set; }
 
         [JsonProperty("prerequisite_product_ids")]
-        public IEnumerable<long> prerequisite_product_ids { get; set; }
+        public IEnumerable<long> PrerequisiteProductIds { get; set; }
 
         [JsonProperty("prerequisite_variant_ids")]
-        public IEnumerable<long> prerequisite_variant_ids { get; set; }
+        public IEnumerable<long> PrerequisiteVariantIds { get; set; }
 
         [JsonProperty("prerequisite_collection_ids")]
-        public List<object> prerequisite_collection_ids { get; set; }
+        public List<object> PrerequisiteCollectionIds { get; set; }
+
         [JsonProperty("prerequisite_to_entitlement_quantity_ratio")]
-        public PrerequisiteToEntitlementQuantityRatio prerequisite_to_entitlement_quantity_ratio { get; set; }
+        public PrerequisiteToEntitlementQuantityRatio PrerequisiteToEntitlementQuantityRatio { get; set; }
 
         [JsonProperty("allocation_limit")]
-        public int allocation_limit { get; set; }
+        public int? AllocationLimit { get; set; }
 
 
 
