@@ -66,6 +66,11 @@ namespace ShopifySharp
         [JsonProperty("customer_selection")]
         public string CustomerSelection { get; set; }
 
+        /**
+         * The number of times the discount can be allocated on the cart - if eligible. For example a Buy 1 hat Get 1 hat
+         * for free discount can be applied 3 times on a cart having more than 6 hats, where maximum of 3 hats get
+         * discounted - if the allocation_limit is 3. Empty (null) allocation_limit means unlimited number of allocations.
+         */
         [JsonProperty("allocation_limit")]
         public int? AllocationLimit { get; set; }
 
@@ -155,21 +160,117 @@ namespace ShopifySharp
         [JsonProperty("prerequisite_saved_search_ids", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public IEnumerable<long> PrerequisiteSavedSearchIds { get; set; }
 
+        /// <summary>
+        /// A list of customer segment IDs. For the price rule to be applicable, the customer must be in the group of
+        /// customers matching a customer segment. If this is populated, then <see cref="PrerequisiteCustomerIds"/>
+        /// must be empty.
+        /// </summary>
         [JsonProperty("customer_segment_prerequisite_ids", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public IEnumerable<long> CustomerSegmentPrerequisiteIds { get; set; }
 
+        /// <summary>
+        /// The prerequisite purchase for a Buy X Get Y discount.
+        /// </summary>
         [JsonProperty("prerequisite_to_entitlement_purchase", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PrerequisiteToEntitlementPurchase PrerequisiteToEntitlementPurchase { get; set; }
 
+        /// <summary>
+        /// List of product ids that will be a prerequisites for a Buy X Get Y type discount. According to Shopify,
+        /// this can only be used when the following conditions are true:
+        /// <list type="bullet">
+        ///   <item>
+        ///     <see cref="TargetType"/> is set to <c>"line_item"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="TargetSelection" /> is set to <c>"entitled"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="AllocationMethod" /> is set to <c>"each"</c> and
+        ///   </item>
+        ///   <item>
+        ///     <see cref="PrerequisiteToEntitlementQuantityRatio"/> is defined.
+        ///   </item>
+        /// </list>
+        /// Caution: according to Shopify, if a product variant is included in <see cref="PrerequisiteVariantIds"/>,
+        /// then this can't include the ID of the product associated with that variant.
+        /// </summary>
         [JsonProperty("prerequisite_product_ids", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public IEnumerable<long> PrerequisiteProductIds { get; set; }
 
+        /// <summary>
+        /// List of variant ids that will be a prerequisites for a Buy X Get Y type discount. According to Shopify,
+        /// this can only be used when the following conditions are true:
+        /// <list type="bullet">
+        ///   <item>
+        ///     <see cref="TargetType"/> is set to <c>"line_item"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="TargetSelection" /> is set to <c>"entitled"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="AllocationMethod" /> is set to <c>"each"</c> and
+        ///   </item>
+        ///   <item>
+        ///     <see cref="PrerequisiteToEntitlementQuantityRatio"/> is defined.
+        ///   </item>
+        /// </list>
+        /// Caution: according to Shopify, if a product is included in <see cref="PrerequisiteProductIds"/>, then this
+        /// can't include the ID of any variants associated with that product.
+        /// </summary>
         [JsonProperty("prerequisite_variant_ids", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public IEnumerable<long> PrerequisiteVariantIds { get; set; }
 
+        /// <summary>
+        /// List of collection ids that will be a prerequisites for a Buy X Get Y discount. According to Shopify,
+        /// this can only be used when the following conditions are true:
+        /// <list type="bullet">
+        ///   <item>
+        ///     <see cref="TargetType"/> is set to <c>"line_item"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="TargetSelection" /> is set to <c>"entitled"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="AllocationMethod" /> is set to <c>"each"</c> and
+        ///   </item>
+        ///   <item>
+        ///     <see cref="PrerequisiteToEntitlementQuantityRatio"/> is defined.
+        ///   </item>
+        /// </list>
+        /// Caution: according to Shopify, this cannot be used in combination with either <see cref="PrerequisiteProductIds"/>
+        /// or <see cref="PrerequisiteVariantIds"/>.
+        /// </summary>
         [JsonProperty("prerequisite_collection_ids", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public IEnumerable<object> PrerequisiteCollectionIds { get; set; }
 
+        /// <summary>
+        /// Buy/Get ratio for a Buy X Get Y discount. <see cref="ShopifySharp.PrerequisiteToEntitlementQuantityRatio.PrerequisiteQuantity "/>
+        /// defines the necessary 'buy' quantity and <see cref="ShopifySharp.PrerequisiteToEntitlementQuantityRatio.EntitledQuantity "/>
+        /// defines the offered 'get' quantity. According to Shopify, this can only be used when the following conditions
+        /// are true:
+        ///
+        /// <list type="bullet">
+        ///   <item>
+        ///     <see cref="ValueType"/> is set to <c>"percentage"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="TargetType"/> is set to <c>"line_item"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="TargetSelection" /> is set to <c>"entitled"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="AllocationMethod" /> is set to <c>"each"</c>,
+        ///   </item>
+        ///   <item>
+        ///     <see cref="PrerequisiteProductIds"/> or <see cref="PrerequisiteVariantIds" /> or <see cref="PrerequisiteCollectionIds" /> are defined and
+        ///   </item>
+        ///   <item>
+        ///     <see cref="EntitledProductIds"/> or <see cref="EntitledVariantIds" /> or <see cref="EntitledCollectionIds" /> are defined.
+        ///   </item>
+        /// </list>
+        /// Caution: according to Shopify, this cannot be used in combination with <see cref="PrerequisiteSubtotalRange" /> or <see cref="PrerequisiteQuantityRange" /> or <see cref="PrerequisiteShippingPriceRange" />.
+        /// </summary>
         [JsonProperty("prerequisite_to_entitlement_quantity_ratio", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PrerequisiteToEntitlementQuantityRatio PrerequisiteToEntitlementQuantityRatio { get; set; }
     }
