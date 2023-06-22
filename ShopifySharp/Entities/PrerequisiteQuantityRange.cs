@@ -5,6 +5,6 @@ namespace ShopifySharp
     public class PrerequisiteQuantityRange
     {
         [JsonProperty("greater_than_or_equal_to")]
-        public int GreaterThanOrEqualTo { get; set; }
+        public int? GreaterThanOrEqualTo { get; set; }
     }
 }

@@ -82,9 +82,9 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Updates_PriceRules()
         {
-            string suffix = Guid.NewGuid().ToString();
+            var suffix = Guid.NewGuid().ToString();
             var created = await Fixture.Create(suffix);
-            long id = created.Id.Value;
+            var id = created.Id.Value;
 
             created.Value = -5.0m;
             created.Id = null;
