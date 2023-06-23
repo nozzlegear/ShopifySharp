@@ -44,12 +44,6 @@ If you're using .NET Core, you can use the `dotnet` command from your favorite s
 dotnet add package shopifysharp
 ```
 
-If you're using Paket with an F# project, use this command:
-
-```sh
-paket add shopifysharp --project /path/to/project.fsproj
-```
-
 # API support
 
 Shopify has begun versioning their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
