@@ -15,43 +15,57 @@ namespace ShopifySharp.Tests
     {
         private class TestService : ShopifyService
         {
-            public TestService() : base("someurl", "sometoken")
+            // Use Shopify's mock.shop API as an API endpoint which doesn't require an access token.
+            private const string MyShopifyDomain = "https://mock.shop";
+
+            /// Number of seconds to delay before sending request to the mock.shop API. This is only used to ensure the
+            /// cancellationToken is canceled before the request is actually made.
+            private readonly TimeSpan _delay = TimeSpan.FromSeconds(1);
+            
+            public TestService() : base(MyShopifyDomain, "fake-token")
             {
             }
             
-            // these are what services call to execute their public API requests
-            public new Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields, CancellationToken cancellationToken = default)
+            // These are what services call to execute their public API requests
+            public Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields, CancellationToken cancellationToken = default)
             {
+                Thread.Sleep(_delay);
                 return base.ExecuteGetAsync<T>(path, resultRootElt, fields, cancellationToken);
             }
 
-            public new Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null, CancellationToken cancellationToken = default)
+            public Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null, CancellationToken cancellationToken = default)
             {
+                Thread.Sleep(_delay);
                 return base.ExecuteGetAsync<T>(path, resultRootElt, queryParams, cancellationToken);
             }
 
-            public new Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter, CancellationToken cancellationToken = default)
+            public Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter, CancellationToken cancellationToken = default)
             {
+                Thread.Sleep(_delay);
                 return base.ExecuteGetListAsync(path, resultRootElt, filter, cancellationToken);
             }
             
-            public new Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
+            public Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
             {
+                Thread.Sleep(_delay);
                 return base.ExecutePostAsync<T>(path, resultRootElt, cancellationToken, jsonContent);
             }
 
-            public new Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
+            public Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
             {
+                Thread.Sleep(_delay);
                 return base.ExecutePutAsync<T>(path, resultRootElt, cancellationToken, jsonContent);
             }
 
             public new Task ExecuteDeleteAsync(string path, CancellationToken cancellationToken)
             {
+                Thread.Sleep(_delay);
                 return base.ExecuteDeleteAsync(path, cancellationToken);
             }
 
-            public new Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null, CancellationToken cancellationToken = default)
+            public Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null, CancellationToken cancellationToken = default)
             {
+                Thread.Sleep(_delay);
                 return base.ExecuteRequestAsync(uri, method, cancellationToken, content);
             }
         }
