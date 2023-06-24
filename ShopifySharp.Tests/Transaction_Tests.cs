@@ -18,6 +18,7 @@ namespace ShopifySharp.Tests
             this.Fixture = fixture;
         }
 
+        [Fact]
         public async Task Counts_Transactions()
         {
             var count = await Fixture.Service.CountAsync(Fixture.Created.First().OrderId.Value);
