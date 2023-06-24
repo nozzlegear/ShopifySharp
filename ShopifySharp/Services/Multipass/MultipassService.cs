@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
+using ShopifySharp.Entities;
 
 namespace ShopifySharp
 {
@@ -12,8 +13,8 @@ namespace ShopifySharp
         private const int FixedKeySize = 16;
 
         public static string GetMultipassUrl(
-            Customer userData,
-            string shopifyUrl, 
+            MultipassRequest userData,
+            string shopifyUrl,
             string multipassSecret
             )
         {
