@@ -94,12 +94,13 @@ namespace ShopifySharp.Tests
 
         public List<PriceRule> CreatedPriceRules { get; } = new List<PriceRule>();
 
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
             var policy = new LeakyBucketExecutionPolicy();
 
             DiscountCodeService.SetExecutionPolicy(policy);
             PriceRuleService.SetExecutionPolicy(policy);
+            return Task.CompletedTask;
         }
 
         /// <summary>

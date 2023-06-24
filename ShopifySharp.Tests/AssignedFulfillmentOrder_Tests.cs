@@ -51,7 +51,7 @@ namespace ShopifySharp.Tests
 
         public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
 
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
             // Fulfillment API has a stricter rate limit when on a non-paid store.
             var policy = new LeakyBucketExecutionPolicy();
@@ -63,6 +63,7 @@ namespace ShopifySharp.Tests
             // Create an order and fulfillment for count, list, get, etc. tests.
             //var order = await CreateOrder();
             //var fulfillment = await CreateFulfillment(order.Id.Value);
+            return Task.CompletedTask;
         }
 
         public async Task DisposeAsync()

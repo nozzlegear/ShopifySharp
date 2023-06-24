@@ -31,33 +31,33 @@ namespace ShopifySharp.Tests
         }
 
         [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
-        public async Task Creates_Checkouts()
+        public Task Creates_Checkouts()
         {
-            
+            return Task.CompletedTask;
         }
 
         [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
-        public async Task Completes_Checkouts()
+        public Task Completes_Checkouts()
         {
-
+            return Task.CompletedTask;
         }
 
         [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
-        public async Task Gets_Checkouts()
+        public Task Gets_Checkouts()
         {
-
+            return Task.CompletedTask;
         }
 
         [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
-        public async Task Updates_Checkouts()
+        public Task Updates_Checkouts()
         {
-
+            return Task.CompletedTask;
         }
 
         [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
-        public async Task Lists_Checkout_Shipping_Rates()
+        public Task Lists_Checkout_Shipping_Rates()
         {
-
+            return Task.CompletedTask;
         }
     }
 }

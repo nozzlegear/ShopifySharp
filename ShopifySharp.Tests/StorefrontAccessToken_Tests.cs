@@ -56,10 +56,11 @@ namespace ShopifySharp.Tests
 
         public List<StorefrontAccessToken> Created { get; } = new List<StorefrontAccessToken>();
 
-        public async Task InitializeAsync()
+        public Task InitializeAsync()
         {
             var policy = new LeakyBucketExecutionPolicy();
             Service.SetExecutionPolicy(policy);
+            return Task.CompletedTask;
         }
 
         public async Task DisposeAsync()
