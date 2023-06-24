@@ -75,9 +75,9 @@ namespace ShopifySharp.Tests
         public async Task Lists_Authors()
         {
             var authors = await Fixture.Service.ListAuthorsAsync();
+            authors = authors.ToArray();
 
-            Assert.True(authors.Count() > 0);
-            Assert.True(authors.Any(a => a == Fixture.Author));
+            Assert.Contains(authors, a => a == Fixture.Author);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace ShopifySharp.Tests
         {
             var tags = await Fixture.Service.ListTagsAsync();
 
-            Assert.True(tags.Count() > 0);
+            Assert.NotEmpty(tags);
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace ShopifySharp.Tests
         {
             var tags = await Fixture.Service.ListTagsForBlogAsync(Fixture.BlogId.Value);
 
-            Assert.True(tags.Count() > 0);
+            Assert.NotEmpty(tags);
         }
 
         [Fact]
