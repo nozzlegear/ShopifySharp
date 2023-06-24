@@ -19,8 +19,8 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("<https://test.myshopify.com/admin/api/2019-07/products.json?page_info=vwxyzab&limit=6>; rel=\"next\"");
             Assert.Null(res.PreviousLink);
             Assert.NotNull(res.NextLink);
-            Assert.Equal(res.NextLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=vwxyzab&limit=6");
-            Assert.Equal(res.NextLink.PageInfo, "vwxyzab");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=vwxyzab&limit=6", res.NextLink.Url);
+            Assert.Equal("vwxyzab", res.NextLink.PageInfo);
         }
 
         [Fact]
@@ -29,8 +29,8 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("<https://test.myshopify.com/admin/api/2019-07/products.json?page_info=vwxyzab&limit=6>; rel=\"previous\"");
             Assert.Null(res.NextLink);
             Assert.NotNull(res.PreviousLink);
-            Assert.Equal(res.PreviousLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=vwxyzab&limit=6");
-            Assert.Equal(res.PreviousLink.PageInfo, "vwxyzab");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=vwxyzab&limit=6", res.PreviousLink.Url);
+            Assert.Equal("vwxyzab", res.PreviousLink.PageInfo);
         }
 
         [Fact]
@@ -39,10 +39,10 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("<https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3>; rel=\"previous\", <https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3>; rel=\"next\"");
             Assert.NotNull(res.PreviousLink);
             Assert.NotNull(res.NextLink);
-            Assert.Equal(res.PreviousLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3");
-            Assert.Equal(res.PreviousLink.PageInfo, "abcdefg");
-            Assert.Equal(res.NextLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3");
-            Assert.Equal(res.NextLink.PageInfo, "opqrstu");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3", res.PreviousLink.Url);
+            Assert.Equal("abcdefg", res.PreviousLink.PageInfo);
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3", res.NextLink.Url);
+            Assert.Equal("opqrstu", res.NextLink.PageInfo);
         }
 
         [Fact]
@@ -51,10 +51,10 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("<https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3>; rel=\"next\", <https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3>; rel=\"previous\"");
             Assert.NotNull(res.PreviousLink);
             Assert.NotNull(res.NextLink);
-            Assert.Equal(res.PreviousLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3");
-            Assert.Equal(res.PreviousLink.PageInfo, "abcdefg");
-            Assert.Equal(res.NextLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3");
-            Assert.Equal(res.NextLink.PageInfo, "opqrstu");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3", res.PreviousLink.Url);
+            Assert.Equal("abcdefg", res.PreviousLink.PageInfo);
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3", res.NextLink.Url);
+            Assert.Equal("opqrstu", res.NextLink.PageInfo);
         }
 
         [Fact]
@@ -63,10 +63,10 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("  <https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3>  ;  rel=\"previous\"  ,   <https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3>  ;  rel=\"next\"  ");
             Assert.NotNull(res.PreviousLink);
             Assert.NotNull(res.NextLink);
-            Assert.Equal(res.PreviousLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3");
-            Assert.Equal(res.PreviousLink.PageInfo, "abcdefg");
-            Assert.Equal(res.NextLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3");
-            Assert.Equal(res.NextLink.PageInfo, "opqrstu");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3", res.PreviousLink.Url);
+            Assert.Equal("abcdefg", res.PreviousLink.PageInfo);
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3", res.NextLink.Url);
+            Assert.Equal("opqrstu", res.NextLink.PageInfo);
         }
 
         [Fact]
@@ -75,10 +75,10 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("<https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3&fields=id,images,title>; rel=\"previous\", <https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3&fields=id,images,title>; rel=\"next\"");
             Assert.NotNull(res.PreviousLink);
             Assert.NotNull(res.NextLink);
-            Assert.Equal(res.PreviousLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3&fields=id,images,title");
-            Assert.Equal(res.PreviousLink.PageInfo, "abcdefg");
-            Assert.Equal(res.NextLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3&fields=id,images,title");
-            Assert.Equal(res.NextLink.PageInfo, "opqrstu");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=abcdefg&limit=3&fields=id,images,title", res.PreviousLink.Url);
+            Assert.Equal("abcdefg", res.PreviousLink.PageInfo);
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?page_info=opqrstu&limit=3&fields=id,images,title", res.NextLink.Url);
+            Assert.Equal("opqrstu", res.NextLink.PageInfo);
         }
 
         [Fact]
@@ -87,10 +87,10 @@ namespace ShopifySharp.Tests
             var res = LinkHeaderParser.Parse<Product>("<https://test.myshopify.com/admin/api/2019-07/products.json?limit=3&page_info=abcdefg>; rel=\"previous\", <https://test.myshopify.com/admin/api/2019-07/products.json?limit=3&page_info=opqrstu>; rel=\"next\"");
             Assert.NotNull(res.PreviousLink);
             Assert.NotNull(res.NextLink);
-            Assert.Equal(res.PreviousLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?limit=3&page_info=abcdefg");
-            Assert.Equal(res.PreviousLink.PageInfo, "abcdefg");
-            Assert.Equal(res.NextLink.Url, "https://test.myshopify.com/admin/api/2019-07/products.json?limit=3&page_info=opqrstu");
-            Assert.Equal(res.NextLink.PageInfo, "opqrstu");
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?limit=3&page_info=abcdefg", res.PreviousLink.Url);
+            Assert.Equal("abcdefg", res.PreviousLink.PageInfo);
+            Assert.Equal("https://test.myshopify.com/admin/api/2019-07/products.json?limit=3&page_info=opqrstu", res.NextLink.Url);
+            Assert.Equal("opqrstu", res.NextLink.PageInfo);
         }
 
         [Fact]

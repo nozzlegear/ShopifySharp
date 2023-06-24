@@ -42,7 +42,7 @@ namespace ShopifySharp.Tests
             }, new FalseToNullConverter());
             var deserialized = JsonConvert.DeserializeObject<TestObject>("{ \"Value\" : \"true\" }", new FalseToNullConverter());
 
-            Assert.Equal(serializedJson, "{\"Value\":true}");
+            Assert.Equal("{\"Value\":true}", serializedJson);
             Assert.True(deserialized.Value);
         }
 
@@ -55,7 +55,7 @@ namespace ShopifySharp.Tests
             }, new FalseToNullConverter());
             var deserialized = JsonConvert.DeserializeObject<TestObject>("{ \"Value\" : \"\" }", new FalseToNullConverter());
 
-            Assert.Equal(serializedJson, "{\"Value\":null}");
+            Assert.Equal("{\"Value\":null}", serializedJson);
             Assert.False(deserialized.Value);
         }
 
