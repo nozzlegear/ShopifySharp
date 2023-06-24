@@ -124,7 +124,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(deserialized.OrdersToRedact);
             Assert.True(deserialized.OrdersToRedact.Any());
-            Assert.Equal(1, deserialized.OrdersToRedact.Count());
+            Assert.Single(deserialized.OrdersToRedact);
             Assert.All(deserialized.OrdersToRedact, o =>
             {
                 Assert.Equal(o, orderId);
@@ -149,7 +149,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(deserialized.OrdersToRedact);
             Assert.True(deserialized.OrdersToRedact.Any());
-            Assert.Equal(1, deserialized.OrdersToRedact.Count());
+            Assert.Single(deserialized.OrdersToRedact);
             Assert.All(deserialized.OrdersToRedact, o =>
             {
                 Assert.Equal(o, orderId);
@@ -243,7 +243,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(deserialized.OrdersRequested);
             Assert.True(deserialized.OrdersRequested.Any());
-            Assert.Equal(1, deserialized.OrdersRequested.Count());
+            Assert.Single(deserialized.OrdersRequested);
             Assert.All(deserialized.OrdersRequested, o =>
             {
                 Assert.Equal(o, orderId);
@@ -268,7 +268,7 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(deserialized.OrdersRequested);
             Assert.True(deserialized.OrdersRequested.Any());
-            Assert.Equal(1, deserialized.OrdersRequested.Count());
+            Assert.Single(deserialized.OrdersRequested);
             Assert.All(deserialized.OrdersRequested, o =>
             {
                 Assert.Equal(o, orderId);
