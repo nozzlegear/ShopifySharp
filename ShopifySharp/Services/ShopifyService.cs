@@ -10,7 +10,6 @@ using System.IO;
 using System.Threading;
 using ShopifySharp.Lists;
 using ShopifySharp.Filters;
-using Microsoft.Extensions.Http;
 
 namespace ShopifySharp
 {
@@ -443,7 +442,7 @@ namespace ShopifySharp
                     var parsedErrors = parsed["errors"];
 
                     // errors can be either a single string, or an array of other errors
-                    if (parsedErrors.Type == JTokenType.String)
+                    if (parsedErrors?.Type == JTokenType.String)
                     {
                         // errors is type #1
                         var description = parsedErrors.Value<string>();
@@ -453,7 +452,7 @@ namespace ShopifySharp
                     else
                     {
                         // errors is type #2 or #3
-                        foreach (var val in parsedErrors.Values())
+                        foreach (var val in parsedErrors?.Values() ?? JEnumerable<JToken>.Empty)
                         {
                             var name = val.Path.Split('.').Last();
 
@@ -494,7 +493,7 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Parses a link header value into a ListResult<T>. The Items property will need to be manually set. 
+        /// Parses a link header value into a <see cref="ShopifySharp.Lists.ListResult"/>. The Items property will need to be manually set. 
         /// </summary>
         protected ListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
