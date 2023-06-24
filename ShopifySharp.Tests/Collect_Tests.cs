@@ -26,7 +26,7 @@ namespace ShopifySharp.Tests
         {
             var count = await Fixture.Service.CountAsync();
 
-            Assert.NotNull(count);
+            Assert.True(count >= 0);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace ShopifySharp.Tests
         {
             var collects = await Fixture.Service.ListAsync();
 
-            Assert.True(collects.Items.Count() > 0);
+            Assert.True(collects.Items.Any());
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests
                 ProductId = productId,
             });
 
-            Assert.True(collects.Items.Count() > 0);
+            Assert.True(collects.Items.Any());
             Assert.All(collects.Items, collect => Assert.True(collect.ProductId > 0));
         }
 
