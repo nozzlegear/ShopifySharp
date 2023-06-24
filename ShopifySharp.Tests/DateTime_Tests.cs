@@ -1,31 +1,26 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿#nullable enable
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System;
 using Xunit;
 
 namespace ShopifySharp.Tests
 {
-
     [Trait("Category", "DateTime"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
     public class DateTime_Tests : IClassFixture<Order_Tests_Fixture>
     {
         public DateTime_Tests(Order_Tests_Fixture orderTestsFixture)
         {
-            this.OrderTestsFixture = orderTestsFixture;
+            OrderTestsFixture = orderTestsFixture;
         }
 
-        public Order_Tests_Fixture OrderTestsFixture { get; }
+        private Order_Tests_Fixture OrderTestsFixture { get; }
 
         [Fact]
         public async Task GraphQL_CompareOrderDates()
         {
-            var orderId = this.OrderTestsFixture.Created.First().Id.Value;
+            var orderId = this.OrderTestsFixture.Created.First().Id!.Value;
 
             var order = await this.OrderTestsFixture.Service.GetAsync(orderId);
             Assert.NotNull(order.UpdatedAt);
@@ -48,30 +43,33 @@ namespace ShopifySharp.Tests
     }
 ");
 
-            var jtokenOrder = graphQlOrder["orders"]["edges"].First["node"];
+            var jTokenOrder = graphQlOrder["orders"]?["edges"]?.First?["node"]!;
 
-            var testOrder = jtokenOrder.ToObject<TestGraphQLOrderWithString>();
-            var testOrderDateTime = DateTimeOffset.Parse(testOrder.UpdatedAt, CultureInfo.InvariantCulture);
-            Assert.Equal(order.UpdatedAt.Value, testOrderDateTime);
+            var testOrder = jTokenOrder.ToObject<TestGraphQlOrderWithString>()!;
+            var testOrderDateTime = DateTimeOffset.Parse(testOrder.UpdatedAt ?? "", CultureInfo.InvariantCulture);
+            Assert.Equal(order.UpdatedAt, testOrderDateTime);
 
-            var testOrderWithDateTimeOffset = jtokenOrder.ToObject<TestGraphQLOrderWithDateTimeOffset>();
-            Assert.Equal(order.UpdatedAt.Value, testOrderWithDateTimeOffset.UpdatedAt);
+            var testOrderWithDateTimeOffset = jTokenOrder.ToObject<TestGraphQlOrderWithDateTimeOffset>()!;
+            Assert.Equal(order.UpdatedAt, testOrderWithDateTimeOffset.UpdatedAt);
 
-            var testOrderWithDateTime = jtokenOrder.ToObject<TestGraphQLOrderWithDateTime>();
-            Assert.Equal(order.UpdatedAt.Value, testOrderWithDateTime.UpdatedAt);
+            var testOrderWithDateTime = jTokenOrder.ToObject<TestGraphQlOrderWithDateTime>()!;
+            Assert.Equal(order.UpdatedAt, testOrderWithDateTime.UpdatedAt);
         }
 
-        public class TestGraphQLOrderWithString
+        [Serializable]
+        public class TestGraphQlOrderWithString
         {
-            public string UpdatedAt { get; set; }
+            public string? UpdatedAt { get; set; }
         }
 
-        public class TestGraphQLOrderWithDateTime
+        [Serializable]
+        public class TestGraphQlOrderWithDateTime
         {
             public DateTime UpdatedAt { get; set; }
         }
 
-        public class TestGraphQLOrderWithDateTimeOffset
+        [Serializable]
+        public class TestGraphQlOrderWithDateTimeOffset
         {
             public DateTimeOffset UpdatedAt { get; set; }
         }
