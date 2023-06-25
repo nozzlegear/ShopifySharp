@@ -1,13 +1,12 @@
 ﻿using ShopifySharp.Filters;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShopifySharp
 {
     public interface IAssignedFulfillmentOrderService
     {
-
         /// <summary>
         /// <para>The AssignedFulfillmentOrder resource allows you to retrieve all the fulfillment orders that are assigned to an app at the shop level.
         /// The list of fulfillment orders can be filtered by location and assignment status such as cancellation_requested and fulfillment_requested.</para>

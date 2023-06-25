@@ -14,50 +14,25 @@ namespace ShopifySharp
     /// <summary>
     /// A service for manipulating Shopify price rules.
     /// </summary>
-    public class PriceRuleService : ShopifyService
+    public class PriceRuleService : ShopifyService, IPriceRuleService
     {
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PriceRuleService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Gets a list of up to 250 of the shop's price rules.
-        /// </summary>
+		/// <inheritdoc />
         public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("price_rules.json", "price_rules", filter, cancellationToken);
         }
 
-        /// <summary>
-        /// Gets a list of up to 250 of the shop's price rules.
-        /// </summary>
+		/// <inheritdoc />
         public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
-        
-        // /// <summary>
-        // /// Gets a list of up to 250 of the shop's price rules.
-        // /// </summary>
-        // public virtual async Task<IEnumerable<PriceRule>> ListAsync(IListFilter filter, CancellationToken cancellationToken = default)
-        // {
-        //     throw new Exception("not yet implemented");
-        //     var req = PrepareRequest("price_rules.json");
-        //
-        //     if (options != null)
-        //     {
-        //         req.QueryParams.AddRange(options);
-        //     }
-        //
-        //     return await ExecuteRequestAsync<List<PriceRule>>(req, HttpMethod.Get, rootElement: "price_rules", cancellationToken: cancellationToken);
-        // }
 
-        /// <summary>
-        /// Retrieves the object with the given id.
-        /// </summary>
-        /// <param name="id">The id of the object to retrieve.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
+		/// <inheritdoc />
         public virtual async Task<PriceRule> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
@@ -72,11 +47,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Creates a new price rule.
-        /// </summary>
-        /// <param name="rule">A new price rule. Id should be set to null.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
+		/// <inheritdoc />
         public virtual async Task<PriceRule> CreateAsync(PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("price_rules.json");
@@ -90,12 +61,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Updates the given object.
-        /// </summary>
-        /// <param name="id">Id of the object being updated.</param>
-        /// <param name="rule">The updated rule.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
+		/// <inheritdoc />
         public virtual async Task<PriceRule> UpdateAsync(long id, PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
@@ -108,11 +74,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Deletes the object with the given Id.
-        /// </summary>
-        /// <param name="id">The object's Id.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
+		/// <inheritdoc />
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");

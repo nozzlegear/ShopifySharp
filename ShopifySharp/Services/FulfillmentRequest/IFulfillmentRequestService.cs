@@ -9,7 +9,6 @@ namespace ShopifySharp
     /// </summary>
     public interface IFulfillmentRequestService
     {
-
         /// <summary>
         /// Accepts a fulfillment request sent to a fulfillment service for a fulfillment order.
         /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest#post-fulfillment-orders-fulfillment-order-id-fulfillment-request-accept">API Reference</see>
