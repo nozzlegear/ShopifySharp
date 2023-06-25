@@ -97,7 +97,7 @@ namespace ShopifySharp
             var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/move.json");
 
             //needs to be original_fulfillment_order
-            var response = await ExecuteRequestAsync<FulfillmentOrderMove>(req, HttpMethod.Post, cancellationToken, content);
+            var response = await ExecuteRequestAsync<FulfillmentOrderMove>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
 
             return response.Result;
         }
