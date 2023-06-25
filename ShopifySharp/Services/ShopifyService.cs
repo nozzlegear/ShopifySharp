@@ -13,7 +13,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public abstract class ShopifyService
+    public abstract class ShopifyService : IShopifyService
     {
         public virtual string APIVersion => "2023-01";
 
@@ -304,7 +304,7 @@ namespace ShopifySharp
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        /// <<param name="rawResponse">The response body returned by Shopify.</param>
+        /// <param name="rawResponse">The response body returned by Shopify.</param>
         public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
             var statusCode = (int)response.StatusCode;
