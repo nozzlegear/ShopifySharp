@@ -20,10 +20,8 @@ namespace ShopifySharp
         public ThemeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <inheritdoc />
-        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null, CancellationToken cancellationToken = default)
-        {
-            return await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter, cancellationToken);
-        }
+        public virtual async Task<IEnumerable<Theme>> ListAsync(ThemeListFilter filter = null, CancellationToken cancellationToken = default) =>
+            await ExecuteGetAsync<IEnumerable<Theme>>("themes.json", "themes", filter, cancellationToken);
 
         /// <inheritdoc />
         public virtual async Task<Theme> GetAsync(long themeId, string fields = null, CancellationToken cancellationToken = default)

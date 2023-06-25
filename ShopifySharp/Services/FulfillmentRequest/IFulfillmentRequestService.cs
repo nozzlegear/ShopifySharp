@@ -29,7 +29,6 @@ namespace ShopifySharp
         /// <exception cref="ShopifyException"></exception>
         Task<FulfillmentOrder> CreateAsync(long fulfillmentOrderId, FulfillmentRequest fulfillmentRequest, CancellationToken cancellationToken = default);
 
-
         /// <summary>
         /// Rejects a fulfillment request sent to a fulfillment service for a fulfillment order.
         /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest#post-fulfillment-orders-fulfillment-order-id-fulfillment-request-reject">API Reference</see>

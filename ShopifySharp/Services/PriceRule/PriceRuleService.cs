@@ -1,13 +1,9 @@
-using System;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
 using ShopifySharp.Filters;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShopifySharp
 {

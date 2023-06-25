@@ -1,10 +1,10 @@
-﻿using System.Net.Http;
-using System.Threading;
-using ShopifySharp.Filters;
-using System.Threading.Tasks;
+﻿using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShopifySharp
 {

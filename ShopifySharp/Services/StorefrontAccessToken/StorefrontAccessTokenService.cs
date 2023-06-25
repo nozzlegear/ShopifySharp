@@ -1,22 +1,19 @@
+using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
-using ShopifySharp.Infrastructure;
+using System.Threading;
 
 namespace ShopifySharp
 {
     /// <summary>
     /// A service for working with Shopify's StorefrontAccessTokens API.
     /// </summary>
-    public class StorefrontAccessTokenService : ShopifyService
+    public class StorefrontAccessTokenService : ShopifyService, IStorefrontAccessTokenService
     {
         public StorefrontAccessTokenService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-        /// <summary>
-        /// Creates a new <see cref="StorefrontAccessToken"/> with the given <paramref name="title"/>. A store can only have a
-        /// maximum of 100 storefront access tokens. 
-        /// </summary>
+        /// <inheritdoc />
         public async Task<StorefrontAccessToken> CreateAsync(string title, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("storefront_access_tokens.json");
@@ -32,9 +29,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Deletes the storefront access token with the given <paramref name="id"/>.
-        /// </summary>
+        /// <inheritdoc />
         public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"storefront_access_tokens/{id}.json");
@@ -42,9 +37,7 @@ namespace ShopifySharp
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
-        /// <summary>
-        /// Gets a list of storefront access tokens. A store can only have a maximum of 100 access tokens. 
-        /// </summary>
+        /// <inheritdoc />
         public async Task<IEnumerable<StorefrontAccessToken>> ListAsync(CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("storefront_access_tokens.json");

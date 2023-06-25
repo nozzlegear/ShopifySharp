@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Net.Http;
+using Newtonsoft.Json;
+using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using ShopifySharp.Infrastructure;
-using Newtonsoft.Json;
-using System.Net;
 using System.Threading;
 
 namespace ShopifySharp
@@ -14,7 +14,7 @@ namespace ShopifySharp
     /// <summary>
     /// A service for using or manipulating Shopify's Graph API.
     /// </summary>
-    public class GraphService : ShopifyService
+    public class GraphService : ShopifyService, IGraphService
     {
         private readonly string _apiVersion;
 
@@ -30,16 +30,7 @@ namespace ShopifySharp
             _apiVersion = apiVersion;
         }
 
-        /// <summary>
-        /// Executes a Graph API Call.
-        /// </summary>
-        /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
-        /// <param name="graphqlQueryCost">
-        /// The requestedQueryCost available at extensions.cost.requestedQueryCost.
-        /// While it is optional, it is recommended to provide it to avoid wasting resources to issue API calls that will be throttled
-        /// </param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>A JToken containing the data from the request.</returns>
+        /// <inheritdoc />
         public virtual async Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
@@ -49,16 +40,7 @@ namespace ShopifySharp
             return await SendAsync(req, content, graphqlQueryCost, cancellationToken);
         }
 
-        /// <summary>
-        /// Executes a Graph API Call.
-        /// </summary>
-        /// <param name="body">The query you would like to execute, as a JToken. Please see documentation for formatting.</param>
-        /// <param name="graphqlQueryCost">
-        /// The requestedQueryCost available at extensions.cost.requestedQueryCost.
-        /// While it is optional, it is recommended to provide it to avoid wasting resources to issue API calls that will be throttled
-        /// </param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>A JToken containing the data from the request.</returns>
+        /// <inheritdoc />
         public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("graphql.json");
@@ -73,6 +55,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="req">The RequestUri.</param>
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
+        /// <param name="graphqlQueryCost">An estimation of the cost of this query.</param>
         /// <returns>A JToken containing the data from the request.</returns>
         protected virtual async Task<JToken> SendAsync(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
         {
@@ -86,8 +69,8 @@ namespace ShopifySharp
         /// <summary>
         /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors. This loses the requestId, but otherwise is capable of passing along the message.
         /// </summary>
-        /// <param name="requestResult">The RequestResult<JToken> response from ExecuteRequestAsync.</param>
-        /// <returns>Task.</returns>
+        /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
+        /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
         protected virtual void CheckForErrors(RequestResult<JToken> requestResult)
         {
             if (requestResult.Result["errors"] != null)
