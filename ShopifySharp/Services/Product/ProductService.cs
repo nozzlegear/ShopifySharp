@@ -105,7 +105,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        private Dictionary<string, string> GetHeaders(bool includePresentmentPrices)
+        protected virtual Dictionary<string, string> GetHeaders(bool includePresentmentPrices)
         {
             if (!includePresentmentPrices)
                 return null;
