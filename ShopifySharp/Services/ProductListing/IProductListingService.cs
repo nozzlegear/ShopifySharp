@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IProductListingService
+    public interface IProductListingService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 1000 default 50 of the shop's product listings.

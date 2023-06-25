@@ -6,7 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IBlogService
+    public interface IBlogService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 250 blogs belonging to the store.

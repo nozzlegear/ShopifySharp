@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IRedirectService
+    public interface IRedirectService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's redirects.

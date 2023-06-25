@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICountryService
+    public interface ICountryService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's countries.

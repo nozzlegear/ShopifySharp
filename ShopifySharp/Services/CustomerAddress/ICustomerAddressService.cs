@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICustomerAddressService
+    public interface ICustomerAddressService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 250 of the shop customer's addresses.

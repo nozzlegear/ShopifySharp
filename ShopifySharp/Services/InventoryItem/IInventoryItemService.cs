@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IInventoryItemService
+    public interface IInventoryItemService : IShopifyService
     {
         /// <summary>
         /// Gets a list of inventory items.

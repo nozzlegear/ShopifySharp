@@ -5,10 +5,8 @@ using Newtonsoft.Json.Linq;
 
 namespace ShopifySharp
 {
-    public interface IGraphService
+    public interface IGraphService : IShopifyService
     {
-        string APIVersion { get; }
-
         /// <summary>
         /// Executes a Graph API Call.
         /// </summary>

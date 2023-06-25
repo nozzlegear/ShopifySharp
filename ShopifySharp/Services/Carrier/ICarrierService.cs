@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface ICarrierService
+    public interface ICarrierService : IShopifyService
     {
         /// <summary>
         /// Retrieve a list of all carrier services that are associated with the store.

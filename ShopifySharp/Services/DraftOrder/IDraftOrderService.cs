@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IDraftOrderService
+    public interface IDraftOrderService : IShopifyService
     {
         /// <summary>
         /// Retrieves a count of the shop's draft orders. 

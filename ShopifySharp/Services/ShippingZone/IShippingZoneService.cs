@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface IShippingZoneService
+    public interface IShippingZoneService : IShopifyService
     {
         /// <summary>
         /// Retrieves a list of all shipping zones. 

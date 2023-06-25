@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IStorefrontAccessTokenService
+    public interface IStorefrontAccessTokenService : IShopifyService
     {
         /// <summary>
         /// Creates a new <see cref="StorefrontAccessToken"/> with the given <paramref name="title"/>. A store can only have a

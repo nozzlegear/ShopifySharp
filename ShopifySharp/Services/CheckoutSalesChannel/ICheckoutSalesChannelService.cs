@@ -5,7 +5,7 @@ using ShopifySharp.Entities.SalesChannel;
 
 namespace ShopifySharp
 {
-    public interface ICheckoutSalesChannelService
+    public interface ICheckoutSalesChannelService : IShopifyService
     {
         /// <summary>
         /// Gets an existing, processing or completed checkout.

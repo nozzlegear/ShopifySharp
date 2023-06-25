@@ -6,7 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICheckoutService
+    public interface ICheckoutService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's orders.

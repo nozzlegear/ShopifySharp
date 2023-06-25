@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IEventService
+    public interface IEventService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all site events.

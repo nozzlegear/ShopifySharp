@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IScriptTagService
+    public interface IScriptTagService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's <see cref="ScriptTag"/>s.

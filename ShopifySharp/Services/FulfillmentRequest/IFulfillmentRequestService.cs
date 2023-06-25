@@ -7,7 +7,7 @@ namespace ShopifySharp
     /// The FulfillmentRequest resource represents a fulfillment request made by the merchant to a fulfillment service for a fulfillment order.
     /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest">API Reference</see>
     /// </summary>
-    public interface IFulfillmentRequestService
+    public interface IFulfillmentRequestService : IShopifyService
     {
         /// <summary>
         /// Accepts a fulfillment request sent to a fulfillment service for a fulfillment order.

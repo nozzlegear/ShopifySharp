@@ -6,7 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICustomerSavedSearchService
+    public interface ICustomerSavedSearchService : IShopifyService
     {
         Task<int> CountAsync(CustomerSavedSearchCountFilter filter = null, CancellationToken cancellationToken = default);
         Task<ListResult<CustomerSavedSearch>> ListAsync(ListFilter<CustomerSavedSearch> filter = null, CancellationToken cancellationToken = default);

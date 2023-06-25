@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IGiftCardService
+    public interface IGiftCardService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the gift cards on the shop.

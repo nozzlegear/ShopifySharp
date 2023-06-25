@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IRefundService
+    public interface IRefundService : IShopifyService
     {
         /// <summary>
         /// Retrieves a list of refunds for an order.

@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface IFulfillmentServiceService
+    public interface IFulfillmentServiceService : IShopifyService
     {
         /// <summary>
         /// Gets a list of your app's FulfillmentServices.

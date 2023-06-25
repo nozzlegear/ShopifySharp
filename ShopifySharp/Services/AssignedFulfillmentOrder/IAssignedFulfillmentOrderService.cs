@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace ShopifySharp
 {
-    public interface IAssignedFulfillmentOrderService
+    public interface IAssignedFulfillmentOrderService : IShopifyService
     {
         /// <summary>
         /// <para>The AssignedFulfillmentOrder resource allows you to retrieve all the fulfillment orders that are assigned to an app at the shop level.

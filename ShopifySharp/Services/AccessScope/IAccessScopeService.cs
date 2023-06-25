@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IAccessScopeService
+    public interface IAccessScopeService : IShopifyService
     {
         /// <summary>
         /// Retrieves a list of access scopes associated to the access token.

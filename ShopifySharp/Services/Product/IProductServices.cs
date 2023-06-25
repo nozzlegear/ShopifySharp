@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IProductService
+    public interface IProductService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's products.

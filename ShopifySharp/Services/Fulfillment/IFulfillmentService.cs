@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IFulfillmentService
+    public interface IFulfillmentService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the order's fulfillments.

@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IApplicationCreditService
+    public interface IApplicationCreditService : IShopifyService
     {
         /// <summary>
         /// Gets a list of all past and present application credits.

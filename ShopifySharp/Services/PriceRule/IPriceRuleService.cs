@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IPriceRuleService
+    public interface IPriceRuleService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 250 of the shop's price rules.

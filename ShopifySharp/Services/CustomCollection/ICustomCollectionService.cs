@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICustomCollectionService
+    public interface ICustomCollectionService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 250 custom collections.

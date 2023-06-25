@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IDiscountCodeService
+    public interface IDiscountCodeService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 250 of the discount codes belonging to the price rule.

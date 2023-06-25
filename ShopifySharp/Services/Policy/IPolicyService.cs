@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IPolicyService
+    public interface IPolicyService : IShopifyService
     {
         /// <summary>
         /// Get the policies and their contents for a shop

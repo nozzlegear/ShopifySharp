@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IShopService
+    public interface IShopService : IShopifyService
     {
         /// <summary>
         /// Gets the shop's data.

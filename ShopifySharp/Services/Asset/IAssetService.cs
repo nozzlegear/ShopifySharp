@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface IAssetService
+    public interface IAssetService : IShopifyService
     {
         /// <summary>
         /// Retrieves the <see cref="Asset"/> with the given id.

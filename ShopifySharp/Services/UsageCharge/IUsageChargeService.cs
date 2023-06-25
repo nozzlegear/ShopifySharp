@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface IUsageChargeService
+    public interface IUsageChargeService : IShopifyService
     {
         /// <summary>
         /// Creates a <see cref="UsageCharge"/>.

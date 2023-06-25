@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface IThemeService
+    public interface IThemeService : IShopifyService
     {
         /// <summary>
         /// Gets a list of up to 250 of the shop's themes.

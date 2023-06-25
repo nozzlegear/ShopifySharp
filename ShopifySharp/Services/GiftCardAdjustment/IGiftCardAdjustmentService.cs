@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IGiftCardAdjustmentService
+    public interface IGiftCardAdjustmentService : IShopifyService
     {
         /// <summary>
         /// Gets a list of gift card adjustments belonging to the given gift card.

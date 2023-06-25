@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICollectionListingService
+    public interface ICollectionListingService : IShopifyService
     {
         /// <summary>
         /// Retrieve collection listings that are published to your app.

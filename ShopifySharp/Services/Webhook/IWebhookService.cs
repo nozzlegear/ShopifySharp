@@ -6,7 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IWebhookService
+    public interface IWebhookService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's webhooks.

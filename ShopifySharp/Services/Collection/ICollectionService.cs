@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICollectionService
+    public interface ICollectionService : IShopifyService
     {
         /// <summary>
         /// Gets a list of the products belonging to the collection.

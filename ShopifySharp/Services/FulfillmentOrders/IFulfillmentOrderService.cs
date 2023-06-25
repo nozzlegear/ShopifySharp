@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IFulfillmentOrderService
+    public interface IFulfillmentOrderService : IShopifyService
     {
         /// <summary>
         /// Cancel a fulfillment order with the given id.

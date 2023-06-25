@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface ITransactionService
+    public interface ITransactionService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's transactions.

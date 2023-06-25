@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace ShopifySharp
 {
-    public interface IProductImageService
+    public interface IProductImageService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's ProductImages.

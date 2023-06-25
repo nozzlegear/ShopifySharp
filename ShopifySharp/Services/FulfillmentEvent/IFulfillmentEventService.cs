@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-    public interface IFulfillmentEventService
+    public interface IFulfillmentEventService : IShopifyService
     {
         /// <summary>
         /// Get a list of all fulfillment events for a fulfillment

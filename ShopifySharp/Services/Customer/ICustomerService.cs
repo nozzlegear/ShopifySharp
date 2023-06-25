@@ -6,7 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICustomerService
+    public interface ICustomerService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's customers.

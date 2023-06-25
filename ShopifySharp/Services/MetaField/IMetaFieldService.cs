@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IMetaFieldService
+    public interface IMetaFieldService : IShopifyService
     {
         /// <summary>
         /// Gets a count of the metafields on the shop itself.

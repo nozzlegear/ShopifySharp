@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ILocationService
+    public interface ILocationService : IShopifyService
     {
         /// <summary>
         /// Retrieves the <see cref="Location"/> with the given id.

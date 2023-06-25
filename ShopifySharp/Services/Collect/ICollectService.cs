@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ICollectService
+    public interface ICollectService : IShopifyService
     {
         Task<int> CountAsync(CollectCountFilter filter = null, CancellationToken cancellationToken = default);
 

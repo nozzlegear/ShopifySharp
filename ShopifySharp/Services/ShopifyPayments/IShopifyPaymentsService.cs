@@ -6,7 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IShopifyPaymentsService
+    public interface IShopifyPaymentsService : IShopifyService
     {
         /// <summary>
         /// Checks whether the Shopify Payments API is enabled on this store.

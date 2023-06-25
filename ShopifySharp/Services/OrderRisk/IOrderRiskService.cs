@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IOrderRiskService
+    public interface IOrderRiskService : IShopifyService
     {
         /// <summary>
         /// Gets a list of all order risks for an order.

@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IPageService
+    public interface IPageService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all of the shop's pages.

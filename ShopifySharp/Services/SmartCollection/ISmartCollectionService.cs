@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface ISmartCollectionService
+    public interface ISmartCollectionService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all smart collections on the store.

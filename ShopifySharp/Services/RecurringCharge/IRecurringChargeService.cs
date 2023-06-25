@@ -5,7 +5,7 @@ using ShopifySharp.Filters;
 
 namespace ShopifySharp
 {
-    public interface IRecurringChargeService
+    public interface IRecurringChargeService : IShopifyService
     {
         /// <summary>
         /// Creates a <see cref="RecurringCharge"/>.

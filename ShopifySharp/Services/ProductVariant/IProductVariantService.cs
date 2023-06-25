@@ -5,7 +5,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp
 {
-    public interface IProductVariantService
+    public interface IProductVariantService : IShopifyService
     {
         /// <summary>
         /// Gets a count of all variants belonging to the given product.
