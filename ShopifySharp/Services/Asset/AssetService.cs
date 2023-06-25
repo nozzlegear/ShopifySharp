@@ -70,7 +70,7 @@ namespace ShopifySharp
         /// <param name="key">The key value of the asset, e.g. 'templates/index.liquid' or 'assets/bg-body.gif'.</param>
         /// <param name="themeId">The id of the theme that the asset belongs to.</param>
         /// <returns>The request with the proper querystring.</returns>
-        RequestUri SetAssetQuerystring(RequestUri req, string key, long themeId)
+        protected virtual RequestUri SetAssetQuerystring(RequestUri req, string key, long themeId)
         {
             //QS should look like:
             //?asset[key]={key}&theme_id={themeId}
