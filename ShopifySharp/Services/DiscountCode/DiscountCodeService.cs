@@ -16,7 +16,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public DiscountCodeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<ListResult<PriceRuleDiscountCode>> ListAsync(long priceRuleId, ListFilter<PriceRuleDiscountCode> filter, CancellationToken cancellationToken = default) =>
 			await ExecuteGetListAsync($"price_rules/{priceRuleId}/discount_codes.json", "discount_codes", filter, cancellationToken);
 
@@ -43,7 +43,7 @@ namespace ShopifySharp
             return await GetAsync(filter, cancellationToken);
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<PriceRuleDiscountCode> CreateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
@@ -58,7 +58,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<PriceRuleDiscountCode> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{code.Id.Value}.json");
@@ -71,7 +71,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task DeleteAsync(long priceRuleId, long discountCodeId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountCodeId}.json");

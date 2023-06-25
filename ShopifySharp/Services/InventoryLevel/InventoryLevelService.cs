@@ -19,7 +19,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public InventoryLevelService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<ListResult<InventoryLevel>> ListAsync(ListFilter<InventoryLevel> filter, CancellationToken cancellationToken = default) =>
 			await ExecuteGetListAsync($"inventory_levels.json", "inventory_levels", filter, cancellationToken);
 
@@ -45,7 +45,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<InventoryLevel> AdjustAsync(InventoryLevelAdjust updatedInventoryLevel, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"inventory_levels/adjust.json");
@@ -56,7 +56,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"inventory_levels/connect.json");

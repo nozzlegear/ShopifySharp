@@ -19,7 +19,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public AccessScopeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<IEnumerable<AccessScope>> ListAsync(CancellationToken cancellationToken = default) => 
             await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes", cancellationToken: cancellationToken);
     }

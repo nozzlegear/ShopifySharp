@@ -19,7 +19,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public MetaFieldService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<int> CountAsync(CancellationToken cancellationToken = default) =>
 			await _CountAsync("metafields/count.json", cancellationToken);
 
@@ -72,7 +72,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, long parentResourceId, string parentResourceType, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{parentResourceType.ToLower()}/{parentResourceId}/{resourceType.ToLower()}/{resourceId}/metafields.json");
@@ -85,7 +85,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"{resourceType.ToLower()}/{resourceId}/metafields.json");
@@ -98,7 +98,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<MetaField> UpdateAsync(long metafieldId, MetaField metafield, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"metafields/{metafieldId}.json");
@@ -111,7 +111,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task DeleteAsync(long metafieldId, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"metafields/{metafieldId}.json");

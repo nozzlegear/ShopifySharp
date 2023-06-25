@@ -19,7 +19,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public AssetService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<Asset> GetAsync(long themeId, string key, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
@@ -36,11 +36,11 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<IEnumerable<Asset>> ListAsync(long themeId, AssetListFilter filter = null, CancellationToken cancellationToken = default) =>
 			await ExecuteGetAsync<IEnumerable<Asset>>($"themes/{themeId}/assets.json", "assets", filter, cancellationToken);
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<Asset> CreateOrUpdateAsync(long themeId, Asset asset, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");
@@ -53,7 +53,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task DeleteAsync(long themeId, string key, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"themes/{themeId}/assets.json");

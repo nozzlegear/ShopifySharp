@@ -20,19 +20,19 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PriceRuleService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<ListResult<PriceRule>> ListAsync(ListFilter<PriceRule> filter, CancellationToken cancellationToken = default)
         {
             return await ExecuteGetListAsync("price_rules.json", "price_rules", filter, cancellationToken);
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<ListResult<PriceRule>> ListAsync(PriceRuleListFilter filter = null, CancellationToken cancellationToken = default)
         {
             return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<PriceRule> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
@@ -47,7 +47,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<PriceRule> CreateAsync(PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest("price_rules.json");
@@ -61,7 +61,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task<PriceRule> UpdateAsync(long id, PriceRule rule, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
@@ -74,7 +74,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
-		/// <inheritdoc />
+        /// <inheritdoc />
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"price_rules/{id}.json");
