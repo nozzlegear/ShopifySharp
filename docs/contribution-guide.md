@@ -19,30 +19,28 @@ That said, if you feel the change should be made anyway, please open an issue so
 
 "Services" in ShopifySharp are classes that contain methods for interacting with a single Shopify API endpoint or object type. For example, the `CustomerService` contains all of the methods for creating, updating, listing and deleting customers with the Shopify API. 
 
-Shopify often introduces new endpoints, so we often accept pull requests with new services for these endpoints! In general, if you're creating a new service, please try to implement all of the endpoints for the service as described in Shopify's docs. Take a look at the other service classes to get an idea for how they should be implemented.
+Shopify introduces new endpoints often, so we often accept pull requests with new services for these endpoints! In general, if you're creating a new service, please try to implement all of the endpoints for the service as described in Shopify's docs. Take a look at the other service classes to get an idea for how they should be implemented.
+
+Every service in ShopifySharp should have an accompanying interface that describes all of the public methods for the interface. The interface should be placed in a separate file alongside your service file, and the documentation for each method should be added to the interface method – not the class. See the [CustomerService.cs](https://github.com/nozzlegear/ShopifySharp/blob/5750feb4116c6047d28720f9ef8c650b30e6a534/ShopifySharp/Services/Customer/CustomerService.cs) and [ICustomerService.cs](https://github.com/nozzlegear/ShopifySharp/blob/5750feb4116c6047d28720f9ef8c650b30e6a534/ShopifySharp/Services/Customer/ICustomerService.cs) files for an example.
 
 > Note that new services must have tests! Even if they're unable to run due to permission issues or requiring a Shopify Plus account, we'd still like the tests to be implemented to confirm that everything works and builds as expected. See the section below on writing tests.
 
 **If your new service uses Shopify's paginated list endpoint, always implement two methods for listing:** the first method should use the generic `ListFilter<EntityType>`, and the second method should use a more dedicated `EntityTypeListFilter`. 
 
-[The `CustomerService` is a good example of this pattern:](https://github.com/nozzlegear/ShopifySharp/blob/d0e747abbf34e946f4b22a092fd47415ee974437/ShopifySharp/Services/Customer/CustomerService.cs#L34)
+[Again, the CustomerService.cs file has a good example of this pattern:](https://github.com/nozzlegear/ShopifySharp/blob/5750feb4116c6047d28720f9ef8c650b30e6a534/ShopifySharp/Services/Customer/CustomerService.cs#L29)
 
 ```cs
 using ShopifySharp.Filters;
 
-public class CustomerService : ShopifyService
+public class CustomerService : ShopifyService, ICustomerService
 {
     // ...
 
-    public async Task<IEnumerable<Customer>> ListAsync(ListFilter<Customer>> filter = null, CancellationToken token = default)
-    {
-        // ...
-    }
+    public virtual async Task<ListResult<Customer>> ListAsync(ListFilter<Customer> filter = null, CancellationToken cancellationToken = default) =>
+        await ExecuteGetListAsync("customers.json", "customers", filter, cancellationToken);
 
-    public async Task<IEnumerable<Customer>> ListAsync(CustomerListFilter filter, CancellationToken token = default)
-    {
-        return await ListAsync(filter?.AsListFilter(), token);
-    }
+    public virtual async Task<ListResult<Customer>> ListAsync(CustomerListFilter filter, CancellationToken cancellationToken = default) =>
+        await ListAsync(filter?.AsListFilter(), cancellationToken);
 }
 ```
 
@@ -96,7 +94,7 @@ SHOPIFYSHARP_MULTIPASS_SECRET = value
 
 > Remember that these tests will make changes to the store! **Do not use an access token from a production or client store**. You should only use tokens from development stores where e.g. creating/updating/deleting/enabling/disabling things like products or orders won't hurt anybody's financial income. 
 
-Once you've got the env file configured, you'll be ready to run the tests. Most IDEs have their own dedicate test running interface that I won't explain here, so instead the following examples will all use the dotnet CLI. 
+Once you've got the env file configured, you'll be ready to run the tests. Most IDEs have their own dedicated test running interface that I won't explain here, so instead the following examples will all use the dotnet CLI. 
 
 ### Running all tests
 
