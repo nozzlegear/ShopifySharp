@@ -1,5 +1,4 @@
 using System.Net.Http;
-using Microsoft.Extensions.Http;
 
 namespace ShopifySharp.Infrastructure
 {
