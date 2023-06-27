@@ -1,7 +1,7 @@
 ﻿using ShopifySharp.Infrastructure;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace ShopifySharp
 {
@@ -17,6 +17,7 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CancellationRequestService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> CreateAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/cancellation_request.json");
@@ -32,6 +33,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> AcceptAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/cancellation_request/accept.json");
@@ -47,6 +49,7 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> RejectAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
             var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/cancellation_request/reject.json");

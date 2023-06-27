@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Net.Http;
+using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using ShopifySharp.Infrastructure;
-using System.Net;
 using System.Threading;
 using System;
 
@@ -15,7 +15,7 @@ namespace ShopifySharp
     /// A service to query the GraphQL Partner API
     /// See https://shopify.dev/api/partner
     /// </summary>
-    public class PartnerService : ShopifyService
+    public class PartnerService : ShopifyService, IPartnerService
     {
         private readonly long _organizationId;
         private readonly string _apiVersion;
@@ -25,20 +25,13 @@ namespace ShopifySharp
         /// <summary>
         /// Creates a new instance of <see cref="GraphService" />.
         /// </summary>
-        /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-        /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PartnerService(long organizationId, string accessToken, string apiVersion = null) : base("partners.shopify.com", accessToken) 
         {
             _organizationId = organizationId;
             _apiVersion = apiVersion;
         }
 
-        /// <summary>
-        /// Executes a Graph API Call.
-        /// </summary>
-        /// <param name="body">The query you would like to execute. Please see documentation for formatting.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>A JToken containing the data from the request.</returns>
+        /// <inheritdoc />
         public virtual async Task<JToken> PostAsync(string body, CancellationToken cancellationToken = default)
         {
             var req = new RequestUri(new Uri($"https://partners.shopify.com/{_organizationId}/api/{APIVersion}/graphql.json"));
@@ -49,10 +42,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors. This loses the requestId, but otherwise is capable of passing along the message.
+        /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API
+        /// doesn't work well without potentially throwing unnecessary errors. This loses the requestId, but otherwise
+        /// is capable of passing along the message.
         /// </summary>
-        /// <param name="requestResult">The RequestResult<JToken> response from ExecuteRequestAsync.</param>
-        /// <returns>Task.</returns>
+        /// <param name="requestResult">The RequestResult{JToken} response from ExecuteRequestAsync.</param>
+        /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
         private void CheckForErrors(RequestResult<JToken> requestResult)
         {
             if (requestResult.Result["errors"] != null)

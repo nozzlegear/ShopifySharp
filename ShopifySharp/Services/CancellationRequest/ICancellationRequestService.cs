@@ -7,7 +7,7 @@ namespace ShopifySharp
     /// The CancellationRequest resource represents a cancellation request made by the merchant or an order management app to a fulfillment service for a fulfillment order.
     /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/cancellationrequest">API Reference</see>
     /// </summary>
-    public interface ICancellationRequestService
+    public interface ICancellationRequestService : IShopifyService
     {
         /// <summary>
         /// Sends a cancellation request to the fulfillment service of a fulfillment order.
