@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
@@ -199,5 +201,69 @@ namespace ShopifySharp.Tests
             Assert.Contains($"state={state}", result);
             Assert.Contains($"grant_options[]=per-user", result);
         }
+
+        [Fact]
+        public void IsAuthenticWebhook_CanValidateHeader()
+        {
+            const string shopifyHMacHeader = "3X6clrsy+C8mmzR/MeTh6b/EcLr46WLZaU+24GrPXOM=";
+            const string secretBytes = "some-secret";
+            const string rawBody = "Bf";
+
+            var headers = new[] {
+                new KeyValuePair<string, StringValues>("X-Shopify-Hmac-SHA256", new StringValues(shopifyHMacHeader)),
+            };
+
+            var actual = AuthorizationService.IsAuthenticWebhook(headers, rawBody, secretBytes);
+
+            Assert.True(actual);
+        }
+
+#if NET6_0_OR_GREATER
+
+        [Fact]
+        public void IsAuthenticWebhook_UsingBytes_WhenHeaderIsMissing_ReturnFalse()
+        {
+            var secretBytes = "some-secret"u8.ToArray();
+            var rawBody = "Bf"u8.ToArray();
+
+            var headers = Array.Empty<KeyValuePair<string, StringValues>>();
+
+            var actual = AuthorizationService.IsAuthenticWebhook(headers, rawBody, secretBytes);
+
+            Assert.False(actual);
+        }
+
+        [Fact]
+        public void IsAuthenticWebhook_UsingBytes_CanValidateHeader()
+        {
+            const string shopifyHMacHeader = "3X6clrsy+C8mmzR/MeTh6b/EcLr46WLZaU+24GrPXOM=";
+            var secretBytes = "some-secret"u8.ToArray();
+            var rawBody = new byte[] {0x42, 0x66};
+
+            var headers = new[] {
+                new KeyValuePair<string, StringValues>("X-Shopify-Hmac-SHA256", new StringValues(shopifyHMacHeader)),
+            };
+
+            var actual = AuthorizationService.IsAuthenticWebhook(headers, rawBody, secretBytes);
+
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void IsAuthenticWebhook_UsingBytes_WhenHeaderIsInvalid_ReturnFalse()
+        {
+            const string shopifyHMacHeader = "3X6clrsy+C8mmzR/MeTh6b/EcLr46WLZaU+24GrPXOM=";
+            var secretBytes = "some-secret-2"u8.ToArray();
+            var rawBody = new byte[] {0x42, 0x66};
+
+            var headers = new[] {
+                new KeyValuePair<string, StringValues>("X-Shopify-Hmac-SHA256", new StringValues(shopifyHMacHeader)),
+            };
+
+            var actual = AuthorizationService.IsAuthenticWebhook(headers, rawBody, secretBytes);
+
+            Assert.False(actual);
+        }
+#endif
     }
 }

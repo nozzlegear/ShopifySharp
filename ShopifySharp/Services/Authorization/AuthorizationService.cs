@@ -1,4 +1,7 @@
 ﻿using System;
+#if NET6_0_OR_GREATER
+using System.Buffers;
+#endif
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -239,6 +242,56 @@ namespace ShopifySharp
             //Webhook is valid if computed hash matches the header hash
             return hash == hmacHeader;
         }
+
+#if NET6_0_OR_GREATER
+        public static bool IsAuthenticWebhook(
+            IEnumerable<KeyValuePair<string, StringValues>> requestHeaders,
+            ReadOnlyMemory<byte> requestBody,
+            ReadOnlyMemory<byte> shopifySecretKey
+        )
+        {
+            var hmacHeaderValue = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
+            if (string.IsNullOrEmpty(hmacHeaderValue))
+            {
+                return false;
+            }
+
+            var hmacHeaderBytes = ArrayPool<byte>.Shared.Rent(32);
+            var hmacBytes = ArrayPool<byte>.Shared.Rent(32);
+            try
+            {
+                //Compute a hash from the apiKey and the request body
+                if (!HMACSHA256.TryHashData(shopifySecretKey.Span, requestBody.Span, hmacBytes, out var bytesWritten))
+                {
+                    return false;
+                }
+
+                if (bytesWritten != 32)
+                {
+                    return false;
+                }
+
+                var hmacBytesSpan = new ReadOnlyMemory<byte>(hmacBytes, 0, bytesWritten);
+                if (!Convert.TryFromBase64String(hmacHeaderValue, hmacHeaderBytes, out var headerBytesWrittern))
+                {
+                    return false;
+                }
+
+                if (headerBytesWrittern != 32)
+                {
+                    return false;
+                }
+
+                //Webhook is valid if computed hash matches the header hash
+                return hmacBytesSpan.Span.SequenceEqual(new Span<byte>(hmacHeaderBytes, 0, headerBytesWrittern));
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(hmacBytes);
+                ArrayPool<byte>.Shared.Return(hmacHeaderBytes);
+            }
+        }
+#endif
 
         /// <summary>
         /// Determines if an incoming webhook request is authentic.
