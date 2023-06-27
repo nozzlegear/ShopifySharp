@@ -1,5 +1,8 @@
 # ShopifySharp: A .NET library for Shopify.
 
+Merge new commits from nozzlegear TO Mv local Shopify:
+https://github.com/Megaventory/ShopifySharp/compare/master...nozzlegear:ShopifySharp:master
+
 [![NuGet](https://img.shields.io/nuget/v/ShopifySharp.svg?maxAge=3600)](https://www.nuget.org/packages/ShopifySharp/)
 [![Build status](https://github.com/nozzlegear/ShopifySharp/actions/workflows/build-and-test.yml/badge.svg?branch=master)](https://github.com/nozzlegear/ShopifySharp/actions/workflows/build-and-test.yml)
 [![license](https://img.shields.io/github/license/nozzlegear/shopifysharp.svg?maxAge=3600)](https://github.com/nozzlegear/shopifysharp/blob/master/LICENSE)
