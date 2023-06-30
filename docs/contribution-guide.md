@@ -66,7 +66,7 @@ We don't reject these outright -- improvements are always welcome -- but anythin
 
 ShopifySharp is uses [xUnit](https://xunit.github.io/) for tests. New tests should all follow the format of other, existing tests. You can use the [Article](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp.Tests/Article_Tests.cs) test as an example. 
 
-If you're using VS Code, I would highly recommend that you [use the provided ShopifySharp Test snippet in the VSCode folder](https://github.com/nozzlegear/ShopifySharp/blob/master/.vscode/snippets.csharp.json). This snippet will set up a new test file for you when you type `test-shopifysharp`:
+If you're using VS Code, a snippet should be automatically loaded for creating tests. This snippet will set up a new test file for you when you type `test-shopifysharp`:
 
 ![shopifysharp-test](https://cloud.githubusercontent.com/assets/2417276/25457929/94bc71dc-2a9d-11e7-80ac-72352715504e.gif)
 
