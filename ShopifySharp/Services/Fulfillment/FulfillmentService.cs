@@ -67,5 +67,18 @@ namespace ShopifySharp
             var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, content, "fulfillment");
             return response.Result;
         }
+
+        /// <summary>
+        /// Cancels a pending fulfillment with the given id.
+        /// </summary>
+        /// <param name="fulfillmentId">The fulfillment's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public virtual async Task<Fulfillment> CancelAsync(long fulfillmentId, CancellationToken cancellationToken = default)
+        {
+            var req = PrepareRequest($"fulfillments/{fulfillmentId}/cancel.json");
+
+            var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
+            return response.Result;
+        }
     }
 }
