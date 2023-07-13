@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// The address of the fulfillment location.
         /// </summary>
         [JsonProperty("origin_address")]
-        public FulfillmentShippingOriginAddress OriginAddress { get; set; }
+        public FulfillmentOriginAddress OriginAddress { get; set; }
 
         /// <summary>
         /// The fulfillment order line items to be requested for fulfillment. If left blank, all line items of the fulfillment order are requested for fulfillment.

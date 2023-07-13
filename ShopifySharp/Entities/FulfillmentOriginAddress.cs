@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp
 {
-    public class FulfillmentShippingOriginAddress
+    public class FulfillmentOriginAddress
     {
         /// <summary>
         /// The street address of the fulfillment location.

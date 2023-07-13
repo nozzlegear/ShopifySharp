@@ -315,7 +315,7 @@ namespace ShopifySharp.Tests
                 },
                 OriginAddress = originAddress == false
                 ? null
-                : new FulfillmentShippingOriginAddress
+                : new FulfillmentOriginAddress
                 {
                     Address1 = "123 4th Street",
                     City = "Minneapolis",
