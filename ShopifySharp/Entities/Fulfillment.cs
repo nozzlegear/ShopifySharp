@@ -128,9 +128,9 @@ namespace ShopifySharp
         public string Name { get; set; }
 
         /// <summary>
-        /// The address of the fulfillment location
+        /// The address of the fulfillment location.
         /// </summary>
         [JsonProperty("origin_address")]
-        public Address OriginAddress { get; set; }
+        public FulfillmentOriginAddress OriginAddress { get; set; }
     }
 }

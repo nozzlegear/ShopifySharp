@@ -110,6 +110,24 @@ namespace ShopifySharp.Tests
         }
 
         [Fact]
+        public async Task Creates_Fulfillments_With_Origin_Address()
+        {
+            var order = await Fixture.CreateOrder();
+            var created = await Fixture.Create(order.Id.Value, originAddress: true);
+
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal("success", created.Status);
+            Assert.Equal("US", created.OriginAddress.CountryCode);
+            Assert.Equal("MN", created.OriginAddress.ProvinceCode);
+            Assert.Equal("123 4th Street", created.OriginAddress.Address1);
+            Assert.Equal("Minneapolis", created.OriginAddress.City);
+            Assert.Equal("MN", created.OriginAddress.ProvinceCode);
+            Assert.Equal("55401", created.OriginAddress.Zip);
+            Assert.Equal("US", created.OriginAddress.CountryCode);
+        }
+
+        [Fact]
         public async Task Creates_Partial_Fulfillments()
         {
             var order = await Fixture.CreateOrder();
@@ -270,7 +288,7 @@ namespace ShopifySharp.Tests
             return orders;
         }
 
-        public async Task<Fulfillment> Create(long orderId, bool partialFulfillment = false)
+        public async Task<Fulfillment> Create(long orderId, bool partialFulfillment = false, bool originAddress = false)
         {
             var fulfillmentOrders = await ListFulfillmentOrders(orderId);
             var lineItems = fulfillmentOrders.Select(o => new LineItemsByFulfillmentOrder
@@ -294,6 +312,16 @@ namespace ShopifySharp.Tests
                     Company = "Jack Black's Pack, Stack and Track",
                     Url = "https://example.com/123456789",
                     Number = "123456789"
+                },
+                OriginAddress = originAddress == false
+                ? null
+                : new FulfillmentOriginAddress
+                {
+                    Address1 = "123 4th Street",
+                    City = "Minneapolis",
+                    ProvinceCode = "MN",
+                    Zip = "55401",
+                    CountryCode = "US"
                 }
             });
 
