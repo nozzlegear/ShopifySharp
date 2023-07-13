@@ -65,5 +65,12 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated <see cref="Fulfillment"/>.</returns>
         Task<Fulfillment> UpdateTrackingAsync(long fulfillmentId, FulfillmentShipping fulfillment, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Cancels a pending fulfillment with the given id.
+        /// </summary>
+        /// <param name="fulfillmentId">The fulfillment's id.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        Task<Fulfillment> CancelAsync(long fulfillmentId, CancellationToken cancellationToken = default);
     }
 }
