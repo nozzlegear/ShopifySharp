@@ -18,6 +18,8 @@ namespace ShopifySharp
 
         /// <summary>
         /// The ID of the line item associated with this fulfillment order line item.
+        /// Note: this is **not** what should be used as the value for <see cref="FulfillmentRequestOrderLineItem.Id"/>;
+        /// for that, you'll want to use <see cref="FulfillmentOrderLineItem.Id"/>.
         /// </summary>
         [JsonProperty("line_item_id")]
         public long? LineItemId { get; set; }
