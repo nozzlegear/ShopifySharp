@@ -19,7 +19,7 @@ namespace ShopifySharp
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
 
-        private static IHttpClientFactory _HttpClientFactory = new DefaultHttpClientFactory();
+        private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
 
         private HttpClient _Client;
 
@@ -109,7 +109,7 @@ namespace ShopifySharp
         /// </summary>
         public static void SetGlobalHttpClientFactory(IHttpClientFactory factory)
         {
-            _HttpClientFactory = factory ?? new DefaultHttpClientFactory();
+            _HttpClientFactory = factory ?? new InternalHttpClientFactory();
         }
 
         protected RequestUri PrepareRequest(string path)
