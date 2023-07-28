@@ -209,5 +209,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("fulfillment_line_item_id")]
         public long? FulfillmentLineItemId { get; set; }
+
+        /// <summary>
+        /// A list of attributed staffs for this line item
+        /// </summary>
+        [JsonProperty("attributed_staffs")]
+        public IEnumerable<LineItemAttributedStaff> AttributedStaffs { get; set; }
     }
 }
