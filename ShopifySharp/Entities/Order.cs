@@ -506,5 +506,8 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("tax_exempt")]
         public bool? TaxExempt { get; set; }
+
+        [JsonProperty("company")]
+        public OrderCompany Company { get; set; }
     }
 }
