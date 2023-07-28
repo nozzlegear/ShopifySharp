@@ -499,7 +499,7 @@ namespace ShopifySharp
         /// The purchase order number associated to this order
         /// </summary>
         [JsonProperty("po_number")]
-        public PaymentTerms PoNumber { get; set; }
+        public string PoNumber { get; set; }
 
         /// <summary>
         /// Whether this order was exempt from taxes.
