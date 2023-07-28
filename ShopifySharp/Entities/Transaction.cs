@@ -160,5 +160,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("payment_id")]
         public string PaymentId { get; set; }
+
+        /// <summary>
+        /// Specifies the available amount with currency to capture on the gateway in shop and presentment currencies. Only available when an amount is capturable or manually mark as paid.
+        /// </summary>
+        [JsonProperty("total_unsettled_set")]
+        public PriceSet TotalUnsettledSet { get; set; }
     }
 }

@@ -234,6 +234,7 @@ namespace ShopifySharp
         /// The type of payment processing method. Known values are 'checkout', 'direct', 'manual', 'offsite', 'express', 'free' and 'none'.
         /// </summary>
         [JsonProperty("processing_method")]
+        [Obsolete("Deprecated in version 2023-04. https://shopify.dev/docs/api/release-notes/2023-04#payment-properties-on-the-order-resource-have-been-removed")]
         public string ProcessingMethod { get; set; }
 
         /// <summary>
@@ -481,5 +482,29 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("payment_terms")]
         public PaymentTerms PaymentTerms { get; set; }
+
+        /// <summary>
+        /// The current total additional fees on the order in shop and presentment currencies. The amount values associated with this field reflect order edits, returns, and refunds.
+        /// </summary>
+        [JsonProperty("current_total_additional_fees_set")]
+        public PriceSet CurrentTotalAdditionalFeesSet { get; set; }
+
+        /// <summary>
+        /// The original total additional fees on the order in shop and presentment currencies.
+        /// </summary>
+        [JsonProperty("original_total_additional_fees_set")]
+        public PriceSet OriginalTotalAdditionalFeesSet { get; set; }
+
+        /// <summary>
+        /// The purchase order number associated to this order
+        /// </summary>
+        [JsonProperty("po_number")]
+        public PaymentTerms PoNumber { get; set; }
+
+        /// <summary>
+        /// Whether this order was exempt from taxes.
+        /// </summary>
+        [JsonProperty("tax_exempt")]
+        public bool? TaxExempt { get; set; }
     }
 }
