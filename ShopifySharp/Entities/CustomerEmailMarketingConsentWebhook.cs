@@ -8,6 +8,9 @@ namespace ShopifySharp
     /// </summary>
     public class CustomerEmailMarketingConsentWebhook : ShopifyObject
     {
+        [JsonProperty("customer_id")]
+        public long? CustomerId { get; set; }
+
         [JsonProperty("email_address")]
         public string EmailAddress { get; set; }
 
