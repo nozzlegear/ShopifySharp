@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using ShopifySharp.Enums;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -20,7 +22,31 @@ namespace ShopifySharp
         public AccessScopeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
         /// <inheritdoc />
-        public virtual async Task<IEnumerable<AccessScope>> ListAsync(CancellationToken cancellationToken = default) => 
-            await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes", cancellationToken: cancellationToken);
+        public virtual async Task<IEnumerable<AccessScope>> ListAsync(CancellationToken cancellationToken = default)
+        {
+            return await ExecuteGetAsync<IEnumerable<AccessScope>>("oauth/access_scopes.json", "access_scopes", cancellationToken: cancellationToken);
+        }
+
+        /// <summary> 
+        ///  Requests a subset of granular access scopes for an individual shop installation. 
+        /// </summary> 
+        public virtual async Task<IEnumerable<AccessScope>> RequestGranularAccessScopesAsync(IEnumerable<AuthorizationScope> requestedScopes, CancellationToken cancellationToken = default) 
+        {
+            return await RequestGranularAccessScopesAsync(requestedScopes.Select(s => s.ToSerializedString()), cancellationToken); 
+        }
+
+        /// <summary> 
+        ///  Requests a subset of granular access scopes for an individual shop installation. 
+        /// </summary> 
+        public virtual async Task<IEnumerable<AccessScope>> RequestGranularAccessScopesAsync(IEnumerable<string> requestedScopes, CancellationToken cancellationToken = default)
+        {
+            var content = new
+            {
+                requested_scopes = requestedScopes,
+            };
+            return await ExecutePostAsync<IEnumerable<AccessScope>>("request_granular_access_scopes.json", "access_scopes", cancellationToken: cancellationToken, content);
+        }
     }
 }
+
+
