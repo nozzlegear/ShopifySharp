@@ -2874,7 +2874,7 @@ However, ShopifySharp also has request execution policies that you can use to im
 
 1. `DefaultRequestExecutionPolicy`: This is the default policy, which will throw a `ShopifyRateLimitException` when the API rate limit has been reached.
 2. `RetryExecutionPolicy`: If a request throws a `ShopifyRateLimitException`, this policy will keep retrying it until it is successful.
-3. `SmartRetryExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
+3. `LeakyBucketExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
 
 You have two different ways to set an execution policy. You can set a policy on a per-instance basis:
 
@@ -2892,7 +2892,7 @@ ShopifyService.SetGlobalExecutionPolicy(new RetryExecutionPolicy());
 
 Note that **instance-specific policies will always be used over global execution policies**. In addition, if you clear the instance-specific policy by passing `null`, **the instance will then switch over to the global execution policy**.
 
-Keep in mind that the `RetryExecutionPolicy` and the `SmartRetryExecutionPolicy` will keep retrying your requests – potentially until the end of time – until they are successful. It's up to you to ensure that such a strategy won't impact the performance of your applications.
+Keep in mind that the `RetryExecutionPolicy` and the `LeakyBucketExecutionPolicy` will keep retrying your requests – potentially until the end of time – until they are successful. It's up to you to ensure that such a strategy won't impact the performance of your applications.
 
 If you need a custom policy to do something more complicated or to e.g. implement request logging, you can create your own request policy that extends the `ShopifySharp.IRequestExecutionPolicy` interface. [Check here](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Infrastructure/Policies/RetryExecutionPolicy.cs) for an example.
 
