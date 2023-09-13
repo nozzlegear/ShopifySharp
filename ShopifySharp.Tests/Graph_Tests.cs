@@ -50,7 +50,7 @@ namespace ShopifySharp.Tests
         [Fact(DisplayName = "Lists orders using the GraphService")]
         public async Task ListsOrdersUsingGraphService()
         {
-            var query = """
+            var query = @"
               query listOrdersWithTag($limit: Int!) {
                 orders(first: $limit) {
                   pageInfo {
@@ -67,7 +67,7 @@ namespace ShopifySharp.Tests
                   }
                 }
               }
-            """;
+            ";
             var variables = new Dictionary<string, object>
             {
                 { "limit", 10 }
@@ -102,7 +102,7 @@ namespace ShopifySharp.Tests
 
     public class Graph_Tests_Fixture : IAsyncLifetime
     {
-        public readonly GraphService Service = new (Utils.MyShopifyUrl, Utils.AccessToken);
+        public readonly GraphService Service = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public Task InitializeAsync()
         {

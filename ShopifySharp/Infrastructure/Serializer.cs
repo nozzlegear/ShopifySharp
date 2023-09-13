@@ -11,7 +11,7 @@ namespace ShopifySharp.Infrastructure
     /// </summary>
     public static class Serializer
     {
-        private static JsonSerializerSettings CreateSettings()
+        public static JsonSerializerSettings CreateSettings()
         {
             return new JsonSerializerSettings 
             {
