@@ -32,28 +32,29 @@ namespace ShopifySharp
             _apiVersion = apiVersion;
         }
 
-        public virtual Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
-            return PostAsync(JsonConvert.SerializeObject(body), graphqlQueryCost, cancellationToken);
-        }
-
-        public virtual async Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-        {
-            var res = await PostAsync<JToken>(body, graphqlQueryCost, cancellationToken);
+            var res = await PostAsync<JToken>(body.ToString(Formatting.None), "application/json", graphqlQueryCost, cancellationToken);
             return res["data"];
         }
 
-        public virtual async Task<JsonElement> Post2Async(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
-            var res = await PostAsync<JsonDocument>(body, graphqlQueryCost, cancellationToken);
+            var res = await PostAsync<JToken>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
+            return res["data"];
+        }
+
+        public virtual async Task<JsonElement> Post2Async(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        {
+            var res = await PostAsync<JsonDocument>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
             return res.RootElement.GetProperty("data");
         }
 
-        private async Task<T> PostAsync<T>(string body, int? graphqlQueryCost, CancellationToken cancellationToken)
+        private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken)
         {
             var req = PrepareRequest("graphql.json");
 
-            var content = new StringContent(body, Encoding.UTF8, "application/graphql");
+            var content = new StringContent(body, Encoding.UTF8, mediaType);
 
             var res = await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken);
 
