@@ -154,6 +154,16 @@ namespace ShopifySharp
         public CurrencyExchangeAdjustment CurrencyExchangeAdjustment { get; set; }
 
         /// <summary>
+        /// payments_refund_attributes are available only if the following criteria apply:
+        /// The store is on a Shopify Plus plan.
+        /// The store uses Shopify Payments.
+        /// The order transaction kind is either refund or void.
+        /// If the criteria isn't met, then the payments_refund_attributes property is omitted.
+        /// </summary>
+        [JsonProperty("payments_refund_attributes")]
+        public PaymentsRefundAttributes PaymentsRefundAttributes { get; set; }
+
+        /// <summary>
         /// Unique ID is now sent to payment providers when a customer pays at checkout. 
         /// This ID can be used to match order information between Shopify and payment providers. An Order can have more than one Payment ID. 
         /// It only includes successful or pending payments. It does not include captures and refunds.
