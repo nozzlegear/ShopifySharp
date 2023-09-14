@@ -205,11 +205,9 @@ namespace ShopifySharp
                                                                         HttpMethod method,
                                                                         CancellationToken cancellationToken,
                                                                         HttpContent content = null,
-                                                                        Dictionary<string, string> headers = null,
-                                                                        int? graphqlQueryCost = null,
-                                                                        DateParseHandling? dateParseHandlingOverride = null)
+                                                                        Dictionary<string, string> headers = null)
         {
-            return await this.ExecuteRequestCoreAsync<JToken>(uri, method, cancellationToken, content, headers, null, graphqlQueryCost, dateParseHandlingOverride);
+            return await this.ExecuteRequestCoreAsync<JToken>(uri, method, cancellationToken, content, headers, null, null);
         }
 
         /// <summary>
