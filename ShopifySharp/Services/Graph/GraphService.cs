@@ -8,6 +8,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System;
+using System.Text.Json;
 
 namespace ShopifySharp
 {
@@ -30,24 +32,32 @@ namespace ShopifySharp
             _apiVersion = apiVersion;
         }
 
-        /// <inheritdoc />
+        public virtual Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        {
+            return PostAsync(JsonConvert.SerializeObject(body), graphqlQueryCost, cancellationToken);
+        }
+
         public virtual async Task<JToken> PostAsync(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        {
+            var res = await PostAsync<JToken>(body, graphqlQueryCost, cancellationToken);
+            return res["data"];
+        }
+
+        public virtual async Task<JsonElement> Post2Async(string body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        {
+            var res = await PostAsync<JsonDocument>(body, graphqlQueryCost, cancellationToken);
+            return res.RootElement.GetProperty("data");
+        }
+
+        private async Task<T> PostAsync<T>(string body, int? graphqlQueryCost, CancellationToken cancellationToken)
         {
             var req = PrepareRequest("graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, "application/graphql");
 
-            return await SendAsync(req, content, graphqlQueryCost, cancellationToken);
-        }
+            var res = await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken);
 
-        /// <inheritdoc />
-        public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-        {
-            var req = PrepareRequest("graphql.json");
-
-            var content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-
-            return await SendAsync(req, content, graphqlQueryCost, cancellationToken);
+            return res;
         }
 
         /// <summary>
@@ -57,13 +67,13 @@ namespace ShopifySharp
         /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
         /// <param name="graphqlQueryCost">An estimation of the cost of this query.</param>
         /// <returns>A JToken containing the data from the request.</returns>
-        protected virtual async Task<JToken> SendAsync(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
+        protected virtual async Task<T> SendAsync<T>(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content, null, graphqlQueryCost, DateParseHandling.None);
+            var response = await ExecuteRequestCoreAsync<T>(req, HttpMethod.Post, cancellationToken, content, null, null, graphqlQueryCost, DateParseHandling.None);
 
             CheckForErrors(response);
 
-            return response.Result["data"];
+            return response.Result;
         }
 
         /// <summary>
@@ -71,20 +81,24 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
         /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
-        protected virtual void CheckForErrors(RequestResult<JToken> requestResult)
+        protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
         {
-            if (requestResult.Result["errors"] != null)
+            var res = JToken.Parse(requestResult.RawResult);
+            if (res["errors"] != null)
             {
                 var errorList = new List<string>();
                 
-                foreach (var error in requestResult.Result["errors"])
+                foreach (var error in res["errors"])
                 {
                     errorList.Add(error["message"].ToString());
                 }
 
-                var message = requestResult.Result["errors"].FirstOrDefault()["message"].ToString();
+                var message = res["errors"].FirstOrDefault()["message"].ToString();
 
-                throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
+                var requestIdHeader = requestResult.Response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
+                var requestId = requestIdHeader.Value?.FirstOrDefault();
+
+                throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
             }
         }
     }
