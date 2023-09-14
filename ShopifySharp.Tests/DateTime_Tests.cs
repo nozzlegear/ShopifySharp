@@ -25,9 +25,6 @@ namespace ShopifySharp.Tests
             var order = await this.OrderTestsFixture.Service.GetAsync(orderId);
             Assert.NotNull(order.UpdatedAt);
 
-            // Shopify seems to take approx. 10 seconds to propagate new orders into the GraphQL API
-            await Task.Delay(TimeSpan.FromSeconds(11));
-
             var graphService = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
             graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
             var graphQlOrder = await graphService.PostAsync(
