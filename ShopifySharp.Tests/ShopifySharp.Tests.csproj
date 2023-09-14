@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net472</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net472</TargetFrameworks>
     <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -24,5 +24,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Wish.GraphQLSchemaGenerator">
+      <Version>1.2.0</Version>
+    </PackageReference>
   </ItemGroup>
 </Project>
