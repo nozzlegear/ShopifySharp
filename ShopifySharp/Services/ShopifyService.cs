@@ -162,15 +162,14 @@ namespace ShopifySharp
             return linkHeaderValues == null ? null : string.Join(", ", linkHeaderValues);
         }
 
-        /// <summary>
-        /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
-        /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
-        /// </summary>
-        /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
-        /// </remarks>
-        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method,
-            CancellationToken cancellationToken, HttpContent content = null, Dictionary<string, string> headers = null, int? graphqlQueryCost = null)
+        protected async Task<RequestResult<T>> ExecuteRequestCoreAsync<T>(RequestUri uri,
+                                                                       HttpMethod method,
+                                                                       CancellationToken cancellationToken,
+                                                                       HttpContent content,
+                                                                       Dictionary<string, string> headers,
+                                                                       string rootElement,
+                                                                       int? graphqlQueryCost,
+                                                                       DateParseHandling? dateParseHandlingOverride = null)
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers))
             {
@@ -185,24 +184,32 @@ namespace ShopifySharp
                         //Check for and throw exception when necessary.
                         CheckResponseExceptions(response, rawResult);
 
-                        JToken jtoken = null;
+                        var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                        // Don't parse the result when the request was Delete.
-                        if (baseRequestMessage.Method != HttpMethod.Delete)
-                        {
-                            // Make sure that dates are not stripped of any timezone information if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
-                            using (var reader = new JsonTextReader(new StringReader(rawResult)) { DateParseHandling = DateParseHandling.None })
-                            {
-                                jtoken = await JObject.LoadAsync(reader, cancellationToken);
-                            }
-                        }
-
-                        return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
+                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
                     }
                 }, cancellationToken, graphqlQueryCost);
 
                 return policyResult;
             }
+        }
+
+        /// <summary>
+        /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
+        /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
+        /// </summary>
+        /// <remarks>
+        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
+        /// </remarks>
+        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri,
+                                                                        HttpMethod method,
+                                                                        CancellationToken cancellationToken,
+                                                                        HttpContent content = null,
+                                                                        Dictionary<string, string> headers = null,
+                                                                        int? graphqlQueryCost = null,
+                                                                        DateParseHandling? dateParseHandlingOverride = null)
+        {
+            return await this.ExecuteRequestCoreAsync<JToken>(uri, method, cancellationToken, content, headers, null, graphqlQueryCost, dateParseHandlingOverride);
         }
 
         /// <summary>
@@ -212,37 +219,14 @@ namespace ShopifySharp
         /// <remarks>
         /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
         /// </remarks>
-        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method,
-            CancellationToken cancellationToken, HttpContent content = null, string rootElement = null, Dictionary<string, string> headers = null)
+        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri,
+                                                                      HttpMethod method,
+                                                                      CancellationToken cancellationToken,
+                                                                      HttpContent content = null,
+                                                                      string rootElement = null,
+                                                                      Dictionary<string, string> headers = null)
         {
-            using (var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers))
-            {
-                var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
-                {
-                    var request = _Client.SendAsync(requestMessage, cancellationToken);
-
-                    using (var response = await request)
-                    {
-                        var rawResult = await response.Content.ReadAsStringAsync();
-
-                        //Check for and throw exception when necessary.
-                        CheckResponseExceptions(response, rawResult);
-
-                        T result = default;
-                        if (rootElement != null)
-                        {
-                            // This method may fail when the method was Delete, which is intendend.
-                            // Delete methods should not be parsing the response JSON and should instead
-                            // be using the non-generic ExecuteRequestAsync.
-                            result = Serializer.Deserialize<T>(rawResult, rootElement);
-                        }
-
-                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
-                    }
-                }, cancellationToken);
-
-                return policyResult;
-            }
+            return await this.ExecuteRequestCoreAsync<T>(uri, method, cancellationToken, content, headers, rootElement, null);
         }
 
         private async Task<T> ExecuteWithContentCoreAsync<T>(string path, string resultRootElt, HttpMethod method, JsonContent content, CancellationToken cancellationToken)
@@ -325,7 +309,7 @@ namespace ShopifySharp
             {
                 string rateExceptionMessage;
                 IEnumerable<string> errors;
-                
+
                 if (TryParseErrorJson(rawResponse, out var rateLimitErrors))
                 {
                     rateExceptionMessage = $"({statusMessage}) {rateLimitErrors.First()}";
@@ -335,7 +319,7 @@ namespace ShopifySharp
                 {
                     var baseMessage = "Exceeded the rate limit for api client. Reduce request rates to resume uninterrupted service.";
                     rateExceptionMessage = $"({statusMessage}) {baseMessage}";
-                    errors = new List<string>{ baseMessage };
+                    errors = new List<string> { baseMessage };
                 }
 
                 throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId);
@@ -356,19 +340,19 @@ namespace ShopifySharp
 
                     switch (totalErrors)
                     {
-                        case 1 :
+                        case 1:
                             exceptionMessage = baseErrorMessage;
                             break;
-                        
+
                         case 2:
                             exceptionMessage = $"{baseErrorMessage} (and one other error)";
                             break;
-                        
+
                         default:
                             exceptionMessage = $"{baseErrorMessage} (and {totalErrors} other errors)";
                             break;
                     }
-                    
+
                     errors = parsedErrors;
                 }
                 else
@@ -398,7 +382,7 @@ namespace ShopifySharp
         public static bool TryParseErrorJson(string json, out List<string> output)
         {
             output = null;
-            
+
             if (string.IsNullOrEmpty(json))
             {
                 return false;
@@ -427,14 +411,14 @@ namespace ShopifySharp
                     // Error is type #4
                     var description = parsed["error_description"].Value<string>();
                     var errorType = parsed["error"].Value<string>();
-                    
+
                     errors.Add($"{errorType}: {description}");
                 }
                 else if (parsed.Any(p => p.Path == "error"))
                 {
                     // Error is type #5
                     var description = parsed["error"].Value<string>();
-                    
+
                     errors.Add(description);
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
@@ -459,7 +443,7 @@ namespace ShopifySharp
                             if (val.Type == JTokenType.String)
                             {
                                 var description = val.Value<string>();
-                                
+
                                 errors.Add($"{name}: {description}");
                             }
                             else if (val.Type == JTokenType.Array)
@@ -488,7 +472,7 @@ namespace ShopifySharp
             }
 
             output = errors;
-            
+
             return true;
         }
 

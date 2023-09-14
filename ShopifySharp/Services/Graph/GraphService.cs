@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <returns>A JToken containing the data from the request.</returns>
         protected virtual async Task<JToken> SendAsync(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
         {
-            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content, graphqlQueryCost: graphqlQueryCost);
+            var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken, content, null, graphqlQueryCost, DateParseHandling.None);
 
             CheckForErrors(response);
 
