@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Converters;
+using System;
 using System.Collections.Generic;
 
 namespace ShopifySharp.Infrastructure
@@ -31,6 +32,13 @@ namespace ShopifySharp.Infrastructure
                 return DeserializeWithSystemTextJson<T>(json);
             else
                 return DeserializeWithNewtonsoft<T>(json, rootElementPath, dateParseHandlingOverride);
+        }
+
+        /// <remarks>This method is not used internally by ShopifySharp but can be used to deserialize webhook JSON payloads into objects</remarks>
+        public static object Deserialize(string json, Type objectType)
+        {
+            var settings = CreateNewtonsoftSettings();
+            return JsonConvert.DeserializeObject(json, objectType, settings);
         }
 
         private static T DeserializeWithNewtonsoft<T>(string json, string rootElementPath, DateParseHandling? dateParseHandlingOverride)
