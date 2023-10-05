@@ -50,7 +50,16 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task GetOrders()
         {
-            var res = await new GraphService(Utils.MyShopifyUrl, Utils.AccessToken).Post2Async(@"
+            foreach (var policy in new IRequestExecutionPolicy[]
+            {
+                new DefaultRequestExecutionPolicy(),
+                new RetryExecutionPolicy(),
+                new LeakyBucketExecutionPolicy()
+            })
+            {
+                var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+                svc.SetExecutionPolicy(policy);
+                var res = await svc.Post2Async(@"
 {
 	orders(first:10)
   {
@@ -72,15 +81,16 @@ namespace ShopifySharp.Tests
   }
 }
 ");
-            var orders = res.GetProperty("orders").Deserialize<OrderConnection>();
-            Assert.True(orders.nodes.Length > 0);
-            var o = orders.nodes[0];
-            Assert.True(o.name != null);
-            Assert.True(o.lineItems.nodes.First().quantity != null);
-            var commentEventEmbed = o as ICommentEventEmbed;
-            Assert.NotNull(commentEventEmbed);
-            Assert.NotNull(commentEventEmbed.AsOrder());
-            Assert.Null(commentEventEmbed.AsCustomer());
+                var orders = res.GetProperty("orders").Deserialize<OrderConnection>();
+                Assert.True(orders.nodes.Length > 0);
+                var o = orders.nodes[0];
+                Assert.True(o.name != null);
+                Assert.True(o.lineItems.nodes.First().quantity != null);
+                var commentEventEmbed = o as ICommentEventEmbed;
+                Assert.NotNull(commentEventEmbed);
+                Assert.NotNull(commentEventEmbed.AsOrder());
+                Assert.Null(commentEventEmbed.AsCustomer());
+            }
         }
     }
 }
