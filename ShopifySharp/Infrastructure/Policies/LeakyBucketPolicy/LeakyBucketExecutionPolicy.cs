@@ -67,6 +67,8 @@ namespace ShopifySharp
 
                         var graphRes = await executeRequestAsync(request);
                         var json = graphRes.Result as JToken;
+                        if (graphRes.Result is System.Text.Json.JsonDocument jsonDoc)
+                            json = JToken.Parse(jsonDoc.RootElement.ToString());
 
                         if (bucket != null)
                         {
