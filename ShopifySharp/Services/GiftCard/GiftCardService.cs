@@ -33,6 +33,12 @@ namespace ShopifySharp
         public virtual async Task<ListResult<GiftCard>> ListAsync(GiftCardListFilter filter = null, CancellationToken cancellationToken = default) =>
             await ListAsync(filter?.AsListFilter(), cancellationToken);
 
+        public virtual async Task<ListResult<GiftCard>> SearchAsync(ListFilter<GiftCard> filter, CancellationToken cancellationToken = default) =>
+            await ExecuteGetListAsync("gift_cards/search.json", "gift_cards", filter, cancellationToken);
+
+        public virtual async Task<ListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter, CancellationToken cancellationToken = default) =>
+            await SearchAsync(filter.AsListFilter(), cancellationToken);
+
         /// <inheritdoc />
         public virtual async Task<GiftCard> GetAsync(long giftCardId, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<GiftCard>($"gift_cards/{giftCardId}.json", "gift_card", cancellationToken: cancellationToken);
@@ -70,23 +76,6 @@ namespace ShopifySharp
             var req = PrepareRequest($"gift_cards/{giftCardId}/disable.json");
             var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, cancellationToken, rootElement: "gift_card");
             return response.Result;
-        }
-
-        /// <inheritdoc />
-        public virtual async Task<ListResult<GiftCard>> SearchAsync(GiftCardSearchFilter filter, CancellationToken cancellationToken = default)
-        {
-            if (filter == null)
-            {
-                throw new ArgumentNullException(nameof(filter));
-            }
-            
-            var req = PrepareRequest("gift_cards/search.json");
-            
-            req.QueryParams.AddRange(filter.ToQueryParameters());
-            
-            var response = await ExecuteRequestAsync<List<GiftCard>>(req, HttpMethod.Get, cancellationToken, rootElement: "gift_cards");
-
-            return ParseLinkHeaderToListResult(response);
         }
     }
 }
