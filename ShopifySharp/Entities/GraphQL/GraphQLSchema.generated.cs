@@ -11,6 +11,10 @@ namespace ShopifySharp.GraphQL
     public class AbandonedCheckout : INavigable, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The URL for the buyer to recover their checkout.
         ///</summary>
         public string? abandonedCheckoutUrl { get; set; }
@@ -37,6 +41,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Abandonment : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The abandonment payload for the abandoned checkout.
         ///</summary>
@@ -198,6 +206,10 @@ namespace ShopifySharp.GraphQL
     public class AbandonmentEmailStateUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated abandonment.
         ///</summary>
         public Abandonment? abandonment { get; set; }
@@ -212,6 +224,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AbandonmentEmailStateUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -243,6 +259,10 @@ namespace ShopifySharp.GraphQL
     public class AbandonmentUpdateActivitiesDeliveryStatusesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated abandonment.
         ///</summary>
         public Abandonment? abandonment { get; set; }
@@ -257,6 +277,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AbandonmentUpdateActivitiesDeliveryStatusesUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -296,6 +320,10 @@ namespace ShopifySharp.GraphQL
     public class AccessScope
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A description of the actions that the access scope allows an app to perform.
         ///</summary>
         public string? description { get; set; }
@@ -310,6 +338,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AddAllProductsOperation : INode, IResourceOperation, IPublicationOperation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -334,6 +366,10 @@ namespace ShopifySharp.GraphQL
     public class AdditionalFee : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -356,6 +392,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AdditionalFeeSale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -404,6 +444,10 @@ namespace ShopifySharp.GraphQL
     public class AdjustmentSale : ISale
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
         public SaleActionType? actionType { get; set; }
@@ -447,6 +491,10 @@ namespace ShopifySharp.GraphQL
     public class AllDiscountItems : IDiscountItems
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether all items are eligible for the discount. This value always returns `true`.
         ///</summary>
         public bool? allItems { get; set; }
@@ -458,6 +506,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ApiVersion
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The human-readable name of the version.
         ///</summary>
@@ -477,6 +529,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class App : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A unique application API identifier.
         ///</summary>
@@ -623,6 +679,10 @@ namespace ShopifySharp.GraphQL
     public class AppCatalog : ICatalog, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The apps associated with the catalog.
         ///</summary>
         public AppConnection? apps { get; set; }
@@ -658,6 +718,10 @@ namespace ShopifySharp.GraphQL
     public class AppConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public AppEdge[]? edges { get; set; }
@@ -676,6 +740,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppCredit : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The amount that can be used towards future app purchases in Shopify.
         ///</summary>
@@ -704,6 +772,10 @@ namespace ShopifySharp.GraphQL
     public class AppCreditConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public AppCreditEdge[]? edges { get; set; }
@@ -722,6 +794,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppCreditEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -760,6 +836,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppDiscountType
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app providing the app discount type.
         ///</summary>
@@ -800,6 +880,10 @@ namespace ShopifySharp.GraphQL
     public class AppEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -816,6 +900,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppFeedback
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The application associated to the feedback.
         ///</summary>
@@ -835,6 +923,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppInstallation : IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The access scopes granted to the application by a merchant during installation.
         ///</summary>
@@ -927,6 +1019,10 @@ namespace ShopifySharp.GraphQL
     public class AppInstallationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public AppInstallationEdge[]? edges { get; set; }
@@ -945,6 +1041,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppInstallationEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -994,6 +1094,10 @@ namespace ShopifySharp.GraphQL
     public class AppPlanV2
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The plan billed to a shop on a recurring basis.
         ///</summary>
         public IAppPricingDetails? pricingDetails { get; set; }
@@ -1010,6 +1114,10 @@ namespace ShopifySharp.GraphQL
     {
         public AppRecurringPricing? AsAppRecurringPricing() => this as AppRecurringPricing;
         public AppUsagePricing? AsAppUsagePricing() => this as AppUsagePricing;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The frequency at which the subscribing shop is billed for an app subscription.
         ///</summary>
@@ -1060,6 +1168,10 @@ namespace ShopifySharp.GraphQL
     public interface IAppPurchase
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The date and time when the app purchase occurred.
         ///</summary>
         public DateTime? createdAt { get; }
@@ -1086,6 +1198,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppPurchaseOneTime : IAppPurchase, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the app purchase occurred.
         ///</summary>
@@ -1118,6 +1234,10 @@ namespace ShopifySharp.GraphQL
     public class AppPurchaseOneTimeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public AppPurchaseOneTimeEdge[]? edges { get; set; }
@@ -1136,6 +1256,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppPurchaseOneTimeCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The newly created app one-time purchase.
         ///</summary>
@@ -1160,6 +1284,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppPurchaseOneTimeEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -1211,6 +1339,10 @@ namespace ShopifySharp.GraphQL
     public class AppRecurringPricing : IAppPricingDetails
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The discount applied to the subscription for a given number of billing intervals.
         ///</summary>
         public AppSubscriptionDiscount? discount { get; set; }
@@ -1229,6 +1361,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppRevenueAttributionRecord : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The financial amount captured in this attribution.
         ///</summary>
@@ -1267,6 +1403,10 @@ namespace ShopifySharp.GraphQL
     public class AppRevenueAttributionRecordConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public AppRevenueAttributionRecordEdge[]? edges { get; set; }
@@ -1286,6 +1426,10 @@ namespace ShopifySharp.GraphQL
     public class AppRevenueAttributionRecordCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created app revenue attribution record.
         ///</summary>
         public AppRevenueAttributionRecord? appRevenueAttributionRecord { get; set; }
@@ -1300,6 +1444,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppRevenueAttributionRecordCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -1335,6 +1483,10 @@ namespace ShopifySharp.GraphQL
     public class AppRevenueAttributionRecordDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the revenue attribution that was deleted, if one was.
         ///</summary>
         public string? deletedId { get; set; }
@@ -1349,6 +1501,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppRevenueAttributionRecordDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -1379,6 +1535,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppRevenueAttributionRecordEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -1438,6 +1598,10 @@ namespace ShopifySharp.GraphQL
     public class AppSubscription : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date and time when the app subscription was created.
         ///</summary>
         public DateTime? createdAt { get; set; }
@@ -1481,6 +1645,10 @@ namespace ShopifySharp.GraphQL
     public class AppSubscriptionCancelPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The cancelled app subscription.
         ///</summary>
         public AppSubscription? appSubscription { get; set; }
@@ -1495,6 +1663,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -1515,6 +1687,10 @@ namespace ShopifySharp.GraphQL
     public class AppSubscriptionCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly-created app subscription.
         ///</summary>
         public AppSubscription? appSubscription { get; set; }
@@ -1533,6 +1709,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionDiscount
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The total number of billing intervals to which the discount will be applied.
         ///The discount will be applied to an indefinite number of billing intervals if this value is blank.
@@ -1558,6 +1738,10 @@ namespace ShopifySharp.GraphQL
     public class AppSubscriptionDiscountAmount : IAppSubscriptionDiscountValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fixed amount value of a discount.
         ///</summary>
         public MoneyV2? amount { get; set; }
@@ -1568,6 +1752,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionDiscountPercentage : IAppSubscriptionDiscountValue
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The percentage value of a discount.
         ///</summary>
@@ -1584,6 +1772,10 @@ namespace ShopifySharp.GraphQL
     {
         public AppSubscriptionDiscountAmount? AsAppSubscriptionDiscountAmount() => this as AppSubscriptionDiscountAmount;
         public AppSubscriptionDiscountPercentage? AsAppSubscriptionDiscountPercentage() => this as AppSubscriptionDiscountPercentage;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -1591,6 +1783,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -1606,6 +1802,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionLineItem
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -1625,6 +1825,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionLineItemUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated app subscription.
         ///</summary>
@@ -1723,6 +1927,10 @@ namespace ShopifySharp.GraphQL
     public class AppSubscriptionTrialExtendPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The app subscription that had its trial extended.
         ///</summary>
         public AppSubscription? appSubscription { get; set; }
@@ -1737,6 +1945,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppSubscriptionTrialExtendUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -1797,6 +2009,10 @@ namespace ShopifySharp.GraphQL
     public class AppUsagePricing : IAppPricingDetails
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The total usage records for interval.
         ///</summary>
         public MoneyV2? balanceUsed { get; set; }
@@ -1823,6 +2039,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppUsageRecord : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the usage record was created.
         ///</summary>
@@ -1855,6 +2075,10 @@ namespace ShopifySharp.GraphQL
     public class AppUsageRecordConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public AppUsageRecordEdge[]? edges { get; set; }
@@ -1874,6 +2098,10 @@ namespace ShopifySharp.GraphQL
     public class AppUsageRecordCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created app usage record.
         ///</summary>
         public AppUsageRecord? appUsageRecord { get; set; }
@@ -1888,6 +2116,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AppUsageRecordEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -1924,6 +2156,10 @@ namespace ShopifySharp.GraphQL
     public class Attribute
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Key or name of the attribute.
         ///</summary>
         public string? key { get; set; }
@@ -1938,6 +2174,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class AutomaticDiscountApplication : IDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is applied to its entitled items.
         ///</summary>
@@ -1991,6 +2231,10 @@ namespace ShopifySharp.GraphQL
     public class AvailableChannelDefinitionsByChannel
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The channel definitions for channels installed on a shop.
         ///</summary>
         public ChannelDefinition[]? channelDefinitions { get; set; }
@@ -2034,6 +2278,10 @@ namespace ShopifySharp.GraphQL
     public class BasicEvent : IEvent, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the app that created the event.
         ///</summary>
         public string? appTitle { get; set; }
@@ -2068,6 +2316,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class BillingAttemptUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -2154,6 +2406,10 @@ namespace ShopifySharp.GraphQL
     public class BulkMutationUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public BulkMutationErrorCode? code { get; set; }
@@ -2178,6 +2434,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class BulkOperation : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///When the bulk operation was successfully completed.
         ///</summary>
@@ -2240,6 +2500,10 @@ namespace ShopifySharp.GraphQL
     public class BulkOperationCancelPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The bulk operation to be canceled.
         ///</summary>
         public BulkOperation? bulkOperation { get; set; }
@@ -2278,6 +2542,10 @@ namespace ShopifySharp.GraphQL
     public class BulkOperationRunMutationPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created bulk operation.
         ///</summary>
         public BulkOperation? bulkOperation { get; set; }
@@ -2292,6 +2560,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class BulkOperationRunQueryPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The newly created bulk operation.
         ///</summary>
@@ -2360,6 +2632,10 @@ namespace ShopifySharp.GraphQL
     public class BulkProductResourceFeedbackCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The feedback that's created.
         ///</summary>
         public ProductResourceFeedback[]? feedback { get; set; }
@@ -2374,6 +2650,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class BulkProductResourceFeedbackCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -2428,6 +2708,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class BundlesFeature
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether a shop is configured properly to sell bundles.
         ///</summary>
@@ -2503,6 +2787,10 @@ namespace ShopifySharp.GraphQL
     public class BusinessCustomerUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public BusinessCustomerErrorCode? code { get; set; }
@@ -2521,6 +2809,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class BuyerExperienceConfiguration
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether to checkout to draft order for merchant review.
         ///</summary>
@@ -2545,6 +2837,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CalculatedAutomaticDiscountApplication : ICalculatedDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is allocated to its entitled items.
         ///</summary>
@@ -2581,6 +2877,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedDiscountAllocation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The money amount that's allocated by the discount application in shop and presentment currencies.
         ///</summary>
         public MoneyBag? allocatedAmountSet { get; set; }
@@ -2595,6 +2895,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface ICalculatedDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///The method by which the discount's value is allocated to its entitled items.
         ///</summary>
@@ -2631,6 +2935,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedDiscountApplicationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CalculatedDiscountApplicationEdge[]? edges { get; set; }
@@ -2650,6 +2958,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedDiscountApplicationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -2664,6 +2976,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CalculatedDiscountCodeApplication : ICalculatedDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is allocated to its entitled items.
         ///</summary>
@@ -2703,6 +3019,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CalculatedDraftOrder
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Order-level discount applied to the draft order.
         ///</summary>
@@ -2806,6 +3126,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CalculatedDraftOrderLineItem
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The discount applied to the line item.
         ///</summary>
@@ -2931,6 +3255,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedLineItem
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The discounts that have been allocated onto the line item by discount applications.
         ///</summary>
         public CalculatedDiscountAllocation[]? calculatedDiscountAllocations { get; set; }
@@ -3019,6 +3347,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CalculatedLineItemEdge[]? edges { get; set; }
@@ -3038,6 +3370,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedLineItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -3052,6 +3388,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CalculatedManualDiscountApplication : ICalculatedDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is allocated to its entitled items.
         ///</summary>
@@ -3087,6 +3427,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CalculatedOrder : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Returns only the new discount applications being added to the order in the current edit.
         ///</summary>
@@ -3161,6 +3505,10 @@ namespace ShopifySharp.GraphQL
     public class CalculatedScriptDiscountApplication : ICalculatedDiscountApplication
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The method by which the discount's value is allocated to its entitled items.
         ///</summary>
         public DiscountApplicationAllocationMethod? allocationMethod { get; set; }
@@ -3195,6 +3543,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CardPaymentDetails : IPaymentDetails
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The response code from the address verification system (AVS). The code is always a single letter.
         ///</summary>
@@ -3239,6 +3591,10 @@ namespace ShopifySharp.GraphQL
     public class CartTransform : IHasMetafields, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID for the Cart Transform function.
         ///</summary>
         public string? functionId { get; set; }
@@ -3270,6 +3626,10 @@ namespace ShopifySharp.GraphQL
     public class CartTransformConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CartTransformEdge[]? edges { get; set; }
@@ -3289,6 +3649,10 @@ namespace ShopifySharp.GraphQL
     public class CartTransformCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created cart transform function.
         ///</summary>
         public CartTransform? cartTransform { get; set; }
@@ -3303,6 +3667,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CartTransformCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -3346,6 +3714,10 @@ namespace ShopifySharp.GraphQL
     public class CartTransformDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The globally-unique ID for the deleted cart transform.
         ///</summary>
         public string? deletedId { get; set; }
@@ -3360,6 +3732,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CartTransformDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -3394,6 +3770,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CartTransformEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -3438,6 +3818,10 @@ namespace ShopifySharp.GraphQL
     public class CatalogConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CatalogEdge[]? edges { get; set; }
@@ -3461,6 +3845,10 @@ namespace ShopifySharp.GraphQL
     public class CatalogContextUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated catalog.
         ///</summary>
         public ICatalog? catalog { get; set; }
@@ -3476,6 +3864,10 @@ namespace ShopifySharp.GraphQL
     public class CatalogCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created catalog.
         ///</summary>
         public ICatalog? catalog { get; set; }
@@ -3490,6 +3882,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CatalogCsvOperation : INode, IResourceOperation, IPublicationOperation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -3514,6 +3910,10 @@ namespace ShopifySharp.GraphQL
     public class CatalogDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted catalog.
         ///</summary>
         public string? deletedId { get; set; }
@@ -3528,6 +3928,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CatalogEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -3606,6 +4010,10 @@ namespace ShopifySharp.GraphQL
     public class CatalogUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated catalog.
         ///</summary>
         public ICatalog? catalog { get; set; }
@@ -3620,6 +4028,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CatalogUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -3788,6 +4200,10 @@ namespace ShopifySharp.GraphQL
     public class Channel : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The underlying app used by the channel.
         ///</summary>
         public App? app { get; set; }
@@ -3847,6 +4263,10 @@ namespace ShopifySharp.GraphQL
     public class ChannelConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ChannelEdge[]? edges { get; set; }
@@ -3866,6 +4286,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ChannelDefinition : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Name of the channel that this sub channel belongs to.
         ///</summary>
@@ -3898,6 +4322,10 @@ namespace ShopifySharp.GraphQL
     public class ChannelEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -3912,6 +4340,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ChannelInformation : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app associated with the channel.
         ///</summary>
@@ -3935,6 +4367,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CheckoutProfile : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the checkout profile was created.
         ///</summary>
@@ -3967,6 +4403,10 @@ namespace ShopifySharp.GraphQL
     public class CheckoutProfileConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CheckoutProfileEdge[]? edges { get; set; }
@@ -3985,6 +4425,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CheckoutProfileEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -4072,6 +4516,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Collection : IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode, IPublishable, IMetafieldReference, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of publications a resource is published to without feedback errors.
         ///</summary>
@@ -4222,6 +4670,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionAddProductsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated collection. Returns `null` if an error is raised.
         ///</summary>
         public Collection? collection { get; set; }
@@ -4237,6 +4689,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionAddProductsV2Payload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job adding the products.
         ///</summary>
         public Job? job { get; set; }
@@ -4251,6 +4707,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionAddProductsV2UserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -4286,6 +4746,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CollectionEdge[]? edges { get; set; }
@@ -4305,6 +4769,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The collection that has been created.
         ///</summary>
         public Collection? collection { get; set; }
@@ -4319,6 +4787,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the collection that was deleted. Returns `null` if the collection doesn't exist.
         ///</summary>
@@ -4339,6 +4811,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -4353,6 +4829,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionPublication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The channel where the collection will be published.
         ///</summary>
@@ -4381,6 +4861,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionPublicationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CollectionPublicationEdge[]? edges { get; set; }
@@ -4400,6 +4884,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionPublicationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -4414,6 +4902,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionPublishPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The published collection.
         ///</summary>
@@ -4438,6 +4930,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionRemoveProductsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job removing the products.
         ///</summary>
         public Job? job { get; set; }
@@ -4453,6 +4949,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionReorderProductsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job reordering the products.
         ///</summary>
         public Job? job { get; set; }
@@ -4467,6 +4967,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionRule
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The attribute that the rule focuses on. For example, `title` or `product_type`.
         ///</summary>
@@ -4558,6 +5062,10 @@ namespace ShopifySharp.GraphQL
         public CollectionRuleMetafieldCondition? AsCollectionRuleMetafieldCondition() => this as CollectionRuleMetafieldCondition;
         public CollectionRuleProductCategoryCondition? AsCollectionRuleProductCategoryCondition() => this as CollectionRuleProductCategoryCondition;
         public CollectionRuleTextCondition? AsCollectionRuleTextCondition() => this as CollectionRuleTextCondition;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -4565,6 +5073,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionRuleConditions
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Allowed relations of the rule.
         ///</summary>
@@ -4592,6 +5104,10 @@ namespace ShopifySharp.GraphQL
     {
         public CollectionRuleMetafieldCondition? AsCollectionRuleMetafieldCondition() => this as CollectionRuleMetafieldCondition;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition associated with the condition.
         ///</summary>
         public MetafieldDefinition? metafieldDefinition { get; set; }
@@ -4603,6 +5119,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionRuleMetafieldCondition : ICollectionRuleConditionObject, ICollectionRuleConditionsRuleObject
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition associated with the condition.
         ///</summary>
         public MetafieldDefinition? metafieldDefinition { get; set; }
@@ -4613,6 +5133,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionRuleProductCategoryCondition : ICollectionRuleConditionObject
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The value of the condition.
         ///</summary>
@@ -4672,6 +5196,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionRuleSet
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether products must match any or all of the rules to be included in the collection.
         ///If true, then products must match at least one of the rules to be included in the collection.
         ///If false, then products must match all of the rules to be included in the collection.
@@ -4688,6 +5216,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionRuleTextCondition : ICollectionRuleConditionObject
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The value of the condition.
         ///</summary>
@@ -4763,6 +5295,10 @@ namespace ShopifySharp.GraphQL
     public class CollectionUnpublishPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The collection that has been unpublished.
         ///</summary>
         public Collection? collection { get; set; }
@@ -4781,6 +5317,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CollectionUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated collection.
         ///</summary>
@@ -4801,6 +5341,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CommentEvent : IEvent, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The name of the app that created the event.
         ///</summary>
@@ -4869,6 +5413,10 @@ namespace ShopifySharp.GraphQL
     public class CommentEventAttachment
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The file extension of the comment event attachment, indicating the file format.
         ///</summary>
         public string? fileExtension { get; set; }
@@ -4911,6 +5459,10 @@ namespace ShopifySharp.GraphQL
         public Product? AsProduct() => this as Product;
         public ProductVariant? AsProductVariant() => this as ProductVariant;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date and time when the customer was added to the store.
         ///</summary>
         public DateTime? createdAt { get; set; }
@@ -4950,6 +5502,10 @@ namespace ShopifySharp.GraphQL
     public interface ICommentEventSubject
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///Whether the timeline subject has a timeline comment. If true, then a timeline comment exists.
         ///</summary>
         public bool? hasTimelineComment { get; }
@@ -4965,6 +5521,10 @@ namespace ShopifySharp.GraphQL
     public class CompaniesDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of IDs of the deleted companies.
         ///</summary>
         public string[]? deletedCompanyIds { get; set; }
@@ -4979,6 +5539,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Company : ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of contacts that belong to the company.
         ///</summary>
@@ -5095,6 +5659,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyAddress : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The first line of the address. Typically the street address or PO Box number.
         ///</summary>
         public string? address1 { get; set; }
@@ -5169,6 +5737,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyAddressDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted address.
         ///</summary>
         public string? deletedAddressId { get; set; }
@@ -5199,6 +5771,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyAssignCustomerAsContactPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created company contact.
         ///</summary>
         public CompanyContact? companyContact { get; set; }
@@ -5214,6 +5790,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyAssignMainContactPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The company for which the main contact is assigned.
         ///</summary>
         public Company? company { get; set; }
@@ -5228,6 +5808,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -5247,6 +5831,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContact : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company to which the contact belongs.
         ///</summary>
@@ -5303,6 +5891,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactAssignRolePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The company contact role assignment.
         ///</summary>
         public CompanyContactRoleAssignment? companyContactRoleAssignment { get; set; }
@@ -5318,6 +5910,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactAssignRolesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of newly created assignments of company contacts to a company location.
         ///</summary>
         public CompanyContactRoleAssignment[]? roleAssignments { get; set; }
@@ -5332,6 +5928,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -5352,6 +5952,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created company contact.
         ///</summary>
         public CompanyContact? companyContact { get; set; }
@@ -5366,6 +5970,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted company contact.
         ///</summary>
@@ -5382,6 +5990,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -5396,6 +6008,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactRemoveFromCompanyPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the removed company contact.
         ///</summary>
@@ -5412,6 +6028,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactRevokeRolePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The role assignment that was revoked.
         ///</summary>
         public string? revokedCompanyContactRoleAssignmentId { get; set; }
@@ -5427,6 +6047,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactRevokeRolesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of role assignment IDs that were removed from the company contact.
         ///</summary>
         public string[]? revokedRoleAssignmentIds { get; set; }
@@ -5441,6 +6065,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactRole : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -5461,6 +6089,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactRoleAssignment : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company this role assignment belongs to.
         ///</summary>
@@ -5497,6 +6129,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactRoleAssignmentConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CompanyContactRoleAssignmentEdge[]? edges { get; set; }
@@ -5515,6 +6151,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactRoleAssignmentEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -5559,6 +6199,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactRoleConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CompanyContactRoleEdge[]? edges { get; set; }
@@ -5577,6 +6221,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactRoleEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -5616,6 +6264,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactSendWelcomeEmailPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company contact to whom a welcome email was sent.
         ///</summary>
@@ -5676,6 +6328,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyContactUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated company contact.
         ///</summary>
         public CompanyContact? companyContact { get; set; }
@@ -5690,6 +6346,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyContactsDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of IDs of the deleted company contacts.
         ///</summary>
@@ -5706,6 +6366,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created company.
         ///</summary>
         public Company? company { get; set; }
@@ -5720,6 +6384,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted company.
         ///</summary>
@@ -5736,6 +6404,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -5750,6 +6422,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyLocation : ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The address used as billing address for the location.
         ///</summary>
@@ -5882,6 +6558,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationAssignAddressPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of updated addresses on the company location.
         ///</summary>
         public CompanyAddress[]? addresses { get; set; }
@@ -5896,6 +6576,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyLocationAssignRolesPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of newly created assignments of company contacts to a company location.
         ///</summary>
@@ -5912,6 +6596,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationAssignTaxExemptionsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated company location.
         ///</summary>
         public CompanyLocation? companyLocation { get; set; }
@@ -5926,6 +6614,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyLocationCatalog : ICatalog, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company locations associated with the catalog.
         ///</summary>
@@ -5966,6 +6658,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CompanyLocationEdge[]? edges { get; set; }
@@ -5985,6 +6681,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created company location.
         ///</summary>
         public CompanyLocation? companyLocation { get; set; }
@@ -5999,6 +6699,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyLocationCreateTaxRegistrationPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company location with the created tax registration.
         ///</summary>
@@ -6015,6 +6719,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted company location.
         ///</summary>
         public string? deletedCompanyLocationId { get; set; }
@@ -6029,6 +6737,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyLocationEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -6045,6 +6757,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationRevokeRolesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of role assignment IDs that were removed from the company location.
         ///</summary>
         public string[]? revokedRoleAssignmentIds { get; set; }
@@ -6060,6 +6776,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationRevokeTaxExemptionsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated company location.
         ///</summary>
         public CompanyLocation? companyLocation { get; set; }
@@ -6074,6 +6794,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyLocationRevokeTaxRegistrationPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated company location.
         ///</summary>
@@ -6126,6 +6850,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated company location.
         ///</summary>
         public CompanyLocation? companyLocation { get; set; }
@@ -6141,6 +6869,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyLocationsDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of IDs of the deleted company locations.
         ///</summary>
         public string[]? deletedCompanyLocationIds { get; set; }
@@ -6155,6 +6887,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CompanyRevokeMainContactPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company from which the main contact is revoked.
         ///</summary>
@@ -6211,6 +6947,10 @@ namespace ShopifySharp.GraphQL
     public class CompanyUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated company.
         ///</summary>
         public Company? company { get; set; }
@@ -6225,6 +6965,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CountriesInShippingZones
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of all the countries from all the combined shipping zones.
         ///</summary>
@@ -7231,6 +7975,10 @@ namespace ShopifySharp.GraphQL
     public class CountryHarmonizedSystemCode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ISO 3166-1 alpha-2 country code for the country that issued the specified harmonized system code.
         ///</summary>
         public CountryCode? countryCode { get; set; }
@@ -7245,6 +7993,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CountryHarmonizedSystemCodeConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -7264,6 +8016,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CountryHarmonizedSystemCodeEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -7380,6 +8136,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         BIF,
         ///<summary>
+        ///Belarusian Ruble (BYN).
+        ///</summary>
+        BYN,
+        ///<summary>
         ///Belize Dollar (BZD).
         ///</summary>
         BZD,
@@ -7472,6 +8232,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         DKK,
         ///<summary>
+        ///Djiboutian Franc (DJF).
+        ///</summary>
+        DJF,
+        ///<summary>
         ///Dominican Peso (DOP).
         ///</summary>
         DOP,
@@ -7484,9 +8248,17 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         EGP,
         ///<summary>
+        ///Eritrean Nakfa (ERN).
+        ///</summary>
+        ERN,
+        ///<summary>
         ///Ethiopian Birr (ETB).
         ///</summary>
         ETB,
+        ///<summary>
+        ///Falkland Islands Pounds (FKP).
+        ///</summary>
+        FKP,
         ///<summary>
         ///CFP Franc (XPF).
         ///</summary>
@@ -7495,6 +8267,10 @@ namespace ShopifySharp.GraphQL
         ///Fijian Dollars (FJD).
         ///</summary>
         FJD,
+        ///<summary>
+        ///Gibraltar Pounds (GIP).
+        ///</summary>
+        GIP,
         ///<summary>
         ///Gambian Dalasi (GMD).
         ///</summary>
@@ -7515,6 +8291,10 @@ namespace ShopifySharp.GraphQL
         ///Georgian Lari (GEL).
         ///</summary>
         GEL,
+        ///<summary>
+        ///Guinean Franc (GNF).
+        ///</summary>
+        GNF,
         ///<summary>
         ///Haitian Gourde (HTG).
         ///</summary>
@@ -7548,6 +8328,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         ILS,
         ///<summary>
+        ///Iranian Rial (IRR).
+        ///</summary>
+        IRR,
+        ///<summary>
         ///Iraqi Dinar (IQD).
         ///</summary>
         IQD,
@@ -7575,6 +8359,10 @@ namespace ShopifySharp.GraphQL
         ///Kenyan Shilling (KES).
         ///</summary>
         KES,
+        ///<summary>
+        ///Kiribati Dollar (KID).
+        ///</summary>
+        KID,
         ///<summary>
         ///Kuwaiti Dinar (KWD).
         ///</summary>
@@ -7604,6 +8392,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         LRD,
         ///<summary>
+        ///Libyan Dinar (LYD).
+        ///</summary>
+        LYD,
+        ///<summary>
         ///Lithuanian Litai (LTL).
         ///</summary>
         LTL,
@@ -7627,6 +8419,10 @@ namespace ShopifySharp.GraphQL
         ///Maldivian Rufiyaa (MVR).
         ///</summary>
         MVR,
+        ///<summary>
+        ///Mauritanian Ouguiya (MRU).
+        ///</summary>
+        MRU,
         ///<summary>
         ///Mexican Pesos (MXN).
         ///</summary>
@@ -7736,6 +8532,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         WST,
         ///<summary>
+        ///Saint Helena Pounds (SHP).
+        ///</summary>
+        SHP,
+        ///<summary>
         ///Saudi Riyal (SAR).
         ///</summary>
         SAR,
@@ -7748,6 +8548,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         SCR,
         ///<summary>
+        ///Sierra Leonean Leone (SLL).
+        ///</summary>
+        SLL,
+        ///<summary>
         ///Singapore Dollars (SGD).
         ///</summary>
         SGD,
@@ -7755,6 +8559,10 @@ namespace ShopifySharp.GraphQL
         ///Sudanese Pound (SDG).
         ///</summary>
         SDG,
+        ///<summary>
+        ///Somali Shilling (SOS).
+        ///</summary>
+        SOS,
         ///<summary>
         ///Syrian Pound (SYP).
         ///</summary>
@@ -7804,9 +8612,17 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         THB,
         ///<summary>
+        ///Tajikistani Somoni (TJS).
+        ///</summary>
+        TJS,
+        ///<summary>
         ///Tanzanian Shilling (TZS).
         ///</summary>
         TZS,
+        ///<summary>
+        ///Tongan Pa'anga (TOP).
+        ///</summary>
+        TOP,
         ///<summary>
         ///Trinidad and Tobago Dollars (TTD).
         ///</summary>
@@ -7848,6 +8664,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         VUV,
         ///<summary>
+        ///Venezuelan Bolivares Soberanos (VES).
+        ///</summary>
+        VES,
+        ///<summary>
         ///Vietnamese đồng (VND).
         ///</summary>
         VND,
@@ -7864,61 +8684,9 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         ZMW,
         ///<summary>
-        ///Belarusian Ruble (BYN).
-        ///</summary>
-        BYN,
-        ///<summary>
         ///Belarusian Ruble (BYR).
         ///</summary>
         BYR,
-        ///<summary>
-        ///Djiboutian Franc (DJF).
-        ///</summary>
-        DJF,
-        ///<summary>
-        ///Eritrean Nakfa (ERN).
-        ///</summary>
-        ERN,
-        ///<summary>
-        ///Falkland Islands Pounds (FKP).
-        ///</summary>
-        FKP,
-        ///<summary>
-        ///Gibraltar Pounds (GIP).
-        ///</summary>
-        GIP,
-        ///<summary>
-        ///Guinean Franc (GNF).
-        ///</summary>
-        GNF,
-        ///<summary>
-        ///Iranian Rial (IRR).
-        ///</summary>
-        IRR,
-        ///<summary>
-        ///Kiribati Dollar (KID).
-        ///</summary>
-        KID,
-        ///<summary>
-        ///Libyan Dinar (LYD).
-        ///</summary>
-        LYD,
-        ///<summary>
-        ///Mauritanian Ouguiya (MRU).
-        ///</summary>
-        MRU,
-        ///<summary>
-        ///Sierra Leonean Leone (SLL).
-        ///</summary>
-        SLL,
-        ///<summary>
-        ///Saint Helena Pounds (SHP).
-        ///</summary>
-        SHP,
-        ///<summary>
-        ///Somali Shilling (SOS).
-        ///</summary>
-        SOS,
         ///<summary>
         ///Sao Tome And Principe Dobra (STD).
         ///</summary>
@@ -7928,14 +8696,6 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         STN,
         ///<summary>
-        ///Tajikistani Somoni (TJS).
-        ///</summary>
-        TJS,
-        ///<summary>
-        ///Tongan Pa'anga (TOP).
-        ///</summary>
-        TOP,
-        ///<summary>
         ///Venezuelan Bolivares (VED).
         ///</summary>
         VED,
@@ -7943,10 +8703,6 @@ namespace ShopifySharp.GraphQL
         ///Venezuelan Bolivares (VEF).
         ///</summary>
         VEF,
-        ///<summary>
-        ///Venezuelan Bolivares (VES).
-        ///</summary>
-        VES,
         ///<summary>
         ///Unrecognized currency.
         ///</summary>
@@ -7958,6 +8714,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CurrencyFormats
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Money without currency in HTML.
         ///</summary>
@@ -7982,6 +8742,10 @@ namespace ShopifySharp.GraphQL
     public class CurrencySetting
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The currency's ISO code.
         ///</summary>
         public CurrencyCode? currencyCode { get; set; }
@@ -8005,6 +8769,10 @@ namespace ShopifySharp.GraphQL
     public class CurrencySettingConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CurrencySettingEdge[]? edges { get; set; }
@@ -8024,6 +8792,10 @@ namespace ShopifySharp.GraphQL
     public class CurrencySettingEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -8041,6 +8813,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Customer : ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode, ICommentEventEmbed, IMetafieldReferencer, IPurchasingEntity
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the customer has agreed to receive marketing material.
         ///</summary>
@@ -8261,6 +9037,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerAddTaxExemptionsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated customer.
         ///</summary>
         public Customer? customer { get; set; }
@@ -8275,6 +9055,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -8310,6 +9094,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created customer.
         ///</summary>
         public Customer? customer { get; set; }
@@ -8324,6 +9112,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerCreditCard : ICustomerPaymentInstrument
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The billing address of the card.
         ///</summary>
@@ -8380,6 +9172,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerCreditCardBillingAddress
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The first line of the address. Typically the street address or PO Box number.
         ///</summary>
         public string? address1 { get; set; }
@@ -8425,6 +9221,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted customer.
         ///</summary>
         public string? deletedCustomerId { get; set; }
@@ -8444,6 +9244,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -8458,6 +9262,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerEmailAddress
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The customer's default email address.
         ///</summary>
@@ -8532,6 +9340,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerEmailMarketingConsentState
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date and time at which the customer consented to receive marketing material by email.
         ///The customer's consent state reflects the consent record with the most recent `consent_updated_at` date.
         ///If no date is provided, then the date and time at which the consent information was sent is used.
@@ -8554,6 +9366,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerEmailMarketingConsentUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated customer.
         ///</summary>
         public Customer? customer { get; set; }
@@ -8568,6 +9384,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerEmailMarketingConsentUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -8642,6 +9462,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerGenerateAccountActivationUrlPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The generated account activation URL.
         ///</summary>
         public string? accountActivationUrl { get; set; }
@@ -8656,6 +9480,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerJourney
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The position of the current order within the customer's order history.
         ///</summary>
@@ -8683,6 +9511,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerJourneySummary
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The position of the current order within the customer's order history. Test orders aren't included.
         ///</summary>
@@ -8742,6 +9574,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerMergeError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of fields preventing the customer from being merged.
         ///</summary>
@@ -8832,6 +9668,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerMergePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job for merging the customers.
         ///</summary>
         public Job? job { get; set; }
@@ -8850,6 +9690,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerMergePreview
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The fields that can be used to override the default fields.
         ///</summary>
@@ -8878,6 +9722,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerMergePreviewAlternateFields
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The default address of a customer.
         ///</summary>
         public MailingAddress? defaultAddress { get; set; }
@@ -8905,6 +9753,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerMergePreviewBlockingFields
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The merged note resulting from a customer merge. The merged note is over the 5000 character limit and will block customer merge.
         ///</summary>
         public string? note { get; set; }
@@ -8919,6 +9771,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerMergePreviewDefaultFields
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The merged addresses resulting from a customer merge.
         ///</summary>
@@ -8999,6 +9855,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerMergeRequest
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The merge errors that occurred during the customer merge request.
         ///</summary>
         public CustomerMergeError[]? customerMergeErrors { get; set; }
@@ -9045,6 +9905,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerMergeUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public CustomerMergeErrorCode? code { get; set; }
@@ -9063,6 +9927,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerMergeable
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of fields preventing the customer from being merged.
         ///</summary>
@@ -9087,6 +9955,10 @@ namespace ShopifySharp.GraphQL
     public interface ICustomerMoment
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The date and time when the customer's session occurred.
         ///</summary>
         public DateTime? occurredAt { get; }
@@ -9097,6 +9969,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerMomentConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -9116,6 +9992,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerMomentEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -9139,6 +10019,10 @@ namespace ShopifySharp.GraphQL
         public CustomerPaypalBillingAgreement? AsCustomerPaypalBillingAgreement() => this as CustomerPaypalBillingAgreement;
         public CustomerShopPayAgreement? AsCustomerShopPayAgreement() => this as CustomerShopPayAgreement;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The payment method can be revoked if there are no active subscription contracts.
         ///</summary>
         public bool? isRevocable { get; set; }
@@ -9149,6 +10033,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentInstrumentBillingAddress
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The first line of the address. Typically the street address or PO Box number.
         ///</summary>
@@ -9191,6 +10079,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethod : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer to whom the payment method belongs.
         ///</summary>
         public Customer? customer { get; set; }
@@ -9222,6 +10114,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CustomerPaymentMethodEdge[]? edges { get; set; }
@@ -9241,6 +10137,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodCreateFromDuplicationDataPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer payment method.
         ///</summary>
         public CustomerPaymentMethod? customerPaymentMethod { get; set; }
@@ -9255,6 +10155,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodCreateFromDuplicationDataUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -9294,6 +10198,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodCreditCardCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer payment method.
         ///</summary>
         public CustomerPaymentMethod? customerPaymentMethod { get; set; }
@@ -9308,6 +10216,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodCreditCardUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The customer payment method.
         ///</summary>
@@ -9324,6 +10236,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -9339,6 +10255,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodGetDuplicationDataPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The encrypted data from the payment method to be duplicated.
         ///</summary>
         public string? encryptedDuplicationData { get; set; }
@@ -9353,6 +10273,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodGetDuplicationDataUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -9404,6 +10328,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodGetUpdateUrlPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The URL to redirect the customer to update the payment method.
         ///</summary>
         public string? updatePaymentMethodUrl { get; set; }
@@ -9418,6 +10346,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodGetUpdateUrlUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -9461,6 +10393,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodPaypalBillingAgreementCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer payment method.
         ///</summary>
         public CustomerPaymentMethod? customerPaymentMethod { get; set; }
@@ -9475,6 +10411,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodPaypalBillingAgreementUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The customer payment method.
         ///</summary>
@@ -9491,6 +10431,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodRemoteCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer payment method.
         ///</summary>
         public CustomerPaymentMethod? customerPaymentMethod { get; set; }
@@ -9506,6 +10450,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodRemoteCreditCardCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer payment method.
         ///</summary>
         public CustomerPaymentMethod? customerPaymentMethod { get; set; }
@@ -9520,6 +10468,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodRemoteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -9634,6 +10586,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodRevokePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the revoked customer payment method.
         ///</summary>
         public string? revokedCustomerPaymentMethodId { get; set; }
@@ -9649,6 +10605,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaymentMethodSendUpdateEmailPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The customer to whom an update payment method email was sent.
         ///</summary>
         public Customer? customer { get; set; }
@@ -9663,6 +10623,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPaymentMethodUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -9702,6 +10666,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerPaypalBillingAgreement : ICustomerPaymentInstrument
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The billing address of this payment method.
         ///</summary>
         public CustomerPaymentInstrumentBillingAddress? billingAddress { get; set; }
@@ -9724,6 +10692,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerPhoneNumber
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the customer has subscribed to SMS marketing material.
         ///</summary>
@@ -9794,6 +10766,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerRemoveTaxExemptionsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated customer.
         ///</summary>
         public Customer? customer { get; set; }
@@ -9808,6 +10784,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerReplaceTaxExemptionsPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated customer.
         ///</summary>
@@ -9843,6 +10823,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerSegmentMember : IHasMetafields
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The total amount of money that the member has spent on orders.
         ///</summary>
@@ -9915,6 +10899,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerSegmentMemberConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CustomerSegmentMemberEdge[]? edges { get; set; }
@@ -9938,6 +10926,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerSegmentMemberEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -9952,6 +10944,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerSegmentMembersQuery : IJobResult, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The current total number of members in a given segment.
         ///</summary>
@@ -9972,6 +10968,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerSegmentMembersQueryCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created customer segment members query.
         ///</summary>
         public CustomerSegmentMembersQuery? customerSegmentMembersQuery { get; set; }
@@ -9986,6 +10986,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerSegmentMembersQueryUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -10016,6 +11020,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerShopPayAgreement : ICustomerPaymentInstrument
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The billing address of the card.
         ///</summary>
@@ -10059,6 +11067,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerSmsMarketingConsentError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -10104,6 +11116,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerSmsMarketingConsentState
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The source from which the SMS marketing information for the customer was collected.
         ///</summary>
         public CustomerConsentCollectedFrom? consentCollectedFrom { get; set; }
@@ -10127,6 +11143,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerSmsMarketingConsentUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated customer.
         ///</summary>
@@ -10237,6 +11257,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerStatistics
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The predicted spend tier of a customer with a shop.
         ///</summary>
         public CustomerPredictedSpendTier? predictedSpendTier { get; set; }
@@ -10247,6 +11271,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerUpdateDefaultAddressPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The customer whose address was updated.
         ///</summary>
@@ -10263,6 +11291,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated customer.
         ///</summary>
         public Customer? customer { get; set; }
@@ -10277,6 +11309,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerVisit : ICustomerMoment, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -10338,6 +11374,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerVisitProductInfo
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product information. If `null`, then the product was deleted from the store.
         ///</summary>
         public Product? product { get; set; }
@@ -10357,6 +11397,10 @@ namespace ShopifySharp.GraphQL
     public class CustomerVisitProductInfoConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public CustomerVisitProductInfoEdge[]? edges { get; set; }
@@ -10375,6 +11419,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class CustomerVisitProductInfoEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -10430,6 +11478,10 @@ namespace ShopifySharp.GraphQL
     public class DelegateAccessToken
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of permissions associated with the token.
         ///</summary>
         public string[]? accessScopes { get; set; }
@@ -10449,6 +11501,10 @@ namespace ShopifySharp.GraphQL
     public class DelegateAccessTokenCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The delegate access token.
         ///</summary>
         public DelegateAccessToken? delegateAccessToken { get; set; }
@@ -10467,6 +11523,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DelegateAccessTokenCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -10522,6 +11582,10 @@ namespace ShopifySharp.GraphQL
     public class DelegateAccessTokenDestroyPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The user's shop.
         ///</summary>
         public Shop? shop { get; set; }
@@ -10540,6 +11604,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DelegateAccessTokenDestroyUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -10585,6 +11653,10 @@ namespace ShopifySharp.GraphQL
     public class DeletionEvent
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date and time when the deletion event for the related resource was generated.
         ///</summary>
         public DateTime? occurredAt { get; set; }
@@ -10604,6 +11676,10 @@ namespace ShopifySharp.GraphQL
     public class DeletionEventConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DeletionEventEdge[]? edges { get; set; }
@@ -10622,6 +11698,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeletionEventEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -10667,6 +11747,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryAvailableService
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The countries the service provider ships to.
         ///</summary>
         public DeliveryCountryCodesOrRestOfWorld? countries { get; set; }
@@ -10682,6 +11766,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryBrandedPromise
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The handle of the branded promise.  For example: `shop_promise`.
         ///</summary>
         public string? handle { get; set; }
@@ -10696,6 +11784,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCarrierService : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of services offered for given destinations.
         ///</summary>
@@ -10724,6 +11816,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCarrierServiceAndLocations
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The carrier service.
         ///</summary>
         public DeliveryCarrierService? carrierService { get; set; }
@@ -10738,6 +11834,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCondition : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The value (weight or price) that the condition field is compared to.
         ///</summary>
@@ -10766,6 +11866,10 @@ namespace ShopifySharp.GraphQL
     {
         public MoneyV2? AsMoneyV2() => this as MoneyV2;
         public Weight? AsWeight() => this as Weight;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -10804,6 +11908,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCountry : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A two-letter country code in ISO 3166-1 alpha-2 standard.
         ///It also includes a flag indicating whether the country should be
         ///a part of the 'Rest Of World' shipping zone.
@@ -10833,6 +11941,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCountryAndZone
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The country details.
         ///</summary>
         public DeliveryCountry? country { get; set; }
@@ -10847,6 +11959,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCountryCodeOrRestOfWorld
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The country code in the ISO 3166-1 alpha-2 format.
         ///</summary>
@@ -10864,6 +11980,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCountryCodesOrRestOfWorld
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///List of applicable country codes in the ISO 3166-1 alpha-2 format.
         ///</summary>
         public CountryCode[]? countryCodes { get; set; }
@@ -10878,6 +11998,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCustomization : IHasMetafieldDefinitions, IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The enabled status of the delivery customization.
         ///</summary>
@@ -10930,6 +12054,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCustomizationActivationPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The IDs of the updated delivery customizations.
         ///</summary>
         public string[]? ids { get; set; }
@@ -10944,6 +12072,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCustomizationConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -10964,6 +12096,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCustomizationCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Returns the created delivery customization.
         ///</summary>
         public DeliveryCustomization? deliveryCustomization { get; set; }
@@ -10978,6 +12114,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCustomizationDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Returns the deleted delivery customization ID.
         ///</summary>
@@ -10994,6 +12134,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCustomizationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -11008,6 +12152,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryCustomizationError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -11083,6 +12231,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryCustomizationUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Returns the updated delivery customization.
         ///</summary>
         public DeliveryCustomization? deliveryCustomization { get; set; }
@@ -11097,6 +12249,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryLegacyModeBlocked
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the shop can convert to full multi-location delivery profiles mode.
         ///</summary>
@@ -11127,6 +12283,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryLocalPickupSettings
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Additional instructions or information related to the local pickup.
         ///</summary>
@@ -11175,6 +12335,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryLocationGroup : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -11193,6 +12357,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryLocationGroupZone
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of method definitions for the zone.
         ///</summary>
@@ -11213,6 +12381,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryLocationGroupZoneConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DeliveryLocationGroupZoneEdge[]? edges { get; set; }
@@ -11232,6 +12404,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryLocationGroupZoneEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -11246,6 +12422,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryLocationLocalPickupSettingsError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -11281,6 +12461,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryMethod : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The branded promise that was presented to the buyer during checkout.  For example: Shop Promise.
         ///</summary>
         public DeliveryBrandedPromise? brandedPromise { get; set; }
@@ -11308,6 +12492,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryMethodDefinition : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether this method definition is active.
         ///</summary>
@@ -11340,6 +12528,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryMethodDefinitionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DeliveryMethodDefinitionEdge[]? edges { get; set; }
@@ -11359,6 +12551,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryMethodDefinitionCounts
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The number of participant method definitions for the specified zone.
         ///</summary>
         public int? participantDefinitionsCount { get; set; }
@@ -11373,6 +12569,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryMethodDefinitionEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -11432,6 +12632,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryParticipant : INode, IDeliveryRateProvider
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether to display new shipping services automatically to the customer when the service becomes available.
         ///</summary>
         public bool? adaptToNewServicesFlag { get; set; }
@@ -11463,6 +12667,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryParticipantService
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the service is active.
         ///</summary>
         public bool? active { get; set; }
@@ -11478,6 +12686,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryProductVariantsCount
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the count has reached the cap of 500.
         ///</summary>
         public bool? capped { get; set; }
@@ -11492,6 +12704,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryProfile : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of active shipping rates for the profile.
         ///</summary>
@@ -11560,6 +12776,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryProfileConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DeliveryProfileEdge[]? edges { get; set; }
@@ -11579,6 +12799,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryProfileEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -11593,6 +12817,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryProfileItem : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -11613,6 +12841,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryProfileItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DeliveryProfileItemEdge[]? edges { get; set; }
@@ -11632,6 +12864,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryProfileItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -11646,6 +12882,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryProfileLocationGroup
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The countries already selected in any zone for the specified location group.
         ///</summary>
@@ -11665,6 +12905,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryProvince : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The code of the region.
         ///</summary>
@@ -11689,6 +12933,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryRateDefinition : INode, IDeliveryRateProvider
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -11709,6 +12957,10 @@ namespace ShopifySharp.GraphQL
         public DeliveryParticipant? AsDeliveryParticipant() => this as DeliveryParticipant;
         public DeliveryRateDefinition? AsDeliveryRateDefinition() => this as DeliveryRateDefinition;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -11721,6 +12973,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliverySetting
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the shop is blocked from converting to full multi-location delivery profiles mode. If the shop is blocked, then the blocking reasons are also returned.
         ///</summary>
@@ -11737,6 +12993,10 @@ namespace ShopifySharp.GraphQL
     public class DeliverySettingUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated delivery shop level settings.
         ///</summary>
         public DeliverySetting? setting { get; set; }
@@ -11752,6 +13012,10 @@ namespace ShopifySharp.GraphQL
     public class DeliveryShippingOriginAssignPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -11762,6 +13026,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DeliveryZone : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of countries within the zone.
         ///</summary>
@@ -11820,6 +13088,10 @@ namespace ShopifySharp.GraphQL
         public DiscountCodeBxgy? AsDiscountCodeBxgy() => this as DiscountCodeBxgy;
         public DiscountCodeFreeShipping? AsDiscountCodeFreeShipping() => this as DiscountCodeFreeShipping;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The number of times the discount has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
         public int? asyncUsageCount { get; set; }
@@ -11859,6 +13131,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAllocation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The money amount that's allocated to a line based on the associated discount application.
         ///</summary>
         public MoneyV2? allocatedAmount { get; set; }
@@ -11878,6 +13154,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAmount : IDiscountCustomerGetsValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The value of the discount.
         ///</summary>
         public MoneyV2? amount { get; set; }
@@ -11895,6 +13175,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///The method by which the discount's value is applied to its entitled items.
         ///</summary>
@@ -11943,6 +13227,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountApplicationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DiscountApplicationEdge[]? edges { get; set; }
@@ -11961,6 +13249,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountApplicationEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -12038,6 +13330,10 @@ namespace ShopifySharp.GraphQL
         public DiscountAutomaticBasic? AsDiscountAutomaticBasic() => this as DiscountAutomaticBasic;
         public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this as DiscountAutomaticBxgy;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The number of times the discount has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
         public int? asyncUsageCount { get; set; }
@@ -12077,6 +13373,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticActivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The activated automatic discount.
         ///</summary>
         public DiscountAutomaticNode? automaticDiscountNode { get; set; }
@@ -12091,6 +13391,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticApp : IDiscount, IDiscountAutomatic
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app discount type providing the discount type.
         ///</summary>
@@ -12147,6 +13451,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticAppCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created app discount.
         ///</summary>
         public DiscountAutomaticApp? automaticAppDiscount { get; set; }
@@ -12162,6 +13470,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticAppUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated automatic app discount.
         ///</summary>
         public DiscountAutomaticApp? automaticAppDiscount { get; set; }
@@ -12176,6 +13488,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticBasic : IDiscount, IDiscountAutomatic
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of times the discount has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
@@ -12240,6 +13556,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticBasicCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created automatic discount.
         ///</summary>
         public DiscountAutomaticNode? automaticDiscountNode { get; set; }
@@ -12254,6 +13574,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticBasicUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated automatic discount.
         ///</summary>
@@ -12270,6 +13594,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticBulkDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job removing the automatic discounts.
         ///</summary>
         public Job? job { get; set; }
@@ -12284,6 +13612,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticBxgy : IHasEvents, INode, IDiscount, IDiscountAutomatic
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of times the discount has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
@@ -12356,6 +13688,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticBxgyCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created automatic discount.
         ///</summary>
         public DiscountAutomaticNode? automaticDiscountNode { get; set; }
@@ -12371,6 +13707,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticBxgyUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated automatic discount.
         ///</summary>
         public DiscountAutomaticNode? automaticDiscountNode { get; set; }
@@ -12385,6 +13725,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -12405,6 +13749,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticDeactivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The deactivated automatic discount.
         ///</summary>
         public DiscountAutomaticNode? automaticDiscountNode { get; set; }
@@ -12419,6 +13767,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The deleted automatic discount ID.
         ///</summary>
@@ -12435,6 +13787,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -12449,6 +13805,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticNode : IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The automatic discount object.
         ///</summary>
@@ -12489,6 +13849,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountAutomaticNodeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DiscountAutomaticNodeEdge[]? edges { get; set; }
@@ -12507,6 +13871,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountAutomaticNodeEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -12550,6 +13918,10 @@ namespace ShopifySharp.GraphQL
         public DiscountCodeBasic? AsDiscountCodeBasic() => this as DiscountCodeBasic;
         public DiscountCodeBxgy? AsDiscountCodeBxgy() => this as DiscountCodeBxgy;
         public DiscountCodeFreeShipping? AsDiscountCodeFreeShipping() => this as DiscountCodeFreeShipping;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the discount can be applied only once per customer.
         ///</summary>
@@ -12622,6 +13994,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeActivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The activated code discount.
         ///</summary>
         public DiscountCodeNode? codeDiscountNode { get; set; }
@@ -12636,6 +14012,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeApp : IDiscount, IDiscountCode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app discount type providing the discount type.
         ///</summary>
@@ -12728,6 +14108,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeAppCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created code app discount.
         ///</summary>
         public DiscountCodeApp? codeAppDiscount { get; set; }
@@ -12742,6 +14126,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeAppUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated code app discount.
         ///</summary>
@@ -12760,6 +14148,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeApplication : IDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is applied to its entitled items.
         ///</summary>
@@ -12792,6 +14184,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeBasic : IDiscount, IDiscountCode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the discount can be applied only once per customer.
         ///</summary>
@@ -12888,6 +14284,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeBasicCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created code discount.
         ///</summary>
         public DiscountCodeNode? codeDiscountNode { get; set; }
@@ -12902,6 +14302,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeBasicUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated code discount.
         ///</summary>
@@ -12918,6 +14322,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeBulkActivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job that activates the code discounts.
         ///</summary>
         public Job? job { get; set; }
@@ -12932,6 +14340,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeBulkDeactivatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The asynchronous job that deactivates the code discounts.
         ///</summary>
@@ -12948,6 +14360,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeBulkDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job that deletes the code discounts.
         ///</summary>
         public Job? job { get; set; }
@@ -12962,6 +14378,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeBxgy : IDiscount, IDiscountCode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the discount can be applied only once per customer.
         ///</summary>
@@ -13054,6 +14474,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeBxgyCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created code discount.
         ///</summary>
         public DiscountCodeNode? codeDiscountNode { get; set; }
@@ -13068,6 +14492,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeBxgyUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated code discount.
         ///</summary>
@@ -13084,6 +14512,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeDeactivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The deactivated code discount.
         ///</summary>
         public DiscountCodeNode? codeDiscountNode { get; set; }
@@ -13099,6 +14531,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The deleted code discount ID.
         ///</summary>
         public string? deletedCodeDiscountId { get; set; }
@@ -13113,6 +14549,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeFreeShipping : IDiscount, IDiscountCode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the discount applies on regular one-time-purchase shipping lines.
         ///</summary>
@@ -13221,6 +14661,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeFreeShippingCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created code discount.
         ///</summary>
         public DiscountCodeNode? codeDiscountNode { get; set; }
@@ -13236,6 +14680,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeFreeShippingUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated code discount.
         ///</summary>
         public DiscountCodeNode? codeDiscountNode { get; set; }
@@ -13250,6 +14698,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeNode : IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The underlying code discount object.
         ///</summary>
@@ -13290,6 +14742,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeNodeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DiscountCodeNodeEdge[]? edges { get; set; }
@@ -13309,6 +14765,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCodeNodeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -13323,6 +14783,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCodeRedeemCodeBulkDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The asynchronous job that deletes the discount redeem codes.
         ///</summary>
@@ -13363,6 +14827,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCollections : IDiscountItems
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of collections that the discount can have as a prerequisite or the list of collections to which the discount can be applied.
         ///</summary>
         public CollectionConnection? collections { get; set; }
@@ -13373,6 +14841,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCombinesWith
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Combines with order discounts.
         ///</summary>
@@ -13393,6 +14865,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCountries : IDiscountShippingDestinationSelection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The codes for the countries where the discount can be applied.
         ///</summary>
         public CountryCode[]? countries { get; set; }
@@ -13408,6 +14884,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCountryAll : IDiscountShippingDestinationSelection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the discount can be applied to all countries as shipping destination. This value is always `true`.
         ///</summary>
         public bool? allCountries { get; set; }
@@ -13419,6 +14899,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountCustomerAll : IDiscountCustomerSelection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the discount can be applied by all customers. This value is always `true`.
         ///</summary>
         public bool? allCustomers { get; set; }
@@ -13429,6 +14913,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCustomerBuys
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The items required for the discount to be applicable.
         ///</summary>
@@ -13449,6 +14937,10 @@ namespace ShopifySharp.GraphQL
     {
         public DiscountPurchaseAmount? AsDiscountPurchaseAmount() => this as DiscountPurchaseAmount;
         public DiscountQuantity? AsDiscountQuantity() => this as DiscountQuantity;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -13456,6 +14948,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCustomerGets
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the discount applies on regular one-time-purchase items.
         ///</summary>
@@ -13486,6 +14982,10 @@ namespace ShopifySharp.GraphQL
         public DiscountAmount? AsDiscountAmount() => this as DiscountAmount;
         public DiscountOnQuantity? AsDiscountOnQuantity() => this as DiscountOnQuantity;
         public DiscountPercentage? AsDiscountPercentage() => this as DiscountPercentage;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -13493,6 +14993,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCustomerSegments : IDiscountCustomerSelection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of customer segments that contain the customers who can use the discount.
         ///</summary>
@@ -13511,6 +15015,10 @@ namespace ShopifySharp.GraphQL
         public DiscountCustomerAll? AsDiscountCustomerAll() => this as DiscountCustomerAll;
         public DiscountCustomerSegments? AsDiscountCustomerSegments() => this as DiscountCustomerSegments;
         public DiscountCustomers? AsDiscountCustomers() => this as DiscountCustomers;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -13518,6 +15026,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountCustomers : IDiscountCustomerSelection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of customers eligible for the discount.
         ///</summary>
@@ -13532,6 +15044,10 @@ namespace ShopifySharp.GraphQL
     public interface IDiscountEffect
     {
         public DiscountPercentage? AsDiscountPercentage() => this as DiscountPercentage;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The percentage value of the discount.
         ///</summary>
@@ -13657,6 +15173,10 @@ namespace ShopifySharp.GraphQL
         public AllDiscountItems? AsAllDiscountItems() => this as AllDiscountItems;
         public DiscountCollections? AsDiscountCollections() => this as DiscountCollections;
         public DiscountProducts? AsDiscountProducts() => this as DiscountProducts;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -13664,6 +15184,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountMinimumQuantity : IDiscountMinimumRequirement
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The minimum quantity of items that's required for the discount to be applied.
         ///</summary>
@@ -13680,6 +15204,10 @@ namespace ShopifySharp.GraphQL
     {
         public DiscountMinimumQuantity? AsDiscountMinimumQuantity() => this as DiscountMinimumQuantity;
         public DiscountMinimumSubtotal? AsDiscountMinimumSubtotal() => this as DiscountMinimumSubtotal;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -13687,6 +15215,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountMinimumSubtotal : IDiscountMinimumRequirement
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The minimum subtotal that's required for the discount to be applied.
         ///</summary>
@@ -13698,6 +15230,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountNode : IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A discount.
         ///</summary>
@@ -13738,6 +15274,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountNodeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DiscountNodeEdge[]? edges { get; set; }
@@ -13757,6 +15297,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountNodeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -13771,6 +15315,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountOnQuantity : IDiscountCustomerGetsValue
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The discount's effect on qualifying items.
         ///</summary>
@@ -13787,6 +15335,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountPercentage : IDiscountCustomerGetsValue, IDiscountEffect
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The percentage value of the discount.
         ///</summary>
         public float? percentage { get; set; }
@@ -13797,6 +15349,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountProducts : IDiscountItems
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of product variants that the discount can have as a prerequisite or the list of product variants to which the discount can be applied.
         ///</summary>
@@ -13813,6 +15369,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountPurchaseAmount : IDiscountCustomerBuysValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The purchase amount in decimal format.
         ///</summary>
         public decimal? amount { get; set; }
@@ -13824,6 +15384,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountQuantity : IDiscountCustomerBuysValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The quantity of items.
         ///</summary>
         public ulong? quantity { get; set; }
@@ -13834,6 +15398,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountRedeemCode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of times that the discount redeem code has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
@@ -13858,6 +15426,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountRedeemCodeBulkAddPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the discount redeem code bulk creation operation. The properties and status of the operation can be tracked using the [`DiscountRedeemCodeBulkCreation` query](https://shopify.dev/api/admin-graphql/2022-04/queries/discountRedeemCodeBulkCreation).
         ///</summary>
         public DiscountRedeemCodeBulkCreation? bulkCreation { get; set; }
@@ -13872,6 +15444,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountRedeemCodeBulkCreation : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The result of each code creation operation associated with the bulk creation operation including any errors that might have occurred during the operation.
         ///</summary>
@@ -13912,6 +15488,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountRedeemCodeBulkCreationCode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The code to use in the discount redeem code creation operation.
         ///</summary>
         public string? code { get; set; }
@@ -13933,6 +15513,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountRedeemCodeBulkCreationCodeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DiscountRedeemCodeBulkCreationCodeEdge[]? edges { get; set; }
@@ -13952,6 +15536,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountRedeemCodeBulkCreationCodeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -13966,6 +15554,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountRedeemCodeConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -13986,6 +15578,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountRedeemCodeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -14000,6 +15596,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DiscountShareableUrl
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The image URL of the item (product or collection) to which the discount applies.
         ///</summary>
@@ -14047,6 +15647,10 @@ namespace ShopifySharp.GraphQL
     {
         public DiscountCountries? AsDiscountCountries() => this as DiscountCountries;
         public DiscountCountryAll? AsDiscountCountryAll() => this as DiscountCountryAll;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -14140,6 +15744,10 @@ namespace ShopifySharp.GraphQL
     public class DiscountUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public DiscountErrorCode? code { get; set; }
@@ -14163,6 +15771,10 @@ namespace ShopifySharp.GraphQL
     public interface IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
         public string[]? field { get; }
@@ -14178,6 +15790,10 @@ namespace ShopifySharp.GraphQL
     public class DisputeEvidenceUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated dispute evidence.
         ///</summary>
         public ShopifyPaymentsDisputeEvidence? disputeEvidence { get; set; }
@@ -14192,6 +15808,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DisputeEvidenceUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -14271,6 +15891,10 @@ namespace ShopifySharp.GraphQL
     public class Domain : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The host name of the domain. For example, `example.com`.
         ///</summary>
         public string? host { get; set; }
@@ -14302,6 +15926,10 @@ namespace ShopifySharp.GraphQL
     public class DomainLocalization
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ISO codes for the domain’s alternate locales. For example, `["en"]`.
         ///</summary>
         public string[]? alternateLocales { get; set; }
@@ -14332,6 +15960,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrder : ICommentEventSubject, IHasEvents, IHasLocalizationExtensions, IHasMetafields, ILegacyInteroperability, INavigable, INode, ICommentEventEmbed, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The order-level discount applied to the draft order.
         ///</summary>
@@ -14470,8 +16102,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public IPurchasingEntity? purchasingEntity { get; set; }
         ///<summary>
-        ///Whether the Draft Order is ready and can be completed. Draft Orders
-        ///        might have asynchronous operations that can take time to finish.
+        ///Whether the Draft Order is ready and can be completed. Draft Orders might have asynchronous operations that can take time to finish.
         ///</summary>
         public bool? ready { get; set; }
         ///<summary>
@@ -14570,6 +16201,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderAppliedDiscount
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Amount of the order-level discount that's applied to the draft order.
         ///</summary>
         public decimal? amount { get; set; }
@@ -14621,6 +16256,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderBulkAddTagsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job for adding tags to the draft orders.
         ///</summary>
         public Job? job { get; set; }
@@ -14635,6 +16274,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderBulkDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The asynchronous job for deleting the draft orders.
         ///</summary>
@@ -14651,6 +16294,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderBulkRemoveTagsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job for removing tags from the draft orders.
         ///</summary>
         public Job? job { get; set; }
@@ -14665,6 +16312,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderCalculatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The calculated properties for a draft order.
         ///</summary>
@@ -14681,6 +16332,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderCompletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The completed draft order.
         ///</summary>
         public DraftOrder? draftOrder { get; set; }
@@ -14695,6 +16350,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -14715,6 +16374,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderCreateFromOrderPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created Draft Order.
         ///</summary>
         public DraftOrder? draftOrder { get; set; }
@@ -14730,6 +16393,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderCreateMerchantCheckoutPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -14740,6 +16407,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The created draft order.
         ///</summary>
@@ -14756,6 +16427,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted draft order.
         ///</summary>
         public string? deletedId { get; set; }
@@ -14770,6 +16445,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderDuplicatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The newly duplicated draft order.
         ///</summary>
@@ -14786,6 +16465,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -14800,6 +16483,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderInvoicePreviewPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The draft order invoice email rendered as HTML to allow previewing.
         ///</summary>
@@ -14820,6 +16507,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderInvoiceSendPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The draft order an invoice email is sent for.
         ///</summary>
         public DraftOrder? draftOrder { get; set; }
@@ -14834,6 +16525,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderLineItem : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The discount that will be applied to the line item or the overall order.
         ///</summary>
@@ -14972,6 +16667,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public DraftOrderLineItemEdge[]? edges { get; set; }
@@ -14990,6 +16689,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DraftOrderLineItemEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -15061,6 +16764,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderTag : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Handle of draft order tag.
         ///</summary>
         public string? handle { get; set; }
@@ -15080,6 +16787,10 @@ namespace ShopifySharp.GraphQL
     public class DraftOrderUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated draft order.
         ///</summary>
         public DraftOrder? draftOrder { get; set; }
@@ -15094,6 +16805,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Duty : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ISO 3166-1 alpha-2 country code of the country of origin used in calculating the duty.
         ///</summary>
@@ -15121,6 +16836,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class DutySale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -15169,6 +16888,10 @@ namespace ShopifySharp.GraphQL
     public class EditableProperty
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the attribute is locked for editing.
         ///</summary>
         public bool? locked { get; set; }
@@ -15184,6 +16907,10 @@ namespace ShopifySharp.GraphQL
     public class ErrorPosition
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The character position of the error in the line.
         ///</summary>
         public int? character { get; set; }
@@ -15198,6 +16925,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ErrorsServerPixelUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -15240,6 +16971,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ErrorsWebPixelUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -15288,6 +17023,10 @@ namespace ShopifySharp.GraphQL
     public interface IEvent
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The name of the app that created the event.
         ///</summary>
         public string? appTitle { get; }
@@ -15323,6 +17062,10 @@ namespace ShopifySharp.GraphQL
     public class EventBridgeServerPixelUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The server pixel as configured by the mutation.
         ///</summary>
         public ServerPixel? serverPixel { get; set; }
@@ -15337,6 +17080,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class EventBridgeWebhookSubscriptionCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
@@ -15353,6 +17100,10 @@ namespace ShopifySharp.GraphQL
     public class EventBridgeWebhookSubscriptionUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -15367,6 +17118,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class EventConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -15386,6 +17141,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class EventEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -15421,6 +17180,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ExchangeV2 : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The details of the new items in the exchange.
         ///</summary>
@@ -15477,6 +17240,10 @@ namespace ShopifySharp.GraphQL
     public class ExchangeV2Additions
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of new items for the exchange.
         ///</summary>
         public ExchangeV2LineItem[]? lineItems { get; set; }
@@ -15500,6 +17267,10 @@ namespace ShopifySharp.GraphQL
     public class ExchangeV2Connection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ExchangeV2Edge[]? edges { get; set; }
@@ -15519,6 +17290,10 @@ namespace ShopifySharp.GraphQL
     public class ExchangeV2Edge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -15533,6 +17308,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ExchangeV2LineItem
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
@@ -15624,6 +17403,10 @@ namespace ShopifySharp.GraphQL
     public class ExchangeV2Returns
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of return items for the exchange.
         ///</summary>
         public ExchangeV2LineItem[]? lineItems { get; set; }
@@ -15658,6 +17441,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ExternalVideo : IMedia, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A word or phrase to share the nature or contents of a media.
         ///</summary>
@@ -15710,6 +17497,10 @@ namespace ShopifySharp.GraphQL
     public class FailedRequirement
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Action to be taken to resolve a failed requirement, including URL link.
         ///</summary>
         public NavigationItem? action { get; set; }
@@ -15725,6 +17516,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IFile
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///A word or phrase to describe the contents or the function of a file.
         ///</summary>
@@ -15761,6 +17556,10 @@ namespace ShopifySharp.GraphQL
     public class FileAcknowledgeUpdateFailedPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated file(s).
         ///</summary>
         public IFile[]? files { get; set; }
@@ -15775,6 +17574,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FileConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -15833,6 +17636,10 @@ namespace ShopifySharp.GraphQL
     public class FileCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created files.
         ///</summary>
         public IFile[]? files { get; set; }
@@ -15847,6 +17654,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FileDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The IDs of the deleted files.
         ///</summary>
@@ -15863,6 +17674,10 @@ namespace ShopifySharp.GraphQL
     public class FileEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -15878,6 +17693,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FileError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Code representing the type of error.
         ///</summary>
@@ -16092,6 +17911,10 @@ namespace ShopifySharp.GraphQL
     public class FileUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of updated files.
         ///</summary>
         public IFile[]? files { get; set; }
@@ -16198,6 +18021,10 @@ namespace ShopifySharp.GraphQL
     public class FilesUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public FilesErrorCode? code { get; set; }
@@ -16217,6 +18044,10 @@ namespace ShopifySharp.GraphQL
     public class FilterOption
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The filter option's label for display purposes.
         ///</summary>
         public string? label { get; set; }
@@ -16232,6 +18063,10 @@ namespace ShopifySharp.GraphQL
     public class FlowTriggerReceivePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -16246,6 +18081,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Fulfillment : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the fulfillment was created.
         ///</summary>
@@ -16335,6 +18174,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentCancelPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The canceled fulfillment.
         ///</summary>
         public Fulfillment? fulfillment { get; set; }
@@ -16349,6 +18192,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -16368,6 +18215,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentCreateV2Payload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The created fulfillment.
         ///</summary>
@@ -16455,6 +18306,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -16469,6 +18324,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentEvent : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The street address where this fulfillment event occurred.
         ///</summary>
@@ -16525,6 +18384,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentEventConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public FulfillmentEventEdge[]? edges { get; set; }
@@ -16544,6 +18407,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentEventCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created fulfillment event.
         ///</summary>
         public FulfillmentEvent? fulfillmentEvent { get; set; }
@@ -16558,6 +18425,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentEventEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -16637,6 +18508,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentHold
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the app or service that applied the fulfillment hold.
         ///</summary>
         public string? heldBy { get; set; }
@@ -16691,6 +18566,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentLineItem : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The total price after discounts are applied.
         ///</summary>
         public decimal? discountedTotal { get; set; }
@@ -16726,6 +18605,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public FulfillmentLineItemEdge[]? edges { get; set; }
@@ -16744,6 +18627,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentLineItemEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -16920,6 +18807,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrder : INode, IMetafieldReferencer
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order's assigned location. This is the location where the fulfillment is expected to happen.
         ///
         ///The fulfillment order's assigned location might change in the following cases:
@@ -17012,6 +18903,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderAcceptCancellationRequestPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order whose cancellation request was accepted.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17026,6 +18921,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderAcceptFulfillmentRequestPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The fulfillment order whose fulfillment request was accepted.
         ///</summary>
@@ -17126,6 +19025,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderAssignedLocation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The first line of the address for the location.
         ///</summary>
         public string? address1 { get; set; }
@@ -17193,6 +19096,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderCancelPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order that was marked as canceled.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17212,6 +19119,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderClosePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order that was marked as incomplete.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17226,6 +19137,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -17245,6 +19160,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderDestination : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The first line of the address of the destination.
         ///</summary>
@@ -17301,6 +19220,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -17315,6 +19238,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderHoldPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The fulfillment order on which a fulfillment hold was applied.
         ///</summary>
@@ -17335,6 +19262,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderHoldUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -17378,6 +19309,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderInternationalDuties
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The method of duties payment. Example values: `DDP`, `DAP`.
         ///</summary>
         public string? incoterm { get; set; }
@@ -17388,6 +19323,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderLineItem : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -17452,6 +19391,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public FulfillmentOrderLineItemEdge[]? edges { get; set; }
@@ -17471,6 +19414,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderLineItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -17485,6 +19432,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderLineItemWarning
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The description of warning.
         ///</summary>
@@ -17501,6 +19452,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderLineItemsPreparedForPickupPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public FulfillmentOrderLineItemsPreparedForPickupUserError[]? userErrors { get; set; }
@@ -17511,6 +19466,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderLineItemsPreparedForPickupUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -17550,6 +19509,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderLocationForMove
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The location being considered as the fulfillment order's new assigned location.
         ///</summary>
         public Location? location { get; set; }
@@ -17570,6 +19533,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderLocationForMoveConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public FulfillmentOrderLocationForMoveEdge[]? edges { get; set; }
@@ -17589,6 +19556,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderLocationForMoveEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -17604,6 +19575,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderMerchantRequest : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The fulfillment order associated with the merchant request.
         ///</summary>
@@ -17643,6 +19618,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderMerchantRequestConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public FulfillmentOrderMerchantRequestEdge[]? edges { get; set; }
@@ -17661,6 +19640,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderMerchantRequestEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -17692,6 +19675,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderMergePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The result of the fulfillment order merges.
         ///</summary>
         public FulfillmentOrderMergeResult[]? fulfillmentOrderMerges { get; set; }
@@ -17707,6 +19694,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderMergeResult
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The new fulfillment order as a result of the merge.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17717,6 +19708,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderMergeUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -17756,6 +19751,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderMovePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order which now contains the moved line items and is assigned to the destination location.
         ///
         ///**First scenario:** All line items belonging to the original fulfillment order are re-assigned.
@@ -17792,6 +19791,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderOpenPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order that was transitioned to open and is fulfillable.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17807,6 +19810,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderRejectCancellationRequestPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order whose cancellation request was rejected.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17821,6 +19828,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderRejectFulfillmentRequestPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The fulfillment order whose fulfillment request was rejected.
         ///</summary>
@@ -17864,6 +19875,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderReleaseHoldPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order on which the hold was released.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17878,6 +19893,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderReleaseHoldUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -17957,6 +19976,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderReschedulePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order that was rescheduled.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -17971,6 +19994,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderRescheduleUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -18018,6 +20045,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderSplitPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The result of the fulfillment order splits.
         ///</summary>
         public FulfillmentOrderSplitResult[]? fulfillmentOrderSplits { get; set; }
@@ -18032,6 +20063,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderSplitResult
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The original fulfillment order as a result of the split.
         ///</summary>
@@ -18051,6 +20086,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderSplitUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -18125,6 +20164,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderSubmitCancellationRequestPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment order specified in the cancelation request.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -18139,6 +20182,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrderSubmitFulfillmentRequestPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The original fulfillment order intended to request fulfillment for.
         ///</summary>
@@ -18166,6 +20213,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderSupportedAction
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The action value.
         ///</summary>
         public FulfillmentOrderAction? action { get; set; }
@@ -18182,6 +20233,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrdersReleaseHoldsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job that will release the fulfillment holds.
         ///</summary>
         public Job? job { get; set; }
@@ -18196,6 +20251,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrdersReleaseHoldsUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -18227,6 +20286,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrdersSetFulfillmentDeadlinePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the fulfillment deadline was successfully set.
         ///</summary>
         public bool? success { get; set; }
@@ -18241,6 +20304,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOrdersSetFulfillmentDeadlineUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -18271,6 +20338,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentOriginAddress
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The street address of the fulfillment location.
         ///</summary>
@@ -18370,6 +20441,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentService
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The callback URL that the fulfillment service has registered for requests. The following considerations apply:
         ///
         ///- Shopify queries the `<callbackUrl>/fetch_tracking_numbers` endpoint to retrieve tracking numbers
@@ -18430,6 +20505,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentServiceCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created fulfillment service.
         ///</summary>
         public FulfillmentService? fulfillmentService { get; set; }
@@ -18444,6 +20523,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentServiceDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted fulfillment service.
         ///</summary>
@@ -18478,6 +20561,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentServiceUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated fulfillment service.
         ///</summary>
@@ -18524,6 +20611,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FulfillmentTrackingInfo
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The name of the tracking company.
         ///
@@ -18708,6 +20799,10 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentTrackingInfoUpdateV2Payload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated fulfillment with tracking information.
         ///</summary>
         public Fulfillment? fulfillment { get; set; }
@@ -18723,6 +20818,10 @@ namespace ShopifySharp.GraphQL
     public class FunctionsAppBridge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The relative path for creating a customization.
         ///</summary>
         public string? createPath { get; set; }
@@ -18737,6 +20836,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class FunctionsErrorHistory
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time that the first error occurred.
         ///</summary>
@@ -18760,6 +20863,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class GenericFile : IFile, INode, IMetafieldReference
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A word or phrase to describe the contents or the function of a file.
         ///</summary>
@@ -18807,6 +20914,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class GiftCard : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The gift card's remaining balance.
         ///</summary>
@@ -18863,6 +20974,10 @@ namespace ShopifySharp.GraphQL
     public class GiftCardConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public GiftCardEdge[]? edges { get; set; }
@@ -18881,6 +20996,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class GiftCardCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The created gift card.
         ///</summary>
@@ -18901,6 +21020,10 @@ namespace ShopifySharp.GraphQL
     public class GiftCardDisablePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The disabled gift card.
         ///</summary>
         public GiftCard? giftCard { get; set; }
@@ -18915,6 +21038,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class GiftCardEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -18965,6 +21092,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class GiftCardSale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -19065,6 +21196,10 @@ namespace ShopifySharp.GraphQL
     public class GiftCardUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated gift card.
         ///</summary>
         public GiftCard? giftCard { get; set; }
@@ -19079,6 +21214,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class GiftCardUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -19099,6 +21238,10 @@ namespace ShopifySharp.GraphQL
     public interface IHasEvents
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The paginated list of events associated with the host subject.
         ///</summary>
         public EventConnection? events { get; }
@@ -19109,6 +21252,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IHasLocalizationExtensions
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///List of localization extensions for the resource.
         ///</summary>
@@ -19121,6 +21268,10 @@ namespace ShopifySharp.GraphQL
     public interface IHasMetafieldDefinitions
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///List of metafield definitions.
         ///</summary>
         public MetafieldDefinitionConnection? metafieldDefinitions { get; }
@@ -19131,6 +21282,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IHasMetafields
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///Returns a metafield by namespace and key that belongs to the resource.
         ///</summary>
@@ -19155,6 +21310,10 @@ namespace ShopifySharp.GraphQL
     public interface IHasPublishedTranslations
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The translations associated with the resource.
         ///</summary>
         public Translation[]? translations { get; }
@@ -19165,6 +21324,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Image : IHasMetafields
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A word or phrase to share the nature or contents of an image.
         ///</summary>
@@ -19232,6 +21395,10 @@ namespace ShopifySharp.GraphQL
     public class ImageConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ImageEdge[]? edges { get; set; }
@@ -19270,6 +21437,10 @@ namespace ShopifySharp.GraphQL
     public class ImageEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -19292,6 +21463,10 @@ namespace ShopifySharp.GraphQL
     public class ImageUploadParameter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The parameter name.
         ///</summary>
         public string? name { get; set; }
@@ -19306,6 +21481,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryActivatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The inventory level that was activated.
         ///</summary>
@@ -19322,6 +21501,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryAdjustQuantitiesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The group of changes made by the operation.
         ///</summary>
         public InventoryAdjustmentGroup? inventoryAdjustmentGroup { get; set; }
@@ -19336,6 +21519,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryAdjustQuantitiesUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -19423,6 +21610,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryAdjustQuantityPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Represents the updated inventory quantity of an inventory item at a specific location.
         ///</summary>
         public InventoryLevel? inventoryLevel { get; set; }
@@ -19437,6 +21628,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryAdjustmentGroup : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app that triggered the inventory event, if one exists.
         ///</summary>
@@ -19473,6 +21668,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryBulkAdjustQuantityAtLocationPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Represents the updated inventory quantities of an inventory item at the location.
         ///</summary>
         public InventoryLevel[]? inventoryLevels { get; set; }
@@ -19487,6 +21686,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryBulkToggleActivationPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The inventory item that was updated.
         ///</summary>
@@ -19506,6 +21709,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryBulkToggleActivationUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -19585,6 +21792,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryChange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The amount by which the inventory quantity was changed.
         ///</summary>
         public int? delta { get; set; }
@@ -19601,7 +21812,8 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public Location? location { get; set; }
         ///<summary>
-        ///The name of the inventory quantity that was changed.
+        ///The [name](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps#inventory-states)
+        ///of the inventory quantity that was changed.
         ///</summary>
         public string? name { get; set; }
         ///<summary>
@@ -19616,6 +21828,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryDeactivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -19627,6 +21843,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryItem : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ISO 3166-1 alpha-2 country code of where the item originated from.
         ///</summary>
@@ -19711,6 +21931,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public InventoryItemEdge[]? edges { get; set; }
@@ -19730,6 +21954,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -19745,6 +21973,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryItemUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The inventory item that was updated.
         ///</summary>
         public InventoryItem? inventoryItem { get; set; }
@@ -19759,6 +21991,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryLevel : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The quantity of inventory items that are available at the inventory level's associated location.
         ///</summary>
@@ -19811,6 +22047,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryLevelConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public InventoryLevelEdge[]? edges { get; set; }
@@ -19830,6 +22070,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryLevelEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -19845,6 +22089,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryMoveQuantitiesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The group of changes made by the operation.
         ///</summary>
         public InventoryAdjustmentGroup? inventoryAdjustmentGroup { get; set; }
@@ -19859,6 +22107,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventoryMoveQuantitiesUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -19954,6 +22206,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryProperties
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///All the quantity names.
         ///</summary>
         public InventoryQuantityName[]? quantityNames { get; set; }
@@ -19965,7 +22221,12 @@ namespace ShopifySharp.GraphQL
     public class InventoryQuantity
     {
         ///<summary>
-        ///The name that identifies the inventory quantity.
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
+        ///The [name](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps#inventory-states)
+        ///that identifies the inventory quantity.
         ///</summary>
         public string? name { get; set; }
         ///<summary>
@@ -19984,6 +22245,10 @@ namespace ShopifySharp.GraphQL
     public class InventoryQuantityName
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///List of quantity names that this quantity name belongs to.
         ///</summary>
         public string[]? belongsTo { get; set; }
@@ -19992,7 +22257,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public string[]? comprises { get; set; }
         ///<summary>
-        ///The i18n-friendly display name of the quantity.
+        ///The display name for quantity names translated into applicable language.
         ///</summary>
         public string? displayName { get; set; }
         ///<summary>
@@ -20000,7 +22265,9 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public bool? isInUse { get; set; }
         ///<summary>
-        ///The quantity name as used by the API.
+        ///The [name](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps#inventory-states) of
+        ///the inventory quantity. Used by
+        ///[inventory queries and mutations](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps#graphql-queries-and-mutations).
         ///</summary>
         public string? name { get; set; }
     }
@@ -20010,6 +22277,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventorySetOnHandQuantitiesPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The group of changes made by the operation.
         ///</summary>
@@ -20025,6 +22296,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class InventorySetOnHandQuantitiesUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -20088,6 +22363,10 @@ namespace ShopifySharp.GraphQL
     public class Job
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///This indicates if the job is still queued or has been run.
         ///</summary>
         public bool? done { get; set; }
@@ -20106,6 +22385,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IJobResult
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///This indicates if the job is still queued or has been run.
         ///</summary>
@@ -20678,6 +22961,10 @@ namespace ShopifySharp.GraphQL
     public interface ILegacyInteroperability
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The ID of the corresponding resource in the REST Admin API.
         ///</summary>
         public ulong? legacyResourceId { get; }
@@ -20721,6 +23008,10 @@ namespace ShopifySharp.GraphQL
     public class LimitedPendingOrderCount
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///This is set when the number of pending orders has reached the maximum.
         ///</summary>
         public bool? atMax { get; set; }
@@ -20736,6 +23027,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LineItem : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the line item can be restocked.
         ///</summary>
@@ -20934,6 +23229,10 @@ namespace ShopifySharp.GraphQL
     public class LineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public LineItemEdge[]? edges { get; set; }
@@ -20953,6 +23252,10 @@ namespace ShopifySharp.GraphQL
     public class LineItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -20967,6 +23270,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LineItemGroup
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -20986,6 +23293,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LineItemMutable : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the line item can be restocked.
         ///</summary>
@@ -21153,6 +23464,10 @@ namespace ShopifySharp.GraphQL
     public class LineItemMutableConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public LineItemMutableEdge[]? edges { get; set; }
@@ -21172,6 +23487,10 @@ namespace ShopifySharp.GraphQL
     public class LineItemMutableEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -21187,6 +23506,10 @@ namespace ShopifySharp.GraphQL
     public class LineItemSellingPlan
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the selling plan for display purposes.
         ///</summary>
         public string? name { get; set; }
@@ -21201,6 +23524,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Link : IHasPublishedTranslations
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A context-sensitive label for the link.
         ///</summary>
@@ -21220,6 +23547,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Locale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Locale ISO code.
         ///</summary>
@@ -21303,6 +23634,10 @@ namespace ShopifySharp.GraphQL
     public class LocalizationExtension
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Country ISO 3166-1 alpha-2 code.
         ///</summary>
         public CountryCode? countryCode { get; set; }
@@ -21330,6 +23665,10 @@ namespace ShopifySharp.GraphQL
     public class LocalizationExtensionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public LocalizationExtensionEdge[]? edges { get; set; }
@@ -21348,6 +23687,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocalizationExtensionEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -21409,6 +23752,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Location : IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether this location can be reactivated.
         ///</summary>
@@ -21517,6 +23864,10 @@ namespace ShopifySharp.GraphQL
     public class LocationActivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The location that was activated.
         ///</summary>
         public Location? location { get; set; }
@@ -21531,6 +23882,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationActivateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -21578,6 +23933,10 @@ namespace ShopifySharp.GraphQL
     public class LocationAddPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The location that was added.
         ///</summary>
         public Location? location { get; set; }
@@ -21592,6 +23951,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationAddUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -21675,6 +24038,10 @@ namespace ShopifySharp.GraphQL
     public class LocationAddress
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The first line of the address for the location.
         ///</summary>
         public string? address1 { get; set; }
@@ -21699,11 +24066,11 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public string[]? formatted { get; set; }
         ///<summary>
-        ///The latitude coordinates of the location.
+        ///The approximate latitude coordinates of the location.
         ///</summary>
         public float? latitude { get; set; }
         ///<summary>
-        ///The longitude coordinates of the location.
+        ///The approximate longitude coordinates of the location.
         ///</summary>
         public float? longitude { get; set; }
         ///<summary>
@@ -21730,6 +24097,10 @@ namespace ShopifySharp.GraphQL
     public class LocationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public LocationEdge[]? edges { get; set; }
@@ -21749,6 +24120,10 @@ namespace ShopifySharp.GraphQL
     public class LocationDeactivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The location that was deactivated.
         ///</summary>
         public Location? location { get; set; }
@@ -21763,6 +24138,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationDeactivateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -21854,6 +24233,10 @@ namespace ShopifySharp.GraphQL
     public class LocationDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the location that was deleted.
         ///</summary>
         public string? deletedLocationId { get; set; }
@@ -21868,6 +24251,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -21919,6 +24306,10 @@ namespace ShopifySharp.GraphQL
     public class LocationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -21934,6 +24325,10 @@ namespace ShopifySharp.GraphQL
     public class LocationEditPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The location that was edited.
         ///</summary>
         public Location? location { get; set; }
@@ -21948,6 +24343,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationEditUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -22039,6 +24438,10 @@ namespace ShopifySharp.GraphQL
     public class LocationLocalPickupDisablePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the location for which local pickup was disabled.
         ///</summary>
         public string? locationId { get; set; }
@@ -22053,6 +24456,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationLocalPickupEnablePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The local pickup settings that were enabled.
         ///</summary>
@@ -22088,6 +24495,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class LocationSuggestedAddress
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The first line of the suggested address.
         ///</summary>
@@ -22133,6 +24544,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MailingAddress : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The first line of the address. Typically the street address or PO Box number.
         ///</summary>
@@ -22233,6 +24648,10 @@ namespace ShopifySharp.GraphQL
     public class MailingAddressConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MailingAddressEdge[]? edges { get; set; }
@@ -22252,6 +24671,10 @@ namespace ShopifySharp.GraphQL
     public class MailingAddressEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -22268,6 +24691,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ManualDiscountApplication : IDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is applied to its entitled items.
         ///</summary>
@@ -22309,6 +24736,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Market : IHasMetafieldDefinitions, IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The catalogs that belong to the market.
         ///</summary>
@@ -22371,8 +24802,9 @@ namespace ShopifySharp.GraphQL
         ///The market’s web presence, which defines its SEO strategy. This can be a different domain,
         ///subdomain, or subfolders of the primary domain. Each web presence comprises one or more
         ///language variants. If a market doesn't have its own web presence, then the market is accessible on the
-        ///shop’s primary domain using [country
+        ///primary market's domains using [country
         ///selectors](https://shopify.dev/themes/internationalization/multiple-currencies-languages#the-country-selector).
+        ///If it's the primary market and it has multiple web presences, then this field will return the primary domain web presence.
         ///</summary>
         public MarketWebPresence? webPresence { get; set; }
     }
@@ -22382,6 +24814,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketCatalog : ICatalog, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -22418,6 +24854,10 @@ namespace ShopifySharp.GraphQL
     public class MarketCatalogConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MarketCatalogEdge[]? edges { get; set; }
@@ -22437,6 +24877,10 @@ namespace ShopifySharp.GraphQL
     public class MarketCatalogEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -22451,6 +24895,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -22471,6 +24919,10 @@ namespace ShopifySharp.GraphQL
     public class MarketCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The market object.
         ///</summary>
         public Market? market { get; set; }
@@ -22485,6 +24937,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketCurrencySettings
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The currency which this market's prices are defined in, and the
         ///currency which its customers must use if local currencies are disabled.
@@ -22505,6 +24961,10 @@ namespace ShopifySharp.GraphQL
     public class MarketCurrencySettingsUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The market object.
         ///</summary>
         public Market? market { get; set; }
@@ -22519,6 +24979,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketCurrencySettingsUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -22570,6 +25034,10 @@ namespace ShopifySharp.GraphQL
     public class MarketDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted market.
         ///</summary>
         public string? deletedId { get; set; }
@@ -22585,6 +25053,10 @@ namespace ShopifySharp.GraphQL
     public class MarketEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -22599,6 +25071,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketLocalizableContent
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The hash digest representation of the content value.
         ///</summary>
@@ -22619,6 +25095,10 @@ namespace ShopifySharp.GraphQL
     public class MarketLocalizableResource
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The market localizable content.
         ///</summary>
         public MarketLocalizableContent[]? marketLocalizableContent { get; set; }
@@ -22638,6 +25118,10 @@ namespace ShopifySharp.GraphQL
     public class MarketLocalizableResourceConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MarketLocalizableResourceEdge[]? edges { get; set; }
@@ -22656,6 +25140,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketLocalizableResourceEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -22682,6 +25170,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketLocalization
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A reference to the value being localized on the resource that this market localization belongs to.
         ///</summary>
@@ -22710,6 +25202,10 @@ namespace ShopifySharp.GraphQL
     public class MarketLocalizationsRegisterPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The market localizations that were created or updated.
         ///</summary>
         public MarketLocalization[]? marketLocalizations { get; set; }
@@ -22724,6 +25220,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketLocalizationsRemovePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The market localizations that were deleted.
         ///</summary>
@@ -22740,6 +25240,10 @@ namespace ShopifySharp.GraphQL
     public interface IMarketRegion
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; }
@@ -22754,6 +25258,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketRegionConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -22773,6 +25281,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketRegionCountry : IMarketRegion, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ISO code identifying the country.
         ///</summary>
@@ -22797,6 +25309,10 @@ namespace ShopifySharp.GraphQL
     public class MarketRegionDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted market region.
         ///</summary>
         public string? deletedId { get; set; }
@@ -22816,6 +25332,10 @@ namespace ShopifySharp.GraphQL
     public class MarketRegionEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -22830,6 +25350,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketRegionsCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The market object.
         ///</summary>
@@ -22846,6 +25370,10 @@ namespace ShopifySharp.GraphQL
     public class MarketUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The market object.
         ///</summary>
         public Market? market { get; set; }
@@ -22860,6 +25388,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -23018,6 +25550,10 @@ namespace ShopifySharp.GraphQL
     public class MarketWebPresence : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ISO codes for the alternate locales. When a domain is used, these locales will be
         ///available as language-specific subfolders. For example, if English is an
         ///alternate locale, and `example.ca` is the market’s domain, then
@@ -23059,6 +25595,10 @@ namespace ShopifySharp.GraphQL
     public class MarketWebPresenceCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The market object.
         ///</summary>
         public Market? market { get; set; }
@@ -23073,6 +25613,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketWebPresenceDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted web presence.
         ///</summary>
@@ -23094,6 +25638,10 @@ namespace ShopifySharp.GraphQL
     public class MarketWebPresenceRootUrl
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The locale that the storefront loads in.
         ///</summary>
         public string? locale { get; set; }
@@ -23108,6 +25656,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketWebPresenceUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The market object.
         ///</summary>
@@ -23124,6 +25676,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingActivity : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The URL of the marketing activity listing page in the marketing section.
         ///</summary>
@@ -23225,6 +25781,10 @@ namespace ShopifySharp.GraphQL
     public class MarketingActivityConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MarketingActivityEdge[]? edges { get; set; }
@@ -23244,6 +25804,10 @@ namespace ShopifySharp.GraphQL
     public class MarketingActivityCreateExternalPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The external marketing activity that was created.
         ///</summary>
         public MarketingActivity? marketingActivity { get; set; }
@@ -23258,6 +25822,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingActivityCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The created marketing activity.
         ///</summary>
@@ -23277,6 +25845,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingActivityEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -23319,6 +25891,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingActivityExtensionAppErrors
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app error type.
         ///</summary>
@@ -23437,6 +26013,10 @@ namespace ShopifySharp.GraphQL
     public class MarketingActivityUpdateExternalPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated marketing activity.
         ///</summary>
         public MarketingActivity? marketingActivity { get; set; }
@@ -23451,6 +26031,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingActivityUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated marketing activity.
         ///</summary>
@@ -23470,6 +26054,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingActivityUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -23504,6 +26092,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingBudget
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The budget type for a marketing activity.
         ///</summary>
@@ -23561,6 +26153,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingEngagement
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The total ad spend for the day, if the marketing event is a paid ad with a daily spend.
         ///</summary>
@@ -23641,6 +26237,10 @@ namespace ShopifySharp.GraphQL
     public class MarketingEngagementCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The marketing engagement that was created.
         ///</summary>
         public MarketingEngagement? marketingEngagement { get; set; }
@@ -23655,6 +26255,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingEvent : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app that the marketing event is attributed to.
         ///</summary>
@@ -23735,6 +26339,10 @@ namespace ShopifySharp.GraphQL
     public class MarketingEventConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MarketingEventEdge[]? edges { get; set; }
@@ -23753,6 +26361,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MarketingEventEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -23868,6 +26480,10 @@ namespace ShopifySharp.GraphQL
     public interface IMedia
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///A word or phrase to share the nature or contents of a media.
         ///</summary>
         public string? alt { get; }
@@ -23902,6 +26518,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MediaConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -23945,6 +26565,10 @@ namespace ShopifySharp.GraphQL
     public class MediaEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -23960,6 +26584,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MediaError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Code representing the type of error.
         ///</summary>
@@ -24134,6 +26762,10 @@ namespace ShopifySharp.GraphQL
     public class MediaImage : IFile, IHasMetafields, IMedia, INode, IMetafieldReference
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A word or phrase to share the nature or contents of a media.
         ///</summary>
         public string? alt { get; set; }
@@ -24213,6 +26845,10 @@ namespace ShopifySharp.GraphQL
     public class MediaImageOriginalSource
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The size of the original file in bytes.
         ///</summary>
         public int? fileSize { get; set; }
@@ -24223,6 +26859,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MediaPreviewImage
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The preview image for the media. Returns `null` until `status` is `READY`.
         ///</summary>
@@ -24284,6 +26924,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MediaUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -24392,6 +27036,10 @@ namespace ShopifySharp.GraphQL
     public class MediaWarning
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The code representing the type of warning.
         ///</summary>
         public MediaWarningCode? code { get; set; }
@@ -24437,6 +27085,10 @@ namespace ShopifySharp.GraphQL
     public class MerchantApprovalSignals
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the shop's Shopify Payments account identity is verified. Returns `false` if the identity is unverified or if the shop doesn't have a Shopify Payments account.
         ///</summary>
         public bool? identityVerified { get; set; }
@@ -24458,6 +27110,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Metafield : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the metafield was created.
         ///</summary>
@@ -24523,6 +27179,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldAccess
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The default admin access setting used for the metafields under this definition.
         ///</summary>
         public MetafieldAdminAccess? admin { get; set; }
@@ -24557,6 +27217,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MetafieldEdge[]? edges { get; set; }
@@ -24576,6 +27240,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinition : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The access settings associated with the metafield definition.
         ///</summary>
@@ -24652,6 +27320,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MetafieldDefinitionEdge[]? edges { get; set; }
@@ -24671,6 +27343,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition that was created.
         ///</summary>
         public MetafieldDefinition? createdDefinition { get; set; }
@@ -24685,6 +27361,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinitionCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -24776,6 +27456,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted metafield definition.
         ///</summary>
         public string? deletedDefinitionId { get; set; }
@@ -24790,6 +27474,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinitionDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -24841,6 +27529,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -24856,6 +27548,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionPinPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition that was pinned.
         ///</summary>
         public MetafieldDefinition? pinnedDefinition { get; set; }
@@ -24870,6 +27566,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinitionPinUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -24963,6 +27663,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionSupportedValidation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the metafield definition validation.
         ///</summary>
         public string? name { get; set; }
@@ -24977,6 +27681,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinitionType
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The category associated with the metafield definition type.
         ///</summary>
@@ -25006,6 +27714,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionUnpinPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition that was unpinned.
         ///</summary>
         public MetafieldDefinition? unpinnedDefinition { get; set; }
@@ -25020,6 +27732,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinitionUnpinUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -25063,6 +27779,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition that was updated.
         ///</summary>
         public MetafieldDefinition? updatedDefinition { get; set; }
@@ -25081,6 +27801,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldDefinitionUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -25149,6 +27873,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDefinitionValidation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The validation name.
         ///</summary>
         public string? name { get; set; }
@@ -25187,6 +27915,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted metafield.
         ///</summary>
         public string? deletedId { get; set; }
@@ -25201,6 +27933,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -25321,6 +28057,10 @@ namespace ShopifySharp.GraphQL
         public ProductVariant? AsProductVariant() => this as ProductVariant;
         public Video? AsVideo() => this as Video;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -25331,6 +28071,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldReferenceConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -25350,6 +28094,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldReferenceEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -25407,6 +28155,10 @@ namespace ShopifySharp.GraphQL
         public ProductVariant? AsProductVariant() => this as ProductVariant;
         public Shop? AsShop() => this as Shop;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -25419,6 +28171,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldRelation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The key of the field making the reference.
         ///</summary>
@@ -25447,6 +28203,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldRelationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MetafieldRelationEdge[]? edges { get; set; }
@@ -25465,6 +28225,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldRelationEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -25486,6 +28250,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldStorefrontVisibility : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the metafield was set to visible in the Storefront API.
         ///</summary>
@@ -25522,6 +28290,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldStorefrontVisibilityConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MetafieldStorefrontVisibilityEdge[]? edges { get; set; }
@@ -25541,6 +28313,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldStorefrontVisibilityCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The `MetafieldStorefrontVisibility` that was created.
         ///</summary>
         public MetafieldStorefrontVisibility? metafieldStorefrontVisibility { get; set; }
@@ -25556,6 +28332,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldStorefrontVisibilityDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted `MetafieldStorefrontVisibility` record.
         ///</summary>
         public string? deletedMetafieldStorefrontVisibilityId { get; set; }
@@ -25570,6 +28350,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldStorefrontVisibilityEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -25629,6 +28413,10 @@ namespace ShopifySharp.GraphQL
     public class MetafieldsSetPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of metafields that were set.
         ///</summary>
         public Metafield[]? metafields { get; set; }
@@ -25643,6 +28431,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetafieldsSetUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -25710,6 +28502,10 @@ namespace ShopifySharp.GraphQL
     public class Metaobject : INode, IMetafieldReference, IMetafieldReferencer
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Metaobject capabilities for this Metaobject.
         ///</summary>
         public MetaobjectCapabilityData? capabilities { get; set; }
@@ -25765,6 +28561,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectAccess
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Access configuration for Admin API surface areas, including the GraphQL Admin API.
         ///</summary>
         public MetaobjectAdminAccess? admin { get; set; }
@@ -25810,6 +28610,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectBulkDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job that deletes the metaobjects.
         ///</summary>
         public Job? job { get; set; }
@@ -25824,6 +28628,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectCapabilities
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Indicate whether a metaobject definition is publishable.
         ///</summary>
@@ -25840,6 +28648,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectCapabilitiesPublishable
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Indicates if the capability is enabled.
         ///</summary>
         public bool? enabled { get; set; }
@@ -25850,6 +28662,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectCapabilitiesTranslatable
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Indicates if the capability is enabled.
         ///</summary>
@@ -25862,6 +28678,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectCapabilityData
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The publishable capability for this metaobject.
         ///</summary>
         public MetaobjectCapabilityDataPublishable? publishable { get; set; }
@@ -25873,6 +28693,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectCapabilityDataPublishable
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The visibility status of this metaobject across all channels.
         ///</summary>
         public MetaobjectStatus? status { get; set; }
@@ -25883,6 +28707,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -25903,6 +28731,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created metaobject.
         ///</summary>
         public Metaobject? metaobject { get; set; }
@@ -25917,6 +28749,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectDefinition : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Access configuration for the metaobject definition.
         ///</summary>
@@ -25965,6 +28801,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectDefinitionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public MetaobjectDefinitionEdge[]? edges { get; set; }
@@ -25984,6 +28824,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectDefinitionCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created metaobject definition.
         ///</summary>
         public MetaobjectDefinition? metaobjectDefinition { get; set; }
@@ -25998,6 +28842,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectDefinitionDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted metaobjects definition.
         ///</summary>
@@ -26014,6 +28862,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectDefinitionEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -26028,6 +28880,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectDefinitionUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated metaobject definition.
         ///</summary>
@@ -26044,6 +28900,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted metaobject.
         ///</summary>
         public string? deletedId { get; set; }
@@ -26059,6 +28919,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -26073,6 +28937,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectField
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The field definition for this object key.
         ///</summary>
@@ -26105,6 +28973,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectFieldDefinition
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The administrative description.
         ///</summary>
@@ -26169,6 +29041,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated metaobject.
         ///</summary>
         public Metaobject? metaobject { get; set; }
@@ -26184,6 +29060,10 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectUpsertPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created or updated metaobject.
         ///</summary>
         public Metaobject? metaobject { get; set; }
@@ -26198,6 +29078,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class MetaobjectUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -26345,6 +29229,10 @@ namespace ShopifySharp.GraphQL
     public class Model3d : IMedia, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A word or phrase to share the nature or contents of a media.
         ///</summary>
         public string? alt { get; set; }
@@ -26396,6 +29284,10 @@ namespace ShopifySharp.GraphQL
     public class Model3dBoundingBox
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Size in meters of the smallest volume which contains the 3d model.
         ///</summary>
         public Vector3? size { get; set; }
@@ -26412,6 +29304,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Model3dSource
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The 3d model source's filesize.
         ///</summary>
@@ -26437,6 +29333,10 @@ namespace ShopifySharp.GraphQL
     public class MoneyBag
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Amount in presentment currency.
         ///</summary>
         public MoneyV2? presentmentMoney { get; set; }
@@ -26452,6 +29352,10 @@ namespace ShopifySharp.GraphQL
     public class MoneyV2 : IDeliveryConditionCriteria, IPricingValue, ISellingPlanCheckoutChargeValue, ISellingPlanPricingPolicyAdjustmentValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Decimal money amount.
         ///</summary>
         public decimal? amount { get; set; }
@@ -26466,6 +29370,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Mutation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Updates the email state value for an abandonment.
         ///</summary>
@@ -27143,9 +30051,9 @@ namespace ShopifySharp.GraphQL
         ///(available as of the `2023-04` API version),
         ///or specify that the original fulfillment order contains line items which have already been fulfilled.
         ///
-        ///If the new location is already assigned to another active fulfillment order, on the same order,
-        ///then the line items are moved to the existing fulfillment order.
-        ///Otherwise, a new fulfillment order is created for the new location, and the line items are moved to the new location.
+        ///If the new location is already assigned to another active fulfillment order, on the same order, then
+        ///a new fulfillment order is created. The existing fulfillment order is closed and line items are recreated
+        ///in a new fulfillment order.
         ///</summary>
         public FulfillmentOrderMovePayload? fulfillmentOrderMove { get; set; }
         ///<summary>
@@ -28272,6 +31180,10 @@ namespace ShopifySharp.GraphQL
     public class MutationsStagedUploadTargetGenerateUploadParameter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The upload parameter name.
         ///</summary>
         public string? name { get; set; }
@@ -28292,6 +31204,10 @@ namespace ShopifySharp.GraphQL
     public interface INavigable
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///A default cursor that returns the single next record, sorted ascending by ID.
         ///</summary>
         public string? defaultCursor { get; }
@@ -28302,6 +31218,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class NavigationItem
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The unique identifier of the navigation item.
         ///</summary>
@@ -28325,6 +31245,10 @@ namespace ShopifySharp.GraphQL
     public interface INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; }
@@ -28339,6 +31263,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OnlineStoreArticle : IHasPublishedTranslations, INavigable, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A default cursor that returns the single next record, sorted ascending by ID.
         ///</summary>
@@ -28360,6 +31288,10 @@ namespace ShopifySharp.GraphQL
     public class OnlineStoreBlog : IHasPublishedTranslations, INode, IMetafieldReferencer
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -28374,6 +31306,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OnlineStorePage : IHasPublishedTranslations, INavigable, INode, IMetafieldReference, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A default cursor that returns the single next record, sorted ascending by ID.
         ///</summary>
@@ -28394,6 +31330,10 @@ namespace ShopifySharp.GraphQL
     public interface IOnlineStorePreviewable
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The online store preview URL.
         ///</summary>
         public string? onlineStorePreviewUrl { get; }
@@ -28413,6 +31353,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Order : ICommentEventSubject, IHasEvents, IHasLocalizationExtensions, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode, ICommentEventEmbed, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of addtional fees applied to the order.
         ///</summary>
@@ -28698,7 +31642,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public bool? merchantEditable { get; set; }
         ///<summary>
-        ///A list of reasons why the order can't be edited. For example, "Canceled orders can’t be edited".
+        ///A list of reasons why the order can't be edited. For example, "Canceled orders can't be edited".
         ///</summary>
         public string[]? merchantEditableErrors { get; set; }
         ///<summary>
@@ -29050,6 +31994,10 @@ namespace ShopifySharp.GraphQL
     public class OrderAgreement : ISalesAgreement
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The application that created the agreement.
         ///</summary>
         public App? app { get; set; }
@@ -29084,6 +32032,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderApp
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The application icon.
         ///</summary>
@@ -29131,6 +32083,10 @@ namespace ShopifySharp.GraphQL
     public class OrderCapturePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created capture transaction.
         ///</summary>
         public OrderTransaction? transaction { get; set; }
@@ -29146,6 +32102,10 @@ namespace ShopifySharp.GraphQL
     public class OrderClosePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The closed order.
         ///</summary>
         public Order? order { get; set; }
@@ -29160,6 +32120,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -29180,6 +32144,10 @@ namespace ShopifySharp.GraphQL
     public class OrderCreateMandatePaymentPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The async job used for charging the payment.
         ///</summary>
         public Job? job { get; set; }
@@ -29198,6 +32166,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderCreateMandatePaymentUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -29311,6 +32283,10 @@ namespace ShopifySharp.GraphQL
     public class OrderDisputeSummary : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -29330,6 +32306,10 @@ namespace ShopifySharp.GraphQL
     public class OrderEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -29344,6 +32324,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderEditAddCustomItemPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The custom line item that will be added to the order based on the current edits.
         ///</summary>
@@ -29363,6 +32347,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderEditAddLineItemDiscountPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The discount applied to a line item during this order edit.
         ///</summary>
@@ -29387,6 +32375,10 @@ namespace ShopifySharp.GraphQL
     public class OrderEditAddVariantPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The [calculated line item](https://shopify.dev/api/admin-graphql/latest/objects/calculatedlineitem)
         ///that's added during this order edit.
         ///</summary>
@@ -29407,6 +32399,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderEditAgreement : ISalesAgreement
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The application that created the agreement.
         ///</summary>
@@ -29439,6 +32435,10 @@ namespace ShopifySharp.GraphQL
     public class OrderEditBeginPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The order that will be edited.
         ///</summary>
         public CalculatedOrder? calculatedOrder { get; set; }
@@ -29454,6 +32454,10 @@ namespace ShopifySharp.GraphQL
     public class OrderEditCommitPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The order with changes applied.
         ///</summary>
         public Order? order { get; set; }
@@ -29468,6 +32472,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderEditRemoveLineItemDiscountPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The calculated line item after removal of the discount.
         ///</summary>
@@ -29488,6 +32496,10 @@ namespace ShopifySharp.GraphQL
     public class OrderEditSetQuantityPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The calculated line item with the edits applied but not saved.
         ///</summary>
         public CalculatedLineItem? calculatedLineItem { get; set; }
@@ -29507,6 +32519,10 @@ namespace ShopifySharp.GraphQL
     public class OrderInvoiceSendPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The order associated with the invoice email.
         ///</summary>
         public Order? order { get; set; }
@@ -29521,6 +32537,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderInvoiceSendUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -29552,6 +32572,10 @@ namespace ShopifySharp.GraphQL
     public class OrderMarkAsPaidPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The order marked as paid.
         ///</summary>
         public Order? order { get; set; }
@@ -29566,6 +32590,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderOpenPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The opened order.
         ///</summary>
@@ -29582,6 +32610,10 @@ namespace ShopifySharp.GraphQL
     public class OrderPaymentCollectionDetails
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The URL to use for collecting an additional payment on the order.
         ///</summary>
         public string? additionalPaymentCollectionUrl { get; set; }
@@ -29596,6 +32628,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderPaymentStatus
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A message describing an error during the asynchronous processing of a payment.
         ///</summary>
@@ -29703,6 +32739,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderRisk
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the risk level is shown in the Shopify admin. If false, then this order risk is ignored when Shopify determines the overall risk level for the order.
         ///</summary>
@@ -29816,6 +32856,10 @@ namespace ShopifySharp.GraphQL
         public OrderStagedChangeAddVariant? AsOrderStagedChangeAddVariant() => this as OrderStagedChangeAddVariant;
         public OrderStagedChangeDecrementItem? AsOrderStagedChangeDecrementItem() => this as OrderStagedChangeDecrementItem;
         public OrderStagedChangeIncrementItem? AsOrderStagedChangeIncrementItem() => this as OrderStagedChangeIncrementItem;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -29825,6 +32869,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderStagedChangeAddCustomItem : IOrderStagedChange
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The price of an individual item without any discounts applied. This value can't be negative.
         ///</summary>
@@ -29845,6 +32893,10 @@ namespace ShopifySharp.GraphQL
     public class OrderStagedChangeAddLineItemDiscount : IOrderStagedChange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The description of the discount.
         ///</summary>
         public string? description { get; set; }
@@ -29864,6 +32916,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderStagedChangeAddShippingLine : IOrderStagedChange
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The phone number at the shipping address.
         ///</summary>
@@ -29888,6 +32944,10 @@ namespace ShopifySharp.GraphQL
     public class OrderStagedChangeAddVariant : IOrderStagedChange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The quantity of the product variant that was added.
         ///</summary>
         public int? quantity { get; set; }
@@ -29902,6 +32962,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderStagedChangeConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -29922,6 +32986,10 @@ namespace ShopifySharp.GraphQL
     public class OrderStagedChangeDecrementItem : IOrderStagedChange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The number of items removed.
         ///</summary>
         public int? delta { get; set; }
@@ -29941,6 +33009,10 @@ namespace ShopifySharp.GraphQL
     public class OrderStagedChangeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -29956,6 +33028,10 @@ namespace ShopifySharp.GraphQL
     public class OrderStagedChangeIncrementItem : IOrderStagedChange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The number of items added.
         ///</summary>
         public int? delta { get; set; }
@@ -29970,6 +33046,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderTransaction : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The masked account number associated with the payment method.
         ///</summary>
@@ -30121,6 +33201,10 @@ namespace ShopifySharp.GraphQL
     public class OrderTransactionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public OrderTransactionEdge[]? edges { get; set; }
@@ -30139,6 +33223,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class OrderTransactionEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -30342,6 +33430,10 @@ namespace ShopifySharp.GraphQL
     public class OrderUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated order.
         ///</summary>
         public Order? order { get; set; }
@@ -30358,6 +33450,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PageInfo
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The cursor corresponding to the last node in edges.
         ///</summary>
@@ -30381,6 +33477,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ParseError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///An error code for the error.
         ///</summary>
@@ -30597,6 +33697,10 @@ namespace ShopifySharp.GraphQL
     public class ParseErrorRange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ending position of the error.
         ///</summary>
         public ErrorPosition? end { get; set; }
@@ -30611,6 +33715,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentCustomization : IHasMetafieldDefinitions, IHasMetafields, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The enabled status of the payment customization.
         ///</summary>
@@ -30663,6 +33771,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentCustomizationActivationPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The IDs of the updated payment customizations.
         ///</summary>
         public string[]? ids { get; set; }
@@ -30677,6 +33789,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentCustomizationConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -30697,6 +33813,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentCustomizationCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Returns the created payment customization.
         ///</summary>
         public PaymentCustomization? paymentCustomization { get; set; }
@@ -30711,6 +33831,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentCustomizationDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Returns the deleted payment customization ID.
         ///</summary>
@@ -30727,6 +33851,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentCustomizationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -30741,6 +33869,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentCustomizationError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -30812,6 +33944,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentCustomizationUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Returns the updated payment customization.
         ///</summary>
         public PaymentCustomization? paymentCustomization { get; set; }
@@ -30829,6 +33965,10 @@ namespace ShopifySharp.GraphQL
     public interface IPaymentDetails
     {
         public CardPaymentDetails? AsCardPaymentDetails() => this as CardPaymentDetails;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The response code from the address verification system (AVS). The code is always a single letter.
         ///</summary>
@@ -30878,6 +34018,10 @@ namespace ShopifySharp.GraphQL
         public VaultCreditCard? AsVaultCreditCard() => this as VaultCreditCard;
         public VaultPaypalBillingAgreement? AsVaultPaypalBillingAgreement() => this as VaultPaypalBillingAgreement;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the card holder.
         ///</summary>
         public string? name { get; set; }
@@ -30889,6 +34033,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentMandate : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The unique ID of a payment mandate.
         ///</summary>
@@ -30942,6 +34090,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentReminderSendPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the payment reminder email was successfully sent.
         ///</summary>
         public bool? success { get; set; }
@@ -30956,6 +34108,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentReminderSendUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -30986,6 +34142,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentSchedule : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Amount owed for this payment schedule.
         ///</summary>
@@ -31018,6 +34178,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentScheduleConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PaymentScheduleEdge[]? edges { get; set; }
@@ -31037,6 +34201,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentScheduleEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -31052,6 +34220,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentSettings
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///List of the digital wallets which the shop supports.
         ///</summary>
         public DigitalWallet[]? supportedDigitalWallets { get; set; }
@@ -31062,6 +34234,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentTerms : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The draft order associated with the payment terms.
         ///</summary>
@@ -31106,6 +34282,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentTermsCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created payment terms.
         ///</summary>
         public PaymentTerms? paymentTerms { get; set; }
@@ -31120,6 +34300,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentTermsCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -31151,6 +34335,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentTermsDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The deleted payment terms ID.
         ///</summary>
         public string? deletedId { get; set; }
@@ -31165,6 +34353,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentTermsDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -31195,6 +34387,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentTermsTemplate : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The description of the payment terms template.
         ///</summary>
@@ -31254,6 +34450,10 @@ namespace ShopifySharp.GraphQL
     public class PaymentTermsUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated payment terms.
         ///</summary>
         public PaymentTerms? paymentTerms { get; set; }
@@ -31268,6 +34468,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PaymentTermsUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -31318,6 +34522,10 @@ namespace ShopifySharp.GraphQL
     public class PolarisVizDataPoint
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The data key. Typically a category, dimension, or other qualitative data.
         ///</summary>
         public string? key { get; set; }
@@ -31332,6 +34540,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PolarisVizDataSeries
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///An array of data points.
         ///</summary>
@@ -31351,6 +34563,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PolarisVizResponse : IShopifyqlResponse
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The PolarisViz visualization of data.
         ///</summary>
@@ -31401,6 +34617,10 @@ namespace ShopifySharp.GraphQL
     public class PriceList : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The catalog that the price list is associated with.
         ///</summary>
         public ICatalog? catalog { get; set; }
@@ -31443,6 +34663,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListAdjustment
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The type of price adjustment, such as percentage increase or decrease.
         ///</summary>
         public PriceListAdjustmentType? type { get; set; }
@@ -31458,6 +34682,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListAdjustmentSettings
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of price list adjustment setting for compare at price.
         ///</summary>
@@ -31500,6 +34728,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PriceListEdge[]? edges { get; set; }
@@ -31519,6 +34751,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created price list.
         ///</summary>
         public PriceList? priceList { get; set; }
@@ -31533,6 +34769,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted price list.
         ///</summary>
@@ -31549,6 +34789,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -31564,6 +34808,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListFixedPricesAddPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of fixed prices that were added to or updated in the price list.
         ///</summary>
         public PriceListPrice[]? prices { get; set; }
@@ -31578,6 +34826,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListFixedPricesByProductBulkUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -31633,6 +34885,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListFixedPricesByProductUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The price list for which the fixed prices were modified.
         ///</summary>
         public PriceList? priceList { get; set; }
@@ -31656,6 +34912,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListFixedPricesDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of product variant IDs whose fixed prices were removed from the price list.
         ///</summary>
         public string[]? deletedFixedPriceVariantIds { get; set; }
@@ -31670,6 +34930,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListFixedPricesUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of deleted variant IDs for prices.
         ///</summary>
@@ -31699,6 +34963,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListParent
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A price list adjustment.
         ///</summary>
         public PriceListAdjustment? adjustment { get; set; }
@@ -31714,6 +34982,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListPrice
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The compare-at price of the product variant on this price list.
         ///</summary>
@@ -31738,6 +35010,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListPriceConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PriceListPriceEdge[]? edges { get; set; }
@@ -31756,6 +35032,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListPriceEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -31786,6 +35066,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListPriceUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -31853,6 +35137,10 @@ namespace ShopifySharp.GraphQL
     public class PriceListUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated price list.
         ///</summary>
         public PriceList? priceList { get; set; }
@@ -31867,6 +35155,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceListUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -32015,6 +35307,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRule : ICommentEventSubject, IHasEvents, ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The maximum number of times that the price rule can be allocated onto an order.
         ///</summary>
@@ -32171,6 +35467,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleActivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The activated price rule.
         ///</summary>
         public PriceRule? priceRule { get; set; }
@@ -32205,6 +35505,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PriceRuleEdge[]? edges { get; set; }
@@ -32223,6 +35527,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The newly created price rule.
         ///</summary>
@@ -32247,6 +35555,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleCustomerSelection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///List of customers to whom the price rule applies.
         ///</summary>
         public CustomerConnection? customers { get; set; }
@@ -32266,6 +35578,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleDeactivatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The deactivated price rule.
         ///</summary>
         public PriceRule? priceRule { get; set; }
@@ -32284,6 +35600,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID price of the deleted price rule.
         ///</summary>
@@ -32308,6 +35628,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleDiscountCode : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The application that created the discount code.
         ///</summary>
         public App? app { get; set; }
@@ -32331,6 +35655,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleDiscountCodeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PriceRuleDiscountCodeEdge[]? edges { get; set; }
@@ -32349,6 +35677,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleDiscountCodeCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated price rule.
         ///</summary>
@@ -32373,6 +35705,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleDiscountCodeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -32387,6 +35723,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleDiscountCodeUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated price rule.
         ///</summary>
@@ -32411,6 +35751,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -32425,6 +35769,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleEntitlementToPrerequisiteQuantityRatio
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The quantity of entitled items in the ratio.
         ///</summary>
@@ -32775,6 +36123,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleFixedAmountValue : IPriceRuleValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The monetary value of the price rule.
         ///</summary>
         public decimal? amount { get; set; }
@@ -32785,6 +36137,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleItemEntitlements
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The collections to which the price rule applies.
         ///</summary>
@@ -32809,6 +36165,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleLineItemPrerequisites
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The collections required for the price rule to be applicable.
         ///</summary>
         public CollectionConnection? collections { get; set; }
@@ -32827,6 +36187,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleMoneyRange
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The lower bound of the money range.
         ///</summary>
@@ -32851,6 +36215,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRulePercentValue : IPriceRuleValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The percent value of the price rule.
         ///</summary>
         public float? percentage { get; set; }
@@ -32861,6 +36229,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRulePrerequisiteToEntitlementQuantityRatio
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The quantity of entitled items in the ratio.
         ///</summary>
@@ -32876,6 +36248,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleQuantityRange
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The lower bound of the quantity range.
         ///</summary>
@@ -32899,6 +36275,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleShareableUrl
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The image URL of the item (product or collection) to which the discount applies.
         ///</summary>
@@ -32941,6 +36321,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleShippingLineEntitlements
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The codes for the countries to which the price rule applies to.
         ///</summary>
@@ -33058,6 +36442,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated price rule.
         ///</summary>
         public PriceRule? priceRule { get; set; }
@@ -33081,6 +36469,10 @@ namespace ShopifySharp.GraphQL
     public class PriceRuleUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Error code to uniquely identify the error.
         ///</summary>
         public PriceRuleErrorCode? code { get; set; }
@@ -33099,6 +36491,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PriceRuleValidityPeriod
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The time after which the price rule becomes invalid.
         ///</summary>
@@ -33119,6 +36515,10 @@ namespace ShopifySharp.GraphQL
     {
         public PriceRuleFixedAmountValue? AsPriceRuleFixedAmountValue() => this as PriceRuleFixedAmountValue;
         public PriceRulePercentValue? AsPriceRulePercentValue() => this as PriceRulePercentValue;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -33127,6 +36527,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PricingPercentageValue : IPricingValue
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The percentage value of the object. This is a number between -100 (free) and 0 (no discount).
         ///</summary>
@@ -33143,6 +36547,10 @@ namespace ShopifySharp.GraphQL
     {
         public MoneyV2? AsMoneyV2() => this as MoneyV2;
         public PricingPercentageValue? AsPricingPercentageValue() => this as PricingPercentageValue;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -33153,6 +36561,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PrivateMetafield : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the private metafield was created.
         ///</summary>
@@ -33189,6 +36601,10 @@ namespace ShopifySharp.GraphQL
     public class PrivateMetafieldConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PrivateMetafieldEdge[]? edges { get; set; }
@@ -33208,6 +36624,10 @@ namespace ShopifySharp.GraphQL
     public class PrivateMetafieldDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of private metafield that was deleted.
         ///</summary>
         public string? deletedPrivateMetafieldId { get; set; }
@@ -33223,6 +36643,10 @@ namespace ShopifySharp.GraphQL
     public class PrivateMetafieldEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -33237,6 +36661,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PrivateMetafieldUpsertPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The private metafield that was created or updated.
         ///</summary>
@@ -33271,6 +36699,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Product : IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, ILegacyInteroperability, INavigable, INode, IOnlineStorePreviewable, IPublishable, ICommentEventEmbed, IMetafieldReference, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of publications a resource is published to without feedback errors.
         ///</summary>
@@ -33557,6 +36989,10 @@ namespace ShopifySharp.GraphQL
     public class ProductAppendImagesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///List of new images appended to the product.
         ///</summary>
         public Image[]? newImages { get; set; }
@@ -33576,6 +37012,10 @@ namespace ShopifySharp.GraphQL
     public class ProductCategory
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product taxonomy node associated with the product category.
         ///</summary>
         public ProductTaxonomyNode? productTaxonomyNode { get; set; }
@@ -33586,6 +37026,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductChangeStatusPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The product object.
         ///</summary>
@@ -33601,6 +37045,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductChangeStatusUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -33672,6 +37120,10 @@ namespace ShopifySharp.GraphQL
     public class ProductConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ProductEdge[]? edges { get; set; }
@@ -33691,6 +37143,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductContextualPricing
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The number of fixed quantity rules for the product's variants on the price list.
         ///</summary>
@@ -33715,6 +37171,10 @@ namespace ShopifySharp.GraphQL
     public class ProductCreateMediaPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created media.
         ///</summary>
         public IMedia[]? media { get; set; }
@@ -33738,6 +37198,10 @@ namespace ShopifySharp.GraphQL
     public class ProductCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product object.
         ///</summary>
         public Product? product { get; set; }
@@ -33756,6 +37220,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductDeleteAsyncPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the product that was requested to be deleted.
         ///</summary>
@@ -33776,6 +37244,10 @@ namespace ShopifySharp.GraphQL
     public class ProductDeleteImagesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The array of image IDs to delete.
         ///</summary>
         public string[]? deletedImageIds { get; set; }
@@ -33794,6 +37266,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductDeleteMediaPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///List of media IDs which were deleted.
         ///</summary>
@@ -33822,6 +37298,10 @@ namespace ShopifySharp.GraphQL
     public class ProductDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted product.
         ///</summary>
         public string? deletedProductId { get; set; }
@@ -33840,6 +37320,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -33875,6 +37359,10 @@ namespace ShopifySharp.GraphQL
     public class ProductDuplicateAsyncPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The duplicated product ID.
         ///</summary>
         public string? duplicatedProductId { get; set; }
@@ -33893,6 +37381,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductDuplicateAsyncV2Payload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The duplicated product ID.
         ///</summary>
@@ -33913,6 +37405,10 @@ namespace ShopifySharp.GraphQL
     public class ProductDuplicateJob
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///This indicates if the job is still queued or has been run.
         ///</summary>
         public bool? done { get; set; }
@@ -33927,6 +37423,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductDuplicatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The asynchronous job that duplicates the product images.
         ///</summary>
@@ -33950,6 +37450,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductDuplicateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -34001,6 +37505,10 @@ namespace ShopifySharp.GraphQL
     public class ProductEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -34015,6 +37523,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductFeed : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The country of the product feed.
         ///</summary>
@@ -34039,6 +37551,10 @@ namespace ShopifySharp.GraphQL
     public class ProductFeedConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ProductFeedEdge[]? edges { get; set; }
@@ -34058,6 +37574,10 @@ namespace ShopifySharp.GraphQL
     public class ProductFeedCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created product feed.
         ///</summary>
         public ProductFeed? productFeed { get; set; }
@@ -34072,6 +37592,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductFeedCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -34107,6 +37631,10 @@ namespace ShopifySharp.GraphQL
     public class ProductFeedDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the product feed that was deleted.
         ///</summary>
         public string? deletedId { get; set; }
@@ -34121,6 +37649,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductFeedDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -34152,6 +37684,10 @@ namespace ShopifySharp.GraphQL
     public class ProductFeedEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -34182,6 +37718,10 @@ namespace ShopifySharp.GraphQL
     public class ProductFullSyncPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public ProductFullSyncUserError[]? userErrors { get; set; }
@@ -34192,6 +37732,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductFullSyncUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -34247,6 +37791,10 @@ namespace ShopifySharp.GraphQL
     public class ProductImageUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The image that has been updated.
         ///</summary>
         public Image? image { get; set; }
@@ -34262,6 +37810,10 @@ namespace ShopifySharp.GraphQL
     public class ProductJoinSellingPlanGroupsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product object.
         ///</summary>
         public Product? product { get; set; }
@@ -34276,6 +37828,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductLeaveSellingPlanGroupsPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The product object.
         ///</summary>
@@ -34314,6 +37870,10 @@ namespace ShopifySharp.GraphQL
     public class ProductOption : IHasPublishedTranslations, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -34341,6 +37901,10 @@ namespace ShopifySharp.GraphQL
     public class ProductPriceRange
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The highest variant's price.
         ///</summary>
         public MoneyV2? maxVariantPrice { get; set; }
@@ -34356,6 +37920,10 @@ namespace ShopifySharp.GraphQL
     public class ProductPriceRangeV2
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The highest variant's price.
         ///</summary>
         public MoneyV2? maxVariantPrice { get; set; }
@@ -34370,6 +37938,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductPublication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The channel where the product was or is published.
         ///</summary>
@@ -34394,6 +37966,10 @@ namespace ShopifySharp.GraphQL
     public class ProductPublicationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ProductPublicationEdge[]? edges { get; set; }
@@ -34413,6 +37989,10 @@ namespace ShopifySharp.GraphQL
     public class ProductPublicationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -34427,6 +38007,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductPublishPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The product that has been published.
         ///</summary>
@@ -34451,6 +38035,10 @@ namespace ShopifySharp.GraphQL
     public class ProductReorderImagesPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job which reorders the images.
         ///</summary>
         public Job? job { get; set; }
@@ -34465,6 +38053,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductReorderMediaPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The asynchronous job which reorders the media.
         ///</summary>
@@ -34486,6 +38078,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductResourceFeedback
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The time when the feedback was generated. Used to help determine whether
         ///incoming feedback is outdated compared to existing feedback.
@@ -34514,6 +38110,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductSale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -34626,6 +38226,10 @@ namespace ShopifySharp.GraphQL
     public class ProductTaxonomyNode : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The full name of the product taxonomy node. For example,  Animals & Pet Supplies > Pet Supplies > Dog Supplies > Dog Beds.
         ///</summary>
         public string? fullName { get; set; }
@@ -34653,6 +38257,10 @@ namespace ShopifySharp.GraphQL
     public class ProductUnpublishPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product that has been unpublished.
         ///</summary>
         public Product? product { get; set; }
@@ -34671,6 +38279,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductUpdateMediaPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated media object.
         ///</summary>
@@ -34695,6 +38307,10 @@ namespace ShopifySharp.GraphQL
     public class ProductUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated product object.
         ///</summary>
         public Product? product { get; set; }
@@ -34709,6 +38325,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariant : IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, ILegacyInteroperability, INavigable, INode, ICommentEventEmbed, IMetafieldReference, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the product variant is available for sale.
         ///</summary>
@@ -34907,6 +38527,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantAppendMediaPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product associated with the variants and media.
         ///</summary>
         public Product? product { get; set; }
@@ -34925,6 +38549,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantComponent : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -34945,6 +38573,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantComponentConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ProductVariantComponentEdge[]? edges { get; set; }
@@ -34964,6 +38596,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantComponentEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -34978,6 +38614,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -34999,6 +38639,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantContextualPricing
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The final compare-at price after all adjustments are applied.
         ///</summary>
         public MoneyV2? compareAtPrice { get; set; }
@@ -35017,6 +38661,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The product associated with the variant.
         ///</summary>
@@ -35037,6 +38685,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted product variant.
         ///</summary>
         public string? deletedProductVariantId { get; set; }
@@ -35056,6 +38708,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantDetachMediaPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product associated with the variants and media.
         ///</summary>
         public Product? product { get; set; }
@@ -35074,6 +38730,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -35124,6 +38784,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantJoinSellingPlanGroupsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product variant object.
         ///</summary>
         public ProductVariant? productVariant { get; set; }
@@ -35138,6 +38802,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantLeaveSellingPlanGroupsPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The product variant object.
         ///</summary>
@@ -35154,6 +38822,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantPricePair
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The compare-at price of the variant with associated currency.
         ///</summary>
         public MoneyV2? compareAtPrice { get; set; }
@@ -35168,6 +38840,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantPricePairConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -35188,6 +38864,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantPricePairEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -35203,6 +38883,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantRelationshipBulkUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product variants with successfully updated product variant relationships.
         ///</summary>
         public ProductVariant[]? parentProductVariants { get; set; }
@@ -35217,6 +38901,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantRelationshipBulkUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35381,6 +39069,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product associated with the variant.
         ///</summary>
         public Product? product { get; set; }
@@ -35400,6 +39092,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantsBulkCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated product object.
         ///</summary>
         public Product? product { get; set; }
@@ -35418,6 +39114,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantsBulkCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35501,6 +39201,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantsBulkDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated product object.
         ///</summary>
         public Product? product { get; set; }
@@ -35515,6 +39219,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantsBulkDeleteUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35554,6 +39262,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantsBulkReorderPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated product.
         ///</summary>
         public Product? product { get; set; }
@@ -35568,6 +39280,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantsBulkReorderUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35611,6 +39327,10 @@ namespace ShopifySharp.GraphQL
     public class ProductVariantsBulkUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated product object.
         ///</summary>
         public Product? product { get; set; }
@@ -35629,6 +39349,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ProductVariantsBulkUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35744,6 +39468,10 @@ namespace ShopifySharp.GraphQL
     public class PubSubServerPixelUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The server pixel as configured by the mutation.
         ///</summary>
         public ServerPixel? serverPixel { get; set; }
@@ -35759,6 +39487,10 @@ namespace ShopifySharp.GraphQL
     public class PubSubWebhookSubscriptionCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public PubSubWebhookSubscriptionCreateUserError[]? userErrors { get; set; }
@@ -35773,6 +39505,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PubSubWebhookSubscriptionCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35804,6 +39540,10 @@ namespace ShopifySharp.GraphQL
     public class PubSubWebhookSubscriptionUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public PubSubWebhookSubscriptionUpdateUserError[]? userErrors { get; set; }
@@ -35818,6 +39558,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PubSubWebhookSubscriptionUpdateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -35848,6 +39592,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Publication : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The app associated with the publication.
         ///</summary>
@@ -35904,6 +39652,10 @@ namespace ShopifySharp.GraphQL
     public class PublicationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public PublicationEdge[]? edges { get; set; }
@@ -35938,6 +39690,10 @@ namespace ShopifySharp.GraphQL
     public class PublicationCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The publication that's been created.
         ///</summary>
         public Publication? publication { get; set; }
@@ -35953,6 +39709,10 @@ namespace ShopifySharp.GraphQL
     public class PublicationDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the publication that was deleted.
         ///</summary>
         public string? deletedId { get; set; }
@@ -35967,6 +39727,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PublicationEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -35989,6 +39753,10 @@ namespace ShopifySharp.GraphQL
         public AddAllProductsOperation? AsAddAllProductsOperation() => this as AddAllProductsOperation;
         public CatalogCsvOperation? AsCatalogCsvOperation() => this as CatalogCsvOperation;
         public PublicationResourceOperation? AsPublicationResourceOperation() => this as PublicationResourceOperation;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -36013,6 +39781,10 @@ namespace ShopifySharp.GraphQL
     public class PublicationResourceOperation : INode, IResourceOperation, IPublicationOperation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -36036,6 +39808,10 @@ namespace ShopifySharp.GraphQL
     public class PublicationUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The publication that's been updated.
         ///</summary>
         public Publication? publication { get; set; }
@@ -36050,6 +39826,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PublicationUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -36150,6 +39930,10 @@ namespace ShopifySharp.GraphQL
     public interface IPublishable
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The number of publications a resource is published to without feedback errors.
         ///</summary>
         public int? availablePublicationCount { get; }
@@ -36197,6 +39981,10 @@ namespace ShopifySharp.GraphQL
     public class PublishablePublishPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Resource that has been published.
         ///</summary>
         public IPublishable? publishable { get; set; }
@@ -36215,6 +40003,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PublishablePublishToCurrentChannelPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Resource that has been published.
         ///</summary>
@@ -36235,6 +40027,10 @@ namespace ShopifySharp.GraphQL
     public class PublishableUnpublishPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Resource that has been unpublished.
         ///</summary>
         public IPublishable? publishable { get; set; }
@@ -36254,6 +40050,10 @@ namespace ShopifySharp.GraphQL
     public class PublishableUnpublishToCurrentChannelPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Resource that has been unpublished.
         ///</summary>
         public IPublishable? publishable { get; set; }
@@ -36272,6 +40072,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class PurchasingCompany : IPurchasingEntity
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The company associated to the order or draft order.
         ///</summary>
@@ -36296,6 +40100,10 @@ namespace ShopifySharp.GraphQL
     {
         public Customer? AsCustomer() => this as Customer;
         public PurchasingCompany? AsPurchasingCompany() => this as PurchasingCompany;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -36303,6 +40111,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class QuantityRule
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The value that specifies the quantity increment between minimum and maximum of the rule.
         ///Only quantities divisible by this value will be considered valid.
@@ -36341,6 +40153,10 @@ namespace ShopifySharp.GraphQL
     public class QuantityRuleConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public QuantityRuleEdge[]? edges { get; set; }
@@ -36363,6 +40179,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class QuantityRuleEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -36393,6 +40213,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class QuantityRuleUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -36464,6 +40288,10 @@ namespace ShopifySharp.GraphQL
     public class QuantityRulesAddPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of quantity rules that were added to or updated in the price list.
         ///</summary>
         public QuantityRule[]? quantityRules { get; set; }
@@ -36479,6 +40307,10 @@ namespace ShopifySharp.GraphQL
     public class QuantityRulesDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of product variant IDs whose quantity rules were removed from the price list.
         ///</summary>
         public string[]? deletedQuantityRulesVariantIds { get; set; }
@@ -36493,6 +40325,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class QueryRoot
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Returns an abandonment by ID.
         ///</summary>
@@ -36528,7 +40364,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public AppInstallation? appInstallation { get; set; }
         ///<summary>
-        ///List of app installations. Requires the `read_apps` access scope.
+        ///List of app installations. Requires contacting Shopify for access to the `read_apps` access scope.
         ///</summary>
         public AppInstallationConnection? appInstallations { get; set; }
         ///<summary>
@@ -36820,7 +40656,9 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public ulong? giftCardsCount { get; set; }
         ///<summary>
-        ///Returns an `InventoryItem` object by ID.
+        ///Returns an
+        ///[InventoryItem](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem)
+        ///object by ID.
         ///</summary>
         public InventoryItem? inventoryItem { get; set; }
         ///<summary>
@@ -36828,7 +40666,9 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public InventoryItemConnection? inventoryItems { get; set; }
         ///<summary>
-        ///Returns an `InventoryLevel` object by ID.
+        ///Returns an
+        ///[InventoryLevel](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel)
+        ///object by ID.
         ///</summary>
         public InventoryLevel? inventoryLevel { get; set; }
         ///<summary>
@@ -37278,6 +41118,10 @@ namespace ShopifySharp.GraphQL
     public class Refund : ILegacyInteroperability, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date and time when the refund was created.
         ///</summary>
         public DateTime? createdAt { get; set; }
@@ -37337,6 +41181,10 @@ namespace ShopifySharp.GraphQL
     public class RefundAgreement : ISalesAgreement
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The application that created the agreement.
         ///</summary>
         public App? app { get; set; }
@@ -37372,6 +41220,10 @@ namespace ShopifySharp.GraphQL
     public class RefundConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public RefundEdge[]? edges { get; set; }
@@ -37391,6 +41243,10 @@ namespace ShopifySharp.GraphQL
     public class RefundCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The order associated with the created refund.
         ///</summary>
         public Order? order { get; set; }
@@ -37409,6 +41265,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class RefundDuty
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The amount of a refunded duty in shop and presentment currencies.
         ///</summary>
@@ -37440,6 +41300,10 @@ namespace ShopifySharp.GraphQL
     public class RefundEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -37454,6 +41318,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class RefundLineItem
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The `LineItem` resource associated to the refunded line item.
         ///</summary>
@@ -37506,6 +41374,10 @@ namespace ShopifySharp.GraphQL
     public class RefundLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public RefundLineItemEdge[]? edges { get; set; }
@@ -37524,6 +41396,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class RefundLineItemEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -37564,6 +41440,10 @@ namespace ShopifySharp.GraphQL
     public class ResourceAlert
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Buttons in the alert that link to related information.
         ///For example, _Edit variants_.
         ///</summary>
@@ -37596,6 +41476,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ResourceAlertAction
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the action appears as a button or as a link.
         ///</summary>
@@ -37663,6 +41547,10 @@ namespace ShopifySharp.GraphQL
     public class ResourceFeedback
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Feedback from an app about the steps a merchant needs to take to set up the app on their store.
         ///</summary>
         public AppFeedback[]? appFeedback { get; set; }
@@ -37697,6 +41585,10 @@ namespace ShopifySharp.GraphQL
     public class ResourceLimit
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the resource is available.
         ///</summary>
         public bool? available { get; set; }
@@ -37719,6 +41611,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IResourceOperation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -37765,6 +41661,10 @@ namespace ShopifySharp.GraphQL
     public class ResourcePublication
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The channel the resource publication is published to.
         ///</summary>
         public Channel? channel { get; set; }
@@ -37794,6 +41694,10 @@ namespace ShopifySharp.GraphQL
     public class ResourcePublicationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ResourcePublicationEdge[]? edges { get; set; }
@@ -37813,6 +41717,10 @@ namespace ShopifySharp.GraphQL
     public class ResourcePublicationEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -37830,6 +41738,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ResourcePublicationV2
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the resource publication is published. If true, then the resource publication is published to the publication.
         ///If false, then the resource publication is staged to be published to the publication.
@@ -37855,6 +41767,10 @@ namespace ShopifySharp.GraphQL
     public class ResourcePublicationV2Connection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ResourcePublicationV2Edge[]? edges { get; set; }
@@ -37874,6 +41790,10 @@ namespace ShopifySharp.GraphQL
     public class ResourcePublicationV2Edge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -37888,6 +41808,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Return : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Additional information about the declined return.
         ///</summary>
@@ -37925,7 +41849,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public SuggestedReturnRefund? suggestedRefund { get; set; }
         ///<summary>
-        ///The sum of all line item quantities for the return.
+        ///The sum of all line item quantities for the return. Includes the total quantity of both return line items and exchange line items.
         ///</summary>
         public int? totalQuantity { get; set; }
     }
@@ -37935,6 +41859,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnApproveRequestPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The approved return.
         ///</summary>
@@ -37951,6 +41879,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnCancelPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The canceled return.
         ///</summary>
         public Return? @return { get; set; }
@@ -37966,6 +41898,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnClosePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The closed return.
         ///</summary>
         public Return? @return { get; set; }
@@ -37980,6 +41916,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -38000,6 +41940,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created return.
         ///</summary>
         public Return? @return { get; set; }
@@ -38014,6 +41958,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnDecline
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The notification message sent to the customer about their declined return request.
         ///Maximum length: 500 characters.
@@ -38050,6 +41998,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnDeclineRequestPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The declined return.
         ///</summary>
         public Return? @return { get; set; }
@@ -38064,6 +42016,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -38183,6 +42139,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnLineItem : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A note from the customer that describes the item to be returned. Maximum length: 300 characters.
         ///</summary>
         public string? customerNote { get; set; }
@@ -38230,6 +42190,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ReturnLineItemEdge[]? edges { get; set; }
@@ -38248,6 +42212,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnLineItemEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -38311,6 +42279,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnRefundPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created refund.
         ///</summary>
         public Refund? refund { get; set; }
@@ -38326,6 +42298,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnReopenPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The reopened return.
         ///</summary>
         public Return? @return { get; set; }
@@ -38340,6 +42316,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnRequestPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The requested return.
         ///</summary>
@@ -38383,6 +42363,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public ReturnErrorCode? code { get; set; }
@@ -38403,6 +42387,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnableFulfillment : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment that the returnable fulfillment refers to.
         ///</summary>
         public Fulfillment? fulfillment { get; set; }
@@ -38421,6 +42409,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnableFulfillmentConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -38441,6 +42433,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnableFulfillmentEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -38456,6 +42452,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnableFulfillmentLineItem
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fulfillment line item that can be returned.
         ///</summary>
         public FulfillmentLineItem? fulfillmentLineItem { get; set; }
@@ -38470,6 +42470,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReturnableFulfillmentLineItemConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -38490,6 +42494,10 @@ namespace ShopifySharp.GraphQL
     public class ReturnableFulfillmentLineItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -38507,6 +42515,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseDelivery : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The deliverable associated with the reverse delivery.
         ///</summary>
@@ -38531,6 +42543,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseDeliveryConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ReverseDeliveryEdge[]? edges { get; set; }
@@ -38550,6 +42566,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseDeliveryCreateWithShippingPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created reverse delivery.
         ///</summary>
         public ReverseDelivery? reverseDelivery { get; set; }
@@ -38568,6 +42588,10 @@ namespace ShopifySharp.GraphQL
     {
         public ReverseDeliveryShippingDeliverable? AsReverseDeliveryShippingDeliverable() => this as ReverseDeliveryShippingDeliverable;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The return label attached to the reverse delivery.
         ///</summary>
         public ReverseDeliveryLabelV2? label { get; set; }
@@ -38582,6 +42606,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseDeliveryDisposePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The disposed reverse delivery line items.
         ///</summary>
@@ -38598,6 +42626,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseDeliveryEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -38612,6 +42644,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseDeliveryLabelV2
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the reverse delivery label was created.
         ///</summary>
@@ -38631,6 +42667,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseDeliveryLineItem : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The dispositions of the item.
         ///</summary>
@@ -38655,6 +42695,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseDeliveryLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ReverseDeliveryLineItemEdge[]? edges { get; set; }
@@ -38674,6 +42718,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseDeliveryLineItemEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -38688,6 +42736,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseDeliveryShippingDeliverable : IReverseDeliveryDeliverable
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The return label attached to the reverse delivery.
         ///</summary>
@@ -38704,6 +42756,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseDeliveryShippingUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated reverse delivery.
         ///</summary>
         public ReverseDelivery? reverseDelivery { get; set; }
@@ -38718,6 +42774,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseDeliveryTrackingV2
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The provider of the tracking information, in a human-readable format for display purposes.
         ///</summary>
@@ -38738,6 +42798,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseFulfillmentOrder : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -38771,6 +42835,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseFulfillmentOrderConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ReverseFulfillmentOrderEdge[]? edges { get; set; }
@@ -38790,6 +42858,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseFulfillmentOrderDisposePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The disposed reverse fulfillment order line items.
         ///</summary>
         public ReverseFulfillmentOrderLineItem[]? reverseFulfillmentOrderLineItems { get; set; }
@@ -38804,6 +42876,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseFulfillmentOrderDisposition : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -38851,6 +42927,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseFulfillmentOrderEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -38865,6 +42945,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseFulfillmentOrderLineItem : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The dispositions of the item.
         ///</summary>
@@ -38889,6 +42973,10 @@ namespace ShopifySharp.GraphQL
     public class ReverseFulfillmentOrderLineItemConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ReverseFulfillmentOrderLineItemEdge[]? edges { get; set; }
@@ -38907,6 +42995,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseFulfillmentOrderLineItemEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -38941,6 +43033,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ReverseFulfillmentOrderThirdPartyConfirmation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The status of the reverse fulfillment order third-party confirmation.
         ///</summary>
@@ -38984,6 +43080,10 @@ namespace ShopifySharp.GraphQL
     public class RowCount
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Estimated number of rows contained within this background operation.
         ///</summary>
         public int? count { get; set; }
@@ -38999,6 +43099,10 @@ namespace ShopifySharp.GraphQL
     public class SEO
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///SEO Description.
         ///</summary>
         public string? description { get; set; }
@@ -39013,6 +43117,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -39080,6 +43188,10 @@ namespace ShopifySharp.GraphQL
     public class SaleAdditionalFee : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -39103,6 +43215,10 @@ namespace ShopifySharp.GraphQL
     public class SaleConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SaleEdge[]? edges { get; set; }
@@ -39121,6 +43237,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SaleEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -39176,6 +43296,10 @@ namespace ShopifySharp.GraphQL
     public class SaleTax
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The portion of the total tax amount on the related sale that comes from the associated tax line.
         ///</summary>
         public MoneyBag? amount { get; set; }
@@ -39194,6 +43318,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface ISalesAgreement
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///The application that created the agreement.
         ///</summary>
@@ -39226,6 +43354,10 @@ namespace ShopifySharp.GraphQL
     public class SalesAgreementConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SalesAgreementEdge[]? edges { get; set; }
@@ -39245,6 +43377,10 @@ namespace ShopifySharp.GraphQL
     public class SalesAgreementEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -39259,6 +43395,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SavedSearch : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The filters of a saved search.
         ///</summary>
@@ -39295,6 +43435,10 @@ namespace ShopifySharp.GraphQL
     public class SavedSearchConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SavedSearchEdge[]? edges { get; set; }
@@ -39314,6 +43458,10 @@ namespace ShopifySharp.GraphQL
     public class SavedSearchCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The saved search that was created.
         ///</summary>
         public SavedSearch? savedSearch { get; set; }
@@ -39328,6 +43476,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SavedSearchDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the saved search that was deleted.
         ///</summary>
@@ -39348,6 +43500,10 @@ namespace ShopifySharp.GraphQL
     public class SavedSearchEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -39362,6 +43518,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SavedSearchUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The saved search that was updated.
         ///</summary>
@@ -39380,6 +43540,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ScriptDiscountApplication : IDiscountApplication
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The method by which the discount's value is applied to its entitled items.
         ///</summary>
@@ -39421,6 +43585,10 @@ namespace ShopifySharp.GraphQL
     public class ScriptTag : ILegacyInteroperability, INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the Shopify CDN can cache and serve the script tag.
         ///If `true`, then the script will be cached and served by the CDN.
         ///The cache expires 15 minutes after the script tag is successfully returned.
@@ -39459,6 +43627,10 @@ namespace ShopifySharp.GraphQL
     public class ScriptTagConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ScriptTagEdge[]? edges { get; set; }
@@ -39478,6 +43650,10 @@ namespace ShopifySharp.GraphQL
     public class ScriptTagCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The script tag that was created.
         ///</summary>
         public ScriptTag? scriptTag { get; set; }
@@ -39492,6 +43668,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ScriptTagDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted script tag.
         ///</summary>
@@ -39527,6 +43707,10 @@ namespace ShopifySharp.GraphQL
     public class ScriptTagEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -39541,6 +43725,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ScriptTagUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The script tag that was updated.
         ///</summary>
@@ -39557,6 +43745,10 @@ namespace ShopifySharp.GraphQL
     public class SearchFilter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The key of the search filter.
         ///</summary>
         public string? key { get; set; }
@@ -39572,6 +43764,10 @@ namespace ShopifySharp.GraphQL
     public class SearchFilterOptions
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of options that can be use to filter product availability.
         ///</summary>
         public FilterOption[]? productAvailability { get; set; }
@@ -39582,6 +43778,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SearchResult
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Returns the search result description text.
         ///</summary>
@@ -39610,6 +43810,10 @@ namespace ShopifySharp.GraphQL
     public class SearchResultConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SearchResultEdge[]? edges { get; set; }
@@ -39628,6 +43832,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SearchResultEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -39672,6 +43880,10 @@ namespace ShopifySharp.GraphQL
     public class Segment : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date and time when the segment was added to the store.
         ///</summary>
         public DateTime? creationDate { get; set; }
@@ -39699,6 +43911,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentAssociationFilter : ISegmentFilter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The localized name of the filter.
         ///</summary>
         public string? localizedName { get; set; }
@@ -39718,6 +43934,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentAttributeStatistics
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The average of a given attribute.
         ///</summary>
         public float? average { get; set; }
@@ -39732,6 +43952,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentBooleanFilter : ISegmentFilter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -39752,6 +43976,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SegmentEdge[]? edges { get; set; }
@@ -39771,6 +43999,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The newly created segment.
         ///</summary>
         public Segment? segment { get; set; }
@@ -39785,6 +44017,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentDateFilter : ISegmentFilter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -39805,6 +44041,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///ID of the deleted segment.
         ///</summary>
         public string? deletedSegmentId { get; set; }
@@ -39820,6 +44060,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -39834,6 +44078,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentEnumFilter : ISegmentFilter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -39853,6 +44101,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentEventFilter : ISegmentFilter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -39880,6 +44132,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentEventFilterParameter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the parameter accepts a list of values.
         ///</summary>
@@ -39912,6 +44168,10 @@ namespace ShopifySharp.GraphQL
     public interface ISegmentFilter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The localized name of the filter.
         ///</summary>
         public string? localizedName { get; }
@@ -39930,6 +44190,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentFilterConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -39950,6 +44214,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentFilterEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -39964,6 +44232,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentFloatFilter : ISegmentFilter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -39984,6 +44256,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentIntegerFilter : ISegmentFilter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The localized name of the filter.
         ///</summary>
         public string? localizedName { get; set; }
@@ -40003,6 +44279,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentMembership
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A Boolean that indicates whether or not the customer in the query is a member of the segment, which is identified using the `segmentId`.
         ///</summary>
         public bool? isMember { get; set; }
@@ -40018,6 +44298,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentMembershipResponse
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The membership status for the given list of segments.
         ///</summary>
         public SegmentMembership[]? memberships { get; set; }
@@ -40029,6 +44313,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentMigration
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -40049,6 +44337,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentMigrationConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SegmentMigrationEdge[]? edges { get; set; }
@@ -40067,6 +44359,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentMigrationEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -40107,6 +44403,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentStatistics
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The statistics of a given attribute.
         ///</summary>
         public SegmentAttributeStatistics? attributeStatistics { get; set; }
@@ -40117,6 +44417,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentStringFilter : ISegmentFilter
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -40137,6 +44441,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated segment.
         ///</summary>
         public Segment? segment { get; set; }
@@ -40154,6 +44462,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The localized version of the value's name. This name is displayed to the merchant.
         ///</summary>
         public string? localizedValue { get; set; }
@@ -40168,6 +44480,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SegmentValueConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -40188,6 +44504,10 @@ namespace ShopifySharp.GraphQL
     public class SegmentValueEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -40203,6 +44523,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SelectedOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The product option’s name.
         ///</summary>
@@ -40223,6 +44547,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlan : IHasPublishedTranslations, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A selling plan policy which describes the recurring billing details.
         ///</summary>
@@ -40280,6 +44608,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanAnchor
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The cutoff day for the anchor.
         ///
@@ -40343,6 +44675,10 @@ namespace ShopifySharp.GraphQL
     {
         public SellingPlanFixedBillingPolicy? AsSellingPlanFixedBillingPolicy() => this as SellingPlanFixedBillingPolicy;
         public SellingPlanRecurringBillingPolicy? AsSellingPlanRecurringBillingPolicy() => this as SellingPlanRecurringBillingPolicy;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -40376,6 +44712,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanCheckoutCharge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The charge type for the checkout charge.
         ///</summary>
         public SellingPlanCheckoutChargeType? type { get; set; }
@@ -40390,6 +44730,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanCheckoutChargePercentageValue : ISellingPlanCheckoutChargeValue
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The percentage value of the price used for checkout charge.
         ///</summary>
@@ -40421,6 +44765,10 @@ namespace ShopifySharp.GraphQL
     {
         public MoneyV2? AsMoneyV2() => this as MoneyV2;
         public SellingPlanCheckoutChargePercentageValue? AsSellingPlanCheckoutChargePercentageValue() => this as SellingPlanCheckoutChargePercentageValue;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -40428,6 +44776,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -40456,6 +44808,10 @@ namespace ShopifySharp.GraphQL
         public SellingPlanFixedDeliveryPolicy? AsSellingPlanFixedDeliveryPolicy() => this as SellingPlanFixedDeliveryPolicy;
         public SellingPlanRecurringDeliveryPolicy? AsSellingPlanRecurringDeliveryPolicy() => this as SellingPlanRecurringDeliveryPolicy;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
         public SellingPlanAnchor[]? anchors { get; set; }
@@ -40471,6 +44827,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -40481,10 +44841,15 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///The fixed selling plan billing policy.
+    ///The fixed selling plan billing policy defines how much of the price of the product will be billed to customer
+    ///at checkout. If there is an outstanding balance, it determines when it will be paid.
     ///</summary>
     public class SellingPlanFixedBillingPolicy : ISellingPlanBillingPolicy
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The checkout charge when the full amount isn't charged at checkout.
         ///</summary>
@@ -40508,6 +44873,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanFixedDeliveryPolicy : ISellingPlanDeliveryPolicy
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
@@ -40575,6 +44944,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanFixedPricingPolicy : ISellingPlanPricingPolicyBase, ISellingPlanPricingPolicy
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The price adjustment type.
         ///</summary>
         public SellingPlanPricingPolicyAdjustmentType? adjustmentType { get; set; }
@@ -40618,6 +44991,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanGroup : IHasPublishedTranslations, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID for app, exposed in Liquid and product JSON.
         ///</summary>
@@ -40698,6 +45075,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanGroupAddProductVariantsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated selling plan group.
         ///</summary>
         public SellingPlanGroup? sellingPlanGroup { get; set; }
@@ -40713,6 +45094,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanGroupAddProductsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated selling plan group.
         ///</summary>
         public SellingPlanGroup? sellingPlanGroup { get; set; }
@@ -40727,6 +45112,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanGroupConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -40747,6 +45136,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanGroupCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created selling plan group object.
         ///</summary>
         public SellingPlanGroup? sellingPlanGroup { get; set; }
@@ -40761,6 +45154,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanGroupDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the deleted selling plan group object.
         ///</summary>
@@ -40777,6 +45174,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanGroupEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -40792,6 +45193,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanGroupRemoveProductVariantsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The removed product variant ids.
         ///</summary>
         public string[]? removedProductVariantIds { get; set; }
@@ -40806,6 +45211,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanGroupRemoveProductsPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The removed product ids.
         ///</summary>
@@ -40850,6 +45259,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanGroupUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The IDs of the deleted Subscription Plans.
         ///</summary>
         public string[]? deletedSellingPlanIds { get; set; }
@@ -40868,6 +45281,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanGroupUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -41158,6 +45575,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanInventoryPolicy
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///When to reserve inventory for the order.
         ///</summary>
         public SellingPlanReserve? reserve { get; set; }
@@ -41177,6 +45598,10 @@ namespace ShopifySharp.GraphQL
     {
         public SellingPlanFixedPricingPolicy? AsSellingPlanFixedPricingPolicy() => this as SellingPlanFixedPricingPolicy;
         public SellingPlanRecurringPricingPolicy? AsSellingPlanRecurringPricingPolicy() => this as SellingPlanRecurringPricingPolicy;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The price adjustment type.
         ///</summary>
@@ -41220,6 +45645,10 @@ namespace ShopifySharp.GraphQL
     {
         public MoneyV2? AsMoneyV2() => this as MoneyV2;
         public SellingPlanPricingPolicyPercentageValue? AsSellingPlanPricingPolicyPercentageValue() => this as SellingPlanPricingPolicyPercentageValue;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -41227,6 +45656,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface ISellingPlanPricingPolicyBase
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///The price adjustment type.
         ///</summary>
@@ -41243,6 +45676,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanPricingPolicyPercentageValue : ISellingPlanPricingPolicyAdjustmentValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The percentage value.
         ///</summary>
         public float? percentage { get; set; }
@@ -41253,6 +45690,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanRecurringBillingPolicy : ISellingPlanBillingPolicy
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Specific anchor dates upon which the billing interval calculations should be made.
         ///</summary>
@@ -41284,6 +45725,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SellingPlanRecurringDeliveryPolicy : ISellingPlanDeliveryPolicy
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
@@ -41351,6 +45796,10 @@ namespace ShopifySharp.GraphQL
     public class SellingPlanRecurringPricingPolicy : ISellingPlanPricingPolicyBase, ISellingPlanPricingPolicy
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The price adjustment type.
         ///</summary>
         public SellingPlanPricingPolicyAdjustmentType? adjustmentType { get; set; }
@@ -41408,6 +45857,10 @@ namespace ShopifySharp.GraphQL
     public class ServerPixel : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -41427,6 +45880,10 @@ namespace ShopifySharp.GraphQL
     public class ServerPixelCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The new server pixel.
         ///</summary>
         public ServerPixel? serverPixel { get; set; }
@@ -41441,6 +45898,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ServerPixelDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The ID of the server pixel that was deleted, if one was deleted.
         ///</summary>
@@ -41486,6 +45947,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShippingLine
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A reference to the carrier service that provided the rate.
         ///Present when the rate was computed by a third-party carrier service.
@@ -41564,6 +46029,10 @@ namespace ShopifySharp.GraphQL
     public class ShippingLineConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ShippingLineEdge[]? edges { get; set; }
@@ -41583,6 +46052,10 @@ namespace ShopifySharp.GraphQL
     public class ShippingLineEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -41597,6 +46070,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShippingLineSale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -41645,6 +46122,10 @@ namespace ShopifySharp.GraphQL
     public class ShippingMethod
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A unique code associated with the rate. For example: `expedited_mail`
         ///</summary>
         public string? code { get; set; }
@@ -41661,6 +46142,10 @@ namespace ShopifySharp.GraphQL
     public class ShippingPackageDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted shipping package.
         ///</summary>
         public string? deletedId { get; set; }
@@ -41675,6 +46160,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShippingPackageMakeDefaultPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
@@ -41710,6 +46199,10 @@ namespace ShopifySharp.GraphQL
     public class ShippingPackageUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -41720,6 +46213,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShippingRate
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Human-readable unique identifier for this shipping rate.
         ///</summary>
@@ -41739,6 +46236,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShippingRefund
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The monetary value of the shipping fees to be refunded.
         ///</summary>
@@ -41770,6 +46271,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Shop : IHasMetafields, IHasPublishedTranslations, INode, IMetafieldReferencer
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of the shop's active alert messages that appear in the Shopify admin.
         ///</summary>
@@ -42151,6 +46656,10 @@ namespace ShopifySharp.GraphQL
     public class ShopAddress : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The first line of the address. Typically the street address or PO Box number.
         ///</summary>
         public string? address1 { get; set; }
@@ -42246,6 +46755,10 @@ namespace ShopifySharp.GraphQL
     public class ShopAlert
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The text for the button in the alert that links to related information. For example, _Add credit card_.
         ///</summary>
         public ShopAlertAction? action { get; set; }
@@ -42261,6 +46774,10 @@ namespace ShopifySharp.GraphQL
     public class ShopAlertAction
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The text for the button in the alert. For example, _Add credit card_.
         ///</summary>
         public string? title { get; set; }
@@ -42275,6 +46792,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopBillingPreferences
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The currency the shop uses to pay for apps and services.
         ///</summary>
@@ -42322,6 +46843,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopFeatures
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether a shop has access to Avalara AvaTax.
         ///</summary>
@@ -42432,6 +46957,10 @@ namespace ShopifySharp.GraphQL
     public class ShopLocale
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The locale ISO code.
         ///</summary>
         public string? locale { get; set; }
@@ -42459,6 +46988,10 @@ namespace ShopifySharp.GraphQL
     public class ShopLocaleDisablePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///ISO code of the locale that was deleted.
         ///</summary>
         public string? locale { get; set; }
@@ -42473,6 +47006,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopLocaleEnablePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///ISO code of the locale that was enabled.
         ///</summary>
@@ -42489,6 +47026,10 @@ namespace ShopifySharp.GraphQL
     public class ShopLocaleUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The locale that was updated.
         ///</summary>
         public ShopLocale? shopLocale { get; set; }
@@ -42503,6 +47044,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopPlan
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The name of the shop's billing plan.
         ///</summary>
@@ -42522,6 +47067,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopPolicy : IHasPublishedTranslations, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The text of the policy. The maximum size is 512kb.
         ///</summary>
@@ -42600,6 +47149,10 @@ namespace ShopifySharp.GraphQL
     public class ShopPolicyUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The shop policy that has been updated.
         ///</summary>
         public ShopPolicy? shopPolicy { get; set; }
@@ -42614,6 +47167,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopPolicyUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -42634,6 +47191,10 @@ namespace ShopifySharp.GraphQL
     public class ShopResourceFeedbackCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The shop feedback that's created.
         ///</summary>
         public AppFeedback? feedback { get; set; }
@@ -42648,6 +47209,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopResourceFeedbackCreateUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -42691,6 +47256,10 @@ namespace ShopifySharp.GraphQL
     public class ShopResourceLimits
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Maximum number of locations allowed.
         ///</summary>
         public int? locationLimit { get; set; }
@@ -42732,6 +47301,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyFunction
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The API type of the Shopify Function.
         ///</summary>
@@ -42780,6 +47353,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyFunctionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ShopifyFunctionEdge[]? edges { get; set; }
@@ -42799,6 +47376,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyFunctionEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -42816,6 +47397,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsAccount : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the Shopify Payments setup is completed.
         ///</summary>
@@ -42898,6 +47483,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsBankAccount : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The account number of the bank account.
         ///</summary>
         public string? accountNumber { get; set; }
@@ -42945,6 +47534,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsBankAccountConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ShopifyPaymentsBankAccountEdge[]? edges { get; set; }
@@ -42963,6 +47556,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsBankAccountEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -43002,6 +47599,10 @@ namespace ShopifySharp.GraphQL
     public interface IShopifyPaymentsChargeStatementDescriptor
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
+        ///<summary>
         ///The default charge statement descriptor.
         ///</summary>
         public string? @default { get; }
@@ -43017,6 +47618,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsDefaultChargeStatementDescriptor : IShopifyPaymentsChargeStatementDescriptor
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The default charge statement descriptor.
         ///</summary>
         public string? @default { get; set; }
@@ -43031,6 +47636,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsDispute : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The total amount disputed by the cardholder.
         ///</summary>
@@ -43083,6 +47692,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsDisputeConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ShopifyPaymentsDisputeEdge[]? edges { get; set; }
@@ -43102,6 +47715,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsDisputeEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -43116,6 +47733,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsDisputeEvidence : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The activity logs associated with the dispute evidence.
         ///</summary>
@@ -43251,6 +47872,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsDisputeFileUpload : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The type of the file for the dispute evidence.
         ///</summary>
         public ShopifyPaymentsDisputeEvidenceFileType? disputeEvidenceType { get; set; }
@@ -43281,6 +47906,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsDisputeFulfillment : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -43364,6 +47993,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsDisputeReasonDetails
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The raw code provided by the payment network.
         ///</summary>
         public string? networkReasonCode { get; set; }
@@ -43378,6 +48011,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsExtendedAuthorization
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The time after which the extended authorization expires. After the expiry, the merchant is unable to capture the payment.
         ///</summary>
@@ -43394,6 +48031,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsFraudSettings
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Decline a charge if there's an AVS failure.
         ///</summary>
         public bool? declineChargeOnAvsFailure { get; set; }
@@ -43408,6 +48049,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsJpChargeStatementDescriptor : IShopifyPaymentsChargeStatementDescriptor
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The default charge statement descriptor.
         ///</summary>
@@ -43432,6 +48077,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsNotificationSettings
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Receive email notifications when new payouts are sent or payouts fail.
         ///</summary>
         public bool? payouts { get; set; }
@@ -43443,6 +48092,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsPayout : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The bank account for the payout.
         ///</summary>
@@ -43488,6 +48141,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsPayoutConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public ShopifyPaymentsPayoutEdge[]? edges { get; set; }
@@ -43506,6 +48163,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsPayoutEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -43544,6 +48205,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsPayoutSchedule
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The interval at which payouts are sent to the connected bank account.
         ///</summary>
@@ -43599,6 +48264,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsPayoutSummary
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Total fees for all adjustments including disputes.
         ///</summary>
@@ -43662,6 +48331,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsRefundSet
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The acquirer reference number (ARN) code generated for Visa/Mastercard transactions.
         ///</summary>
         public string? acquirerReferenceNumber { get; set; }
@@ -43672,6 +48345,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsTransactionSet
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Contains all fields related to an extended authorization.
         ///</summary>
@@ -43688,6 +48365,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsVerification : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -43707,6 +48388,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class ShopifyPaymentsVerificationDocument
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///True if the back side of the document is required.
         ///</summary>
@@ -43765,6 +48450,10 @@ namespace ShopifySharp.GraphQL
     public class ShopifyPaymentsVerificationSubject
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The family name of the individual to verify.
         ///</summary>
         public string? familyName { get; set; }
@@ -43779,6 +48468,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface IShopifyqlResponse
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///A list of parse errors, if parsing fails.
         ///</summary>
@@ -43796,6 +48489,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StaffMember : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Whether the staff member is active.
         ///</summary>
@@ -43856,6 +48553,10 @@ namespace ShopifySharp.GraphQL
     public class StaffMemberConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public StaffMemberEdge[]? edges { get; set; }
@@ -43893,6 +48594,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StaffMemberEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -44004,6 +48709,10 @@ namespace ShopifySharp.GraphQL
     public class StaffMemberPrivateData
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The URL to the staff member's account settings page.
         ///</summary>
         public string? accountSettingsUrl { get; set; }
@@ -44026,6 +48735,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StagedMediaUploadTarget
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Parameters needed to authenticate a request to upload the file.
         ///</summary>
@@ -44072,6 +48785,10 @@ namespace ShopifySharp.GraphQL
     public class StagedUploadParameter
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The parameter's name.
         ///</summary>
         public string? name { get; set; }
@@ -44092,6 +48809,10 @@ namespace ShopifySharp.GraphQL
     public class StagedUploadTarget
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The parameters of an image to be uploaded.
         ///</summary>
         public ImageUploadParameter[]? parameters { get; set; }
@@ -44106,6 +48827,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StagedUploadTargetGeneratePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The signed parameters that can be used to upload the asset.
         ///</summary>
@@ -44212,6 +48937,10 @@ namespace ShopifySharp.GraphQL
     public class StagedUploadTargetsGeneratePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The staged upload targets that were generated.
         ///</summary>
         public StagedUploadTarget[]? urls { get; set; }
@@ -44226,6 +48955,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StagedUploadsCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The staged upload targets that were generated.
         ///</summary>
@@ -44242,6 +48975,10 @@ namespace ShopifySharp.GraphQL
     public class StandardMetafieldDefinitionEnablePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The metafield definition that was created.
         ///</summary>
         public MetafieldDefinition? createdDefinition { get; set; }
@@ -44256,6 +48993,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StandardMetafieldDefinitionEnableUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -44310,6 +49051,10 @@ namespace ShopifySharp.GraphQL
     public class StandardMetafieldDefinitionTemplate : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The description of the standard metafield definition.
         ///</summary>
         public string? description { get; set; }
@@ -44353,6 +49098,10 @@ namespace ShopifySharp.GraphQL
     public class StandardMetafieldDefinitionTemplateConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public StandardMetafieldDefinitionTemplateEdge[]? edges { get; set; }
@@ -44372,6 +49121,10 @@ namespace ShopifySharp.GraphQL
     public class StandardMetafieldDefinitionTemplateEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -44386,6 +49139,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StandardMetaobjectDefinitionEnablePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The metaobject definition that was enabled using the standard template.
         ///</summary>
@@ -44402,6 +49159,10 @@ namespace ShopifySharp.GraphQL
     public class StandardizedProductType
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The product taxonomy node associated with the standardized product type.
         ///</summary>
         public ProductTaxonomyNode? productTaxonomyNode { get; set; }
@@ -44414,6 +49175,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StorefrontAccessToken : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///List of permissions associated with the token.
         ///</summary>
@@ -44446,6 +49211,10 @@ namespace ShopifySharp.GraphQL
     public class StorefrontAccessTokenConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public StorefrontAccessTokenEdge[]? edges { get; set; }
@@ -44464,6 +49233,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StorefrontAccessTokenCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The user's shop.
         ///</summary>
@@ -44484,6 +49257,10 @@ namespace ShopifySharp.GraphQL
     public class StorefrontAccessTokenDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted storefront access token.
         ///</summary>
         public string? deletedStorefrontAccessTokenId { get; set; }
@@ -44498,6 +49275,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class StorefrontAccessTokenEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -44514,6 +49295,10 @@ namespace ShopifySharp.GraphQL
     public class StringConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public StringEdge[]? edges { get; set; }
@@ -44529,6 +49314,10 @@ namespace ShopifySharp.GraphQL
     public class StringEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -44543,6 +49332,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionAppliedCodeDiscount : ISubscriptionDiscount
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The unique ID.
         ///</summary>
@@ -44564,6 +49357,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingAttempt : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The date and time when the billing attempt was completed.
         ///</summary>
@@ -44618,6 +49415,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingAttemptConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SubscriptionBillingAttemptEdge[]? edges { get; set; }
@@ -44637,6 +49438,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingAttemptCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The subscription billing attempt.
         ///</summary>
         public SubscriptionBillingAttempt? subscriptionBillingAttempt { get; set; }
@@ -44651,6 +49456,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingAttemptEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -44767,6 +49576,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingCycle
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The date on which the billing attempt is expected to be made.
         ///</summary>
         public DateTime? billingAttemptExpectedDate { get; set; }
@@ -44829,6 +49642,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingCycleConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SubscriptionBillingCycleEdge[]? edges { get; set; }
@@ -44848,6 +49665,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingCycleContractDraftCommitPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The committed Subscription Billing Cycle Edited Contract object.
         ///</summary>
         public SubscriptionBillingCycleEditedContract? contract { get; set; }
@@ -44862,6 +49683,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingCycleContractDraftConcatenatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The Subscription Draft object.
         ///</summary>
@@ -44878,6 +49703,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingCycleContractEditPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The draft subscription contract object.
         ///</summary>
         public SubscriptionDraft? draft { get; set; }
@@ -44892,6 +49721,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingCycleEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -44908,6 +49741,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingCycleEditDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of updated billing cycles.
         ///</summary>
         public SubscriptionBillingCycle[]? billingCycles { get; set; }
@@ -44922,6 +49759,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingCycleEditedContract : ISubscriptionContractBase
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The subscription app that the subscription contract is registered to.
         ///</summary>
@@ -44993,6 +49834,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingCycleEditsDeletePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of updated billing cycles.
         ///</summary>
@@ -45083,6 +49928,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingCycleScheduleEditPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated billing cycle.
         ///</summary>
         public SubscriptionBillingCycle? billingCycle { get; set; }
@@ -45097,6 +49946,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionBillingCycleUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -45148,6 +50001,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionBillingPolicy
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Specific anchor dates upon which the billing interval calculations should be made.
         ///</summary>
         public SellingPlanAnchor[]? anchors { get; set; }
@@ -45174,6 +50031,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionContract : INode, ISubscriptionContractBase
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The subscription app that the subscription contract is registered to.
         ///</summary>
@@ -45278,6 +50139,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionContractAtomicCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The new Subscription Contract object.
         ///</summary>
         public SubscriptionContract? contract { get; set; }
@@ -45292,6 +50157,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public interface ISubscriptionContractBase
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; }
         ///<summary>
         ///The subscription app that the subscription contract is registered to.
         ///</summary>
@@ -45356,6 +50225,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionContractConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SubscriptionContractEdge[]? edges { get; set; }
@@ -45375,6 +50248,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionContractCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The Subscription Contract object.
         ///</summary>
         public SubscriptionDraft? draft { get; set; }
@@ -45389,6 +50266,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionContractEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -45431,6 +50312,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionContractProductChangePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The new Subscription Contract object.
         ///</summary>
         public SubscriptionContract? contract { get; set; }
@@ -45449,6 +50334,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionContractSetNextBillingDatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated Subscription Contract object.
         ///</summary>
@@ -45496,6 +50385,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionContractUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The Subscription Contract object.
         ///</summary>
         public SubscriptionDraft? draft { get; set; }
@@ -45510,6 +50403,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionContractUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -45529,6 +50426,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionCyclePriceAdjustment
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Price adjustment type.
         ///</summary>
@@ -45559,13 +50460,22 @@ namespace ShopifySharp.GraphQL
         public SubscriptionDeliveryMethodLocalDelivery? AsSubscriptionDeliveryMethodLocalDelivery() => this as SubscriptionDeliveryMethodLocalDelivery;
         public SubscriptionDeliveryMethodPickup? AsSubscriptionDeliveryMethodPickup() => this as SubscriptionDeliveryMethodPickup;
         public SubscriptionDeliveryMethodShipping? AsSubscriptionDeliveryMethodShipping() => this as SubscriptionDeliveryMethodShipping;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
-    ///A local delivery method, which includes a mailing address and a local delivery option.
+    ///A subscription delivery method for local delivery.
+    ///The other subscription delivery methods can be found in the `SubscriptionDeliveryMethod` union type.
     ///</summary>
     public class SubscriptionDeliveryMethodLocalDelivery : ISubscriptionDeliveryMethod
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The address to deliver to.
         ///</summary>
@@ -45581,6 +50491,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDeliveryMethodLocalDeliveryOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A custom reference to the delivery method for use with automations.
         ///</summary>
@@ -45614,6 +50528,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDeliveryMethodPickup : ISubscriptionDeliveryMethod
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The details of the pickup delivery method to use.
         ///</summary>
         public SubscriptionDeliveryMethodPickupOption? pickupOption { get; set; }
@@ -45624,6 +50542,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDeliveryMethodPickupOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A custom reference to the delivery method for use with automations.
         ///</summary>
@@ -45652,6 +50574,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDeliveryMethodShipping : ISubscriptionDeliveryMethod
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The address to ship to.
         ///</summary>
         public SubscriptionMailingAddress? address { get; set; }
@@ -45666,6 +50592,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDeliveryMethodShippingOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The carrier service that's providing this shipping option.
         ///This field isn't currently supported and returns null.
@@ -45702,6 +50632,10 @@ namespace ShopifySharp.GraphQL
         public SubscriptionPickupOption? AsSubscriptionPickupOption() => this as SubscriptionPickupOption;
         public SubscriptionShippingOption? AsSubscriptionShippingOption() => this as SubscriptionShippingOption;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The code of the local delivery option.
         ///</summary>
         public string? code { get; set; }
@@ -45737,6 +50671,10 @@ namespace ShopifySharp.GraphQL
     {
         public SubscriptionDeliveryOptionResultFailure? AsSubscriptionDeliveryOptionResultFailure() => this as SubscriptionDeliveryOptionResultFailure;
         public SubscriptionDeliveryOptionResultSuccess? AsSubscriptionDeliveryOptionResultSuccess() => this as SubscriptionDeliveryOptionResultSuccess;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -45744,6 +50682,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDeliveryOptionResultFailure : ISubscriptionDeliveryOptionResult
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The reason for the failure.
         ///</summary>
@@ -45756,6 +50698,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDeliveryOptionResultSuccess : ISubscriptionDeliveryOptionResult
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The available delivery options.
         ///</summary>
         public ISubscriptionDeliveryOption[]? deliveryOptions { get; set; }
@@ -45766,6 +50712,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDeliveryPolicy
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
@@ -45791,6 +50741,10 @@ namespace ShopifySharp.GraphQL
         public SubscriptionAppliedCodeDiscount? AsSubscriptionAppliedCodeDiscount() => this as SubscriptionAppliedCodeDiscount;
         public SubscriptionManualDiscount? AsSubscriptionManualDiscount() => this as SubscriptionManualDiscount;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -45806,6 +50760,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDiscountAllocation
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Allocation amount.
         ///</summary>
         public MoneyV2? amount { get; set; }
@@ -45820,6 +50778,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDiscountConnection
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A list of edges.
         ///</summary>
@@ -45840,6 +50802,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDiscountEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -45854,6 +50820,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDiscountEntitledLines
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Specify whether the subscription discount will apply on all subscription lines.
         ///</summary>
@@ -45870,6 +50840,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDiscountFixedAmountValue : ISubscriptionDiscountValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The fixed amount value of the discount.
         ///</summary>
         public MoneyV2? amount { get; set; }
@@ -45884,6 +50858,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDiscountPercentageValue : ISubscriptionDiscountValue
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The percentage value of the discount.
         ///</summary>
@@ -45951,6 +50929,10 @@ namespace ShopifySharp.GraphQL
     {
         public SubscriptionDiscountFixedAmountValue? AsSubscriptionDiscountFixedAmountValue() => this as SubscriptionDiscountFixedAmountValue;
         public SubscriptionDiscountPercentageValue? AsSubscriptionDiscountPercentageValue() => this as SubscriptionDiscountPercentageValue;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -45958,6 +50940,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDraft : INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The billing cycle that the subscription contract will be associated with.
         ///</summary>
@@ -46062,6 +51048,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftCommitPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The updated Subscription Contract object.
         ///</summary>
         public SubscriptionContract? contract { get; set; }
@@ -46076,6 +51066,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDraftDiscountAddPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The added Subscription Discount.
         ///</summary>
@@ -46096,6 +51090,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftDiscountCodeApplyPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The added subscription discount.
         ///</summary>
         public SubscriptionAppliedCodeDiscount? appliedDiscount { get; set; }
@@ -46115,6 +51113,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftDiscountRemovePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The removed subscription draft discount.
         ///</summary>
         public ISubscriptionDiscount? discountRemoved { get; set; }
@@ -46133,6 +51135,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDraftDiscountUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated Subscription Discount.
         ///</summary>
@@ -46320,6 +51326,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftFreeShippingDiscountAddPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The added subscription free shipping discount.
         ///</summary>
         public SubscriptionManualDiscount? discountAdded { get; set; }
@@ -46338,6 +51348,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDraftFreeShippingDiscountUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated Subscription Discount.
         ///</summary>
@@ -46358,6 +51372,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftLineAddPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The Subscription Contract draft object.
         ///</summary>
         public SubscriptionDraft? draft { get; set; }
@@ -46376,6 +51394,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDraftLineRemovePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of updated subscription discounts impacted by the removed line.
         ///</summary>
@@ -46400,6 +51422,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftLineUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The Subscription Contract draft object.
         ///</summary>
         public SubscriptionDraft? draft { get; set; }
@@ -46419,6 +51445,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionDraftUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The Subscription Draft object.
         ///</summary>
         public SubscriptionDraft? draft { get; set; }
@@ -46433,6 +51463,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionDraftUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -46452,6 +51486,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionLine
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The price per unit for the subscription line in the contract's currency.
         ///</summary>
@@ -46542,6 +51580,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionLineConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SubscriptionLineEdge[]? edges { get; set; }
@@ -46561,6 +51603,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionLineEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -46575,6 +51621,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionLocalDeliveryOption : ISubscriptionDeliveryOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The code of the local delivery option.
         ///</summary>
@@ -46606,6 +51656,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionMailingAddress
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The first line of the address. Typically the street address or PO Box number.
         ///</summary>
@@ -46670,6 +51724,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionManualDiscount : ISubscriptionDiscount
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Entitled line items used to apply the subscription discount on.
         ///</summary>
         public SubscriptionDiscountEntitledLines? entitledLines { get; set; }
@@ -46713,6 +51771,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionManualDiscountConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public SubscriptionManualDiscountEdge[]? edges { get; set; }
@@ -46732,6 +51794,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionManualDiscountEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -46746,6 +51812,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionPickupOption : ISubscriptionDeliveryOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The code of the pickup option.
         ///</summary>
@@ -46786,6 +51856,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionPricingPolicy
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The base price per unit for the subscription line in the contract's currency.
         ///</summary>
         public MoneyV2? basePrice { get; set; }
@@ -46800,6 +51874,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionShippingOption : ISubscriptionDeliveryOption
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The carrier service that's providing this shipping option.
         ///This field isn't currently supported and returns null.
@@ -46841,6 +51919,10 @@ namespace ShopifySharp.GraphQL
     {
         public SubscriptionShippingOptionResultFailure? AsSubscriptionShippingOptionResultFailure() => this as SubscriptionShippingOptionResultFailure;
         public SubscriptionShippingOptionResultSuccess? AsSubscriptionShippingOptionResultSuccess() => this as SubscriptionShippingOptionResultSuccess;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -46848,6 +51930,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SubscriptionShippingOptionResultFailure : ISubscriptionShippingOptionResult
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///Failure reason.
         ///</summary>
@@ -46860,6 +51946,10 @@ namespace ShopifySharp.GraphQL
     public class SubscriptionShippingOptionResultSuccess : ISubscriptionShippingOptionResult
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Available shipping options.
         ///</summary>
         public SubscriptionShippingOption[]? shippingOptions { get; set; }
@@ -46871,6 +51961,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SuggestedOrderTransaction
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The masked account number associated with the payment method.
         ///</summary>
@@ -46925,6 +52019,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class SuggestedRefund
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The total monetary value to be refunded.
         ///</summary>
@@ -46993,6 +52091,10 @@ namespace ShopifySharp.GraphQL
     public class SuggestedReturnRefund
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The total monetary value to be refunded in shop and presentment currencies.
         ///</summary>
         public MoneyBag? amount { get; set; }
@@ -47040,6 +52142,10 @@ namespace ShopifySharp.GraphQL
     public class TableData
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The data table columns.
         ///</summary>
         public TableDataColumn[]? columns { get; set; }
@@ -47058,6 +52164,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TableDataColumn
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///For comparison columns, indicates the column to compare to.
         ///</summary>
@@ -47082,6 +52192,10 @@ namespace ShopifySharp.GraphQL
     public class TableResponse : IShopifyqlResponse
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of parse errors, if parsing fails.
         ///</summary>
         public ParseError[]? parseErrors { get; set; }
@@ -47096,6 +52210,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TagsAddPayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The object that was updated.
         ///</summary>
@@ -47112,6 +52230,10 @@ namespace ShopifySharp.GraphQL
     public class TagsRemovePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The object that was updated.
         ///</summary>
         public INode? node { get; set; }
@@ -47127,6 +52249,10 @@ namespace ShopifySharp.GraphQL
     public class TaxAppConfiguration
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///State of the tax app configuration.
         ///</summary>
         public TaxPartnerState? state { get; set; }
@@ -47137,6 +52263,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TaxAppConfigurePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The updated tax app configuration.
         ///</summary>
@@ -47152,6 +52282,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TaxAppConfigureUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -47486,6 +52620,10 @@ namespace ShopifySharp.GraphQL
     public class TaxLine
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the channel that submitted the tax line is liable for remitting. A value of null indicates unknown liability for this tax line.
         ///</summary>
         public bool? channelLiable { get; set; }
@@ -47538,6 +52676,10 @@ namespace ShopifySharp.GraphQL
     public class TenderTransaction : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The amount and currency of the tender transaction.
         ///</summary>
         public MoneyV2? amount { get; set; }
@@ -47577,6 +52719,10 @@ namespace ShopifySharp.GraphQL
     public class TenderTransactionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public TenderTransactionEdge[]? edges { get; set; }
@@ -47596,6 +52742,10 @@ namespace ShopifySharp.GraphQL
     public class TenderTransactionCreditCardDetails : ITenderTransactionDetails
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the company that issued the customer's credit card. Example: `Visa`.
         ///</summary>
         public string? creditCardCompany { get; set; }
@@ -47614,6 +52764,10 @@ namespace ShopifySharp.GraphQL
     {
         public TenderTransactionCreditCardDetails? AsTenderTransactionCreditCardDetails() => this as TenderTransactionCreditCardDetails;
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The name of the company that issued the customer's credit card. Example: `Visa`.
         ///</summary>
         public string? creditCardCompany { get; set; }
@@ -47629,6 +52783,10 @@ namespace ShopifySharp.GraphQL
     public class TenderTransactionEdge
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
         public string? cursor { get; set; }
@@ -47643,6 +52801,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TipSale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -47691,6 +52853,10 @@ namespace ShopifySharp.GraphQL
     public class TransactionFee : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Amount of the fee.
         ///</summary>
         public MoneyV2? amount { get; set; }
@@ -47730,6 +52896,10 @@ namespace ShopifySharp.GraphQL
     public class TranslatableContent
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Hash digest representation of the content value.
         ///</summary>
         public string? digest { get; set; }
@@ -47757,6 +52927,10 @@ namespace ShopifySharp.GraphQL
     public class TranslatableResource
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///GID of the resource.
         ///</summary>
         public string? resourceId { get; set; }
@@ -47776,6 +52950,10 @@ namespace ShopifySharp.GraphQL
     public class TranslatableResourceConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public TranslatableResourceEdge[]? edges { get; set; }
@@ -47794,6 +52972,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TranslatableResourceEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -47902,6 +53084,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Translation
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///On the resource that this translation belongs to, the reference to the value being translated.
         ///</summary>
@@ -48013,6 +53199,10 @@ namespace ShopifySharp.GraphQL
     public class TranslationUserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The error code.
         ///</summary>
         public TranslationErrorCode? code { get; set; }
@@ -48032,6 +53222,10 @@ namespace ShopifySharp.GraphQL
     public class TranslationsRegisterPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The translations that were created or updated.
         ///</summary>
         public Translation[]? translations { get; set; }
@@ -48046,6 +53240,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class TranslationsRemovePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The translations that were deleted.
         ///</summary>
@@ -48062,6 +53260,10 @@ namespace ShopifySharp.GraphQL
     public class TypedAttribute
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Key or name of the attribute.
         ///</summary>
         public string? key { get; set; }
@@ -48076,6 +53278,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UTMParameters
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The name of a marketing campaign.
         ///</summary>
@@ -48118,6 +53324,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UnknownSale : ISale
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -48162,6 +53372,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirect : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the URL redirect.
         ///</summary>
         public string? id { get; set; }
@@ -48181,6 +53395,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectBulkDeleteAllPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job removing the redirects.
         ///</summary>
         public Job? job { get; set; }
@@ -48196,6 +53414,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectBulkDeleteByIdsPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job removing the redirects.
         ///</summary>
         public Job? job { get; set; }
@@ -48210,6 +53432,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UrlRedirectBulkDeleteByIdsUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -48243,6 +53469,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectBulkDeleteBySavedSearchPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job removing the redirects.
         ///</summary>
         public Job? job { get; set; }
@@ -48257,6 +53487,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UrlRedirectBulkDeleteBySavedSearchUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -48292,6 +53526,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectBulkDeleteBySearchPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job removing the redirects.
         ///</summary>
         public Job? job { get; set; }
@@ -48306,6 +53544,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UrlRedirectBulkDeleteBySearchUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -48337,6 +53579,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public UrlRedirectEdge[]? edges { get; set; }
@@ -48356,6 +53602,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created redirect.
         ///</summary>
         public UrlRedirect? urlRedirect { get; set; }
@@ -48371,6 +53621,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted redirect.
         ///</summary>
         public string? deletedUrlRedirectId { get; set; }
@@ -48385,6 +53639,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UrlRedirectEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -48427,6 +53685,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectImport : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The number of rows in the file.
         ///</summary>
         public int? count { get; set; }
@@ -48466,6 +53728,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectImportCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The created `URLRedirectImport` object.
         ///</summary>
         public UrlRedirectImport? urlRedirectImport { get; set; }
@@ -48504,6 +53770,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectImportPreview
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The old path to be redirected from. When the user visits this path, they will be redirected to the target location.
         ///</summary>
         public string? path { get; set; }
@@ -48519,6 +53789,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectImportSubmitPayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The asynchronous job importing the redirects.
         ///</summary>
         public Job? job { get; set; }
@@ -48533,6 +53807,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UrlRedirectImportUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -48573,6 +53851,10 @@ namespace ShopifySharp.GraphQL
     public class UrlRedirectUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Returns the updated URL redirect.
         ///</summary>
         public UrlRedirect? urlRedirect { get; set; }
@@ -48587,6 +53869,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class UrlRedirectUserError : IDisplayableError
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The error code.
         ///</summary>
@@ -48607,6 +53893,10 @@ namespace ShopifySharp.GraphQL
     public class UserError : IDisplayableError
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
         public string[]? field { get; set; }
@@ -48621,6 +53911,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class VaultCreditCard : IPaymentInstrument
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The billing address of the card.
         ///</summary>
@@ -48657,6 +53951,10 @@ namespace ShopifySharp.GraphQL
     public class VaultPaypalBillingAgreement : IPaymentInstrument
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///Whether the paypal billing agreement is inactive.
         ///</summary>
         public bool? inactive { get; set; }
@@ -48678,6 +53976,10 @@ namespace ShopifySharp.GraphQL
     public class Vector3
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The x coordinate of Vector3.
         ///</summary>
         public float? x { get; set; }
@@ -48696,6 +53998,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Video : IFile, IMedia, INode, IMetafieldReference
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A word or phrase to share the nature or contents of a media.
         ///</summary>
@@ -48773,6 +54079,10 @@ namespace ShopifySharp.GraphQL
     public class VideoSource
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The video source's file size in bytes.
         ///</summary>
         public int? fileSize { get; set; }
@@ -48819,6 +54129,10 @@ namespace ShopifySharp.GraphQL
     public class WebPixel : INode
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
@@ -48833,6 +54147,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class WebPixelCreatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
@@ -48849,6 +54167,10 @@ namespace ShopifySharp.GraphQL
     public class WebPixelDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the web pixel settings that was deleted.
         ///</summary>
         public string? deletedWebPixelId { get; set; }
@@ -48863,6 +54185,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class WebPixelUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
@@ -48879,6 +54205,10 @@ namespace ShopifySharp.GraphQL
     public class WebhookEventBridgeEndpoint : IWebhookSubscriptionEndpoint
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ARN of this EventBridge partner event source.
         ///</summary>
         public string? arn { get; set; }
@@ -48890,6 +54220,10 @@ namespace ShopifySharp.GraphQL
     public class WebhookHttpEndpoint : IWebhookSubscriptionEndpoint
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The URL to which the webhooks events are sent.
         ///</summary>
         public string? callbackUrl { get; set; }
@@ -48900,6 +54234,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class WebhookPubSubEndpoint : IWebhookSubscriptionEndpoint
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The Google Cloud Pub/Sub project ID.
         ///</summary>
@@ -48918,6 +54256,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class WebhookSubscription : ILegacyInteroperability, INode
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The Admin API version that Shopify uses to serialize webhook events. This value is inherited from the app that created the webhook subscription.
         ///</summary>
@@ -48974,6 +54316,10 @@ namespace ShopifySharp.GraphQL
     public class WebhookSubscriptionConnection
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A list of edges.
         ///</summary>
         public WebhookSubscriptionEdge[]? edges { get; set; }
@@ -48993,6 +54339,10 @@ namespace ShopifySharp.GraphQL
     public class WebhookSubscriptionCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -49008,6 +54358,10 @@ namespace ShopifySharp.GraphQL
     public class WebhookSubscriptionDeletePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The ID of the deleted webhook subscription.
         ///</summary>
         public string? deletedWebhookSubscriptionId { get; set; }
@@ -49022,6 +54376,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class WebhookSubscriptionEdge
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///A cursor for use in pagination.
         ///</summary>
@@ -49044,6 +54402,10 @@ namespace ShopifySharp.GraphQL
         public WebhookEventBridgeEndpoint? AsWebhookEventBridgeEndpoint() => this as WebhookEventBridgeEndpoint;
         public WebhookHttpEndpoint? AsWebhookHttpEndpoint() => this as WebhookHttpEndpoint;
         public WebhookPubSubEndpoint? AsWebhookPubSubEndpoint() => this as WebhookPubSubEndpoint;
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
     }
 
     ///<summary>
@@ -49758,6 +55120,10 @@ namespace ShopifySharp.GraphQL
     public class WebhookSubscriptionUpdatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public UserError[]? userErrors { get; set; }
@@ -49772,6 +55138,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class Weight : IDeliveryConditionCriteria
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The unit of measurement for `value`.
         ///</summary>
@@ -49812,6 +55182,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class __Directive
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         public __InputValue[]? args { get; set; }
         public string? description { get; set; }
         public bool? isRepeatable { get; set; }
@@ -49910,6 +55284,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class __EnumValue
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         public string? deprecationReason { get; set; }
         public string? description { get; set; }
         public bool? isDeprecated { get; set; }
@@ -49922,6 +55300,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class __Field
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         public bool? accessRestricted { get; set; }
         public string? accessRestrictedReason { get; set; }
         public __InputValue[]? args { get; set; }
@@ -49943,6 +55325,10 @@ namespace ShopifySharp.GraphQL
     public class __InputValue
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///A GraphQL-formatted string representing the default value for this input value.
         ///</summary>
         public string? defaultValue { get; set; }
@@ -49959,6 +55345,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class __Schema
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         public string? description { get; set; }
         ///<summary>
         ///A list of all directives supported by this server.
@@ -49989,6 +55379,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class __Type
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         public bool? accessRestricted { get; set; }
         public string? accessRestrictedReason { get; set; }
         public string? componentName { get; set; }
@@ -50054,6 +55448,10 @@ namespace ShopifySharp.GraphQL
     public class deliveryProfileCreatePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The delivery profile that was created.
         ///</summary>
         public DeliveryProfile? profile { get; set; }
@@ -50069,6 +55467,10 @@ namespace ShopifySharp.GraphQL
     public class deliveryProfileRemovePayload
     {
         ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
+        ///<summary>
         ///The delivery profile deletion job triggered by the mutation.
         ///</summary>
         public Job? job { get; set; }
@@ -50083,6 +55485,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class deliveryProfileUpdatePayload
     {
+        ///<summary>
+        ///the name of the object type
+        ///</summary>
+        public string? __typename { get; set; }
         ///<summary>
         ///The delivery profile that was updated.
         ///</summary>
