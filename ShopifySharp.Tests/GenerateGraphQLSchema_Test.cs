@@ -14,7 +14,7 @@ namespace ShopifySharp.Tests
     [Trait("Category", "GraphQL")]
     public class GenerateGraphQLSchema_Test
     {
-        [Fact/*(Skip = "This test should be run manually to re-generate the GraphQL types whenever the API version is upgraded")*/]
+        [Fact(Skip = "This test should be run manually to re-generate the GraphQL types whenever the API version is upgraded")]
         public async Task GenerateGraphQLTypes()
         {
             var scalarNameToTypeName = new Dictionary<string, string>
