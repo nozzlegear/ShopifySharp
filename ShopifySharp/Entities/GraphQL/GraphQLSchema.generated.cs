@@ -1057,8 +1057,11 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Services and features purchased once by the store.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AppPurchaseOneTime), typeDiscriminator: "AppPurchaseOneTime")]
     public interface IAppPurchase
     {
+        public AppPurchaseOneTime? AsAppPurchaseOneTime() => this as AppPurchaseOneTime;
         ///<summary>
         ///The date and time when the app purchase occurred.
         ///</summary>
@@ -2593,8 +2596,17 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///A [discount application](https://shopify.dev/api/admin-graphql/latest/interfaces/discountapplication) involved in order editing that might be newly added or have new changes applied.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(CalculatedAutomaticDiscountApplication), typeDiscriminator: "CalculatedAutomaticDiscountApplication")]
+    [JsonDerivedType(typeof(CalculatedDiscountCodeApplication), typeDiscriminator: "CalculatedDiscountCodeApplication")]
+    [JsonDerivedType(typeof(CalculatedManualDiscountApplication), typeDiscriminator: "CalculatedManualDiscountApplication")]
+    [JsonDerivedType(typeof(CalculatedScriptDiscountApplication), typeDiscriminator: "CalculatedScriptDiscountApplication")]
     public interface ICalculatedDiscountApplication
     {
+        public CalculatedAutomaticDiscountApplication? AsCalculatedAutomaticDiscountApplication() => this as CalculatedAutomaticDiscountApplication;
+        public CalculatedDiscountCodeApplication? AsCalculatedDiscountCodeApplication() => this as CalculatedDiscountCodeApplication;
+        public CalculatedManualDiscountApplication? AsCalculatedManualDiscountApplication() => this as CalculatedManualDiscountApplication;
+        public CalculatedScriptDiscountApplication? AsCalculatedScriptDiscountApplication() => this as CalculatedScriptDiscountApplication;
         ///<summary>
         ///The method by which the discount's value is allocated to its entitled items.
         ///</summary>
@@ -3408,6 +3420,10 @@ namespace ShopifySharp.GraphQL
     ///A list of products with publishing and pricing information.
     ///A catalog can be associated with a specific context, such as a [`Market`](https://shopify.dev/api/admin-graphql/current/objects/market), [`CompanyLocation`](https://shopify.dev/api/admin-graphql/current/objects/companylocation), or [`App`](https://shopify.dev/api/admin-graphql/current/objects/app).
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AppCatalog), typeDiscriminator: "AppCatalog")]
+    [JsonDerivedType(typeof(CompanyLocationCatalog), typeDiscriminator: "CompanyLocationCatalog")]
+    [JsonDerivedType(typeof(MarketCatalog), typeDiscriminator: "MarketCatalog")]
     public interface ICatalog : INode
     {
         ///<summary>
@@ -4947,8 +4963,21 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///The subject line of a comment event.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+    [JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+    [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
+    [JsonDerivedType(typeof(PriceRule), typeDiscriminator: "PriceRule")]
     public interface ICommentEventSubject
     {
+        public Company? AsCompany() => this as Company;
+        public CompanyLocation? AsCompanyLocation() => this as CompanyLocation;
+        public Customer? AsCustomer() => this as Customer;
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public Order? AsOrder() => this as Order;
+        public PriceRule? AsPriceRule() => this as PriceRule;
         ///<summary>
         ///Whether the timeline subject has a timeline comment. If true, then a timeline comment exists.
         ///</summary>
@@ -9084,8 +9113,11 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents a session preceding an order, often used for building a timeline of events leading to an order.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(CustomerVisit), typeDiscriminator: "CustomerVisit")]
     public interface ICustomerMoment
     {
+        public CustomerVisit? AsCustomerVisit() => this as CustomerVisit;
         ///<summary>
         ///The date and time when the customer's session occurred.
         ///</summary>
@@ -11893,8 +11925,17 @@ namespace ShopifySharp.GraphQL
     ///
     ///Discount applications don't represent the actual final amount discounted on a line (line item or shipping line). The actual amount discounted on a line is represented by the [DiscountAllocation](https://shopify.dev/api/admin-graphql/latest/objects/discountallocation) object.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AutomaticDiscountApplication), typeDiscriminator: "AutomaticDiscountApplication")]
+    [JsonDerivedType(typeof(DiscountCodeApplication), typeDiscriminator: "DiscountCodeApplication")]
+    [JsonDerivedType(typeof(ManualDiscountApplication), typeDiscriminator: "ManualDiscountApplication")]
+    [JsonDerivedType(typeof(ScriptDiscountApplication), typeDiscriminator: "ScriptDiscountApplication")]
     public interface IDiscountApplication
     {
+        public AutomaticDiscountApplication? AsAutomaticDiscountApplication() => this as AutomaticDiscountApplication;
+        public DiscountCodeApplication? AsDiscountCodeApplication() => this as DiscountCodeApplication;
+        public ManualDiscountApplication? AsManualDiscountApplication() => this as ManualDiscountApplication;
+        public ScriptDiscountApplication? AsScriptDiscountApplication() => this as ScriptDiscountApplication;
         ///<summary>
         ///The method by which the discount's value is applied to its entitled items.
         ///</summary>
@@ -14160,8 +14201,214 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents an error in the input of a mutation.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AbandonmentEmailStateUpdateUserError), typeDiscriminator: "AbandonmentEmailStateUpdateUserError")]
+    [JsonDerivedType(typeof(AbandonmentUpdateActivitiesDeliveryStatusesUserError), typeDiscriminator: "AbandonmentUpdateActivitiesDeliveryStatusesUserError")]
+    [JsonDerivedType(typeof(AppRevenueAttributionRecordCreateUserError), typeDiscriminator: "AppRevenueAttributionRecordCreateUserError")]
+    [JsonDerivedType(typeof(AppRevenueAttributionRecordDeleteUserError), typeDiscriminator: "AppRevenueAttributionRecordDeleteUserError")]
+    [JsonDerivedType(typeof(AppSubscriptionTrialExtendUserError), typeDiscriminator: "AppSubscriptionTrialExtendUserError")]
+    [JsonDerivedType(typeof(BillingAttemptUserError), typeDiscriminator: "BillingAttemptUserError")]
+    [JsonDerivedType(typeof(BulkMutationUserError), typeDiscriminator: "BulkMutationUserError")]
+    [JsonDerivedType(typeof(BulkProductResourceFeedbackCreateUserError), typeDiscriminator: "BulkProductResourceFeedbackCreateUserError")]
+    [JsonDerivedType(typeof(BusinessCustomerUserError), typeDiscriminator: "BusinessCustomerUserError")]
+    [JsonDerivedType(typeof(CartTransformCreateUserError), typeDiscriminator: "CartTransformCreateUserError")]
+    [JsonDerivedType(typeof(CartTransformDeleteUserError), typeDiscriminator: "CartTransformDeleteUserError")]
+    [JsonDerivedType(typeof(CatalogUserError), typeDiscriminator: "CatalogUserError")]
+    [JsonDerivedType(typeof(CollectionAddProductsV2UserError), typeDiscriminator: "CollectionAddProductsV2UserError")]
+    [JsonDerivedType(typeof(CustomerEmailMarketingConsentUpdateUserError), typeDiscriminator: "CustomerEmailMarketingConsentUpdateUserError")]
+    [JsonDerivedType(typeof(CustomerMergeUserError), typeDiscriminator: "CustomerMergeUserError")]
+    [JsonDerivedType(typeof(CustomerPaymentMethodCreateFromDuplicationDataUserError), typeDiscriminator: "CustomerPaymentMethodCreateFromDuplicationDataUserError")]
+    [JsonDerivedType(typeof(CustomerPaymentMethodGetDuplicationDataUserError), typeDiscriminator: "CustomerPaymentMethodGetDuplicationDataUserError")]
+    [JsonDerivedType(typeof(CustomerPaymentMethodGetUpdateUrlUserError), typeDiscriminator: "CustomerPaymentMethodGetUpdateUrlUserError")]
+    [JsonDerivedType(typeof(CustomerPaymentMethodRemoteUserError), typeDiscriminator: "CustomerPaymentMethodRemoteUserError")]
+    [JsonDerivedType(typeof(CustomerPaymentMethodUserError), typeDiscriminator: "CustomerPaymentMethodUserError")]
+    [JsonDerivedType(typeof(CustomerSegmentMembersQueryUserError), typeDiscriminator: "CustomerSegmentMembersQueryUserError")]
+    [JsonDerivedType(typeof(CustomerSmsMarketingConsentError), typeDiscriminator: "CustomerSmsMarketingConsentError")]
+    [JsonDerivedType(typeof(DelegateAccessTokenCreateUserError), typeDiscriminator: "DelegateAccessTokenCreateUserError")]
+    [JsonDerivedType(typeof(DelegateAccessTokenDestroyUserError), typeDiscriminator: "DelegateAccessTokenDestroyUserError")]
+    [JsonDerivedType(typeof(DeliveryCustomizationError), typeDiscriminator: "DeliveryCustomizationError")]
+    [JsonDerivedType(typeof(DeliveryLocationLocalPickupSettingsError), typeDiscriminator: "DeliveryLocationLocalPickupSettingsError")]
+    [JsonDerivedType(typeof(DiscountUserError), typeDiscriminator: "DiscountUserError")]
+    [JsonDerivedType(typeof(DisputeEvidenceUpdateUserError), typeDiscriminator: "DisputeEvidenceUpdateUserError")]
+    [JsonDerivedType(typeof(ErrorsServerPixelUserError), typeDiscriminator: "ErrorsServerPixelUserError")]
+    [JsonDerivedType(typeof(ErrorsWebPixelUserError), typeDiscriminator: "ErrorsWebPixelUserError")]
+    [JsonDerivedType(typeof(FilesUserError), typeDiscriminator: "FilesUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrderHoldUserError), typeDiscriminator: "FulfillmentOrderHoldUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrderLineItemsPreparedForPickupUserError), typeDiscriminator: "FulfillmentOrderLineItemsPreparedForPickupUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrderMergeUserError), typeDiscriminator: "FulfillmentOrderMergeUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrderReleaseHoldUserError), typeDiscriminator: "FulfillmentOrderReleaseHoldUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrderRescheduleUserError), typeDiscriminator: "FulfillmentOrderRescheduleUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrderSplitUserError), typeDiscriminator: "FulfillmentOrderSplitUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrdersReleaseHoldsUserError), typeDiscriminator: "FulfillmentOrdersReleaseHoldsUserError")]
+    [JsonDerivedType(typeof(FulfillmentOrdersSetFulfillmentDeadlineUserError), typeDiscriminator: "FulfillmentOrdersSetFulfillmentDeadlineUserError")]
+    [JsonDerivedType(typeof(GiftCardUserError), typeDiscriminator: "GiftCardUserError")]
+    [JsonDerivedType(typeof(InventoryAdjustQuantitiesUserError), typeDiscriminator: "InventoryAdjustQuantitiesUserError")]
+    [JsonDerivedType(typeof(InventoryBulkToggleActivationUserError), typeDiscriminator: "InventoryBulkToggleActivationUserError")]
+    [JsonDerivedType(typeof(InventoryMoveQuantitiesUserError), typeDiscriminator: "InventoryMoveQuantitiesUserError")]
+    [JsonDerivedType(typeof(InventorySetOnHandQuantitiesUserError), typeDiscriminator: "InventorySetOnHandQuantitiesUserError")]
+    [JsonDerivedType(typeof(LocationActivateUserError), typeDiscriminator: "LocationActivateUserError")]
+    [JsonDerivedType(typeof(LocationAddUserError), typeDiscriminator: "LocationAddUserError")]
+    [JsonDerivedType(typeof(LocationDeactivateUserError), typeDiscriminator: "LocationDeactivateUserError")]
+    [JsonDerivedType(typeof(LocationDeleteUserError), typeDiscriminator: "LocationDeleteUserError")]
+    [JsonDerivedType(typeof(LocationEditUserError), typeDiscriminator: "LocationEditUserError")]
+    [JsonDerivedType(typeof(MarketCurrencySettingsUserError), typeDiscriminator: "MarketCurrencySettingsUserError")]
+    [JsonDerivedType(typeof(MarketUserError), typeDiscriminator: "MarketUserError")]
+    [JsonDerivedType(typeof(MarketingActivityUserError), typeDiscriminator: "MarketingActivityUserError")]
+    [JsonDerivedType(typeof(MediaUserError), typeDiscriminator: "MediaUserError")]
+    [JsonDerivedType(typeof(MetafieldDefinitionCreateUserError), typeDiscriminator: "MetafieldDefinitionCreateUserError")]
+    [JsonDerivedType(typeof(MetafieldDefinitionDeleteUserError), typeDiscriminator: "MetafieldDefinitionDeleteUserError")]
+    [JsonDerivedType(typeof(MetafieldDefinitionPinUserError), typeDiscriminator: "MetafieldDefinitionPinUserError")]
+    [JsonDerivedType(typeof(MetafieldDefinitionUnpinUserError), typeDiscriminator: "MetafieldDefinitionUnpinUserError")]
+    [JsonDerivedType(typeof(MetafieldDefinitionUpdateUserError), typeDiscriminator: "MetafieldDefinitionUpdateUserError")]
+    [JsonDerivedType(typeof(MetafieldsSetUserError), typeDiscriminator: "MetafieldsSetUserError")]
+    [JsonDerivedType(typeof(MetaobjectUserError), typeDiscriminator: "MetaobjectUserError")]
+    [JsonDerivedType(typeof(OrderCreateMandatePaymentUserError), typeDiscriminator: "OrderCreateMandatePaymentUserError")]
+    [JsonDerivedType(typeof(OrderInvoiceSendUserError), typeDiscriminator: "OrderInvoiceSendUserError")]
+    [JsonDerivedType(typeof(PaymentCustomizationError), typeDiscriminator: "PaymentCustomizationError")]
+    [JsonDerivedType(typeof(PaymentReminderSendUserError), typeDiscriminator: "PaymentReminderSendUserError")]
+    [JsonDerivedType(typeof(PaymentTermsCreateUserError), typeDiscriminator: "PaymentTermsCreateUserError")]
+    [JsonDerivedType(typeof(PaymentTermsDeleteUserError), typeDiscriminator: "PaymentTermsDeleteUserError")]
+    [JsonDerivedType(typeof(PaymentTermsUpdateUserError), typeDiscriminator: "PaymentTermsUpdateUserError")]
+    [JsonDerivedType(typeof(PriceListFixedPricesByProductBulkUpdateUserError), typeDiscriminator: "PriceListFixedPricesByProductBulkUpdateUserError")]
+    [JsonDerivedType(typeof(PriceListPriceUserError), typeDiscriminator: "PriceListPriceUserError")]
+    [JsonDerivedType(typeof(PriceListUserError), typeDiscriminator: "PriceListUserError")]
+    [JsonDerivedType(typeof(PriceRuleUserError), typeDiscriminator: "PriceRuleUserError")]
+    [JsonDerivedType(typeof(ProductChangeStatusUserError), typeDiscriminator: "ProductChangeStatusUserError")]
+    [JsonDerivedType(typeof(ProductDeleteUserError), typeDiscriminator: "ProductDeleteUserError")]
+    [JsonDerivedType(typeof(ProductDuplicateUserError), typeDiscriminator: "ProductDuplicateUserError")]
+    [JsonDerivedType(typeof(ProductFeedCreateUserError), typeDiscriminator: "ProductFeedCreateUserError")]
+    [JsonDerivedType(typeof(ProductFeedDeleteUserError), typeDiscriminator: "ProductFeedDeleteUserError")]
+    [JsonDerivedType(typeof(ProductFullSyncUserError), typeDiscriminator: "ProductFullSyncUserError")]
+    [JsonDerivedType(typeof(ProductVariantRelationshipBulkUpdateUserError), typeDiscriminator: "ProductVariantRelationshipBulkUpdateUserError")]
+    [JsonDerivedType(typeof(ProductVariantsBulkCreateUserError), typeDiscriminator: "ProductVariantsBulkCreateUserError")]
+    [JsonDerivedType(typeof(ProductVariantsBulkDeleteUserError), typeDiscriminator: "ProductVariantsBulkDeleteUserError")]
+    [JsonDerivedType(typeof(ProductVariantsBulkReorderUserError), typeDiscriminator: "ProductVariantsBulkReorderUserError")]
+    [JsonDerivedType(typeof(ProductVariantsBulkUpdateUserError), typeDiscriminator: "ProductVariantsBulkUpdateUserError")]
+    [JsonDerivedType(typeof(ProductVariantsBulkUpdateUserError), typeDiscriminator: "ProductVariantsBulkUpdateUserError")]
+    [JsonDerivedType(typeof(PubSubWebhookSubscriptionCreateUserError), typeDiscriminator: "PubSubWebhookSubscriptionCreateUserError")]
+    [JsonDerivedType(typeof(PubSubWebhookSubscriptionUpdateUserError), typeDiscriminator: "PubSubWebhookSubscriptionUpdateUserError")]
+    [JsonDerivedType(typeof(PublicationUserError), typeDiscriminator: "PublicationUserError")]
+    [JsonDerivedType(typeof(QuantityRuleUserError), typeDiscriminator: "QuantityRuleUserError")]
+    [JsonDerivedType(typeof(ReturnUserError), typeDiscriminator: "ReturnUserError")]
+    [JsonDerivedType(typeof(SellingPlanGroupUserError), typeDiscriminator: "SellingPlanGroupUserError")]
+    [JsonDerivedType(typeof(ShopPolicyUserError), typeDiscriminator: "ShopPolicyUserError")]
+    [JsonDerivedType(typeof(ShopResourceFeedbackCreateUserError), typeDiscriminator: "ShopResourceFeedbackCreateUserError")]
+    [JsonDerivedType(typeof(StandardMetafieldDefinitionEnableUserError), typeDiscriminator: "StandardMetafieldDefinitionEnableUserError")]
+    [JsonDerivedType(typeof(SubscriptionBillingCycleUserError), typeDiscriminator: "SubscriptionBillingCycleUserError")]
+    [JsonDerivedType(typeof(SubscriptionContractUserError), typeDiscriminator: "SubscriptionContractUserError")]
+    [JsonDerivedType(typeof(SubscriptionDraftUserError), typeDiscriminator: "SubscriptionDraftUserError")]
+    [JsonDerivedType(typeof(TaxAppConfigureUserError), typeDiscriminator: "TaxAppConfigureUserError")]
+    [JsonDerivedType(typeof(TranslationUserError), typeDiscriminator: "TranslationUserError")]
+    [JsonDerivedType(typeof(UrlRedirectBulkDeleteByIdsUserError), typeDiscriminator: "UrlRedirectBulkDeleteByIdsUserError")]
+    [JsonDerivedType(typeof(UrlRedirectBulkDeleteBySavedSearchUserError), typeDiscriminator: "UrlRedirectBulkDeleteBySavedSearchUserError")]
+    [JsonDerivedType(typeof(UrlRedirectBulkDeleteBySearchUserError), typeDiscriminator: "UrlRedirectBulkDeleteBySearchUserError")]
+    [JsonDerivedType(typeof(UrlRedirectImportUserError), typeDiscriminator: "UrlRedirectImportUserError")]
+    [JsonDerivedType(typeof(UrlRedirectUserError), typeDiscriminator: "UrlRedirectUserError")]
+    [JsonDerivedType(typeof(UserError), typeDiscriminator: "UserError")]
     public interface IDisplayableError
     {
+        public AbandonmentEmailStateUpdateUserError? AsAbandonmentEmailStateUpdateUserError() => this as AbandonmentEmailStateUpdateUserError;
+        public AbandonmentUpdateActivitiesDeliveryStatusesUserError? AsAbandonmentUpdateActivitiesDeliveryStatusesUserError() => this as AbandonmentUpdateActivitiesDeliveryStatusesUserError;
+        public AppRevenueAttributionRecordCreateUserError? AsAppRevenueAttributionRecordCreateUserError() => this as AppRevenueAttributionRecordCreateUserError;
+        public AppRevenueAttributionRecordDeleteUserError? AsAppRevenueAttributionRecordDeleteUserError() => this as AppRevenueAttributionRecordDeleteUserError;
+        public AppSubscriptionTrialExtendUserError? AsAppSubscriptionTrialExtendUserError() => this as AppSubscriptionTrialExtendUserError;
+        public BillingAttemptUserError? AsBillingAttemptUserError() => this as BillingAttemptUserError;
+        public BulkMutationUserError? AsBulkMutationUserError() => this as BulkMutationUserError;
+        public BulkProductResourceFeedbackCreateUserError? AsBulkProductResourceFeedbackCreateUserError() => this as BulkProductResourceFeedbackCreateUserError;
+        public BusinessCustomerUserError? AsBusinessCustomerUserError() => this as BusinessCustomerUserError;
+        public CartTransformCreateUserError? AsCartTransformCreateUserError() => this as CartTransformCreateUserError;
+        public CartTransformDeleteUserError? AsCartTransformDeleteUserError() => this as CartTransformDeleteUserError;
+        public CatalogUserError? AsCatalogUserError() => this as CatalogUserError;
+        public CollectionAddProductsV2UserError? AsCollectionAddProductsV2UserError() => this as CollectionAddProductsV2UserError;
+        public CustomerEmailMarketingConsentUpdateUserError? AsCustomerEmailMarketingConsentUpdateUserError() => this as CustomerEmailMarketingConsentUpdateUserError;
+        public CustomerMergeUserError? AsCustomerMergeUserError() => this as CustomerMergeUserError;
+        public CustomerPaymentMethodCreateFromDuplicationDataUserError? AsCustomerPaymentMethodCreateFromDuplicationDataUserError() => this as CustomerPaymentMethodCreateFromDuplicationDataUserError;
+        public CustomerPaymentMethodGetDuplicationDataUserError? AsCustomerPaymentMethodGetDuplicationDataUserError() => this as CustomerPaymentMethodGetDuplicationDataUserError;
+        public CustomerPaymentMethodGetUpdateUrlUserError? AsCustomerPaymentMethodGetUpdateUrlUserError() => this as CustomerPaymentMethodGetUpdateUrlUserError;
+        public CustomerPaymentMethodRemoteUserError? AsCustomerPaymentMethodRemoteUserError() => this as CustomerPaymentMethodRemoteUserError;
+        public CustomerPaymentMethodUserError? AsCustomerPaymentMethodUserError() => this as CustomerPaymentMethodUserError;
+        public CustomerSegmentMembersQueryUserError? AsCustomerSegmentMembersQueryUserError() => this as CustomerSegmentMembersQueryUserError;
+        public CustomerSmsMarketingConsentError? AsCustomerSmsMarketingConsentError() => this as CustomerSmsMarketingConsentError;
+        public DelegateAccessTokenCreateUserError? AsDelegateAccessTokenCreateUserError() => this as DelegateAccessTokenCreateUserError;
+        public DelegateAccessTokenDestroyUserError? AsDelegateAccessTokenDestroyUserError() => this as DelegateAccessTokenDestroyUserError;
+        public DeliveryCustomizationError? AsDeliveryCustomizationError() => this as DeliveryCustomizationError;
+        public DeliveryLocationLocalPickupSettingsError? AsDeliveryLocationLocalPickupSettingsError() => this as DeliveryLocationLocalPickupSettingsError;
+        public DiscountUserError? AsDiscountUserError() => this as DiscountUserError;
+        public DisputeEvidenceUpdateUserError? AsDisputeEvidenceUpdateUserError() => this as DisputeEvidenceUpdateUserError;
+        public ErrorsServerPixelUserError? AsErrorsServerPixelUserError() => this as ErrorsServerPixelUserError;
+        public ErrorsWebPixelUserError? AsErrorsWebPixelUserError() => this as ErrorsWebPixelUserError;
+        public FilesUserError? AsFilesUserError() => this as FilesUserError;
+        public FulfillmentOrderHoldUserError? AsFulfillmentOrderHoldUserError() => this as FulfillmentOrderHoldUserError;
+        public FulfillmentOrderLineItemsPreparedForPickupUserError? AsFulfillmentOrderLineItemsPreparedForPickupUserError() => this as FulfillmentOrderLineItemsPreparedForPickupUserError;
+        public FulfillmentOrderMergeUserError? AsFulfillmentOrderMergeUserError() => this as FulfillmentOrderMergeUserError;
+        public FulfillmentOrderReleaseHoldUserError? AsFulfillmentOrderReleaseHoldUserError() => this as FulfillmentOrderReleaseHoldUserError;
+        public FulfillmentOrderRescheduleUserError? AsFulfillmentOrderRescheduleUserError() => this as FulfillmentOrderRescheduleUserError;
+        public FulfillmentOrderSplitUserError? AsFulfillmentOrderSplitUserError() => this as FulfillmentOrderSplitUserError;
+        public FulfillmentOrdersReleaseHoldsUserError? AsFulfillmentOrdersReleaseHoldsUserError() => this as FulfillmentOrdersReleaseHoldsUserError;
+        public FulfillmentOrdersSetFulfillmentDeadlineUserError? AsFulfillmentOrdersSetFulfillmentDeadlineUserError() => this as FulfillmentOrdersSetFulfillmentDeadlineUserError;
+        public GiftCardUserError? AsGiftCardUserError() => this as GiftCardUserError;
+        public InventoryAdjustQuantitiesUserError? AsInventoryAdjustQuantitiesUserError() => this as InventoryAdjustQuantitiesUserError;
+        public InventoryBulkToggleActivationUserError? AsInventoryBulkToggleActivationUserError() => this as InventoryBulkToggleActivationUserError;
+        public InventoryMoveQuantitiesUserError? AsInventoryMoveQuantitiesUserError() => this as InventoryMoveQuantitiesUserError;
+        public InventorySetOnHandQuantitiesUserError? AsInventorySetOnHandQuantitiesUserError() => this as InventorySetOnHandQuantitiesUserError;
+        public LocationActivateUserError? AsLocationActivateUserError() => this as LocationActivateUserError;
+        public LocationAddUserError? AsLocationAddUserError() => this as LocationAddUserError;
+        public LocationDeactivateUserError? AsLocationDeactivateUserError() => this as LocationDeactivateUserError;
+        public LocationDeleteUserError? AsLocationDeleteUserError() => this as LocationDeleteUserError;
+        public LocationEditUserError? AsLocationEditUserError() => this as LocationEditUserError;
+        public MarketCurrencySettingsUserError? AsMarketCurrencySettingsUserError() => this as MarketCurrencySettingsUserError;
+        public MarketUserError? AsMarketUserError() => this as MarketUserError;
+        public MarketingActivityUserError? AsMarketingActivityUserError() => this as MarketingActivityUserError;
+        public MediaUserError? AsMediaUserError() => this as MediaUserError;
+        public MetafieldDefinitionCreateUserError? AsMetafieldDefinitionCreateUserError() => this as MetafieldDefinitionCreateUserError;
+        public MetafieldDefinitionDeleteUserError? AsMetafieldDefinitionDeleteUserError() => this as MetafieldDefinitionDeleteUserError;
+        public MetafieldDefinitionPinUserError? AsMetafieldDefinitionPinUserError() => this as MetafieldDefinitionPinUserError;
+        public MetafieldDefinitionUnpinUserError? AsMetafieldDefinitionUnpinUserError() => this as MetafieldDefinitionUnpinUserError;
+        public MetafieldDefinitionUpdateUserError? AsMetafieldDefinitionUpdateUserError() => this as MetafieldDefinitionUpdateUserError;
+        public MetafieldsSetUserError? AsMetafieldsSetUserError() => this as MetafieldsSetUserError;
+        public MetaobjectUserError? AsMetaobjectUserError() => this as MetaobjectUserError;
+        public OrderCreateMandatePaymentUserError? AsOrderCreateMandatePaymentUserError() => this as OrderCreateMandatePaymentUserError;
+        public OrderInvoiceSendUserError? AsOrderInvoiceSendUserError() => this as OrderInvoiceSendUserError;
+        public PaymentCustomizationError? AsPaymentCustomizationError() => this as PaymentCustomizationError;
+        public PaymentReminderSendUserError? AsPaymentReminderSendUserError() => this as PaymentReminderSendUserError;
+        public PaymentTermsCreateUserError? AsPaymentTermsCreateUserError() => this as PaymentTermsCreateUserError;
+        public PaymentTermsDeleteUserError? AsPaymentTermsDeleteUserError() => this as PaymentTermsDeleteUserError;
+        public PaymentTermsUpdateUserError? AsPaymentTermsUpdateUserError() => this as PaymentTermsUpdateUserError;
+        public PriceListFixedPricesByProductBulkUpdateUserError? AsPriceListFixedPricesByProductBulkUpdateUserError() => this as PriceListFixedPricesByProductBulkUpdateUserError;
+        public PriceListPriceUserError? AsPriceListPriceUserError() => this as PriceListPriceUserError;
+        public PriceListUserError? AsPriceListUserError() => this as PriceListUserError;
+        public PriceRuleUserError? AsPriceRuleUserError() => this as PriceRuleUserError;
+        public ProductChangeStatusUserError? AsProductChangeStatusUserError() => this as ProductChangeStatusUserError;
+        public ProductDeleteUserError? AsProductDeleteUserError() => this as ProductDeleteUserError;
+        public ProductDuplicateUserError? AsProductDuplicateUserError() => this as ProductDuplicateUserError;
+        public ProductFeedCreateUserError? AsProductFeedCreateUserError() => this as ProductFeedCreateUserError;
+        public ProductFeedDeleteUserError? AsProductFeedDeleteUserError() => this as ProductFeedDeleteUserError;
+        public ProductFullSyncUserError? AsProductFullSyncUserError() => this as ProductFullSyncUserError;
+        public ProductVariantRelationshipBulkUpdateUserError? AsProductVariantRelationshipBulkUpdateUserError() => this as ProductVariantRelationshipBulkUpdateUserError;
+        public ProductVariantsBulkCreateUserError? AsProductVariantsBulkCreateUserError() => this as ProductVariantsBulkCreateUserError;
+        public ProductVariantsBulkDeleteUserError? AsProductVariantsBulkDeleteUserError() => this as ProductVariantsBulkDeleteUserError;
+        public ProductVariantsBulkReorderUserError? AsProductVariantsBulkReorderUserError() => this as ProductVariantsBulkReorderUserError;
+        public ProductVariantsBulkUpdateUserError? AsProductVariantsBulkUpdateUserError() => this as ProductVariantsBulkUpdateUserError;
+        public PubSubWebhookSubscriptionCreateUserError? AsPubSubWebhookSubscriptionCreateUserError() => this as PubSubWebhookSubscriptionCreateUserError;
+        public PubSubWebhookSubscriptionUpdateUserError? AsPubSubWebhookSubscriptionUpdateUserError() => this as PubSubWebhookSubscriptionUpdateUserError;
+        public PublicationUserError? AsPublicationUserError() => this as PublicationUserError;
+        public QuantityRuleUserError? AsQuantityRuleUserError() => this as QuantityRuleUserError;
+        public ReturnUserError? AsReturnUserError() => this as ReturnUserError;
+        public SellingPlanGroupUserError? AsSellingPlanGroupUserError() => this as SellingPlanGroupUserError;
+        public ShopPolicyUserError? AsShopPolicyUserError() => this as ShopPolicyUserError;
+        public ShopResourceFeedbackCreateUserError? AsShopResourceFeedbackCreateUserError() => this as ShopResourceFeedbackCreateUserError;
+        public StandardMetafieldDefinitionEnableUserError? AsStandardMetafieldDefinitionEnableUserError() => this as StandardMetafieldDefinitionEnableUserError;
+        public SubscriptionBillingCycleUserError? AsSubscriptionBillingCycleUserError() => this as SubscriptionBillingCycleUserError;
+        public SubscriptionContractUserError? AsSubscriptionContractUserError() => this as SubscriptionContractUserError;
+        public SubscriptionDraftUserError? AsSubscriptionDraftUserError() => this as SubscriptionDraftUserError;
+        public TaxAppConfigureUserError? AsTaxAppConfigureUserError() => this as TaxAppConfigureUserError;
+        public TranslationUserError? AsTranslationUserError() => this as TranslationUserError;
+        public UrlRedirectBulkDeleteByIdsUserError? AsUrlRedirectBulkDeleteByIdsUserError() => this as UrlRedirectBulkDeleteByIdsUserError;
+        public UrlRedirectBulkDeleteBySavedSearchUserError? AsUrlRedirectBulkDeleteBySavedSearchUserError() => this as UrlRedirectBulkDeleteBySavedSearchUserError;
+        public UrlRedirectBulkDeleteBySearchUserError? AsUrlRedirectBulkDeleteBySearchUserError() => this as UrlRedirectBulkDeleteBySearchUserError;
+        public UrlRedirectImportUserError? AsUrlRedirectImportUserError() => this as UrlRedirectImportUserError;
+        public UrlRedirectUserError? AsUrlRedirectUserError() => this as UrlRedirectUserError;
+        public UserError? AsUserError() => this as UserError;
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
@@ -15284,8 +15531,13 @@ namespace ShopifySharp.GraphQL
     ///Events chronicle resource activities such as the creation of an article, the fulfillment of an order, or the
     ///addition of a product.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(BasicEvent), typeDiscriminator: "BasicEvent")]
+    [JsonDerivedType(typeof(CommentEvent), typeDiscriminator: "CommentEvent")]
     public interface IEvent
     {
+        public BasicEvent? AsBasicEvent() => this as BasicEvent;
+        public CommentEvent? AsCommentEvent() => this as CommentEvent;
         ///<summary>
         ///The name of the app that created the event.
         ///</summary>
@@ -15722,8 +15974,15 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///A file interface.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(GenericFile), typeDiscriminator: "GenericFile")]
+    [JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
+    [JsonDerivedType(typeof(Video), typeDiscriminator: "Video")]
     public interface IFile
     {
+        public GenericFile? AsGenericFile() => this as GenericFile;
+        public MediaImage? AsMediaImage() => this as MediaImage;
+        public Video? AsVideo() => this as Video;
         ///<summary>
         ///A word or phrase to describe the contents or the function of a file.
         ///</summary>
@@ -19095,8 +19354,29 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents an object that has a list of events.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+    [JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+    [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
+    [JsonDerivedType(typeof(DiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
+    [JsonDerivedType(typeof(DiscountAutomaticNode), typeDiscriminator: "DiscountAutomaticNode")]
+    [JsonDerivedType(typeof(DiscountCodeNode), typeDiscriminator: "DiscountCodeNode")]
+    [JsonDerivedType(typeof(DiscountNode), typeDiscriminator: "DiscountNode")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
+    [JsonDerivedType(typeof(PriceRule), typeDiscriminator: "PriceRule")]
     public interface IHasEvents
     {
+        public Company? AsCompany() => this as Company;
+        public CompanyLocation? AsCompanyLocation() => this as CompanyLocation;
+        public Customer? AsCustomer() => this as Customer;
+        public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this as DiscountAutomaticBxgy;
+        public DiscountAutomaticNode? AsDiscountAutomaticNode() => this as DiscountAutomaticNode;
+        public DiscountCodeNode? AsDiscountCodeNode() => this as DiscountCodeNode;
+        public DiscountNode? AsDiscountNode() => this as DiscountNode;
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public Order? AsOrder() => this as Order;
+        public PriceRule? AsPriceRule() => this as PriceRule;
         ///<summary>
         ///The paginated list of events associated with the host subject.
         ///</summary>
@@ -19106,8 +19386,13 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Localization extensions associated with the specified resource. For example, the tax id for government invoice.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
     public interface IHasLocalizationExtensions
     {
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public Order? AsOrder() => this as Order;
         ///<summary>
         ///List of localization extensions for the resource.
         ///</summary>
@@ -19117,8 +19402,37 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Resources that metafield definitions can be applied to.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
+    [JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+    [JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+    [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
+    [JsonDerivedType(typeof(DeliveryCustomization), typeDiscriminator: "DeliveryCustomization")]
+    [JsonDerivedType(typeof(DiscountAutomaticNode), typeDiscriminator: "DiscountAutomaticNode")]
+    [JsonDerivedType(typeof(DiscountCodeNode), typeDiscriminator: "DiscountCodeNode")]
+    [JsonDerivedType(typeof(DiscountNode), typeDiscriminator: "DiscountNode")]
+    [JsonDerivedType(typeof(Location), typeDiscriminator: "Location")]
+    [JsonDerivedType(typeof(Market), typeDiscriminator: "Market")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
+    [JsonDerivedType(typeof(PaymentCustomization), typeDiscriminator: "PaymentCustomization")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+    [JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
     public interface IHasMetafieldDefinitions
     {
+        public Collection? AsCollection() => this as Collection;
+        public Company? AsCompany() => this as Company;
+        public CompanyLocation? AsCompanyLocation() => this as CompanyLocation;
+        public Customer? AsCustomer() => this as Customer;
+        public DeliveryCustomization? AsDeliveryCustomization() => this as DeliveryCustomization;
+        public DiscountAutomaticNode? AsDiscountAutomaticNode() => this as DiscountAutomaticNode;
+        public DiscountCodeNode? AsDiscountCodeNode() => this as DiscountCodeNode;
+        public DiscountNode? AsDiscountNode() => this as DiscountNode;
+        public Location? AsLocation() => this as Location;
+        public Market? AsMarket() => this as Market;
+        public Order? AsOrder() => this as Order;
+        public PaymentCustomization? AsPaymentCustomization() => this as PaymentCustomization;
+        public Product? AsProduct() => this as Product;
+        public ProductVariant? AsProductVariant() => this as ProductVariant;
         ///<summary>
         ///List of metafield definitions.
         ///</summary>
@@ -19128,8 +19442,51 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents information about the metafields associated to the specified resource.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AppInstallation), typeDiscriminator: "AppInstallation")]
+    [JsonDerivedType(typeof(CartTransform), typeDiscriminator: "CartTransform")]
+    [JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
+    [JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+    [JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+    [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
+    [JsonDerivedType(typeof(CustomerSegmentMember), typeDiscriminator: "CustomerSegmentMember")]
+    [JsonDerivedType(typeof(DeliveryCustomization), typeDiscriminator: "DeliveryCustomization")]
+    [JsonDerivedType(typeof(DiscountAutomaticNode), typeDiscriminator: "DiscountAutomaticNode")]
+    [JsonDerivedType(typeof(DiscountCodeNode), typeDiscriminator: "DiscountCodeNode")]
+    [JsonDerivedType(typeof(DiscountNode), typeDiscriminator: "DiscountNode")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(Image), typeDiscriminator: "Image")]
+    [JsonDerivedType(typeof(Location), typeDiscriminator: "Location")]
+    [JsonDerivedType(typeof(Market), typeDiscriminator: "Market")]
+    [JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
+    [JsonDerivedType(typeof(PaymentCustomization), typeDiscriminator: "PaymentCustomization")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+    [JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
+    [JsonDerivedType(typeof(Shop), typeDiscriminator: "Shop")]
     public interface IHasMetafields
     {
+        public AppInstallation? AsAppInstallation() => this as AppInstallation;
+        public CartTransform? AsCartTransform() => this as CartTransform;
+        public Collection? AsCollection() => this as Collection;
+        public Company? AsCompany() => this as Company;
+        public CompanyLocation? AsCompanyLocation() => this as CompanyLocation;
+        public Customer? AsCustomer() => this as Customer;
+        public CustomerSegmentMember? AsCustomerSegmentMember() => this as CustomerSegmentMember;
+        public DeliveryCustomization? AsDeliveryCustomization() => this as DeliveryCustomization;
+        public DiscountAutomaticNode? AsDiscountAutomaticNode() => this as DiscountAutomaticNode;
+        public DiscountCodeNode? AsDiscountCodeNode() => this as DiscountCodeNode;
+        public DiscountNode? AsDiscountNode() => this as DiscountNode;
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public Image? AsImage() => this as Image;
+        public Location? AsLocation() => this as Location;
+        public Market? AsMarket() => this as Market;
+        public MediaImage? AsMediaImage() => this as MediaImage;
+        public Order? AsOrder() => this as Order;
+        public PaymentCustomization? AsPaymentCustomization() => this as PaymentCustomization;
+        public Product? AsProduct() => this as Product;
+        public ProductVariant? AsProductVariant() => this as ProductVariant;
+        public Shop? AsShop() => this as Shop;
         ///<summary>
         ///Returns a metafield by namespace and key that belongs to the resource.
         ///</summary>
@@ -19151,8 +19508,33 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Published translations associated with the resource.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
+    [JsonDerivedType(typeof(Link), typeDiscriminator: "Link")]
+    [JsonDerivedType(typeof(OnlineStoreArticle), typeDiscriminator: "OnlineStoreArticle")]
+    [JsonDerivedType(typeof(OnlineStoreBlog), typeDiscriminator: "OnlineStoreBlog")]
+    [JsonDerivedType(typeof(OnlineStorePage), typeDiscriminator: "OnlineStorePage")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+    [JsonDerivedType(typeof(ProductOption), typeDiscriminator: "ProductOption")]
+    [JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
+    [JsonDerivedType(typeof(SellingPlan), typeDiscriminator: "SellingPlan")]
+    [JsonDerivedType(typeof(SellingPlanGroup), typeDiscriminator: "SellingPlanGroup")]
+    [JsonDerivedType(typeof(Shop), typeDiscriminator: "Shop")]
+    [JsonDerivedType(typeof(ShopPolicy), typeDiscriminator: "ShopPolicy")]
     public interface IHasPublishedTranslations
     {
+        public Collection? AsCollection() => this as Collection;
+        public Link? AsLink() => this as Link;
+        public OnlineStoreArticle? AsOnlineStoreArticle() => this as OnlineStoreArticle;
+        public OnlineStoreBlog? AsOnlineStoreBlog() => this as OnlineStoreBlog;
+        public OnlineStorePage? AsOnlineStorePage() => this as OnlineStorePage;
+        public Product? AsProduct() => this as Product;
+        public ProductOption? AsProductOption() => this as ProductOption;
+        public ProductVariant? AsProductVariant() => this as ProductVariant;
+        public SellingPlan? AsSellingPlan() => this as SellingPlan;
+        public SellingPlanGroup? AsSellingPlanGroup() => this as SellingPlanGroup;
+        public Shop? AsShop() => this as Shop;
+        public ShopPolicy? AsShopPolicy() => this as ShopPolicy;
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
@@ -20107,8 +20489,11 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///A job corresponds to some long running task that the client should poll for status.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(CustomerSegmentMembersQuery), typeDiscriminator: "CustomerSegmentMembersQuery")]
     public interface IJobResult
     {
+        public CustomerSegmentMembersQuery? AsCustomerSegmentMembersQuery() => this as CustomerSegmentMembersQuery;
         ///<summary>
         ///This indicates if the job is still queued or has been run.
         ///</summary>
@@ -20678,8 +21063,45 @@ namespace ShopifySharp.GraphQL
     ///Interoperability metadata for types that directly correspond to a REST Admin API resource.
     ///For example, on the Product type, LegacyInteroperability returns metadata for the corresponding [Product object](https://shopify.dev/api/admin-graphql/latest/objects/product) in the REST Admin API.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(Fulfillment), typeDiscriminator: "Fulfillment")]
+    [JsonDerivedType(typeof(InventoryItem), typeDiscriminator: "InventoryItem")]
+    [JsonDerivedType(typeof(Location), typeDiscriminator: "Location")]
+    [JsonDerivedType(typeof(MarketingEvent), typeDiscriminator: "MarketingEvent")]
+    [JsonDerivedType(typeof(Metafield), typeDiscriminator: "Metafield")]
+    [JsonDerivedType(typeof(MetafieldStorefrontVisibility), typeDiscriminator: "MetafieldStorefrontVisibility")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
+    [JsonDerivedType(typeof(PriceRule), typeDiscriminator: "PriceRule")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+    [JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
+    [JsonDerivedType(typeof(Refund), typeDiscriminator: "Refund")]
+    [JsonDerivedType(typeof(SavedSearch), typeDiscriminator: "SavedSearch")]
+    [JsonDerivedType(typeof(ScriptTag), typeDiscriminator: "ScriptTag")]
+    [JsonDerivedType(typeof(ShopifyPaymentsDispute), typeDiscriminator: "ShopifyPaymentsDispute")]
+    [JsonDerivedType(typeof(ShopifyPaymentsPayout), typeDiscriminator: "ShopifyPaymentsPayout")]
+    [JsonDerivedType(typeof(WebhookSubscription), typeDiscriminator: "WebhookSubscription")]
     public interface ILegacyInteroperability
     {
+        public Customer? AsCustomer() => this as Customer;
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public Fulfillment? AsFulfillment() => this as Fulfillment;
+        public InventoryItem? AsInventoryItem() => this as InventoryItem;
+        public Location? AsLocation() => this as Location;
+        public MarketingEvent? AsMarketingEvent() => this as MarketingEvent;
+        public Metafield? AsMetafield() => this as Metafield;
+        public MetafieldStorefrontVisibility? AsMetafieldStorefrontVisibility() => this as MetafieldStorefrontVisibility;
+        public Order? AsOrder() => this as Order;
+        public PriceRule? AsPriceRule() => this as PriceRule;
+        public Product? AsProduct() => this as Product;
+        public ProductVariant? AsProductVariant() => this as ProductVariant;
+        public Refund? AsRefund() => this as Refund;
+        public SavedSearch? AsSavedSearch() => this as SavedSearch;
+        public ScriptTag? AsScriptTag() => this as ScriptTag;
+        public ShopifyPaymentsDispute? AsShopifyPaymentsDispute() => this as ShopifyPaymentsDispute;
+        public ShopifyPaymentsPayout? AsShopifyPaymentsPayout() => this as ShopifyPaymentsPayout;
+        public WebhookSubscription? AsWebhookSubscription() => this as WebhookSubscription;
         ///<summary>
         ///The ID of the corresponding resource in the REST Admin API.
         ///</summary>
@@ -22741,8 +23163,11 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///A geographic region which comprises a market.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(MarketRegionCountry), typeDiscriminator: "MarketRegionCountry")]
     public interface IMarketRegion
     {
+        public MarketRegionCountry? AsMarketRegionCountry() => this as MarketRegionCountry;
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -23869,8 +24294,17 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents a media interface.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(ExternalVideo), typeDiscriminator: "ExternalVideo")]
+    [JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
+    [JsonDerivedType(typeof(Model3d), typeDiscriminator: "Model3d")]
+    [JsonDerivedType(typeof(Video), typeDiscriminator: "Video")]
     public interface IMedia
     {
+        public ExternalVideo? AsExternalVideo() => this as ExternalVideo;
+        public MediaImage? AsMediaImage() => this as MediaImage;
+        public Model3d? AsModel3d() => this as Model3d;
+        public Video? AsVideo() => this as Video;
         ///<summary>
         ///A word or phrase to share the nature or contents of a media.
         ///</summary>
@@ -28293,8 +28727,25 @@ namespace ShopifySharp.GraphQL
     ///To learn more about using cursor-based pagination, refer to
     ///[Paginating results with GraphQL](https://shopify.dev/api/usage/pagination-graphql).
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AbandonedCheckout), typeDiscriminator: "AbandonedCheckout")]
+    [JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+    [JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(OnlineStoreArticle), typeDiscriminator: "OnlineStoreArticle")]
+    [JsonDerivedType(typeof(OnlineStorePage), typeDiscriminator: "OnlineStorePage")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+    [JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
     public interface INavigable
     {
+        public AbandonedCheckout? AsAbandonedCheckout() => this as AbandonedCheckout;
+        public Company? AsCompany() => this as Company;
+        public CompanyLocation? AsCompanyLocation() => this as CompanyLocation;
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public OnlineStoreArticle? AsOnlineStoreArticle() => this as OnlineStoreArticle;
+        public OnlineStorePage? AsOnlineStorePage() => this as OnlineStorePage;
+        public Product? AsProduct() => this as Product;
+        public ProductVariant? AsProductVariant() => this as ProductVariant;
         ///<summary>
         ///A default cursor that returns the single next record, sorted ascending by ID.
         ///</summary>
@@ -28326,8 +28777,311 @@ namespace ShopifySharp.GraphQL
     ///This interface is used by the [node](https://shopify.dev/api/admin-graphql/unstable/queries/node)
     ///and [nodes](https://shopify.dev/api/admin-graphql/unstable/queries/nodes) queries.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AbandonedCheckout), typeDiscriminator: "AbandonedCheckout")]
+    [JsonDerivedType(typeof(Abandonment), typeDiscriminator: "Abandonment")]
+    [JsonDerivedType(typeof(AddAllProductsOperation), typeDiscriminator: "AddAllProductsOperation")]
+    [JsonDerivedType(typeof(AdditionalFee), typeDiscriminator: "AdditionalFee")]
+    [JsonDerivedType(typeof(App), typeDiscriminator: "App")]
+    [JsonDerivedType(typeof(AppCatalog), typeDiscriminator: "AppCatalog")]
+    [JsonDerivedType(typeof(AppCredit), typeDiscriminator: "AppCredit")]
+    [JsonDerivedType(typeof(AppInstallation), typeDiscriminator: "AppInstallation")]
+    [JsonDerivedType(typeof(AppPurchaseOneTime), typeDiscriminator: "AppPurchaseOneTime")]
+    [JsonDerivedType(typeof(AppRevenueAttributionRecord), typeDiscriminator: "AppRevenueAttributionRecord")]
+    [JsonDerivedType(typeof(AppSubscription), typeDiscriminator: "AppSubscription")]
+    [JsonDerivedType(typeof(AppUsageRecord), typeDiscriminator: "AppUsageRecord")]
+    [JsonDerivedType(typeof(BasicEvent), typeDiscriminator: "BasicEvent")]
+    [JsonDerivedType(typeof(BulkOperation), typeDiscriminator: "BulkOperation")]
+    [JsonDerivedType(typeof(CalculatedOrder), typeDiscriminator: "CalculatedOrder")]
+    [JsonDerivedType(typeof(CartTransform), typeDiscriminator: "CartTransform")]
+    [JsonDerivedType(typeof(CatalogCsvOperation), typeDiscriminator: "CatalogCsvOperation")]
+    [JsonDerivedType(typeof(Channel), typeDiscriminator: "Channel")]
+    [JsonDerivedType(typeof(ChannelDefinition), typeDiscriminator: "ChannelDefinition")]
+    [JsonDerivedType(typeof(ChannelInformation), typeDiscriminator: "ChannelInformation")]
+    [JsonDerivedType(typeof(CheckoutProfile), typeDiscriminator: "CheckoutProfile")]
+    [JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
+    [JsonDerivedType(typeof(CommentEvent), typeDiscriminator: "CommentEvent")]
+    [JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+    [JsonDerivedType(typeof(CompanyAddress), typeDiscriminator: "CompanyAddress")]
+    [JsonDerivedType(typeof(CompanyContact), typeDiscriminator: "CompanyContact")]
+    [JsonDerivedType(typeof(CompanyContactRole), typeDiscriminator: "CompanyContactRole")]
+    [JsonDerivedType(typeof(CompanyContactRoleAssignment), typeDiscriminator: "CompanyContactRoleAssignment")]
+    [JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+    [JsonDerivedType(typeof(CompanyLocationCatalog), typeDiscriminator: "CompanyLocationCatalog")]
+    [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
+    [JsonDerivedType(typeof(CustomerPaymentMethod), typeDiscriminator: "CustomerPaymentMethod")]
+    [JsonDerivedType(typeof(CustomerSegmentMembersQuery), typeDiscriminator: "CustomerSegmentMembersQuery")]
+    [JsonDerivedType(typeof(CustomerVisit), typeDiscriminator: "CustomerVisit")]
+    [JsonDerivedType(typeof(DeliveryCarrierService), typeDiscriminator: "DeliveryCarrierService")]
+    [JsonDerivedType(typeof(DeliveryCondition), typeDiscriminator: "DeliveryCondition")]
+    [JsonDerivedType(typeof(DeliveryCountry), typeDiscriminator: "DeliveryCountry")]
+    [JsonDerivedType(typeof(DeliveryCustomization), typeDiscriminator: "DeliveryCustomization")]
+    [JsonDerivedType(typeof(DeliveryLocationGroup), typeDiscriminator: "DeliveryLocationGroup")]
+    [JsonDerivedType(typeof(DeliveryMethod), typeDiscriminator: "DeliveryMethod")]
+    [JsonDerivedType(typeof(DeliveryMethodDefinition), typeDiscriminator: "DeliveryMethodDefinition")]
+    [JsonDerivedType(typeof(DeliveryParticipant), typeDiscriminator: "DeliveryParticipant")]
+    [JsonDerivedType(typeof(DeliveryProfile), typeDiscriminator: "DeliveryProfile")]
+    [JsonDerivedType(typeof(DeliveryProfileItem), typeDiscriminator: "DeliveryProfileItem")]
+    [JsonDerivedType(typeof(DeliveryProvince), typeDiscriminator: "DeliveryProvince")]
+    [JsonDerivedType(typeof(DeliveryRateDefinition), typeDiscriminator: "DeliveryRateDefinition")]
+    [JsonDerivedType(typeof(DeliveryZone), typeDiscriminator: "DeliveryZone")]
+    [JsonDerivedType(typeof(DiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
+    [JsonDerivedType(typeof(DiscountAutomaticNode), typeDiscriminator: "DiscountAutomaticNode")]
+    [JsonDerivedType(typeof(DiscountCodeNode), typeDiscriminator: "DiscountCodeNode")]
+    [JsonDerivedType(typeof(DiscountNode), typeDiscriminator: "DiscountNode")]
+    [JsonDerivedType(typeof(DiscountRedeemCodeBulkCreation), typeDiscriminator: "DiscountRedeemCodeBulkCreation")]
+    [JsonDerivedType(typeof(Domain), typeDiscriminator: "Domain")]
+    [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(DraftOrderLineItem), typeDiscriminator: "DraftOrderLineItem")]
+    [JsonDerivedType(typeof(DraftOrderTag), typeDiscriminator: "DraftOrderTag")]
+    [JsonDerivedType(typeof(Duty), typeDiscriminator: "Duty")]
+    [JsonDerivedType(typeof(ExchangeV2), typeDiscriminator: "ExchangeV2")]
+    [JsonDerivedType(typeof(ExternalVideo), typeDiscriminator: "ExternalVideo")]
+    [JsonDerivedType(typeof(Fulfillment), typeDiscriminator: "Fulfillment")]
+    [JsonDerivedType(typeof(FulfillmentEvent), typeDiscriminator: "FulfillmentEvent")]
+    [JsonDerivedType(typeof(FulfillmentLineItem), typeDiscriminator: "FulfillmentLineItem")]
+    [JsonDerivedType(typeof(FulfillmentOrder), typeDiscriminator: "FulfillmentOrder")]
+    [JsonDerivedType(typeof(FulfillmentOrderDestination), typeDiscriminator: "FulfillmentOrderDestination")]
+    [JsonDerivedType(typeof(FulfillmentOrderLineItem), typeDiscriminator: "FulfillmentOrderLineItem")]
+    [JsonDerivedType(typeof(FulfillmentOrderMerchantRequest), typeDiscriminator: "FulfillmentOrderMerchantRequest")]
+    [JsonDerivedType(typeof(GenericFile), typeDiscriminator: "GenericFile")]
+    [JsonDerivedType(typeof(GiftCard), typeDiscriminator: "GiftCard")]
+    [JsonDerivedType(typeof(InventoryAdjustmentGroup), typeDiscriminator: "InventoryAdjustmentGroup")]
+    [JsonDerivedType(typeof(InventoryItem), typeDiscriminator: "InventoryItem")]
+    [JsonDerivedType(typeof(InventoryLevel), typeDiscriminator: "InventoryLevel")]
+    [JsonDerivedType(typeof(LineItem), typeDiscriminator: "LineItem")]
+    [JsonDerivedType(typeof(LineItemMutable), typeDiscriminator: "LineItemMutable")]
+    [JsonDerivedType(typeof(Location), typeDiscriminator: "Location")]
+    [JsonDerivedType(typeof(MailingAddress), typeDiscriminator: "MailingAddress")]
+    [JsonDerivedType(typeof(Market), typeDiscriminator: "Market")]
+    [JsonDerivedType(typeof(MarketCatalog), typeDiscriminator: "MarketCatalog")]
+    [JsonDerivedType(typeof(MarketRegionCountry), typeDiscriminator: "MarketRegionCountry")]
+    [JsonDerivedType(typeof(MarketWebPresence), typeDiscriminator: "MarketWebPresence")]
+    [JsonDerivedType(typeof(MarketingActivity), typeDiscriminator: "MarketingActivity")]
+    [JsonDerivedType(typeof(MarketingEvent), typeDiscriminator: "MarketingEvent")]
+    [JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
+    [JsonDerivedType(typeof(Metafield), typeDiscriminator: "Metafield")]
+    [JsonDerivedType(typeof(MetafieldDefinition), typeDiscriminator: "MetafieldDefinition")]
+    [JsonDerivedType(typeof(MetafieldStorefrontVisibility), typeDiscriminator: "MetafieldStorefrontVisibility")]
+    [JsonDerivedType(typeof(Metaobject), typeDiscriminator: "Metaobject")]
+    [JsonDerivedType(typeof(MetaobjectDefinition), typeDiscriminator: "MetaobjectDefinition")]
+    [JsonDerivedType(typeof(Model3d), typeDiscriminator: "Model3d")]
+    [JsonDerivedType(typeof(OnlineStoreArticle), typeDiscriminator: "OnlineStoreArticle")]
+    [JsonDerivedType(typeof(OnlineStoreBlog), typeDiscriminator: "OnlineStoreBlog")]
+    [JsonDerivedType(typeof(OnlineStorePage), typeDiscriminator: "OnlineStorePage")]
+    [JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
+    [JsonDerivedType(typeof(OrderDisputeSummary), typeDiscriminator: "OrderDisputeSummary")]
+    [JsonDerivedType(typeof(OrderTransaction), typeDiscriminator: "OrderTransaction")]
+    [JsonDerivedType(typeof(PaymentCustomization), typeDiscriminator: "PaymentCustomization")]
+    [JsonDerivedType(typeof(PaymentMandate), typeDiscriminator: "PaymentMandate")]
+    [JsonDerivedType(typeof(PaymentSchedule), typeDiscriminator: "PaymentSchedule")]
+    [JsonDerivedType(typeof(PaymentTerms), typeDiscriminator: "PaymentTerms")]
+    [JsonDerivedType(typeof(PaymentTermsTemplate), typeDiscriminator: "PaymentTermsTemplate")]
+    [JsonDerivedType(typeof(PriceList), typeDiscriminator: "PriceList")]
+    [JsonDerivedType(typeof(PriceRule), typeDiscriminator: "PriceRule")]
+    [JsonDerivedType(typeof(PriceRuleDiscountCode), typeDiscriminator: "PriceRuleDiscountCode")]
+    [JsonDerivedType(typeof(PrivateMetafield), typeDiscriminator: "PrivateMetafield")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+    [JsonDerivedType(typeof(ProductFeed), typeDiscriminator: "ProductFeed")]
+    [JsonDerivedType(typeof(ProductOption), typeDiscriminator: "ProductOption")]
+    [JsonDerivedType(typeof(ProductTaxonomyNode), typeDiscriminator: "ProductTaxonomyNode")]
+    [JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
+    [JsonDerivedType(typeof(ProductVariantComponent), typeDiscriminator: "ProductVariantComponent")]
+    [JsonDerivedType(typeof(Publication), typeDiscriminator: "Publication")]
+    [JsonDerivedType(typeof(PublicationResourceOperation), typeDiscriminator: "PublicationResourceOperation")]
+    [JsonDerivedType(typeof(Refund), typeDiscriminator: "Refund")]
+    [JsonDerivedType(typeof(Return), typeDiscriminator: "Return")]
+    [JsonDerivedType(typeof(ReturnLineItem), typeDiscriminator: "ReturnLineItem")]
+    [JsonDerivedType(typeof(ReturnableFulfillment), typeDiscriminator: "ReturnableFulfillment")]
+    [JsonDerivedType(typeof(ReverseDelivery), typeDiscriminator: "ReverseDelivery")]
+    [JsonDerivedType(typeof(ReverseDeliveryLineItem), typeDiscriminator: "ReverseDeliveryLineItem")]
+    [JsonDerivedType(typeof(ReverseFulfillmentOrder), typeDiscriminator: "ReverseFulfillmentOrder")]
+    [JsonDerivedType(typeof(ReverseFulfillmentOrderDisposition), typeDiscriminator: "ReverseFulfillmentOrderDisposition")]
+    [JsonDerivedType(typeof(ReverseFulfillmentOrderLineItem), typeDiscriminator: "ReverseFulfillmentOrderLineItem")]
+    [JsonDerivedType(typeof(SaleAdditionalFee), typeDiscriminator: "SaleAdditionalFee")]
+    [JsonDerivedType(typeof(SavedSearch), typeDiscriminator: "SavedSearch")]
+    [JsonDerivedType(typeof(ScriptTag), typeDiscriminator: "ScriptTag")]
+    [JsonDerivedType(typeof(Segment), typeDiscriminator: "Segment")]
+    [JsonDerivedType(typeof(SellingPlan), typeDiscriminator: "SellingPlan")]
+    [JsonDerivedType(typeof(SellingPlanGroup), typeDiscriminator: "SellingPlanGroup")]
+    [JsonDerivedType(typeof(ServerPixel), typeDiscriminator: "ServerPixel")]
+    [JsonDerivedType(typeof(Shop), typeDiscriminator: "Shop")]
+    [JsonDerivedType(typeof(ShopAddress), typeDiscriminator: "ShopAddress")]
+    [JsonDerivedType(typeof(ShopPolicy), typeDiscriminator: "ShopPolicy")]
+    [JsonDerivedType(typeof(ShopifyPaymentsAccount), typeDiscriminator: "ShopifyPaymentsAccount")]
+    [JsonDerivedType(typeof(ShopifyPaymentsBankAccount), typeDiscriminator: "ShopifyPaymentsBankAccount")]
+    [JsonDerivedType(typeof(ShopifyPaymentsDispute), typeDiscriminator: "ShopifyPaymentsDispute")]
+    [JsonDerivedType(typeof(ShopifyPaymentsDisputeEvidence), typeDiscriminator: "ShopifyPaymentsDisputeEvidence")]
+    [JsonDerivedType(typeof(ShopifyPaymentsDisputeFileUpload), typeDiscriminator: "ShopifyPaymentsDisputeFileUpload")]
+    [JsonDerivedType(typeof(ShopifyPaymentsDisputeFulfillment), typeDiscriminator: "ShopifyPaymentsDisputeFulfillment")]
+    [JsonDerivedType(typeof(ShopifyPaymentsPayout), typeDiscriminator: "ShopifyPaymentsPayout")]
+    [JsonDerivedType(typeof(ShopifyPaymentsVerification), typeDiscriminator: "ShopifyPaymentsVerification")]
+    [JsonDerivedType(typeof(StaffMember), typeDiscriminator: "StaffMember")]
+    [JsonDerivedType(typeof(StandardMetafieldDefinitionTemplate), typeDiscriminator: "StandardMetafieldDefinitionTemplate")]
+    [JsonDerivedType(typeof(StorefrontAccessToken), typeDiscriminator: "StorefrontAccessToken")]
+    [JsonDerivedType(typeof(SubscriptionBillingAttempt), typeDiscriminator: "SubscriptionBillingAttempt")]
+    [JsonDerivedType(typeof(SubscriptionContract), typeDiscriminator: "SubscriptionContract")]
+    [JsonDerivedType(typeof(SubscriptionDraft), typeDiscriminator: "SubscriptionDraft")]
+    [JsonDerivedType(typeof(TenderTransaction), typeDiscriminator: "TenderTransaction")]
+    [JsonDerivedType(typeof(TransactionFee), typeDiscriminator: "TransactionFee")]
+    [JsonDerivedType(typeof(UrlRedirect), typeDiscriminator: "UrlRedirect")]
+    [JsonDerivedType(typeof(UrlRedirectImport), typeDiscriminator: "UrlRedirectImport")]
+    [JsonDerivedType(typeof(Video), typeDiscriminator: "Video")]
+    [JsonDerivedType(typeof(WebPixel), typeDiscriminator: "WebPixel")]
+    [JsonDerivedType(typeof(WebhookSubscription), typeDiscriminator: "WebhookSubscription")]
     public interface INode
     {
+        public AbandonedCheckout? AsAbandonedCheckout() => this as AbandonedCheckout;
+        public Abandonment? AsAbandonment() => this as Abandonment;
+        public AddAllProductsOperation? AsAddAllProductsOperation() => this as AddAllProductsOperation;
+        public AdditionalFee? AsAdditionalFee() => this as AdditionalFee;
+        public App? AsApp() => this as App;
+        public AppCatalog? AsAppCatalog() => this as AppCatalog;
+        public AppCredit? AsAppCredit() => this as AppCredit;
+        public AppInstallation? AsAppInstallation() => this as AppInstallation;
+        public AppPurchaseOneTime? AsAppPurchaseOneTime() => this as AppPurchaseOneTime;
+        public AppRevenueAttributionRecord? AsAppRevenueAttributionRecord() => this as AppRevenueAttributionRecord;
+        public AppSubscription? AsAppSubscription() => this as AppSubscription;
+        public AppUsageRecord? AsAppUsageRecord() => this as AppUsageRecord;
+        public BasicEvent? AsBasicEvent() => this as BasicEvent;
+        public BulkOperation? AsBulkOperation() => this as BulkOperation;
+        public CalculatedOrder? AsCalculatedOrder() => this as CalculatedOrder;
+        public CartTransform? AsCartTransform() => this as CartTransform;
+        public CatalogCsvOperation? AsCatalogCsvOperation() => this as CatalogCsvOperation;
+        public Channel? AsChannel() => this as Channel;
+        public ChannelDefinition? AsChannelDefinition() => this as ChannelDefinition;
+        public ChannelInformation? AsChannelInformation() => this as ChannelInformation;
+        public CheckoutProfile? AsCheckoutProfile() => this as CheckoutProfile;
+        public Collection? AsCollection() => this as Collection;
+        public CommentEvent? AsCommentEvent() => this as CommentEvent;
+        public Company? AsCompany() => this as Company;
+        public CompanyAddress? AsCompanyAddress() => this as CompanyAddress;
+        public CompanyContact? AsCompanyContact() => this as CompanyContact;
+        public CompanyContactRole? AsCompanyContactRole() => this as CompanyContactRole;
+        public CompanyContactRoleAssignment? AsCompanyContactRoleAssignment() => this as CompanyContactRoleAssignment;
+        public CompanyLocation? AsCompanyLocation() => this as CompanyLocation;
+        public CompanyLocationCatalog? AsCompanyLocationCatalog() => this as CompanyLocationCatalog;
+        public Customer? AsCustomer() => this as Customer;
+        public CustomerPaymentMethod? AsCustomerPaymentMethod() => this as CustomerPaymentMethod;
+        public CustomerSegmentMembersQuery? AsCustomerSegmentMembersQuery() => this as CustomerSegmentMembersQuery;
+        public CustomerVisit? AsCustomerVisit() => this as CustomerVisit;
+        public DeliveryCarrierService? AsDeliveryCarrierService() => this as DeliveryCarrierService;
+        public DeliveryCondition? AsDeliveryCondition() => this as DeliveryCondition;
+        public DeliveryCountry? AsDeliveryCountry() => this as DeliveryCountry;
+        public DeliveryCustomization? AsDeliveryCustomization() => this as DeliveryCustomization;
+        public DeliveryLocationGroup? AsDeliveryLocationGroup() => this as DeliveryLocationGroup;
+        public DeliveryMethod? AsDeliveryMethod() => this as DeliveryMethod;
+        public DeliveryMethodDefinition? AsDeliveryMethodDefinition() => this as DeliveryMethodDefinition;
+        public DeliveryParticipant? AsDeliveryParticipant() => this as DeliveryParticipant;
+        public DeliveryProfile? AsDeliveryProfile() => this as DeliveryProfile;
+        public DeliveryProfileItem? AsDeliveryProfileItem() => this as DeliveryProfileItem;
+        public DeliveryProvince? AsDeliveryProvince() => this as DeliveryProvince;
+        public DeliveryRateDefinition? AsDeliveryRateDefinition() => this as DeliveryRateDefinition;
+        public DeliveryZone? AsDeliveryZone() => this as DeliveryZone;
+        public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this as DiscountAutomaticBxgy;
+        public DiscountAutomaticNode? AsDiscountAutomaticNode() => this as DiscountAutomaticNode;
+        public DiscountCodeNode? AsDiscountCodeNode() => this as DiscountCodeNode;
+        public DiscountNode? AsDiscountNode() => this as DiscountNode;
+        public DiscountRedeemCodeBulkCreation? AsDiscountRedeemCodeBulkCreation() => this as DiscountRedeemCodeBulkCreation;
+        public Domain? AsDomain() => this as Domain;
+        public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public DraftOrderLineItem? AsDraftOrderLineItem() => this as DraftOrderLineItem;
+        public DraftOrderTag? AsDraftOrderTag() => this as DraftOrderTag;
+        public Duty? AsDuty() => this as Duty;
+        public ExchangeV2? AsExchangeV2() => this as ExchangeV2;
+        public ExternalVideo? AsExternalVideo() => this as ExternalVideo;
+        public Fulfillment? AsFulfillment() => this as Fulfillment;
+        public FulfillmentEvent? AsFulfillmentEvent() => this as FulfillmentEvent;
+        public FulfillmentLineItem? AsFulfillmentLineItem() => this as FulfillmentLineItem;
+        public FulfillmentOrder? AsFulfillmentOrder() => this as FulfillmentOrder;
+        public FulfillmentOrderDestination? AsFulfillmentOrderDestination() => this as FulfillmentOrderDestination;
+        public FulfillmentOrderLineItem? AsFulfillmentOrderLineItem() => this as FulfillmentOrderLineItem;
+        public FulfillmentOrderMerchantRequest? AsFulfillmentOrderMerchantRequest() => this as FulfillmentOrderMerchantRequest;
+        public GenericFile? AsGenericFile() => this as GenericFile;
+        public GiftCard? AsGiftCard() => this as GiftCard;
+        public InventoryAdjustmentGroup? AsInventoryAdjustmentGroup() => this as InventoryAdjustmentGroup;
+        public InventoryItem? AsInventoryItem() => this as InventoryItem;
+        public InventoryLevel? AsInventoryLevel() => this as InventoryLevel;
+        public LineItem? AsLineItem() => this as LineItem;
+        public LineItemMutable? AsLineItemMutable() => this as LineItemMutable;
+        public Location? AsLocation() => this as Location;
+        public MailingAddress? AsMailingAddress() => this as MailingAddress;
+        public Market? AsMarket() => this as Market;
+        public MarketCatalog? AsMarketCatalog() => this as MarketCatalog;
+        public MarketRegionCountry? AsMarketRegionCountry() => this as MarketRegionCountry;
+        public MarketWebPresence? AsMarketWebPresence() => this as MarketWebPresence;
+        public MarketingActivity? AsMarketingActivity() => this as MarketingActivity;
+        public MarketingEvent? AsMarketingEvent() => this as MarketingEvent;
+        public MediaImage? AsMediaImage() => this as MediaImage;
+        public Metafield? AsMetafield() => this as Metafield;
+        public MetafieldDefinition? AsMetafieldDefinition() => this as MetafieldDefinition;
+        public MetafieldStorefrontVisibility? AsMetafieldStorefrontVisibility() => this as MetafieldStorefrontVisibility;
+        public Metaobject? AsMetaobject() => this as Metaobject;
+        public MetaobjectDefinition? AsMetaobjectDefinition() => this as MetaobjectDefinition;
+        public Model3d? AsModel3d() => this as Model3d;
+        public OnlineStoreArticle? AsOnlineStoreArticle() => this as OnlineStoreArticle;
+        public OnlineStoreBlog? AsOnlineStoreBlog() => this as OnlineStoreBlog;
+        public OnlineStorePage? AsOnlineStorePage() => this as OnlineStorePage;
+        public Order? AsOrder() => this as Order;
+        public OrderDisputeSummary? AsOrderDisputeSummary() => this as OrderDisputeSummary;
+        public OrderTransaction? AsOrderTransaction() => this as OrderTransaction;
+        public PaymentCustomization? AsPaymentCustomization() => this as PaymentCustomization;
+        public PaymentMandate? AsPaymentMandate() => this as PaymentMandate;
+        public PaymentSchedule? AsPaymentSchedule() => this as PaymentSchedule;
+        public PaymentTerms? AsPaymentTerms() => this as PaymentTerms;
+        public PaymentTermsTemplate? AsPaymentTermsTemplate() => this as PaymentTermsTemplate;
+        public PriceList? AsPriceList() => this as PriceList;
+        public PriceRule? AsPriceRule() => this as PriceRule;
+        public PriceRuleDiscountCode? AsPriceRuleDiscountCode() => this as PriceRuleDiscountCode;
+        public PrivateMetafield? AsPrivateMetafield() => this as PrivateMetafield;
+        public Product? AsProduct() => this as Product;
+        public ProductFeed? AsProductFeed() => this as ProductFeed;
+        public ProductOption? AsProductOption() => this as ProductOption;
+        public ProductTaxonomyNode? AsProductTaxonomyNode() => this as ProductTaxonomyNode;
+        public ProductVariant? AsProductVariant() => this as ProductVariant;
+        public ProductVariantComponent? AsProductVariantComponent() => this as ProductVariantComponent;
+        public Publication? AsPublication() => this as Publication;
+        public PublicationResourceOperation? AsPublicationResourceOperation() => this as PublicationResourceOperation;
+        public Refund? AsRefund() => this as Refund;
+        public Return? AsReturn() => this as Return;
+        public ReturnLineItem? AsReturnLineItem() => this as ReturnLineItem;
+        public ReturnableFulfillment? AsReturnableFulfillment() => this as ReturnableFulfillment;
+        public ReverseDelivery? AsReverseDelivery() => this as ReverseDelivery;
+        public ReverseDeliveryLineItem? AsReverseDeliveryLineItem() => this as ReverseDeliveryLineItem;
+        public ReverseFulfillmentOrder? AsReverseFulfillmentOrder() => this as ReverseFulfillmentOrder;
+        public ReverseFulfillmentOrderDisposition? AsReverseFulfillmentOrderDisposition() => this as ReverseFulfillmentOrderDisposition;
+        public ReverseFulfillmentOrderLineItem? AsReverseFulfillmentOrderLineItem() => this as ReverseFulfillmentOrderLineItem;
+        public SaleAdditionalFee? AsSaleAdditionalFee() => this as SaleAdditionalFee;
+        public SavedSearch? AsSavedSearch() => this as SavedSearch;
+        public ScriptTag? AsScriptTag() => this as ScriptTag;
+        public Segment? AsSegment() => this as Segment;
+        public SellingPlan? AsSellingPlan() => this as SellingPlan;
+        public SellingPlanGroup? AsSellingPlanGroup() => this as SellingPlanGroup;
+        public ServerPixel? AsServerPixel() => this as ServerPixel;
+        public Shop? AsShop() => this as Shop;
+        public ShopAddress? AsShopAddress() => this as ShopAddress;
+        public ShopPolicy? AsShopPolicy() => this as ShopPolicy;
+        public ShopifyPaymentsAccount? AsShopifyPaymentsAccount() => this as ShopifyPaymentsAccount;
+        public ShopifyPaymentsBankAccount? AsShopifyPaymentsBankAccount() => this as ShopifyPaymentsBankAccount;
+        public ShopifyPaymentsDispute? AsShopifyPaymentsDispute() => this as ShopifyPaymentsDispute;
+        public ShopifyPaymentsDisputeEvidence? AsShopifyPaymentsDisputeEvidence() => this as ShopifyPaymentsDisputeEvidence;
+        public ShopifyPaymentsDisputeFileUpload? AsShopifyPaymentsDisputeFileUpload() => this as ShopifyPaymentsDisputeFileUpload;
+        public ShopifyPaymentsDisputeFulfillment? AsShopifyPaymentsDisputeFulfillment() => this as ShopifyPaymentsDisputeFulfillment;
+        public ShopifyPaymentsPayout? AsShopifyPaymentsPayout() => this as ShopifyPaymentsPayout;
+        public ShopifyPaymentsVerification? AsShopifyPaymentsVerification() => this as ShopifyPaymentsVerification;
+        public StaffMember? AsStaffMember() => this as StaffMember;
+        public StandardMetafieldDefinitionTemplate? AsStandardMetafieldDefinitionTemplate() => this as StandardMetafieldDefinitionTemplate;
+        public StorefrontAccessToken? AsStorefrontAccessToken() => this as StorefrontAccessToken;
+        public SubscriptionBillingAttempt? AsSubscriptionBillingAttempt() => this as SubscriptionBillingAttempt;
+        public SubscriptionContract? AsSubscriptionContract() => this as SubscriptionContract;
+        public SubscriptionDraft? AsSubscriptionDraft() => this as SubscriptionDraft;
+        public TenderTransaction? AsTenderTransaction() => this as TenderTransaction;
+        public TransactionFee? AsTransactionFee() => this as TransactionFee;
+        public UrlRedirect? AsUrlRedirect() => this as UrlRedirect;
+        public UrlRedirectImport? AsUrlRedirectImport() => this as UrlRedirectImport;
+        public Video? AsVideo() => this as Video;
+        public WebPixel? AsWebPixel() => this as WebPixel;
+        public WebhookSubscription? AsWebhookSubscription() => this as WebhookSubscription;
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -28395,8 +29149,11 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Online Store preview URL of the object.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
     public interface IOnlineStorePreviewable
     {
+        public Product? AsProduct() => this as Product;
         ///<summary>
         ///The online store preview URL.
         ///</summary>
@@ -36151,8 +36908,13 @@ namespace ShopifySharp.GraphQL
     ///Represents a resource that can be published to a channel.
     ///A publishable resource can be either a Product or Collection.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
     public interface IPublishable
     {
+        public Collection? AsCollection() => this as Collection;
+        public Product? AsProduct() => this as Product;
         ///<summary>
         ///The number of publications a resource is published to without feedback errors.
         ///</summary>
@@ -37725,8 +38487,15 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents a merchandising background operation interface.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AddAllProductsOperation), typeDiscriminator: "AddAllProductsOperation")]
+    [JsonDerivedType(typeof(CatalogCsvOperation), typeDiscriminator: "CatalogCsvOperation")]
+    [JsonDerivedType(typeof(PublicationResourceOperation), typeDiscriminator: "PublicationResourceOperation")]
     public interface IResourceOperation
     {
+        public AddAllProductsOperation? AsAddAllProductsOperation() => this as AddAllProductsOperation;
+        public CatalogCsvOperation? AsCatalogCsvOperation() => this as CatalogCsvOperation;
+        public PublicationResourceOperation? AsPublicationResourceOperation() => this as PublicationResourceOperation;
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -39019,8 +39788,25 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An individual sale record associated with a sales agreement. Every money value in an order's sales data is represented in the currency's smallest unit. When amounts are divided across multiple line items, such as taxes or order discounts, the amounts might not divide evenly across all of the line items on the order. To address this, the remaining currency units that couldn't be divided evenly are allocated one at a time, starting with the first line item, until they are all accounted for. In aggregate, the values sum up correctly. In isolation, one line item might have a different tax or discount amount than another line item of the same price, before taxes and discounts. This is because the amount could not be divided evenly across the items. The allocation of currency units across line items is immutable. After they are allocated, currency units are never reallocated or redistributed among the line items.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(AdditionalFeeSale), typeDiscriminator: "AdditionalFeeSale")]
+    [JsonDerivedType(typeof(AdjustmentSale), typeDiscriminator: "AdjustmentSale")]
+    [JsonDerivedType(typeof(DutySale), typeDiscriminator: "DutySale")]
+    [JsonDerivedType(typeof(GiftCardSale), typeDiscriminator: "GiftCardSale")]
+    [JsonDerivedType(typeof(ProductSale), typeDiscriminator: "ProductSale")]
+    [JsonDerivedType(typeof(ShippingLineSale), typeDiscriminator: "ShippingLineSale")]
+    [JsonDerivedType(typeof(TipSale), typeDiscriminator: "TipSale")]
+    [JsonDerivedType(typeof(UnknownSale), typeDiscriminator: "UnknownSale")]
     public interface ISale
     {
+        public AdditionalFeeSale? AsAdditionalFeeSale() => this as AdditionalFeeSale;
+        public AdjustmentSale? AsAdjustmentSale() => this as AdjustmentSale;
+        public DutySale? AsDutySale() => this as DutySale;
+        public GiftCardSale? AsGiftCardSale() => this as GiftCardSale;
+        public ProductSale? AsProductSale() => this as ProductSale;
+        public ShippingLineSale? AsShippingLineSale() => this as ShippingLineSale;
+        public TipSale? AsTipSale() => this as TipSale;
+        public UnknownSale? AsUnknownSale() => this as UnknownSale;
         ///<summary>
         ///The type of order action that the sale represents.
         ///</summary>
@@ -39200,8 +39986,15 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///A contract between a merchant and a customer to do business. Shopify creates a sales agreement whenever an order is placed, edited, or refunded. A sales agreement has one or more sales records, which provide itemized details about the initial agreement or subsequent changes made to the order. For example, when a customer places an order, Shopify creates the order, generates a sales agreement, and records a sale for each line item purchased in the order. A sale record is specific to a type of order line. Order lines can represent different things such as a purchased product, a tip added by a customer, shipping costs collected at checkout, and more.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(OrderAgreement), typeDiscriminator: "OrderAgreement")]
+    [JsonDerivedType(typeof(OrderEditAgreement), typeDiscriminator: "OrderEditAgreement")]
+    [JsonDerivedType(typeof(RefundAgreement), typeDiscriminator: "RefundAgreement")]
     public interface ISalesAgreement
     {
+        public OrderAgreement? AsOrderAgreement() => this as OrderAgreement;
+        public OrderEditAgreement? AsOrderEditAgreement() => this as OrderEditAgreement;
+        public RefundAgreement? AsRefundAgreement() => this as RefundAgreement;
         ///<summary>
         ///The application that created the agreement.
         ///</summary>
@@ -39917,8 +40710,25 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///The filters used in segment queries associated with a shop.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(SegmentAssociationFilter), typeDiscriminator: "SegmentAssociationFilter")]
+    [JsonDerivedType(typeof(SegmentBooleanFilter), typeDiscriminator: "SegmentBooleanFilter")]
+    [JsonDerivedType(typeof(SegmentDateFilter), typeDiscriminator: "SegmentDateFilter")]
+    [JsonDerivedType(typeof(SegmentEnumFilter), typeDiscriminator: "SegmentEnumFilter")]
+    [JsonDerivedType(typeof(SegmentEventFilter), typeDiscriminator: "SegmentEventFilter")]
+    [JsonDerivedType(typeof(SegmentFloatFilter), typeDiscriminator: "SegmentFloatFilter")]
+    [JsonDerivedType(typeof(SegmentIntegerFilter), typeDiscriminator: "SegmentIntegerFilter")]
+    [JsonDerivedType(typeof(SegmentStringFilter), typeDiscriminator: "SegmentStringFilter")]
     public interface ISegmentFilter
     {
+        public SegmentAssociationFilter? AsSegmentAssociationFilter() => this as SegmentAssociationFilter;
+        public SegmentBooleanFilter? AsSegmentBooleanFilter() => this as SegmentBooleanFilter;
+        public SegmentDateFilter? AsSegmentDateFilter() => this as SegmentDateFilter;
+        public SegmentEnumFilter? AsSegmentEnumFilter() => this as SegmentEnumFilter;
+        public SegmentEventFilter? AsSegmentEventFilter() => this as SegmentEventFilter;
+        public SegmentFloatFilter? AsSegmentFloatFilter() => this as SegmentFloatFilter;
+        public SegmentIntegerFilter? AsSegmentIntegerFilter() => this as SegmentIntegerFilter;
+        public SegmentStringFilter? AsSegmentStringFilter() => this as SegmentStringFilter;
         ///<summary>
         ///The localized name of the filter.
         ///</summary>
@@ -41234,8 +42044,13 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents selling plan pricing policy common fields.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(SellingPlanFixedPricingPolicy), typeDiscriminator: "SellingPlanFixedPricingPolicy")]
+    [JsonDerivedType(typeof(SellingPlanRecurringPricingPolicy), typeDiscriminator: "SellingPlanRecurringPricingPolicy")]
     public interface ISellingPlanPricingPolicyBase
     {
+        public SellingPlanFixedPricingPolicy? AsSellingPlanFixedPricingPolicy() => this as SellingPlanFixedPricingPolicy;
+        public SellingPlanRecurringPricingPolicy? AsSellingPlanRecurringPricingPolicy() => this as SellingPlanRecurringPricingPolicy;
         ///<summary>
         ///The price adjustment type.
         ///</summary>
@@ -43008,8 +43823,13 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///The charge descriptors for a payments account.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(ShopifyPaymentsDefaultChargeStatementDescriptor), typeDiscriminator: "ShopifyPaymentsDefaultChargeStatementDescriptor")]
+    [JsonDerivedType(typeof(ShopifyPaymentsJpChargeStatementDescriptor), typeDiscriminator: "ShopifyPaymentsJpChargeStatementDescriptor")]
     public interface IShopifyPaymentsChargeStatementDescriptor
     {
+        public ShopifyPaymentsDefaultChargeStatementDescriptor? AsShopifyPaymentsDefaultChargeStatementDescriptor() => this as ShopifyPaymentsDefaultChargeStatementDescriptor;
+        public ShopifyPaymentsJpChargeStatementDescriptor? AsShopifyPaymentsJpChargeStatementDescriptor() => this as ShopifyPaymentsJpChargeStatementDescriptor;
         ///<summary>
         ///The default charge statement descriptor.
         ///</summary>
@@ -43786,8 +44606,13 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///A response to a ShopifyQL query.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(PolarisVizResponse), typeDiscriminator: "PolarisVizResponse")]
+    [JsonDerivedType(typeof(TableResponse), typeDiscriminator: "TableResponse")]
     public interface IShopifyqlResponse
     {
+        public PolarisVizResponse? AsPolarisVizResponse() => this as PolarisVizResponse;
+        public TableResponse? AsTableResponse() => this as TableResponse;
         ///<summary>
         ///A list of parse errors, if parsing fails.
         ///</summary>
@@ -45299,8 +46124,13 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Represents subscription contract common fields.
     ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(SubscriptionBillingCycleEditedContract), typeDiscriminator: "SubscriptionBillingCycleEditedContract")]
+    [JsonDerivedType(typeof(SubscriptionContract), typeDiscriminator: "SubscriptionContract")]
     public interface ISubscriptionContractBase
     {
+        public SubscriptionBillingCycleEditedContract? AsSubscriptionBillingCycleEditedContract() => this as SubscriptionBillingCycleEditedContract;
+        public SubscriptionContract? AsSubscriptionContract() => this as SubscriptionContract;
         ///<summary>
         ///The subscription app that the subscription contract is registered to.
         ///</summary>
