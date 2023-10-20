@@ -44,11 +44,21 @@ namespace ShopifySharp
             return res["data"];
         }
 
-        public virtual async Task<JsonElement> Post2Async(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
             var res = await PostAsync<JsonDocument>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
             return res.RootElement.GetProperty("data");
         }
+
+#if NET6_0_OR_GREATER
+        public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+            where TResult : class
+        {
+            var elt = await this.SendAsync(graphqlQuery, graphqlQueryCost, cancellationToken);
+            var ptyElt = elt.EnumerateObject().Single().Value;
+            return GraphQL.Serializer.Deserialize<TResult>(ptyElt.GetRawText());
+        }
+#endif
 
         private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken)
         {

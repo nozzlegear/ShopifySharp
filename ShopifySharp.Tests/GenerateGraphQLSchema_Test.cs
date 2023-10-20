@@ -59,7 +59,7 @@ namespace ShopifySharp.Tests
             {
                 var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
                 svc.SetExecutionPolicy(policy);
-                var res = await svc.Post2Async(@"
+                var res = await svc.SendAsync<OrderConnection>(@"
 {
 	orders(first:10)
   {
@@ -81,9 +81,9 @@ namespace ShopifySharp.Tests
   }
 }
 ");
-                var orders = res.GetProperty("orders").Deserialize<OrderConnection>();
-                Assert.True(orders.nodes.Length > 0);
-                var o = orders.nodes[0];
+                var orders = res.nodes;
+                Assert.True(orders.Length > 0);
+                var o = orders[0];
                 Assert.True(o.name != null);
                 Assert.True(o.lineItems.nodes.First().quantity != null);
                 var commentEventEmbed = o as ICommentEventEmbed;
