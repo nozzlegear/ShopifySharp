@@ -82,8 +82,8 @@ namespace ShopifySharp.Tests
 }
 ");
                 var orders = res.nodes;
-                Assert.True(orders.Length > 0);
-                var o = orders[0];
+                Assert.True(orders.Count() > 0);
+                var o = orders.First();
                 Assert.True(o.name != null);
                 Assert.True(o.lineItems.nodes.First().quantity != null);
                 var commentEventEmbed = o as ICommentEventEmbed;

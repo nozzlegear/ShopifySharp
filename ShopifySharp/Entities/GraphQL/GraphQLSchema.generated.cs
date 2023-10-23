@@ -1,6 +1,7 @@
 #if NET6_0_OR_GREATER
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -46,6 +47,32 @@ namespace ShopifySharp.GraphQL
     public static class GraphQLObjectExtensions
     {
         public static string ToJson(this IGraphQLObject o) => Serializer.Serialize(o);
+    }
+
+    public interface IConnectionWithEdges<TEdge, TNode>
+        where TEdge : IEdge<TNode>
+    {
+        PageInfo? pageInfo { get; }
+
+        IEnumerable<TEdge>? edges { get; }
+    }
+
+    public interface IConnectionWithNodes<TNode>
+    {
+        PageInfo? pageInfo { get; }
+
+        IEnumerable<TNode>? nodes { get; }
+    }
+
+    public interface IConnectionWithNodesAndEdges<TEdge, TNode> : IConnectionWithEdges<TEdge, TNode>, IConnectionWithNodes<TNode> where TEdge : IEdge<TNode>
+    {
+    }
+
+    public interface IEdge<TNode>
+    {
+        string? cursor { get; }
+
+        TNode? node { get; }
     }
 
     ///<summary>
@@ -247,7 +274,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public AbandonmentEmailStateUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<AbandonmentEmailStateUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -262,7 +289,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -292,7 +319,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public AbandonmentUpdateActivitiesDeliveryStatusesUserError[]? userErrors { get; set; }
+        public IEnumerable<AbandonmentUpdateActivitiesDeliveryStatusesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -307,7 +334,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -391,7 +418,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of taxes charged on the additional fee.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
     }
 
     ///<summary>
@@ -422,7 +449,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -465,7 +492,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -535,7 +562,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The access scopes available to the app.
         ///</summary>
-        public AccessScope[]? availableAccessScopes { get; set; }
+        public IEnumerable<AccessScope>? availableAccessScopes { get; set; }
         ///<summary>
         ///Banner image for the app.
         ///</summary>
@@ -565,11 +592,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Requirements that must be met before the app can be installed.
         ///</summary>
-        public FailedRequirement[]? failedRequirements { get; set; }
+        public IEnumerable<FailedRequirement>? failedRequirements { get; set; }
         ///<summary>
         ///A list of app features that are shown in the Shopify App Store listing.
         ///</summary>
-        public string[]? features { get; set; }
+        public IEnumerable<string>? features { get; set; }
         ///<summary>
         ///Feedback from this app about the store.
         ///</summary>
@@ -610,7 +637,7 @@ namespace ShopifySharp.GraphQL
         ///Menu items for the app, which also appear as submenu items in left navigation sidebar in the Shopify admin.
         ///</summary>
         [Obsolete("Use AppInstallation.navigationItems instead")]
-        public NavigationItem[]? navigationItems { get; set; }
+        public IEnumerable<NavigationItem>? navigationItems { get; set; }
         ///<summary>
         ///Whether the app was previously installed on the current shop.
         ///</summary>
@@ -638,11 +665,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The access scopes requested by the app.
         ///</summary>
-        public AccessScope[]? requestedAccessScopes { get; set; }
+        public IEnumerable<AccessScope>? requestedAccessScopes { get; set; }
         ///<summary>
         ///Screenshots of the app.
         ///</summary>
-        public Image[]? screenshots { get; set; }
+        public IEnumerable<Image>? screenshots { get; set; }
         ///<summary>
         ///Whether the app was developed by Shopify.
         ///</summary>
@@ -684,7 +711,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Most recent catalog operations.
         ///</summary>
-        public IResourceOperation[]? operations { get; set; }
+        public IEnumerable<IResourceOperation>? operations { get; set; }
         ///<summary>
         ///The price list associated with the catalog.
         ///</summary>
@@ -706,16 +733,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Apps.
     ///</summary>
-    public class AppConnection : GraphQLObject<AppConnection>
+    public class AppConnection : GraphQLObject<AppConnection>, IConnectionWithNodesAndEdges<AppEdge, App>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppEdge[]? edges { get; set; }
+        public IEnumerable<AppEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppEdge.
         ///</summary>
-        public App[]? nodes { get; set; }
+        public IEnumerable<App>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -752,16 +779,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple AppCredits.
     ///</summary>
-    public class AppCreditConnection : GraphQLObject<AppCreditConnection>
+    public class AppCreditConnection : GraphQLObject<AppCreditConnection>, IConnectionWithNodesAndEdges<AppCreditEdge, AppCredit>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppCreditEdge[]? edges { get; set; }
+        public IEnumerable<AppCreditEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppCreditEdge.
         ///</summary>
-        public AppCredit[]? nodes { get; set; }
+        public IEnumerable<AppCredit>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -771,7 +798,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one AppCredit and a cursor during pagination.
     ///</summary>
-    public class AppCreditEdge : GraphQLObject<AppCreditEdge>
+    public class AppCreditEdge : GraphQLObject<AppCreditEdge>, IEdge<AppCredit>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -848,7 +875,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one App and a cursor during pagination.
     ///</summary>
-    public class AppEdge : GraphQLObject<AppEdge>
+    public class AppEdge : GraphQLObject<AppEdge>, IEdge<App>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -878,7 +905,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The feedback message presented to the merchant.
         ///</summary>
-        public UserError[]? messages { get; set; }
+        public IEnumerable<UserError>? messages { get; set; }
     }
 
     ///<summary>
@@ -889,11 +916,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The access scopes granted to the application by a merchant during installation.
         ///</summary>
-        public AccessScope[]? accessScopes { get; set; }
+        public IEnumerable<AccessScope>? accessScopes { get; set; }
         ///<summary>
         ///The active application subscriptions billed to the shop on a recurring basis.
         ///</summary>
-        public AppSubscription[]? activeSubscriptions { get; set; }
+        public IEnumerable<AppSubscription>? activeSubscriptions { get; set; }
         ///<summary>
         ///All subscriptions created for a shop.
         ///</summary>
@@ -957,7 +984,7 @@ namespace ShopifySharp.GraphQL
         ///Subscriptions charge to a shop on a recurring basis.
         ///</summary>
         [Obsolete("Use `activeSubscriptions` instead.")]
-        public AppSubscription[]? subscriptions { get; set; }
+        public IEnumerable<AppSubscription>? subscriptions { get; set; }
         ///<summary>
         ///The URL to uninstall the application.
         ///</summary>
@@ -983,16 +1010,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple AppInstallations.
     ///</summary>
-    public class AppInstallationConnection : GraphQLObject<AppInstallationConnection>
+    public class AppInstallationConnection : GraphQLObject<AppInstallationConnection>, IConnectionWithNodesAndEdges<AppInstallationEdge, AppInstallation>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppInstallationEdge[]? edges { get; set; }
+        public IEnumerable<AppInstallationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppInstallationEdge.
         ///</summary>
-        public AppInstallation[]? nodes { get; set; }
+        public IEnumerable<AppInstallation>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -1002,7 +1029,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one AppInstallation and a cursor during pagination.
     ///</summary>
-    public class AppInstallationEdge : GraphQLObject<AppInstallationEdge>
+    public class AppInstallationEdge : GraphQLObject<AppInstallationEdge>, IEdge<AppInstallation>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -1177,16 +1204,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple AppPurchaseOneTimes.
     ///</summary>
-    public class AppPurchaseOneTimeConnection : GraphQLObject<AppPurchaseOneTimeConnection>
+    public class AppPurchaseOneTimeConnection : GraphQLObject<AppPurchaseOneTimeConnection>, IConnectionWithNodesAndEdges<AppPurchaseOneTimeEdge, AppPurchaseOneTime>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppPurchaseOneTimeEdge[]? edges { get; set; }
+        public IEnumerable<AppPurchaseOneTimeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppPurchaseOneTimeEdge.
         ///</summary>
-        public AppPurchaseOneTime[]? nodes { get; set; }
+        public IEnumerable<AppPurchaseOneTime>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -1214,13 +1241,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one AppPurchaseOneTime and a cursor during pagination.
     ///</summary>
-    public class AppPurchaseOneTimeEdge : GraphQLObject<AppPurchaseOneTimeEdge>
+    public class AppPurchaseOneTimeEdge : GraphQLObject<AppPurchaseOneTimeEdge>, IEdge<AppPurchaseOneTime>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -1327,16 +1354,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple AppRevenueAttributionRecords.
     ///</summary>
-    public class AppRevenueAttributionRecordConnection : GraphQLObject<AppRevenueAttributionRecordConnection>
+    public class AppRevenueAttributionRecordConnection : GraphQLObject<AppRevenueAttributionRecordConnection>, IConnectionWithNodesAndEdges<AppRevenueAttributionRecordEdge, AppRevenueAttributionRecord>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppRevenueAttributionRecordEdge[]? edges { get; set; }
+        public IEnumerable<AppRevenueAttributionRecordEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppRevenueAttributionRecordEdge.
         ///</summary>
-        public AppRevenueAttributionRecord[]? nodes { get; set; }
+        public IEnumerable<AppRevenueAttributionRecord>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -1355,7 +1382,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public AppRevenueAttributionRecordCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<AppRevenueAttributionRecordCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -1370,7 +1397,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -1404,7 +1431,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public AppRevenueAttributionRecordDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<AppRevenueAttributionRecordDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -1419,7 +1446,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -1440,7 +1467,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one AppRevenueAttributionRecord and a cursor during pagination.
     ///</summary>
-    public class AppRevenueAttributionRecordEdge : GraphQLObject<AppRevenueAttributionRecordEdge>
+    public class AppRevenueAttributionRecordEdge : GraphQLObject<AppRevenueAttributionRecordEdge>, IEdge<AppRevenueAttributionRecord>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -1515,7 +1542,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The plans attached to the app subscription.
         ///</summary>
-        public AppSubscriptionLineItem[]? lineItems { get; set; }
+        public IEnumerable<AppSubscriptionLineItem>? lineItems { get; set; }
         ///<summary>
         ///The name of the app subscription.
         ///</summary>
@@ -1550,22 +1577,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple AppSubscriptions.
     ///</summary>
-    public class AppSubscriptionConnection : GraphQLObject<AppSubscriptionConnection>
+    public class AppSubscriptionConnection : GraphQLObject<AppSubscriptionConnection>, IConnectionWithNodesAndEdges<AppSubscriptionEdge, AppSubscription>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppSubscriptionEdge[]? edges { get; set; }
+        public IEnumerable<AppSubscriptionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppSubscriptionEdge.
         ///</summary>
-        public AppSubscription[]? nodes { get; set; }
+        public IEnumerable<AppSubscription>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -1588,7 +1615,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -1652,7 +1679,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one AppSubscription and a cursor during pagination.
     ///</summary>
-    public class AppSubscriptionEdge : GraphQLObject<AppSubscriptionEdge>
+    public class AppSubscriptionEdge : GraphQLObject<AppSubscriptionEdge>, IEdge<AppSubscription>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -1699,7 +1726,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -1793,7 +1820,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public AppSubscriptionTrialExtendUserError[]? userErrors { get; set; }
+        public IEnumerable<AppSubscriptionTrialExtendUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -1808,7 +1835,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -1916,16 +1943,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple AppUsageRecords.
     ///</summary>
-    public class AppUsageRecordConnection : GraphQLObject<AppUsageRecordConnection>
+    public class AppUsageRecordConnection : GraphQLObject<AppUsageRecordConnection>, IConnectionWithNodesAndEdges<AppUsageRecordEdge, AppUsageRecord>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public AppUsageRecordEdge[]? edges { get; set; }
+        public IEnumerable<AppUsageRecordEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in AppUsageRecordEdge.
         ///</summary>
-        public AppUsageRecord[]? nodes { get; set; }
+        public IEnumerable<AppUsageRecord>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -1944,13 +1971,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one AppUsageRecord and a cursor during pagination.
     ///</summary>
-    public class AppUsageRecordEdge : GraphQLObject<AppUsageRecordEdge>
+    public class AppUsageRecordEdge : GraphQLObject<AppUsageRecordEdge>, IEdge<AppUsageRecord>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -2057,7 +2084,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The channel definitions for channels installed on a shop.
         ///</summary>
-        public ChannelDefinition[]? channelDefinitions { get; set; }
+        public IEnumerable<ChannelDefinition>? channelDefinitions { get; set; }
         ///<summary>
         ///The name of the channel.
         ///</summary>
@@ -2139,7 +2166,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -2224,7 +2251,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -2310,7 +2337,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -2348,7 +2375,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BulkMutationUserError[]? userErrors { get; set; }
+        public IEnumerable<BulkMutationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -2363,7 +2390,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -2426,11 +2453,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The feedback that's created.
         ///</summary>
-        public ProductResourceFeedback[]? feedback { get; set; }
+        public IEnumerable<ProductResourceFeedback>? feedback { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BulkProductResourceFeedbackCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<BulkProductResourceFeedbackCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -2445,7 +2472,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -2573,7 +2600,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -2701,16 +2728,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CalculatedDiscountApplications.
     ///</summary>
-    public class CalculatedDiscountApplicationConnection : GraphQLObject<CalculatedDiscountApplicationConnection>
+    public class CalculatedDiscountApplicationConnection : GraphQLObject<CalculatedDiscountApplicationConnection>, IConnectionWithNodesAndEdges<CalculatedDiscountApplicationEdge, ICalculatedDiscountApplication>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CalculatedDiscountApplicationEdge[]? edges { get; set; }
+        public IEnumerable<CalculatedDiscountApplicationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CalculatedDiscountApplicationEdge.
         ///</summary>
-        public ICalculatedDiscountApplication[]? nodes { get; set; }
+        public IEnumerable<ICalculatedDiscountApplication>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -2720,7 +2747,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CalculatedDiscountApplication and a cursor during pagination.
     ///</summary>
-    public class CalculatedDiscountApplicationEdge : GraphQLObject<CalculatedDiscountApplicationEdge>
+    public class CalculatedDiscountApplicationEdge : GraphQLObject<CalculatedDiscountApplicationEdge>, IEdge<ICalculatedDiscountApplication>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -2783,7 +2810,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The available shipping rates for the draft order. Requires a customer with a valid shipping address and at least one line item.
         ///</summary>
-        public ShippingRate[]? availableShippingRates { get; set; }
+        public IEnumerable<ShippingRate>? availableShippingRates { get; set; }
         ///<summary>
         ///Whether the billing address matches the shipping address.
         ///</summary>
@@ -2799,7 +2826,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Line items in the draft order with their computed properties.
         ///</summary>
-        public CalculatedDraftOrderLineItem[]? lineItems { get; set; }
+        public IEnumerable<CalculatedDraftOrderLineItem>? lineItems { get; set; }
         ///<summary>
         ///A subtotal of the line items and corresponding discounts. The subtotal doesn't include shipping charges, shipping discounts, taxes, or order discounts.
         ///</summary>
@@ -2839,7 +2866,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Total amount of taxes charged for each line item and shipping line.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Total discounts for this draft order.
         ///</summary>
@@ -2890,11 +2917,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///Additional information (metafields) about the line item with the associated types.
         ///</summary>
-        public TypedAttribute[]? customAttributesV2 { get; set; }
+        public IEnumerable<TypedAttribute>? customAttributesV2 { get; set; }
         ///<summary>
         ///Total price with discounts applied.
         ///</summary>
@@ -3006,17 +3033,17 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The discounts that have been allocated onto the line item by discount applications.
         ///</summary>
-        public CalculatedDiscountAllocation[]? calculatedDiscountAllocations { get; set; }
+        public IEnumerable<CalculatedDiscountAllocation>? calculatedDiscountAllocations { get; set; }
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
 
         ///<summary>
         ///The discounts that have been allocated onto the line item by discount applications.
         ///</summary>
         [Obsolete("Use `calculatedDiscountAllocations` instead.")]
-        public DiscountAllocation[]? discountAllocations { get; set; }
+        public IEnumerable<DiscountAllocation>? discountAllocations { get; set; }
         ///<summary>
         ///The price of a single quantity of the line item with line item discounts applied, in shop and presentment currencies. Discounts applied to the entire order aren't included in this price.
         ///</summary>
@@ -3068,7 +3095,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of changes that affect this line item.
         ///</summary>
-        public IOrderStagedChange[]? stagedChanges { get; set; }
+        public IEnumerable<IOrderStagedChange>? stagedChanges { get; set; }
         ///<summary>
         ///The title of the product.
         ///</summary>
@@ -3091,16 +3118,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CalculatedLineItems.
     ///</summary>
-    public class CalculatedLineItemConnection : GraphQLObject<CalculatedLineItemConnection>
+    public class CalculatedLineItemConnection : GraphQLObject<CalculatedLineItemConnection>, IConnectionWithNodesAndEdges<CalculatedLineItemEdge, CalculatedLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CalculatedLineItemEdge[]? edges { get; set; }
+        public IEnumerable<CalculatedLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CalculatedLineItemEdge.
         ///</summary>
-        public CalculatedLineItem[]? nodes { get; set; }
+        public IEnumerable<CalculatedLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -3110,7 +3137,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CalculatedLineItem and a cursor during pagination.
     ///</summary>
-    public class CalculatedLineItemEdge : GraphQLObject<CalculatedLineItemEdge>
+    public class CalculatedLineItemEdge : GraphQLObject<CalculatedLineItemEdge>, IEdge<CalculatedLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -3221,7 +3248,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Taxes charged for the line item.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Total price of the order less the total amount received from the customer in shop and presentment currencies.
         ///</summary>
@@ -3348,16 +3375,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CartTransforms.
     ///</summary>
-    public class CartTransformConnection : GraphQLObject<CartTransformConnection>
+    public class CartTransformConnection : GraphQLObject<CartTransformConnection>, IConnectionWithNodesAndEdges<CartTransformEdge, CartTransform>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CartTransformEdge[]? edges { get; set; }
+        public IEnumerable<CartTransformEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CartTransformEdge.
         ///</summary>
-        public CartTransform[]? nodes { get; set; }
+        public IEnumerable<CartTransform>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -3376,7 +3403,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CartTransformCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<CartTransformCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -3391,7 +3418,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -3433,7 +3460,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CartTransformDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<CartTransformDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -3448,7 +3475,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -3473,7 +3500,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CartTransform and a cursor during pagination.
     ///</summary>
-    public class CartTransformEdge : GraphQLObject<CartTransformEdge>
+    public class CartTransformEdge : GraphQLObject<CartTransformEdge>, IEdge<CartTransform>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -3498,7 +3525,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Most recent catalog operations.
         ///</summary>
-        public IResourceOperation[]? operations { get; }
+        public IEnumerable<IResourceOperation>? operations { get; }
         ///<summary>
         ///The price list associated with the catalog.
         ///</summary>
@@ -3520,16 +3547,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Catalogs.
     ///</summary>
-    public class CatalogConnection : GraphQLObject<CatalogConnection>
+    public class CatalogConnection : GraphQLObject<CatalogConnection>, IConnectionWithNodesAndEdges<CatalogEdge, ICatalog>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CatalogEdge[]? edges { get; set; }
+        public IEnumerable<CatalogEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CatalogEdge.
         ///</summary>
-        public ICatalog[]? nodes { get; set; }
+        public IEnumerable<ICatalog>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -3552,7 +3579,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CatalogUserError[]? userErrors { get; set; }
+        public IEnumerable<CatalogUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -3567,7 +3594,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CatalogUserError[]? userErrors { get; set; }
+        public IEnumerable<CatalogUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -3605,13 +3632,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CatalogUserError[]? userErrors { get; set; }
+        public IEnumerable<CatalogUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Catalog and a cursor during pagination.
     ///</summary>
-    public class CatalogEdge : GraphQLObject<CatalogEdge>
+    public class CatalogEdge : GraphQLObject<CatalogEdge>, IEdge<ICatalog>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -3697,7 +3724,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CatalogUserError[]? userErrors { get; set; }
+        public IEnumerable<CatalogUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -3712,7 +3739,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -3907,7 +3934,7 @@ namespace ShopifySharp.GraphQL
         ///The menu items for the channel, which also appear as submenu items in the left navigation sidebar in the Shopify admin.
         ///</summary>
         [Obsolete("Use [AppInstallation.navigationItems](\n          https://shopify.dev/api/admin-graphql/current/objects/AppInstallation#field-appinstallation-navigationitems) instead.")]
-        public NavigationItem[]? navigationItems { get; set; }
+        public IEnumerable<NavigationItem>? navigationItems { get; set; }
 
         ///<summary>
         ///Home page for the channel.
@@ -3937,16 +3964,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Channels.
     ///</summary>
-    public class ChannelConnection : GraphQLObject<ChannelConnection>
+    public class ChannelConnection : GraphQLObject<ChannelConnection>, IConnectionWithNodesAndEdges<ChannelEdge, Channel>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ChannelEdge[]? edges { get; set; }
+        public IEnumerable<ChannelEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ChannelEdge.
         ///</summary>
-        public Channel[]? nodes { get; set; }
+        public IEnumerable<Channel>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -3988,7 +4015,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Channel and a cursor during pagination.
     ///</summary>
-    public class ChannelEdge : GraphQLObject<ChannelEdge>
+    public class ChannelEdge : GraphQLObject<ChannelEdge>, IEdge<Channel>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -4057,16 +4084,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CheckoutProfiles.
     ///</summary>
-    public class CheckoutProfileConnection : GraphQLObject<CheckoutProfileConnection>
+    public class CheckoutProfileConnection : GraphQLObject<CheckoutProfileConnection>, IConnectionWithNodesAndEdges<CheckoutProfileEdge, CheckoutProfile>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CheckoutProfileEdge[]? edges { get; set; }
+        public IEnumerable<CheckoutProfileEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CheckoutProfileEdge.
         ///</summary>
-        public CheckoutProfile[]? nodes { get; set; }
+        public IEnumerable<CheckoutProfile>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -4076,7 +4103,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CheckoutProfile and a cursor during pagination.
     ///</summary>
-    public class CheckoutProfileEdge : GraphQLObject<CheckoutProfileEdge>
+    public class CheckoutProfileEdge : GraphQLObject<CheckoutProfileEdge>, IEdge<CheckoutProfile>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -4306,7 +4333,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
 
         ///<summary>
         ///The list of channels that the resource is not published to.
@@ -4335,7 +4362,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4350,7 +4377,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CollectionAddProductsV2UserError[]? userErrors { get; set; }
+        public IEnumerable<CollectionAddProductsV2UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4365,7 +4392,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -4390,16 +4417,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Collections.
     ///</summary>
-    public class CollectionConnection : GraphQLObject<CollectionConnection>
+    public class CollectionConnection : GraphQLObject<CollectionConnection>, IConnectionWithNodesAndEdges<CollectionEdge, Collection>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CollectionEdge[]? edges { get; set; }
+        public IEnumerable<CollectionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CollectionEdge.
         ///</summary>
-        public Collection[]? nodes { get; set; }
+        public IEnumerable<Collection>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -4418,7 +4445,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4437,13 +4464,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Collection and a cursor during pagination.
     ///</summary>
-    public class CollectionEdge : GraphQLObject<CollectionEdge>
+    public class CollectionEdge : GraphQLObject<CollectionEdge>, IEdge<Collection>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -4486,16 +4513,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CollectionPublications.
     ///</summary>
-    public class CollectionPublicationConnection : GraphQLObject<CollectionPublicationConnection>
+    public class CollectionPublicationConnection : GraphQLObject<CollectionPublicationConnection>, IConnectionWithNodesAndEdges<CollectionPublicationEdge, CollectionPublication>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CollectionPublicationEdge[]? edges { get; set; }
+        public IEnumerable<CollectionPublicationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CollectionPublicationEdge.
         ///</summary>
-        public CollectionPublication[]? nodes { get; set; }
+        public IEnumerable<CollectionPublication>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -4505,7 +4532,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CollectionPublication and a cursor during pagination.
     ///</summary>
-    public class CollectionPublicationEdge : GraphQLObject<CollectionPublicationEdge>
+    public class CollectionPublicationEdge : GraphQLObject<CollectionPublicationEdge>, IEdge<CollectionPublication>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -4529,7 +4556,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The channels where the collection has been published.
         ///</summary>
-        public CollectionPublication[]? collectionPublications { get; set; }
+        public IEnumerable<CollectionPublication>? collectionPublications { get; set; }
         ///<summary>
         ///The shop associated with the collection.
         ///</summary>
@@ -4537,7 +4564,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4552,7 +4579,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4567,7 +4594,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4676,7 +4703,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Allowed relations of the rule.
         ///</summary>
-        public CollectionRuleRelation[]? allowedRelations { get; set; }
+        public IEnumerable<CollectionRuleRelation>? allowedRelations { get; set; }
         ///<summary>
         ///Most commonly used relation for this rule.
         ///</summary>
@@ -4788,7 +4815,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The rules used to assign products to the collection.
         ///</summary>
-        public CollectionRule[]? rules { get; set; }
+        public IEnumerable<CollectionRule>? rules { get; set; }
     }
 
     ///<summary>
@@ -4881,7 +4908,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4900,7 +4927,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -4916,7 +4943,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The attachments associated with the comment event.
         ///</summary>
-        public CommentEventAttachment[]? attachments { get; set; }
+        public IEnumerable<CommentEventAttachment>? attachments { get; set; }
         ///<summary>
         ///Whether the event was created by an app.
         ///</summary>
@@ -5092,11 +5119,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of IDs of the deleted companies.
         ///</summary>
-        public string[]? deletedCompanyIds { get; set; }
+        public IEnumerable<string>? deletedCompanyIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5255,7 +5282,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The formatted version of the address.
         ///</summary>
-        public string[]? formattedAddress { get; set; }
+        public IEnumerable<string>? formattedAddress { get; set; }
         ///<summary>
         ///A comma-separated list of the values for city, province, and country.
         ///</summary>
@@ -5304,7 +5331,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5334,7 +5361,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5349,22 +5376,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Companies.
     ///</summary>
-    public class CompanyConnection : GraphQLObject<CompanyConnection>
+    public class CompanyConnection : GraphQLObject<CompanyConnection>, IConnectionWithNodesAndEdges<CompanyEdge, Company>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CompanyEdge[]? edges { get; set; }
+        public IEnumerable<CompanyEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CompanyEdge.
         ///</summary>
-        public Company[]? nodes { get; set; }
+        public IEnumerable<Company>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -5438,7 +5465,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5449,26 +5476,26 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of newly created assignments of company contacts to a company location.
         ///</summary>
-        public CompanyContactRoleAssignment[]? roleAssignments { get; set; }
+        public IEnumerable<CompanyContactRoleAssignment>? roleAssignments { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple CompanyContacts.
     ///</summary>
-    public class CompanyContactConnection : GraphQLObject<CompanyContactConnection>
+    public class CompanyContactConnection : GraphQLObject<CompanyContactConnection>, IConnectionWithNodesAndEdges<CompanyContactEdge, CompanyContact>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CompanyContactEdge[]? edges { get; set; }
+        public IEnumerable<CompanyContactEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CompanyContactEdge.
         ///</summary>
-        public CompanyContact[]? nodes { get; set; }
+        public IEnumerable<CompanyContact>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -5487,7 +5514,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5502,13 +5529,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one CompanyContact and a cursor during pagination.
     ///</summary>
-    public class CompanyContactEdge : GraphQLObject<CompanyContactEdge>
+    public class CompanyContactEdge : GraphQLObject<CompanyContactEdge>, IEdge<CompanyContact>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -5532,7 +5559,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5547,7 +5574,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5558,11 +5585,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of role assignment IDs that were removed from the company contact.
         ///</summary>
-        public string[]? revokedRoleAssignmentIds { get; set; }
+        public IEnumerable<string>? revokedRoleAssignmentIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5623,16 +5650,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CompanyContactRoleAssignments.
     ///</summary>
-    public class CompanyContactRoleAssignmentConnection : GraphQLObject<CompanyContactRoleAssignmentConnection>
+    public class CompanyContactRoleAssignmentConnection : GraphQLObject<CompanyContactRoleAssignmentConnection>, IConnectionWithNodesAndEdges<CompanyContactRoleAssignmentEdge, CompanyContactRoleAssignment>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CompanyContactRoleAssignmentEdge[]? edges { get; set; }
+        public IEnumerable<CompanyContactRoleAssignmentEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CompanyContactRoleAssignmentEdge.
         ///</summary>
-        public CompanyContactRoleAssignment[]? nodes { get; set; }
+        public IEnumerable<CompanyContactRoleAssignment>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -5642,7 +5669,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CompanyContactRoleAssignment and a cursor during pagination.
     ///</summary>
-    public class CompanyContactRoleAssignmentEdge : GraphQLObject<CompanyContactRoleAssignmentEdge>
+    public class CompanyContactRoleAssignmentEdge : GraphQLObject<CompanyContactRoleAssignmentEdge>, IEdge<CompanyContactRoleAssignment>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -5685,16 +5712,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CompanyContactRoles.
     ///</summary>
-    public class CompanyContactRoleConnection : GraphQLObject<CompanyContactRoleConnection>
+    public class CompanyContactRoleConnection : GraphQLObject<CompanyContactRoleConnection>, IConnectionWithNodesAndEdges<CompanyContactRoleEdge, CompanyContactRole>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CompanyContactRoleEdge[]? edges { get; set; }
+        public IEnumerable<CompanyContactRoleEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CompanyContactRoleEdge.
         ///</summary>
-        public CompanyContactRole[]? nodes { get; set; }
+        public IEnumerable<CompanyContactRole>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -5704,7 +5731,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CompanyContactRole and a cursor during pagination.
     ///</summary>
-    public class CompanyContactRoleEdge : GraphQLObject<CompanyContactRoleEdge>
+    public class CompanyContactRoleEdge : GraphQLObject<CompanyContactRoleEdge>, IEdge<CompanyContactRole>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -5752,7 +5779,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5811,7 +5838,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5822,11 +5849,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of IDs of the deleted company contacts.
         ///</summary>
-        public string[]? deletedCompanyContactIds { get; set; }
+        public IEnumerable<string>? deletedCompanyContactIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5841,7 +5868,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -5856,13 +5883,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Company and a cursor during pagination.
     ///</summary>
-    public class CompanyEdge : GraphQLObject<CompanyEdge>
+    public class CompanyEdge : GraphQLObject<CompanyEdge>, IEdge<Company>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -5994,7 +6021,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of tax exemptions applied to the location.
         ///</summary>
-        public TaxExemption[]? taxExemptions { get; set; }
+        public IEnumerable<TaxExemption>? taxExemptions { get; set; }
         ///<summary>
         ///The tax registration ID for the company location.
         ///</summary>
@@ -6017,11 +6044,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of updated addresses on the company location.
         ///</summary>
-        public CompanyAddress[]? addresses { get; set; }
+        public IEnumerable<CompanyAddress>? addresses { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6032,11 +6059,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of newly created assignments of company contacts to a company location.
         ///</summary>
-        public CompanyContactRoleAssignment[]? roleAssignments { get; set; }
+        public IEnumerable<CompanyContactRoleAssignment>? roleAssignments { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6051,7 +6078,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6074,7 +6101,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Most recent catalog operations.
         ///</summary>
-        public IResourceOperation[]? operations { get; set; }
+        public IEnumerable<IResourceOperation>? operations { get; set; }
         ///<summary>
         ///The price list associated with the catalog.
         ///</summary>
@@ -6096,16 +6123,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CompanyLocations.
     ///</summary>
-    public class CompanyLocationConnection : GraphQLObject<CompanyLocationConnection>
+    public class CompanyLocationConnection : GraphQLObject<CompanyLocationConnection>, IConnectionWithNodesAndEdges<CompanyLocationEdge, CompanyLocation>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CompanyLocationEdge[]? edges { get; set; }
+        public IEnumerable<CompanyLocationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CompanyLocationEdge.
         ///</summary>
-        public CompanyLocation[]? nodes { get; set; }
+        public IEnumerable<CompanyLocation>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -6124,7 +6151,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6139,7 +6166,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6154,13 +6181,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one CompanyLocation and a cursor during pagination.
     ///</summary>
-    public class CompanyLocationEdge : GraphQLObject<CompanyLocationEdge>
+    public class CompanyLocationEdge : GraphQLObject<CompanyLocationEdge>, IEdge<CompanyLocation>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -6180,11 +6207,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of role assignment IDs that were removed from the company location.
         ///</summary>
-        public string[]? revokedRoleAssignmentIds { get; set; }
+        public IEnumerable<string>? revokedRoleAssignmentIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6199,7 +6226,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6214,7 +6241,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6265,7 +6292,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6276,11 +6303,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of IDs of the deleted company locations.
         ///</summary>
-        public string[]? deletedCompanyLocationIds { get; set; }
+        public IEnumerable<string>? deletedCompanyLocationIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6295,7 +6322,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6350,7 +6377,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BusinessCustomerUserError[]? userErrors { get; set; }
+        public IEnumerable<BusinessCustomerUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -6361,7 +6388,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of all the countries from all the combined shipping zones.
         ///</summary>
-        public CountryCode[]? countryCodes { get; set; }
+        public IEnumerable<CountryCode>? countryCodes { get; set; }
         ///<summary>
         ///Whether 'Rest of World' has been defined in any of the shipping zones.
         ///</summary>
@@ -7376,16 +7403,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CountryHarmonizedSystemCodes.
     ///</summary>
-    public class CountryHarmonizedSystemCodeConnection : GraphQLObject<CountryHarmonizedSystemCodeConnection>
+    public class CountryHarmonizedSystemCodeConnection : GraphQLObject<CountryHarmonizedSystemCodeConnection>, IConnectionWithNodesAndEdges<CountryHarmonizedSystemCodeEdge, CountryHarmonizedSystemCode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CountryHarmonizedSystemCodeEdge[]? edges { get; set; }
+        public IEnumerable<CountryHarmonizedSystemCodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CountryHarmonizedSystemCodeEdge.
         ///</summary>
-        public CountryHarmonizedSystemCode[]? nodes { get; set; }
+        public IEnumerable<CountryHarmonizedSystemCode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -7395,7 +7422,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CountryHarmonizedSystemCode and a cursor during pagination.
     ///</summary>
-    public class CountryHarmonizedSystemCodeEdge : GraphQLObject<CountryHarmonizedSystemCodeEdge>
+    public class CountryHarmonizedSystemCodeEdge : GraphQLObject<CountryHarmonizedSystemCodeEdge>, IEdge<CountryHarmonizedSystemCode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -8138,16 +8165,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CurrencySettings.
     ///</summary>
-    public class CurrencySettingConnection : GraphQLObject<CurrencySettingConnection>
+    public class CurrencySettingConnection : GraphQLObject<CurrencySettingConnection>, IConnectionWithNodesAndEdges<CurrencySettingEdge, CurrencySetting>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CurrencySettingEdge[]? edges { get; set; }
+        public IEnumerable<CurrencySettingEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CurrencySettingEdge.
         ///</summary>
-        public CurrencySetting[]? nodes { get; set; }
+        public IEnumerable<CurrencySetting>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -8157,7 +8184,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CurrencySetting and a cursor during pagination.
     ///</summary>
-    public class CurrencySettingEdge : GraphQLObject<CurrencySettingEdge>
+    public class CurrencySettingEdge : GraphQLObject<CurrencySettingEdge>, IEdge<CurrencySetting>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -8191,7 +8218,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of addresses associated with the customer.
         ///</summary>
-        public MailingAddress[]? addresses { get; set; }
+        public IEnumerable<MailingAddress>? addresses { get; set; }
         ///<summary>
         ///The total amount that the customer has spent on orders in their lifetime.
         ///</summary>
@@ -8218,7 +8245,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the customer's company contact profiles.
         ///</summary>
-        public CompanyContact[]? companyContactProfiles { get; set; }
+        public IEnumerable<CompanyContact>? companyContactProfiles { get; set; }
         ///<summary>
         ///The date and time when the customer was added to the store.
         ///</summary>
@@ -8375,7 +8402,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A comma separated list of tags that have been added to the customer.
         ///</summary>
-        public string[]? tags { get; set; }
+        public IEnumerable<string>? tags { get; set; }
         ///<summary>
         ///Whether the customer is exempt from being charged taxes on their orders.
         ///</summary>
@@ -8383,7 +8410,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of tax exemptions applied to the customer.
         ///</summary>
-        public TaxExemption[]? taxExemptions { get; set; }
+        public IEnumerable<TaxExemption>? taxExemptions { get; set; }
         ///<summary>
         ///The URL to unsubscribe the customer from the mailing list.
         ///</summary>
@@ -8418,22 +8445,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Customers.
     ///</summary>
-    public class CustomerConnection : GraphQLObject<CustomerConnection>
+    public class CustomerConnection : GraphQLObject<CustomerConnection>, IConnectionWithNodesAndEdges<CustomerEdge, Customer>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CustomerEdge[]? edges { get; set; }
+        public IEnumerable<CustomerEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CustomerEdge.
         ///</summary>
-        public Customer[]? nodes { get; set; }
+        public IEnumerable<Customer>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -8467,7 +8494,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -8586,13 +8613,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Customer and a cursor during pagination.
     ///</summary>
-    public class CustomerEdge : GraphQLObject<CustomerEdge>
+    public class CustomerEdge : GraphQLObject<CustomerEdge>, IEdge<Customer>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -8711,7 +8738,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerEmailMarketingConsentUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerEmailMarketingConsentUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -8726,7 +8753,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -8799,7 +8826,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -8826,7 +8853,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Events preceding a customer order, such as shop sessions.
         ///</summary>
-        public ICustomerMoment[]? moments { get; set; }
+        public IEnumerable<ICustomerMoment>? moments { get; set; }
     }
 
     ///<summary>
@@ -8896,7 +8923,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of fields preventing the customer from being merged.
         ///</summary>
-        public CustomerMergeErrorFieldType[]? errorFields { get; set; }
+        public IEnumerable<CustomerMergeErrorFieldType>? errorFields { get; set; }
         ///<summary>
         ///The customer merge error message.
         ///</summary>
@@ -8993,7 +9020,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerMergeUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerMergeUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9012,7 +9039,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The errors blocking the customer merge.
         ///</summary>
-        public CustomerMergeError[]? customerMergeErrors { get; set; }
+        public IEnumerable<CustomerMergeError>? customerMergeErrors { get; set; }
         ///<summary>
         ///The fields that will be kept if the two customers are merged.
         ///</summary>
@@ -9062,7 +9089,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The merged tags resulting from a customer merge. The merged tags are over the 250 limit and will block customer merge.
         ///</summary>
-        public string[]? tags { get; set; }
+        public IEnumerable<string>? tags { get; set; }
     }
 
     ///<summary>
@@ -9141,7 +9168,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The merged tags resulting from a customer merge.
         ///</summary>
-        public string[]? tags { get; set; }
+        public IEnumerable<string>? tags { get; set; }
     }
 
     ///<summary>
@@ -9152,7 +9179,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The merge errors that occurred during the customer merge request.
         ///</summary>
-        public CustomerMergeError[]? customerMergeErrors { get; set; }
+        public IEnumerable<CustomerMergeError>? customerMergeErrors { get; set; }
         ///<summary>
         ///The UUID of the merge job.
         ///</summary>
@@ -9202,7 +9229,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -9217,7 +9244,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of fields preventing the customer from being merged.
         ///</summary>
-        public CustomerMergeErrorFieldType[]? errorFields { get; set; }
+        public IEnumerable<CustomerMergeErrorFieldType>? errorFields { get; set; }
         ///<summary>
         ///Whether the customer can be merged with another customer.
         ///</summary>
@@ -9249,16 +9276,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CustomerMoments.
     ///</summary>
-    public class CustomerMomentConnection : GraphQLObject<CustomerMomentConnection>
+    public class CustomerMomentConnection : GraphQLObject<CustomerMomentConnection>, IConnectionWithNodesAndEdges<CustomerMomentEdge, ICustomerMoment>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CustomerMomentEdge[]? edges { get; set; }
+        public IEnumerable<CustomerMomentEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CustomerMomentEdge.
         ///</summary>
-        public ICustomerMoment[]? nodes { get; set; }
+        public IEnumerable<ICustomerMoment>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -9268,7 +9295,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CustomerMoment and a cursor during pagination.
     ///</summary>
-    public class CustomerMomentEdge : GraphQLObject<CustomerMomentEdge>
+    public class CustomerMomentEdge : GraphQLObject<CustomerMomentEdge>, IEdge<ICustomerMoment>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -9373,16 +9400,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CustomerPaymentMethods.
     ///</summary>
-    public class CustomerPaymentMethodConnection : GraphQLObject<CustomerPaymentMethodConnection>
+    public class CustomerPaymentMethodConnection : GraphQLObject<CustomerPaymentMethodConnection>, IConnectionWithNodesAndEdges<CustomerPaymentMethodEdge, CustomerPaymentMethod>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CustomerPaymentMethodEdge[]? edges { get; set; }
+        public IEnumerable<CustomerPaymentMethodEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CustomerPaymentMethodEdge.
         ///</summary>
-        public CustomerPaymentMethod[]? nodes { get; set; }
+        public IEnumerable<CustomerPaymentMethod>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -9401,7 +9428,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodCreateFromDuplicationDataUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodCreateFromDuplicationDataUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9416,7 +9443,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -9454,7 +9481,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9469,13 +9496,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one CustomerPaymentMethod and a cursor during pagination.
     ///</summary>
-    public class CustomerPaymentMethodEdge : GraphQLObject<CustomerPaymentMethodEdge>
+    public class CustomerPaymentMethodEdge : GraphQLObject<CustomerPaymentMethodEdge>, IEdge<CustomerPaymentMethod>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -9499,7 +9526,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodGetDuplicationDataUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodGetDuplicationDataUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9514,7 +9541,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -9564,7 +9591,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodGetUpdateUrlUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodGetUpdateUrlUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9579,7 +9606,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -9621,7 +9648,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9636,7 +9663,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9651,7 +9678,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodRemoteUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodRemoteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9666,7 +9693,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerPaymentMethodUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerPaymentMethodUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9681,7 +9708,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -9794,7 +9821,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9809,7 +9836,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9824,7 +9851,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -9954,7 +9981,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -9969,7 +9996,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10070,12 +10097,12 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///The connection type for the `CustomerSegmentMembers` object.
     ///</summary>
-    public class CustomerSegmentMemberConnection : GraphQLObject<CustomerSegmentMemberConnection>
+    public class CustomerSegmentMemberConnection : GraphQLObject<CustomerSegmentMemberConnection>, IConnectionWithEdges<CustomerSegmentMemberEdge, CustomerSegmentMember>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CustomerSegmentMemberEdge[]? edges { get; set; }
+        public IEnumerable<CustomerSegmentMemberEdge>? edges { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -10093,7 +10120,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CustomerSegmentMember and a cursor during pagination.
     ///</summary>
-    public class CustomerSegmentMemberEdge : GraphQLObject<CustomerSegmentMemberEdge>
+    public class CustomerSegmentMemberEdge : GraphQLObject<CustomerSegmentMemberEdge>, IEdge<CustomerSegmentMember>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -10136,7 +10163,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerSegmentMembersQueryUserError[]? userErrors { get; set; }
+        public IEnumerable<CustomerSegmentMembersQueryUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10151,7 +10178,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -10224,7 +10251,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -10292,7 +10319,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public CustomerSmsMarketingConsentError[]? userErrors { get; set; }
+        public IEnumerable<CustomerSmsMarketingConsentError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10412,7 +10439,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10427,7 +10454,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10512,16 +10539,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple CustomerVisitProductInfos.
     ///</summary>
-    public class CustomerVisitProductInfoConnection : GraphQLObject<CustomerVisitProductInfoConnection>
+    public class CustomerVisitProductInfoConnection : GraphQLObject<CustomerVisitProductInfoConnection>, IConnectionWithNodesAndEdges<CustomerVisitProductInfoEdge, CustomerVisitProductInfo>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public CustomerVisitProductInfoEdge[]? edges { get; set; }
+        public IEnumerable<CustomerVisitProductInfoEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in CustomerVisitProductInfoEdge.
         ///</summary>
-        public CustomerVisitProductInfo[]? nodes { get; set; }
+        public IEnumerable<CustomerVisitProductInfo>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -10531,7 +10558,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one CustomerVisitProductInfo and a cursor during pagination.
     ///</summary>
-    public class CustomerVisitProductInfoEdge : GraphQLObject<CustomerVisitProductInfoEdge>
+    public class CustomerVisitProductInfoEdge : GraphQLObject<CustomerVisitProductInfoEdge>, IEdge<CustomerVisitProductInfo>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -10590,7 +10617,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of permissions associated with the token.
         ///</summary>
-        public string[]? accessScopes { get; set; }
+        public IEnumerable<string>? accessScopes { get; set; }
         ///<summary>
         ///The issued delegate access token.
         ///</summary>
@@ -10617,7 +10644,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DelegateAccessTokenCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<DelegateAccessTokenCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10632,7 +10659,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -10690,7 +10717,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DelegateAccessTokenDestroyUserError[]? userErrors { get; set; }
+        public IEnumerable<DelegateAccessTokenDestroyUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -10705,7 +10732,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -10759,16 +10786,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DeletionEvents.
     ///</summary>
-    public class DeletionEventConnection : GraphQLObject<DeletionEventConnection>
+    public class DeletionEventConnection : GraphQLObject<DeletionEventConnection>, IConnectionWithNodesAndEdges<DeletionEventEdge, DeletionEvent>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DeletionEventEdge[]? edges { get; set; }
+        public IEnumerable<DeletionEventEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DeletionEventEdge.
         ///</summary>
-        public DeletionEvent[]? nodes { get; set; }
+        public IEnumerable<DeletionEvent>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -10778,7 +10805,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DeletionEvent and a cursor during pagination.
     ///</summary>
-    public class DeletionEventEdge : GraphQLObject<DeletionEventEdge>
+    public class DeletionEventEdge : GraphQLObject<DeletionEventEdge>, IEdge<DeletionEvent>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -10857,7 +10884,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of services offered for given destinations.
         ///</summary>
-        public DeliveryAvailableService[]? availableServicesForCountries { get; set; }
+        public IEnumerable<DeliveryAvailableService>? availableServicesForCountries { get; set; }
         ///<summary>
         ///The properly formatted name of the shipping service provider, ready to display.
         ///</summary>
@@ -10888,7 +10915,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of locations that support this carrier service.
         ///</summary>
-        public Location[]? locations { get; set; }
+        public IEnumerable<Location>? locations { get; set; }
     }
 
     ///<summary>
@@ -10978,7 +11005,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of regions associated with this country.
         ///</summary>
-        public DeliveryProvince[]? provinces { get; set; }
+        public IEnumerable<DeliveryProvince>? provinces { get; set; }
         ///<summary>
         ///The translated name of the country. The translation returned is based on the system's locale.
         ///</summary>
@@ -11024,7 +11051,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of applicable country codes in the ISO 3166-1 alpha-2 format.
         ///</summary>
-        public CountryCode[]? countryCodes { get; set; }
+        public IEnumerable<CountryCode>? countryCodes { get; set; }
         ///<summary>
         ///Whether the countries are a part of the 'Rest of World' shipping zone.
         ///</summary>
@@ -11094,26 +11121,26 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The IDs of the updated delivery customizations.
         ///</summary>
-        public string[]? ids { get; set; }
+        public IEnumerable<string>? ids { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DeliveryCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<DeliveryCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple DeliveryCustomizations.
     ///</summary>
-    public class DeliveryCustomizationConnection : GraphQLObject<DeliveryCustomizationConnection>
+    public class DeliveryCustomizationConnection : GraphQLObject<DeliveryCustomizationConnection>, IConnectionWithNodesAndEdges<DeliveryCustomizationEdge, DeliveryCustomization>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DeliveryCustomizationEdge[]? edges { get; set; }
+        public IEnumerable<DeliveryCustomizationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DeliveryCustomizationEdge.
         ///</summary>
-        public DeliveryCustomization[]? nodes { get; set; }
+        public IEnumerable<DeliveryCustomization>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -11132,7 +11159,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DeliveryCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<DeliveryCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -11147,13 +11174,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DeliveryCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<DeliveryCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one DeliveryCustomization and a cursor during pagination.
     ///</summary>
-    public class DeliveryCustomizationEdge : GraphQLObject<DeliveryCustomizationEdge>
+    public class DeliveryCustomizationEdge : GraphQLObject<DeliveryCustomizationEdge>, IEdge<DeliveryCustomization>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -11177,7 +11204,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -11251,7 +11278,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DeliveryCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<DeliveryCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -11266,7 +11293,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The reasons why the shop is blocked from converting to full multi-location delivery profiles mode.
         ///</summary>
-        public DeliveryLegacyModeBlockedReason[]? reasons { get; set; }
+        public IEnumerable<DeliveryLegacyModeBlockedReason>? reasons { get; set; }
     }
 
     ///<summary>
@@ -11373,16 +11400,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DeliveryLocationGroupZones.
     ///</summary>
-    public class DeliveryLocationGroupZoneConnection : GraphQLObject<DeliveryLocationGroupZoneConnection>
+    public class DeliveryLocationGroupZoneConnection : GraphQLObject<DeliveryLocationGroupZoneConnection>, IConnectionWithNodesAndEdges<DeliveryLocationGroupZoneEdge, DeliveryLocationGroupZone>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DeliveryLocationGroupZoneEdge[]? edges { get; set; }
+        public IEnumerable<DeliveryLocationGroupZoneEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DeliveryLocationGroupZoneEdge.
         ///</summary>
-        public DeliveryLocationGroupZone[]? nodes { get; set; }
+        public IEnumerable<DeliveryLocationGroupZone>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -11392,7 +11419,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DeliveryLocationGroupZone and a cursor during pagination.
     ///</summary>
-    public class DeliveryLocationGroupZoneEdge : GraphQLObject<DeliveryLocationGroupZoneEdge>
+    public class DeliveryLocationGroupZoneEdge : GraphQLObject<DeliveryLocationGroupZoneEdge>, IEdge<DeliveryLocationGroupZone>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -11416,7 +11443,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -11486,7 +11513,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The method conditions that must pass for this method definition to be applied to an order.
         ///</summary>
-        public DeliveryCondition[]? methodConditions { get; set; }
+        public IEnumerable<DeliveryCondition>? methodConditions { get; set; }
         ///<summary>
         ///The name of the method definition.
         ///</summary>
@@ -11500,16 +11527,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DeliveryMethodDefinitions.
     ///</summary>
-    public class DeliveryMethodDefinitionConnection : GraphQLObject<DeliveryMethodDefinitionConnection>
+    public class DeliveryMethodDefinitionConnection : GraphQLObject<DeliveryMethodDefinitionConnection>, IConnectionWithNodesAndEdges<DeliveryMethodDefinitionEdge, DeliveryMethodDefinition>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DeliveryMethodDefinitionEdge[]? edges { get; set; }
+        public IEnumerable<DeliveryMethodDefinitionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DeliveryMethodDefinitionEdge.
         ///</summary>
-        public DeliveryMethodDefinition[]? nodes { get; set; }
+        public IEnumerable<DeliveryMethodDefinition>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -11534,7 +11561,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DeliveryMethodDefinition and a cursor during pagination.
     ///</summary>
-    public class DeliveryMethodDefinitionEdge : GraphQLObject<DeliveryMethodDefinitionEdge>
+    public class DeliveryMethodDefinitionEdge : GraphQLObject<DeliveryMethodDefinitionEdge>, IEdge<DeliveryMethodDefinition>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -11613,7 +11640,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The carrier-specific services offered by the participant, and whether each service is active.
         ///</summary>
-        public DeliveryParticipantService[]? participantServices { get; set; }
+        public IEnumerable<DeliveryParticipantService>? participantServices { get; set; }
         ///<summary>
         ///The merchant-defined percentage-of-rate fee for this participant.
         ///</summary>
@@ -11700,7 +11727,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The location groups and associated zones using this profile.
         ///</summary>
-        public DeliveryProfileLocationGroup[]? profileLocationGroups { get; set; }
+        public IEnumerable<DeliveryProfileLocationGroup>? profileLocationGroups { get; set; }
         ///<summary>
         ///Selling plan groups associated with the specified delivery profile.
         ///</summary>
@@ -11708,7 +11735,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of locations that haven't been assigned to a location group for this profile.
         ///</summary>
-        public Location[]? unassignedLocations { get; set; }
+        public IEnumerable<Location>? unassignedLocations { get; set; }
         ///<summary>
         ///List of locations that have not been assigned to a location group for this profile.
         ///</summary>
@@ -11722,16 +11749,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DeliveryProfiles.
     ///</summary>
-    public class DeliveryProfileConnection : GraphQLObject<DeliveryProfileConnection>
+    public class DeliveryProfileConnection : GraphQLObject<DeliveryProfileConnection>, IConnectionWithNodesAndEdges<DeliveryProfileEdge, DeliveryProfile>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DeliveryProfileEdge[]? edges { get; set; }
+        public IEnumerable<DeliveryProfileEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DeliveryProfileEdge.
         ///</summary>
-        public DeliveryProfile[]? nodes { get; set; }
+        public IEnumerable<DeliveryProfile>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -11741,7 +11768,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DeliveryProfile and a cursor during pagination.
     ///</summary>
-    public class DeliveryProfileEdge : GraphQLObject<DeliveryProfileEdge>
+    public class DeliveryProfileEdge : GraphQLObject<DeliveryProfileEdge>, IEdge<DeliveryProfile>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -11775,16 +11802,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DeliveryProfileItems.
     ///</summary>
-    public class DeliveryProfileItemConnection : GraphQLObject<DeliveryProfileItemConnection>
+    public class DeliveryProfileItemConnection : GraphQLObject<DeliveryProfileItemConnection>, IConnectionWithNodesAndEdges<DeliveryProfileItemEdge, DeliveryProfileItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DeliveryProfileItemEdge[]? edges { get; set; }
+        public IEnumerable<DeliveryProfileItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DeliveryProfileItemEdge.
         ///</summary>
-        public DeliveryProfileItem[]? nodes { get; set; }
+        public IEnumerable<DeliveryProfileItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -11794,7 +11821,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DeliveryProfileItem and a cursor during pagination.
     ///</summary>
-    public class DeliveryProfileItemEdge : GraphQLObject<DeliveryProfileItemEdge>
+    public class DeliveryProfileItemEdge : GraphQLObject<DeliveryProfileItemEdge>, IEdge<DeliveryProfileItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -11814,7 +11841,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The countries already selected in any zone for the specified location group.
         ///</summary>
-        public DeliveryCountryAndZone[]? countriesInAnyZone { get; set; }
+        public IEnumerable<DeliveryCountryAndZone>? countriesInAnyZone { get; set; }
         ///<summary>
         ///The collection of locations that make up the specified location group.
         ///</summary>
@@ -11908,7 +11935,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -11919,7 +11946,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -11930,7 +11957,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of countries within the zone.
         ///</summary>
-        public DeliveryCountry[]? countries { get; set; }
+        public IEnumerable<DeliveryCountry>? countries { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -12116,16 +12143,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountApplications.
     ///</summary>
-    public class DiscountApplicationConnection : GraphQLObject<DiscountApplicationConnection>
+    public class DiscountApplicationConnection : GraphQLObject<DiscountApplicationConnection>, IConnectionWithNodesAndEdges<DiscountApplicationEdge, IDiscountApplication>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountApplicationEdge[]? edges { get; set; }
+        public IEnumerable<DiscountApplicationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountApplicationEdge.
         ///</summary>
-        public IDiscountApplication[]? nodes { get; set; }
+        public IEnumerable<IDiscountApplication>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -12135,7 +12162,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DiscountApplication and a cursor during pagination.
     ///</summary>
-    public class DiscountApplicationEdge : GraphQLObject<DiscountApplicationEdge>
+    public class DiscountApplicationEdge : GraphQLObject<DiscountApplicationEdge>, IEdge<IDiscountApplication>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -12259,7 +12286,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12329,7 +12356,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12344,7 +12371,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12424,7 +12451,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12439,7 +12466,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12454,7 +12481,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12544,7 +12571,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12559,22 +12586,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountAutomatics.
     ///</summary>
-    public class DiscountAutomaticConnection : GraphQLObject<DiscountAutomaticConnection>
+    public class DiscountAutomaticConnection : GraphQLObject<DiscountAutomaticConnection>, IConnectionWithNodesAndEdges<DiscountAutomaticEdge, IDiscountAutomatic>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountAutomaticEdge[]? edges { get; set; }
+        public IEnumerable<DiscountAutomaticEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountAutomaticEdge.
         ///</summary>
-        public IDiscountAutomatic[]? nodes { get; set; }
+        public IEnumerable<IDiscountAutomatic>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -12593,7 +12620,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12608,13 +12635,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one DiscountAutomatic and a cursor during pagination.
     ///</summary>
-    public class DiscountAutomaticEdge : GraphQLObject<DiscountAutomaticEdge>
+    public class DiscountAutomaticEdge : GraphQLObject<DiscountAutomaticEdge>, IEdge<IDiscountAutomatic>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -12672,16 +12699,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountAutomaticNodes.
     ///</summary>
-    public class DiscountAutomaticNodeConnection : GraphQLObject<DiscountAutomaticNodeConnection>
+    public class DiscountAutomaticNodeConnection : GraphQLObject<DiscountAutomaticNodeConnection>, IConnectionWithNodesAndEdges<DiscountAutomaticNodeEdge, DiscountAutomaticNode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountAutomaticNodeEdge[]? edges { get; set; }
+        public IEnumerable<DiscountAutomaticNodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountAutomaticNodeEdge.
         ///</summary>
-        public DiscountAutomaticNode[]? nodes { get; set; }
+        public IEnumerable<DiscountAutomaticNode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -12691,7 +12718,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DiscountAutomaticNode and a cursor during pagination.
     ///</summary>
-    public class DiscountAutomaticNodeEdge : GraphQLObject<DiscountAutomaticNodeEdge>
+    public class DiscountAutomaticNodeEdge : GraphQLObject<DiscountAutomaticNodeEdge>, IEdge<DiscountAutomaticNode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -12775,7 +12802,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///URLs that can be used to share the discount.
         ///</summary>
-        public DiscountShareableUrl[]? shareableUrls { get; set; }
+        public IEnumerable<DiscountShareableUrl>? shareableUrls { get; set; }
         ///<summary>
         ///The date and time when the discount starts.
         ///</summary>
@@ -12814,7 +12841,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12881,7 +12908,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///URLs that can be used to share the discount.
         ///</summary>
-        public DiscountShareableUrl[]? shareableUrls { get; set; }
+        public IEnumerable<DiscountShareableUrl>? shareableUrls { get; set; }
         ///<summary>
         ///The date and time when the discount starts.
         ///</summary>
@@ -12920,7 +12947,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -12935,7 +12962,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13033,7 +13060,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///URLs that can be used to share the discount.
         ///</summary>
-        public DiscountShareableUrl[]? shareableUrls { get; set; }
+        public IEnumerable<DiscountShareableUrl>? shareableUrls { get; set; }
         ///<summary>
         ///A short summary of the discount.
         ///</summary>
@@ -13080,7 +13107,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13095,7 +13122,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13110,7 +13137,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13125,7 +13152,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13140,7 +13167,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13199,7 +13226,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///URLs that can be used to share the discount.
         ///</summary>
-        public DiscountShareableUrl[]? shareableUrls { get; set; }
+        public IEnumerable<DiscountShareableUrl>? shareableUrls { get; set; }
         ///<summary>
         ///The date and time when the discount starts.
         ///</summary>
@@ -13246,7 +13273,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13261,7 +13288,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13276,7 +13303,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13291,7 +13318,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13366,7 +13393,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///URLs that can be used to share the discount.
         ///</summary>
-        public DiscountShareableUrl[]? shareableUrls { get; set; }
+        public IEnumerable<DiscountShareableUrl>? shareableUrls { get; set; }
         ///<summary>
         ///A short summary of the discount.
         ///</summary>
@@ -13413,7 +13440,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13428,7 +13455,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13477,16 +13504,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountCodeNodes.
     ///</summary>
-    public class DiscountCodeNodeConnection : GraphQLObject<DiscountCodeNodeConnection>
+    public class DiscountCodeNodeConnection : GraphQLObject<DiscountCodeNodeConnection>, IConnectionWithNodesAndEdges<DiscountCodeNodeEdge, DiscountCodeNode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountCodeNodeEdge[]? edges { get; set; }
+        public IEnumerable<DiscountCodeNodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountCodeNodeEdge.
         ///</summary>
-        public DiscountCodeNode[]? nodes { get; set; }
+        public IEnumerable<DiscountCodeNode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -13496,7 +13523,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DiscountCodeNode and a cursor during pagination.
     ///</summary>
-    public class DiscountCodeNodeEdge : GraphQLObject<DiscountCodeNodeEdge>
+    public class DiscountCodeNodeEdge : GraphQLObject<DiscountCodeNodeEdge>, IEdge<DiscountCodeNode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -13520,7 +13547,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -13585,7 +13612,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The codes for the countries where the discount can be applied.
         ///</summary>
-        public CountryCode[]? countries { get; set; }
+        public IEnumerable<CountryCode>? countries { get; set; }
         ///<summary>
         ///Whether the discount is applicable to countries that haven't been defined in the shop's shipping zones.
         ///</summary>
@@ -13686,7 +13713,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of customer segments that contain the customers who can use the discount.
         ///</summary>
-        public Segment[]? segments { get; set; }
+        public IEnumerable<Segment>? segments { get; set; }
     }
 
     ///<summary>
@@ -13711,7 +13738,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of customers eligible for the discount.
         ///</summary>
-        public Customer[]? customers { get; set; }
+        public IEnumerable<Customer>? customers { get; set; }
     }
 
     ///<summary>
@@ -13929,16 +13956,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountNodes.
     ///</summary>
-    public class DiscountNodeConnection : GraphQLObject<DiscountNodeConnection>
+    public class DiscountNodeConnection : GraphQLObject<DiscountNodeConnection>, IConnectionWithNodesAndEdges<DiscountNodeEdge, DiscountNode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountNodeEdge[]? edges { get; set; }
+        public IEnumerable<DiscountNodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountNodeEdge.
         ///</summary>
-        public DiscountNode[]? nodes { get; set; }
+        public IEnumerable<DiscountNode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -13948,7 +13975,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DiscountNode and a cursor during pagination.
     ///</summary>
-    public class DiscountNodeEdge : GraphQLObject<DiscountNodeEdge>
+    public class DiscountNodeEdge : GraphQLObject<DiscountNodeEdge>, IEdge<DiscountNode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -14058,7 +14085,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DiscountUserError[]? userErrors { get; set; }
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -14118,22 +14145,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of errors that occurred during the creation operation of the discount redeem code.
         ///</summary>
-        public DiscountUserError[]? errors { get; set; }
+        public IEnumerable<DiscountUserError>? errors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountRedeemCodeBulkCreationCodes.
     ///</summary>
-    public class DiscountRedeemCodeBulkCreationCodeConnection : GraphQLObject<DiscountRedeemCodeBulkCreationCodeConnection>
+    public class DiscountRedeemCodeBulkCreationCodeConnection : GraphQLObject<DiscountRedeemCodeBulkCreationCodeConnection>, IConnectionWithNodesAndEdges<DiscountRedeemCodeBulkCreationCodeEdge, DiscountRedeemCodeBulkCreationCode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountRedeemCodeBulkCreationCodeEdge[]? edges { get; set; }
+        public IEnumerable<DiscountRedeemCodeBulkCreationCodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountRedeemCodeBulkCreationCodeEdge.
         ///</summary>
-        public DiscountRedeemCodeBulkCreationCode[]? nodes { get; set; }
+        public IEnumerable<DiscountRedeemCodeBulkCreationCode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -14143,7 +14170,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DiscountRedeemCodeBulkCreationCode and a cursor during pagination.
     ///</summary>
-    public class DiscountRedeemCodeBulkCreationCodeEdge : GraphQLObject<DiscountRedeemCodeBulkCreationCodeEdge>
+    public class DiscountRedeemCodeBulkCreationCodeEdge : GraphQLObject<DiscountRedeemCodeBulkCreationCodeEdge>, IEdge<DiscountRedeemCodeBulkCreationCode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -14158,16 +14185,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DiscountRedeemCodes.
     ///</summary>
-    public class DiscountRedeemCodeConnection : GraphQLObject<DiscountRedeemCodeConnection>
+    public class DiscountRedeemCodeConnection : GraphQLObject<DiscountRedeemCodeConnection>, IConnectionWithNodesAndEdges<DiscountRedeemCodeEdge, DiscountRedeemCode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DiscountRedeemCodeEdge[]? edges { get; set; }
+        public IEnumerable<DiscountRedeemCodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DiscountRedeemCodeEdge.
         ///</summary>
-        public DiscountRedeemCode[]? nodes { get; set; }
+        public IEnumerable<DiscountRedeemCode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -14177,7 +14204,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DiscountRedeemCode and a cursor during pagination.
     ///</summary>
-    public class DiscountRedeemCodeEdge : GraphQLObject<DiscountRedeemCodeEdge>
+    public class DiscountRedeemCodeEdge : GraphQLObject<DiscountRedeemCodeEdge>, IEdge<DiscountRedeemCode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -14344,7 +14371,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -14565,7 +14592,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; }
+        public IEnumerable<string>? field { get; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -14584,7 +14611,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DisputeEvidenceUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<DisputeEvidenceUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -14599,7 +14626,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -14704,7 +14731,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The ISO codes for the domain’s alternate locales. For example, `["en"]`.
         ///</summary>
-        public string[]? alternateLocales { get; set; }
+        public IEnumerable<string>? alternateLocales { get; set; }
         ///<summary>
         ///The ISO code for the country assigned to the domain. For example, `"CA"` or "*" for a domain set to "Rest of world".
         ///</summary>
@@ -14760,7 +14787,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The custom information added to the draft order on behalf of the customer.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The customer who will be sent an invoice for the draft order, if there is one.
         ///</summary>
@@ -14907,7 +14934,7 @@ namespace ShopifySharp.GraphQL
         ///existing tags, use the [tagsAdd](https://shopify.dev/api/admin-graphql/latest/mutations/tagsadd)
         ///mutation.
         ///</summary>
-        public string[]? tags { get; set; }
+        public IEnumerable<string>? tags { get; set; }
         ///<summary>
         ///Whether the draft order is tax exempt.
         ///</summary>
@@ -14915,7 +14942,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Total amount of taxes charged for each line item and shipping line.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Whether the line item prices include taxes.
         ///</summary>
@@ -15031,7 +15058,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15046,7 +15073,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15061,7 +15088,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15076,7 +15103,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15091,22 +15118,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple DraftOrders.
     ///</summary>
-    public class DraftOrderConnection : GraphQLObject<DraftOrderConnection>
+    public class DraftOrderConnection : GraphQLObject<DraftOrderConnection>, IConnectionWithNodesAndEdges<DraftOrderEdge, DraftOrder>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DraftOrderEdge[]? edges { get; set; }
+        public IEnumerable<DraftOrderEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DraftOrderEdge.
         ///</summary>
-        public DraftOrder[]? nodes { get; set; }
+        public IEnumerable<DraftOrder>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -15125,7 +15152,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15136,7 +15163,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15151,7 +15178,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15166,7 +15193,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15181,13 +15208,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one DraftOrder and a cursor during pagination.
     ///</summary>
-    public class DraftOrderEdge : GraphQLObject<DraftOrderEdge>
+    public class DraftOrderEdge : GraphQLObject<DraftOrderEdge>, IEdge<DraftOrder>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -15215,7 +15242,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15230,7 +15257,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15249,11 +15276,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///Additional information (metafields) about the line item with the associated types.
         ///</summary>
-        public TypedAttribute[]? customAttributesV2 { get; set; }
+        public IEnumerable<TypedAttribute>? customAttributesV2 { get; set; }
         ///<summary>
         ///The line item price after discounts are applied.
         ///</summary>
@@ -15337,7 +15364,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of tax line objects, each of which details the total taxes applicable to the order.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Whether the variant is taxable.
         ///</summary>
@@ -15375,16 +15402,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple DraftOrderLineItems.
     ///</summary>
-    public class DraftOrderLineItemConnection : GraphQLObject<DraftOrderLineItemConnection>
+    public class DraftOrderLineItemConnection : GraphQLObject<DraftOrderLineItemConnection>, IConnectionWithNodesAndEdges<DraftOrderLineItemEdge, DraftOrderLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public DraftOrderLineItemEdge[]? edges { get; set; }
+        public IEnumerable<DraftOrderLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in DraftOrderLineItemEdge.
         ///</summary>
-        public DraftOrderLineItem[]? nodes { get; set; }
+        public IEnumerable<DraftOrderLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -15394,7 +15421,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one DraftOrderLineItem and a cursor during pagination.
     ///</summary>
-    public class DraftOrderLineItemEdge : GraphQLObject<DraftOrderLineItemEdge>
+    public class DraftOrderLineItemEdge : GraphQLObject<DraftOrderLineItemEdge>, IEdge<DraftOrderLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -15492,7 +15519,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15519,7 +15546,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of taxes charged on the duty.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
     }
 
     ///<summary>
@@ -15550,7 +15577,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -15611,7 +15638,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -15653,7 +15680,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -15740,7 +15767,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsServerPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsServerPixelUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -15751,7 +15778,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
         ///<summary>
         ///The webhook subscription that was created.
         ///</summary>
@@ -15766,7 +15793,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
         ///<summary>
         ///The webhook subscription that was updated.
         ///</summary>
@@ -15776,16 +15803,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Events.
     ///</summary>
-    public class EventConnection : GraphQLObject<EventConnection>
+    public class EventConnection : GraphQLObject<EventConnection>, IConnectionWithNodesAndEdges<EventEdge, IEvent>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public EventEdge[]? edges { get; set; }
+        public IEnumerable<EventEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in EventEdge.
         ///</summary>
-        public IEvent[]? nodes { get; set; }
+        public IEnumerable<IEvent>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -15795,7 +15822,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Event and a cursor during pagination.
     ///</summary>
-    public class EventEdge : GraphQLObject<EventEdge>
+    public class EventEdge : GraphQLObject<EventEdge>, IEdge<IEvent>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -15859,7 +15886,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The refunds processed during the exchange.
         ///</summary>
-        public Refund[]? refunds { get; set; }
+        public IEnumerable<Refund>? refunds { get; set; }
         ///<summary>
         ///The details of the returned items in the exchange.
         ///</summary>
@@ -15879,7 +15906,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The order transactions related to the exchange.
         ///</summary>
-        public OrderTransaction[]? transactions { get; set; }
+        public IEnumerable<OrderTransaction>? transactions { get; set; }
     }
 
     ///<summary>
@@ -15890,7 +15917,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of new items for the exchange.
         ///</summary>
-        public ExchangeV2LineItem[]? lineItems { get; set; }
+        public IEnumerable<ExchangeV2LineItem>? lineItems { get; set; }
         ///<summary>
         ///The subtotal of the items being added, including discounts.
         ///</summary>
@@ -15898,7 +15925,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The summary of all taxes of the items being added.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///The total price of the items being added, including discounts and taxes.
         ///</summary>
@@ -15908,16 +15935,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ExchangeV2s.
     ///</summary>
-    public class ExchangeV2Connection : GraphQLObject<ExchangeV2Connection>
+    public class ExchangeV2Connection : GraphQLObject<ExchangeV2Connection>, IConnectionWithNodesAndEdges<ExchangeV2Edge, ExchangeV2>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ExchangeV2Edge[]? edges { get; set; }
+        public IEnumerable<ExchangeV2Edge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ExchangeV2Edge.
         ///</summary>
-        public ExchangeV2[]? nodes { get; set; }
+        public IEnumerable<ExchangeV2>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -15927,7 +15954,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ExchangeV2 and a cursor during pagination.
     ///</summary>
-    public class ExchangeV2Edge : GraphQLObject<ExchangeV2Edge>
+    public class ExchangeV2Edge : GraphQLObject<ExchangeV2Edge>, IEdge<ExchangeV2>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -15947,7 +15974,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The total line price, in shop and presentment currencies, after discounts are applied.
         ///</summary>
@@ -15973,7 +16000,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The gift cards associated with the line item.
         ///</summary>
-        public GiftCard[]? giftCards { get; set; }
+        public IEnumerable<GiftCard>? giftCards { get; set; }
         ///<summary>
         ///The line item associated with this object.
         ///</summary>
@@ -16006,7 +16033,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The TaxLine object connected to this line item.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Whether the variant is taxable.
         ///</summary>
@@ -16037,7 +16064,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of return items for the exchange.
         ///</summary>
-        public ExchangeV2LineItem[]? lineItems { get; set; }
+        public IEnumerable<ExchangeV2LineItem>? lineItems { get; set; }
         ///<summary>
         ///The amount of the order-level discount for the items and shipping being returned, which doesn't contain any line item discounts.
         ///</summary>
@@ -16053,7 +16080,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The summary of all taxes of the items being returned.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///The amount of money to be refunded for tip.
         ///</summary>
@@ -16098,11 +16125,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors which have occurred on the media.
         ///</summary>
-        public MediaError[]? mediaErrors { get; set; }
+        public IEnumerable<MediaError>? mediaErrors { get; set; }
         ///<summary>
         ///The warnings attached to the media.
         ///</summary>
-        public MediaWarning[]? mediaWarnings { get; set; }
+        public IEnumerable<MediaWarning>? mediaWarnings { get; set; }
         ///<summary>
         ///The origin URL of the video on the respective host.
         ///</summary>
@@ -16156,7 +16183,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors that have occurred on the file.
         ///</summary>
-        public FileError[]? fileErrors { get; }
+        public IEnumerable<FileError>? fileErrors { get; }
         ///<summary>
         ///The status of the file.
         ///</summary>
@@ -16183,26 +16210,26 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The updated file(s).
         ///</summary>
-        public IFile[]? files { get; set; }
+        public IEnumerable<IFile>? files { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FilesUserError[]? userErrors { get; set; }
+        public IEnumerable<FilesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Files.
     ///</summary>
-    public class FileConnection : GraphQLObject<FileConnection>
+    public class FileConnection : GraphQLObject<FileConnection>, IConnectionWithNodesAndEdges<FileEdge, IFile>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FileEdge[]? edges { get; set; }
+        public IEnumerable<FileEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FileEdge.
         ///</summary>
-        public IFile[]? nodes { get; set; }
+        public IEnumerable<IFile>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -16255,11 +16282,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The newly created files.
         ///</summary>
-        public IFile[]? files { get; set; }
+        public IEnumerable<IFile>? files { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FilesUserError[]? userErrors { get; set; }
+        public IEnumerable<FilesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -16270,17 +16297,17 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The IDs of the deleted files.
         ///</summary>
-        public string[]? deletedFileIds { get; set; }
+        public IEnumerable<string>? deletedFileIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FilesUserError[]? userErrors { get; set; }
+        public IEnumerable<FilesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one File and a cursor during pagination.
     ///</summary>
-    public class FileEdge : GraphQLObject<FileEdge>
+    public class FileEdge : GraphQLObject<FileEdge>, IEdge<IFile>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -16514,11 +16541,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of updated files.
         ///</summary>
-        public IFile[]? files { get; set; }
+        public IEnumerable<IFile>? files { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FilesUserError[]? userErrors { get; set; }
+        public IEnumerable<FilesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -16624,7 +16651,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -16654,7 +16681,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -16742,7 +16769,7 @@ namespace ShopifySharp.GraphQL
         ///Tracking information associated with the fulfillment,
         ///such as the tracking company, tracking number, and tracking URL.
         ///</summary>
-        public FulfillmentTrackingInfo[]? trackingInfo { get; set; }
+        public IEnumerable<FulfillmentTrackingInfo>? trackingInfo { get; set; }
         ///<summary>
         ///The date and time when the fulfillment was last modified.
         ///</summary>
@@ -16761,22 +16788,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Fulfillments.
     ///</summary>
-    public class FulfillmentConnection : GraphQLObject<FulfillmentConnection>
+    public class FulfillmentConnection : GraphQLObject<FulfillmentConnection>, IConnectionWithNodesAndEdges<FulfillmentEdge, Fulfillment>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentEdge.
         ///</summary>
-        public Fulfillment[]? nodes { get; set; }
+        public IEnumerable<Fulfillment>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -16795,7 +16822,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -16872,7 +16899,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Fulfillment and a cursor during pagination.
     ///</summary>
-    public class FulfillmentEdge : GraphQLObject<FulfillmentEdge>
+    public class FulfillmentEdge : GraphQLObject<FulfillmentEdge>, IEdge<Fulfillment>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -16942,16 +16969,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple FulfillmentEvents.
     ///</summary>
-    public class FulfillmentEventConnection : GraphQLObject<FulfillmentEventConnection>
+    public class FulfillmentEventConnection : GraphQLObject<FulfillmentEventConnection>, IConnectionWithNodesAndEdges<FulfillmentEventEdge, FulfillmentEvent>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentEventEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentEventEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentEventEdge.
         ///</summary>
-        public FulfillmentEvent[]? nodes { get; set; }
+        public IEnumerable<FulfillmentEvent>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -16970,13 +16997,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one FulfillmentEvent and a cursor during pagination.
     ///</summary>
-    public class FulfillmentEventEdge : GraphQLObject<FulfillmentEventEdge>
+    public class FulfillmentEventEdge : GraphQLObject<FulfillmentEventEdge>, IEdge<FulfillmentEvent>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -17146,16 +17173,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple FulfillmentLineItems.
     ///</summary>
-    public class FulfillmentLineItemConnection : GraphQLObject<FulfillmentLineItemConnection>
+    public class FulfillmentLineItemConnection : GraphQLObject<FulfillmentLineItemConnection>, IConnectionWithNodesAndEdges<FulfillmentLineItemEdge, FulfillmentLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentLineItemEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentLineItemEdge.
         ///</summary>
-        public FulfillmentLineItem[]? nodes { get; set; }
+        public IEnumerable<FulfillmentLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -17165,7 +17192,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one FulfillmentLineItem and a cursor during pagination.
     ///</summary>
-    public class FulfillmentLineItemEdge : GraphQLObject<FulfillmentLineItemEdge>
+    public class FulfillmentLineItemEdge : GraphQLObject<FulfillmentLineItemEdge>, IEdge<FulfillmentLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -17382,7 +17409,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The fulfillment holds applied on the fulfillment order.
         ///</summary>
-        public FulfillmentHold[]? fulfillmentHolds { get; set; }
+        public IEnumerable<FulfillmentHold>? fulfillmentHolds { get; set; }
         ///<summary>
         ///A list of fulfillments for the fulfillment order.
         ///</summary>
@@ -17422,7 +17449,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The actions that can be performed on this fulfillment order.
         ///</summary>
-        public FulfillmentOrderSupportedAction[]? supportedActions { get; set; }
+        public IEnumerable<FulfillmentOrderSupportedAction>? supportedActions { get; set; }
         ///<summary>
         ///The date and time when the fulfillment order was last updated.
         ///</summary>
@@ -17441,7 +17468,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -17456,7 +17483,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -17626,7 +17653,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -17641,22 +17668,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple FulfillmentOrders.
     ///</summary>
-    public class FulfillmentOrderConnection : GraphQLObject<FulfillmentOrderConnection>
+    public class FulfillmentOrderConnection : GraphQLObject<FulfillmentOrderConnection>, IConnectionWithNodesAndEdges<FulfillmentOrderEdge, FulfillmentOrder>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentOrderEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentOrderEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentOrderEdge.
         ///</summary>
-        public FulfillmentOrder[]? nodes { get; set; }
+        public IEnumerable<FulfillmentOrder>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -17721,7 +17748,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one FulfillmentOrder and a cursor during pagination.
     ///</summary>
-    public class FulfillmentOrderEdge : GraphQLObject<FulfillmentOrderEdge>
+    public class FulfillmentOrderEdge : GraphQLObject<FulfillmentOrderEdge>, IEdge<FulfillmentOrder>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -17750,7 +17777,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrderHoldUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrderHoldUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -17765,7 +17792,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -17864,7 +17891,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Warning messages for a fulfillment order line item.
         ///</summary>
-        public FulfillmentOrderLineItemWarning[]? warnings { get; set; }
+        public IEnumerable<FulfillmentOrderLineItemWarning>? warnings { get; set; }
         ///<summary>
         ///The weight of a line item unit.
         ///</summary>
@@ -17874,16 +17901,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple FulfillmentOrderLineItems.
     ///</summary>
-    public class FulfillmentOrderLineItemConnection : GraphQLObject<FulfillmentOrderLineItemConnection>
+    public class FulfillmentOrderLineItemConnection : GraphQLObject<FulfillmentOrderLineItemConnection>, IConnectionWithNodesAndEdges<FulfillmentOrderLineItemEdge, FulfillmentOrderLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentOrderLineItemEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentOrderLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentOrderLineItemEdge.
         ///</summary>
-        public FulfillmentOrderLineItem[]? nodes { get; set; }
+        public IEnumerable<FulfillmentOrderLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -17893,7 +17920,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one FulfillmentOrderLineItem and a cursor during pagination.
     ///</summary>
-    public class FulfillmentOrderLineItemEdge : GraphQLObject<FulfillmentOrderLineItemEdge>
+    public class FulfillmentOrderLineItemEdge : GraphQLObject<FulfillmentOrderLineItemEdge>, IEdge<FulfillmentOrderLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -17928,7 +17955,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrderLineItemsPreparedForPickupUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrderLineItemsPreparedForPickupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -17943,7 +17970,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -17992,16 +18019,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple FulfillmentOrderLocationForMoves.
     ///</summary>
-    public class FulfillmentOrderLocationForMoveConnection : GraphQLObject<FulfillmentOrderLocationForMoveConnection>
+    public class FulfillmentOrderLocationForMoveConnection : GraphQLObject<FulfillmentOrderLocationForMoveConnection>, IConnectionWithNodesAndEdges<FulfillmentOrderLocationForMoveEdge, FulfillmentOrderLocationForMove>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentOrderLocationForMoveEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentOrderLocationForMoveEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentOrderLocationForMoveEdge.
         ///</summary>
-        public FulfillmentOrderLocationForMove[]? nodes { get; set; }
+        public IEnumerable<FulfillmentOrderLocationForMove>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -18011,7 +18038,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one FulfillmentOrderLocationForMove and a cursor during pagination.
     ///</summary>
-    public class FulfillmentOrderLocationForMoveEdge : GraphQLObject<FulfillmentOrderLocationForMoveEdge>
+    public class FulfillmentOrderLocationForMoveEdge : GraphQLObject<FulfillmentOrderLocationForMoveEdge>, IEdge<FulfillmentOrderLocationForMove>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -18065,16 +18092,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple FulfillmentOrderMerchantRequests.
     ///</summary>
-    public class FulfillmentOrderMerchantRequestConnection : GraphQLObject<FulfillmentOrderMerchantRequestConnection>
+    public class FulfillmentOrderMerchantRequestConnection : GraphQLObject<FulfillmentOrderMerchantRequestConnection>, IConnectionWithNodesAndEdges<FulfillmentOrderMerchantRequestEdge, FulfillmentOrderMerchantRequest>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public FulfillmentOrderMerchantRequestEdge[]? edges { get; set; }
+        public IEnumerable<FulfillmentOrderMerchantRequestEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in FulfillmentOrderMerchantRequestEdge.
         ///</summary>
-        public FulfillmentOrderMerchantRequest[]? nodes { get; set; }
+        public IEnumerable<FulfillmentOrderMerchantRequest>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -18084,7 +18111,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one FulfillmentOrderMerchantRequest and a cursor during pagination.
     ///</summary>
-    public class FulfillmentOrderMerchantRequestEdge : GraphQLObject<FulfillmentOrderMerchantRequestEdge>
+    public class FulfillmentOrderMerchantRequestEdge : GraphQLObject<FulfillmentOrderMerchantRequestEdge>, IEdge<FulfillmentOrderMerchantRequest>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -18119,11 +18146,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The result of the fulfillment order merges.
         ///</summary>
-        public FulfillmentOrderMergeResult[]? fulfillmentOrderMerges { get; set; }
+        public IEnumerable<FulfillmentOrderMergeResult>? fulfillmentOrderMerges { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrderMergeUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrderMergeUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18149,7 +18176,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -18208,7 +18235,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18223,7 +18250,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18238,7 +18265,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18253,7 +18280,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18295,7 +18322,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrderReleaseHoldUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrderReleaseHoldUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18310,7 +18337,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -18388,7 +18415,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrderRescheduleUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrderRescheduleUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18403,7 +18430,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -18445,11 +18472,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The result of the fulfillment order splits.
         ///</summary>
-        public FulfillmentOrderSplitResult[]? fulfillmentOrderSplits { get; set; }
+        public IEnumerable<FulfillmentOrderSplitResult>? fulfillmentOrderSplits { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrderSplitUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrderSplitUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18483,7 +18510,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -18556,7 +18583,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18582,7 +18609,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18613,7 +18640,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrdersReleaseHoldsUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrdersReleaseHoldsUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18628,7 +18655,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -18658,7 +18685,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public FulfillmentOrdersSetFulfillmentDeadlineUserError[]? userErrors { get; set; }
+        public IEnumerable<FulfillmentOrdersSetFulfillmentDeadlineUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18673,7 +18700,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -18844,7 +18871,7 @@ namespace ShopifySharp.GraphQL
         ///Shipping methods associated with the fulfillment service provider. Applies only to Fulfill By Amazon fulfillment service.
         ///</summary>
         [Obsolete("The Fulfillment by Amazon feature will no longer be supported from March 30, 2023. To continue using Amazon fulfillment, merchants need to set up a Multi-Channel Fulfillment solution recommended by Amazon: https://help.shopify.com/manual/shipping/fulfillment-services/amazon#activate-fulfillment-by-amazon")]
-        public ShippingMethod[]? shippingMethods { get; set; }
+        public IEnumerable<ShippingMethod>? shippingMethods { get; set; }
         ///<summary>
         ///Type associated with the fulfillment service.
         ///</summary>
@@ -18863,7 +18890,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18878,7 +18905,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -18912,7 +18939,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -19143,7 +19170,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -19200,7 +19227,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors that have occurred on the file.
         ///</summary>
-        public FileError[]? fileErrors { get; set; }
+        public IEnumerable<FileError>? fileErrors { get; set; }
         ///<summary>
         ///The status of the file.
         ///</summary>
@@ -19289,16 +19316,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple GiftCards.
     ///</summary>
-    public class GiftCardConnection : GraphQLObject<GiftCardConnection>
+    public class GiftCardConnection : GraphQLObject<GiftCardConnection>, IConnectionWithNodesAndEdges<GiftCardEdge, GiftCard>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public GiftCardEdge[]? edges { get; set; }
+        public IEnumerable<GiftCardEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in GiftCardEdge.
         ///</summary>
-        public GiftCard[]? nodes { get; set; }
+        public IEnumerable<GiftCard>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -19321,7 +19348,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public GiftCardUserError[]? userErrors { get; set; }
+        public IEnumerable<GiftCardUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -19336,13 +19363,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one GiftCard and a cursor during pagination.
     ///</summary>
-    public class GiftCardEdge : GraphQLObject<GiftCardEdge>
+    public class GiftCardEdge : GraphQLObject<GiftCardEdge>, IEdge<GiftCard>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -19417,7 +19444,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -19500,7 +19527,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -19515,7 +19542,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -19713,7 +19740,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; }
+        public IEnumerable<Translation>? translations { get; }
     }
 
     ///<summary>
@@ -19795,16 +19822,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Images.
     ///</summary>
-    public class ImageConnection : GraphQLObject<ImageConnection>
+    public class ImageConnection : GraphQLObject<ImageConnection>, IConnectionWithNodesAndEdges<ImageEdge, Image>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ImageEdge[]? edges { get; set; }
+        public IEnumerable<ImageEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ImageEdge.
         ///</summary>
-        public Image[]? nodes { get; set; }
+        public IEnumerable<Image>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -19833,7 +19860,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Image and a cursor during pagination.
     ///</summary>
-    public class ImageEdge : GraphQLObject<ImageEdge>
+    public class ImageEdge : GraphQLObject<ImageEdge>, IEdge<Image>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -19879,7 +19906,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -19894,7 +19921,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public InventoryAdjustQuantitiesUserError[]? userErrors { get; set; }
+        public IEnumerable<InventoryAdjustQuantitiesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -19909,7 +19936,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -19995,7 +20022,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20010,7 +20037,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The set of inventory quantity changes that occurred in the inventory event.
         ///</summary>
-        public InventoryChange[]? changes { get; set; }
+        public IEnumerable<InventoryChange>? changes { get; set; }
         ///<summary>
         ///The date and time the inventory adjustment group was created.
         ///</summary>
@@ -20041,11 +20068,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Represents the updated inventory quantities of an inventory item at the location.
         ///</summary>
-        public InventoryLevel[]? inventoryLevels { get; set; }
+        public IEnumerable<InventoryLevel>? inventoryLevels { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20060,11 +20087,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The activated inventory levels.
         ///</summary>
-        public InventoryLevel[]? inventoryLevels { get; set; }
+        public IEnumerable<InventoryLevel>? inventoryLevels { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public InventoryBulkToggleActivationUserError[]? userErrors { get; set; }
+        public IEnumerable<InventoryBulkToggleActivationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20079,7 +20106,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -20186,7 +20213,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20276,16 +20303,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple InventoryItems.
     ///</summary>
-    public class InventoryItemConnection : GraphQLObject<InventoryItemConnection>
+    public class InventoryItemConnection : GraphQLObject<InventoryItemConnection>, IConnectionWithNodesAndEdges<InventoryItemEdge, InventoryItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public InventoryItemEdge[]? edges { get; set; }
+        public IEnumerable<InventoryItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in InventoryItemEdge.
         ///</summary>
-        public InventoryItem[]? nodes { get; set; }
+        public IEnumerable<InventoryItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -20295,7 +20322,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one InventoryItem and a cursor during pagination.
     ///</summary>
-    public class InventoryItemEdge : GraphQLObject<InventoryItemEdge>
+    public class InventoryItemEdge : GraphQLObject<InventoryItemEdge>, IEdge<InventoryItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -20319,7 +20346,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20371,7 +20398,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Quantities for the requested names.
         ///</summary>
-        public InventoryQuantity[]? quantities { get; set; }
+        public IEnumerable<InventoryQuantity>? quantities { get; set; }
         ///<summary>
         ///The date and time when the inventory level was updated.
         ///</summary>
@@ -20381,16 +20408,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple InventoryLevels.
     ///</summary>
-    public class InventoryLevelConnection : GraphQLObject<InventoryLevelConnection>
+    public class InventoryLevelConnection : GraphQLObject<InventoryLevelConnection>, IConnectionWithNodesAndEdges<InventoryLevelEdge, InventoryLevel>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public InventoryLevelEdge[]? edges { get; set; }
+        public IEnumerable<InventoryLevelEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in InventoryLevelEdge.
         ///</summary>
-        public InventoryLevel[]? nodes { get; set; }
+        public IEnumerable<InventoryLevel>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -20400,7 +20427,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one InventoryLevel and a cursor during pagination.
     ///</summary>
-    public class InventoryLevelEdge : GraphQLObject<InventoryLevelEdge>
+    public class InventoryLevelEdge : GraphQLObject<InventoryLevelEdge>, IEdge<InventoryLevel>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -20424,7 +20451,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public InventoryMoveQuantitiesUserError[]? userErrors { get; set; }
+        public IEnumerable<InventoryMoveQuantitiesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20439,7 +20466,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -20529,7 +20556,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All the quantity names.
         ///</summary>
-        public InventoryQuantityName[]? quantityNames { get; set; }
+        public IEnumerable<InventoryQuantityName>? quantityNames { get; set; }
     }
 
     ///<summary>
@@ -20560,11 +20587,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of quantity names that this quantity name belongs to.
         ///</summary>
-        public string[]? belongsTo { get; set; }
+        public IEnumerable<string>? belongsTo { get; set; }
         ///<summary>
         ///List of quantity names that comprise this quantity name.
         ///</summary>
-        public string[]? comprises { get; set; }
+        public IEnumerable<string>? comprises { get; set; }
         ///<summary>
         ///The display name for quantity names translated into applicable language.
         ///</summary>
@@ -20593,7 +20620,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public InventorySetOnHandQuantitiesUserError[]? userErrors { get; set; }
+        public IEnumerable<InventorySetOnHandQuantitiesUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -20608,7 +20635,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -21368,11 +21395,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The discounts that have been allocated onto the line item by discount applications, not including order edits and refunds.
         ///</summary>
-        public DiscountAllocation[]? discountAllocations { get; set; }
+        public IEnumerable<DiscountAllocation>? discountAllocations { get; set; }
 
         ///<summary>
         ///The total line price after discounts are applied, in shop currency.
@@ -21396,7 +21423,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The duties associated with the line item.
         ///</summary>
-        public Duty[]? duties { get; set; }
+        public IEnumerable<Duty>? duties { get; set; }
 
         ///<summary>
         ///The total number of units to fulfill.
@@ -21508,7 +21535,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The taxes charged for this line item.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Whether the variant is taxable.
         ///</summary>
@@ -21568,16 +21595,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple LineItems.
     ///</summary>
-    public class LineItemConnection : GraphQLObject<LineItemConnection>
+    public class LineItemConnection : GraphQLObject<LineItemConnection>, IConnectionWithNodesAndEdges<LineItemEdge, LineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public LineItemEdge[]? edges { get; set; }
+        public IEnumerable<LineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in LineItemEdge.
         ///</summary>
-        public LineItem[]? nodes { get; set; }
+        public IEnumerable<LineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -21587,7 +21614,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one LineItem and a cursor during pagination.
     ///</summary>
-    public class LineItemEdge : GraphQLObject<LineItemEdge>
+    public class LineItemEdge : GraphQLObject<LineItemEdge>, IEdge<LineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -21631,11 +21658,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of attributes that represent custom features or special requests.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The discounts that have been allocated onto the line item by discount applications.
         ///</summary>
-        public DiscountAllocation[]? discountAllocations { get; set; }
+        public IEnumerable<DiscountAllocation>? discountAllocations { get; set; }
 
         ///<summary>
         ///The total line price after discounts are applied, in shop currency.
@@ -21742,7 +21769,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The TaxLine object connected to this line item.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Whether the variant is taxable.
         ///</summary>
@@ -21802,16 +21829,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple LineItemMutables.
     ///</summary>
-    public class LineItemMutableConnection : GraphQLObject<LineItemMutableConnection>
+    public class LineItemMutableConnection : GraphQLObject<LineItemMutableConnection>, IConnectionWithNodesAndEdges<LineItemMutableEdge, LineItemMutable>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public LineItemMutableEdge[]? edges { get; set; }
+        public IEnumerable<LineItemMutableEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in LineItemMutableEdge.
         ///</summary>
-        public LineItemMutable[]? nodes { get; set; }
+        public IEnumerable<LineItemMutable>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -21821,7 +21848,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one LineItemMutable and a cursor during pagination.
     ///</summary>
-    public class LineItemMutableEdge : GraphQLObject<LineItemMutableEdge>
+    public class LineItemMutableEdge : GraphQLObject<LineItemMutableEdge>, IEdge<LineItemMutable>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -21860,7 +21887,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The URL that the link visits.
         ///</summary>
@@ -21979,16 +22006,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple LocalizationExtensions.
     ///</summary>
-    public class LocalizationExtensionConnection : GraphQLObject<LocalizationExtensionConnection>
+    public class LocalizationExtensionConnection : GraphQLObject<LocalizationExtensionConnection>, IConnectionWithNodesAndEdges<LocalizationExtensionEdge, LocalizationExtension>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public LocalizationExtensionEdge[]? edges { get; set; }
+        public IEnumerable<LocalizationExtensionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in LocalizationExtensionEdge.
         ///</summary>
-        public LocalizationExtension[]? nodes { get; set; }
+        public IEnumerable<LocalizationExtension>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -21998,7 +22025,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one LocalizationExtension and a cursor during pagination.
     ///</summary>
-    public class LocalizationExtensionEdge : GraphQLObject<LocalizationExtensionEdge>
+    public class LocalizationExtensionEdge : GraphQLObject<LocalizationExtensionEdge>, IEdge<LocalizationExtension>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -22166,7 +22193,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of suggested addresses for this location (empty if none).
         ///</summary>
-        public LocationSuggestedAddress[]? suggestedAddresses { get; set; }
+        public IEnumerable<LocationSuggestedAddress>? suggestedAddresses { get; set; }
     }
 
     ///<summary>
@@ -22181,7 +22208,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public LocationActivateUserError[]? locationActivateUserErrors { get; set; }
+        public IEnumerable<LocationActivateUserError>? locationActivateUserErrors { get; set; }
     }
 
     ///<summary>
@@ -22196,7 +22223,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -22242,7 +22269,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public LocationAddUserError[]? userErrors { get; set; }
+        public IEnumerable<LocationAddUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -22257,7 +22284,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -22355,7 +22382,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A formatted version of the address for the location.
         ///</summary>
-        public string[]? formatted { get; set; }
+        public IEnumerable<string>? formatted { get; set; }
         ///<summary>
         ///The approximate latitude coordinates of the location.
         ///</summary>
@@ -22385,16 +22412,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Locations.
     ///</summary>
-    public class LocationConnection : GraphQLObject<LocationConnection>
+    public class LocationConnection : GraphQLObject<LocationConnection>, IConnectionWithNodesAndEdges<LocationEdge, Location>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public LocationEdge[]? edges { get; set; }
+        public IEnumerable<LocationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in LocationEdge.
         ///</summary>
-        public Location[]? nodes { get; set; }
+        public IEnumerable<Location>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -22413,7 +22440,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public LocationDeactivateUserError[]? locationDeactivateUserErrors { get; set; }
+        public IEnumerable<LocationDeactivateUserError>? locationDeactivateUserErrors { get; set; }
     }
 
     ///<summary>
@@ -22428,7 +22455,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -22518,7 +22545,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public LocationDeleteUserError[]? locationDeleteUserErrors { get; set; }
+        public IEnumerable<LocationDeleteUserError>? locationDeleteUserErrors { get; set; }
     }
 
     ///<summary>
@@ -22533,7 +22560,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -22574,7 +22601,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Location and a cursor during pagination.
     ///</summary>
-    public class LocationEdge : GraphQLObject<LocationEdge>
+    public class LocationEdge : GraphQLObject<LocationEdge>, IEdge<Location>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -22598,7 +22625,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public LocationEditUserError[]? userErrors { get; set; }
+        public IEnumerable<LocationEditUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -22613,7 +22640,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -22703,7 +22730,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DeliveryLocationLocalPickupSettingsError[]? userErrors { get; set; }
+        public IEnumerable<DeliveryLocationLocalPickupSettingsError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -22718,7 +22745,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public DeliveryLocationLocalPickupSettingsError[]? userErrors { get; set; }
+        public IEnumerable<DeliveryLocationLocalPickupSettingsError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -22769,7 +22796,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A formatted version of the suggested address.
         ///</summary>
-        public string[]? formatted { get; set; }
+        public IEnumerable<string>? formatted { get; set; }
         ///<summary>
         ///The province of the suggested address.
         ///</summary>
@@ -22836,7 +22863,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A formatted version of the address, customized by the provided arguments.
         ///</summary>
-        public string[]? formatted { get; set; }
+        public IEnumerable<string>? formatted { get; set; }
         ///<summary>
         ///A comma-separated list of the values for city, province, and country.
         ///</summary>
@@ -22890,16 +22917,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MailingAddresses.
     ///</summary>
-    public class MailingAddressConnection : GraphQLObject<MailingAddressConnection>
+    public class MailingAddressConnection : GraphQLObject<MailingAddressConnection>, IConnectionWithNodesAndEdges<MailingAddressEdge, MailingAddress>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MailingAddressEdge[]? edges { get; set; }
+        public IEnumerable<MailingAddressEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MailingAddressEdge.
         ///</summary>
-        public MailingAddress[]? nodes { get; set; }
+        public IEnumerable<MailingAddress>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -22909,7 +22936,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MailingAddress and a cursor during pagination.
     ///</summary>
-    public class MailingAddressEdge : GraphQLObject<MailingAddressEdge>
+    public class MailingAddressEdge : GraphQLObject<MailingAddressEdge>, IEdge<MailingAddress>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -23058,7 +23085,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Most recent catalog operations.
         ///</summary>
-        public IResourceOperation[]? operations { get; set; }
+        public IEnumerable<IResourceOperation>? operations { get; set; }
         ///<summary>
         ///The price list associated with the catalog.
         ///</summary>
@@ -23080,16 +23107,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MarketCatalogs.
     ///</summary>
-    public class MarketCatalogConnection : GraphQLObject<MarketCatalogConnection>
+    public class MarketCatalogConnection : GraphQLObject<MarketCatalogConnection>, IConnectionWithNodesAndEdges<MarketCatalogEdge, MarketCatalog>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MarketCatalogEdge[]? edges { get; set; }
+        public IEnumerable<MarketCatalogEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MarketCatalogEdge.
         ///</summary>
-        public MarketCatalog[]? nodes { get; set; }
+        public IEnumerable<MarketCatalog>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -23099,7 +23126,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MarketCatalog and a cursor during pagination.
     ///</summary>
-    public class MarketCatalogEdge : GraphQLObject<MarketCatalogEdge>
+    public class MarketCatalogEdge : GraphQLObject<MarketCatalogEdge>, IEdge<MarketCatalog>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -23114,16 +23141,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Markets.
     ///</summary>
-    public class MarketConnection : GraphQLObject<MarketConnection>
+    public class MarketConnection : GraphQLObject<MarketConnection>, IConnectionWithNodesAndEdges<MarketEdge, Market>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MarketEdge[]? edges { get; set; }
+        public IEnumerable<MarketEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MarketEdge.
         ///</summary>
-        public Market[]? nodes { get; set; }
+        public IEnumerable<Market>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -23142,7 +23169,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23176,7 +23203,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketCurrencySettingsUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketCurrencySettingsUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23191,7 +23218,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -23241,13 +23268,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Market and a cursor during pagination.
     ///</summary>
-    public class MarketEdge : GraphQLObject<MarketEdge>
+    public class MarketEdge : GraphQLObject<MarketEdge>, IEdge<Market>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -23286,11 +23313,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The market localizable content.
         ///</summary>
-        public MarketLocalizableContent[]? marketLocalizableContent { get; set; }
+        public IEnumerable<MarketLocalizableContent>? marketLocalizableContent { get; set; }
         ///<summary>
         ///Market localizations for the market localizable content.
         ///</summary>
-        public MarketLocalization[]? marketLocalizations { get; set; }
+        public IEnumerable<MarketLocalization>? marketLocalizations { get; set; }
         ///<summary>
         ///The GID of the resource.
         ///</summary>
@@ -23300,16 +23327,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MarketLocalizableResources.
     ///</summary>
-    public class MarketLocalizableResourceConnection : GraphQLObject<MarketLocalizableResourceConnection>
+    public class MarketLocalizableResourceConnection : GraphQLObject<MarketLocalizableResourceConnection>, IConnectionWithNodesAndEdges<MarketLocalizableResourceEdge, MarketLocalizableResource>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MarketLocalizableResourceEdge[]? edges { get; set; }
+        public IEnumerable<MarketLocalizableResourceEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MarketLocalizableResourceEdge.
         ///</summary>
-        public MarketLocalizableResource[]? nodes { get; set; }
+        public IEnumerable<MarketLocalizableResource>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -23319,7 +23346,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MarketLocalizableResource and a cursor during pagination.
     ///</summary>
-    public class MarketLocalizableResourceEdge : GraphQLObject<MarketLocalizableResourceEdge>
+    public class MarketLocalizableResourceEdge : GraphQLObject<MarketLocalizableResourceEdge>, IEdge<MarketLocalizableResource>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -23377,11 +23404,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The market localizations that were created or updated.
         ///</summary>
-        public MarketLocalization[]? marketLocalizations { get; set; }
+        public IEnumerable<MarketLocalization>? marketLocalizations { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public TranslationUserError[]? userErrors { get; set; }
+        public IEnumerable<TranslationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23392,11 +23419,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The market localizations that were deleted.
         ///</summary>
-        public MarketLocalization[]? marketLocalizations { get; set; }
+        public IEnumerable<MarketLocalization>? marketLocalizations { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public TranslationUserError[]? userErrors { get; set; }
+        public IEnumerable<TranslationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23420,16 +23447,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MarketRegions.
     ///</summary>
-    public class MarketRegionConnection : GraphQLObject<MarketRegionConnection>
+    public class MarketRegionConnection : GraphQLObject<MarketRegionConnection>, IConnectionWithNodesAndEdges<MarketRegionEdge, IMarketRegion>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MarketRegionEdge[]? edges { get; set; }
+        public IEnumerable<MarketRegionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MarketRegionEdge.
         ///</summary>
-        public IMarketRegion[]? nodes { get; set; }
+        public IEnumerable<IMarketRegion>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -23475,13 +23502,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one MarketRegion and a cursor during pagination.
     ///</summary>
-    public class MarketRegionEdge : GraphQLObject<MarketRegionEdge>
+    public class MarketRegionEdge : GraphQLObject<MarketRegionEdge>, IEdge<IMarketRegion>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -23505,7 +23532,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23520,7 +23547,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23535,7 +23562,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -23691,7 +23718,7 @@ namespace ShopifySharp.GraphQL
         ///alternate locale, and `example.ca` is the market’s domain, then
         ///`example.ca/en` will load in English.
         ///</summary>
-        public string[]? alternateLocales { get; set; }
+        public IEnumerable<string>? alternateLocales { get; set; }
         ///<summary>
         ///The ISO code for the default locale. When a domain is used, this is the locale that will
         ///be used when the domain root is accessed. For example, if French is the default locale,
@@ -23714,7 +23741,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of root URLs for each of the web presence’s locales.
         ///</summary>
-        public MarketWebPresenceRootUrl[]? rootUrls { get; set; }
+        public IEnumerable<MarketWebPresenceRootUrl>? rootUrls { get; set; }
         ///<summary>
         ///The market-specific suffix of the subfolders defined by the web presence. Example: in `/en-us` the subfolder suffix is `us`. This field will be null if `domain` isn't null.
         ///</summary>
@@ -23733,7 +23760,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23752,7 +23779,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23783,7 +23810,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23892,16 +23919,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MarketingActivities.
     ///</summary>
-    public class MarketingActivityConnection : GraphQLObject<MarketingActivityConnection>
+    public class MarketingActivityConnection : GraphQLObject<MarketingActivityConnection>, IConnectionWithNodesAndEdges<MarketingActivityEdge, MarketingActivity>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MarketingActivityEdge[]? edges { get; set; }
+        public IEnumerable<MarketingActivityEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MarketingActivityEdge.
         ///</summary>
-        public MarketingActivity[]? nodes { get; set; }
+        public IEnumerable<MarketingActivity>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -23920,7 +23947,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketingActivityUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketingActivityUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -23939,13 +23966,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one MarketingActivity and a cursor during pagination.
     ///</summary>
-    public class MarketingActivityEdge : GraphQLObject<MarketingActivityEdge>
+    public class MarketingActivityEdge : GraphQLObject<MarketingActivityEdge>, IEdge<MarketingActivity>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -23996,7 +24023,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors returned by the app.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -24113,7 +24140,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MarketingActivityUserError[]? userErrors { get; set; }
+        public IEnumerable<MarketingActivityUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -24132,7 +24159,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -24147,7 +24174,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -24317,7 +24344,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -24404,16 +24431,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MarketingEvents.
     ///</summary>
-    public class MarketingEventConnection : GraphQLObject<MarketingEventConnection>
+    public class MarketingEventConnection : GraphQLObject<MarketingEventConnection>, IConnectionWithNodesAndEdges<MarketingEventEdge, MarketingEvent>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MarketingEventEdge[]? edges { get; set; }
+        public IEnumerable<MarketingEventEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MarketingEventEdge.
         ///</summary>
-        public MarketingEvent[]? nodes { get; set; }
+        public IEnumerable<MarketingEvent>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -24423,7 +24450,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MarketingEvent and a cursor during pagination.
     ///</summary>
-    public class MarketingEventEdge : GraphQLObject<MarketingEventEdge>
+    public class MarketingEventEdge : GraphQLObject<MarketingEventEdge>, IEdge<MarketingEvent>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -24567,11 +24594,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors which have occurred on the media.
         ///</summary>
-        public MediaError[]? mediaErrors { get; }
+        public IEnumerable<MediaError>? mediaErrors { get; }
         ///<summary>
         ///The warnings attached to the media.
         ///</summary>
-        public MediaWarning[]? mediaWarnings { get; }
+        public IEnumerable<MediaWarning>? mediaWarnings { get; }
         ///<summary>
         ///The preview image for the media.
         ///</summary>
@@ -24585,16 +24612,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Media.
     ///</summary>
-    public class MediaConnection : GraphQLObject<MediaConnection>
+    public class MediaConnection : GraphQLObject<MediaConnection>, IConnectionWithNodesAndEdges<MediaEdge, IMedia>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MediaEdge[]? edges { get; set; }
+        public IEnumerable<MediaEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MediaEdge.
         ///</summary>
-        public IMedia[]? nodes { get; set; }
+        public IEnumerable<IMedia>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -24627,7 +24654,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Media and a cursor during pagination.
     ///</summary>
-    public class MediaEdge : GraphQLObject<MediaEdge>
+    public class MediaEdge : GraphQLObject<MediaEdge>, IEdge<IMedia>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -24829,7 +24856,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors that have occurred on the file.
         ///</summary>
-        public FileError[]? fileErrors { get; set; }
+        public IEnumerable<FileError>? fileErrors { get; set; }
         ///<summary>
         ///The status of the file.
         ///</summary>
@@ -24849,11 +24876,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors which have occurred on the media.
         ///</summary>
-        public MediaError[]? mediaErrors { get; set; }
+        public IEnumerable<MediaError>? mediaErrors { get; set; }
         ///<summary>
         ///The warnings attached to the media.
         ///</summary>
-        public MediaWarning[]? mediaWarnings { get; set; }
+        public IEnumerable<MediaWarning>? mediaWarnings { get; set; }
         ///<summary>
         ///Returns a metafield by namespace and key that belongs to the resource.
         ///</summary>
@@ -24980,7 +25007,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -25243,16 +25270,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Metafields.
     ///</summary>
-    public class MetafieldConnection : GraphQLObject<MetafieldConnection>
+    public class MetafieldConnection : GraphQLObject<MetafieldConnection>, IConnectionWithNodesAndEdges<MetafieldEdge, Metafield>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetafieldEdge[]? edges { get; set; }
+        public IEnumerable<MetafieldEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetafieldEdge.
         ///</summary>
-        public Metafield[]? nodes { get; set; }
+        public IEnumerable<Metafield>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -25328,7 +25355,7 @@ namespace ShopifySharp.GraphQL
         ///type `date`, you can set a minimum date validation so that each of the metafields that belong to it can only
         ///store dates after the specified minimum.
         ///</summary>
-        public MetafieldDefinitionValidation[]? validations { get; set; }
+        public IEnumerable<MetafieldDefinitionValidation>? validations { get; set; }
         ///<summary>
         ///Whether each of the metafields that belong to the metafield definition are visible from the Storefront API.
         ///</summary>
@@ -25338,16 +25365,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MetafieldDefinitions.
     ///</summary>
-    public class MetafieldDefinitionConnection : GraphQLObject<MetafieldDefinitionConnection>
+    public class MetafieldDefinitionConnection : GraphQLObject<MetafieldDefinitionConnection>, IConnectionWithNodesAndEdges<MetafieldDefinitionEdge, MetafieldDefinition>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetafieldDefinitionEdge[]? edges { get; set; }
+        public IEnumerable<MetafieldDefinitionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetafieldDefinitionEdge.
         ///</summary>
-        public MetafieldDefinition[]? nodes { get; set; }
+        public IEnumerable<MetafieldDefinition>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -25366,7 +25393,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetafieldDefinitionCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<MetafieldDefinitionCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -25381,7 +25408,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -25471,7 +25498,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetafieldDefinitionDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<MetafieldDefinitionDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -25486,7 +25513,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -25527,7 +25554,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MetafieldDefinition and a cursor during pagination.
     ///</summary>
-    public class MetafieldDefinitionEdge : GraphQLObject<MetafieldDefinitionEdge>
+    public class MetafieldDefinitionEdge : GraphQLObject<MetafieldDefinitionEdge>, IEdge<MetafieldDefinition>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -25551,7 +25578,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetafieldDefinitionPinUserError[]? userErrors { get; set; }
+        public IEnumerable<MetafieldDefinitionPinUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -25566,7 +25593,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -25678,7 +25705,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The supported validations for a metafield definition type.
         ///</summary>
-        public MetafieldDefinitionSupportedValidation[]? supportedValidations { get; set; }
+        public IEnumerable<MetafieldDefinitionSupportedValidation>? supportedValidations { get; set; }
         ///<summary>
         ///Whether metafields without a definition can be migrated to a definition of this type.
         ///</summary>
@@ -25703,7 +25730,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetafieldDefinitionUnpinUserError[]? userErrors { get; set; }
+        public IEnumerable<MetafieldDefinitionUnpinUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -25718,7 +25745,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -25760,7 +25787,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetafieldDefinitionUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<MetafieldDefinitionUpdateUserError>? userErrors { get; set; }
         ///<summary>
         ///The asynchronous job updating the metafield definition's validation_status.
         ///</summary>
@@ -25779,7 +25806,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -25884,13 +25911,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Metafield and a cursor during pagination.
     ///</summary>
-    public class MetafieldEdge : GraphQLObject<MetafieldEdge>
+    public class MetafieldEdge : GraphQLObject<MetafieldEdge>, IEdge<Metafield>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -26021,16 +26048,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MetafieldReferences.
     ///</summary>
-    public class MetafieldReferenceConnection : GraphQLObject<MetafieldReferenceConnection>
+    public class MetafieldReferenceConnection : GraphQLObject<MetafieldReferenceConnection>, IConnectionWithNodesAndEdges<MetafieldReferenceEdge, IMetafieldReference>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetafieldReferenceEdge[]? edges { get; set; }
+        public IEnumerable<MetafieldReferenceEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetafieldReferenceEdge.
         ///</summary>
-        public IMetafieldReference[]? nodes { get; set; }
+        public IEnumerable<IMetafieldReference>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -26040,7 +26067,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MetafieldReference and a cursor during pagination.
     ///</summary>
-    public class MetafieldReferenceEdge : GraphQLObject<MetafieldReferenceEdge>
+    public class MetafieldReferenceEdge : GraphQLObject<MetafieldReferenceEdge>, IEdge<IMetafieldReference>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -26136,16 +26163,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MetafieldRelations.
     ///</summary>
-    public class MetafieldRelationConnection : GraphQLObject<MetafieldRelationConnection>
+    public class MetafieldRelationConnection : GraphQLObject<MetafieldRelationConnection>, IConnectionWithNodesAndEdges<MetafieldRelationEdge, MetafieldRelation>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetafieldRelationEdge[]? edges { get; set; }
+        public IEnumerable<MetafieldRelationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetafieldRelationEdge.
         ///</summary>
-        public MetafieldRelation[]? nodes { get; set; }
+        public IEnumerable<MetafieldRelation>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -26155,7 +26182,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one MetafieldRelation and a cursor during pagination.
     ///</summary>
-    public class MetafieldRelationEdge : GraphQLObject<MetafieldRelationEdge>
+    public class MetafieldRelationEdge : GraphQLObject<MetafieldRelationEdge>, IEdge<MetafieldRelation>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -26211,16 +26238,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MetafieldStorefrontVisibilities.
     ///</summary>
-    public class MetafieldStorefrontVisibilityConnection : GraphQLObject<MetafieldStorefrontVisibilityConnection>
+    public class MetafieldStorefrontVisibilityConnection : GraphQLObject<MetafieldStorefrontVisibilityConnection>, IConnectionWithNodesAndEdges<MetafieldStorefrontVisibilityEdge, MetafieldStorefrontVisibility>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetafieldStorefrontVisibilityEdge[]? edges { get; set; }
+        public IEnumerable<MetafieldStorefrontVisibilityEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetafieldStorefrontVisibilityEdge.
         ///</summary>
-        public MetafieldStorefrontVisibility[]? nodes { get; set; }
+        public IEnumerable<MetafieldStorefrontVisibility>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -26239,7 +26266,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26254,13 +26281,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one MetafieldStorefrontVisibility and a cursor during pagination.
     ///</summary>
-    public class MetafieldStorefrontVisibilityEdge : GraphQLObject<MetafieldStorefrontVisibilityEdge>
+    public class MetafieldStorefrontVisibilityEdge : GraphQLObject<MetafieldStorefrontVisibilityEdge>, IEdge<MetafieldStorefrontVisibility>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -26323,11 +26350,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of metafields that were set.
         ///</summary>
-        public Metafield[]? metafields { get; set; }
+        public IEnumerable<Metafield>? metafields { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetafieldsSetUserError[]? userErrors { get; set; }
+        public IEnumerable<MetafieldsSetUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26346,7 +26373,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -26424,7 +26451,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All ordered fields of the metaobject with their definitions and values.
         ///</summary>
-        public MetaobjectField[]? fields { get; set; }
+        public IEnumerable<MetaobjectField>? fields { get; set; }
         ///<summary>
         ///The unique handle of the object, useful as a custom ID.
         ///</summary>
@@ -26508,7 +26535,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26573,16 +26600,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Metaobjects.
     ///</summary>
-    public class MetaobjectConnection : GraphQLObject<MetaobjectConnection>
+    public class MetaobjectConnection : GraphQLObject<MetaobjectConnection>, IConnectionWithNodesAndEdges<MetaobjectEdge, Metaobject>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetaobjectEdge[]? edges { get; set; }
+        public IEnumerable<MetaobjectEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetaobjectEdge.
         ///</summary>
-        public Metaobject[]? nodes { get; set; }
+        public IEnumerable<Metaobject>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -26601,7 +26628,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26628,7 +26655,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The fields defined for this object type.
         ///</summary>
-        public MetaobjectFieldDefinition[]? fieldDefinitions { get; set; }
+        public IEnumerable<MetaobjectFieldDefinition>? fieldDefinitions { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -26654,16 +26681,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple MetaobjectDefinitions.
     ///</summary>
-    public class MetaobjectDefinitionConnection : GraphQLObject<MetaobjectDefinitionConnection>
+    public class MetaobjectDefinitionConnection : GraphQLObject<MetaobjectDefinitionConnection>, IConnectionWithNodesAndEdges<MetaobjectDefinitionEdge, MetaobjectDefinition>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public MetaobjectDefinitionEdge[]? edges { get; set; }
+        public IEnumerable<MetaobjectDefinitionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in MetaobjectDefinitionEdge.
         ///</summary>
-        public MetaobjectDefinition[]? nodes { get; set; }
+        public IEnumerable<MetaobjectDefinition>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -26682,7 +26709,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26697,13 +26724,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one MetaobjectDefinition and a cursor during pagination.
     ///</summary>
-    public class MetaobjectDefinitionEdge : GraphQLObject<MetaobjectDefinitionEdge>
+    public class MetaobjectDefinitionEdge : GraphQLObject<MetaobjectDefinitionEdge>, IEdge<MetaobjectDefinition>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -26727,7 +26754,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26742,13 +26769,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Metaobject and a cursor during pagination.
     ///</summary>
-    public class MetaobjectEdge : GraphQLObject<MetaobjectEdge>
+    public class MetaobjectEdge : GraphQLObject<MetaobjectEdge>, IEdge<Metaobject>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -26821,7 +26848,7 @@ namespace ShopifySharp.GraphQL
         ///A list of [validation options](https://shopify.dev/apps/metafields/definitions/validation) for
         ///the field. For example, a field with the type `date` can set a minimum date requirement.
         ///</summary>
-        public MetafieldDefinitionValidation[]? validations { get; set; }
+        public IEnumerable<MetafieldDefinitionValidation>? validations { get; set; }
     }
 
     ///<summary>
@@ -26867,7 +26894,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26882,7 +26909,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -26905,7 +26932,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -27059,11 +27086,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors which have occurred on the media.
         ///</summary>
-        public MediaError[]? mediaErrors { get; set; }
+        public IEnumerable<MediaError>? mediaErrors { get; set; }
         ///<summary>
         ///The warnings attached to the media.
         ///</summary>
-        public MediaWarning[]? mediaWarnings { get; set; }
+        public IEnumerable<MediaWarning>? mediaWarnings { get; set; }
         ///<summary>
         ///The 3d model's original source.
         ///</summary>
@@ -27075,7 +27102,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The 3d model's sources.
         ///</summary>
-        public Model3dSource[]? sources { get; set; }
+        public IEnumerable<Model3dSource>? sources { get; set; }
         ///<summary>
         ///Current status of the media.
         ///</summary>
@@ -29417,7 +29444,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
     }
 
     ///<summary>
@@ -29433,7 +29460,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
     }
 
     ///<summary>
@@ -29452,7 +29479,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
     }
 
     ///<summary>
@@ -29486,7 +29513,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of addtional fees applied to the order.
         ///</summary>
-        public AdditionalFee[]? additionalFees { get; set; }
+        public IEnumerable<AdditionalFee>? additionalFees { get; set; }
         ///<summary>
         ///A list of sales agreements associated with the order.
         ///</summary>
@@ -29494,7 +29521,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of messages that appear on the order page in the Shopify admin.
         ///</summary>
-        public ResourceAlert[]? alerts { get; set; }
+        public IEnumerable<ResourceAlert>? alerts { get; set; }
         ///<summary>
         ///The application that created the order.
         ///</summary>
@@ -29597,7 +29624,7 @@ namespace ShopifySharp.GraphQL
         ///A list of all tax lines applied to line items on the order, after returns.
         ///Tax line prices represent the total price for all tax lines with the same `rate` and `title`.
         ///</summary>
-        public TaxLine[]? currentTaxLines { get; set; }
+        public IEnumerable<TaxLine>? currentTaxLines { get; set; }
         ///<summary>
         ///The total amount of additional fees after returns, in shop and presentment currencies.
         ///Returns `null` if there are no additional fees for the order.
@@ -29629,7 +29656,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the custom attributes added to the order.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The customer that placed the order.
         ///</summary>
@@ -29663,7 +29690,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The discount codes used for the order.
         ///</summary>
-        public string[]? discountCodes { get; set; }
+        public IEnumerable<string>? discountCodes { get; set; }
         ///<summary>
         ///The primary address of the customer.
         ///Returns `null` if neither the shipping address nor the billing address was provided.
@@ -29683,7 +29710,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the disputes associated with the order.
         ///</summary>
-        public OrderDisputeSummary[]? disputes { get; set; }
+        public IEnumerable<OrderDisputeSummary>? disputes { get; set; }
         ///<summary>
         ///Whether the order has had any edits applied.
         ///</summary>
@@ -29725,7 +29752,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of shipments for the order.
         ///</summary>
-        public Fulfillment[]? fulfillments { get; set; }
+        public IEnumerable<Fulfillment>? fulfillments { get; set; }
         ///<summary>
         ///Whether the order has been paid in full.
         ///</summary>
@@ -29784,7 +29811,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of reasons why the order can't be edited. For example, "Canceled orders can't be edited".
         ///</summary>
-        public string[]? merchantEditableErrors { get; set; }
+        public IEnumerable<string>? merchantEditableErrors { get; set; }
         ///<summary>
         ///The application acting as the Merchant of Record for the order.
         ///</summary>
@@ -29849,7 +29876,7 @@ namespace ShopifySharp.GraphQL
         ///A list of the names of all payment gateways used for the order.
         ///For example, "Shopify Payments" and "Cash on Delivery (COD)".
         ///</summary>
-        public string[]? paymentGatewayNames { get; set; }
+        public IEnumerable<string>? paymentGatewayNames { get; set; }
         ///<summary>
         ///The payment terms associated with the order.
         ///</summary>
@@ -29929,7 +29956,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of refunds that have been applied to the order.
         ///</summary>
-        public Refund[]? refunds { get; set; }
+        public IEnumerable<Refund>? refunds { get; set; }
         ///<summary>
         ///The URL of the source that the order originated from, if found in the domain registry.
         ///</summary>
@@ -29957,7 +29984,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of risks associated with the order.
         ///</summary>
-        public OrderRisk[]? risks { get; set; }
+        public IEnumerable<OrderRisk>? risks { get; set; }
         ///<summary>
         ///The mailing address of the customer.
         ///</summary>
@@ -30001,7 +30028,7 @@ namespace ShopifySharp.GraphQL
         ///existing tags, use the [tagsAdd](https://shopify.dev/api/admin-graphql/latest/mutations/tagsadd)
         ///mutation.
         ///</summary>
-        public string[]? tags { get; set; }
+        public IEnumerable<string>? tags { get; set; }
         ///<summary>
         ///Whether taxes are exempt on the order.
         ///</summary>
@@ -30010,7 +30037,7 @@ namespace ShopifySharp.GraphQL
         ///A list of all tax lines applied to line items on the order, before returns.
         ///Tax line prices represent the total price for all tax lines with the same `rate` and `title`.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Whether taxes are included in the subtotal price of the order.
         ///</summary>
@@ -30123,7 +30150,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of transactions associated with the order.
         ///</summary>
-        public OrderTransaction[]? transactions { get; set; }
+        public IEnumerable<OrderTransaction>? transactions { get; set; }
         ///<summary>
         ///Whether no payments have been made for the order.
         ///</summary>
@@ -30251,7 +30278,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30266,22 +30293,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Orders.
     ///</summary>
-    public class OrderConnection : GraphQLObject<OrderConnection>
+    public class OrderConnection : GraphQLObject<OrderConnection>, IConnectionWithNodesAndEdges<OrderEdge, Order>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public OrderEdge[]? edges { get; set; }
+        public IEnumerable<OrderEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in OrderEdge.
         ///</summary>
-        public Order[]? nodes { get; set; }
+        public IEnumerable<Order>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -30304,7 +30331,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public OrderCreateMandatePaymentUserError[]? userErrors { get; set; }
+        public IEnumerable<OrderCreateMandatePaymentUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30319,7 +30346,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -30441,7 +30468,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Order and a cursor during pagination.
     ///</summary>
-    public class OrderEdge : GraphQLObject<OrderEdge>
+    public class OrderEdge : GraphQLObject<OrderEdge>, IEdge<Order>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -30469,7 +30496,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30492,7 +30519,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30513,7 +30540,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30559,7 +30586,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30574,7 +30601,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30593,7 +30620,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30612,7 +30639,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30627,7 +30654,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public OrderInvoiceSendUserError[]? userErrors { get; set; }
+        public IEnumerable<OrderInvoiceSendUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30642,7 +30669,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -30672,7 +30699,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30687,7 +30714,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -30702,7 +30729,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of vaulted payment methods for the order with their permissions.
         ///</summary>
-        public PaymentMandate[]? vaultedPaymentMethods { get; set; }
+        public IEnumerable<PaymentMandate>? vaultedPaymentMethods { get; set; }
     }
 
     ///<summary>
@@ -31014,16 +31041,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple OrderStagedChanges.
     ///</summary>
-    public class OrderStagedChangeConnection : GraphQLObject<OrderStagedChangeConnection>
+    public class OrderStagedChangeConnection : GraphQLObject<OrderStagedChangeConnection>, IConnectionWithNodesAndEdges<OrderStagedChangeEdge, IOrderStagedChange>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public OrderStagedChangeEdge[]? edges { get; set; }
+        public IEnumerable<OrderStagedChangeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in OrderStagedChangeEdge.
         ///</summary>
-        public IOrderStagedChange[]? nodes { get; set; }
+        public IEnumerable<IOrderStagedChange>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -31052,7 +31079,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one OrderStagedChange and a cursor during pagination.
     ///</summary>
-    public class OrderStagedChangeEdge : GraphQLObject<OrderStagedChangeEdge>
+    public class OrderStagedChangeEdge : GraphQLObject<OrderStagedChangeEdge>, IEdge<IOrderStagedChange>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -31123,7 +31150,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The transaction fees charged on the order transaction. Only present for Shopify Payments transactions.
         ///</summary>
-        public TransactionFee[]? fees { get; set; }
+        public IEnumerable<TransactionFee>? fees { get; set; }
         ///<summary>
         ///The human-readable payment gateway name used to process the transaction.
         ///</summary>
@@ -31246,16 +31273,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple OrderTransactions.
     ///</summary>
-    public class OrderTransactionConnection : GraphQLObject<OrderTransactionConnection>
+    public class OrderTransactionConnection : GraphQLObject<OrderTransactionConnection>, IConnectionWithNodesAndEdges<OrderTransactionEdge, OrderTransaction>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public OrderTransactionEdge[]? edges { get; set; }
+        public IEnumerable<OrderTransactionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in OrderTransactionEdge.
         ///</summary>
-        public OrderTransaction[]? nodes { get; set; }
+        public IEnumerable<OrderTransaction>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -31265,7 +31292,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one OrderTransaction and a cursor during pagination.
     ///</summary>
-    public class OrderTransactionEdge : GraphQLObject<OrderTransactionEdge>
+    public class OrderTransactionEdge : GraphQLObject<OrderTransactionEdge>, IEdge<OrderTransaction>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -31476,7 +31503,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -31797,26 +31824,26 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The IDs of the updated payment customizations.
         ///</summary>
-        public string[]? ids { get; set; }
+        public IEnumerable<string>? ids { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<PaymentCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple PaymentCustomizations.
     ///</summary>
-    public class PaymentCustomizationConnection : GraphQLObject<PaymentCustomizationConnection>
+    public class PaymentCustomizationConnection : GraphQLObject<PaymentCustomizationConnection>, IConnectionWithNodesAndEdges<PaymentCustomizationEdge, PaymentCustomization>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PaymentCustomizationEdge[]? edges { get; set; }
+        public IEnumerable<PaymentCustomizationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PaymentCustomizationEdge.
         ///</summary>
-        public PaymentCustomization[]? nodes { get; set; }
+        public IEnumerable<PaymentCustomization>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -31835,7 +31862,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<PaymentCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -31850,13 +31877,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<PaymentCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one PaymentCustomization and a cursor during pagination.
     ///</summary>
-    public class PaymentCustomizationEdge : GraphQLObject<PaymentCustomizationEdge>
+    public class PaymentCustomizationEdge : GraphQLObject<PaymentCustomizationEdge>, IEdge<PaymentCustomization>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -31880,7 +31907,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -31950,7 +31977,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentCustomizationError[]? userErrors { get; set; }
+        public IEnumerable<PaymentCustomizationError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32080,7 +32107,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentReminderSendUserError[]? userErrors { get; set; }
+        public IEnumerable<PaymentReminderSendUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32095,7 +32122,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -32147,16 +32174,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple PaymentSchedules.
     ///</summary>
-    public class PaymentScheduleConnection : GraphQLObject<PaymentScheduleConnection>
+    public class PaymentScheduleConnection : GraphQLObject<PaymentScheduleConnection>, IConnectionWithNodesAndEdges<PaymentScheduleEdge, PaymentSchedule>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PaymentScheduleEdge[]? edges { get; set; }
+        public IEnumerable<PaymentScheduleEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PaymentScheduleEdge.
         ///</summary>
-        public PaymentSchedule[]? nodes { get; set; }
+        public IEnumerable<PaymentSchedule>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -32166,7 +32193,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one PaymentSchedule and a cursor during pagination.
     ///</summary>
-    public class PaymentScheduleEdge : GraphQLObject<PaymentScheduleEdge>
+    public class PaymentScheduleEdge : GraphQLObject<PaymentScheduleEdge>, IEdge<PaymentSchedule>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -32186,7 +32213,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of the digital wallets which the shop supports.
         ///</summary>
-        public DigitalWallet[]? supportedDigitalWallets { get; set; }
+        public IEnumerable<DigitalWallet>? supportedDigitalWallets { get; set; }
     }
 
     ///<summary>
@@ -32244,7 +32271,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentTermsCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<PaymentTermsCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32259,7 +32286,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -32289,7 +32316,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentTermsDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<PaymentTermsDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32304,7 +32331,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -32392,7 +32419,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PaymentTermsUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<PaymentTermsUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32407,7 +32434,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -32467,7 +32494,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///An array of data points.
         ///</summary>
-        public PolarisVizDataPoint[]? data { get; set; }
+        public IEnumerable<PolarisVizDataPoint>? data { get; set; }
         ///<summary>
         ///Whether the series represents comparison data.
         ///</summary>
@@ -32486,11 +32513,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The PolarisViz visualization of data.
         ///</summary>
-        public PolarisVizDataSeries[]? data { get; set; }
+        public IEnumerable<PolarisVizDataSeries>? data { get; set; }
         ///<summary>
         ///A list of parse errors, if parsing fails.
         ///</summary>
-        public ParseError[]? parseErrors { get; set; }
+        public IEnumerable<ParseError>? parseErrors { get; set; }
         ///<summary>
         ///The result in a tabular format with schema and row data.
         ///                It's always present even if query has a `VISUALIZE` keyword.
@@ -32629,16 +32656,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple PriceLists.
     ///</summary>
-    public class PriceListConnection : GraphQLObject<PriceListConnection>
+    public class PriceListConnection : GraphQLObject<PriceListConnection>, IConnectionWithNodesAndEdges<PriceListEdge, PriceList>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PriceListEdge[]? edges { get; set; }
+        public IEnumerable<PriceListEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PriceListEdge.
         ///</summary>
-        public PriceList[]? nodes { get; set; }
+        public IEnumerable<PriceList>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -32657,7 +32684,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32672,13 +32699,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one PriceList and a cursor during pagination.
     ///</summary>
-    public class PriceListEdge : GraphQLObject<PriceListEdge>
+    public class PriceListEdge : GraphQLObject<PriceListEdge>, IEdge<PriceList>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -32698,11 +32725,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of fixed prices that were added to or updated in the price list.
         ///</summary>
-        public PriceListPrice[]? prices { get; set; }
+        public IEnumerable<PriceListPrice>? prices { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListPriceUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListPriceUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32717,7 +32744,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -32771,15 +32798,15 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The product for which the fixed prices were added.
         ///</summary>
-        public Product[]? pricesToAddProducts { get; set; }
+        public IEnumerable<Product>? pricesToAddProducts { get; set; }
         ///<summary>
         ///The product for which the fixed prices were deleted.
         ///</summary>
-        public Product[]? pricesToDeleteProducts { get; set; }
+        public IEnumerable<Product>? pricesToDeleteProducts { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListFixedPricesByProductBulkUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListFixedPricesByProductBulkUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32790,11 +32817,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of product variant IDs whose fixed prices were removed from the price list.
         ///</summary>
-        public string[]? deletedFixedPriceVariantIds { get; set; }
+        public IEnumerable<string>? deletedFixedPriceVariantIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListPriceUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListPriceUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32805,7 +32832,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of deleted variant IDs for prices.
         ///</summary>
-        public string[]? deletedFixedPriceVariantIds { get; set; }
+        public IEnumerable<string>? deletedFixedPriceVariantIds { get; set; }
         ///<summary>
         ///The price list for which the fixed prices were modified.
         ///</summary>
@@ -32813,11 +32840,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The prices that were added to the price list.
         ///</summary>
-        public PriceListPrice[]? pricesAdded { get; set; }
+        public IEnumerable<PriceListPrice>? pricesAdded { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListPriceUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListPriceUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -32867,16 +32894,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple PriceListPrices.
     ///</summary>
-    public class PriceListPriceConnection : GraphQLObject<PriceListPriceConnection>
+    public class PriceListPriceConnection : GraphQLObject<PriceListPriceConnection>, IConnectionWithNodesAndEdges<PriceListPriceEdge, PriceListPrice>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PriceListPriceEdge[]? edges { get; set; }
+        public IEnumerable<PriceListPriceEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PriceListPriceEdge.
         ///</summary>
-        public PriceListPrice[]? nodes { get; set; }
+        public IEnumerable<PriceListPrice>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -32886,7 +32913,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one PriceListPrice and a cursor during pagination.
     ///</summary>
-    public class PriceListPriceEdge : GraphQLObject<PriceListPriceEdge>
+    public class PriceListPriceEdge : GraphQLObject<PriceListPriceEdge>, IEdge<PriceListPrice>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -32925,7 +32952,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -32991,7 +33018,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceListUserError[]? userErrors { get; set; }
+        public IEnumerable<PriceListUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -33006,7 +33033,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -33201,7 +33228,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the price rule's features.
         ///</summary>
-        public PriceRuleFeature[]? features { get; set; }
+        public IEnumerable<PriceRuleFeature>? features { get; set; }
         ///<summary>
         ///Indicates whether there are any timeline comments on the price rule.
         ///</summary>
@@ -33245,7 +33272,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///URLs that can be used to share the discount.
         ///</summary>
-        public PriceRuleShareableUrl[]? shareableUrls { get; set; }
+        public IEnumerable<PriceRuleShareableUrl>? shareableUrls { get; set; }
         ///<summary>
         ///The shipping lines to which the price rule applies.
         ///</summary>
@@ -33279,7 +33306,7 @@ namespace ShopifySharp.GraphQL
         ///A list of the price rule's features.
         ///</summary>
         [Obsolete("Use `features` instead.")]
-        public PriceRuleTrait[]? traits { get; set; }
+        public IEnumerable<PriceRuleTrait>? traits { get; set; }
         ///<summary>
         ///The number of times that the price rule has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
@@ -33316,13 +33343,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -33343,16 +33370,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple PriceRules.
     ///</summary>
-    public class PriceRuleConnection : GraphQLObject<PriceRuleConnection>
+    public class PriceRuleConnection : GraphQLObject<PriceRuleConnection>, IConnectionWithNodesAndEdges<PriceRuleEdge, PriceRule>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PriceRuleEdge[]? edges { get; set; }
+        public IEnumerable<PriceRuleEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PriceRuleEdge.
         ///</summary>
-        public PriceRule[]? nodes { get; set; }
+        public IEnumerable<PriceRule>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -33375,13 +33402,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -33400,7 +33427,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of customer segments that contain the customers who can use the price rule.
         ///</summary>
-        public Segment[]? segments { get; set; }
+        public IEnumerable<Segment>? segments { get; set; }
     }
 
     ///<summary>
@@ -33415,13 +33442,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -33436,7 +33463,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
         ///<summary>
         ///The shop of the deleted price rule.
         ///</summary>
@@ -33446,7 +33473,7 @@ namespace ShopifySharp.GraphQL
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -33475,16 +33502,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple PriceRuleDiscountCodes.
     ///</summary>
-    public class PriceRuleDiscountCodeConnection : GraphQLObject<PriceRuleDiscountCodeConnection>
+    public class PriceRuleDiscountCodeConnection : GraphQLObject<PriceRuleDiscountCodeConnection>, IConnectionWithNodesAndEdges<PriceRuleDiscountCodeEdge, PriceRuleDiscountCode>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PriceRuleDiscountCodeEdge[]? edges { get; set; }
+        public IEnumerable<PriceRuleDiscountCodeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PriceRuleDiscountCodeEdge.
         ///</summary>
-        public PriceRuleDiscountCode[]? nodes { get; set; }
+        public IEnumerable<PriceRuleDiscountCode>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -33507,19 +33534,19 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one PriceRuleDiscountCode and a cursor during pagination.
     ///</summary>
-    public class PriceRuleDiscountCodeEdge : GraphQLObject<PriceRuleDiscountCodeEdge>
+    public class PriceRuleDiscountCodeEdge : GraphQLObject<PriceRuleDiscountCodeEdge>, IEdge<PriceRuleDiscountCode>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -33547,19 +33574,19 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one PriceRule and a cursor during pagination.
     ///</summary>
-    public class PriceRuleEdge : GraphQLObject<PriceRuleEdge>
+    public class PriceRuleEdge : GraphQLObject<PriceRuleEdge>, IEdge<PriceRule>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -34095,7 +34122,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The codes for the countries to which the price rule applies to.
         ///</summary>
-        public CountryCode[]? countryCodes { get; set; }
+        public IEnumerable<CountryCode>? countryCodes { get; set; }
         ///<summary>
         ///Whether the price rule is applicable to countries that haven't been defined in the shop's shipping zones.
         ///</summary>
@@ -34219,13 +34246,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PriceRuleUserError[]? priceRuleUserErrors { get; set; }
+        public IEnumerable<PriceRuleUserError>? priceRuleUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `priceRuleUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34240,7 +34267,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -34339,16 +34366,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple PrivateMetafields.
     ///</summary>
-    public class PrivateMetafieldConnection : GraphQLObject<PrivateMetafieldConnection>
+    public class PrivateMetafieldConnection : GraphQLObject<PrivateMetafieldConnection>, IConnectionWithNodesAndEdges<PrivateMetafieldEdge, PrivateMetafield>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PrivateMetafieldEdge[]? edges { get; set; }
+        public IEnumerable<PrivateMetafieldEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PrivateMetafieldEdge.
         ///</summary>
-        public PrivateMetafield[]? nodes { get; set; }
+        public IEnumerable<PrivateMetafield>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -34367,13 +34394,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one PrivateMetafield and a cursor during pagination.
     ///</summary>
-    public class PrivateMetafieldEdge : GraphQLObject<PrivateMetafieldEdge>
+    public class PrivateMetafieldEdge : GraphQLObject<PrivateMetafieldEdge>, IEdge<PrivateMetafield>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -34397,7 +34424,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34551,7 +34578,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of product options. The limit is specified by Shop.resourceLimits.maxProductOptions.
         ///</summary>
-        public ProductOption[]? options { get; set; }
+        public IEnumerable<ProductOption>? options { get; set; }
 
         ///<summary>
         ///The price range of the product.
@@ -34678,7 +34705,7 @@ namespace ShopifySharp.GraphQL
         ///existing tags, use the [tagsAdd](https://shopify.dev/api/admin-graphql/latest/mutations/tagsadd)
         ///mutation.
         ///</summary>
-        public string[]? tags { get; set; }
+        public IEnumerable<string>? tags { get; set; }
         ///<summary>
         ///The theme template used when viewing the product in a store.
         ///</summary>
@@ -34702,7 +34729,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
 
         ///<summary>
         ///The list of channels that the resource is not published to.
@@ -34738,7 +34765,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of new images appended to the product.
         ///</summary>
-        public Image[]? newImages { get; set; }
+        public IEnumerable<Image>? newImages { get; set; }
         ///<summary>
         ///The product object.
         ///</summary>
@@ -34746,7 +34773,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34772,7 +34799,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductChangeStatusUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductChangeStatusUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34787,7 +34814,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -34848,16 +34875,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Products.
     ///</summary>
-    public class ProductConnection : GraphQLObject<ProductConnection>
+    public class ProductConnection : GraphQLObject<ProductConnection>, IConnectionWithNodesAndEdges<ProductEdge, Product>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ProductEdge[]? edges { get; set; }
+        public IEnumerable<ProductEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ProductEdge.
         ///</summary>
-        public Product[]? nodes { get; set; }
+        public IEnumerable<Product>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -34896,11 +34923,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The newly created media.
         ///</summary>
-        public IMedia[]? media { get; set; }
+        public IEnumerable<IMedia>? media { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MediaUserError[]? mediaUserErrors { get; set; }
+        public IEnumerable<MediaUserError>? mediaUserErrors { get; set; }
         ///<summary>
         ///The product associated with the media.
         ///</summary>
@@ -34910,7 +34937,7 @@ namespace ShopifySharp.GraphQL
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `mediaUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34929,7 +34956,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34948,7 +34975,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34959,7 +34986,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The array of image IDs to delete.
         ///</summary>
-        public string[]? deletedImageIds { get; set; }
+        public IEnumerable<string>? deletedImageIds { get; set; }
         ///<summary>
         ///The product object.
         ///</summary>
@@ -34967,7 +34994,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -34978,15 +35005,15 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of media IDs which were deleted.
         ///</summary>
-        public string[]? deletedMediaIds { get; set; }
+        public IEnumerable<string>? deletedMediaIds { get; set; }
         ///<summary>
         ///List of product image IDs which were deleted.
         ///</summary>
-        public string[]? deletedProductImageIds { get; set; }
+        public IEnumerable<string>? deletedProductImageIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MediaUserError[]? mediaUserErrors { get; set; }
+        public IEnumerable<MediaUserError>? mediaUserErrors { get; set; }
         ///<summary>
         ///The product associated with the deleted media.
         ///</summary>
@@ -34996,7 +35023,7 @@ namespace ShopifySharp.GraphQL
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `mediaUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35015,7 +35042,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35030,7 +35057,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -35068,7 +35095,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductDuplicateUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductDuplicateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35087,7 +35114,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductDuplicateUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductDuplicateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35125,7 +35152,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35140,7 +35167,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -35181,7 +35208,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Product and a cursor during pagination.
     ///</summary>
-    public class ProductEdge : GraphQLObject<ProductEdge>
+    public class ProductEdge : GraphQLObject<ProductEdge>, IEdge<Product>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -35219,16 +35246,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ProductFeeds.
     ///</summary>
-    public class ProductFeedConnection : GraphQLObject<ProductFeedConnection>
+    public class ProductFeedConnection : GraphQLObject<ProductFeedConnection>, IConnectionWithNodesAndEdges<ProductFeedEdge, ProductFeed>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ProductFeedEdge[]? edges { get; set; }
+        public IEnumerable<ProductFeedEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ProductFeedEdge.
         ///</summary>
-        public ProductFeed[]? nodes { get; set; }
+        public IEnumerable<ProductFeed>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -35247,7 +35274,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductFeedCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductFeedCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35262,7 +35289,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -35296,7 +35323,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductFeedDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductFeedDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35311,7 +35338,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -35332,7 +35359,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ProductFeed and a cursor during pagination.
     ///</summary>
-    public class ProductFeedEdge : GraphQLObject<ProductFeedEdge>
+    public class ProductFeedEdge : GraphQLObject<ProductFeedEdge>, IEdge<ProductFeed>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -35367,7 +35394,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductFullSyncUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductFullSyncUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35382,7 +35409,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -35436,7 +35463,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35451,7 +35478,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35466,7 +35493,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35511,11 +35538,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The corresponding value to the product option name.
         ///</summary>
-        public string[]? values { get; set; }
+        public IEnumerable<string>? values { get; set; }
     }
 
     ///<summary>
@@ -35574,16 +35601,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ProductPublications.
     ///</summary>
-    public class ProductPublicationConnection : GraphQLObject<ProductPublicationConnection>
+    public class ProductPublicationConnection : GraphQLObject<ProductPublicationConnection>, IConnectionWithNodesAndEdges<ProductPublicationEdge, ProductPublication>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ProductPublicationEdge[]? edges { get; set; }
+        public IEnumerable<ProductPublicationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ProductPublicationEdge.
         ///</summary>
-        public ProductPublication[]? nodes { get; set; }
+        public IEnumerable<ProductPublication>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -35593,7 +35620,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ProductPublication and a cursor during pagination.
     ///</summary>
-    public class ProductPublicationEdge : GraphQLObject<ProductPublicationEdge>
+    public class ProductPublicationEdge : GraphQLObject<ProductPublicationEdge>, IEdge<ProductPublication>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -35619,7 +35646,7 @@ namespace ShopifySharp.GraphQL
         ///The channels where the product is published.
         ///</summary>
         [Obsolete("Use Product.publications instead.")]
-        public ProductPublication[]? productPublications { get; set; }
+        public IEnumerable<ProductPublication>? productPublications { get; set; }
         ///<summary>
         ///The user's shop.
         ///</summary>
@@ -35627,7 +35654,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35642,7 +35669,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35657,13 +35684,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MediaUserError[]? mediaUserErrors { get; set; }
+        public IEnumerable<MediaUserError>? mediaUserErrors { get; set; }
 
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `mediaUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35681,7 +35708,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The feedback messages presented to the merchant.
         ///</summary>
-        public string[]? messages { get; set; }
+        public IEnumerable<string>? messages { get; set; }
         ///<summary>
         ///The ID of the product associated with the feedback.
         ///</summary>
@@ -35724,7 +35751,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -35850,7 +35877,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35861,11 +35888,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The updated media object.
         ///</summary>
-        public IMedia[]? media { get; set; }
+        public IEnumerable<IMedia>? media { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MediaUserError[]? mediaUserErrors { get; set; }
+        public IEnumerable<MediaUserError>? mediaUserErrors { get; set; }
         ///<summary>
         ///The product on which media was updated.
         ///</summary>
@@ -35875,7 +35902,7 @@ namespace ShopifySharp.GraphQL
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         [Obsolete("Use `mediaUserErrors` instead.")]
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -35890,7 +35917,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36048,7 +36075,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of product options applied to the variant.
         ///</summary>
-        public SelectedOption[]? selectedOptions { get; set; }
+        public IEnumerable<SelectedOption>? selectedOptions { get; set; }
         ///<summary>
         ///The total sellable quantity of the variant for online channels.
         ///This doesn't represent the total available inventory or capture
@@ -36091,7 +36118,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The date and time (ISO 8601 format) when the product variant was last modified.
         ///</summary>
@@ -36118,11 +36145,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The product variants that were updated.
         ///</summary>
-        public ProductVariant[]? productVariants { get; set; }
+        public IEnumerable<ProductVariant>? productVariants { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MediaUserError[]? userErrors { get; set; }
+        public IEnumerable<MediaUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36147,16 +36174,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ProductVariantComponents.
     ///</summary>
-    public class ProductVariantComponentConnection : GraphQLObject<ProductVariantComponentConnection>
+    public class ProductVariantComponentConnection : GraphQLObject<ProductVariantComponentConnection>, IConnectionWithNodesAndEdges<ProductVariantComponentEdge, ProductVariantComponent>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ProductVariantComponentEdge[]? edges { get; set; }
+        public IEnumerable<ProductVariantComponentEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ProductVariantComponentEdge.
         ///</summary>
-        public ProductVariantComponent[]? nodes { get; set; }
+        public IEnumerable<ProductVariantComponent>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -36166,7 +36193,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ProductVariantComponent and a cursor during pagination.
     ///</summary>
-    public class ProductVariantComponentEdge : GraphQLObject<ProductVariantComponentEdge>
+    public class ProductVariantComponentEdge : GraphQLObject<ProductVariantComponentEdge>, IEdge<ProductVariantComponent>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -36181,16 +36208,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ProductVariants.
     ///</summary>
-    public class ProductVariantConnection : GraphQLObject<ProductVariantConnection>
+    public class ProductVariantConnection : GraphQLObject<ProductVariantConnection>, IConnectionWithNodesAndEdges<ProductVariantEdge, ProductVariant>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ProductVariantEdge[]? edges { get; set; }
+        public IEnumerable<ProductVariantEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ProductVariantEdge.
         ///</summary>
-        public ProductVariant[]? nodes { get; set; }
+        public IEnumerable<ProductVariant>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -36233,7 +36260,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36252,7 +36279,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36267,17 +36294,17 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The product variants that were updated.
         ///</summary>
-        public ProductVariant[]? productVariants { get; set; }
+        public IEnumerable<ProductVariant>? productVariants { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MediaUserError[]? userErrors { get; set; }
+        public IEnumerable<MediaUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one ProductVariant and a cursor during pagination.
     ///</summary>
-    public class ProductVariantEdge : GraphQLObject<ProductVariantEdge>
+    public class ProductVariantEdge : GraphQLObject<ProductVariantEdge>, IEdge<ProductVariant>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -36335,7 +36362,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36350,7 +36377,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36371,16 +36398,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ProductVariantPricePairs.
     ///</summary>
-    public class ProductVariantPricePairConnection : GraphQLObject<ProductVariantPricePairConnection>
+    public class ProductVariantPricePairConnection : GraphQLObject<ProductVariantPricePairConnection>, IConnectionWithNodesAndEdges<ProductVariantPricePairEdge, ProductVariantPricePair>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ProductVariantPricePairEdge[]? edges { get; set; }
+        public IEnumerable<ProductVariantPricePairEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ProductVariantPricePairEdge.
         ///</summary>
-        public ProductVariantPricePair[]? nodes { get; set; }
+        public IEnumerable<ProductVariantPricePair>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -36390,7 +36417,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ProductVariantPricePair and a cursor during pagination.
     ///</summary>
-    public class ProductVariantPricePairEdge : GraphQLObject<ProductVariantPricePairEdge>
+    public class ProductVariantPricePairEdge : GraphQLObject<ProductVariantPricePairEdge>, IEdge<ProductVariantPricePair>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -36410,11 +36437,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The product variants with successfully updated product variant relationships.
         ///</summary>
-        public ProductVariant[]? parentProductVariants { get; set; }
+        public IEnumerable<ProductVariant>? parentProductVariants { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductVariantRelationshipBulkUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductVariantRelationshipBulkUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36429,7 +36456,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -36596,7 +36623,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36611,11 +36638,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The newly created variants.
         ///</summary>
-        public ProductVariant[]? productVariants { get; set; }
+        public IEnumerable<ProductVariant>? productVariants { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductVariantsBulkCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductVariantsBulkCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36630,7 +36657,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -36712,7 +36739,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductVariantsBulkDeleteUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductVariantsBulkDeleteUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36727,7 +36754,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -36765,7 +36792,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductVariantsBulkReorderUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductVariantsBulkReorderUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36780,7 +36807,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -36822,11 +36849,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The updated variants.
         ///</summary>
-        public ProductVariant[]? productVariants { get; set; }
+        public IEnumerable<ProductVariant>? productVariants { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ProductVariantsBulkUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<ProductVariantsBulkUpdateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36841,7 +36868,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -36955,7 +36982,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsServerPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsServerPixelUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -36966,7 +36993,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PubSubWebhookSubscriptionCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<PubSubWebhookSubscriptionCreateUserError>? userErrors { get; set; }
         ///<summary>
         ///The webhook subscription that was created.
         ///</summary>
@@ -36985,7 +37012,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -37011,7 +37038,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PubSubWebhookSubscriptionUpdateUserError[]? userErrors { get; set; }
+        public IEnumerable<PubSubWebhookSubscriptionUpdateUserError>? userErrors { get; set; }
         ///<summary>
         ///The webhook subscription that was updated.
         ///</summary>
@@ -37030,7 +37057,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -37109,16 +37136,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Publications.
     ///</summary>
-    public class PublicationConnection : GraphQLObject<PublicationConnection>
+    public class PublicationConnection : GraphQLObject<PublicationConnection>, IConnectionWithNodesAndEdges<PublicationEdge, Publication>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public PublicationEdge[]? edges { get; set; }
+        public IEnumerable<PublicationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in PublicationEdge.
         ///</summary>
-        public Publication[]? nodes { get; set; }
+        public IEnumerable<Publication>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -37152,7 +37179,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PublicationUserError[]? userErrors { get; set; }
+        public IEnumerable<PublicationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37167,13 +37194,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PublicationUserError[]? userErrors { get; set; }
+        public IEnumerable<PublicationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Publication and a cursor during pagination.
     ///</summary>
-    public class PublicationEdge : GraphQLObject<PublicationEdge>
+    public class PublicationEdge : GraphQLObject<PublicationEdge>, IEdge<Publication>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -37250,7 +37277,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public PublicationUserError[]? userErrors { get; set; }
+        public IEnumerable<PublicationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37265,7 +37292,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -37426,7 +37453,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37445,7 +37472,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37464,7 +37491,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37483,7 +37510,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37557,16 +37584,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple QuantityRules.
     ///</summary>
-    public class QuantityRuleConnection : GraphQLObject<QuantityRuleConnection>
+    public class QuantityRuleConnection : GraphQLObject<QuantityRuleConnection>, IConnectionWithNodesAndEdges<QuantityRuleEdge, QuantityRule>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public QuantityRuleEdge[]? edges { get; set; }
+        public IEnumerable<QuantityRuleEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in QuantityRuleEdge.
         ///</summary>
-        public QuantityRule[]? nodes { get; set; }
+        public IEnumerable<QuantityRule>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -37580,7 +37607,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one QuantityRule and a cursor during pagination.
     ///</summary>
-    public class QuantityRuleEdge : GraphQLObject<QuantityRuleEdge>
+    public class QuantityRuleEdge : GraphQLObject<QuantityRuleEdge>, IEdge<QuantityRule>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -37619,7 +37646,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -37685,11 +37712,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of quantity rules that were added to or updated in the price list.
         ///</summary>
-        public QuantityRule[]? quantityRules { get; set; }
+        public IEnumerable<QuantityRule>? quantityRules { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public QuantityRuleUserError[]? userErrors { get; set; }
+        public IEnumerable<QuantityRuleUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37700,11 +37727,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of product variant IDs whose quantity rules were removed from the price list.
         ///</summary>
-        public string[]? deletedQuantityRulesVariantIds { get; set; }
+        public IEnumerable<string>? deletedQuantityRulesVariantIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public QuantityRuleUserError[]? userErrors { get; set; }
+        public IEnumerable<QuantityRuleUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -37741,7 +37768,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of app discount types installed by apps.
         ///</summary>
-        public AppDiscountType[]? appDiscountTypes { get; set; }
+        public IEnumerable<AppDiscountType>? appDiscountTypes { get; set; }
         ///<summary>
         ///Lookup an AppInstallation by ID or return the AppInstallation for the currently authenticated App.
         ///</summary>
@@ -37777,11 +37804,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Returns a list of activated carrier services and associated shop locations that support them.
         ///</summary>
-        public DeliveryCarrierServiceAndLocations[]? availableCarrierServices { get; set; }
+        public IEnumerable<DeliveryCarrierServiceAndLocations>? availableCarrierServices { get; set; }
         ///<summary>
         ///A list of available locales.
         ///</summary>
-        public Locale[]? availableLocales { get; set; }
+        public IEnumerable<Locale>? availableLocales { get; set; }
         ///<summary>
         ///Returns a `DeliveryCarrierService` object by ID.
         ///</summary>
@@ -37797,7 +37824,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Returns the most recent catalog operations for the shop.
         ///</summary>
-        public IResourceOperation[]? catalogOperations { get; set; }
+        public IEnumerable<IResourceOperation>? catalogOperations { get; set; }
         ///<summary>
         ///The catalogs belonging to the shop.
         ///</summary>
@@ -37851,7 +37878,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Lists all rules that can be used to create smart collections.
         ///</summary>
-        public CollectionRuleConditions[]? collectionRulesConditions { get; set; }
+        public IEnumerable<CollectionRuleConditions>? collectionRulesConditions { get; set; }
         ///<summary>
         ///Returns a list of the shop's collection saved searches.
         ///</summary>
@@ -38083,7 +38110,7 @@ namespace ShopifySharp.GraphQL
         ///Returns a list of all origin locations available for a delivery profile.
         ///</summary>
         [Obsolete("Use `locationsAvailableForDeliveryProfilesConnection` instead.")]
-        public Location[]? locationsAvailableForDeliveryProfiles { get; set; }
+        public IEnumerable<Location>? locationsAvailableForDeliveryProfiles { get; set; }
         ///<summary>
         ///Returns a list of all origin locations available for a delivery profile.
         ///</summary>
@@ -38146,7 +38173,7 @@ namespace ShopifySharp.GraphQL
         ///
         ///Refer to the [list of supported metafield types](https://shopify.dev/apps/metafields/types).
         ///</summary>
-        public MetafieldDefinitionType[]? metafieldDefinitionTypes { get; set; }
+        public IEnumerable<MetafieldDefinitionType>? metafieldDefinitionTypes { get; set; }
         ///<summary>
         ///List of metafield definitions.
         ///</summary>
@@ -38202,7 +38229,7 @@ namespace ShopifySharp.GraphQL
         ///interface) with the given IDs, in accordance with the
         ///[Relay specification](https://relay.dev/docs/guides/graphql-server-specification/#object-identification).
         ///</summary>
-        public INode[]? nodes { get; set; }
+        public IEnumerable<INode>? nodes { get; set; }
         ///<summary>
         ///Returns an Order resource by ID.
         ///</summary>
@@ -38230,7 +38257,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of payment terms templates eligible for all shops and users.
         ///</summary>
-        public PaymentTermsTemplate[]? paymentTermsTemplates { get; set; }
+        public IEnumerable<PaymentTermsTemplate>? paymentTermsTemplates { get; set; }
         ///<summary>
         ///Returns a price list resource by ID.
         ///</summary>
@@ -38315,7 +38342,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of publicly-accessible Admin API versions, including supported versions, the release candidate, and unstable versions.
         ///</summary>
-        public ApiVersion[]? publicApiVersions { get; set; }
+        public IEnumerable<ApiVersion>? publicApiVersions { get; set; }
         ///<summary>
         ///Lookup a publication by ID.
         ///</summary>
@@ -38416,7 +38443,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of locales available on a shop.
         ///</summary>
-        public ShopLocale[]? shopLocales { get; set; }
+        public IEnumerable<ShopLocale>? shopLocales { get; set; }
         ///<summary>
         ///The Shopify Function.
         ///</summary>
@@ -38529,7 +38556,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the refunded duties as part of this refund.
         ///</summary>
-        public RefundDuty[]? duties { get; set; }
+        public IEnumerable<RefundDuty>? duties { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -38616,16 +38643,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Refunds.
     ///</summary>
-    public class RefundConnection : GraphQLObject<RefundConnection>
+    public class RefundConnection : GraphQLObject<RefundConnection>, IConnectionWithNodesAndEdges<RefundEdge, Refund>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public RefundEdge[]? edges { get; set; }
+        public IEnumerable<RefundEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in RefundEdge.
         ///</summary>
-        public Refund[]? nodes { get; set; }
+        public IEnumerable<Refund>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -38648,7 +38675,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -38684,7 +38711,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Refund and a cursor during pagination.
     ///</summary>
-    public class RefundEdge : GraphQLObject<RefundEdge>
+    public class RefundEdge : GraphQLObject<RefundEdge>, IEdge<Refund>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -38756,16 +38783,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple RefundLineItems.
     ///</summary>
-    public class RefundLineItemConnection : GraphQLObject<RefundLineItemConnection>
+    public class RefundLineItemConnection : GraphQLObject<RefundLineItemConnection>, IConnectionWithNodesAndEdges<RefundLineItemEdge, RefundLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public RefundLineItemEdge[]? edges { get; set; }
+        public IEnumerable<RefundLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in RefundLineItemEdge.
         ///</summary>
-        public RefundLineItem[]? nodes { get; set; }
+        public IEnumerable<RefundLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -38775,7 +38802,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one RefundLineItem and a cursor during pagination.
     ///</summary>
-    public class RefundLineItemEdge : GraphQLObject<RefundLineItemEdge>
+    public class RefundLineItemEdge : GraphQLObject<RefundLineItemEdge>, IEdge<RefundLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -38820,7 +38847,7 @@ namespace ShopifySharp.GraphQL
         ///Buttons in the alert that link to related information.
         ///For example, _Edit variants_.
         ///</summary>
-        public ResourceAlertAction[]? actions { get; set; }
+        public IEnumerable<ResourceAlertAction>? actions { get; set; }
         ///<summary>
         ///The secondary text in the alert that includes further information or instructions about how to solve a problem.
         ///</summary>
@@ -38920,11 +38947,11 @@ namespace ShopifySharp.GraphQL
         ///Feedback from an app about the steps a merchant needs to take to set up the app on their store.
         ///</summary>
         [Obsolete("Use `details` instead.")]
-        public AppFeedback[]? appFeedback { get; set; }
+        public IEnumerable<AppFeedback>? appFeedback { get; set; }
         ///<summary>
         ///List of AppFeedback detailing issues regarding a resource.
         ///</summary>
-        public AppFeedback[]? details { get; set; }
+        public IEnumerable<AppFeedback>? details { get; set; }
         ///<summary>
         ///Summary of resource feedback pertaining to the resource.
         ///</summary>
@@ -39054,16 +39081,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ResourcePublications.
     ///</summary>
-    public class ResourcePublicationConnection : GraphQLObject<ResourcePublicationConnection>
+    public class ResourcePublicationConnection : GraphQLObject<ResourcePublicationConnection>, IConnectionWithNodesAndEdges<ResourcePublicationEdge, ResourcePublication>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ResourcePublicationEdge[]? edges { get; set; }
+        public IEnumerable<ResourcePublicationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ResourcePublicationEdge.
         ///</summary>
-        public ResourcePublication[]? nodes { get; set; }
+        public IEnumerable<ResourcePublication>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39073,7 +39100,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ResourcePublication and a cursor during pagination.
     ///</summary>
-    public class ResourcePublicationEdge : GraphQLObject<ResourcePublicationEdge>
+    public class ResourcePublicationEdge : GraphQLObject<ResourcePublicationEdge>, IEdge<ResourcePublication>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39115,16 +39142,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ResourcePublicationV2s.
     ///</summary>
-    public class ResourcePublicationV2Connection : GraphQLObject<ResourcePublicationV2Connection>
+    public class ResourcePublicationV2Connection : GraphQLObject<ResourcePublicationV2Connection>, IConnectionWithNodesAndEdges<ResourcePublicationV2Edge, ResourcePublicationV2>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ResourcePublicationV2Edge[]? edges { get; set; }
+        public IEnumerable<ResourcePublicationV2Edge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ResourcePublicationV2Edge.
         ///</summary>
-        public ResourcePublicationV2[]? nodes { get; set; }
+        public IEnumerable<ResourcePublicationV2>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39134,7 +39161,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ResourcePublicationV2 and a cursor during pagination.
     ///</summary>
-    public class ResourcePublicationV2Edge : GraphQLObject<ResourcePublicationV2Edge>
+    public class ResourcePublicationV2Edge : GraphQLObject<ResourcePublicationV2Edge>, IEdge<ResourcePublicationV2>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39205,7 +39232,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39220,7 +39247,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39235,22 +39262,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Returns.
     ///</summary>
-    public class ReturnConnection : GraphQLObject<ReturnConnection>
+    public class ReturnConnection : GraphQLObject<ReturnConnection>, IConnectionWithNodesAndEdges<ReturnEdge, Return>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReturnEdge[]? edges { get; set; }
+        public IEnumerable<ReturnEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReturnEdge.
         ///</summary>
-        public Return[]? nodes { get; set; }
+        public IEnumerable<Return>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39269,7 +39296,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39319,13 +39346,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Return and a cursor during pagination.
     ///</summary>
-    public class ReturnEdge : GraphQLObject<ReturnEdge>
+    public class ReturnEdge : GraphQLObject<ReturnEdge>, IEdge<Return>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39490,16 +39517,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReturnLineItems.
     ///</summary>
-    public class ReturnLineItemConnection : GraphQLObject<ReturnLineItemConnection>
+    public class ReturnLineItemConnection : GraphQLObject<ReturnLineItemConnection>, IConnectionWithNodesAndEdges<ReturnLineItemEdge, ReturnLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReturnLineItemEdge[]? edges { get; set; }
+        public IEnumerable<ReturnLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReturnLineItemEdge.
         ///</summary>
-        public ReturnLineItem[]? nodes { get; set; }
+        public IEnumerable<ReturnLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39509,7 +39536,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ReturnLineItem and a cursor during pagination.
     ///</summary>
-    public class ReturnLineItemEdge : GraphQLObject<ReturnLineItemEdge>
+    public class ReturnLineItemEdge : GraphQLObject<ReturnLineItemEdge>, IEdge<ReturnLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39580,7 +39607,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39595,7 +39622,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39610,7 +39637,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39652,7 +39679,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -39682,16 +39709,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReturnableFulfillments.
     ///</summary>
-    public class ReturnableFulfillmentConnection : GraphQLObject<ReturnableFulfillmentConnection>
+    public class ReturnableFulfillmentConnection : GraphQLObject<ReturnableFulfillmentConnection>, IConnectionWithNodesAndEdges<ReturnableFulfillmentEdge, ReturnableFulfillment>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReturnableFulfillmentEdge[]? edges { get; set; }
+        public IEnumerable<ReturnableFulfillmentEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReturnableFulfillmentEdge.
         ///</summary>
-        public ReturnableFulfillment[]? nodes { get; set; }
+        public IEnumerable<ReturnableFulfillment>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39701,7 +39728,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ReturnableFulfillment and a cursor during pagination.
     ///</summary>
-    public class ReturnableFulfillmentEdge : GraphQLObject<ReturnableFulfillmentEdge>
+    public class ReturnableFulfillmentEdge : GraphQLObject<ReturnableFulfillmentEdge>, IEdge<ReturnableFulfillment>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39731,16 +39758,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReturnableFulfillmentLineItems.
     ///</summary>
-    public class ReturnableFulfillmentLineItemConnection : GraphQLObject<ReturnableFulfillmentLineItemConnection>
+    public class ReturnableFulfillmentLineItemConnection : GraphQLObject<ReturnableFulfillmentLineItemConnection>, IConnectionWithNodesAndEdges<ReturnableFulfillmentLineItemEdge, ReturnableFulfillmentLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReturnableFulfillmentLineItemEdge[]? edges { get; set; }
+        public IEnumerable<ReturnableFulfillmentLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReturnableFulfillmentLineItemEdge.
         ///</summary>
-        public ReturnableFulfillmentLineItem[]? nodes { get; set; }
+        public IEnumerable<ReturnableFulfillmentLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39750,7 +39777,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ReturnableFulfillmentLineItem and a cursor during pagination.
     ///</summary>
-    public class ReturnableFulfillmentLineItemEdge : GraphQLObject<ReturnableFulfillmentLineItemEdge>
+    public class ReturnableFulfillmentLineItemEdge : GraphQLObject<ReturnableFulfillmentLineItemEdge>, IEdge<ReturnableFulfillmentLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39791,16 +39818,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReverseDeliveries.
     ///</summary>
-    public class ReverseDeliveryConnection : GraphQLObject<ReverseDeliveryConnection>
+    public class ReverseDeliveryConnection : GraphQLObject<ReverseDeliveryConnection>, IConnectionWithNodesAndEdges<ReverseDeliveryEdge, ReverseDelivery>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReverseDeliveryEdge[]? edges { get; set; }
+        public IEnumerable<ReverseDeliveryEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReverseDeliveryEdge.
         ///</summary>
-        public ReverseDelivery[]? nodes { get; set; }
+        public IEnumerable<ReverseDelivery>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39819,7 +39846,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -39848,17 +39875,17 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The disposed reverse delivery line items.
         ///</summary>
-        public ReverseDeliveryLineItem[]? reverseDeliveryLineItems { get; set; }
+        public IEnumerable<ReverseDeliveryLineItem>? reverseDeliveryLineItems { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one ReverseDelivery and a cursor during pagination.
     ///</summary>
-    public class ReverseDeliveryEdge : GraphQLObject<ReverseDeliveryEdge>
+    public class ReverseDeliveryEdge : GraphQLObject<ReverseDeliveryEdge>, IEdge<ReverseDelivery>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39897,7 +39924,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The dispositions of the item.
         ///</summary>
-        public ReverseFulfillmentOrderDisposition[]? dispositions { get; set; }
+        public IEnumerable<ReverseFulfillmentOrderDisposition>? dispositions { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -39915,16 +39942,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReverseDeliveryLineItems.
     ///</summary>
-    public class ReverseDeliveryLineItemConnection : GraphQLObject<ReverseDeliveryLineItemConnection>
+    public class ReverseDeliveryLineItemConnection : GraphQLObject<ReverseDeliveryLineItemConnection>, IConnectionWithNodesAndEdges<ReverseDeliveryLineItemEdge, ReverseDeliveryLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReverseDeliveryLineItemEdge[]? edges { get; set; }
+        public IEnumerable<ReverseDeliveryLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReverseDeliveryLineItemEdge.
         ///</summary>
-        public ReverseDeliveryLineItem[]? nodes { get; set; }
+        public IEnumerable<ReverseDeliveryLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -39934,7 +39961,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ReverseDeliveryLineItem and a cursor during pagination.
     ///</summary>
-    public class ReverseDeliveryLineItemEdge : GraphQLObject<ReverseDeliveryLineItemEdge>
+    public class ReverseDeliveryLineItemEdge : GraphQLObject<ReverseDeliveryLineItemEdge>, IEdge<ReverseDeliveryLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -39973,7 +40000,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40031,16 +40058,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReverseFulfillmentOrders.
     ///</summary>
-    public class ReverseFulfillmentOrderConnection : GraphQLObject<ReverseFulfillmentOrderConnection>
+    public class ReverseFulfillmentOrderConnection : GraphQLObject<ReverseFulfillmentOrderConnection>, IConnectionWithNodesAndEdges<ReverseFulfillmentOrderEdge, ReverseFulfillmentOrder>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReverseFulfillmentOrderEdge[]? edges { get; set; }
+        public IEnumerable<ReverseFulfillmentOrderEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReverseFulfillmentOrderEdge.
         ///</summary>
-        public ReverseFulfillmentOrder[]? nodes { get; set; }
+        public IEnumerable<ReverseFulfillmentOrder>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40055,11 +40082,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The disposed reverse fulfillment order line items.
         ///</summary>
-        public ReverseFulfillmentOrderLineItem[]? reverseFulfillmentOrderLineItems { get; set; }
+        public IEnumerable<ReverseFulfillmentOrderLineItem>? reverseFulfillmentOrderLineItems { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ReturnUserError[]? userErrors { get; set; }
+        public IEnumerable<ReturnUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40111,7 +40138,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ReverseFulfillmentOrder and a cursor during pagination.
     ///</summary>
-    public class ReverseFulfillmentOrderEdge : GraphQLObject<ReverseFulfillmentOrderEdge>
+    public class ReverseFulfillmentOrderEdge : GraphQLObject<ReverseFulfillmentOrderEdge>, IEdge<ReverseFulfillmentOrder>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -40131,7 +40158,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The dispositions of the item.
         ///</summary>
-        public ReverseFulfillmentOrderDisposition[]? dispositions { get; set; }
+        public IEnumerable<ReverseFulfillmentOrderDisposition>? dispositions { get; set; }
         ///<summary>
         ///The corresponding fulfillment line item for a reverse fulfillment order line item.
         ///</summary>
@@ -40149,16 +40176,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ReverseFulfillmentOrderLineItems.
     ///</summary>
-    public class ReverseFulfillmentOrderLineItemConnection : GraphQLObject<ReverseFulfillmentOrderLineItemConnection>
+    public class ReverseFulfillmentOrderLineItemConnection : GraphQLObject<ReverseFulfillmentOrderLineItemConnection>, IConnectionWithNodesAndEdges<ReverseFulfillmentOrderLineItemEdge, ReverseFulfillmentOrderLineItem>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ReverseFulfillmentOrderLineItemEdge[]? edges { get; set; }
+        public IEnumerable<ReverseFulfillmentOrderLineItemEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ReverseFulfillmentOrderLineItemEdge.
         ///</summary>
-        public ReverseFulfillmentOrderLineItem[]? nodes { get; set; }
+        public IEnumerable<ReverseFulfillmentOrderLineItem>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40168,7 +40195,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ReverseFulfillmentOrderLineItem and a cursor during pagination.
     ///</summary>
-    public class ReverseFulfillmentOrderLineItemEdge : GraphQLObject<ReverseFulfillmentOrderLineItemEdge>
+    public class ReverseFulfillmentOrderLineItemEdge : GraphQLObject<ReverseFulfillmentOrderLineItemEdge>, IEdge<ReverseFulfillmentOrderLineItem>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -40312,7 +40339,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; }
+        public IEnumerable<SaleTax>? taxes { get; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -40374,22 +40401,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of taxes charged on the additional fee.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple Sales.
     ///</summary>
-    public class SaleConnection : GraphQLObject<SaleConnection>
+    public class SaleConnection : GraphQLObject<SaleConnection>, IConnectionWithNodesAndEdges<SaleEdge, ISale>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SaleEdge[]? edges { get; set; }
+        public IEnumerable<SaleEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SaleEdge.
         ///</summary>
-        public ISale[]? nodes { get; set; }
+        public IEnumerable<ISale>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40399,7 +40426,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one Sale and a cursor during pagination.
     ///</summary>
-    public class SaleEdge : GraphQLObject<SaleEdge>
+    public class SaleEdge : GraphQLObject<SaleEdge>, IEdge<ISale>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -40510,16 +40537,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SalesAgreements.
     ///</summary>
-    public class SalesAgreementConnection : GraphQLObject<SalesAgreementConnection>
+    public class SalesAgreementConnection : GraphQLObject<SalesAgreementConnection>, IConnectionWithNodesAndEdges<SalesAgreementEdge, ISalesAgreement>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SalesAgreementEdge[]? edges { get; set; }
+        public IEnumerable<SalesAgreementEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SalesAgreementEdge.
         ///</summary>
-        public ISalesAgreement[]? nodes { get; set; }
+        public IEnumerable<ISalesAgreement>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40529,7 +40556,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SalesAgreement and a cursor during pagination.
     ///</summary>
-    public class SalesAgreementEdge : GraphQLObject<SalesAgreementEdge>
+    public class SalesAgreementEdge : GraphQLObject<SalesAgreementEdge>, IEdge<ISalesAgreement>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -40549,7 +40576,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The filters of a saved search.
         ///</summary>
-        public SearchFilter[]? filters { get; set; }
+        public IEnumerable<SearchFilter>? filters { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -40579,16 +40606,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SavedSearches.
     ///</summary>
-    public class SavedSearchConnection : GraphQLObject<SavedSearchConnection>
+    public class SavedSearchConnection : GraphQLObject<SavedSearchConnection>, IConnectionWithNodesAndEdges<SavedSearchEdge, SavedSearch>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SavedSearchEdge[]? edges { get; set; }
+        public IEnumerable<SavedSearchEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SavedSearchEdge.
         ///</summary>
-        public SavedSearch[]? nodes { get; set; }
+        public IEnumerable<SavedSearch>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40607,7 +40634,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40626,13 +40653,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one SavedSearch and a cursor during pagination.
     ///</summary>
-    public class SavedSearchEdge : GraphQLObject<SavedSearchEdge>
+    public class SavedSearchEdge : GraphQLObject<SavedSearchEdge>, IEdge<SavedSearch>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -40656,7 +40683,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40745,16 +40772,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ScriptTags.
     ///</summary>
-    public class ScriptTagConnection : GraphQLObject<ScriptTagConnection>
+    public class ScriptTagConnection : GraphQLObject<ScriptTagConnection>, IConnectionWithNodesAndEdges<ScriptTagEdge, ScriptTag>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ScriptTagEdge[]? edges { get; set; }
+        public IEnumerable<ScriptTagEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ScriptTagEdge.
         ///</summary>
-        public ScriptTag[]? nodes { get; set; }
+        public IEnumerable<ScriptTag>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40773,7 +40800,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40788,7 +40815,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40813,7 +40840,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ScriptTag and a cursor during pagination.
     ///</summary>
-    public class ScriptTagEdge : GraphQLObject<ScriptTagEdge>
+    public class ScriptTagEdge : GraphQLObject<ScriptTagEdge>, IEdge<ScriptTag>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -40837,7 +40864,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -40863,7 +40890,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of options that can be use to filter product availability.
         ///</summary>
-        public FilterOption[]? productAvailability { get; set; }
+        public IEnumerable<FilterOption>? productAvailability { get; set; }
     }
 
     ///<summary>
@@ -40896,12 +40923,12 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///The connection type for SearchResult.
     ///</summary>
-    public class SearchResultConnection : GraphQLObject<SearchResultConnection>
+    public class SearchResultConnection : GraphQLObject<SearchResultConnection>, IConnectionWithEdges<SearchResultEdge, SearchResult>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SearchResultEdge[]? edges { get; set; }
+        public IEnumerable<SearchResultEdge>? edges { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -40917,7 +40944,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SearchResult and a cursor during pagination.
     ///</summary>
-    public class SearchResultEdge : GraphQLObject<SearchResultEdge>
+    public class SearchResultEdge : GraphQLObject<SearchResultEdge>, IEdge<SearchResult>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -41040,16 +41067,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple Segments.
     ///</summary>
-    public class SegmentConnection : GraphQLObject<SegmentConnection>
+    public class SegmentConnection : GraphQLObject<SegmentConnection>, IConnectionWithNodesAndEdges<SegmentEdge, Segment>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SegmentEdge[]? edges { get; set; }
+        public IEnumerable<SegmentEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SegmentEdge.
         ///</summary>
-        public Segment[]? nodes { get; set; }
+        public IEnumerable<Segment>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -41068,7 +41095,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -41102,13 +41129,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one Segment and a cursor during pagination.
     ///</summary>
-    public class SegmentEdge : GraphQLObject<SegmentEdge>
+    public class SegmentEdge : GraphQLObject<SegmentEdge>, IEdge<Segment>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -41155,7 +41182,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The parameters for an event segment filter.
         ///</summary>
-        public SegmentEventFilterParameter[]? parameters { get; set; }
+        public IEnumerable<SegmentEventFilterParameter>? parameters { get; set; }
         ///<summary>
         ///The query name of the filter.
         ///</summary>
@@ -41236,16 +41263,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SegmentFilters.
     ///</summary>
-    public class SegmentFilterConnection : GraphQLObject<SegmentFilterConnection>
+    public class SegmentFilterConnection : GraphQLObject<SegmentFilterConnection>, IConnectionWithNodesAndEdges<SegmentFilterEdge, ISegmentFilter>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SegmentFilterEdge[]? edges { get; set; }
+        public IEnumerable<SegmentFilterEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SegmentFilterEdge.
         ///</summary>
-        public ISegmentFilter[]? nodes { get; set; }
+        public IEnumerable<ISegmentFilter>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -41255,7 +41282,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SegmentFilter and a cursor during pagination.
     ///</summary>
-    public class SegmentFilterEdge : GraphQLObject<SegmentFilterEdge>
+    public class SegmentFilterEdge : GraphQLObject<SegmentFilterEdge>, IEdge<ISegmentFilter>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -41328,7 +41355,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The membership status for the given list of segments.
         ///</summary>
-        public SegmentMembership[]? memberships { get; set; }
+        public IEnumerable<SegmentMembership>? memberships { get; set; }
     }
 
     ///<summary>
@@ -41354,16 +41381,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SegmentMigrations.
     ///</summary>
-    public class SegmentMigrationConnection : GraphQLObject<SegmentMigrationConnection>
+    public class SegmentMigrationConnection : GraphQLObject<SegmentMigrationConnection>, IConnectionWithNodesAndEdges<SegmentMigrationEdge, SegmentMigration>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SegmentMigrationEdge[]? edges { get; set; }
+        public IEnumerable<SegmentMigrationEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SegmentMigrationEdge.
         ///</summary>
-        public SegmentMigration[]? nodes { get; set; }
+        public IEnumerable<SegmentMigration>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -41373,7 +41400,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SegmentMigration and a cursor during pagination.
     ///</summary>
-    public class SegmentMigrationEdge : GraphQLObject<SegmentMigrationEdge>
+    public class SegmentMigrationEdge : GraphQLObject<SegmentMigrationEdge>, IEdge<SegmentMigration>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -41451,7 +41478,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -41474,16 +41501,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SegmentValues.
     ///</summary>
-    public class SegmentValueConnection : GraphQLObject<SegmentValueConnection>
+    public class SegmentValueConnection : GraphQLObject<SegmentValueConnection>, IConnectionWithNodesAndEdges<SegmentValueEdge, SegmentValue>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SegmentValueEdge[]? edges { get; set; }
+        public IEnumerable<SegmentValueEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SegmentValueEdge.
         ///</summary>
-        public SegmentValue[]? nodes { get; set; }
+        public IEnumerable<SegmentValue>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -41493,7 +41520,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SegmentValue and a cursor during pagination.
     ///</summary>
-    public class SegmentValueEdge : GraphQLObject<SegmentValueEdge>
+    public class SegmentValueEdge : GraphQLObject<SegmentValueEdge>, IEdge<SegmentValue>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -41568,7 +41595,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The values of all options available on the selling plan. Selling plans are grouped together in Liquid when they're created by the same app, and have the same `selling_plan_group.name` and `selling_plan_group.options` values.
         ///</summary>
-        public string[]? options { get; set; }
+        public IEnumerable<string>? options { get; set; }
         ///<summary>
         ///Relative position of the selling plan for display. A lower position will be displayed before a higher position.
         ///</summary>
@@ -41576,11 +41603,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Selling plan pricing details.
         ///</summary>
-        public ISellingPlanPricingPolicy[]? pricingPolicies { get; set; }
+        public IEnumerable<ISellingPlanPricingPolicy>? pricingPolicies { get; set; }
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
     }
 
     ///<summary>
@@ -41734,16 +41761,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SellingPlans.
     ///</summary>
-    public class SellingPlanConnection : GraphQLObject<SellingPlanConnection>
+    public class SellingPlanConnection : GraphQLObject<SellingPlanConnection>, IConnectionWithNodesAndEdges<SellingPlanEdge, SellingPlan>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SellingPlanEdge[]? edges { get; set; }
+        public IEnumerable<SellingPlanEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SellingPlanEdge.
         ///</summary>
-        public SellingPlan[]? nodes { get; set; }
+        public IEnumerable<SellingPlan>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -41766,7 +41793,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
-        public SellingPlanAnchor[]? anchors { get; set; }
+        public IEnumerable<SellingPlanAnchor>? anchors { get; set; }
         ///<summary>
         ///A buffer period for orders to be included in next fulfillment anchor.
         ///</summary>
@@ -41776,7 +41803,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SellingPlan and a cursor during pagination.
     ///</summary>
-    public class SellingPlanEdge : GraphQLObject<SellingPlanEdge>
+    public class SellingPlanEdge : GraphQLObject<SellingPlanEdge>, IEdge<SellingPlan>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -41820,7 +41847,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
-        public SellingPlanAnchor[]? anchors { get; set; }
+        public IEnumerable<SellingPlanAnchor>? anchors { get; set; }
         ///<summary>
         ///A buffer period for orders to be included in next fulfillment anchor.
         ///</summary>
@@ -41966,7 +41993,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The values of all options available on the selling plan group. Selling plans are grouped together in Liquid when they're created by the same app, and have the same `selling_plan_group.name` and `selling_plan_group.options` values.
         ///</summary>
-        public string[]? options { get; set; }
+        public IEnumerable<string>? options { get; set; }
         ///<summary>
         ///The relative position of the selling plan group for display.
         ///</summary>
@@ -41998,7 +42025,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
     }
 
     ///<summary>
@@ -42013,7 +42040,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42028,22 +42055,22 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple SellingPlanGroups.
     ///</summary>
-    public class SellingPlanGroupConnection : GraphQLObject<SellingPlanGroupConnection>
+    public class SellingPlanGroupConnection : GraphQLObject<SellingPlanGroupConnection>, IConnectionWithNodesAndEdges<SellingPlanGroupEdge, SellingPlanGroup>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SellingPlanGroupEdge[]? edges { get; set; }
+        public IEnumerable<SellingPlanGroupEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SellingPlanGroupEdge.
         ///</summary>
-        public SellingPlanGroup[]? nodes { get; set; }
+        public IEnumerable<SellingPlanGroup>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -42062,7 +42089,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42077,13 +42104,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one SellingPlanGroup and a cursor during pagination.
     ///</summary>
-    public class SellingPlanGroupEdge : GraphQLObject<SellingPlanGroupEdge>
+    public class SellingPlanGroupEdge : GraphQLObject<SellingPlanGroupEdge>, IEdge<SellingPlanGroup>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -42103,11 +42130,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The removed product variant ids.
         ///</summary>
-        public string[]? removedProductVariantIds { get; set; }
+        public IEnumerable<string>? removedProductVariantIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42118,11 +42145,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The removed product ids.
         ///</summary>
-        public string[]? removedProductIds { get; set; }
+        public IEnumerable<string>? removedProductIds { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42161,7 +42188,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The IDs of the deleted Subscription Plans.
         ///</summary>
-        public string[]? deletedSellingPlanIds { get; set; }
+        public IEnumerable<string>? deletedSellingPlanIds { get; set; }
         ///<summary>
         ///The updated Selling Plan Group.
         ///</summary>
@@ -42169,7 +42196,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SellingPlanGroupUserError[]? userErrors { get; set; }
+        public IEnumerable<SellingPlanGroupUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42184,7 +42211,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -42570,7 +42597,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Specific anchor dates upon which the billing interval calculations should be made.
         ///</summary>
-        public SellingPlanAnchor[]? anchors { get; set; }
+        public IEnumerable<SellingPlanAnchor>? anchors { get; set; }
         ///<summary>
         ///The date and time when the selling plan billing policy was created.
         ///</summary>
@@ -42601,7 +42628,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
-        public SellingPlanAnchor[]? anchors { get; set; }
+        public IEnumerable<SellingPlanAnchor>? anchors { get; set; }
         ///<summary>
         ///The date and time when the selling plan delivery policy was created.
         ///</summary>
@@ -42747,7 +42774,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsServerPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsServerPixelUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42762,7 +42789,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsServerPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsServerPixelUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42820,7 +42847,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The discounts that have been allocated to the shipping line.
         ///</summary>
-        public DiscountAllocation[]? discountAllocations { get; set; }
+        public IEnumerable<DiscountAllocation>? discountAllocations { get; set; }
 
         ///<summary>
         ///The pre-tax shipping price with discounts applied.
@@ -42871,7 +42898,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The TaxLine objects connected to this shipping line.
         ///</summary>
-        public TaxLine[]? taxLines { get; set; }
+        public IEnumerable<TaxLine>? taxLines { get; set; }
         ///<summary>
         ///Returns the title of the shipping line.
         ///</summary>
@@ -42881,16 +42908,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ShippingLines.
     ///</summary>
-    public class ShippingLineConnection : GraphQLObject<ShippingLineConnection>
+    public class ShippingLineConnection : GraphQLObject<ShippingLineConnection>, IConnectionWithNodesAndEdges<ShippingLineEdge, ShippingLine>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ShippingLineEdge[]? edges { get; set; }
+        public IEnumerable<ShippingLineEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ShippingLineEdge.
         ///</summary>
-        public ShippingLine[]? nodes { get; set; }
+        public IEnumerable<ShippingLine>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -42900,7 +42927,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ShippingLine and a cursor during pagination.
     ///</summary>
-    public class ShippingLineEdge : GraphQLObject<ShippingLineEdge>
+    public class ShippingLineEdge : GraphQLObject<ShippingLineEdge>, IEdge<ShippingLine>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -42940,7 +42967,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -42987,7 +43014,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -42998,7 +43025,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -43032,7 +43059,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -43098,11 +43125,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the shop's active alert messages that appear in the Shopify admin.
         ///</summary>
-        public ShopAlert[]? alerts { get; set; }
+        public IEnumerable<ShopAlert>? alerts { get; set; }
         ///<summary>
         ///A list of the shop's product categories. Limit: 1000 product categories.
         ///</summary>
-        public ProductCategory[]? allProductCategories { get; set; }
+        public IEnumerable<ProductCategory>? allProductCategories { get; set; }
 
         ///<summary>
         ///The token required to query the shop's reports or dashboards.
@@ -43148,7 +43175,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of all channel definitions associated with a shop.
         ///</summary>
-        public AvailableChannelDefinitionsByChannel[]? channelDefinitionsForInstalledChannels { get; set; }
+        public IEnumerable<AvailableChannelDefinitionsByChannel>? channelDefinitionsForInstalledChannels { get; set; }
 
         ///<summary>
         ///List of the shop's active sales channels.
@@ -43227,7 +43254,7 @@ namespace ShopifySharp.GraphQL
         ///The domains configured for the shop.
         ///</summary>
         [Obsolete("Use `domainsPaginated` instead.")]
-        public Domain[]? domains { get; set; }
+        public IEnumerable<Domain>? domains { get; set; }
 
         ///<summary>
         ///List of the shop's draft order saved searches.
@@ -43252,7 +43279,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The presentment currencies enabled for the shop.
         ///</summary>
-        public CurrencyCode[]? enabledPresentmentCurrencies { get; set; }
+        public IEnumerable<CurrencyCode>? enabledPresentmentCurrencies { get; set; }
         ///<summary>
         ///The set of features enabled for the shop.
         ///</summary>
@@ -43266,7 +43293,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of the shop's installed fulfillment services.
         ///</summary>
-        public FulfillmentService[]? fulfillmentServices { get; set; }
+        public IEnumerable<FulfillmentService>? fulfillmentServices { get; set; }
         ///<summary>
         ///The shop's time zone as defined by the IANA.
         ///</summary>
@@ -43321,7 +43348,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The shop's settings related to navigation.
         ///</summary>
-        public NavigationItem[]? navigationSettings { get; set; }
+        public IEnumerable<NavigationItem>? navigationSettings { get; set; }
         ///<summary>
         ///The prefix that appears before order numbers.
         ///</summary>
@@ -43455,11 +43482,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of countries that the shop ships to.
         ///</summary>
-        public CountryCode[]? shipsToCountries { get; set; }
+        public IEnumerable<CountryCode>? shipsToCountries { get; set; }
         ///<summary>
         ///The list of all legal policies associated with a shop.
         ///</summary>
-        public ShopPolicy[]? shopPolicies { get; set; }
+        public IEnumerable<ShopPolicy>? shopPolicies { get; set; }
 
         ///<summary>
         ///Shopify Payments account information, including balances and payouts.
@@ -43507,7 +43534,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The shop's unit system for weights and measures.
         ///</summary>
@@ -43515,7 +43542,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Fetches a list of images uploaded to the shop by their IDs.
         ///</summary>
-        public Image[]? uploadedImagesByIds { get; set; }
+        public IEnumerable<Image>? uploadedImagesByIds { get; set; }
         ///<summary>
         ///The URL of the shop's online store.
         ///</summary>
@@ -43578,7 +43605,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A formatted version of the address, customized by the provided arguments.
         ///</summary>
-        public string[]? formatted { get; set; }
+        public IEnumerable<string>? formatted { get; set; }
         ///<summary>
         ///A comma-separated list of the values for city, province, and country.
         ///</summary>
@@ -43833,7 +43860,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The market web presences that use the locale.
         ///</summary>
-        public MarketWebPresence[]? marketWebPresences { get; set; }
+        public IEnumerable<MarketWebPresence>? marketWebPresences { get; set; }
         ///<summary>
         ///The human-readable locale name.
         ///</summary>
@@ -43860,7 +43887,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -43875,7 +43902,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -43890,7 +43917,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -43928,7 +43955,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations associated with the resource.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The shop policy type.
         ///</summary>
@@ -44001,7 +44028,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ShopPolicyUserError[]? userErrors { get; set; }
+        public IEnumerable<ShopPolicyUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -44016,7 +44043,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -44035,7 +44062,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ShopResourceFeedbackCreateUserError[]? userErrors { get; set; }
+        public IEnumerable<ShopResourceFeedbackCreateUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -44050,7 +44077,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -44174,16 +44201,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ShopifyFunctions.
     ///</summary>
-    public class ShopifyFunctionConnection : GraphQLObject<ShopifyFunctionConnection>
+    public class ShopifyFunctionConnection : GraphQLObject<ShopifyFunctionConnection>, IConnectionWithNodesAndEdges<ShopifyFunctionEdge, ShopifyFunction>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ShopifyFunctionEdge[]? edges { get; set; }
+        public IEnumerable<ShopifyFunctionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ShopifyFunctionEdge.
         ///</summary>
-        public ShopifyFunction[]? nodes { get; set; }
+        public IEnumerable<ShopifyFunction>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -44193,7 +44220,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ShopifyFunction and a cursor during pagination.
     ///</summary>
-    public class ShopifyFunctionEdge : GraphQLObject<ShopifyFunctionEdge>
+    public class ShopifyFunctionEdge : GraphQLObject<ShopifyFunctionEdge>, IEdge<ShopifyFunction>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -44220,7 +44247,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Current balances in all currencies for the account.
         ///</summary>
-        public MoneyV2[]? balance { get; set; }
+        public IEnumerable<MoneyV2>? balance { get; set; }
         ///<summary>
         ///All bank accounts configured for the Shopify Payments account.
         ///</summary>
@@ -44284,11 +44311,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The permitted documents for identity verification.
         ///</summary>
-        public ShopifyPaymentsVerificationDocument[]? permittedVerificationDocuments { get; set; }
+        public IEnumerable<ShopifyPaymentsVerificationDocument>? permittedVerificationDocuments { get; set; }
         ///<summary>
         ///The verifications necessary for this account.
         ///</summary>
-        public ShopifyPaymentsVerification[]? verifications { get; set; }
+        public IEnumerable<ShopifyPaymentsVerification>? verifications { get; set; }
     }
 
     ///<summary>
@@ -44341,16 +44368,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ShopifyPaymentsBankAccounts.
     ///</summary>
-    public class ShopifyPaymentsBankAccountConnection : GraphQLObject<ShopifyPaymentsBankAccountConnection>
+    public class ShopifyPaymentsBankAccountConnection : GraphQLObject<ShopifyPaymentsBankAccountConnection>, IConnectionWithNodesAndEdges<ShopifyPaymentsBankAccountEdge, ShopifyPaymentsBankAccount>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ShopifyPaymentsBankAccountEdge[]? edges { get; set; }
+        public IEnumerable<ShopifyPaymentsBankAccountEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ShopifyPaymentsBankAccountEdge.
         ///</summary>
-        public ShopifyPaymentsBankAccount[]? nodes { get; set; }
+        public IEnumerable<ShopifyPaymentsBankAccount>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -44360,7 +44387,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ShopifyPaymentsBankAccount and a cursor during pagination.
     ///</summary>
-    public class ShopifyPaymentsBankAccountEdge : GraphQLObject<ShopifyPaymentsBankAccountEdge>
+    public class ShopifyPaymentsBankAccountEdge : GraphQLObject<ShopifyPaymentsBankAccountEdge>, IEdge<ShopifyPaymentsBankAccount>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -44484,16 +44511,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ShopifyPaymentsDisputes.
     ///</summary>
-    public class ShopifyPaymentsDisputeConnection : GraphQLObject<ShopifyPaymentsDisputeConnection>
+    public class ShopifyPaymentsDisputeConnection : GraphQLObject<ShopifyPaymentsDisputeConnection>, IConnectionWithNodesAndEdges<ShopifyPaymentsDisputeEdge, ShopifyPaymentsDispute>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ShopifyPaymentsDisputeEdge[]? edges { get; set; }
+        public IEnumerable<ShopifyPaymentsDisputeEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ShopifyPaymentsDisputeEdge.
         ///</summary>
-        public ShopifyPaymentsDispute[]? nodes { get; set; }
+        public IEnumerable<ShopifyPaymentsDispute>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -44503,7 +44530,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ShopifyPaymentsDispute and a cursor during pagination.
     ///</summary>
-    public class ShopifyPaymentsDisputeEdge : GraphQLObject<ShopifyPaymentsDisputeEdge>
+    public class ShopifyPaymentsDisputeEdge : GraphQLObject<ShopifyPaymentsDisputeEdge>, IEdge<ShopifyPaymentsDispute>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -44567,11 +44594,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The file uploads associated with the dispute evidence.
         ///</summary>
-        public ShopifyPaymentsDisputeFileUpload[]? disputeFileUploads { get; set; }
+        public IEnumerable<ShopifyPaymentsDisputeFileUpload>? disputeFileUploads { get; set; }
         ///<summary>
         ///The fulfillments associated with the dispute evidence.
         ///</summary>
-        public ShopifyPaymentsDisputeFulfillment[]? fulfillments { get; set; }
+        public IEnumerable<ShopifyPaymentsDisputeFulfillment>? fulfillments { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -44891,16 +44918,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple ShopifyPaymentsPayouts.
     ///</summary>
-    public class ShopifyPaymentsPayoutConnection : GraphQLObject<ShopifyPaymentsPayoutConnection>
+    public class ShopifyPaymentsPayoutConnection : GraphQLObject<ShopifyPaymentsPayoutConnection>, IConnectionWithNodesAndEdges<ShopifyPaymentsPayoutEdge, ShopifyPaymentsPayout>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public ShopifyPaymentsPayoutEdge[]? edges { get; set; }
+        public IEnumerable<ShopifyPaymentsPayoutEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in ShopifyPaymentsPayoutEdge.
         ///</summary>
-        public ShopifyPaymentsPayout[]? nodes { get; set; }
+        public IEnumerable<ShopifyPaymentsPayout>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -44910,7 +44937,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one ShopifyPaymentsPayout and a cursor during pagination.
     ///</summary>
-    public class ShopifyPaymentsPayoutEdge : GraphQLObject<ShopifyPaymentsPayoutEdge>
+    public class ShopifyPaymentsPayoutEdge : GraphQLObject<ShopifyPaymentsPayoutEdge>, IEdge<ShopifyPaymentsPayout>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -45193,7 +45220,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of parse errors, if parsing fails.
         ///</summary>
-        public ParseError[]? parseErrors { get; }
+        public IEnumerable<ParseError>? parseErrors { get; }
         ///<summary>
         ///The result in a tabular format with schema and row data.
         ///          To be used as a raw 2-dimensional response of the query.
@@ -45234,7 +45261,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The staff member's initials, if available.
         ///</summary>
-        public string[]? initials { get; set; }
+        public IEnumerable<string>? initials { get; set; }
         ///<summary>
         ///Whether the staff member is the shop owner.
         ///</summary>
@@ -45264,16 +45291,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple StaffMembers.
     ///</summary>
-    public class StaffMemberConnection : GraphQLObject<StaffMemberConnection>
+    public class StaffMemberConnection : GraphQLObject<StaffMemberConnection>, IConnectionWithNodesAndEdges<StaffMemberEdge, StaffMember>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public StaffMemberEdge[]? edges { get; set; }
+        public IEnumerable<StaffMemberEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in StaffMemberEdge.
         ///</summary>
-        public StaffMember[]? nodes { get; set; }
+        public IEnumerable<StaffMember>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -45302,7 +45329,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one StaffMember and a cursor during pagination.
     ///</summary>
-    public class StaffMemberEdge : GraphQLObject<StaffMemberEdge>
+    public class StaffMemberEdge : GraphQLObject<StaffMemberEdge>, IEdge<StaffMember>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -45429,7 +45456,7 @@ namespace ShopifySharp.GraphQL
         ///Access permissions for the staff member.
         ///</summary>
         [Obsolete("Use StaffMember.permissions.userPermissions instead")]
-        public StaffMemberPermission[]? permissions { get; set; }
+        public IEnumerable<StaffMemberPermission>? permissions { get; set; }
     }
 
     ///<summary>
@@ -45444,7 +45471,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Parameters needed to authenticate a request to upload the file.
         ///</summary>
-        public StagedUploadParameter[]? parameters { get; set; }
+        public IEnumerable<StagedUploadParameter>? parameters { get; set; }
         ///<summary>
         ///The URL to be passed as `originalSource` in
         ///[CreateMediaInput](https://shopify.dev/api/admin-graphql/latest/input-objects/CreateMediaInput)
@@ -45509,7 +45536,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The parameters of an image to be uploaded.
         ///</summary>
-        public ImageUploadParameter[]? parameters { get; set; }
+        public IEnumerable<ImageUploadParameter>? parameters { get; set; }
         ///<summary>
         ///The image URL.
         ///</summary>
@@ -45524,7 +45551,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The signed parameters that can be used to upload the asset.
         ///</summary>
-        public MutationsStagedUploadTargetGenerateUploadParameter[]? parameters { get; set; }
+        public IEnumerable<MutationsStagedUploadTargetGenerateUploadParameter>? parameters { get; set; }
         ///<summary>
         ///The signed URL where the asset can be uploaded.
         ///</summary>
@@ -45532,7 +45559,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -45629,11 +45656,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The staged upload targets that were generated.
         ///</summary>
-        public StagedUploadTarget[]? urls { get; set; }
+        public IEnumerable<StagedUploadTarget>? urls { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -45644,11 +45671,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The staged upload targets that were generated.
         ///</summary>
-        public StagedMediaUploadTarget[]? stagedTargets { get; set; }
+        public IEnumerable<StagedMediaUploadTarget>? stagedTargets { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -45663,7 +45690,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public StandardMetafieldDefinitionEnableUserError[]? userErrors { get; set; }
+        public IEnumerable<StandardMetafieldDefinitionEnableUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -45678,7 +45705,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -45747,7 +45774,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of resource types that the standard metafield definition can be applied to.
         ///</summary>
-        public MetafieldOwnerType[]? ownerTypes { get; set; }
+        public IEnumerable<MetafieldOwnerType>? ownerTypes { get; set; }
         ///<summary>
         ///The associated [metafield definition type](https://shopify.dev/apps/metafields/definitions/types) that the metafield stores.
         ///</summary>
@@ -45755,7 +45782,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The configured validations for the standard metafield definition.
         ///</summary>
-        public MetafieldDefinitionValidation[]? validations { get; set; }
+        public IEnumerable<MetafieldDefinitionValidation>? validations { get; set; }
         ///<summary>
         ///Whether metafields for the definition are by default visible using the Storefront API.
         ///</summary>
@@ -45765,16 +45792,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple StandardMetafieldDefinitionTemplates.
     ///</summary>
-    public class StandardMetafieldDefinitionTemplateConnection : GraphQLObject<StandardMetafieldDefinitionTemplateConnection>
+    public class StandardMetafieldDefinitionTemplateConnection : GraphQLObject<StandardMetafieldDefinitionTemplateConnection>, IConnectionWithNodesAndEdges<StandardMetafieldDefinitionTemplateEdge, StandardMetafieldDefinitionTemplate>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public StandardMetafieldDefinitionTemplateEdge[]? edges { get; set; }
+        public IEnumerable<StandardMetafieldDefinitionTemplateEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in StandardMetafieldDefinitionTemplateEdge.
         ///</summary>
-        public StandardMetafieldDefinitionTemplate[]? nodes { get; set; }
+        public IEnumerable<StandardMetafieldDefinitionTemplate>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -45784,7 +45811,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one StandardMetafieldDefinitionTemplate and a cursor during pagination.
     ///</summary>
-    public class StandardMetafieldDefinitionTemplateEdge : GraphQLObject<StandardMetafieldDefinitionTemplateEdge>
+    public class StandardMetafieldDefinitionTemplateEdge : GraphQLObject<StandardMetafieldDefinitionTemplateEdge>, IEdge<StandardMetafieldDefinitionTemplate>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -45808,7 +45835,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public MetaobjectUserError[]? userErrors { get; set; }
+        public IEnumerable<MetaobjectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -45832,7 +45859,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of permissions associated with the token.
         ///</summary>
-        public AccessScope[]? accessScopes { get; set; }
+        public IEnumerable<AccessScope>? accessScopes { get; set; }
         ///<summary>
         ///The issued public access token.
         ///</summary>
@@ -45858,16 +45885,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple StorefrontAccessTokens.
     ///</summary>
-    public class StorefrontAccessTokenConnection : GraphQLObject<StorefrontAccessTokenConnection>
+    public class StorefrontAccessTokenConnection : GraphQLObject<StorefrontAccessTokenConnection>, IConnectionWithNodesAndEdges<StorefrontAccessTokenEdge, StorefrontAccessToken>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public StorefrontAccessTokenEdge[]? edges { get; set; }
+        public IEnumerable<StorefrontAccessTokenEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in StorefrontAccessTokenEdge.
         ///</summary>
-        public StorefrontAccessToken[]? nodes { get; set; }
+        public IEnumerable<StorefrontAccessToken>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -45890,7 +45917,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -45905,13 +45932,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one StorefrontAccessToken and a cursor during pagination.
     ///</summary>
-    public class StorefrontAccessTokenEdge : GraphQLObject<StorefrontAccessTokenEdge>
+    public class StorefrontAccessTokenEdge : GraphQLObject<StorefrontAccessTokenEdge>, IEdge<StorefrontAccessToken>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -45926,12 +45953,12 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through a list of Strings.
     ///</summary>
-    public class StringConnection : GraphQLObject<StringConnection>
+    public class StringConnection : GraphQLObject<StringConnection>, IConnectionWithEdges<StringEdge, string>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public StringEdge[]? edges { get; set; }
+        public IEnumerable<StringEdge>? edges { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -45941,7 +45968,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one String and a cursor during pagination.
     ///</summary>
-    public class StringEdge : GraphQLObject<StringEdge>
+    public class StringEdge : GraphQLObject<StringEdge>, IEdge<string>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -46030,16 +46057,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SubscriptionBillingAttempts.
     ///</summary>
-    public class SubscriptionBillingAttemptConnection : GraphQLObject<SubscriptionBillingAttemptConnection>
+    public class SubscriptionBillingAttemptConnection : GraphQLObject<SubscriptionBillingAttemptConnection>, IConnectionWithNodesAndEdges<SubscriptionBillingAttemptEdge, SubscriptionBillingAttempt>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SubscriptionBillingAttemptEdge[]? edges { get; set; }
+        public IEnumerable<SubscriptionBillingAttemptEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SubscriptionBillingAttemptEdge.
         ///</summary>
-        public SubscriptionBillingAttempt[]? nodes { get; set; }
+        public IEnumerable<SubscriptionBillingAttempt>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -46058,13 +46085,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public BillingAttemptUserError[]? userErrors { get; set; }
+        public IEnumerable<BillingAttemptUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one SubscriptionBillingAttempt and a cursor during pagination.
     ///</summary>
-    public class SubscriptionBillingAttemptEdge : GraphQLObject<SubscriptionBillingAttemptEdge>
+    public class SubscriptionBillingAttemptEdge : GraphQLObject<SubscriptionBillingAttemptEdge>, IEdge<SubscriptionBillingAttempt>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -46241,16 +46268,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SubscriptionBillingCycles.
     ///</summary>
-    public class SubscriptionBillingCycleConnection : GraphQLObject<SubscriptionBillingCycleConnection>
+    public class SubscriptionBillingCycleConnection : GraphQLObject<SubscriptionBillingCycleConnection>, IConnectionWithNodesAndEdges<SubscriptionBillingCycleEdge, SubscriptionBillingCycle>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SubscriptionBillingCycleEdge[]? edges { get; set; }
+        public IEnumerable<SubscriptionBillingCycleEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SubscriptionBillingCycleEdge.
         ///</summary>
-        public SubscriptionBillingCycle[]? nodes { get; set; }
+        public IEnumerable<SubscriptionBillingCycle>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -46269,7 +46296,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46284,7 +46311,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46299,13 +46326,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one SubscriptionBillingCycle and a cursor during pagination.
     ///</summary>
-    public class SubscriptionBillingCycleEdge : GraphQLObject<SubscriptionBillingCycleEdge>
+    public class SubscriptionBillingCycleEdge : GraphQLObject<SubscriptionBillingCycleEdge>, IEdge<SubscriptionBillingCycle>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -46325,11 +46352,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of updated billing cycles.
         ///</summary>
-        public SubscriptionBillingCycle[]? billingCycles { get; set; }
+        public IEnumerable<SubscriptionBillingCycle>? billingCycles { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionBillingCycleUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionBillingCycleUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46360,7 +46387,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the custom attributes to be added to the generated orders.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The customer to whom the subscription contract belongs.
         ///</summary>
@@ -46411,11 +46438,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of updated billing cycles.
         ///</summary>
-        public SubscriptionBillingCycle[]? billingCycles { get; set; }
+        public IEnumerable<SubscriptionBillingCycle>? billingCycles { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionBillingCycleUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionBillingCycleUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46504,7 +46531,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionBillingCycleUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionBillingCycleUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46519,7 +46546,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -46565,7 +46592,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Specific anchor dates upon which the billing interval calculations should be made.
         ///</summary>
-        public SellingPlanAnchor[]? anchors { get; set; }
+        public IEnumerable<SellingPlanAnchor>? anchors { get; set; }
         ///<summary>
         ///The kind of interval that's associated with this schedule (e.g. Monthly, Weekly, etc).
         ///</summary>
@@ -46616,7 +46643,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the custom attributes to be added to the generated orders.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The customer to whom the subscription contract belongs.
         ///</summary>
@@ -46699,7 +46726,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46727,7 +46754,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the custom attributes to be added to the generated orders.
         ///</summary>
-        public Attribute[]? customAttributes { get; }
+        public IEnumerable<Attribute>? customAttributes { get; }
         ///<summary>
         ///The customer to whom the subscription contract belongs.
         ///</summary>
@@ -46773,16 +46800,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SubscriptionContracts.
     ///</summary>
-    public class SubscriptionContractConnection : GraphQLObject<SubscriptionContractConnection>
+    public class SubscriptionContractConnection : GraphQLObject<SubscriptionContractConnection>, IConnectionWithNodesAndEdges<SubscriptionContractEdge, SubscriptionContract>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SubscriptionContractEdge[]? edges { get; set; }
+        public IEnumerable<SubscriptionContractEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SubscriptionContractEdge.
         ///</summary>
-        public SubscriptionContract[]? nodes { get; set; }
+        public IEnumerable<SubscriptionContract>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -46801,13 +46828,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one SubscriptionContract and a cursor during pagination.
     ///</summary>
-    public class SubscriptionContractEdge : GraphQLObject<SubscriptionContractEdge>
+    public class SubscriptionContractEdge : GraphQLObject<SubscriptionContractEdge>, IEdge<SubscriptionContract>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -46861,7 +46888,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46876,7 +46903,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionContractUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionContractUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46922,7 +46949,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -46937,7 +46964,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -47180,7 +47207,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The available delivery options.
         ///</summary>
-        public ISubscriptionDeliveryOption[]? deliveryOptions { get; set; }
+        public IEnumerable<ISubscriptionDeliveryOption>? deliveryOptions { get; set; }
     }
 
     ///<summary>
@@ -47191,7 +47218,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The specific anchor dates upon which the delivery interval calculations should be made.
         ///</summary>
-        public SellingPlanAnchor[]? anchors { get; set; }
+        public IEnumerable<SellingPlanAnchor>? anchors { get; set; }
         ///<summary>
         ///The kind of interval that's associated with this schedule (e.g. Monthly, Weekly, etc).
         ///</summary>
@@ -47240,16 +47267,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SubscriptionDiscounts.
     ///</summary>
-    public class SubscriptionDiscountConnection : GraphQLObject<SubscriptionDiscountConnection>
+    public class SubscriptionDiscountConnection : GraphQLObject<SubscriptionDiscountConnection>, IConnectionWithNodesAndEdges<SubscriptionDiscountEdge, ISubscriptionDiscount>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SubscriptionDiscountEdge[]? edges { get; set; }
+        public IEnumerable<SubscriptionDiscountEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SubscriptionDiscountEdge.
         ///</summary>
-        public ISubscriptionDiscount[]? nodes { get; set; }
+        public IEnumerable<ISubscriptionDiscount>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -47259,7 +47286,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SubscriptionDiscount and a cursor during pagination.
     ///</summary>
-    public class SubscriptionDiscountEdge : GraphQLObject<SubscriptionDiscountEdge>
+    public class SubscriptionDiscountEdge : GraphQLObject<SubscriptionDiscountEdge>, IEdge<ISubscriptionDiscount>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -47399,7 +47426,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of the custom attributes to be added to the generated orders.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///The customer to whom the subscription contract belongs.
         ///</summary>
@@ -47492,7 +47519,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47511,7 +47538,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47530,7 +47557,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47549,7 +47576,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47568,7 +47595,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47754,7 +47781,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47773,7 +47800,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47792,7 +47819,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47803,7 +47830,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of updated subscription discounts impacted by the removed line.
         ///</summary>
-        public SubscriptionManualDiscount[]? discountsUpdated { get; set; }
+        public IEnumerable<SubscriptionManualDiscount>? discountsUpdated { get; set; }
         ///<summary>
         ///The Subscription Contract draft object.
         ///</summary>
@@ -47815,7 +47842,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47834,7 +47861,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47849,7 +47876,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public SubscriptionDraftUserError[]? userErrors { get; set; }
+        public IEnumerable<SubscriptionDraftUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -47864,7 +47891,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -47883,11 +47910,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///List of custom attributes associated to the line item.
         ///</summary>
-        public Attribute[]? customAttributes { get; set; }
+        public IEnumerable<Attribute>? customAttributes { get; set; }
         ///<summary>
         ///Discount allocations.
         ///</summary>
-        public SubscriptionDiscountAllocation[]? discountAllocations { get; set; }
+        public IEnumerable<SubscriptionDiscountAllocation>? discountAllocations { get; set; }
         ///<summary>
         ///The unique ID.
         ///</summary>
@@ -47963,16 +47990,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SubscriptionLines.
     ///</summary>
-    public class SubscriptionLineConnection : GraphQLObject<SubscriptionLineConnection>
+    public class SubscriptionLineConnection : GraphQLObject<SubscriptionLineConnection>, IConnectionWithNodesAndEdges<SubscriptionLineEdge, SubscriptionLine>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SubscriptionLineEdge[]? edges { get; set; }
+        public IEnumerable<SubscriptionLineEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SubscriptionLineEdge.
         ///</summary>
-        public SubscriptionLine[]? nodes { get; set; }
+        public IEnumerable<SubscriptionLine>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -47982,7 +48009,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SubscriptionLine and a cursor during pagination.
     ///</summary>
-    public class SubscriptionLineEdge : GraphQLObject<SubscriptionLineEdge>
+    public class SubscriptionLineEdge : GraphQLObject<SubscriptionLineEdge>, IEdge<SubscriptionLine>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -48134,16 +48161,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple SubscriptionManualDiscounts.
     ///</summary>
-    public class SubscriptionManualDiscountConnection : GraphQLObject<SubscriptionManualDiscountConnection>
+    public class SubscriptionManualDiscountConnection : GraphQLObject<SubscriptionManualDiscountConnection>, IConnectionWithNodesAndEdges<SubscriptionManualDiscountEdge, SubscriptionManualDiscount>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public SubscriptionManualDiscountEdge[]? edges { get; set; }
+        public IEnumerable<SubscriptionManualDiscountEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in SubscriptionManualDiscountEdge.
         ///</summary>
-        public SubscriptionManualDiscount[]? nodes { get; set; }
+        public IEnumerable<SubscriptionManualDiscount>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -48153,7 +48180,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one SubscriptionManualDiscount and a cursor during pagination.
     ///</summary>
-    public class SubscriptionManualDiscountEdge : GraphQLObject<SubscriptionManualDiscountEdge>
+    public class SubscriptionManualDiscountEdge : GraphQLObject<SubscriptionManualDiscountEdge>, IEdge<SubscriptionManualDiscount>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -48216,7 +48243,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The adjustments per cycle for the subscription line.
         ///</summary>
-        public SubscriptionCyclePriceAdjustment[]? cycleDiscounts { get; set; }
+        public IEnumerable<SubscriptionCyclePriceAdjustment>? cycleDiscounts { get; set; }
     }
 
     ///<summary>
@@ -48287,7 +48314,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Available shipping options.
         ///</summary>
-        public SubscriptionShippingOption[]? shippingOptions { get; set; }
+        public IEnumerable<SubscriptionShippingOption>? shippingOptions { get; set; }
     }
 
     ///<summary>
@@ -48380,11 +48407,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of duties to be refunded from the order.
         ///</summary>
-        public RefundDuty[]? refundDuties { get; set; }
+        public IEnumerable<RefundDuty>? refundDuties { get; set; }
         ///<summary>
         ///A list of line items to be refunded, along with restock instructions.
         ///</summary>
-        public RefundLineItem[]? refundLineItems { get; set; }
+        public IEnumerable<RefundLineItem>? refundLineItems { get; set; }
         ///<summary>
         ///The shipping costs to be refunded from the order.
         ///</summary>
@@ -48402,7 +48429,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of suggested order transactions.
         ///</summary>
-        public SuggestedOrderTransaction[]? suggestedTransactions { get; set; }
+        public IEnumerable<SuggestedOrderTransaction>? suggestedTransactions { get; set; }
         ///<summary>
         ///The total cart discount amount that was applied to all line items in this refund.
         ///</summary>
@@ -48443,7 +48470,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of duties to be refunded from the order.
         ///</summary>
-        public RefundDuty[]? refundDuties { get; set; }
+        public IEnumerable<RefundDuty>? refundDuties { get; set; }
         ///<summary>
         ///The shipping costs to be refunded from the order.
         ///</summary>
@@ -48455,7 +48482,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of suggested order transactions.
         ///</summary>
-        public SuggestedOrderTransaction[]? suggestedTransactions { get; set; }
+        public IEnumerable<SuggestedOrderTransaction>? suggestedTransactions { get; set; }
         ///<summary>
         ///The total cart discount amount that was applied to all line items in this refund.
         ///</summary>
@@ -48478,11 +48505,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The data table columns.
         ///</summary>
-        public TableDataColumn[]? columns { get; set; }
+        public IEnumerable<TableDataColumn>? columns { get; set; }
         ///<summary>
         ///The formatted data values.
         ///</summary>
-        public string[][]? rowData { get; set; }
+        public IEnumerable<IEnumerable<string>>? rowData { get; set; }
         ///<summary>
         ///The unformatted data values.
         ///</summary>
@@ -48520,7 +48547,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of parse errors, if parsing fails.
         ///</summary>
-        public ParseError[]? parseErrors { get; set; }
+        public IEnumerable<ParseError>? parseErrors { get; set; }
         ///<summary>
         ///The result in a tabular format with schema and row data.
         ///</summary>
@@ -48539,7 +48566,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -48554,7 +48581,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -48580,7 +48607,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public TaxAppConfigureUserError[]? userErrors { get; set; }
+        public IEnumerable<TaxAppConfigureUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -48595,7 +48622,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -49012,16 +49039,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple TenderTransactions.
     ///</summary>
-    public class TenderTransactionConnection : GraphQLObject<TenderTransactionConnection>
+    public class TenderTransactionConnection : GraphQLObject<TenderTransactionConnection>, IConnectionWithNodesAndEdges<TenderTransactionEdge, TenderTransaction>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public TenderTransactionEdge[]? edges { get; set; }
+        public IEnumerable<TenderTransactionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in TenderTransactionEdge.
         ///</summary>
-        public TenderTransaction[]? nodes { get; set; }
+        public IEnumerable<TenderTransaction>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -49064,7 +49091,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one TenderTransaction and a cursor during pagination.
     ///</summary>
-    public class TenderTransactionEdge : GraphQLObject<TenderTransactionEdge>
+    public class TenderTransactionEdge : GraphQLObject<TenderTransactionEdge>, IEdge<TenderTransaction>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -49104,7 +49131,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -49201,26 +49228,26 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Translatable content.
         ///</summary>
-        public TranslatableContent[]? translatableContent { get; set; }
+        public IEnumerable<TranslatableContent>? translatableContent { get; set; }
         ///<summary>
         ///Translatable content translations.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type for paginating through multiple TranslatableResources.
     ///</summary>
-    public class TranslatableResourceConnection : GraphQLObject<TranslatableResourceConnection>
+    public class TranslatableResourceConnection : GraphQLObject<TranslatableResourceConnection>, IConnectionWithNodesAndEdges<TranslatableResourceEdge, TranslatableResource>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public TranslatableResourceEdge[]? edges { get; set; }
+        public IEnumerable<TranslatableResourceEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in TranslatableResourceEdge.
         ///</summary>
-        public TranslatableResource[]? nodes { get; set; }
+        public IEnumerable<TranslatableResource>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -49230,7 +49257,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type which holds one TranslatableResource and a cursor during pagination.
     ///</summary>
-    public class TranslatableResourceEdge : GraphQLObject<TranslatableResourceEdge>
+    public class TranslatableResourceEdge : GraphQLObject<TranslatableResourceEdge>, IEdge<TranslatableResource>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -49252,8 +49279,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         COLLECTION,
         ///<summary>
-        ///The delivery method definition. For example, "Standard", or "Expedited".
-        ///        Translatable fields: `name`.
+        ///The delivery method definition. For example, "Standard", or "Expedited". Translatable fields: `name`.
         ///</summary>
         DELIVERY_METHOD_DEFINITION,
         ///<summary>
@@ -49457,7 +49483,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -49472,11 +49498,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations that were created or updated.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public TranslationUserError[]? userErrors { get; set; }
+        public IEnumerable<TranslationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49487,11 +49513,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The translations that were deleted.
         ///</summary>
-        public Translation[]? translations { get; set; }
+        public IEnumerable<Translation>? translations { get; set; }
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public TranslationUserError[]? userErrors { get; set; }
+        public IEnumerable<TranslationUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49575,7 +49601,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///All individual taxes associated with the sale.
         ///</summary>
-        public SaleTax[]? taxes { get; set; }
+        public IEnumerable<SaleTax>? taxes { get; set; }
         ///<summary>
         ///The total sale amount after taxes and discounts.
         ///</summary>
@@ -49625,7 +49651,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49640,7 +49666,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectBulkDeleteByIdsUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectBulkDeleteByIdsUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49655,7 +49681,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -49687,7 +49713,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectBulkDeleteBySavedSearchUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectBulkDeleteBySavedSearchUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49702,7 +49728,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -49736,7 +49762,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectBulkDeleteBySearchUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectBulkDeleteBySearchUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49751,7 +49777,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -49772,16 +49798,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple UrlRedirects.
     ///</summary>
-    public class UrlRedirectConnection : GraphQLObject<UrlRedirectConnection>
+    public class UrlRedirectConnection : GraphQLObject<UrlRedirectConnection>, IConnectionWithNodesAndEdges<UrlRedirectEdge, UrlRedirect>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public UrlRedirectEdge[]? edges { get; set; }
+        public IEnumerable<UrlRedirectEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in UrlRedirectEdge.
         ///</summary>
-        public UrlRedirect[]? nodes { get; set; }
+        public IEnumerable<UrlRedirect>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -49800,7 +49826,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49815,13 +49841,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one UrlRedirect and a cursor during pagination.
     ///</summary>
-    public class UrlRedirectEdge : GraphQLObject<UrlRedirectEdge>
+    public class UrlRedirectEdge : GraphQLObject<UrlRedirectEdge>, IEdge<UrlRedirect>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -49891,7 +49917,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of up to three previews of the URL redirects to be imported.
         ///</summary>
-        public UrlRedirectImportPreview[]? previewRedirects { get; set; }
+        public IEnumerable<UrlRedirectImportPreview>? previewRedirects { get; set; }
         ///<summary>
         ///The number of redirects updated during the import.
         ///</summary>
@@ -49910,7 +49936,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectImportUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectImportUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49964,7 +49990,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectImportUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectImportUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -49979,7 +50005,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -50018,7 +50044,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UrlRedirectUserError[]? userErrors { get; set; }
+        public IEnumerable<UrlRedirectUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -50033,7 +50059,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -50048,7 +50074,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The path to the input field that caused the error.
         ///</summary>
-        public string[]? field { get; set; }
+        public IEnumerable<string>? field { get; set; }
         ///<summary>
         ///The error message.
         ///</summary>
@@ -50151,7 +50177,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors that have occurred on the file.
         ///</summary>
-        public FileError[]? fileErrors { get; set; }
+        public IEnumerable<FileError>? fileErrors { get; set; }
         ///<summary>
         ///The status of the file.
         ///</summary>
@@ -50171,11 +50197,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Any errors which have occurred on the media.
         ///</summary>
-        public MediaError[]? mediaErrors { get; set; }
+        public IEnumerable<MediaError>? mediaErrors { get; set; }
         ///<summary>
         ///The warnings attached to the media.
         ///</summary>
-        public MediaWarning[]? mediaWarnings { get; set; }
+        public IEnumerable<MediaWarning>? mediaWarnings { get; set; }
         ///<summary>
         ///The video's original source. This value is `null` unless the video's status field is
         ///[READY](https://shopify.dev/api/admin-graphql/latest/enums/MediaStatus#value-ready).
@@ -50189,7 +50215,7 @@ namespace ShopifySharp.GraphQL
         ///The video's sources. This value is empty unless the video's status field is
         ///[READY](https://shopify.dev/api/admin-graphql/latest/enums/MediaStatus#value-ready).
         ///</summary>
-        public VideoSource[]? sources { get; set; }
+        public IEnumerable<VideoSource>? sources { get; set; }
         ///<summary>
         ///Current status of the media.
         ///</summary>
@@ -50275,7 +50301,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsWebPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsWebPixelUserError>? userErrors { get; set; }
         ///<summary>
         ///The created web pixel settings.
         ///</summary>
@@ -50294,7 +50320,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsWebPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsWebPixelUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -50305,7 +50331,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public ErrorsWebPixelUserError[]? userErrors { get; set; }
+        public IEnumerable<ErrorsWebPixelUserError>? userErrors { get; set; }
         ///<summary>
         ///The updated web pixel settings.
         ///</summary>
@@ -50386,7 +50412,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///An optional array of top-level resource fields that should be serialized and sent in the webhook message. If null, then all fields will be sent.
         ///</summary>
-        public string[]? includeFields { get; set; }
+        public IEnumerable<string>? includeFields { get; set; }
         ///<summary>
         ///The ID of the corresponding resource in the REST Admin API.
         ///</summary>
@@ -50394,13 +50420,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of namespaces for any metafields that should be included in the webhook subscription.
         ///</summary>
-        public string[]? metafieldNamespaces { get; set; }
+        public IEnumerable<string>? metafieldNamespaces { get; set; }
 
         ///<summary>
         ///The list of namespaces for private metafields that should be included in the webhook subscription.
         ///</summary>
         [Obsolete("Metafields created using a reserved namespace are private by default. See our guide for\n[migrating private metafields](https://shopify.dev/docs/apps/custom-data/metafields/migrate-private-metafields).")]
-        public string[]? privateMetafieldNamespaces { get; set; }
+        public IEnumerable<string>? privateMetafieldNamespaces { get; set; }
         ///<summary>
         ///The type of event that triggers the webhook. The topic determines when the webhook subscription sends a webhook, as well as what class of data object that webhook contains.
         ///</summary>
@@ -50414,16 +50440,16 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///An auto-generated type for paginating through multiple WebhookSubscriptions.
     ///</summary>
-    public class WebhookSubscriptionConnection : GraphQLObject<WebhookSubscriptionConnection>
+    public class WebhookSubscriptionConnection : GraphQLObject<WebhookSubscriptionConnection>, IConnectionWithNodesAndEdges<WebhookSubscriptionEdge, WebhookSubscription>
     {
         ///<summary>
         ///A list of edges.
         ///</summary>
-        public WebhookSubscriptionEdge[]? edges { get; set; }
+        public IEnumerable<WebhookSubscriptionEdge>? edges { get; set; }
         ///<summary>
         ///A list of the nodes contained in WebhookSubscriptionEdge.
         ///</summary>
-        public WebhookSubscription[]? nodes { get; set; }
+        public IEnumerable<WebhookSubscription>? nodes { get; set; }
         ///<summary>
         ///Information to aid in pagination.
         ///</summary>
@@ -50438,7 +50464,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
         ///<summary>
         ///The webhook subscription that was created.
         ///</summary>
@@ -50457,13 +50483,13 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
     ///An auto-generated type which holds one WebhookSubscription and a cursor during pagination.
     ///</summary>
-    public class WebhookSubscriptionEdge : GraphQLObject<WebhookSubscriptionEdge>
+    public class WebhookSubscriptionEdge : GraphQLObject<WebhookSubscriptionEdge>, IEdge<WebhookSubscription>
     {
         ///<summary>
         ///A cursor for use in pagination.
@@ -51203,7 +51229,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
         ///<summary>
         ///The webhook subscription that was updated.
         ///</summary>
@@ -51255,10 +51281,10 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     public class __Directive : GraphQLObject<__Directive>
     {
-        public __InputValue[]? args { get; set; }
+        public IEnumerable<__InputValue>? args { get; set; }
         public string? description { get; set; }
         public bool? isRepeatable { get; set; }
-        public __DirectiveLocation[]? locations { get; set; }
+        public IEnumerable<__DirectiveLocation>? locations { get; set; }
         public string? name { get; set; }
 
         [Obsolete("Use `locations`.")]
@@ -51373,7 +51399,7 @@ namespace ShopifySharp.GraphQL
     {
         public bool? accessRestricted { get; set; }
         public string? accessRestrictedReason { get; set; }
-        public __InputValue[]? args { get; set; }
+        public IEnumerable<__InputValue>? args { get; set; }
         public string? deprecationReason { get; set; }
         public string? description { get; set; }
         public bool? isDeprecated { get; set; }
@@ -51397,7 +51423,7 @@ namespace ShopifySharp.GraphQL
         public string? defaultValue { get; set; }
         public string? deprecationReason { get; set; }
         public string? description { get; set; }
-        public string[]? gidTypes { get; set; }
+        public IEnumerable<string>? gidTypes { get; set; }
         public bool? isDeprecated { get; set; }
         public string? name { get; set; }
         public __Type? type { get; set; }
@@ -51412,7 +51438,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of all directives supported by this server.
         ///</summary>
-        public __Directive[]? directives { get; set; }
+        public IEnumerable<__Directive>? directives { get; set; }
         ///<summary>
         ///If this server supports mutation, the type that mutation operations will be rooted at.
         ///</summary>
@@ -51428,7 +51454,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///A list of all types supported by this server.
         ///</summary>
-        public __Type[]? types { get; set; }
+        public IEnumerable<__Type>? types { get; set; }
     }
 
     ///<summary>
@@ -51442,17 +51468,17 @@ namespace ShopifySharp.GraphQL
         public string? accessRestrictedReason { get; set; }
         public string? componentName { get; set; }
         public string? description { get; set; }
-        public __EnumValue[]? enumValues { get; set; }
-        public __Field[]? fields { get; set; }
-        public __InputValue[]? inputFields { get; set; }
-        public __Type[]? interfaces { get; set; }
+        public IEnumerable<__EnumValue>? enumValues { get; set; }
+        public IEnumerable<__Field>? fields { get; set; }
+        public IEnumerable<__InputValue>? inputFields { get; set; }
+        public IEnumerable<__Type>? interfaces { get; set; }
         public bool? isOneOf { get; set; }
         public bool? isPrivatelyDocumented { get; set; }
         public bool? isProtected { get; set; }
         public __TypeKind? kind { get; set; }
         public string? name { get; set; }
         public __Type? ofType { get; set; }
-        public __Type[]? possibleTypes { get; set; }
+        public IEnumerable<__Type>? possibleTypes { get; set; }
         public string? protectedSubject { get; set; }
         public string? requiredAccess { get; set; }
         public string? specifiedByURL { get; set; }
@@ -51509,7 +51535,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -51524,7 +51550,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -51539,7 +51565,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
-        public UserError[]? userErrors { get; set; }
+        public IEnumerable<UserError>? userErrors { get; set; }
     }
 }
 #endif
