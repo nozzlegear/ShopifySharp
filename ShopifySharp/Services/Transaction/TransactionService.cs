@@ -1,5 +1,4 @@
-﻿#nullable enable
-using ShopifySharp.Filters;
+﻿using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -23,10 +22,10 @@ namespace ShopifySharp
         public virtual async Task<int> CountAsync(long orderId, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<int>($"orders/{orderId}/transactions/count.json", "count", cancellationToken: cancellationToken);
 
-        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter? filter = null, bool includeCurrencyExchangeAdjustments = false, CancellationToken cancellationToken = default) =>
+        public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, TransactionListFilter filter = null, bool includeCurrencyExchangeAdjustments = false, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<IEnumerable<Transaction>>($"orders/{orderId}/transactions.json", "transactions", filter, cancellationToken, GetHeaders(includeCurrencyExchangeAdjustments));
 
-        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter? filter = null, bool includeCurrencyExchangeAdjustments = false, CancellationToken cancellationToken = default) =>
+        public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, TransactionGetFilter filter = null, bool includeCurrencyExchangeAdjustments = false, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", "transaction", filter, cancellationToken, GetHeaders(includeCurrencyExchangeAdjustments));
 
         public virtual async Task<Transaction> CreateAsync(long orderId, Transaction transaction, CancellationToken cancellationToken = default)
@@ -45,7 +44,7 @@ namespace ShopifySharp
         /// Creates a dictionary containing the currency exchange adjustments headers depending on whether
         /// <paramref name="includeCurrencyExchangeAdjustments"/> is true or false.
         /// </summary>
-        private Dictionary<string, string>? GetHeaders(bool includeCurrencyExchangeAdjustments)
+        private Dictionary<string, string> GetHeaders(bool includeCurrencyExchangeAdjustments)
         {
             if (!includeCurrencyExchangeAdjustments)
                 return null;

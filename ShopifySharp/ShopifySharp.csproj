@@ -1,27 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
-    <AssemblyName>ShopifySharp</AssemblyName>
-    <RootNamespace>ShopifySharp</RootNamespace>
-    <VersionPrefix>6.7.0</VersionPrefix>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <LangVersion>8</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
-    <Authors>Nozzlegear</Authors>
-    <Copyright>Nozzlegear Software</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
-    <PackageTags>shopify,ecommerce</PackageTags>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
-    <PackageReference Include="newtonsoft.json" Version="13.0.2" />
-    <PackageReference Include="System.Text.Json" Version="7.0.3" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+		<AssemblyName>ShopifySharp</AssemblyName>
+		<RootNamespace>ShopifySharp</RootNamespace>
+		<VersionPrefix>6.8.0</VersionPrefix>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<LangVersion>9.0</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup>
+		<Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
+		<Authors>Nozzlegear</Authors>
+		<Copyright>Nozzlegear Software</Copyright>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
+		<PackageTags>shopify,ecommerce</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Http" Version="2.1.0" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
+		<PackageReference Include="newtonsoft.json" Version="13.0.2" />
+		<PackageReference Include="System.Text.Json" Version="7.0.3" />
+	</ItemGroup>
 </Project>
