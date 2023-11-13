@@ -63,6 +63,10 @@ namespace ShopifySharp
 
         public void SetGraphQLBucketState(int maximumAvailable, int restoreRatePerSecond, double currentlyAvailable, int refund)
         {
+            //There seems to be a bug in the GraphQL API. It sometimes returns a currentlyAvailable larger than maximumAvailable.
+            if (currentlyAvailable > maximumAvailable)
+                currentlyAvailable = maximumAvailable;
+
             currentlyAvailable = Math.Max(0, Math.Min(currentlyAvailable, GraphQLBucket.ComputedCurrentlyAvailable + refund));
             GraphQLBucket.SetState(maximumAvailable, restoreRatePerSecond, currentlyAvailable);
         }
