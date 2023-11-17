@@ -2,6 +2,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -49,12 +50,17 @@ namespace ShopifySharp.GraphQL
         public static string ToJson(this IGraphQLObject o) => Serializer.Serialize(o);
     }
 
-    public interface IConnectionWithEdges<TEdge, TNode>
-        where TEdge : IEdge<TNode>
+    public interface IConnectionWithEdges<TEdge, TNode> : IConnectionWithEdges<TNode> where TEdge : IEdge<TNode>
+    {
+        IEnumerable<IEdge<TNode>>? IConnectionWithEdges<TNode>.edges => this.edges?.Cast<IEdge<TNode>>();
+        new IEnumerable<TEdge>? edges { get; }
+    }
+
+    public interface IConnectionWithEdges<TNode>
     {
         PageInfo? pageInfo { get; }
 
-        IEnumerable<TEdge>? edges { get; }
+        IEnumerable<IEdge<TNode>>? edges { get; }
     }
 
     public interface IConnectionWithNodes<TNode>
@@ -16746,7 +16752,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public Order? order { get; set; }
         ///<summary>
-        ///The address at which the fulfillment occurred. Typically this is the address of the warehouse or fulfillment center.
+        ///The address at which the fulfillment occurred. This field is intended for tax purposes, as a full address is required for tax providers to accurately calculate taxes. Typically this is the address of the warehouse or fulfillment center. To retrieve a fulfillment location's address, use the `assignedLocation` field on the [`FulfillmentOrder`](/docs/api/admin-graphql/latest/objects/FulfillmentOrder) object instead.
         ///</summary>
         public FulfillmentOriginAddress? originAddress { get; set; }
         ///<summary>
@@ -18719,7 +18725,7 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///The address at which the fulfillment occurred. Typically this is the address of the warehouse or fulfillment center.
+    ///The address at which the fulfillment occurred. This object is intended for tax purposes, as a full address is required for tax providers to accurately calculate taxes. Typically this is the address of the warehouse or fulfillment center. To retrieve a fulfillment location's address, use the `assignedLocation` field on the [`FulfillmentOrder`](/docs/api/admin-graphql/latest/objects/FulfillmentOrder) object instead.
     ///</summary>
     public class FulfillmentOriginAddress : GraphQLObject<FulfillmentOriginAddress>
     {
@@ -20357,7 +20363,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The quantity of inventory items that are available at the inventory level's associated location.
         ///</summary>
-        [Obsolete("Use `quantities` instead.")]
+        [Obsolete("Use the `quantities` field instead and specify available for names. Example: `quantities(names:[\"available\"]){name quantity}`.")]
         public int? available { get; set; }
         ///<summary>
         ///Whether the inventory items associated with the inventory level can be deactivated.
@@ -20385,7 +20391,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The quantity of inventory items that are going to the inventory level's associated location.
         ///</summary>
-        [Obsolete("Use `quantities` instead.")]
+        [Obsolete("Use the `quantities` field instead and specify incoming for names. Example: `quantities(names:[\"incoming\"]){name quantity}`.")]
         public int? incoming { get; set; }
         ///<summary>
         ///Inventory item associated with the inventory level.
@@ -23852,8 +23858,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public string? id { get; set; }
         ///<summary>
-        ///Whether the marketing activity is in the main workflow version of
-        ///          the marketing automation.
+        ///Whether the marketing activity is in the main workflow version of the marketing automation.
         ///</summary>
         public bool? inMainWorkflowVersion { get; set; }
         ///<summary>
@@ -26464,9 +26469,11 @@ namespace ShopifySharp.GraphQL
         ///List of back references metafields that belong to the resource.
         ///</summary>
         public MetafieldRelationConnection? referencedBy { get; set; }
+
         ///<summary>
         ///The staff member who created the metaobject.
         ///</summary>
+        [Obsolete("Use `createdByStaff` instead.")]
         public StaffMember? staffMember { get; set; }
         ///<summary>
         ///The type of the metaobject.
@@ -28186,7 +28193,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public MetaobjectUpsertPayload? metaobjectUpsert { get; set; }
         ///<summary>
-        ///Captures payment for an authorized transaction on an order. An order can only be captured if it has a successful authorization transaction. Capturing an order will claim the money reserved by the authorization.
+        ///Captures payment for an authorized transaction on an order. An order can only be captured if it has a successful authorization transaction. Capturing an order will claim the money reserved by the authorization. orderCapture can be used to capture multiple times as long as the OrderTransaction is multicapturable. To capture a partial payment, the included `amount` value should be less than the total order amount. Multicapture is available only to stores on a Shopify Plus plan.
         ///</summary>
         public OrderCapturePayload? orderCapture { get; set; }
         ///<summary>
@@ -28670,9 +28677,11 @@ namespace ShopifySharp.GraphQL
         ///Creates a new reverse delivery with associated external shipping information.
         ///</summary>
         public ReverseDeliveryCreateWithShippingPayload? reverseDeliveryCreateWithShipping { get; set; }
+
         ///<summary>
         ///Disposes reverse delivery line items for a reverse delivery on the same shop.
         ///</summary>
+        [Obsolete("`reverseDeliveryDispose` will be removed in API version 2025-01. Use `reverseFulfillmentOrderDispose` instead.")]
         public ReverseDeliveryDisposePayload? reverseDeliveryDispose { get; set; }
         ///<summary>
         ///Updates a reverse delivery with associated external shipping information.
@@ -28698,6 +28707,9 @@ namespace ShopifySharp.GraphQL
         ///<div class="note"><h4>Theme app extensions</h4>
         ///  <p>Your app might not pass App Store review if it uses script tags instead of theme app extensions. All new apps, and apps that integrate with Online Store 2.0 themes, should use theme app extensions, such as app blocks or app embed blocks. Script tags are an alternative you can use with only vintage themes. <a href="/apps/online-store#what-integration-method-should-i-use" target="_blank">Learn more</a>.</p></div>
         ///
+        ///<div class="note"><h4>Script tag deprecation</h4>
+        ///  <p>Script tags will be sunset for the <b>Order status</b> page on August 28, 2025. <a href="https://www.shopify.com/plus/upgrading-to-checkout-extensibility">Upgrade to Checkout Extensibility</a> before this date. <a href="/docs/api/liquid/objects#script">Shopify Scripts</a> will continue to work alongside Checkout Extensibility until August 28, 2025.</p></div>
+        ///
         ///
         ///Creates a new script tag.
         ///</summary>
@@ -28706,6 +28718,9 @@ namespace ShopifySharp.GraphQL
         ///<div class="note"><h4>Theme app extensions</h4>
         ///  <p>Your app might not pass App Store review if it uses script tags instead of theme app extensions. All new apps, and apps that integrate with Online Store 2.0 themes, should use theme app extensions, such as app blocks or app embed blocks. Script tags are an alternative you can use with only vintage themes. <a href="/apps/online-store#what-integration-method-should-i-use" target="_blank">Learn more</a>.</p></div>
         ///
+        ///<div class="note"><h4>Script tag deprecation</h4>
+        ///  <p>Script tags will be sunset for the <b>Order status</b> page on August 28, 2025. <a href="https://www.shopify.com/plus/upgrading-to-checkout-extensibility">Upgrade to Checkout Extensibility</a> before this date. <a href="/docs/api/liquid/objects#script">Shopify Scripts</a> will continue to work alongside Checkout Extensibility until August 28, 2025.</p></div>
+        ///
         ///
         ///Deletes a script tag.
         ///</summary>
@@ -28713,6 +28728,9 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///<div class="note"><h4>Theme app extensions</h4>
         ///  <p>Your app might not pass App Store review if it uses script tags instead of theme app extensions. All new apps, and apps that integrate with Online Store 2.0 themes, should use theme app extensions, such as app blocks or app embed blocks. Script tags are an alternative you can use with only vintage themes. <a href="/apps/online-store#what-integration-method-should-i-use" target="_blank">Learn more</a>.</p></div>
+        ///
+        ///<div class="note"><h4>Script tag deprecation</h4>
+        ///  <p>Script tags will be sunset for the <b>Order status</b> page on August 28, 2025. <a href="https://www.shopify.com/plus/upgrading-to-checkout-extensibility">Upgrade to Checkout Extensibility</a> before this date. <a href="/docs/api/liquid/objects#script">Shopify Scripts</a> will continue to work alongside Checkout Extensibility until August 28, 2025.</p></div>
         ///
         ///
         ///Updates a script tag.
@@ -29829,7 +29847,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public MetafieldConnection? metafields { get; set; }
         ///<summary>
-        ///The unique identifier for the order that appears on the order page in the Shopify admin and the order status page.
+        ///The unique identifier for the order that appears on the order page in the Shopify admin and the <b>Order status</b> page.
         ///For example, "#1001", "EN1001", or "1001-A".
         ///This value isn't unique across multiple stores.
         ///</summary>
@@ -37774,7 +37792,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public AppInstallation? appInstallation { get; set; }
         ///<summary>
-        ///List of app installations. Requires contacting Shopify for access to the `read_apps` access scope.
+        ///A list of app installations. To use this query, you need to contact [Shopify Support](https://partners.shopify.com/current/support/) to grant your custom app the `read_apps` access scope. Public apps can't be granted this access scope.
         ///</summary>
         public AppInstallationConnection? appInstallations { get; set; }
 
@@ -38379,6 +38397,9 @@ namespace ShopifySharp.GraphQL
         ///<div class="note"><h4>Theme app extensions</h4>
         ///  <p>Your app might not pass App Store review if it uses script tags instead of theme app extensions. All new apps, and apps that integrate with Online Store 2.0 themes, should use theme app extensions, such as app blocks or app embed blocks. Script tags are an alternative you can use with only vintage themes. <a href="/apps/online-store#what-integration-method-should-i-use" target="_blank">Learn more</a>.</p></div>
         ///
+        ///<div class="note"><h4>Script tag deprecation</h4>
+        ///  <p>Script tags will be sunset for the <b>Order status</b> page on August 28, 2025. <a href="https://www.shopify.com/plus/upgrading-to-checkout-extensibility">Upgrade to Checkout Extensibility</a> before this date. <a href="/docs/api/liquid/objects#script">Shopify Scripts</a> will continue to work alongside Checkout Extensibility until August 28, 2025.</p></div>
+        ///
         ///
         ///Lookup a script tag resource by ID.
         ///</summary>
@@ -38386,6 +38407,9 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///<div class="note"><h4>Theme app extensions</h4>
         ///  <p>Your app might not pass App Store review if it uses script tags instead of theme app extensions. All new apps, and apps that integrate with Online Store 2.0 themes, should use theme app extensions, such as app blocks or app embed blocks. Script tags are an alternative you can use with only vintage themes. <a href="/apps/online-store#what-integration-method-should-i-use" target="_blank">Learn more</a>.</p></div>
+        ///
+        ///<div class="note"><h4>Script tag deprecation</h4>
+        ///  <p>Script tags will be sunset for the <b>Order status</b> page on August 28, 2025. <a href="https://www.shopify.com/plus/upgrading-to-checkout-extensibility">Upgrade to Checkout Extensibility</a> before this date. <a href="/docs/api/liquid/objects#script">Shopify Scripts</a> will continue to work alongside Checkout Extensibility until August 28, 2025.</p></div>
         ///
         ///
         ///A list of script tags.
@@ -40731,8 +40755,11 @@ namespace ShopifySharp.GraphQL
     ///<div class="note"><h4>Theme app extensions</h4>
     ///  <p>Your app might not pass App Store review if it uses script tags instead of theme app extensions. All new apps, and apps that integrate with Online Store 2.0 themes, should use theme app extensions, such as app blocks or app embed blocks. Script tags are an alternative you can use with only vintage themes. <a href="/apps/online-store#what-integration-method-should-i-use" target="_blank">Learn more</a>.</p></div>
     ///
+    ///<div class="note"><h4>Script tag deprecation</h4>
+    ///  <p>Script tags will be sunset for the <b>Order status</b> page on August 28, 2025. <a href="https://www.shopify.com/plus/upgrading-to-checkout-extensibility">Upgrade to Checkout Extensibility</a> before this date. <a href="/docs/api/liquid/objects#script">Shopify Scripts</a> will continue to work alongside Checkout Extensibility until August 28, 2025.</p></div>
     ///
-    ///A script tag represents remote JavaScript code that is loaded into the pages of a shop's storefront or the order status page of checkout.
+    ///
+    ///A script tag represents remote JavaScript code that is loaded into the pages of a shop's storefront or the **Order status** page of checkout.
     ///</summary>
     public class ScriptTag : GraphQLObject<ScriptTag>, ILegacyInteroperability, INode
     {
@@ -40824,11 +40851,11 @@ namespace ShopifySharp.GraphQL
     public enum ScriptTagDisplayScope
     {
         ///<summary>
-        ///Include the script on both the web storefront and the order status page.
+        ///Include the script on both the web storefront and the <b>Order status</b> page.
         ///</summary>
         ALL,
         ///<summary>
-        ///Include the script only on the order status page.
+        ///Include the script only on the <b>Order status</b> page.
         ///</summary>
         ORDER_STATUS,
         ///<summary>
