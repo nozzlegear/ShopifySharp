@@ -1,15 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
 		<AssemblyName>ShopifySharp</AssemblyName>
 		<RootNamespace>ShopifySharp</RootNamespace>
 		<VersionPrefix>6.6.1</VersionPrefix>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<LangVersion>9.0</LangVersion>
+        <LangVersion>Latest</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup>
 		<Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
