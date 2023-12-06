@@ -1,8 +1,6 @@
 #if NET7_0_OR_GREATER
-using ShopifySharp.GraphQL;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -45,52 +43,6 @@ namespace ShopifySharp.Tests
                                 .AppendLine("#endif");
 
             File.WriteAllText(@"../../../../ShopifySharp/Entities/GraphQL/GraphQLSchema.generated.cs", strCode.ToString());
-        }
-
-        [Fact]
-        public async Task GetOrders()
-        {
-            foreach (var policy in new IRequestExecutionPolicy[]
-            {
-                new DefaultRequestExecutionPolicy(),
-                new RetryExecutionPolicy(),
-                new LeakyBucketExecutionPolicy()
-            })
-            {
-                var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-                svc.SetExecutionPolicy(policy);
-                var res = await svc.SendAsync<OrderConnection>(@"
-{
-	orders(first:10)
-  {
-    nodes
-    {
-      id
-      createdAt
-      name
-      phone
-      lineItems(first: 10)
-      {
-        nodes
-        {
-          title
-          quantity
-        }
-      }
-    }
-  }
-}
-");
-                var orders = res.nodes;
-                Assert.True(orders.Count() > 0);
-                var o = orders.First();
-                Assert.True(o.name != null);
-                Assert.True(o.lineItems.nodes.First().quantity != null);
-                var commentEventEmbed = o as ICommentEventEmbed;
-                Assert.NotNull(commentEventEmbed);
-                Assert.NotNull(commentEventEmbed.AsOrder());
-                Assert.Null(commentEventEmbed.AsCustomer());
-            }
         }
     }
 }

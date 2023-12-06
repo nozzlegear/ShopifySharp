@@ -44,17 +44,29 @@ namespace ShopifySharp
             return res["data"];
         }
 
-        public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
-            var res = await PostAsync<JsonDocument>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
+            return SendAsync(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
+        }
+
+        public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        {
+            var body = System.Text.Json.JsonSerializer.Serialize(request);
+            var res = await PostAsync<JsonDocument>(body, "application/json", graphqlQueryCost, cancellationToken);
             return res.RootElement.GetProperty("data");
         }
 
 #if NET6_0_OR_GREATER
-        public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
             where TResult : class
         {
-            var elt = await this.SendAsync(graphqlQuery, graphqlQueryCost, cancellationToken);
+            return SendAsync<TResult>(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
+        }
+
+        public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+            where TResult : class
+        {
+            var elt = await this.SendAsync(request, graphqlQueryCost, cancellationToken);
             var ptyElt = elt.EnumerateObject().Single().Value;
             return GraphQL.Serializer.Deserialize<TResult>(ptyElt.GetRawText());
         }
