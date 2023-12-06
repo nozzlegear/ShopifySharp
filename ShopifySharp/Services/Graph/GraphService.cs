@@ -44,17 +44,25 @@ namespace ShopifySharp
             return res["data"];
         }
 
-        public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        public virtual Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+            => SendAsync(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
+
+        public virtual async Task<JsonElement> SendAsync(string graphqlQuery, string mediaType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         {
-            var res = await PostAsync<JsonDocument>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
+            var res = await PostAsync<JsonDocument>(graphqlQuery, mediaType, graphqlQueryCost, cancellationToken);
             return res.RootElement.GetProperty("data");
         }
 
 #if NET6_0_OR_GREATER
-        public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+
+        public virtual Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+            where TResult : class
+            => SendAsync<TResult>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
+
+        public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, string mediaType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
             where TResult : class
         {
-            var elt = await this.SendAsync(graphqlQuery, graphqlQueryCost, cancellationToken);
+            var elt = await SendAsync(graphqlQuery, mediaType, graphqlQueryCost, cancellationToken);
             var ptyElt = elt.EnumerateObject().Single().Value;
             return GraphQL.Serializer.Deserialize<TResult>(ptyElt.GetRawText());
         }

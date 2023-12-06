@@ -92,6 +92,35 @@ namespace ShopifySharp.Tests
                 Assert.Null(commentEventEmbed.AsCustomer());
             }
         }
+
+        [Fact]
+        public async Task GetProductsAsParameterizedJsonQuery()
+        {
+            var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+            svc.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+
+            var parameterizedQuery = new
+            {
+                query = @"
+                        query ($limit: Int!) { 
+                            products(first:$limit) { 
+                                nodes { 
+                                    id 
+                                } 
+                             } 
+                        }",
+                variables = new
+                {
+                    limit = 10,
+                }
+            };
+
+            var queryAsJson = Serializer.Serialize(parameterizedQuery);
+            var res = await svc.SendAsync<ProductConnection>(queryAsJson, "application/json");
+            var orders = res.nodes;
+            Assert.NotNull(orders);
+            Assert.NotEmpty(orders);
+        }
     }
 }
 #endif
