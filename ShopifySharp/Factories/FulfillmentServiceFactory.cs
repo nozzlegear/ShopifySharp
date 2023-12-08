@@ -1,3 +1,5 @@
+// Notice:
+// This class is auto-generated from a template. Please do not edit it or change it directly.
 #if NETSTANDARD2_0
 #nullable disable
 #else
