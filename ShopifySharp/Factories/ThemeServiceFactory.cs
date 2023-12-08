@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IThemeServiceFactory
     IThemeService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class ThemeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IThemeServiceFactory
+public class ThemeServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IThemeServiceFactory
 {
     public virtual IThemeService Create(ShopifyRestApiCredentials credentials)
     {

@@ -1,6 +1,6 @@
 #! /usr/bin/env fish
 
-set template_path "ShopifySharp.DependencyInjection/Factories/template.txt"
+set template_path "ShopifySharp/Factories/factory-service-template.txt"
 
 if ! test -e "$template_path"
     set_color yellow
@@ -14,7 +14,7 @@ for service_file in (ls ShopifySharp/Services/*/I*Service.cs)
 
     # The PartnerService has a different type of constructor
     if test -n "$service_name" -a "$service_name" != "PartnerService"
-        set factory_file_name (printf "ShopifySharp.DependencyInjection/Factories/%sFactory.cs" "$service_name")
+        set factory_file_name (printf "ShopifySharp/Factories/%sFactory.cs" "$service_name")
         set templated_service_text $template_text
         echo $service_name
 

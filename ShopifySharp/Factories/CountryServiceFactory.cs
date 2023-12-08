@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface ICountryServiceFactory
     ICountryService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class CountryServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICountryServiceFactory
+public class CountryServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : ICountryServiceFactory
 {
     public virtual ICountryService Create(ShopifyRestApiCredentials credentials)
     {

@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IPriceRuleServiceFactory
     IPriceRuleService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class PriceRuleServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IPriceRuleServiceFactory
+public class PriceRuleServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IPriceRuleServiceFactory
 {
     public virtual IPriceRuleService Create(ShopifyRestApiCredentials credentials)
     {

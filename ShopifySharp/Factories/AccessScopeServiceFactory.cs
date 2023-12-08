@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IAccessScopeServiceFactory
     IAccessScopeService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class AccessScopeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IAccessScopeServiceFactory
+public class AccessScopeServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IAccessScopeServiceFactory
 {
     public virtual IAccessScopeService Create(ShopifyRestApiCredentials credentials)
     {

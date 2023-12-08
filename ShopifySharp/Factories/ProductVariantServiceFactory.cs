@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IProductVariantServiceFactory
     IProductVariantService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class ProductVariantServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IProductVariantServiceFactory
+public class ProductVariantServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IProductVariantServiceFactory
 {
     public virtual IProductVariantService Create(ShopifyRestApiCredentials credentials)
     {

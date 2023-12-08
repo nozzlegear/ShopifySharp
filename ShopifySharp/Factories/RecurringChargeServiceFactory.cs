@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IRecurringChargeServiceFactory
     IRecurringChargeService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class RecurringChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IRecurringChargeServiceFactory
+public class RecurringChargeServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IRecurringChargeServiceFactory
 {
     public virtual IRecurringChargeService Create(ShopifyRestApiCredentials credentials)
     {

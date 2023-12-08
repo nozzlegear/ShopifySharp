@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IEventServiceFactory
     IEventService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class EventServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IEventServiceFactory
+public class EventServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IEventServiceFactory
 {
     public virtual IEventService Create(ShopifyRestApiCredentials credentials)
     {

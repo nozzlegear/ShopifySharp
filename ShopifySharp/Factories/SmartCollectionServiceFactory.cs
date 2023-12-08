@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface ISmartCollectionServiceFactory
     ISmartCollectionService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class SmartCollectionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ISmartCollectionServiceFactory
+public class SmartCollectionServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : ISmartCollectionServiceFactory
 {
     public virtual ISmartCollectionService Create(ShopifyRestApiCredentials credentials)
     {

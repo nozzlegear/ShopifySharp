@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IGiftCardAdjustmentServiceFactory
     IGiftCardAdjustmentService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IGiftCardAdjustmentServiceFactory
+public class GiftCardAdjustmentServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IGiftCardAdjustmentServiceFactory
 {
     public virtual IGiftCardAdjustmentService Create(ShopifyRestApiCredentials credentials)
     {
