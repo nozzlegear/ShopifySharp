@@ -20,6 +20,24 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ShopifySharp.Experimental.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopifySharp.Extensions.DependencyInjection", "ShopifySharp.Extensions.DependencyInjection\ShopifySharp.Extensions.DependencyInjection.csproj", "{76CC06C6-1F1D-4817-8E79-B5BE620777B8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{86BAC93E-824A-4860-ADC1-9A398E1FED12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D44F97F5-4C76-405E-8E41-EEBE6C90F414}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{1D5FA585-B39C-49E2-A405-935A2EE58222}"
+	ProjectSection(SolutionItems) = preProject
+		.github\scripts\generate_factories.fish = .github\scripts\generate_factories.fish
+		.github\scripts\build.fish = .github\scripts\build.fish
+		.github\scripts\bump-version.fish = .github\scripts\bump-version.fish
+		.github\scripts\test-dnf.ps1 = .github\scripts\test-dnf.ps1
+		.github\scripts\test.fish = .github\scripts\test.fish
+		.github\scripts\utils.fish = .github\scripts\utils.fish
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,5 +67,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D44F97F5-4C76-405E-8E41-EEBE6C90F414} = {86BAC93E-824A-4860-ADC1-9A398E1FED12}
+		{1D5FA585-B39C-49E2-A405-935A2EE58222} = {86BAC93E-824A-4860-ADC1-9A398E1FED12}
 	EndGlobalSection
 EndGlobal
