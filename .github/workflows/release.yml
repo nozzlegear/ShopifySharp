@@ -12,7 +12,7 @@ on:
 jobs:
   publish:
     name: "Publish release packages"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     environment: "Release deployment environment"
 
     steps:
@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          6.0.x
+          8.0.x
 
     - name: Clone repository
       uses: actions/checkout@v3
