@@ -4,6 +4,13 @@ run-name: Publish ${{ inputs.package_version }}
 on:
   workflow_dispatch:
     inputs:
+      package_id:
+        description: "Package"
+        type: choice
+        default: 'shopifysharp'
+        options:
+          - 'shopifysharp'
+          - 'shopifysharp-di'
       package_version:
         description: "New package version"
         type: string
@@ -33,7 +40,7 @@ jobs:
 
     - name: Bump package version
       run:
-        fish .github/scripts/bump-version.fish "${{ inputs.package_version }}"
+        fish .github/scripts/bump-version.fish "${{ inputs.package_version }}" "${{ inputs.package_id }}"
       shell: bash
 
     - name: Build and pack
@@ -51,29 +58,51 @@ jobs:
         path: |
           ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
           ./artifacts/ShopifySharp.${{ inputs.package_version }}.snupkg
+          ./artifacts/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.nupkg
+          ./artifacts/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.snupkg
 
     - name: Commit package version change
       uses: EndBug/add-and-commit@v9
       with:
-        add: ./ShopifySharp/ShopifySharp.csproj
+        add: |
+          ./ShopifySharp/ShopifySharp.csproj
+          ./ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj
         commit: --signoff
         message: "Bump version to ${{ inputs.package_version }}"
         pathspec_error_handling: exitAtEnd
         default_author: github_actions
         push: true
 
-    - name: Publish package to Nuget
+    - name: Publish ShopifySharp package to Nuget
+      if: ${{ inputs.package_id == 'shopifysharp' }}
       run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
 
-    - name: Create Github release
-      # This step will create a new Github release and tag it with the input tag.
+    - name: Publish ShopifySharp.Extensions.DependencyInjection package to Nuget
+      if: ${{ inputs.package_id == 'shopifysharp-di' }}
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/ShopifySharp.Extensions.Dependencyinjection.${{ inputs.package_version }}.nupkg
+
+    - name: Create Github release for ShopifySharp
+      if: ${{ inputs.package_id == 'shopifysharp' }}
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "${{ inputs.package_version }}"
         prerelease: false
         draft: true
-        title: "${{ inputs.package_version }}"
+        title: "ShopifySharp ${{ inputs.package_version }}"
         files: |
           ./artifacts/ShopifySharp.${{ inputs.package_version }}.nupkg
           ./artifacts/ShopifySharp.${{ inputs.package_version }}.snupkg
+
+    - name: Create Github release for ShopifySharp.Extensions.DependencyInjection
+      if: ${{ inputs.package_id == 'shopifysharp-di' }}
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "${{ inputs.package_version }}"
+        prerelease: false
+        draft: true
+        title: "ShopifySharp.Extensions.DependencyInjection ${{ inputs.package_version }}"
+        files: |
+          ./artifacts/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.nupkg
+          ./artifacts/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.snupkg
