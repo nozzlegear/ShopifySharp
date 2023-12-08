@@ -43,7 +43,7 @@ ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp
 Shopify has begun versioning their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
 
 | ShopifySharp version | Shopify API version |
-| -------------------- | ------------------- |
+|----------------------|---------------------|
 | 4.x and below        | None, unsupported   |
 | 5.0.0 - 5.5.0        | 2019-10             |
 | 5.6.0 - 5.7.0        | 2020-07             |
@@ -52,11 +52,11 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 5.14.0 - 5.15.0      | 2021-10             |
 | 5.16.0 - 5.18.11     | 2022-04             |
 | 5.19.0 - 5.19.1      | 2022-07             |
-| 6.0.1 and above      | 2023-01             |
+| 6.0.1 - 6.2.0        | 2023-01             |
+| 6.3.0 and above      | 2023-07             |
 
 **Note:** ShopifySharp dropped support for .NET Framework 4.5 in version 5.14.0. [More details in #438.](https://github.com/nozzlegear/ShopifySharp/issues/438)
-
-**A migration guide for migrating from ShopifySharp 5.x to ShopifySharp 6.0+ is coming soon.**
+The oldest version of .NET Framework we can support is [whichever version is supported by .NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions).
 
 # Frequently Asked Questions
 
