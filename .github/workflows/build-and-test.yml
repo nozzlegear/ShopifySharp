@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     name: "Build"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     environment: "Build Environment"
 
     steps:
@@ -30,7 +30,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          6.0.x
+          8.0.x
 
     - name: Build and pack
       run: fish .github/scripts/build.fish
@@ -80,7 +80,7 @@ jobs:
 
   test:
     name: "Unit tests"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     # Do not run this job until the build job completes
     needs: test-windows
     environment: "Unit test environment"
@@ -117,7 +117,7 @@ jobs:
 
   publish:
     name: "Publish prerelease packages"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: test
     environment: "Prerelease deployment environment"
 
@@ -126,7 +126,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          6.0.x
+          8.0.x
           3.1.x
 
     - name: Download artifacts
