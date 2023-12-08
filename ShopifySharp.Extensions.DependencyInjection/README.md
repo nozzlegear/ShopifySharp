@@ -1,10 +1,9 @@
 # ShopifySharp.Extensions.DependencyInjection
 
-This package adds support for injecting ShopifySharp services into .NET classes using Microsoft's Dependency Injection framework. To do this, it exposes several methods that extend the [IServiceCollection interface](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-8.0), and Microsoft's DI framework will then make the ShopifySharp services available to the rest of your code when you add the interfaces to your constructor.
+This package adds support for injecting ShopifySharp services into .NET classes using Microsoft's Dependency Injection framework. To do this, it exposes several methods that extend the [IServiceCollection interface](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-8.0). Microsoft's DI framework will then make the ShopifySharp services available to the rest of your code when you add the interfaces to your class constructors.
 
 ```cs
 // In your Program.cs or Startup.cs file, or wherever you register your Dependency Injection services
-
 public class DependencyInjectionExample(IServiceCollection services)
 {
     // ...
