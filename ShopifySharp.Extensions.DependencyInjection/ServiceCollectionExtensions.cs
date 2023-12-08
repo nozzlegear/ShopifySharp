@@ -1,6 +1,3 @@
-#if NETSTANDARD2_0
-#nullable disable
-#endif
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using ShopifySharp.Factories;
@@ -14,26 +11,26 @@ namespace ShopifySharp.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddShopifySharpRequestExecutionPolicy(this IServiceCollection services, IRequestExecutionPolicy requestExecutionPolicy)
+    /// <summary>
+    /// Adds a <see cref="IRequestExecutionPolicy"/> to your Dependency Injection container. ShopifySharp service factories
+    /// managed by your container will use this policy when creating ShopifySharp services.
+    /// </summary>
+    /// <typeparam name="T">A class that implements ShopifySharp's <see cref="IRequestExecutionPolicy"/> interface.</typeparam>
+    public static IServiceCollection AddShopifySharpRequestExecutionPolicy<T>(this IServiceCollection services)
+        where T : class, IRequestExecutionPolicy
     {
-        services.TryAddSingleton(requestExecutionPolicy);
+        // TODO: add ServiceLifetime parameter
+        services.TryAddSingleton<IRequestExecutionPolicy, T>();
         return services;
     }
 
-    public static IServiceCollection AddShopifySharpServiceFactories(
-        this IServiceCollection services,
-        #if NETSTANDARD2_0
-        IRequestExecutionPolicy requestExecutionPolicy = null
-        #else
-        IRequestExecutionPolicy? requestExecutionPolicy = null
-        #endif
-    )
+    /// <summary>
+    /// Adds ShopifySharp's service factories to your Dependency Injection container. If you've added an <see cref="IRequestExecutionPolicy"/>,
+    /// the service factories will use it when creating ShopifySharp services.
+    /// </summary>
+    public static IServiceCollection AddShopifySharpServiceFactories(this IServiceCollection services)
     {
-        if (requestExecutionPolicy is not null)
-        {
-            services.AddShopifySharpRequestExecutionPolicy(requestExecutionPolicy);
-        }
-
+        // TODO: add ServiceLifetime parameter
         services.TryAddSingleton<IAccessScopeServiceFactory, AccessScopeServiceFactory>();
         services.TryAddSingleton<IApplicationCreditServiceFactory, ApplicationCreditServiceFactory>();
         services.TryAddSingleton<IArticleServiceFactory, ArticleServiceFactory>();
@@ -96,8 +93,21 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddShopifySharp(this IServiceCollection services)
+    /// <summary>
+    /// Adds all of ShopifySharp's Dependency Injection services to your DI container. This is a convenience method and
+    /// simply calls the following extensions sequentially:
+    /// <list type="bullet">
+    /// <item><see cref="AddShopifySharpServiceFactories"/></item>
+    /// <item><see cref="AddShopifySharpRequestExecutionPolicy{T}"/></item>
+    /// </list>
+    /// </summary>
+    /// <param name="services"></param>
+    /// <typeparam name="T"></typeparam>
+    public static IServiceCollection AddShopifySharp<T>(this IServiceCollection services)
+        where T : class, IRequestExecutionPolicy
     {
-        return services.AddShopifySharpServiceFactories();
+        return services
+            .AddShopifySharpRequestExecutionPolicy<T>()
+            .AddShopifySharpServiceFactories();
     }
 }
