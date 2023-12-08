@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master, setup-github-actions ]
 
-# Cancel any in-progress build/test runs 
+# Cancel any in-progress build/test runs
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
 concurrency:
   group: ci-${{ github.ref }}
@@ -127,7 +127,6 @@ jobs:
       with:
         dotnet-version: |
           8.0.x
-          3.1.x
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -140,4 +139,4 @@ jobs:
 
     - name: Publish package to Nuget
       # Prerelease packages have a `-b*.nupkg` suffix
-      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg 
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg
