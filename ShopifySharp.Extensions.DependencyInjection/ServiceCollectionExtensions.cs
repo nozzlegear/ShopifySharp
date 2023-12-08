@@ -5,13 +5,32 @@ using ShopifySharp.Factories;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMethodReturnValue.Global
 
 namespace ShopifySharp.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddShopifySharpServiceFactories(this IServiceCollection services)
+    public static IServiceCollection AddShopifySharpRequestExecutionPolicy(this IServiceCollection services, IRequestExecutionPolicy requestExecutionPolicy)
     {
+        services.TryAddSingleton(requestExecutionPolicy);
+        return services;
+    }
+
+    public static IServiceCollection AddShopifySharpServiceFactories(
+        this IServiceCollection services,
+        #if NETSTANDARD2_1_OR_GREATER
+        IRequestExecutionPolicy? requestExecutionPolicy = null
+        #else
+        IRequestExecutionPolicy requestExecutionPolicy = null
+        #endif
+    )
+    {
+        if (requestExecutionPolicy is not null)
+        {
+            services.AddShopifySharpRequestExecutionPolicy(requestExecutionPolicy);
+        }
+
         services.TryAddSingleton<IAccessScopeServiceFactory, AccessScopeServiceFactory>();
         services.TryAddSingleton<IApplicationCreditServiceFactory, ApplicationCreditServiceFactory>();
         services.TryAddSingleton<IArticleServiceFactory, ArticleServiceFactory>();
