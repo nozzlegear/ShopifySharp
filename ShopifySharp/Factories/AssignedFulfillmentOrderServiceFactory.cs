@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IAssignedFulfillmentOrderServiceFactory
     IAssignedFulfillmentOrderService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class AssignedFulfillmentOrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IAssignedFulfillmentOrderServiceFactory
+public class AssignedFulfillmentOrderServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IAssignedFulfillmentOrderServiceFactory
 {
     public virtual IAssignedFulfillmentOrderService Create(ShopifyRestApiCredentials credentials)
     {

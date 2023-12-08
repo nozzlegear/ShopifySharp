@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface ICustomerAddressServiceFactory
     ICustomerAddressService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class CustomerAddressServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICustomerAddressServiceFactory
+public class CustomerAddressServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : ICustomerAddressServiceFactory
 {
     public virtual ICustomerAddressService Create(ShopifyRestApiCredentials credentials)
     {

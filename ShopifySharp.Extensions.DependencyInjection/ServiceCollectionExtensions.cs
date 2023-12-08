@@ -1,3 +1,6 @@
+#if NETSTANDARD2_0
+#nullable disable
+#endif
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using ShopifySharp.Factories;
@@ -19,10 +22,10 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddShopifySharpServiceFactories(
         this IServiceCollection services,
-        #if NETSTANDARD2_1_OR_GREATER
-        IRequestExecutionPolicy? requestExecutionPolicy = null
-        #else
+        #if NETSTANDARD2_0
         IRequestExecutionPolicy requestExecutionPolicy = null
+        #else
+        IRequestExecutionPolicy? requestExecutionPolicy = null
         #endif
     )
     {

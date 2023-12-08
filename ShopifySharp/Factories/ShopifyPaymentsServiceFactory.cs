@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IShopifyPaymentsServiceFactory
     IShopifyPaymentsService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class ShopifyPaymentsServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IShopifyPaymentsServiceFactory
+public class ShopifyPaymentsServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IShopifyPaymentsServiceFactory
 {
     public virtual IShopifyPaymentsService Create(ShopifyRestApiCredentials credentials)
     {

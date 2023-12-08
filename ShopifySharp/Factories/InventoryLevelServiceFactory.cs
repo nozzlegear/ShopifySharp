@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IInventoryLevelServiceFactory
     IInventoryLevelService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class InventoryLevelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IInventoryLevelServiceFactory
+public class InventoryLevelServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IInventoryLevelServiceFactory
 {
     public virtual IInventoryLevelService Create(ShopifyRestApiCredentials credentials)
     {

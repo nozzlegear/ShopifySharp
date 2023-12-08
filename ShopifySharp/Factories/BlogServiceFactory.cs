@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IBlogServiceFactory
     IBlogService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class BlogServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IBlogServiceFactory
+public class BlogServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IBlogServiceFactory
 {
     public virtual IBlogService Create(ShopifyRestApiCredentials credentials)
     {

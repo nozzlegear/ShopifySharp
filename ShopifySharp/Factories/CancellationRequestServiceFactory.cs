@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface ICancellationRequestServiceFactory
     ICancellationRequestService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class CancellationRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICancellationRequestServiceFactory
+public class CancellationRequestServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : ICancellationRequestServiceFactory
 {
     public virtual ICancellationRequestService Create(ShopifyRestApiCredentials credentials)
     {

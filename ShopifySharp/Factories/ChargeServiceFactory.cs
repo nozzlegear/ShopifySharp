@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IChargeServiceFactory
     IChargeService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class ChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IChargeServiceFactory
+public class ChargeServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IChargeServiceFactory
 {
     public virtual IChargeService Create(ShopifyRestApiCredentials credentials)
     {

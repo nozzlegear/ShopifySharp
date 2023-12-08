@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IRedirectServiceFactory
     IRedirectService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class RedirectServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IRedirectServiceFactory
+public class RedirectServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IRedirectServiceFactory
 {
     public virtual IRedirectService Create(ShopifyRestApiCredentials credentials)
     {

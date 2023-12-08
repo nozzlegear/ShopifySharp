@@ -1,3 +1,9 @@
+#if NETSTANDARD2_0
+#nullable disable
+#else
+#nullable enable
+#endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
@@ -8,7 +14,13 @@ public interface IShippingZoneServiceFactory
     IShippingZoneService Create(ShopifyRestApiCredentials credentials);
 }
 
-public class ShippingZoneServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IShippingZoneServiceFactory
+public class ShippingZoneServiceFactory(
+    #if NETSTANDARD2_0
+    IRequestExecutionPolicy requestExecutionPolicy = null
+    #else
+    IRequestExecutionPolicy? requestExecutionPolicy = null
+    #endif
+) : IShippingZoneServiceFactory
 {
     public virtual IShippingZoneService Create(ShopifyRestApiCredentials credentials)
     {
