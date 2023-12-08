@@ -15,7 +15,9 @@ set revision "b$GITHUB_RUN_NUMBER"
 set outputDir "$ARTIFACT_DIR"
 
 # Pack the projects
+# TODO: only pack projects that have git changes
 packProject "$revision" "$outputDir" "ShopifySharp/ShopifySharp.csproj"
+packProject "$revision" "$outputDir" "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj"
 packProject "$revision" "$outputDir" "ShopifySharp.Experimental/ShopifySharp.Experimental.fsproj"
 
 exit 0
