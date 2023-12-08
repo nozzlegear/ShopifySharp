@@ -31,20 +31,14 @@ It's difficult to find blog posts or tutorials about building Shopify apps, and 
 
 # Installation
 
-ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager
-console in Visual Studio to install it:
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). You can install it with the dotnet command line:
 
-```pwsh
-Install-Package ShopifySharp
-```
+| Package                                                                                                                   | Installation                                                     | Documentation                                                                               |
+|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| [ShopifySharp](https://www.nuget.org/packages/ShopifySharp)                                                               | `dotnet add package shopifysharp`                                | [Click here.](#using-shopifysharp-with-a-public-shopify-app) New documentation coming soon! |
+| [ShopifySharp.Extensions.DependencyInjection](https://www.nuget.org/packages/ShopifySharp.Extensions.DependencyInjection) | `dotnet add package shopifysharp.extensions.dependencyinjection` | [Click here.](./ShopifySharp.Extensions.DependencyInjection/README.md)                      |
 
-If you're using .NET Core, you can use the `dotnet` command from your favorite shell:
-
-```sh
-dotnet add package shopifysharp
-```
-
-# API support
+# Shopify API version support
 
 Shopify has begun versioning their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
 
@@ -95,6 +89,43 @@ product = await productService.UpdateAsync(productId, product);
 ```
 
 We're looking for feedback on methods to improve object updating and property serialization in ShopifySharp. [You can offer feedback here](https://github.com/nozzlegear/ShopifySharp/issues/388), and check out these issues ([#284](https://github.com/nozzlegear/ShopifySharp/issues/284), [#367](https://github.com/nozzlegear/ShopifySharp/issues/367), [#373](https://github.com/nozzlegear/ShopifySharp/issues/373), [#379](https://github.com/nozzlegear/ShopifySharp/issues/379), [#642](https://github.com/nozzlegear/ShopifySharp/issues/642)) for further history on the problem.
+
+### Question: How can I use ShopifySharp with Dependency Injection?
+
+Install the [ShopifySharp.Extensions.DependencyInjection package from Nuget](https://nuget.org/packages/ShopifySharp.Extensions.DependencyInjection), which adds support for injecting ShopifySharp services into .NET classes using Microsoft's Dependency Injection framework. To do this, it exposes several methods that extend the [IServiceCollection interface](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-8.0). Microsoft's DI framework will then make the ShopifySharp services available to the rest of your code when you add the interfaces to your class constructors.
+
+```cs
+// In your Program.cs or Startup.cs file, or wherever you register your Dependency Injection services
+public class DependencyInjectionExample(IServiceCollection services)
+{
+    // ...
+    
+    // Add ShopifySharp's service factories and the LeakyBucketExecutionPolicy to your DI container
+    services.AddShopifySharp<LeakyBucketExecutionPolicy>(options =>
+    {
+        options.RequestExecutionPolicy = new LeakyBucketExecutionPolicy(); 
+    });
+}
+
+// In the class where you want to use a ShopifySharp service
+public class MyClass(IOrderServiceFactory orderServiceFactory)
+{
+    public async Task ListOrdersForUser()
+    {
+        var user = await DoSomethingToGetUser();
+        var credentials = new ShopifyRestApiCredentials(user.ShopDomain, user.AccessToken);
+        var orderService = orderServiceFactory.Create(credentials);
+        
+        // Because the service was created using the injected factory class, 
+        // it's automatically using the LeakyBucket request policy. That means it will
+        // gracefully handle Shopify's API request limit and will wait if it hits the
+        // limit (instead of throwing an exception).
+        var orders = await ordrService.ListAsync();
+    }
+}
+```
+
+Check the [package's documentation](./ShopifySharp.Extensions.DependencyInjection/README.md) for more information.
 
 # A work-in-progress
 
