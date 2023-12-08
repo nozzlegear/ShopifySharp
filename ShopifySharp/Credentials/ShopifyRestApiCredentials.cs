@@ -1,40 +1,43 @@
-#nullable enable
 using System;
-namespace ShopifySharp.Credentials;
 
-public abstract class ShopifyRestApiCredentials
+namespace ShopifySharp.Credentials
 {
-    public virtual string ShopDomain { get; }
-    public virtual string AccessToken { get; }
-
-    public ShopifyRestApiCredentials(string shopDomain, string accessToken)
+    public readonly struct ShopifyRestApiCredentials
     {
-        ShopDomain = shopDomain;
-        AccessToken = accessToken;
-    }
+        public string ShopDomain { get; }
+        public string AccessToken { get; }
 
-    protected virtual bool Equals(ShopifyRestApiCredentials other)
-    {
-        return ShopDomain == other.ShopDomain && AccessToken == other.AccessToken;
-    }
+        public ShopifyRestApiCredentials(string shopDomain, string accessToken)
+        {
+            ShopDomain = shopDomain;
+            AccessToken = accessToken;
+        }
 
-    public override bool Equals(object? obj)
-    {
-        return obj is ShopifyRestApiCredentials other && Equals(other);
-    }
+        #if NETSTANDARD2_0
+        public override bool Equals(object obj)
+        {
+            return obj is ShopifyRestApiCredentials other
+                && ShopDomain == other.ShopDomain
+                && AccessToken == other.AccessToken;
+        }
+        #else
+        #nullable enable
+        public override bool Equals(object? obj)
+        {
+            return obj is ShopifyRestApiCredentials other
+                && ShopDomain == other.ShopDomain
+                && AccessToken == other.AccessToken;
+        }
+        #nullable disable
+        #endif
 
-    protected virtual int ComputeHashCode()
-    {
-#if NETSTANDARD2_0
-        return (ShopDomain, AccessToken).GetHashCode();
-#else
-        return HashCode.Combine(ShopDomain, AccessToken);
-#endif
-    }
-
-    public override int GetHashCode()
-    {
-        return ComputeHashCode();
+        public override int GetHashCode()
+        {
+            #if NETSTANDARD2_0
+            return (ShopDomain, AccessToken).GetHashCode();
+            #else
+            return HashCode.Combine(ShopDomain, AccessToken);
+            #endif
+        }
     }
 }
-

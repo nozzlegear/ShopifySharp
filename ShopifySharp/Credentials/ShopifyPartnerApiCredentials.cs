@@ -1,41 +1,43 @@
-#nullable enable
 using System;
 
-namespace ShopifySharp.Credentials;
-
-public abstract class ShopifyPartnerApiCredentials
+namespace ShopifySharp.Credentials
 {
-    public virtual long PartnerOrganizationId { get; }
-    public virtual string AccessToken { get; }
-
-    public ShopifyPartnerApiCredentials(long partnerOrganizationId, string accessToken)
+    public readonly struct ShopifyPartnerApiCredentials
     {
-        PartnerOrganizationId = partnerOrganizationId;
-        AccessToken = accessToken;
-    }
+        public long PartnerOrganizationId { get; }
+        public string AccessToken { get; }
 
-    protected virtual bool Equals(ShopifyPartnerApiCredentials other)
-    {
-        return PartnerOrganizationId == other.PartnerOrganizationId && AccessToken == other.AccessToken;
-    }
+        public ShopifyPartnerApiCredentials(long partnerOrganizationId, string accessToken)
+        {
+            PartnerOrganizationId = partnerOrganizationId;
+            AccessToken = accessToken;
+        }
 
-    public override bool Equals(object? obj)
-    {
-        return obj is ShopifyPartnerApiCredentials other && Equals(other);
-    }
+        #if NETSTANDARD2_0
+        public override bool Equals(object obj)
+        {
+            return obj is ShopifyPartnerApiCredentials other
+                && PartnerOrganizationId == other.PartnerOrganizationId
+                && AccessToken == other.AccessToken;
+        }
+        #else
+        #nullable enable
+        public override bool Equals(object? obj)
+        {
+            return obj is ShopifyPartnerApiCredentials other
+                && PartnerOrganizationId == other.PartnerOrganizationId
+                && AccessToken == other.AccessToken;
+        }
+        #nullable disable
+        #endif
 
-    protected virtual int ComputeHashCode()
-    {
-#if NETSTANDARD2_0
-        return (PartnerOrganizationId, AccessToken).GetHashCode();
-#else
-        return HashCode.Combine(PartnerOrganizationId, AccessToken);
-#endif
-    }
-
-    public override int GetHashCode()
-    {
-        return ComputeHashCode();
+        public override int GetHashCode()
+        {
+            #if NETSTANDARD2_0
+            return (PartnerOrganizationId, AccessToken).GetHashCode();
+            #else
+            return HashCode.Combine(PartnerOrganizationId, AccessToken);
+            #endif
+        }
     }
 }
-
