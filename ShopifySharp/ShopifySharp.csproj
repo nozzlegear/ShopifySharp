@@ -12,8 +12,8 @@
 		<Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
 		<Authors>Nozzlegear</Authors>
 		<Copyright>Nozzlegear Software</Copyright>
-		<PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
 		<PackageTags>Shopify;Ecommerce;Rest;Graphql</PackageTags>
