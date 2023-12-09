@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
@@ -218,8 +216,8 @@ namespace ShopifySharp.Tests
             Assert.True(actual);
         }
 
-#if NET6_0_OR_GREATER
-
+#if NET472
+#else
         [Fact]
         public void IsAuthenticWebhook_UsingBytes_WhenHeaderIsMissing_ReturnFalse()
         {
