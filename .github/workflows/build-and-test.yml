@@ -100,6 +100,12 @@ jobs:
         && sudo apt-get -qq update \
         && sudo apt-get -qq install fish parallel
 
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          8.0.x
+
     - name: Checkout branch
       uses: actions/checkout@master
 
