@@ -3,7 +3,7 @@
 echo "Using $(fish --version)"
 
 set experimentalTestProject "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
-set diTestProject "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj"
+set diTestProject "ShopifySharp.Extensions.DependencyInjection.Tests/ShopifySharp.Extensions.DependencyInjection.Tests.csproj"
 
 # Load utility functions
 set utilsFilePath (dirname (status --current-filename))"/utils.fish"
@@ -32,7 +32,7 @@ buildProject "$testProjectFile"; or exit 1;
 success "Test project build succeeded."
 
 # Regex for parsing categories from Trait attributes in test files
-set categoryRegex "Trait\(['\"]Category['\"], ['\"]([A-Za-z]+)['\"]" 
+set categoryRegex "Trait\(['\"]Category['\"], ['\"]([A-Za-z]+)['\"]"
 set categories
 
 # Read every C# file in the test directory and parse the categories
