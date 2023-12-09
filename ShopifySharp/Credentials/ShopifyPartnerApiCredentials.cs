@@ -1,17 +1,16 @@
+#if NETSTANDARD2_0
+#else
+#nullable enable
+#endif
+
 using System;
 
 namespace ShopifySharp.Credentials
 {
-    public readonly struct ShopifyPartnerApiCredentials
+    public readonly struct ShopifyPartnerApiCredentials(long partnerOrganizationId, string accessToken)
     {
-        public long PartnerOrganizationId { get; }
-        public string AccessToken { get; }
-
-        public ShopifyPartnerApiCredentials(long partnerOrganizationId, string accessToken)
-        {
-            PartnerOrganizationId = partnerOrganizationId;
-            AccessToken = accessToken;
-        }
+        public long PartnerOrganizationId { get; } = partnerOrganizationId;
+        public string AccessToken { get; } = accessToken;
 
         #if NETSTANDARD2_0
         public override bool Equals(object obj)
@@ -21,14 +20,12 @@ namespace ShopifySharp.Credentials
                 && AccessToken == other.AccessToken;
         }
         #else
-        #nullable enable
         public override bool Equals(object? obj)
         {
             return obj is ShopifyPartnerApiCredentials other
                 && PartnerOrganizationId == other.PartnerOrganizationId
                 && AccessToken == other.AccessToken;
         }
-        #nullable disable
         #endif
 
         public override int GetHashCode()

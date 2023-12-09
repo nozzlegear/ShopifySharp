@@ -1,17 +1,16 @@
+#if NETSTANDARD2_0
+#else
+#nullable enable
+#endif
+
 using System;
 
 namespace ShopifySharp.Credentials
 {
-    public readonly struct ShopifyRestApiCredentials
+    public readonly struct ShopifyRestApiCredentials(string shopDomain, string accessToken)
     {
-        public string ShopDomain { get; }
-        public string AccessToken { get; }
-
-        public ShopifyRestApiCredentials(string shopDomain, string accessToken)
-        {
-            ShopDomain = shopDomain;
-            AccessToken = accessToken;
-        }
+        public string ShopDomain { get; } = shopDomain;
+        public string AccessToken { get; } = accessToken;
 
         #if NETSTANDARD2_0
         public override bool Equals(object obj)
@@ -21,14 +20,12 @@ namespace ShopifySharp.Credentials
                 && AccessToken == other.AccessToken;
         }
         #else
-        #nullable enable
         public override bool Equals(object? obj)
         {
             return obj is ShopifyRestApiCredentials other
                 && ShopDomain == other.ShopDomain
                 && AccessToken == other.AccessToken;
         }
-        #nullable disable
         #endif
 
         public override int GetHashCode()
