@@ -132,7 +132,7 @@ namespace ShopifySharp.Tests
         {
             var qs = "hmac=134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746&shop=stages-test-shop-2.myshopify.com&signature=f477a85f3ed6027735589159f9da74da&timestamp=1459779785";
 
-            bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey);
+            Assert.True(AuthorizationService.IsAuthenticRequest(qs, Utils.SecretKey));
         }
 
         [Fact]
