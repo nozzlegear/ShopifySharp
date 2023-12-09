@@ -4,7 +4,6 @@
 		<AssemblyName>ShopifySharp</AssemblyName>
 		<RootNamespace>ShopifySharp</RootNamespace>
 		<VersionPrefix>6.6.1</VersionPrefix>
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <LangVersion>Latest</LangVersion>
@@ -14,9 +13,10 @@
 		<Authors>Nozzlegear</Authors>
 		<Copyright>Nozzlegear Software</Copyright>
 		<PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
-		<PackageTags>shopify,ecommerce</PackageTags>
+		<PackageTags>Shopify;Ecommerce;Rest;Graphql</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="2.1.0" />
