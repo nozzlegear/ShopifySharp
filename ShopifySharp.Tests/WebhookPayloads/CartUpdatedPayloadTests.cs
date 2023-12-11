@@ -10,10 +10,10 @@ using Xunit;
 namespace ShopifySharp.Tests.WebhookPayloads
 {
     [Trait("Category", "CartUpdatedPayload")]
-    public class CartUpdatedWebhookTests
+    public class CartUpdatedPayloadTests
     {
-        private const string JsonFilePath = "./WebhookPayloads/cart_updated_webhook.json";
-        private const string JsonWithPropertiesFilePath = "./WebhookPayloads/cart_updated_webhook_with_properties.json";
+        private const string JsonFilePath = "./WebhookPayloads/cart_updated_payload.json";
+        private const string JsonWithPropertiesFilePath = "./WebhookPayloads/cart_updated_payload_with_properties.json";
 
         [Fact]
         public async Task ShouldDeserializeACartWebhookUpdatedRequest()
@@ -121,14 +121,14 @@ namespace ShopifySharp.Tests.WebhookPayloads
                 .BeOfType<JArray>();
         }
 
-        private static void TestShopMoneyObject(CartUpdatedWebhookShopMoney shopMoney, decimal expectedAmount)
+        private static void TestShopMoneyObject(CartUpdatedShopMoney shopMoney, decimal expectedAmount)
         {
             shopMoney.Should().NotBeNull();
             shopMoney.Amount.Should().Be(expectedAmount);
             shopMoney.CurrencyCode.Should().NotBeNullOrWhiteSpace();
         }
 
-        private static void TestPresentmentMoneyObject(CartUpdatedWebhookPresentmentMoney presentmentMoney, decimal expectedAmount)
+        private static void TestPresentmentMoneyObject(CartUpdatedPresentmentMoney presentmentMoney, decimal expectedAmount)
         {
             presentmentMoney.Should().NotBeNull();
             presentmentMoney.Amount.Should().Be(expectedAmount);
