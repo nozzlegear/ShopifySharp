@@ -1,24 +1,26 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace ShopifySharp.Entities.CartUpdatedWebhook
+namespace ShopifySharp.WebhookPayloads.CartUpdated
 {
     public class CartUpdatedWebhookLineItem : ShopifyObject
     {
+        #nullable enable
         [JsonProperty("properties")]
-        public IDictionary<string, object> Properties { get; set; }
+        public IDictionary<string, object>? Properties { get; set; }
+        #nullable disable
 
         [JsonProperty("quantity")]
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
 
         [JsonProperty("variant_id")]
-        public long? VariantId { get; set; }
+        public long VariantId { get; set; }
 
         [JsonProperty("key")]
         public string Key { get; set; }
 
         [JsonProperty("discounted_price")]
-        public string DiscountedPrice { get; set; }
+        public decimal DiscountedPrice { get; set; }
 
         [JsonProperty("gift_card")]
         public bool? GiftCard { get; set; }
@@ -27,22 +29,24 @@ namespace ShopifySharp.Entities.CartUpdatedWebhook
         public int? Grams { get; set; }
 
         [JsonProperty("line_price")]
-        public string LinePrice { get; set; }
+        public decimal LinePrice { get; set; }
 
         [JsonProperty("original_line_price")]
-        public string OriginalLinePrice { get; set; }
+        public decimal OriginalLinePrice { get; set; }
 
         [JsonProperty("original_price")]
-        public string OriginalPrice { get; set; }
+        public decimal OriginalPrice { get; set; }
 
         [JsonProperty("price")]
-        public string Price { get; set; }
+        public decimal Price { get; set; }
 
         [JsonProperty("product_id")]
-        public long? ProductId { get; set; }
+        public long ProductId { get; set; }
 
+        #nullable enable
         [JsonProperty("sku")]
-        public string Sku { get; set; }
+        public string? Sku { get; set; }
+        #nullable disable
 
         [JsonProperty("taxable")]
         public bool? Taxable { get; set; }
@@ -51,7 +55,7 @@ namespace ShopifySharp.Entities.CartUpdatedWebhook
         public string Title { get; set; }
 
         [JsonProperty("total_discount")]
-        public string TotalDiscount { get; set; }
+        public decimal TotalDiscount { get; set; }
 
         [JsonProperty("vendor")]
         public string Vendor { get; set; }
@@ -72,6 +76,6 @@ namespace ShopifySharp.Entities.CartUpdatedWebhook
         public CartUpdatedWebhookTotalDiscountSet TotalDiscountSet { get; set; }
 
         [JsonProperty("discounts")]
-        public IEnumerable<object> Discounts { get; set; }
+        public ICollection<object> Discounts { get; set; }
     }
 }
