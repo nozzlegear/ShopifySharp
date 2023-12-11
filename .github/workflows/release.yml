@@ -1,5 +1,5 @@
 name: Release Pipeline
-run-name: Publish ${{ inputs.package_version }}
+run-name: Publish ${{ inputs.package_id }} ${{ inputs.package_version }}
 
 on:
   workflow_dispatch:
