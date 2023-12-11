@@ -30,10 +30,13 @@
     <PackageReference Include="Wish.GraphQLSchemaGenerator" Version="1.5.2" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Entities\cart_updated_webhook.json" />
-    <Content Include="Entities\cart_updated_webhook.json">
+    <Content Include="WebhookPayloads\cart_updated_payload.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>CartUpdatedWebhookTests.cs</DependentUpon>
+      <DependentUpon>CartUpdatedPayloadTests.cs</DependentUpon>
+    </Content>
+    <Content Include="WebhookPayloads\cart_updated_payload_with_properties.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>CartUpdatedPayloadTests.cs</DependentUpon>
     </Content>
   </ItemGroup>
 </Project>
