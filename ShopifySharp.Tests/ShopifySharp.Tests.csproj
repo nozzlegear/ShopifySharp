@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotenvfile" Version="2.1.0" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="fsharp.core" Version="4.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
@@ -27,5 +28,12 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageReference Include="Wish.GraphQLSchemaGenerator" Version="1.5.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Entities\cart_updated_webhook.json" />
+    <Content Include="Entities\cart_updated_webhook.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>CartUpdatedWebhookTests.cs</DependentUpon>
+    </Content>
   </ItemGroup>
 </Project>
