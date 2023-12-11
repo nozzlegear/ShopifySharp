@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp.Entities.CartUpdatedWebhook
+namespace ShopifySharp.WebhookPayloads.CartUpdated
 {
-    public class CartUpdatedWebhookPriceSet
+    public class CartUpdatedWebhookLinePriceSet
     {
         [JsonProperty("shop_money")]
         public CartUpdatedWebhookShopMoney ShopMoney { get; set; }

@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp.Entities.CartUpdatedWebhook
+namespace ShopifySharp.WebhookPayloads.CartUpdated
 {
-    public class CartUpdatedWebhookShopMoney
+    public class CartUpdatedWebhookPresentmentMoney
     {
         [JsonProperty("amount")]
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [JsonProperty("currency_code")]
         public string CurrencyCode { get; set; }
