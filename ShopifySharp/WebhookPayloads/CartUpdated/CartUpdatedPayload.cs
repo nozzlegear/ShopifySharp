@@ -18,7 +18,7 @@ namespace ShopifySharp.WebhookPayloads.CartUpdated
         public string Id { get; set; }
 
         [JsonProperty("line_items")]
-        public ICollection<CartUpdatedWebhookLineItem> LineItems { get; set; }
+        public ICollection<CartUpdatedLineItem> LineItems { get; set; }
 
         [JsonProperty("note")]
         public string Note { get; set; }

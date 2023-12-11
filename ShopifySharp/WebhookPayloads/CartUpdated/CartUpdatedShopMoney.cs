@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.WebhookPayloads.CartUpdated
 {
-    public class CartUpdatedWebhookShopMoney
+    public class CartUpdatedShopMoney
     {
         [JsonProperty("amount")]
         public decimal Amount { get; set; }

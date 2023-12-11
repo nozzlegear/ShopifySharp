@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.WebhookPayloads.CartUpdated
 {
-    public class CartUpdatedWebhookLineItem : ShopifyObject
+    public class CartUpdatedLineItem : ShopifyObject
     {
         #nullable enable
         [JsonProperty("properties")]
@@ -61,19 +61,19 @@ namespace ShopifySharp.WebhookPayloads.CartUpdated
         public string Vendor { get; set; }
 
         [JsonProperty("discounted_price_set")]
-        public CartUpdatedWebhookDiscountedPriceSet DiscountedPriceSet { get; set; }
+        public CartUpdatedDiscountedPriceSet DiscountedPriceSet { get; set; }
 
         [JsonProperty("line_price_set")]
-        public CartUpdatedWebhookLinePriceSet LinePriceSet { get; set; }
+        public CartUpdatedLinePriceSet LinePriceSet { get; set; }
 
         [JsonProperty("original_line_price_set")]
-        public CartUpdatedWebhookOriginalLinePriceSet OriginalLinePriceSet { get; set; }
+        public CartUpdatedOriginalLinePriceSet OriginalLinePriceSet { get; set; }
 
         [JsonProperty("price_set")]
-        public CartUpdatedWebhookPriceSet PriceSet { get; set; }
+        public CartUpdatedPriceSet PriceSet { get; set; }
 
         [JsonProperty("total_discount_set")]
-        public CartUpdatedWebhookTotalDiscountSet TotalDiscountSet { get; set; }
+        public CartUpdatedTotalDiscountSet TotalDiscountSet { get; set; }
 
         [JsonProperty("discounts")]
         public ICollection<object> Discounts { get; set; }
