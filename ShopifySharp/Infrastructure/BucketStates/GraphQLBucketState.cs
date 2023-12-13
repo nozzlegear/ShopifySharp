@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace ShopifySharp
+﻿namespace ShopifySharp
 {
     public class GraphQLBucketState
     {
@@ -14,24 +12,26 @@ namespace ShopifySharp
 
         public int? ActualQueryCost { get; private set; }
 
-        public static GraphQLBucketState Get(JToken response)
+        public static GraphQLBucketState Get(System.Text.Json.JsonDocument response)
         {
-            var cost = response.SelectToken("extensions.cost");
-            if (cost == null)
+            if (!response.RootElement.TryGetProperty("extensions", out var extensions))
+                return null;
+            if (!extensions.TryGetProperty("cost", out var cost))
                 return null;
 
-            var throttleStatus = cost["throttleStatus"];
-            int maximumAvailable = (int)throttleStatus["maximumAvailable"];
-            int restoreRate = (int)throttleStatus["restoreRate"];
-            int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
-            int requestedQueryCost = (int)cost["requestedQueryCost"];
-            int? actualQueryCost = (int?)cost["actualQueryCost"];//actual query cost is null if THROTTLED
+            int requestedQueryCost = cost.GetProperty("requestedQueryCost").GetInt32();
+            int? actualQueryCost = cost.TryGetProperty("actualQueryCost", out var actualQueryCostElt) && actualQueryCostElt.ValueKind != System.Text.Json.JsonValueKind.Null ? actualQueryCostElt.GetInt32() : null;//actual query cost is null if THROTTLED
+
+            var throttleStatus = cost.GetProperty("throttleStatus");
+            decimal maximumAvailable = throttleStatus.GetProperty("maximumAvailable").GetDecimal();
+            decimal restoreRate = throttleStatus.GetProperty("restoreRate").GetDecimal();
+            decimal currentlyAvailable = throttleStatus.GetProperty("currentlyAvailable").GetDecimal();
 
             return new GraphQLBucketState
             {
-                MaxAvailable = maximumAvailable,
-                RestoreRate = restoreRate,
-                CurrentlyAvailable = currentlyAvailable,    
+                MaxAvailable = (int)maximumAvailable,
+                RestoreRate = (int)restoreRate,
+                CurrentlyAvailable = (int)currentlyAvailable,    
                 RequestedQueryCost = requestedQueryCost,
                 ActualQueryCost = actualQueryCost,
             };

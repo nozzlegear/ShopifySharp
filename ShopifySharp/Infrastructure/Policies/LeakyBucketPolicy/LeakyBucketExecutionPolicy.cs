@@ -65,13 +65,16 @@ namespace ShopifySharp
                             await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost.Value, cancellationToken);
 
                         var graphRes = await executeRequestAsync(request);
-                        var json = graphRes.Result as JToken;
-                        if (graphRes.Result is System.Text.Json.JsonDocument jsonDoc)
-                            json = JToken.Parse(jsonDoc.RootElement.ToString());
+                        var jsonDoc = graphRes.Result switch
+                        {
+                            System.Text.Json.JsonDocument systemTextJsonDoc => systemTextJsonDoc,
+                            JToken jsonNetDoc => System.Text.Json.JsonDocument.Parse(jsonNetDoc.ToString(Newtonsoft.Json.Formatting.None)),
+                            _ => throw new Exception($"Unexpected non json result of type {graphRes.Response.GetType().Name} for GraphQL Admin API")
+                        };
 
                         if (bucket != null)
                         {
-                            var graphBucketState = graphRes.GetGraphQLBucketState(json);
+                            var graphBucketState = graphRes.GetGraphQLBucketState(jsonDoc);
                             if (graphBucketState != null)
                             {
                                 int actualQueryCost = graphBucketState.ActualQueryCost ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
@@ -84,10 +87,10 @@ namespace ShopifySharp
                             }
                         }
 
-                        if (json.SelectToken("errors")
-                            ?.Children()
-                            .Any(r => r.SelectToken("extensions.code")?.Value<string>() == "THROTTLED")
-                            == true)
+                        if (jsonDoc.RootElement.TryGetProperty("errors", out var errors) && 
+                            errors.EnumerateArray().Any(error => error.TryGetProperty("extensions", out var extensions) && 
+                                                                 extensions.TryGetProperty("code", out var code) &&
+                                                                 code.GetString() == "THROTTLED"))
                         {
                             await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                             break;
