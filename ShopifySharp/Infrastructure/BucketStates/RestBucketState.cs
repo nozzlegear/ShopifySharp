@@ -5,9 +5,9 @@ namespace ShopifySharp
 {
     public class RestBucketState
     {
-        public int CurrentlyUsed { get; init; }
+        public int CurrentlyUsed { get; private set; }
 
-        public int MaxAvailable { get; init; }
+        public int MaxAvailable { get; private set; }
 
         public const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
 

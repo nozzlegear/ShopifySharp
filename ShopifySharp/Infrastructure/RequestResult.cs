@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using Newtonsoft.Json.Linq;
+using System.Net.Http;
 
 namespace ShopifySharp
 {
@@ -26,6 +27,11 @@ namespace ShopifySharp
         public RestBucketState GetRestBucketState()
         {
             return RestBucketState.Get(this.Response);
+        }
+
+        public GraphQLBucketState GetGraphQLBucketState(JToken response)
+        {
+            return GraphQLBucketState.Get(response);
         }
     }
 }

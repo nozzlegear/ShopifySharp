@@ -71,20 +71,16 @@ namespace ShopifySharp
 
                         if (bucket != null)
                         {
-                            var cost = json.SelectToken("extensions.cost");
-                            if (cost != null)
+                            var graphBucketState = graphRes.GetGraphQLBucketState(json);
+                            if (graphBucketState != null)
                             {
-                                var throttleStatus = cost["throttleStatus"];
-                                int maximumAvailable = (int)throttleStatus["maximumAvailable"];
-                                int restoreRate = (int)throttleStatus["restoreRate"];
-                                int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
-                                int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
+                                int actualQueryCost = graphBucketState.ActualQueryCost ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
                                 int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
-                                bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
+                                bucket.SetGraphQLBucketState(graphBucketState.MaxAvailable, graphBucketState.RestoreRate, graphBucketState.CurrentlyAvailable, refund);
 
                                 //The user might have supplied no cost or an invalid cost
                                 //We fix the query cost so the correct value is used if a retry is needed
-                                graphqlQueryCost = (int)cost["requestedQueryCost"];
+                                graphqlQueryCost = graphBucketState.RequestedQueryCost;
                             }
                         }
 
