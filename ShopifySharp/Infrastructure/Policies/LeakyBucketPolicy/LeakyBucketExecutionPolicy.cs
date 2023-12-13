@@ -18,7 +18,6 @@ namespace ShopifySharp
     public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
     {
         private const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
-        public const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
 
         private static ConcurrentDictionary<string, MultiShopifyAPIBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, MultiShopifyAPIBucket>();
 
@@ -110,16 +109,9 @@ namespace ShopifySharp
 
                             if (bucket != null)
                             {
-                                var apiCallLimitHeaderValue = GetRestCallLimit(restRes.Response);
-                                if (apiCallLimitHeaderValue != null)
-                                {
-                                    var split = apiCallLimitHeaderValue.Split('/');
-                                    if (split.Length == 2 && int.TryParse(split[0], out int currentlyUsed) &&
-                                                             int.TryParse(split[1], out int maxAvailable))
-                                    {
-                                        bucket.SetRESTBucketState(maxAvailable, maxAvailable - currentlyUsed);
-                                    }
-                                }
+                                var restBucketState = restRes.GetRestBucketState();
+                                if (restBucketState != null)
+                                    bucket.SetRESTBucketState(restBucketState.MaxAvailable, restBucketState.MaxAvailable - restBucketState.CurrentlyUsed);
                             }
 
                             return restRes;
@@ -147,13 +139,6 @@ namespace ShopifySharp
                         }
                 }
             }
-        }
-
-        private string GetRestCallLimit(HttpResponseMessage response)
-        {
-            return response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT)
-                                       .Value
-                                       ?.FirstOrDefault();
         }
 
         private string GetAccessToken(HttpRequestMessage client)

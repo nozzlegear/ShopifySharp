@@ -22,5 +22,10 @@ namespace ShopifySharp
             this.RawResult = rawResult;
             this.RawLinkHeaderValue = rawLinkHeaderValue;
         }
+
+        public RestBucketState GetRestBucketState()
+        {
+            return RestBucketState.Get(this.Response);
+        }
     }
 }
