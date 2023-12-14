@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IPriceRuleServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IPriceRuleService Create(ShopifyRestApiCredentials credentials);
+    IPriceRuleService Create(ShopifyApiCredentials credentials);
 }
 
 public class PriceRuleServiceFactory(
@@ -24,7 +24,7 @@ public class PriceRuleServiceFactory(
     #endif
 ) : IPriceRuleServiceFactory
 {
-    public virtual IPriceRuleService Create(ShopifyRestApiCredentials credentials)
+    public virtual IPriceRuleService Create(ShopifyApiCredentials credentials)
     {
         var service = new PriceRuleService(credentials.ShopDomain, credentials.AccessToken);
 

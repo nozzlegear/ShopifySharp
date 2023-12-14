@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IInventoryItemServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IInventoryItemService Create(ShopifyRestApiCredentials credentials);
+    IInventoryItemService Create(ShopifyApiCredentials credentials);
 }
 
 public class InventoryItemServiceFactory(
@@ -24,7 +24,7 @@ public class InventoryItemServiceFactory(
     #endif
 ) : IInventoryItemServiceFactory
 {
-    public virtual IInventoryItemService Create(ShopifyRestApiCredentials credentials)
+    public virtual IInventoryItemService Create(ShopifyApiCredentials credentials)
     {
         var service = new InventoryItemService(credentials.ShopDomain, credentials.AccessToken);
 

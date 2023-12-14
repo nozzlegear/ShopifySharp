@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IApplicationCreditServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IApplicationCreditService Create(ShopifyRestApiCredentials credentials);
+    IApplicationCreditService Create(ShopifyApiCredentials credentials);
 }
 
 public class ApplicationCreditServiceFactory(
@@ -24,7 +24,7 @@ public class ApplicationCreditServiceFactory(
     #endif
 ) : IApplicationCreditServiceFactory
 {
-    public virtual IApplicationCreditService Create(ShopifyRestApiCredentials credentials)
+    public virtual IApplicationCreditService Create(ShopifyApiCredentials credentials)
     {
         var service = new ApplicationCreditService(credentials.ShopDomain, credentials.AccessToken);
 

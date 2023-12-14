@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface I@@REPLACEME@@Factory
 {
     // ReSharper disable once UnusedMember.Global
-    I@@REPLACEME@@ Create(ShopifyRestApiCredentials credentials);
+    I@@REPLACEME@@ Create(ShopifyApiCredentials credentials);
 }
 
 public class @@REPLACEME@@Factory(
@@ -24,7 +24,7 @@ public class @@REPLACEME@@Factory(
     #endif
 ) : I@@REPLACEME@@Factory
 {
-    public virtual I@@REPLACEME@@ Create(ShopifyRestApiCredentials credentials)
+    public virtual I@@REPLACEME@@ Create(ShopifyApiCredentials credentials)
     {
         var service = new @@REPLACEME@@(credentials.ShopDomain, credentials.AccessToken);
 

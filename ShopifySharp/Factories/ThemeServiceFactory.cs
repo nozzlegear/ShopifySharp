@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IThemeServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IThemeService Create(ShopifyRestApiCredentials credentials);
+    IThemeService Create(ShopifyApiCredentials credentials);
 }
 
 public class ThemeServiceFactory(
@@ -24,7 +24,7 @@ public class ThemeServiceFactory(
     #endif
 ) : IThemeServiceFactory
 {
-    public virtual IThemeService Create(ShopifyRestApiCredentials credentials)
+    public virtual IThemeService Create(ShopifyApiCredentials credentials)
     {
         var service = new ThemeService(credentials.ShopDomain, credentials.AccessToken);
 

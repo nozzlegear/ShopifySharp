@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IMetaFieldServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IMetaFieldService Create(ShopifyRestApiCredentials credentials);
+    IMetaFieldService Create(ShopifyApiCredentials credentials);
 }
 
 public class MetaFieldServiceFactory(
@@ -24,7 +24,7 @@ public class MetaFieldServiceFactory(
     #endif
 ) : IMetaFieldServiceFactory
 {
-    public virtual IMetaFieldService Create(ShopifyRestApiCredentials credentials)
+    public virtual IMetaFieldService Create(ShopifyApiCredentials credentials)
     {
         var service = new MetaFieldService(credentials.ShopDomain, credentials.AccessToken);
 

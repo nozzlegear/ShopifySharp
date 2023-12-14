@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICancellationRequestServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICancellationRequestService Create(ShopifyRestApiCredentials credentials);
+    ICancellationRequestService Create(ShopifyApiCredentials credentials);
 }
 
 public class CancellationRequestServiceFactory(
@@ -24,7 +24,7 @@ public class CancellationRequestServiceFactory(
     #endif
 ) : ICancellationRequestServiceFactory
 {
-    public virtual ICancellationRequestService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICancellationRequestService Create(ShopifyApiCredentials credentials)
     {
         var service = new CancellationRequestService(credentials.ShopDomain, credentials.AccessToken);
 

@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ITransactionServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ITransactionService Create(ShopifyRestApiCredentials credentials);
+    ITransactionService Create(ShopifyApiCredentials credentials);
 }
 
 public class TransactionServiceFactory(
@@ -24,7 +24,7 @@ public class TransactionServiceFactory(
     #endif
 ) : ITransactionServiceFactory
 {
-    public virtual ITransactionService Create(ShopifyRestApiCredentials credentials)
+    public virtual ITransactionService Create(ShopifyApiCredentials credentials)
     {
         var service = new TransactionService(credentials.ShopDomain, credentials.AccessToken);
 

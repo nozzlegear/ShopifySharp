@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IEventServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IEventService Create(ShopifyRestApiCredentials credentials);
+    IEventService Create(ShopifyApiCredentials credentials);
 }
 
 public class EventServiceFactory(
@@ -24,7 +24,7 @@ public class EventServiceFactory(
     #endif
 ) : IEventServiceFactory
 {
-    public virtual IEventService Create(ShopifyRestApiCredentials credentials)
+    public virtual IEventService Create(ShopifyApiCredentials credentials)
     {
         var service = new EventService(credentials.ShopDomain, credentials.AccessToken);
 

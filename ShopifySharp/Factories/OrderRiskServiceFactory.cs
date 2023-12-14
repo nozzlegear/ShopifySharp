@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IOrderRiskServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IOrderRiskService Create(ShopifyRestApiCredentials credentials);
+    IOrderRiskService Create(ShopifyApiCredentials credentials);
 }
 
 public class OrderRiskServiceFactory(
@@ -24,7 +24,7 @@ public class OrderRiskServiceFactory(
     #endif
 ) : IOrderRiskServiceFactory
 {
-    public virtual IOrderRiskService Create(ShopifyRestApiCredentials credentials)
+    public virtual IOrderRiskService Create(ShopifyApiCredentials credentials)
     {
         var service = new OrderRiskService(credentials.ShopDomain, credentials.AccessToken);
 

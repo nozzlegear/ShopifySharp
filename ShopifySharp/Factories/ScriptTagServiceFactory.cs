@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IScriptTagServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IScriptTagService Create(ShopifyRestApiCredentials credentials);
+    IScriptTagService Create(ShopifyApiCredentials credentials);
 }
 
 public class ScriptTagServiceFactory(
@@ -24,7 +24,7 @@ public class ScriptTagServiceFactory(
     #endif
 ) : IScriptTagServiceFactory
 {
-    public virtual IScriptTagService Create(ShopifyRestApiCredentials credentials)
+    public virtual IScriptTagService Create(ShopifyApiCredentials credentials)
     {
         var service = new ScriptTagService(credentials.ShopDomain, credentials.AccessToken);
 

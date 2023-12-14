@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IGiftCardServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IGiftCardService Create(ShopifyRestApiCredentials credentials);
+    IGiftCardService Create(ShopifyApiCredentials credentials);
 }
 
 public class GiftCardServiceFactory(
@@ -24,7 +24,7 @@ public class GiftCardServiceFactory(
     #endif
 ) : IGiftCardServiceFactory
 {
-    public virtual IGiftCardService Create(ShopifyRestApiCredentials credentials)
+    public virtual IGiftCardService Create(ShopifyApiCredentials credentials)
     {
         var service = new GiftCardService(credentials.ShopDomain, credentials.AccessToken);
 

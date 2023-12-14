@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICarrierServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICarrierService Create(ShopifyRestApiCredentials credentials);
+    ICarrierService Create(ShopifyApiCredentials credentials);
 }
 
 public class CarrierServiceFactory(
@@ -24,7 +24,7 @@ public class CarrierServiceFactory(
     #endif
 ) : ICarrierServiceFactory
 {
-    public virtual ICarrierService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICarrierService Create(ShopifyApiCredentials credentials)
     {
         var service = new CarrierService(credentials.ShopDomain, credentials.AccessToken);
 
