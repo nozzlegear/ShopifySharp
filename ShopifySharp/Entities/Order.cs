@@ -262,6 +262,12 @@ namespace ShopifySharp
         public IEnumerable<ShippingLine> ShippingLines { get; set; }
 
         /// <summary>
+        /// The ID of the order placed on the originating platform. This value doesn't correspond to the Shopify ID that's generated from a completed draft
+        /// </summary>
+        [JsonProperty("source_identifier")]
+        public string SourceIdentifier { get; set; }
+
+        /// <summary>
         /// Where the order originated. May only be set during creation, and is not writeable thereafter.
         /// Orders created via the API may be assigned any string of your choice except for "web", "pos", "iphone", and "android".
         /// Default is "api".
