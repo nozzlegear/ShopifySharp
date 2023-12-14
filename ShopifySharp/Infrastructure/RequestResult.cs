@@ -29,7 +29,7 @@ namespace ShopifySharp
             return RestBucketState.Get(this.Response);
         }
 
-        public GraphQLBucketState GetGraphQLBucketState(JToken response)
+        public GraphQLBucketState GetGraphQLBucketState(System.Text.Json.JsonDocument response)
         {
             return GraphQLBucketState.Get(response);
         }

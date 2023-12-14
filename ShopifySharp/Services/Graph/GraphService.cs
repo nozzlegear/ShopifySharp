@@ -63,6 +63,14 @@ namespace ShopifySharp
             return SendAsync<TResult>(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
         }
 
+        /// <summary>
+        /// Issue a single value query and return the value as an strongly typed object.
+        /// Use a type from the ShopifySharp.GraphQL namespace
+        /// </summary>
+        /// <typeparam name="TResult">Use a type from the ShopifySharp.GraphQL namespace</typeparam>
+        /// <param name="request"></param>
+        /// <param name="graphqlQueryCost"></param>
+        /// <param name="cancellationToken"></param>
         public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
             where TResult : class
         {

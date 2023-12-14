@@ -45,6 +45,7 @@ namespace ShopifySharp.Tests
         public Graph_Tests(Graph_Tests_Fixture fixture)
         {
             _fixture = fixture;
+            _fixture.Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         }
 
         [Fact(DisplayName = "Lists orders using the GraphService")]
