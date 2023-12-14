@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICustomerSavedSearchServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICustomerSavedSearchService Create(ShopifyRestApiCredentials credentials);
+    ICustomerSavedSearchService Create(ShopifyApiCredentials credentials);
 }
 
 public class CustomerSavedSearchServiceFactory(
@@ -24,7 +24,7 @@ public class CustomerSavedSearchServiceFactory(
     #endif
 ) : ICustomerSavedSearchServiceFactory
 {
-    public virtual ICustomerSavedSearchService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICustomerSavedSearchService Create(ShopifyApiCredentials credentials)
     {
         var service = new CustomerSavedSearchService(credentials.ShopDomain, credentials.AccessToken);
 

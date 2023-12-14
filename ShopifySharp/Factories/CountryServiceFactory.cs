@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICountryServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICountryService Create(ShopifyRestApiCredentials credentials);
+    ICountryService Create(ShopifyApiCredentials credentials);
 }
 
 public class CountryServiceFactory(
@@ -24,7 +24,7 @@ public class CountryServiceFactory(
     #endif
 ) : ICountryServiceFactory
 {
-    public virtual ICountryService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICountryService Create(ShopifyApiCredentials credentials)
     {
         var service = new CountryService(credentials.ShopDomain, credentials.AccessToken);
 

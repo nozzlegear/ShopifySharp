@@ -7,7 +7,7 @@ using System;
 
 namespace ShopifySharp.Credentials
 {
-    public readonly struct ShopifyRestApiCredentials(string shopDomain, string accessToken)
+    public readonly struct ShopifyApiCredentials(string shopDomain, string accessToken)
     {
         public string ShopDomain { get; } = shopDomain;
         public string AccessToken { get; } = accessToken;
@@ -15,14 +15,14 @@ namespace ShopifySharp.Credentials
         #if NETSTANDARD2_0
         public override bool Equals(object obj)
         {
-            return obj is ShopifyRestApiCredentials other
+            return obj is ShopifyApiCredentials other
                 && ShopDomain == other.ShopDomain
                 && AccessToken == other.AccessToken;
         }
         #else
         public override bool Equals(object? obj)
         {
-            return obj is ShopifyRestApiCredentials other
+            return obj is ShopifyApiCredentials other
                 && ShopDomain == other.ShopDomain
                 && AccessToken == other.AccessToken;
         }
@@ -35,6 +35,16 @@ namespace ShopifySharp.Credentials
             #else
             return HashCode.Combine(ShopDomain, AccessToken);
             #endif
+        }
+
+        public static bool operator ==(ShopifyApiCredentials left, ShopifyApiCredentials right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ShopifyApiCredentials left, ShopifyApiCredentials right)
+        {
+            return !(left == right);
         }
     }
 }

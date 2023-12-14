@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IRedirectServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IRedirectService Create(ShopifyRestApiCredentials credentials);
+    IRedirectService Create(ShopifyApiCredentials credentials);
 }
 
 public class RedirectServiceFactory(
@@ -24,7 +24,7 @@ public class RedirectServiceFactory(
     #endif
 ) : IRedirectServiceFactory
 {
-    public virtual IRedirectService Create(ShopifyRestApiCredentials credentials)
+    public virtual IRedirectService Create(ShopifyApiCredentials credentials)
     {
         var service = new RedirectService(credentials.ShopDomain, credentials.AccessToken);
 

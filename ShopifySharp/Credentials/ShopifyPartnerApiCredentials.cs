@@ -36,5 +36,15 @@ namespace ShopifySharp.Credentials
             return HashCode.Combine(PartnerOrganizationId, AccessToken);
             #endif
         }
+
+        public static bool operator ==(ShopifyPartnerApiCredentials left, ShopifyPartnerApiCredentials right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ShopifyPartnerApiCredentials left, ShopifyPartnerApiCredentials right)
+        {
+            return !(left == right);
+        }
     }
 }

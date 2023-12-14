@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IRefundServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IRefundService Create(ShopifyRestApiCredentials credentials);
+    IRefundService Create(ShopifyApiCredentials credentials);
 }
 
 public class RefundServiceFactory(
@@ -24,7 +24,7 @@ public class RefundServiceFactory(
     #endif
 ) : IRefundServiceFactory
 {
-    public virtual IRefundService Create(ShopifyRestApiCredentials credentials)
+    public virtual IRefundService Create(ShopifyApiCredentials credentials)
     {
         var service = new RefundService(credentials.ShopDomain, credentials.AccessToken);
 

@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IInventoryLevelServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IInventoryLevelService Create(ShopifyRestApiCredentials credentials);
+    IInventoryLevelService Create(ShopifyApiCredentials credentials);
 }
 
 public class InventoryLevelServiceFactory(
@@ -24,7 +24,7 @@ public class InventoryLevelServiceFactory(
     #endif
 ) : IInventoryLevelServiceFactory
 {
-    public virtual IInventoryLevelService Create(ShopifyRestApiCredentials credentials)
+    public virtual IInventoryLevelService Create(ShopifyApiCredentials credentials)
     {
         var service = new InventoryLevelService(credentials.ShopDomain, credentials.AccessToken);
 

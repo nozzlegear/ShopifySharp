@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IWebhookServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IWebhookService Create(ShopifyRestApiCredentials credentials);
+    IWebhookService Create(ShopifyApiCredentials credentials);
 }
 
 public class WebhookServiceFactory(
@@ -24,7 +24,7 @@ public class WebhookServiceFactory(
     #endif
 ) : IWebhookServiceFactory
 {
-    public virtual IWebhookService Create(ShopifyRestApiCredentials credentials)
+    public virtual IWebhookService Create(ShopifyApiCredentials credentials)
     {
         var service = new WebhookService(credentials.ShopDomain, credentials.AccessToken);
 

@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IStorefrontAccessTokenServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IStorefrontAccessTokenService Create(ShopifyRestApiCredentials credentials);
+    IStorefrontAccessTokenService Create(ShopifyApiCredentials credentials);
 }
 
 public class StorefrontAccessTokenServiceFactory(
@@ -24,7 +24,7 @@ public class StorefrontAccessTokenServiceFactory(
     #endif
 ) : IStorefrontAccessTokenServiceFactory
 {
-    public virtual IStorefrontAccessTokenService Create(ShopifyRestApiCredentials credentials)
+    public virtual IStorefrontAccessTokenService Create(ShopifyApiCredentials credentials)
     {
         var service = new StorefrontAccessTokenService(credentials.ShopDomain, credentials.AccessToken);
 

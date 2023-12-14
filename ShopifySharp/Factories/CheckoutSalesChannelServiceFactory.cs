@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICheckoutSalesChannelServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICheckoutSalesChannelService Create(ShopifyRestApiCredentials credentials);
+    ICheckoutSalesChannelService Create(ShopifyApiCredentials credentials);
 }
 
 public class CheckoutSalesChannelServiceFactory(
@@ -24,7 +24,7 @@ public class CheckoutSalesChannelServiceFactory(
     #endif
 ) : ICheckoutSalesChannelServiceFactory
 {
-    public virtual ICheckoutSalesChannelService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICheckoutSalesChannelService Create(ShopifyApiCredentials credentials)
     {
         var service = new CheckoutSalesChannelService(credentials.ShopDomain, credentials.AccessToken);
 

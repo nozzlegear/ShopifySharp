@@ -2,7 +2,7 @@ namespace ShopifySharp.Extensions.DependencyInjection.Tests;
 
 public class FactoryServiceTests
 {
-    private readonly ShopifyRestApiCredentials _credentials = new("some-shopify-domain", "some-access-token");
+    private readonly ShopifyApiCredentials _credentials = new("some-shopify-domain", "some-access-token");
 
     [Fact]
     public void FactoryServices_WhenRequestExecutionPolicyIsNotInjected_ShouldCreateService()

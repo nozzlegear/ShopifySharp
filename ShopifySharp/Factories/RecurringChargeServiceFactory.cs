@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IRecurringChargeServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IRecurringChargeService Create(ShopifyRestApiCredentials credentials);
+    IRecurringChargeService Create(ShopifyApiCredentials credentials);
 }
 
 public class RecurringChargeServiceFactory(
@@ -24,7 +24,7 @@ public class RecurringChargeServiceFactory(
     #endif
 ) : IRecurringChargeServiceFactory
 {
-    public virtual IRecurringChargeService Create(ShopifyRestApiCredentials credentials)
+    public virtual IRecurringChargeService Create(ShopifyApiCredentials credentials)
     {
         var service = new RecurringChargeService(credentials.ShopDomain, credentials.AccessToken);
 

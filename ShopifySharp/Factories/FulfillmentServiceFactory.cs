@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IFulfillmentServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IFulfillmentService Create(ShopifyRestApiCredentials credentials);
+    IFulfillmentService Create(ShopifyApiCredentials credentials);
 }
 
 public class FulfillmentServiceFactory(
@@ -24,7 +24,7 @@ public class FulfillmentServiceFactory(
     #endif
 ) : IFulfillmentServiceFactory
 {
-    public virtual IFulfillmentService Create(ShopifyRestApiCredentials credentials)
+    public virtual IFulfillmentService Create(ShopifyApiCredentials credentials)
     {
         var service = new FulfillmentService(credentials.ShopDomain, credentials.AccessToken);
 

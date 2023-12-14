@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IPolicyServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IPolicyService Create(ShopifyRestApiCredentials credentials);
+    IPolicyService Create(ShopifyApiCredentials credentials);
 }
 
 public class PolicyServiceFactory(
@@ -24,7 +24,7 @@ public class PolicyServiceFactory(
     #endif
 ) : IPolicyServiceFactory
 {
-    public virtual IPolicyService Create(ShopifyRestApiCredentials credentials)
+    public virtual IPolicyService Create(ShopifyApiCredentials credentials)
     {
         var service = new PolicyService(credentials.ShopDomain, credentials.AccessToken);
 

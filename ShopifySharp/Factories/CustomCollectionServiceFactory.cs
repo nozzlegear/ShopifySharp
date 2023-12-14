@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICustomCollectionServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICustomCollectionService Create(ShopifyRestApiCredentials credentials);
+    ICustomCollectionService Create(ShopifyApiCredentials credentials);
 }
 
 public class CustomCollectionServiceFactory(
@@ -24,7 +24,7 @@ public class CustomCollectionServiceFactory(
     #endif
 ) : ICustomCollectionServiceFactory
 {
-    public virtual ICustomCollectionService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICustomCollectionService Create(ShopifyApiCredentials credentials)
     {
         var service = new CustomCollectionService(credentials.ShopDomain, credentials.AccessToken);
 

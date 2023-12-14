@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IGraphServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IGraphService Create(ShopifyRestApiCredentials credentials);
+    IGraphService Create(ShopifyApiCredentials credentials);
 }
 
 public class GraphServiceFactory(
@@ -24,7 +24,7 @@ public class GraphServiceFactory(
     #endif
 ) : IGraphServiceFactory
 {
-    public virtual IGraphService Create(ShopifyRestApiCredentials credentials)
+    public virtual IGraphService Create(ShopifyApiCredentials credentials)
     {
         var service = new GraphService(credentials.ShopDomain, credentials.AccessToken);
 

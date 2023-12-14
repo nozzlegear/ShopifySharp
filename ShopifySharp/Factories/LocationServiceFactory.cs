@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ILocationServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ILocationService Create(ShopifyRestApiCredentials credentials);
+    ILocationService Create(ShopifyApiCredentials credentials);
 }
 
 public class LocationServiceFactory(
@@ -24,7 +24,7 @@ public class LocationServiceFactory(
     #endif
 ) : ILocationServiceFactory
 {
-    public virtual ILocationService Create(ShopifyRestApiCredentials credentials)
+    public virtual ILocationService Create(ShopifyApiCredentials credentials)
     {
         var service = new LocationService(credentials.ShopDomain, credentials.AccessToken);
 

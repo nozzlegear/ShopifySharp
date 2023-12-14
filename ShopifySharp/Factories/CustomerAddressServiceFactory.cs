@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface ICustomerAddressServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    ICustomerAddressService Create(ShopifyRestApiCredentials credentials);
+    ICustomerAddressService Create(ShopifyApiCredentials credentials);
 }
 
 public class CustomerAddressServiceFactory(
@@ -24,7 +24,7 @@ public class CustomerAddressServiceFactory(
     #endif
 ) : ICustomerAddressServiceFactory
 {
-    public virtual ICustomerAddressService Create(ShopifyRestApiCredentials credentials)
+    public virtual ICustomerAddressService Create(ShopifyApiCredentials credentials)
     {
         var service = new CustomerAddressService(credentials.ShopDomain, credentials.AccessToken);
 

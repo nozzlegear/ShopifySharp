@@ -13,7 +13,7 @@ namespace ShopifySharp.Factories;
 public interface IDiscountCodeServiceFactory
 {
     // ReSharper disable once UnusedMember.Global
-    IDiscountCodeService Create(ShopifyRestApiCredentials credentials);
+    IDiscountCodeService Create(ShopifyApiCredentials credentials);
 }
 
 public class DiscountCodeServiceFactory(
@@ -24,7 +24,7 @@ public class DiscountCodeServiceFactory(
     #endif
 ) : IDiscountCodeServiceFactory
 {
-    public virtual IDiscountCodeService Create(ShopifyRestApiCredentials credentials)
+    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials)
     {
         var service = new DiscountCodeService(credentials.ShopDomain, credentials.AccessToken);
 
