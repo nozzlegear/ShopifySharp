@@ -1,77 +1,83 @@
-﻿using System;
+﻿// ReSharper disable InconsistentNaming
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
-using System.IO;
 using System.Threading;
 using ShopifySharp.Lists;
 using ShopifySharp.Filters;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
     public abstract class ShopifyService : IShopifyService
     {
+        #nullable enable
+
         public virtual string APIVersion => "2023-07";
 
-        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
-
-        private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
-
-        private HttpClient _Client;
-
-        private IRequestExecutionPolicy _ExecutionPolicy;
-
         protected Uri _ShopUri { get; set; }
-
         protected string _AccessToken { get; set; }
-
         protected virtual bool SupportsAPIVersioning => true;
 
+        private readonly IShopifyDomainUtility _domainUtility = new ShopifyDomainUtility();
+        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+        private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
+        private IRequestExecutionPolicy _ExecutionPolicy;
+        private HttpClient _Client;
+
         /// <summary>
-        /// Creates a new instance of <see cref="ShopifyService" />.
+        /// Creates a new instance of the service using a Shopify shop domain and access token.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         protected ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
-            _ShopUri = BuildShopUri(myShopifyUrl, false);
+            _ShopUri = _domainUtility.BuildShopDomainUri(myShopifyUrl);
             _AccessToken = shopAccessToken;
             _Client = _HttpClientFactory.CreateClient();
             _ExecutionPolicy = _GlobalExecutionPolicy;
         }
 
         /// <summary>
-        /// Attempts to build a shop API <see cref="Uri"/> for the given shop. Will throw a <see cref="ShopifyException"/> if the URL cannot be formatted.
+        /// Creates a new instance of the service using the Shopify shop domain and access token in the <paramref name="credentials"/>.
         /// </summary>
-        /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-        /// <exception cref="ShopifyException">Thrown if the given URL cannot be converted into a well-formed URI.</exception>
-        /// <returns>The shop's API <see cref="Uri"/>.</returns>
-        public static Uri BuildShopUri(string myShopifyUrl, bool withAdminPath)
+        protected ShopifyService(ShopifyApiCredentials credentials)
         {
-            if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
-            {
-                //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.
-                //Try to fix that by adding a scheme and checking again.
-                if (Uri.IsWellFormedUriString("https://" + myShopifyUrl, UriKind.Absolute) == false)
-                {
-                    throw new ShopifyException($"The given {nameof(myShopifyUrl)} cannot be converted into a well-formed URI.");
-                }
+            _ShopUri = _domainUtility.BuildShopDomainUri(credentials.ShopDomain);
+            _AccessToken = credentials.AccessToken;
+            _Client = _HttpClientFactory.CreateClient();
+            _ExecutionPolicy = _GlobalExecutionPolicy;
+        }
 
-                myShopifyUrl = "https://" + myShopifyUrl;
-            }
+        #nullable disable
 
-            var builder = new UriBuilder(myShopifyUrl)
+        /// <summary>
+        /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
+        /// </summary>
+        /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+        /// <param name="withAdminPath">Whether the <c>/admin</c> path should be included in the resulting URI.</param>
+        [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp. Please use the ShopifySharp.Utilities.ShopifyDomainUtility instead.")]
+        // TODO: remove this method after 6-8 weeks
+        public static Uri BuildShopUri(string shopDomain, bool withAdminPath)
+        {
+            var domainUtility = new ShopifyDomainUtility();
+            var shopUri = domainUtility.BuildShopDomainUri(shopDomain);
+
+            if (!withAdminPath)
+                return shopUri;
+
+            var uriBuilder = new UriBuilder(shopUri)
             {
-                Scheme = "https:",
-                Port = 443, //SSL port
-                Path = withAdminPath ? "admin" : ""
+                Path = "admin"
             };
 
-            return builder.Uri;
+            return uriBuilder.Uri;
         }
 
         /// <summary>
@@ -116,7 +122,7 @@ namespace ShopifySharp
         {
             var ub = new UriBuilder(_ShopUri)
             {
-                Scheme = "https:",
+                Scheme = Uri.UriSchemeHttps,
                 Port = 443,
                 Path = SupportsAPIVersioning ? $"admin/api/{APIVersion}/{path}" : $"admin/{path}"
             };
