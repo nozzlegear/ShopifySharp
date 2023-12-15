@@ -22,10 +22,7 @@ namespace ShopifySharp
 
         public override string APIVersion => _apiVersion ?? base.APIVersion;
 
-        /// <summary>
-        /// Creates a new instance of <see cref="GraphService" />.
-        /// </summary>
-        public PartnerService(long organizationId, string accessToken, string apiVersion = null) : base("partners.shopify.com", accessToken) 
+        public PartnerService(long organizationId, string accessToken, string apiVersion = null) : base("partners.shopify.com", accessToken)
         {
             _organizationId = organizationId;
             _apiVersion = apiVersion;
