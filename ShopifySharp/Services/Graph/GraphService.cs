@@ -115,16 +115,20 @@ namespace ShopifySharp
         protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
         {
             var res = JToken.Parse(requestResult.RawResult);
+
             if (res["errors"] != null)
             {
                 var errorList = new List<string>();
-                
+
                 foreach (var error in res["errors"])
                 {
-                    errorList.Add(error["message"].ToString());
+                    if (error["message"] is not null)
+                    {
+                        errorList.Add(error["message"].ToString());
+                    }
                 }
 
-                var message = res["errors"].FirstOrDefault()["message"].ToString();
+                var message = res["errors"].FirstOrDefault()?["message"]?.ToString();
 
                 var requestIdHeader = requestResult.Response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
                 var requestId = requestIdHeader.Value?.FirstOrDefault();
