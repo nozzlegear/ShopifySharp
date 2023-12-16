@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Infrastructure;
 
@@ -25,9 +26,12 @@ public interface IShopifyDomainUtility
     Task<bool> IsValidShopDomainAsync(string shopDomain);
 }
 
-public class ShopifyDomainUtility(IHttpClientFactory? httpClientFactory = null) : IShopifyDomainUtility
+public class ShopifyDomainUtility : IShopifyDomainUtility
 {
-    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? new InternalHttpClientFactory();
+    // TODO: use DI to get an IHttpClient from the constructor here
+    private readonly IHttpClientFactory _httpClientFactory = new InternalHttpClientFactory();
+    private readonly Version? _assemblyVersion = typeof(IShopifyDomainUtility).GetTypeInfo().Assembly.GetName().Version;
+    private string UserAgent => $"ShopifySharp v{_assemblyVersion} (https://github.com/nozzlegear/shopifysharp)";
 
     /// <inheritdoc />
     public Uri BuildShopDomainUri(string shopDomain)
@@ -47,15 +51,10 @@ public class ShopifyDomainUtility(IHttpClientFactory? httpClientFactory = null) 
     /// <inheritdoc />
     public async Task<bool> IsValidShopDomainAsync(string shopDomain)
     {
-        var uri = BuildShopDomainUri(shopDomain);
-
-        // Use an HttpClientHandler that disallows redirects, as Shopify will auto-redirect requests to the home page or admin login URL
-        using var handler = new HttpClientHandler();
-        handler.AllowAutoRedirect = false;
+        var requestUri = BuildShopDomainUri(shopDomain);
         var client = _httpClientFactory.CreateClient();
-        using var msg = new HttpRequestMessage(HttpMethod.Head, uri);
-        var version = typeof(IShopifyDomainUtility).GetTypeInfo().Assembly.GetName().Version;
-        msg.Headers.Add("User-Agent", $"ShopifySharp v{version} (https://github.com/nozzlegear/shopifysharp)");
+        using var msg = new HttpRequestMessage(HttpMethod.Head, requestUri);
+        msg.Headers.Add("User-Agent", UserAgent);
 
         try
         {

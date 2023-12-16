@@ -149,23 +149,10 @@ public record RefreshAccessTokenOptions
 }
 #endif
 
-public class ShopifyOauthUtility : IShopifyOauthUtility
+public class ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null) : IShopifyOauthUtility
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IShopifyDomainUtility _domainUtility;
-
-    public ShopifyOauthUtility()
-    {
-        _httpClientFactory = new InternalHttpClientFactory();
-        _domainUtility = new ShopifyDomainUtility(_httpClientFactory);
-    }
-
-    public ShopifyOauthUtility(IShopifyDomainUtility domainUtility, IHttpClientFactory httpClientFactory)
-    {
-        _domainUtility = domainUtility;
-        _httpClientFactory = httpClientFactory;
-    }
-
+    private readonly IHttpClientFactory _httpClientFactory = new InternalHttpClientFactory();
+    private readonly IShopifyDomainUtility _domainUtility = domainUtility ?? new ShopifyDomainUtility();
 
     /// <inheritdoc />
     public Uri BuildAuthorizationUrl(
