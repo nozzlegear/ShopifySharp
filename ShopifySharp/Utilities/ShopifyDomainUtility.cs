@@ -1,8 +1,10 @@
+#nullable enable
 using System;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Utilities;
 
@@ -23,8 +25,10 @@ public interface IShopifyDomainUtility
     Task<bool> IsValidShopDomainAsync(string shopDomain);
 }
 
-public class ShopifyDomainUtility : IShopifyDomainUtility
+public class ShopifyDomainUtility(IHttpClientFactory? httpClientFactory = null) : IShopifyDomainUtility
 {
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory ?? new InternalHttpClientFactory();
+
     /// <inheritdoc />
     public Uri BuildShopDomainUri(string shopDomain)
     {
@@ -48,7 +52,7 @@ public class ShopifyDomainUtility : IShopifyDomainUtility
         // Use an HttpClientHandler that disallows redirects, as Shopify will auto-redirect requests to the home page or admin login URL
         using var handler = new HttpClientHandler();
         handler.AllowAutoRedirect = false;
-        using var client = new HttpClient(handler);
+        var client = _httpClientFactory.CreateClient();
         using var msg = new HttpRequestMessage(HttpMethod.Head, uri);
         var version = typeof(IShopifyDomainUtility).GetTypeInfo().Assembly.GetName().Version;
         msg.Headers.Add("User-Agent", $"ShopifySharp v{version} (https://github.com/nozzlegear/shopifysharp)");

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NSubstitute;
@@ -20,12 +21,14 @@ public class ShopifyOauthUtilityTests
     private const string ClientId = "some-client-id";
 
     private IShopifyDomainUtility _shopifyDomainUtility;
+    private IHttpClientFactory _httpClientFactory;
     private IShopifyOauthUtility _utility;
 
     public ShopifyOauthUtilityTests()
     {
         _shopifyDomainUtility = Substitute.For<IShopifyDomainUtility>();
-        _utility = new ShopifyOauthUtility(_shopifyDomainUtility);
+        _httpClientFactory = Substitute.For<IHttpClientFactory>();
+        _utility = new ShopifyOauthUtility(_shopifyDomainUtility, _httpClientFactory);
     }
 
     [Theory]

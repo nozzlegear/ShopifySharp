@@ -149,9 +149,23 @@ public record RefreshAccessTokenOptions
 }
 #endif
 
-public class ShopifyOauthUtility(IShopifyDomainUtility domainUtility) : IShopifyOauthUtility
+public class ShopifyOauthUtility : IShopifyOauthUtility
 {
-    private readonly IShopifyDomainUtility _domainUtility = domainUtility;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IShopifyDomainUtility _domainUtility;
+
+    public ShopifyOauthUtility()
+    {
+        _httpClientFactory = new InternalHttpClientFactory();
+        _domainUtility = new ShopifyDomainUtility(_httpClientFactory);
+    }
+
+    public ShopifyOauthUtility(IShopifyDomainUtility domainUtility, IHttpClientFactory httpClientFactory)
+    {
+        _domainUtility = domainUtility;
+        _httpClientFactory = httpClientFactory;
+    }
+
 
     /// <inheritdoc />
     public Uri BuildAuthorizationUrl(
@@ -280,7 +294,7 @@ public class ShopifyOauthUtility(IShopifyDomainUtility domainUtility) : IShopify
             access_token = existingStoreAccessToken
         });
 
-        using var client = new HttpClient();
+        using var client = _httpClientFactory.CreateClient();
         using var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
         var request = client.SendAsync(msg);
         var response = await request;
