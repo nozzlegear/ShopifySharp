@@ -33,9 +33,10 @@ public class ShopifyDomainUtility : IShopifyDomainUtility
             Scheme = Uri.UriSchemeHttps,
             // SSL port
             Port = 443,
-            Path = string.Empty
+            Path = string.Empty,
+            Fragment = string.Empty,
+            Query = string.Empty
         };
-
         return builder.Uri;
     }
 
