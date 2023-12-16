@@ -13,7 +13,7 @@ namespace ShopifySharp.Utilities;
 public interface IShopifyOauthUtility
 {
     /// <summary>
-    /// Builds an authorization URL for Shopify OAuth integration.
+    /// Builds an OAuth authorization URL for Shopify OAuth integration.
     /// </summary>
     /// <param name="scopes">An array of <see cref="AuthorizationScope"/> — the permissions that your app needs to run.</param>
     /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
@@ -31,7 +31,7 @@ public interface IShopifyOauthUtility
     );
 
     /// <summary>
-    /// Builds an authorization URL for Shopify OAuth integration.
+    /// Builds an OAuth authorization URL for Shopify OAuth integration.
     /// </summary>
     /// <param name="scopes">An array of Shopify permission strings, e.g. 'read_orders' or 'write_script_tags'. These are the permissions that your app needs to run.</param>
     /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
@@ -48,6 +48,13 @@ public interface IShopifyOauthUtility
         IEnumerable<string>? grants = null
     );
 
+    #if NET8_0_OR_GREATER
+    /// <summary>
+    /// Builds an OAuth authorization URL for Shopify OAuth integration.
+    /// </summary>
+    /// <param name="options">Options for building the OAuth URL.</param>
+    Uri BuildAuthorizationUrl(AuthorizationUrlOptions options);
+    #endif
     /// <summary>
     /// Authorizes an application installation, generating an access token for the given shop.
     /// </summary>
@@ -80,6 +87,21 @@ public interface IShopifyOauthUtility
     );
 }
 
+#if NET8_0_OR_GREATER
+public record RefreshAccessTokenOptions
+{
+    /// The store's *.myshopify.com url
+    public string ShopDomain { get; init; }
+    /// Your app's public Client ID, also known as its public API key.
+    public string ClientId { get; init; }
+    /// Your app's Client Secret, also known as its secret API key.
+    public string ClientSecret { get; init; }
+    /// The app's refresh token
+    public string RefreshToken { get; init; }
+    /// The existing store access token
+    public string ExistingStoreAccessToken { get; init; }
+}
+#endif
 public class ShopifyOauthUtility(IShopifyDomainUtility domainUtility) : IShopifyOauthUtility
 {
     private readonly IShopifyDomainUtility _domainUtility = domainUtility;
@@ -134,6 +156,19 @@ public class ShopifyOauthUtility(IShopifyDomainUtility domainUtility) : IShopify
 
         return builder.Uri;
     }
+
+    #if NET8_0_OR_GREATER
+    /// <inheritdoc />
+    public Uri BuildAuthorizationUrl(AuthorizationUrlOptions options) =>
+        BuildAuthorizationUrl(
+            options.Scopes,
+            options.ShopDomain,
+            options.ClientId,
+            options.RedirectUrl,
+            options.State,
+            options.Grants
+        );
+    #endif
 
     /// <inheritdoc />
     public async Task<AuthorizationResult> AuthorizeAsync(
