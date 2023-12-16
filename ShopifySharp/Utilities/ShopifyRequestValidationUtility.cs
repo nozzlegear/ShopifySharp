@@ -3,7 +3,6 @@ using System;
 using System.Buffers;
 #endif
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -42,8 +41,7 @@ public interface IShopifyRequestValidationUtility
     bool IsAuthenticRequest(string querystring, string shopifySecretKey);
 
     /// <summary>
-    /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
-    /// except that proxy requests use HMACSHA256 rather than MD5.
+    /// Determines if an incoming proxy page request is authentic.
     /// </summary>
     /// <param name="querystring">The collection of querystring parameters from the request. Hint: use Request.QueryString if you're calling this from an ASP.NET MVC controller.</param>
     /// <param name="shopifySecretKey">Your app's secret key.</param>
@@ -51,8 +49,7 @@ public interface IShopifyRequestValidationUtility
     bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey);
 
     /// <summary>
-    /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="AuthorizationService.IsAuthenticRequest(string,string)"/>,
-    /// except that proxy requests use HMACSHA256 rather than MD5.
+    /// Determines if an incoming proxy page request is authentic.
     /// </summary>
     /// <param name="querystring">A dictionary containing the keys and values from the request's querystring.</param>
     /// <param name="shopifySecretKey">Your app's secret key.</param>
@@ -60,8 +57,7 @@ public interface IShopifyRequestValidationUtility
     bool IsAuthenticProxyRequest(IDictionary<string, string> querystring, string shopifySecretKey);
 
     /// <summary>
-    /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
-    /// except that proxy requests use HMACSHA256 rather than MD5.
+    /// Determines if an incoming proxy page request is authentic.
     /// </summary>
     /// <param name="querystring">The request's raw querystring.</param>
     /// <param name="shopifySecretKey">Your app's secret key.</param>
@@ -110,6 +106,7 @@ public class ShopifyRequestValidationUtility : IShopifyRequestValidationUtility
     /// <inheritdoc />
     public bool IsAuthenticRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
     {
+        querystring = querystring.ToArray();
         // To calculate HMAC signature:
         // 1. Cast querystring to KVP pairs.
         // 2. Remove `signature` and `hmac` keys.
@@ -123,7 +120,7 @@ public class ShopifyRequestValidationUtility : IShopifyRequestValidationUtility
         // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
         var hmacValues = querystring.FirstOrDefault(kvp => kvp.Key == "hmac").Value;
 
-        if (string.IsNullOrEmpty(hmacValues) || hmacValues.Count() < 1)
+        if (string.IsNullOrEmpty(hmacValues) || hmacValues.Count == 0)
         {
             return false;
         }
@@ -157,11 +154,13 @@ public class ShopifyRequestValidationUtility : IShopifyRequestValidationUtility
     /// <inheritdoc />
     public bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
     {
+        querystring = querystring.ToArray();
+
         // To calculate signature, order all querystring parameters by alphabetical (exclude the
         // signature itself). Then, hash it with the secret key.
         var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key == "signature").Value;
 
-        if (string.IsNullOrEmpty(signatureValues) || signatureValues.Count() < 1)
+        if (string.IsNullOrEmpty(signatureValues) || signatureValues.Count < 1)
         {
             return false;
         }
@@ -307,7 +306,7 @@ public class ShopifyRequestValidationUtility : IShopifyRequestValidationUtility
 
     private static string EncodeQuery(string key, StringValues values, bool isKey)
     {
-        string result = null;
+        string result;
 
         if (isKey)
         {
