@@ -8,6 +8,7 @@ namespace ShopifySharp
 {
     public class ShopifyException : Exception
     {
+        [Obsolete("This property is deprecated and will be removed in a future version of ShopifySharp.")]
         public HttpResponseMessage HttpResponse { get; }
 
         public HttpStatusCode HttpStatusCode { get; }
