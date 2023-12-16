@@ -22,8 +22,9 @@ public interface IShopifyDomainUtility
     /// <p>**Warning**: this method of validation is not officially supported by Shopify and could break at any time.</p>
     /// </summary>
     /// <param name="shopDomain">The shop domain to check. This should be a *.myshopify.com domain.</param>
-    /// <returns>A boolean indicating whether the URL is valid.</returns>
-    Task<bool> IsValidShopDomainAsync(string shopDomain);
+    /// <param name="cancellationToken">A cancellation token which can cancel the request.</param>
+    /// <returns>Returns true if the shop domain is a Shopify store.</returns>
+    Task<bool> IsValidShopDomainAsync(string shopDomain, CancellationToken cancellationToken = default);
 }
 
 public class ShopifyDomainUtility : IShopifyDomainUtility
@@ -49,7 +50,7 @@ public class ShopifyDomainUtility : IShopifyDomainUtility
     }
 
     /// <inheritdoc />
-    public async Task<bool> IsValidShopDomainAsync(string shopDomain)
+    public async Task<bool> IsValidShopDomainAsync(string shopDomain, CancellationToken cancellationToken = default)
     {
         var requestUri = BuildShopDomainUri(shopDomain);
         var client = _httpClientFactory.CreateClient();
@@ -58,8 +59,10 @@ public class ShopifyDomainUtility : IShopifyDomainUtility
 
         try
         {
-            var response = await client.SendAsync(msg);
-            return response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
+            var response = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var hasShopIdHeader = response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
+
+            return hasShopIdHeader;
         }
         catch (HttpRequestException)
         {
