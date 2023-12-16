@@ -110,86 +110,86 @@ public class ShopifyRequestValidationUtility : IShopifyRequestValidationUtility
     /// <inheritdoc />
     public bool IsAuthenticRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
     {
-            // To calculate HMAC signature:
-            // 1. Cast querystring to KVP pairs.
-            // 2. Remove `signature` and `hmac` keys.
-            // 3. Replace & with %26, % with %25 in keys and values.
-            // 4. Replace = with %3D in keys only.
-            // 5. Join each key and value with = (key=value).
-            // 6. Sort kvps alphabetically.
-            // 7. Join kvps together with & (key=value&key=value&key=value).
-            // 8. Compute the kvps with an HMAC-SHA256 using the secret key.
-            // 9. Request is authentic if the computed string equals the `hash` in query string.
-            // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
-            var hmacValues = querystring.FirstOrDefault(kvp => kvp.Key == "hmac").Value;
+        // To calculate HMAC signature:
+        // 1. Cast querystring to KVP pairs.
+        // 2. Remove `signature` and `hmac` keys.
+        // 3. Replace & with %26, % with %25 in keys and values.
+        // 4. Replace = with %3D in keys only.
+        // 5. Join each key and value with = (key=value).
+        // 6. Sort kvps alphabetically.
+        // 7. Join kvps together with & (key=value&key=value&key=value).
+        // 8. Compute the kvps with an HMAC-SHA256 using the secret key.
+        // 9. Request is authentic if the computed string equals the `hash` in query string.
+        // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
+        var hmacValues = querystring.FirstOrDefault(kvp => kvp.Key == "hmac").Value;
 
-            if (string.IsNullOrEmpty(hmacValues) || hmacValues.Count() < 1)
-            {
-                return false;
-            }
+        if (string.IsNullOrEmpty(hmacValues) || hmacValues.Count() < 1)
+        {
+            return false;
+        }
 
-            string hmac = hmacValues.First();
-            string kvps = PrepareQuerystring(querystring, "&");
-            var hmacHasher = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
-            var hash = hmacHasher.ComputeHash(Encoding.UTF8.GetBytes(string.Join("&", kvps)));
+        string hmac = hmacValues.First();
+        string kvps = PrepareQuerystring(querystring, "&");
+        var hmacHasher = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+        var hash = hmacHasher.ComputeHash(Encoding.UTF8.GetBytes(string.Join("&", kvps)));
 
-            //Convert bytes back to string, replacing dashes, to get the final signature.
-            var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");
+        //Convert bytes back to string, replacing dashes, to get the final signature.
+        var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");
 
-            //Request is valid if the calculated signature matches the signature from the querystring.
-            return calculatedSignature.ToUpper() == hmac.ToUpper();
+        //Request is valid if the calculated signature matches the signature from the querystring.
+        return calculatedSignature.ToUpper() == hmac.ToUpper();
     }
 
     /// <inheritdoc />
     public bool IsAuthenticRequest(IDictionary<string, string> querystring, string shopifySecretKey)
     {
-            var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
+        var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
 
-            return IsAuthenticRequest(qs, shopifySecretKey);
+        return IsAuthenticRequest(qs, shopifySecretKey);
     }
 
     /// <inheritdoc />
     public bool IsAuthenticRequest(string querystring, string shopifySecretKey)
     {
-            return IsAuthenticRequest(ParseRawQuerystring(querystring), shopifySecretKey);
+        return IsAuthenticRequest(ParseRawQuerystring(querystring), shopifySecretKey);
     }
 
     /// <inheritdoc />
     public bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey)
     {
-            // To calculate signature, order all querystring parameters by alphabetical (exclude the
-            // signature itself). Then, hash it with the secret key.
-            var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key == "signature").Value;
+        // To calculate signature, order all querystring parameters by alphabetical (exclude the
+        // signature itself). Then, hash it with the secret key.
+        var signatureValues = querystring.FirstOrDefault(kvp => kvp.Key == "signature").Value;
 
-            if (string.IsNullOrEmpty(signatureValues) || signatureValues.Count() < 1)
-            {
-                return false;
-            }
+        if (string.IsNullOrEmpty(signatureValues) || signatureValues.Count() < 1)
+        {
+            return false;
+        }
 
-            string signature = signatureValues.First();
-            string kvps = PrepareQuerystring(querystring, string.Empty);
-            var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(string.Join(null, kvps)));
+        string signature = signatureValues.First();
+        string kvps = PrepareQuerystring(querystring, string.Empty);
+        var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(string.Join(null, kvps)));
 
-            //Convert bytes back to string, replacing dashes, to get the final signature.
-            var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");
+        //Convert bytes back to string, replacing dashes, to get the final signature.
+        var calculatedSignature = BitConverter.ToString(hash).Replace("-", "");
 
-            //Request is valid if the calculated signature matches the signature from the querystring.
-            return calculatedSignature.ToUpper() == signature.ToUpper();
+        //Request is valid if the calculated signature matches the signature from the querystring.
+        return calculatedSignature.ToUpper() == signature.ToUpper();
     }
 
     /// <inheritdoc />
     public bool IsAuthenticProxyRequest(IDictionary<string, string> querystring, string shopifySecretKey)
     {
-            var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
+        var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
 
-            return IsAuthenticProxyRequest(qs, shopifySecretKey);
+        return IsAuthenticProxyRequest(qs, shopifySecretKey);
     }
 
     /// <inheritdoc />
     public bool IsAuthenticProxyRequest(string querystring, string shopifySecretKey)
     {
-            return IsAuthenticProxyRequest(ParseRawQuerystring(querystring), shopifySecretKey);
+        return IsAuthenticProxyRequest(ParseRawQuerystring(querystring), shopifySecretKey);
     }
 
     /// <inheritdoc />
@@ -209,85 +209,85 @@ public class ShopifyRequestValidationUtility : IShopifyRequestValidationUtility
     /// <inheritdoc />
     public bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, string requestBody, string shopifySecretKey)
     {
-            var hmacHeaderValues = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value;
+        var hmacHeaderValues = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value;
 
-            if (string.IsNullOrEmpty(hmacHeaderValues) || hmacHeaderValues.Count() < 1)
-            {
-                return false;
-            }
+        if (string.IsNullOrEmpty(hmacHeaderValues) || hmacHeaderValues.Count() < 1)
+        {
+            return false;
+        }
 
-            //Compute a hash from the apiKey and the request body
-            string hmacHeader = hmacHeaderValues.First();
-            HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
-            string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
+        //Compute a hash from the apiKey and the request body
+        string hmacHeader = hmacHeaderValues.First();
+        HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+        string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
 
-            //Webhook is valid if computed hash matches the header hash
-            return hash == hmacHeader;
+        //Webhook is valid if computed hash matches the header hash
+        return hash == hmacHeader;
     }
 
     /// <inheritdoc />
     public bool IsAuthenticWebhook(HttpRequestHeaders requestHeaders, string requestBody, string shopifySecretKey)
     {
-            var hmacHeaderValue = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
+        var hmacHeaderValue = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
 
-            if (string.IsNullOrEmpty(hmacHeaderValue))
-            {
-                return false;
-            }
+        if (string.IsNullOrEmpty(hmacHeaderValue))
+        {
+            return false;
+        }
 
-            //Compute a hash from the apiKey and the request body
-            string hmacHeader = hmacHeaderValue;
-            HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
-            string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
+        //Compute a hash from the apiKey and the request body
+        string hmacHeader = hmacHeaderValue;
+        HMACSHA256 hmac = new HMACSHA256(Encoding.UTF8.GetBytes(shopifySecretKey));
+        string hash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
 
-            //Webhook is valid if computed hash matches the header hash
-            return hash == hmacHeader;
+        //Webhook is valid if computed hash matches the header hash
+        return hash == hmacHeader;
     }
 
     #if NET6_0_OR_GREATER
     /// <inheritdoc />
     public bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, ReadOnlyMemory<byte> requestBody, ReadOnlyMemory<byte> shopifySecretKey)
     {
-            var hmacHeaderValue = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
-            if (string.IsNullOrEmpty(hmacHeaderValue))
+        var hmacHeaderValue = requestHeaders.FirstOrDefault(kvp => kvp.Key.Equals("X-Shopify-Hmac-SHA256", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
+        if (string.IsNullOrEmpty(hmacHeaderValue))
+        {
+            return false;
+        }
+
+        var hmacHeaderBytes = ArrayPool<byte>.Shared.Rent(32);
+        var hmacBytes = ArrayPool<byte>.Shared.Rent(32);
+        try
+        {
+            //Compute a hash from the apiKey and the request body
+            if (!HMACSHA256.TryHashData(shopifySecretKey.Span, requestBody.Span, hmacBytes, out var bytesWritten))
             {
                 return false;
             }
 
-            var hmacHeaderBytes = ArrayPool<byte>.Shared.Rent(32);
-            var hmacBytes = ArrayPool<byte>.Shared.Rent(32);
-            try
+            if (bytesWritten != 32)
             {
-                //Compute a hash from the apiKey and the request body
-                if (!HMACSHA256.TryHashData(shopifySecretKey.Span, requestBody.Span, hmacBytes, out var bytesWritten))
-                {
-                    return false;
-                }
-
-                if (bytesWritten != 32)
-                {
-                    return false;
-                }
-
-                var hmacBytesSpan = new ReadOnlyMemory<byte>(hmacBytes, 0, bytesWritten);
-                if (!Convert.TryFromBase64String(hmacHeaderValue, hmacHeaderBytes, out var headerBytesWrittern))
-                {
-                    return false;
-                }
-
-                if (headerBytesWrittern != 32)
-                {
-                    return false;
-                }
-
-                //Webhook is valid if computed hash matches the header hash
-                return hmacBytesSpan.Span.SequenceEqual(new Span<byte>(hmacHeaderBytes, 0, headerBytesWrittern));
+                return false;
             }
-            finally
+
+            var hmacBytesSpan = new ReadOnlyMemory<byte>(hmacBytes, 0, bytesWritten);
+            if (!Convert.TryFromBase64String(hmacHeaderValue, hmacHeaderBytes, out var headerBytesWrittern))
             {
-                ArrayPool<byte>.Shared.Return(hmacBytes);
-                ArrayPool<byte>.Shared.Return(hmacHeaderBytes);
+                return false;
             }
+
+            if (headerBytesWrittern != 32)
+            {
+                return false;
+            }
+
+            //Webhook is valid if computed hash matches the header hash
+            return hmacBytesSpan.Span.SequenceEqual(new Span<byte>(hmacHeaderBytes, 0, headerBytesWrittern));
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(hmacBytes);
+            ArrayPool<byte>.Shared.Return(hmacHeaderBytes);
+        }
     }
     #endif
 
