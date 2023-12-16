@@ -190,6 +190,6 @@ namespace ShopifySharp
         /// <param name="existingStoreAccessToken">The existing store access token</param>
         /// <returns></returns>
         public static Task<AuthorizationResult> RefreshAccessToken(string myShopifyUrl, string clientId, string clientSecret, string refreshToken, string existingStoreAccessToken) =>
-            ShopifyOauthUtility.RefreshAccessToken(myShopifyUrl, clientId, clientSecret, refreshToken, existingStoreAccessToken);
+            ShopifyOauthUtility.RefreshAccessTokenAsync(myShopifyUrl, clientId, clientSecret, refreshToken, existingStoreAccessToken);
     }
 }

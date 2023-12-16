@@ -78,7 +78,7 @@ public interface IShopifyOauthUtility
     /// <param name="clientSecret">Your app's Client Secret, also known as its secret API key.</param>
     /// <param name="refreshToken">The app's refresh token</param>
     /// <param name="existingStoreAccessToken">The existing store access token</param>
-    Task<AuthorizationResult> RefreshAccessToken(
+    Task<AuthorizationResult> RefreshAccessTokenAsync(
         string shopDomain,
         string clientId,
         string clientSecret,
@@ -202,7 +202,7 @@ public class ShopifyOauthUtility(IShopifyDomainUtility domainUtility) : IShopify
     }
 
     /// <inheritdoc />
-    public async Task<AuthorizationResult> RefreshAccessToken(
+    public async Task<AuthorizationResult> RefreshAccessTokenAsync(
         string shopDomain,
         string clientId,
         string clientSecret,
