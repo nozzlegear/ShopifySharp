@@ -8,6 +8,7 @@ using System.IO;
 using Microsoft.Extensions.Primitives;
 using System.Net.Http.Headers;
 using ShopifySharp.Enums;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp
@@ -15,9 +16,17 @@ namespace ShopifySharp
     [Obsolete("The static AuthorizationService is obsolete and will be removed in a future version of ShopifySharp. Please use the ShopifyOauthUtility, ShopifyRequestValidationUtility or ShopifyDomainUtility classes instead.")]
     public static class AuthorizationService
     {
-        private static readonly IShopifyDomainUtility ShopifyDomainUtility = new ShopifyDomainUtility();
-        private static readonly IShopifyOauthUtility ShopifyOauthUtility = new ShopifyOauthUtility(ShopifyDomainUtility);
-        private static readonly IShopifyRequestValidationUtility ShopifyRequestValidationUtility = new ShopifyRequestValidationUtility();
+        private static readonly IShopifyDomainUtility ShopifyDomainUtility;
+        private static readonly IShopifyOauthUtility ShopifyOauthUtility;
+        private static readonly IShopifyRequestValidationUtility ShopifyRequestValidationUtility;
+
+        static AuthorizationService()
+        {
+            var httpClientFactory = new InternalHttpClientFactory();
+            ShopifyDomainUtility = new ShopifyDomainUtility(httpClientFactory);
+            ShopifyOauthUtility = new ShopifyOauthUtility(ShopifyDomainUtility, httpClientFactory);
+            ShopifyRequestValidationUtility = new ShopifyRequestValidationUtility();
+        }
 
         public static bool IsAuthenticRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string shopifySecretKey) =>
             ShopifyRequestValidationUtility.IsAuthenticRequest(querystring, shopifySecretKey);
