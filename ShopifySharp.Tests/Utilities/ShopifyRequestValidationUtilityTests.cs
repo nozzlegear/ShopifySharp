@@ -10,6 +10,7 @@ using Xunit;
 namespace ShopifySharp.Tests.Utilities;
 
 [TestSubject(typeof(ShopifyRequestValidationUtility))]
+[Trait("Category", "ShopifyRequestValidationUtility")]
 public class ShopifyRequestValidationUtilityTests
 {
     private readonly string _secretKey = Utils.SecretKey;

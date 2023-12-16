@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using JetBrains.Annotations;
 using NSubstitute;
 using ShopifySharp.Enums;
 using ShopifySharp.Utilities;
@@ -10,6 +11,8 @@ using Xunit;
 
 namespace ShopifySharp.Tests.Utilities;
 
+[TestSubject(typeof(ShopifyOauthUtility))]
+[Trait("Category", "ShopifyOauthUtility")]
 public class ShopifyOauthUtilityTests
 {
     private const string ShopDomain = "example.myshopify.com";

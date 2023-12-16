@@ -8,6 +8,7 @@ using FluentAssertions;
 namespace ShopifySharp.Tests.Utilities;
 
 [TestSubject(typeof(ShopifyDomainUtility))]
+[Trait("Category", "ShopifyDomainUtility")]
 public class ShopifyDomainUtilityTest
 {
     private readonly ShopifyDomainUtility _utility = new();
