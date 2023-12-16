@@ -28,7 +28,7 @@ namespace ShopifySharp
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
         private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
-        private readonly IShopifyDomainUtility _domainUtility = new ShopifyDomainUtility(_HttpClientFactory);
+        private readonly IShopifyDomainUtility _domainUtility = new ShopifyDomainUtility();
         private IRequestExecutionPolicy _ExecutionPolicy;
         private HttpClient _Client;
 

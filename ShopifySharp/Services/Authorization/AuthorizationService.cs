@@ -8,7 +8,6 @@ using System.IO;
 using Microsoft.Extensions.Primitives;
 using System.Net.Http.Headers;
 using ShopifySharp.Enums;
-using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp
@@ -16,15 +15,14 @@ namespace ShopifySharp
     [Obsolete("The static AuthorizationService is obsolete and will be removed in a future version of ShopifySharp. Please use the ShopifyOauthUtility, ShopifyRequestValidationUtility or ShopifyDomainUtility classes instead.")]
     public static class AuthorizationService
     {
-        private static readonly IShopifyDomainUtility ShopifyDomainUtility;
-        private static readonly IShopifyOauthUtility ShopifyOauthUtility;
-        private static readonly IShopifyRequestValidationUtility ShopifyRequestValidationUtility;
+        private static readonly ShopifyDomainUtility ShopifyDomainUtility;
+        private static readonly ShopifyOauthUtility ShopifyOauthUtility;
+        private static readonly ShopifyRequestValidationUtility ShopifyRequestValidationUtility;
 
         static AuthorizationService()
         {
-            var httpClientFactory = new InternalHttpClientFactory();
-            ShopifyDomainUtility = new ShopifyDomainUtility(httpClientFactory);
-            ShopifyOauthUtility = new ShopifyOauthUtility(ShopifyDomainUtility, httpClientFactory);
+            ShopifyDomainUtility = new ShopifyDomainUtility();
+            ShopifyOauthUtility = new ShopifyOauthUtility(ShopifyDomainUtility);
             ShopifyRequestValidationUtility = new ShopifyRequestValidationUtility();
         }
 
