@@ -3,8 +3,11 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using ShopifySharp.Enums;
+using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Utilities;
 using Xunit;
 
@@ -18,14 +21,7 @@ public class ShopifyOauthUtilityTests
     private const string RedirectUrl = "https://example.com/app";
     private const string ClientId = "some-client-id";
 
-    private IShopifyDomainUtility _shopifyDomainUtility;
-    private IShopifyOauthUtility _utility;
-
-    public ShopifyOauthUtilityTests()
-    {
-        _shopifyDomainUtility = Substitute.For<IShopifyDomainUtility>();
-        _utility = new ShopifyOauthUtility(_shopifyDomainUtility);
-    }
+    private ShopifyOauthUtility? _utility;
 
     [Theory]
     [InlineData(null, null)]
@@ -35,11 +31,8 @@ public class ShopifyOauthUtilityTests
     public void BuildAuthorizationUrl_WhenGivenStringScopes_ReturnsTheUrl(string? state, string[]? grants)
     {
         // Setup
+        _utility = new ShopifyOauthUtility();
         var scopes = new[] { "some-permission-1", "some-permission-2" };
-
-        // Mock
-        _shopifyDomainUtility.BuildShopDomainUri(ShopDomain)
-            .Returns(new Uri(Uri.UriSchemeHttps + Uri.SchemeDelimiter + ShopDomain, UriKind.Absolute));
 
         // Act
         var result = _utility.BuildAuthorizationUrl(scopes, ShopDomain, ClientId, RedirectUrl, state, grants);
@@ -73,12 +66,9 @@ public class ShopifyOauthUtilityTests
     public void Builds_Authorization_Urls_With_Enums(string? state, string[]? grants)
     {
         // Setup
+        _utility = new ShopifyOauthUtility();
         string[] expectedEnumStrings = ["read_customers", "write_customers"];
         AuthorizationScope[] scopes = [ AuthorizationScope.ReadCustomers, AuthorizationScope.WriteCustomers ];
-
-        // Mock
-        _shopifyDomainUtility.BuildShopDomainUri(ShopDomain)
-            .Returns(new Uri(Uri.UriSchemeHttps + Uri.SchemeDelimiter + ShopDomain, UriKind.Absolute));
 
         // Act
         var result = _utility.BuildAuthorizationUrl(scopes, ShopDomain, ClientId, RedirectUrl, state, grants);
@@ -113,11 +103,8 @@ public class ShopifyOauthUtilityTests
     public void BuildAuthorizationUrl_WhenGivenAuthorizationUrlOptions_ReturnsTheUrl(string? state, string[]? grants)
     {
         // Setup
+        _utility = new ShopifyOauthUtility();
         var scopes = new[] { "some-permission-1", "some-permission-2" };
-
-        // Mock
-        _shopifyDomainUtility.BuildShopDomainUri(ShopDomain)
-            .Returns(new Uri(Uri.UriSchemeHttps + Uri.SchemeDelimiter + ShopDomain, UriKind.Absolute));
 
         // Act
         var result = _utility.BuildAuthorizationUrl(new AuthorizationUrlOptions
@@ -151,4 +138,25 @@ public class ShopifyOauthUtilityTests
             result.Query.Should().NotContain("grant_options[]=");
     }
     #endif
+
+    [Fact]
+    public void ShopifyOauthUtility_ShouldUseDomainUtilityFromDependencyInjection()
+    {
+        // Setup
+        IServiceCollection container = new ServiceCollection();
+        var domainUtility = Substitute.For<IShopifyDomainUtility>();
+        container.AddSingleton(domainUtility);
+        container.AddSingleton<ShopifyOauthUtility>();
+
+        // Mock
+        domainUtility.BuildShopDomainUri(ShopDomain)
+            .Throws<TestException>();
+
+        // Act
+        _utility = container.BuildServiceProvider().GetService<ShopifyOauthUtility>()!;
+        var act = () => _utility.BuildAuthorizationUrl([ "some-scope" ], ShopDomain, ClientId, RedirectUrl, "some-state", [ "some-grant" ]);
+
+        // Assert
+        act.Should().Throw<TestException>();
+    }
 }
