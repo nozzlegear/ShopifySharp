@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IFulfillmentRequestServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IFulfillmentRequestService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IFulfillmentRequestService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IFulfillmentRequestService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IFulfillmentRequestService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class FulfillmentRequestServiceFactory(
     #endif
 ) : IFulfillmentRequestServiceFactory
 {
-    public virtual IFulfillmentRequestService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IFulfillmentRequestService Create(string shopDomain, string accessToken)
     {
-        var service = new FulfillmentRequestService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new FulfillmentRequestService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class FulfillmentRequestServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IFulfillmentRequestService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

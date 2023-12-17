@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IGraphServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IGraphService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IGraphService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IGraphService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IGraphService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class GraphServiceFactory(
     #endif
 ) : IGraphServiceFactory
 {
-    public virtual IGraphService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IGraphService Create(string shopDomain, string accessToken)
     {
-        var service = new GraphService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new GraphService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class GraphServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IGraphService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

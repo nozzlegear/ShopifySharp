@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IPageServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IPageService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IPageService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IPageService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IPageService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class PageServiceFactory(
     #endif
 ) : IPageServiceFactory
 {
-    public virtual IPageService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IPageService Create(string shopDomain, string accessToken)
     {
-        var service = new PageService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new PageService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class PageServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IPageService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

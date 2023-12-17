@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IScriptTagServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IScriptTagService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IScriptTagService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IScriptTagService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IScriptTagService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class ScriptTagServiceFactory(
     #endif
 ) : IScriptTagServiceFactory
 {
-    public virtual IScriptTagService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IScriptTagService Create(string shopDomain, string accessToken)
     {
-        var service = new ScriptTagService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new ScriptTagService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class ScriptTagServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IScriptTagService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

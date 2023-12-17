@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IDiscountCodeServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IDiscountCodeService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IDiscountCodeService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IDiscountCodeService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IDiscountCodeService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class DiscountCodeServiceFactory(
     #endif
 ) : IDiscountCodeServiceFactory
 {
-    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IDiscountCodeService Create(string shopDomain, string accessToken)
     {
-        var service = new DiscountCodeService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new DiscountCodeService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class DiscountCodeServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

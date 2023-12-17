@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IFulfillmentEventServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IFulfillmentEventService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IFulfillmentEventService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IFulfillmentEventService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IFulfillmentEventService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class FulfillmentEventServiceFactory(
     #endif
 ) : IFulfillmentEventServiceFactory
 {
-    public virtual IFulfillmentEventService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IFulfillmentEventService Create(string shopDomain, string accessToken)
     {
-        var service = new FulfillmentEventService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new FulfillmentEventService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class FulfillmentEventServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IFulfillmentEventService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

@@ -1,15 +1,24 @@
+// Notice:
+// This class is auto-generated from a template. Please do not edit it or change it directly.
 #if NETSTANDARD2_0
 #nullable disable
 #else
 #nullable enable
 #endif
+
 using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
 
 public interface IPartnerServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IPartnerService" /> with the given credentials.
+    /// <param name="partnerOrganizationId">Your Shopify Partner organization ID. This can be found on your Shopify Partner account settings page.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IPartnerService Create(long partnerOrganizationId, string accessToken);
+
+    /// Creates a new instance of the <see cref="IPartnerService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
@@ -21,9 +30,10 @@ public class PartnerServiceFactory(
     #endif
 ) : IPartnerServiceFactory
 {
-    public virtual IPartnerService Create(ShopifyPartnerApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IPartnerService Create(long partnerOrganizationId, string accessToken)
     {
-        var service = new PartnerService(credentials.PartnerOrganizationId, credentials.AccessToken);
+        var service = new PartnerService(partnerOrganizationId, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -32,4 +42,8 @@ public class PartnerServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IPartnerService Create(ShopifyPartnerApiCredentials credentials) =>
+        Create(credentials.PartnerOrganizationId, credentials.AccessToken);
 }

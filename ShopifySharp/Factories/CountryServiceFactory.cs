@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface ICountryServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="ICountryService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    ICountryService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="ICountryService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     ICountryService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class CountryServiceFactory(
     #endif
 ) : ICountryServiceFactory
 {
-    public virtual ICountryService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual ICountryService Create(string shopDomain, string accessToken)
     {
-        var service = new CountryService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new CountryService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class CountryServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual ICountryService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

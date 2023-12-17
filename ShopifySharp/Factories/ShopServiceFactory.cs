@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IShopServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IShopService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IShopService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IShopService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IShopService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class ShopServiceFactory(
     #endif
 ) : IShopServiceFactory
 {
-    public virtual IShopService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IShopService Create(string shopDomain, string accessToken)
     {
-        var service = new ShopService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new ShopService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class ShopServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IShopService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

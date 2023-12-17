@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface ICustomCollectionServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="ICustomCollectionService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    ICustomCollectionService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="ICustomCollectionService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     ICustomCollectionService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class CustomCollectionServiceFactory(
     #endif
 ) : ICustomCollectionServiceFactory
 {
-    public virtual ICustomCollectionService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual ICustomCollectionService Create(string shopDomain, string accessToken)
     {
-        var service = new CustomCollectionService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new CustomCollectionService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class CustomCollectionServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual ICustomCollectionService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }
