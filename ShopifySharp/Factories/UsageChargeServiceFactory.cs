@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IUsageChargeServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IUsageChargeService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IUsageChargeService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IUsageChargeService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IUsageChargeService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class UsageChargeServiceFactory(
     #endif
 ) : IUsageChargeServiceFactory
 {
-    public virtual IUsageChargeService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IUsageChargeService Create(string shopDomain, string accessToken)
     {
-        var service = new UsageChargeService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new UsageChargeService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class UsageChargeServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IUsageChargeService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

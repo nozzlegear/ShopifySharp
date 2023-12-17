@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IProductVariantServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IProductVariantService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IProductVariantService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IProductVariantService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IProductVariantService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class ProductVariantServiceFactory(
     #endif
 ) : IProductVariantServiceFactory
 {
-    public virtual IProductVariantService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IProductVariantService Create(string shopDomain, string accessToken)
     {
-        var service = new ProductVariantService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new ProductVariantService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class ProductVariantServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IProductVariantService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }

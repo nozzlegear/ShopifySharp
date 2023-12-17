@@ -12,7 +12,13 @@ namespace ShopifySharp.Factories;
 
 public interface IRefundServiceFactory
 {
-    // ReSharper disable once UnusedMember.Global
+    /// Creates a new instance of the <see cref="IRefundService" /> with the given credentials.
+    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IRefundService Create(string shopDomain, string accessToken);
+
+    /// Creates a new instance of the <see cref="IRefundService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IRefundService Create(ShopifyApiCredentials credentials);
 }
 
@@ -24,9 +30,10 @@ public class RefundServiceFactory(
     #endif
 ) : IRefundServiceFactory
 {
-    public virtual IRefundService Create(ShopifyApiCredentials credentials)
+    /// <inheritDoc />
+    public virtual IRefundService Create(string shopDomain, string accessToken)
     {
-        var service = new RefundService(credentials.ShopDomain, credentials.AccessToken);
+        var service = new RefundService(shopDomain, accessToken);
 
         if (requestExecutionPolicy is not null)
         {
@@ -35,4 +42,8 @@ public class RefundServiceFactory(
 
         return service;
     }
+
+    /// <inheritDoc />
+    public virtual IRefundService Create(ShopifyApiCredentials credentials) =>
+        Create(credentials.ShopDomain, credentials.AccessToken);
 }
