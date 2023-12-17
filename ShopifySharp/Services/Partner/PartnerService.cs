@@ -45,21 +45,28 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="requestResult">The RequestResult{JToken} response from ExecuteRequestAsync.</param>
         /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
-        private void CheckForErrors(RequestResult<JToken> requestResult)
+        private static void CheckForErrors(RequestResult<JToken> requestResult)
         {
-            if (requestResult.Result["errors"] != null)
+            if (requestResult.Result["errors"] is null)
             {
-                var errorList = new List<string>();
-                
-                foreach (var error in requestResult.Result["errors"])
-                {
-                    errorList.Add(error["message"].ToString());
-                }
-
-                var message = requestResult.Result["errors"].FirstOrDefault()["message"].ToString();
-
-                throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
+                return;
             }
+
+            var errorList = new List<string>();
+
+            foreach (var error in requestResult.Result["errors"])
+            {
+                var errorMessage = error["message"];
+
+                if (errorMessage is not null)
+                {
+                    errorList.Add(errorMessage.ToString());
+                }
+            }
+
+            var message = requestResult.Result["errors"].FirstOrDefault()?["message"]?.ToString();
+
+            throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
         }
     }
 }
