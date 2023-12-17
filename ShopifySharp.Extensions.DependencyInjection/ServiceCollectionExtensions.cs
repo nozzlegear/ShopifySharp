@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using ShopifySharp.Factories;
+using ShopifySharp.Utilities;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedType.Global
@@ -21,6 +22,24 @@ public static class ServiceCollectionExtensions
     {
         // TODO: add ServiceLifetime parameter
         services.TryAddSingleton<IRequestExecutionPolicy, T>();
+        return services;
+    }
+
+    /// <summary>
+    /// Adds ShopifySharp's utilities to your Dependency Injection container. Includes the following utilities:
+    /// <list type="bullet">
+    /// <item><see cref="IShopifyOauthUtility"/></item>
+    /// <item><see cref="IShopifyDomainUtility"/></item>
+    /// <item><see cref="IShopifyRequestValidationUtility"/></item>
+    /// </list>
+    /// </summary>
+    public static IServiceCollection AddShopifySharpUtilities(this IServiceCollection services)
+    {
+        // TODO: add ServiceLifetime parameter
+        services.TryAddSingleton<IShopifyOauthUtility, ShopifyOauthUtility>();
+        services.TryAddSingleton<IShopifyDomainUtility, ShopifyDomainUtility>();
+        services.TryAddSingleton<IShopifyRequestValidationUtility, ShopifyRequestValidationUtility>();
+
         return services;
     }
 
@@ -97,8 +116,9 @@ public static class ServiceCollectionExtensions
     /// Adds all of ShopifySharp's Dependency Injection services to your DI container. This is a convenience method and
     /// simply calls the following extensions sequentially:
     /// <list type="bullet">
-    /// <item><see cref="AddShopifySharpServiceFactories"/></item>
     /// <item><see cref="AddShopifySharpRequestExecutionPolicy{T}"/></item>
+    /// <item><see cref="AddShopifySharpUtilities"/></item>
+    /// <item><see cref="AddShopifySharpServiceFactories"/></item>
     /// </list>
     /// </summary>
     /// <param name="services"></param>
@@ -108,6 +128,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddShopifySharpRequestExecutionPolicy<T>()
+            .AddShopifySharpUtilities()
             .AddShopifySharpServiceFactories();
     }
 }
