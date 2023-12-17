@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface IGiftCardAdjustmentServiceFactory
     IGiftCardAdjustmentService Create(ShopifyApiCredentials credentials);
 }
 
-public class GiftCardAdjustmentServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : IGiftCardAdjustmentServiceFactory
+public class GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IGiftCardAdjustmentServiceFactory
 {
     /// <inheritDoc />
     public virtual IGiftCardAdjustmentService Create(string shopDomain, string accessToken)

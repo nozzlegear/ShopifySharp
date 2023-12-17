@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface ICheckoutSalesChannelServiceFactory
     ICheckoutSalesChannelService Create(ShopifyApiCredentials credentials);
 }
 
-public class CheckoutSalesChannelServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : ICheckoutSalesChannelServiceFactory
+public class CheckoutSalesChannelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICheckoutSalesChannelServiceFactory
 {
     /// <inheritDoc />
     public virtual ICheckoutSalesChannelService Create(string shopDomain, string accessToken)

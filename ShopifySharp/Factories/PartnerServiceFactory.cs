@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface IPartnerServiceFactory
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
-public class PartnerServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : IPartnerServiceFactory
+public class PartnerServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IPartnerServiceFactory
 {
     /// <inheritDoc />
     public virtual IPartnerService Create(long partnerOrganizationId, string accessToken)
