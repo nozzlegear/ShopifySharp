@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface IGraphServiceFactory
     IGraphService Create(ShopifyApiCredentials credentials);
 }
 
-public class GraphServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : IGraphServiceFactory
+public class GraphServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IGraphServiceFactory
 {
     /// <inheritDoc />
     public virtual IGraphService Create(string shopDomain, string accessToken)

@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface ILocationServiceFactory
     ILocationService Create(ShopifyApiCredentials credentials);
 }
 
-public class LocationServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : ILocationServiceFactory
+public class LocationServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ILocationServiceFactory
 {
     /// <inheritDoc />
     public virtual ILocationService Create(string shopDomain, string accessToken)

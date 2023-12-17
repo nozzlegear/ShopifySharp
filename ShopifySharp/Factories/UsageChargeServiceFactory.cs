@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface IUsageChargeServiceFactory
     IUsageChargeService Create(ShopifyApiCredentials credentials);
 }
 
-public class UsageChargeServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : IUsageChargeServiceFactory
+public class UsageChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IUsageChargeServiceFactory
 {
     /// <inheritDoc />
     public virtual IUsageChargeService Create(string shopDomain, string accessToken)

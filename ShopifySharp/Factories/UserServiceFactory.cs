@@ -1,10 +1,6 @@
+#nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
-#if NETSTANDARD2_0
-#nullable disable
-#else
-#nullable enable
-#endif
 
 using ShopifySharp.Credentials;
 
@@ -22,13 +18,7 @@ public interface IUserServiceFactory
     IUserService Create(ShopifyApiCredentials credentials);
 }
 
-public class UserServiceFactory(
-    #if NETSTANDARD2_0
-    IRequestExecutionPolicy requestExecutionPolicy = null
-    #else
-    IRequestExecutionPolicy? requestExecutionPolicy = null
-    #endif
-) : IUserServiceFactory
+public class UserServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IUserServiceFactory
 {
     /// <inheritDoc />
     public virtual IUserService Create(string shopDomain, string accessToken)
