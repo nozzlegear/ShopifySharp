@@ -1,8 +1,12 @@
+#nullable enable
+// ReSharper disable InconsistentNaming
+
 namespace ShopifySharp
 {
     public interface IShopifyService
     {
         string APIVersion { get; }
+        bool SupportsAPIVersioning { get; }
 
         void SetExecutionPolicy(IRequestExecutionPolicy policy);
 

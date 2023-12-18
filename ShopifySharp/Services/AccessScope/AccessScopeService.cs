@@ -12,7 +12,7 @@ namespace ShopifySharp
     public class AccessScopeService : ShopifyService, IAccessScopeService
     {
         //oauth endpoints don't support versioning
-        protected override bool SupportsAPIVersioning => false;
+        public override bool SupportsAPIVersioning => false;
 
         /// <summary>
         /// Creates a new instance of the service.
