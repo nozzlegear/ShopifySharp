@@ -23,7 +23,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Address> GetAsync(long customerId, long addressId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}.json");
+            var req = BuildRequestUri($"customers/{customerId}/addresses/{addressId}.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -37,7 +37,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Address> CreateAsync(long customerId, Address address, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}/addresses.json");
+            var req = BuildRequestUri($"customers/{customerId}/addresses.json");
             var addressBody = address.ToDictionary();
             var content = new JsonContent(new
             {
@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Address> UpdateAsync(long customerId, long addressId, Address address, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}.json");
+            var req = BuildRequestUri($"customers/{customerId}/addresses/{addressId}.json");
             var addressBody = address.ToDictionary();
 
             var content = new JsonContent(new
@@ -66,7 +66,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long customerId, long addressId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}.json");
+            var req = BuildRequestUri($"customers/{customerId}/addresses/{addressId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
@@ -74,7 +74,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Address> SetDefault(long customerId, long addressId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}/addresses/{addressId}/default.json");
+            var req = BuildRequestUri($"customers/{customerId}/addresses/{addressId}/default.json");
 
             var response = await ExecuteRequestAsync<Address>(req, HttpMethod.Put, cancellationToken, rootElement: "customer_address");
             return response.Result;

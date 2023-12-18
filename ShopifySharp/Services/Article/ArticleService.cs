@@ -35,7 +35,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Article> GetAsync(long blogId, long articleId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
+            var req = BuildRequestUri($"blogs/{blogId}/articles/{articleId}.json");
 
             if (fields != null)
             {
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Article> CreateAsync(long blogId, Article article, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles.json");
+            var req = BuildRequestUri($"blogs/{blogId}/articles.json");
             var body = article.ToDictionary();
 
             if (metafields != null)
@@ -69,7 +69,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Article> UpdateAsync(long blogId, long articleId, Article article, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
+            var req = BuildRequestUri($"blogs/{blogId}/articles/{articleId}.json");
             var body = article.ToDictionary();
 
             if (metafields != null)
@@ -89,7 +89,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long blogId, long articleId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles/{articleId}.json");
+            var req = BuildRequestUri($"blogs/{blogId}/articles/{articleId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
@@ -97,7 +97,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<string>> ListAuthorsAsync(CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"articles/authors.json");
+            var req = BuildRequestUri($"articles/authors.json");
 
             var response = await ExecuteRequestAsync<List<string>>(req, HttpMethod.Get, cancellationToken, rootElement: "authors");
             return response.Result;
@@ -106,7 +106,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<string>> ListTagsAsync(int? popular = null, int? limit = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"articles/tags.json");
+            var req = BuildRequestUri($"articles/tags.json");
 
             if (popular.HasValue)
             {
@@ -125,7 +125,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<string>> ListTagsForBlogAsync(long blogId, int? popular = null, int? limit = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"blogs/{blogId}/articles/tags.json");
+            var req = BuildRequestUri($"blogs/{blogId}/articles/tags.json");
 
             if (popular.HasValue)
             {

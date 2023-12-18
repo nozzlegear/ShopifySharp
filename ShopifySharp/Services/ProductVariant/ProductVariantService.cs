@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<ProductVariant> CreateAsync(long productId, ProductVariant variant, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}/variants.json");
+            var req = BuildRequestUri($"products/{productId}/variants.json");
             var content = new JsonContent(new
             {
                 variant = variant
@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<ProductVariant> UpdateAsync(long productVariantId, ProductVariant variant, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"variants/{productVariantId}.json");
+            var req = BuildRequestUri($"variants/{productVariantId}.json");
             var content = new JsonContent(new
             {
                 variant = variant
@@ -72,7 +72,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long productId, long variantId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}/variants/{variantId}.json");
+            var req = BuildRequestUri($"products/{productId}/variants/{variantId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

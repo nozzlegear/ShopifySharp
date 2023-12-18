@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Country> CreateAsync(Country country, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("countries.json");
+            var req = BuildRequestUri("countries.json");
             var content = new JsonContent(new
             {
                 country = country
@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Country> UpdateAsync(long countryId, Country country, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"countries/{countryId}.json");
+            var req = BuildRequestUri($"countries/{countryId}.json");
             var content = new JsonContent(new
             {
                 country = country
@@ -64,7 +64,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long countryId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"countries/{countryId}.json");
+            var req = BuildRequestUri($"countries/{countryId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

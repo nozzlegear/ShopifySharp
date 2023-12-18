@@ -53,11 +53,11 @@ module UsageCharges =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
         member x.CreateAsync (recurringChargeId : int64, data : UsageChargeProperties) =
-            let req = base.PrepareRequest (sprintf "recurring_application_charges/%i/usage_charges.json" recurringChargeId)
+            let req = base.BuildRequestUri($"recurring_application_charges/{recurringChargeId}/usage_charges.json")
             let data = dict [ "usage_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<UsageCharge>(req, HttpMethod.Post, CancellationToken.None, content, "usage_charge")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

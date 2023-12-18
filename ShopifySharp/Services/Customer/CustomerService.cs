@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Customer> CreateAsync(Customer customer, CustomerCreateOptions options = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("customers.json");
+            var req = BuildRequestUri("customers.json");
             var body = customer.ToDictionary();
 
             if (options != null)
@@ -67,7 +67,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Customer> UpdateAsync(long customerId, Customer customer, CustomerUpdateOptions options = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}.json");
+            var req = BuildRequestUri($"customers/{customerId}.json");
             var body = customer.ToDictionary();
 
             if (options != null)
@@ -90,7 +90,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long customerId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}.json");
+            var req = BuildRequestUri($"customers/{customerId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken: cancellationToken);
         }
@@ -98,7 +98,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CustomerInvite> SendInviteAsync(long customerId, CustomerInvite invite = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerId}/send_invite.json");
+            var req = BuildRequestUri($"customers/{customerId}/send_invite.json");
 
             var content = new JsonContent(new
             {
@@ -112,7 +112,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<string> GetAccountActivationUrl(long customerid, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"customers/{customerid}/account_activation_url.json");
+            var req = BuildRequestUri($"customers/{customerid}/account_activation_url.json");
             var response = await ExecuteRequestAsync(req, HttpMethod.Post, cancellationToken);
 
             return response.Result.SelectToken("account_activation_url").ToString();

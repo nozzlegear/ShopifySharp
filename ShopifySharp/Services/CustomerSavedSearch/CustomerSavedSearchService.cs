@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CustomerSavedSearch> GetAsync(long customerSearchId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"{RootResource}/{customerSearchId}.json");
+            var req = BuildRequestUri($"{RootResource}/{customerSearchId}.json");
 
             if (string.IsNullOrEmpty(fields) == false)
             {
@@ -59,7 +59,7 @@ namespace ShopifySharp
                 throw new ArgumentException("Name property is required", nameof(customerSavedSearch));
             }
 
-            var req = PrepareRequest($"{RootResource}.json");
+            var req = BuildRequestUri($"{RootResource}.json");
             var body = customerSavedSearch.ToDictionary();
 
             var content = new JsonContent(new
@@ -74,7 +74,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CustomerSavedSearch> UpdateAsync(long customerSavedSearchId, CustomerSavedSearch customerSavedSearch, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}.json");
+            var req = BuildRequestUri($"{RootResource}/{customerSavedSearchId}.json");
             var body = customerSavedSearch.ToDictionary();
 
             var content = new JsonContent(new
@@ -89,7 +89,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual Task DeleteAsync(long customerSavedSearchId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"{RootResource}/{customerSavedSearchId}.json");
+            var req = BuildRequestUri($"{RootResource}/{customerSavedSearchId}.json");
 
             return ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

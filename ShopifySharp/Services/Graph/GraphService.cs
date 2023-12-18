@@ -82,7 +82,7 @@ namespace ShopifySharp
 
         private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken)
         {
-            var req = PrepareRequest("graphql.json");
+            var req = BuildRequestUri("graphql.json");
 
             var content = new StringContent(body, Encoding.UTF8, mediaType);
 

@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<GiftCard> CreateAsync(GiftCard giftCard, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("gift_cards.json");
+            var req = BuildRequestUri("gift_cards.json");
             var body = giftCard.ToDictionary();
 
             var content = new JsonContent(new
@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<GiftCard> UpdateAsync(long giftCardId, GiftCard giftCard, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}.json");
+            var req = BuildRequestUri($"gift_cards/{giftCardId}.json");
             var content = new JsonContent(new
             {
                 gift_card = giftCard
@@ -71,7 +71,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<GiftCard> DisableAsync(long giftCardId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}/disable.json");
+            var req = BuildRequestUri($"gift_cards/{giftCardId}/disable.json");
             var response = await ExecuteRequestAsync<GiftCard>(req, HttpMethod.Post, cancellationToken, rootElement: "gift_card");
             return response.Result;
         }

@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<PriceRuleDiscountCode> CreateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes.json");
+            var req = BuildRequestUri($"price_rules/{priceRuleId}/discount_codes.json");
             var body = code.ToDictionary();
 
             var content = new JsonContent(new
@@ -61,7 +61,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<PriceRuleDiscountCode> UpdateAsync(long priceRuleId, PriceRuleDiscountCode code, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{code.Id.Value}.json");
+            var req = BuildRequestUri($"price_rules/{priceRuleId}/discount_codes/{code.Id.Value}.json");
             var content = new JsonContent(new
             {
                 discount_code = code
@@ -74,7 +74,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long priceRuleId, long discountCodeId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"price_rules/{priceRuleId}/discount_codes/{discountCodeId}.json");
+            var req = BuildRequestUri($"price_rules/{priceRuleId}/discount_codes/{discountCodeId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

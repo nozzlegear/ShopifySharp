@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Fulfillment> CreateAsync(FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillments.json");
+            var req = BuildRequestUri($"fulfillments.json");
             var body = fulfillment.ToDictionary();
 
             var content = new JsonContent(new
@@ -57,7 +57,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Fulfillment> UpdateTrackingAsync(long fulfillmentId, FulfillmentShipping fulfillment, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillments/{fulfillmentId}/update_tracking.json");
+            var req = BuildRequestUri($"fulfillments/{fulfillmentId}/update_tracking.json");
             var body = fulfillment.ToDictionary();
             var content = new JsonContent(new
             {
@@ -71,7 +71,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Fulfillment> CancelAsync(long fulfillmentId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillments/{fulfillmentId}/cancel.json");
+            var req = BuildRequestUri($"fulfillments/{fulfillmentId}/cancel.json");
 
             var response = await ExecuteRequestAsync<Fulfillment>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment");
             return response.Result;

@@ -2,7 +2,6 @@
 
 open System.Net.Http
 open System.Threading
-open System.Threading
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -79,18 +78,18 @@ module ScriptTags =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
         member x.CreateAsync (tag : ScriptTagProperties) =
-            let req = base.PrepareRequest "script_tags.json"
+            let req = base.BuildRequestUri("script_tags.json")
             let data = dict [ "script_tag" => tag ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Post, CancellationToken.None, content, "script_tag")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
             
         member x.UpdateAsync (id : int64, tag : ScriptTagProperties) =
-            let req = base.PrepareRequest (sprintf "script_tags/%i.json" id)
+            let req = base.BuildRequestUri($"script_tags/{id}.json")
             let data = dict [ "script_tag" => tag ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<ScriptTag>(req, HttpMethod.Put, CancellationToken.None, content, "script_tag")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

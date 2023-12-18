@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Refund> CalculateAsync(long orderId, Refund options, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/refunds/calculate.json");
+            var req = BuildRequestUri($"orders/{orderId}/refunds/calculate.json");
             var content = new JsonContent(new { refund = options });
             var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, cancellationToken, content, "refund");
 
@@ -44,7 +44,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Refund> RefundAsync(long orderId, Refund options, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/refunds.json");
+            var req = BuildRequestUri($"orders/{orderId}/refunds.json");
             var content = new JsonContent(new { refund = options });
             var response = await ExecuteRequestAsync<Refund>(req, HttpMethod.Post, cancellationToken, content, "refund");
 

@@ -29,7 +29,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentEvent> CreateAsync(long orderId, long fulfillmentId, FulfillmentEvent @event, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
+            var req = BuildRequestUri($"orders/{orderId}/fulfillments/{fulfillmentId}/events.json");
 
             var content = new JsonContent(new
             {
@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long orderId, long fulfillmentId, long fulfillmentEventId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
+            var req = BuildRequestUri($"orders/{orderId}/fulfillments/{fulfillmentId}/events/{fulfillmentEventId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

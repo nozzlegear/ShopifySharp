@@ -26,7 +26,7 @@ namespace ShopifySharp
 
         public virtual async Task<GiftCardAdjustment> CreateAsync(long giftCardId, GiftCardAdjustment adjustment, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"gift_cards/{giftCardId}/adjustments.json");
+            var req = BuildRequestUri($"gift_cards/{giftCardId}/adjustments.json");
             var content = new JsonContent(new
             {
                 adjustment = adjustment

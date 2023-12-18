@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CustomCollection> CreateAsync(CustomCollection customCollection, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("custom_collections.json");
+            var req = BuildRequestUri("custom_collections.json");
             var content = new JsonContent(new
             {
                 custom_collection = customCollection
@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long customCollectionId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
+            var req = BuildRequestUri($"custom_collections/{customCollectionId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
@@ -59,7 +59,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CustomCollection> UpdateAsync(long customCollectionId, CustomCollection customCollection, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"custom_collections/{customCollectionId}.json");
+            var req = BuildRequestUri($"custom_collections/{customCollectionId}.json");
             var content = new JsonContent(new
             {
                 custom_collection = customCollection

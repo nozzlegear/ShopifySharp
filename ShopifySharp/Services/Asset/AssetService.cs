@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Asset> GetAsync(long themeId, string key, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"themes/{themeId}/assets.json");
+            var req = BuildRequestUri($"themes/{themeId}/assets.json");
             // Add the proper asset querystring
             req = SetAssetQuerystring(req, key, themeId);
 
@@ -43,7 +43,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Asset> CreateOrUpdateAsync(long themeId, Asset asset, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"themes/{themeId}/assets.json");
+            var req = BuildRequestUri($"themes/{themeId}/assets.json");
             var content = new JsonContent(new
             {
                 asset = asset
@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long themeId, string key, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"themes/{themeId}/assets.json");
+            var req = BuildRequestUri($"themes/{themeId}/assets.json");
 
             req = SetAssetQuerystring(req, key, themeId);
 

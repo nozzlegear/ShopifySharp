@@ -18,7 +18,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CheckoutSalesChannel> GetAsync(string token, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"checkouts/{token}.json");
+            var req = BuildRequestUri($"checkouts/{token}.json");
 
             var response = await ExecuteRequestAsync<CheckoutSalesChannel>(req, HttpMethod.Get, cancellationToken, rootElement: "checkout");
             return response.Result;
@@ -28,7 +28,7 @@ namespace ShopifySharp
         public virtual async Task<CheckoutSalesChannel> CreateAsync(CheckoutSalesChannel checkout,
             CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("checkouts.json");
+            var req = BuildRequestUri("checkouts.json");
 
             var response = await ExecuteRequestAsync<CheckoutSalesChannel>(req, HttpMethod.Post, cancellationToken,
                 new JsonContent(new {checkout}), "checkout");
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<CheckoutSalesChannel> CompleteAsync(string token, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"checkouts/{token}/complete.json");
+            var req = BuildRequestUri($"checkouts/{token}/complete.json");
 
             var response = await ExecuteRequestAsync<CheckoutSalesChannel>(req, HttpMethod.Post, cancellationToken, rootElement: "checkout");
             return response.Result;
@@ -48,7 +48,7 @@ namespace ShopifySharp
         public virtual async Task<CheckoutSalesChannel> UpdateAsync(string token, CheckoutSalesChannel checkout,
             CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"checkouts/{token}.json");
+            var req = BuildRequestUri($"checkouts/{token}.json");
 
             var response = await ExecuteRequestAsync<CheckoutSalesChannel>(req, HttpMethod.Put, cancellationToken,
                 new JsonContent(new { checkout }), "checkout");
@@ -58,7 +58,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<CheckoutShippingRate>> ListShippingRatesAsync(string token, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"checkouts/{token}/shipping_rates.json");
+            var req = BuildRequestUri($"checkouts/{token}/shipping_rates.json");
 
             var response = await ExecuteRequestAsync<List<CheckoutShippingRate>>(req, HttpMethod.Get, cancellationToken, rootElement: "shipping_rates");
             return response.Result;
@@ -68,7 +68,7 @@ namespace ShopifySharp
         public virtual async Task<PaymentSalesChannel> CreatePaymentAsync(string token, CreatePayment createPayment,
             CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"checkouts/{token}/payments.json");
+            var req = BuildRequestUri($"checkouts/{token}/payments.json");
 
             var response = await ExecuteRequestAsync<PaymentSalesChannel>(req, HttpMethod.Post, cancellationToken,
                 new JsonContent(new {payment = createPayment}), "payment");

@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<SmartCollection> CreateAsync(SmartCollection collection, bool published = true, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"smart_collections.json");
+            var req = BuildRequestUri($"smart_collections.json");
             var body = collection.ToDictionary();
 
             body.Add("published", published);
@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<SmartCollection> UpdateAsync(long smartCollectionId, SmartCollection collection, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
+            var req = BuildRequestUri($"smart_collections/{smartCollectionId}.json");
             var content = new JsonContent(new
             {
                 smart_collection = collection
@@ -69,7 +69,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<SmartCollection> PublishAsync(long smartCollectionId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
+            var req = BuildRequestUri($"smart_collections/{smartCollectionId}.json");
             var body = new Dictionary<string, object>()
             {
                 { "id", smartCollectionId },
@@ -87,7 +87,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<SmartCollection> UnpublishAsync(long smartCollectionId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"smart_collections/{smartCollectionId}.json");
+            var req = BuildRequestUri($"smart_collections/{smartCollectionId}.json");
             var body = new Dictionary<string, object>()
             {
                 { "id", smartCollectionId },
@@ -105,7 +105,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task UpdateProductOrderAsync(long smartCollectionId, string sortOrder = null, params long[] productIds)
         {
-            var req = PrepareRequest($"smart_collections/{smartCollectionId}/order.json");
+            var req = BuildRequestUri($"smart_collections/{smartCollectionId}/order.json");
             var content = new JsonContent(new
             {
                 sort_order = sortOrder,
@@ -117,7 +117,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task UpdateProductOrderAsync(long smartCollectionId, CancellationToken cancellationToken, string sortOrder = null, params long[] productIds)
         {
-            var req = PrepareRequest($"smart_collections/{smartCollectionId}/order.json");
+            var req = BuildRequestUri($"smart_collections/{smartCollectionId}/order.json");
             var content = new JsonContent(new
             {
                 sort_order = sortOrder,
@@ -129,7 +129,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long collectionId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"smart_collections/{collectionId}.json");
+            var req = BuildRequestUri($"smart_collections/{collectionId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

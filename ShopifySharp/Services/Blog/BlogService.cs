@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
-            var request = PrepareRequest("blogs.json");
+            var request = BuildRequestUri("blogs.json");
             var body = blog.ToDictionary();
 
             if (metafields != null && metafields.Any())
@@ -56,7 +56,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Blog> UpdateAsync(long blogId, Blog blog, IEnumerable<MetaField> metafields = null, CancellationToken cancellationToken = default)
         {
-            var request = PrepareRequest($"blogs/{blogId}.json");
+            var request = BuildRequestUri($"blogs/{blogId}.json");
             var body = blog.ToDictionary();
 
             if (metafields != null && metafields.Count() >= 1)
@@ -76,7 +76,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Blog> GetAsync(long id, CancellationToken cancellationToken = default)
         {
-            var request = PrepareRequest($"blogs/{id}.json");
+            var request = BuildRequestUri($"blogs/{id}.json");
 
             var response = await ExecuteRequestAsync<Blog>(request, HttpMethod.Get, cancellationToken, rootElement: "blog");
             return response.Result;
@@ -85,7 +85,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-            var request = PrepareRequest($"blogs/{id}.json");
+            var request = BuildRequestUri($"blogs/{id}.json");
 
             await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken);
         }

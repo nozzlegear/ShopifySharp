@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<UsageCharge> CreateAsync(long recurringChargeId, string description, decimal price, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
+            var req = BuildRequestUri($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
             var content = new JsonContent(new
             {
                 usage_charge = new
@@ -39,7 +39,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<UsageCharge> GetAsync(long recurringChargeId, long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges/{id}.json");
+            var req = BuildRequestUri($"recurring_application_charges/{recurringChargeId}/usage_charges/{id}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -54,7 +54,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<UsageCharge>> ListAsync(long recurringChargeId, UsageChargeListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
+            var req = BuildRequestUri($"recurring_application_charges/{recurringChargeId}/usage_charges.json");
 
             if (filter != null)
             {

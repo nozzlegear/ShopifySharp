@@ -28,13 +28,16 @@ namespace ShopifySharp
 			await ListAsync(filter?.AsListFilter(), cancellationToken);
 
         /// <inheritdoc />
-        public virtual async Task DeleteAsync(long inventoryItemId, long locationId, CancellationToken cancellationToken = default) =>
-			await ExecuteRequestAsync(PrepareRequest($"inventory_levels.json?inventory_item_id={inventoryItemId}&location_id={locationId}"), HttpMethod.Delete, cancellationToken);
+        public virtual async Task DeleteAsync(long inventoryItemId, long locationId, CancellationToken cancellationToken = default)
+        {
+            var requestUri = BuildRequestUri($"inventory_levels.json?inventory_item_id={inventoryItemId}&location_id={locationId}");
+            await ExecuteRequestAsync(requestUri, HttpMethod.Delete, cancellationToken);
+        }
 
         /// <inheritdoc />
         public virtual async Task<InventoryLevel> SetAsync(InventoryLevel updatedInventoryLevel, bool disconnectIfNecessary = false, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"inventory_levels/set.json");
+            var req = BuildRequestUri($"inventory_levels/set.json");
             var body = updatedInventoryLevel.ToDictionary();
             
             body.Add("disconnect_if_necessary", disconnectIfNecessary);
@@ -48,7 +51,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<InventoryLevel> AdjustAsync(InventoryLevelAdjust updatedInventoryLevel, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"inventory_levels/adjust.json");
+            var req = BuildRequestUri($"inventory_levels/adjust.json");
             var body = updatedInventoryLevel.ToDictionary();
             var content = new JsonContent(body);
             var response = await ExecuteRequestAsync<InventoryLevel>(req, HttpMethod.Post, cancellationToken, content, "inventory_level");
@@ -59,7 +62,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<InventoryLevel> ConnectAsync(long inventoryItemId, long locationId, bool relocateIfNecessary = false, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"inventory_levels/connect.json");
+            var req = BuildRequestUri($"inventory_levels/connect.json");
             var content = new JsonContent(new
             {
                 location_id = locationId,

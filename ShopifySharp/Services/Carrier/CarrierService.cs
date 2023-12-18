@@ -25,7 +25,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Carrier> CreateAsync(Carrier carrier, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("carrier_services.json");
+            var req = BuildRequestUri("carrier_services.json");
             var content = new JsonContent(new
             {
                 carrier_service = carrier
@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Carrier> GetAsync(long carrierId, CancellationToken cancellationToken = default)
         {            
-            var req = PrepareRequest($"carrier_services/{carrierId}.json");
+            var req = BuildRequestUri($"carrier_services/{carrierId}.json");
 
             var response = await ExecuteRequestAsync<Carrier>(req, HttpMethod.Get, cancellationToken, rootElement: "carrier_service");
             return response.Result;
@@ -47,7 +47,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long carrierId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"carrier_services/{carrierId}.json");
+            var req = BuildRequestUri($"carrier_services/{carrierId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
@@ -55,7 +55,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Carrier> UpdateAsync(long carrierId, Carrier carrier, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"carrier_services/{carrierId}.json");
+            var req = BuildRequestUri($"carrier_services/{carrierId}.json");
             var content = new JsonContent(new
             {
                 carrier_service = carrier

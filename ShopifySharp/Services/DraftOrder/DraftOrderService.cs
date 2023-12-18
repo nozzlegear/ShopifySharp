@@ -36,7 +36,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<DraftOrder> CreateAsync(DraftOrder order, bool useCustomerDefaultAddress, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("draft_orders.json");
+            var req = BuildRequestUri("draft_orders.json");
             var body = order.ToDictionary();
 
             body.Add("use_customer_default_address", useCustomerDefaultAddress);
@@ -53,7 +53,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<DraftOrder> CreateAsync(DraftOrder order, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("draft_orders.json");
+            var req = BuildRequestUri("draft_orders.json");
             var content = new JsonContent(new
             {
                 draft_order = order.ToDictionary()
@@ -66,7 +66,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<DraftOrder> UpdateAsync(long id, DraftOrder order, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"draft_orders/{id}.json");
+            var req = BuildRequestUri($"draft_orders/{id}.json");
             var content = new JsonContent(new
             {
                 draft_order = order.ToDictionary()
@@ -79,7 +79,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"draft_orders/{id}.json");
+            var req = BuildRequestUri($"draft_orders/{id}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
@@ -87,7 +87,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<DraftOrder> CompleteAsync(long id, bool paymentPending = false, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"draft_orders/{id}/complete.json");
+            var req = BuildRequestUri($"draft_orders/{id}/complete.json");
             req.QueryParams.Add("payment_pending", paymentPending);
 
             var response = await ExecuteRequestAsync<DraftOrder>(req, HttpMethod.Put, cancellationToken, rootElement: "draft_order");
@@ -97,7 +97,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<DraftOrderInvoice> SendInvoiceAsync(long id, DraftOrderInvoice customInvoice = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"draft_orders/{id}/send_invoice.json");
+            var req = BuildRequestUri($"draft_orders/{id}/send_invoice.json");
             // If the custom invoice is not null, use that as the body. Else use an empty dictionary object which will send the default invoice
             var body = customInvoice?.ToDictionary() ?? new Dictionary<string, object>();
             var content = new JsonContent(new

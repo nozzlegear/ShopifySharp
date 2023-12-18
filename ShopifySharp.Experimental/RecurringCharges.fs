@@ -73,11 +73,11 @@ module RecurringCharges =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
         member x.CreateAsync (data : RecurringChargeProperties) =
-            let req = base.PrepareRequest "recurring_application_charges.json"
+            let req = base.BuildRequestUri("recurring_application_charges.json")
             let data = dict [ "recurring_application_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<RecurringCharge>(req, HttpMethod.Post, CancellationToken.None, content, "recurring_application_charge")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

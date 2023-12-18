@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> CancelAsync(long fulfillmentOrderId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/cancel.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/cancel.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -40,7 +40,7 @@ namespace ShopifySharp
                 fulfillment_order = body,
             });
 
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/close.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/close.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -55,7 +55,7 @@ namespace ShopifySharp
                 fulfillment_hold = body,
             });
 
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/hold.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/hold.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -73,7 +73,7 @@ namespace ShopifySharp
                 fulfillment_order = body,
             });
 
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/move.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/move.json");
 
             //needs to be original_fulfillment_order
             var response = await ExecuteRequestAsync<FulfillmentOrderMove>(req, HttpMethod.Post, cancellationToken, content);
@@ -84,7 +84,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> OpenAsync(long fulfillmentOrderId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/open.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/open.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -93,7 +93,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> ReleaseHoldAsync(long fulfillmentOrderId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/release_hold.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/release_hold.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -111,7 +111,7 @@ namespace ShopifySharp
                 fulfillment_order = body,
             });
 
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/reschedule.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/reschedule.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Post, cancellationToken, content, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -120,7 +120,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> GetAsync(long fulfillmentOrderId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}.json");
             var response = await ExecuteRequestAsync<FulfillmentOrder>(req, HttpMethod.Get, cancellationToken, rootElement: "fulfillment_order");
 
             return response.Result;
@@ -129,7 +129,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<FulfillmentOrder>> ListAsync(long orderId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/fulfillment_orders.json");
+            var req = BuildRequestUri($"orders/{orderId}/fulfillment_orders.json");
             var response = await ExecuteRequestAsync<IEnumerable<FulfillmentOrder>>(req, HttpMethod.Get, cancellationToken, rootElement: "fulfillment_orders");
 
             return response.Result;
