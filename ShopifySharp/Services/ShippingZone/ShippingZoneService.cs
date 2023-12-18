@@ -21,7 +21,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("shipping_zones.json");
+            var req = BuildRequestUri("shipping_zones.json");
             
             if (filter != null)
             {

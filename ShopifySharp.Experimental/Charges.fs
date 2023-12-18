@@ -61,11 +61,11 @@ module Charges =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
         member x.CreateAsync (data : ChargeProperties) =
-            let req = base.PrepareRequest "application_charges.json"
+            let req = base.BuildRequestUri("application_charges.json")
             let data = dict [ "application_charge" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Charge>(req, HttpMethod.Post, CancellationToken.None, content, "application_charge")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

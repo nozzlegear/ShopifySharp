@@ -28,7 +28,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<OrderRisk> CreateAsync(long orderId, OrderRisk risk, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/risks.json");
+            var req = BuildRequestUri($"orders/{orderId}/risks.json");
             var content = new JsonContent(new
             {
                 risk = risk
@@ -41,7 +41,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<OrderRisk> UpdateAsync(long orderId, long orderRiskId, OrderRisk risk, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/risks/{orderRiskId}.json");
+            var req = BuildRequestUri($"orders/{orderId}/risks/{orderRiskId}.json");
             var content = new JsonContent(new
             {
                 risk = risk
@@ -54,7 +54,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long orderId, long riskId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/risks/{riskId}.json");
+            var req = BuildRequestUri($"orders/{orderId}/risks/{riskId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

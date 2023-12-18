@@ -40,7 +40,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task<ScriptTag> GetAsync(long tagId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"script_tags/{tagId}.json");
+            var req = BuildRequestUri($"script_tags/{tagId}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -55,7 +55,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task<ScriptTag> CreateAsync(ScriptTag tag, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("script_tags.json");
+            var req = BuildRequestUri("script_tags.json");
             var content = new JsonContent(new
             {
                 script_tag = tag
@@ -68,7 +68,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task<ScriptTag> UpdateAsync(long scriptTagId, ScriptTag tag, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"script_tags/{scriptTagId}.json");
+            var req = BuildRequestUri($"script_tags/{scriptTagId}.json");
             var content = new JsonContent(new
             {
                 script_tag = tag
@@ -81,7 +81,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task DeleteAsync(long tagId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"script_tags/{tagId}.json");
+            var req = BuildRequestUri($"script_tags/{tagId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

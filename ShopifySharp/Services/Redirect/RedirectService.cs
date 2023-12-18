@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Redirect> GetAsync(long redirectId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"redirects/{redirectId}.json");
+            var req = BuildRequestUri($"redirects/{redirectId}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Redirect> CreateAsync(Redirect redirect, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("redirects.json");
+            var req = BuildRequestUri("redirects.json");
             var content = new JsonContent(new
             {
                 redirect = redirect
@@ -62,7 +62,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Redirect> UpdateAsync(long redirectId, Redirect redirect, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"redirects/{redirectId}.json");
+            var req = BuildRequestUri($"redirects/{redirectId}.json");
             var content = new JsonContent(new
             {
                 redirect = redirect
@@ -75,7 +75,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long redirectId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"redirects/{redirectId}.json");
+            var req = BuildRequestUri($"redirects/{redirectId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

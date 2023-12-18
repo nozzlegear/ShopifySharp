@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<InventoryItem> UpdateAsync( long inventoryItemId, InventoryItem inventoryItem, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest( $"inventory_items/{inventoryItemId}.json" );
+            var req = BuildRequestUri( $"inventory_items/{inventoryItemId}.json" );
             var content = new JsonContent( new
             {
                 inventory_item = inventoryItem

@@ -16,7 +16,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public async Task<StorefrontAccessToken> CreateAsync(string title, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("storefront_access_tokens.json");
+            var req = BuildRequestUri("storefront_access_tokens.json");
             var content = new JsonContent(new
             {
                 storefront_access_token = new
@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"storefront_access_tokens/{id}.json");
+            var req = BuildRequestUri($"storefront_access_tokens/{id}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
@@ -40,7 +40,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public async Task<IEnumerable<StorefrontAccessToken>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("storefront_access_tokens.json");
+            var req = BuildRequestUri("storefront_access_tokens.json");
             var response = await ExecuteRequestAsync<IEnumerable<StorefrontAccessToken>>(req, HttpMethod.Get, cancellationToken, rootElement: "storefront_access_tokens");
 
             return response.Result;

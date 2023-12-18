@@ -60,11 +60,11 @@ module ApplicationCredits =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
         member x.CreateAsync (data : ApplicationCreditProperties) =
-            let req = base.PrepareRequest "application_credits.json"
+            let req = base.BuildRequestUri("application_credits.json")
             let data = dict [ "application_credit" => data ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<ApplicationCredit>(req, HttpMethod.Post, CancellationToken.None, content, "usage_charge")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

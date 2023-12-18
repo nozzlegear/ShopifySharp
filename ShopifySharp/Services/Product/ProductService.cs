@@ -34,7 +34,7 @@ namespace ShopifySharp
 
         public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("products.json");
+            var req = BuildRequestUri("products.json");
             var body = product.ToDictionary();
 
             if (options != null)
@@ -56,7 +56,7 @@ namespace ShopifySharp
 
         public virtual async Task<Product> UpdateAsync(long productId, Product product, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}.json");
+            var req = BuildRequestUri($"products/{productId}.json");
             var content = new JsonContent(new
             {
                 product = product
@@ -68,14 +68,14 @@ namespace ShopifySharp
 
         public virtual async Task DeleteAsync(long productId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}.json");
+            var req = BuildRequestUri($"products/{productId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         public virtual async Task<Product> PublishAsync(long id, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{id}.json");
+            var req = BuildRequestUri($"products/{id}.json");
             var content = new JsonContent(new
             {
                 product = new
@@ -91,7 +91,7 @@ namespace ShopifySharp
 
         public virtual async Task<Product> UnpublishAsync(long id, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{id}.json");
+            var req = BuildRequestUri($"products/{id}.json");
             var content = new JsonContent(new
             {
                 product = new

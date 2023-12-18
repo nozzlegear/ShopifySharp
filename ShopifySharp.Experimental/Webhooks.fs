@@ -2,8 +2,6 @@ namespace ShopifySharp.Experimental
 
 open System.Net.Http
 open System.Threading
-open System.Threading
-open System.Threading.Tasks
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -80,20 +78,20 @@ module Webhooks =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
              
         member x.CreateAsync (webhook: WebhookProperties) =
-            let req = base.PrepareRequest "webhooks.json"
+            let req = base.BuildRequestUri("webhooks.json")
             let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)
             
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Post, CancellationToken.None, content, "webhook")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
             
         member x.UpdateAsync (id: int64, webhook: WebhookProperties) =
-            let req = base.PrepareRequest (sprintf "webhooks/%i.json" id)
+            let req = base.BuildRequestUri($"webhooks/{id}.json")
             let data = dict [ "webhook" => webhook ]
             let content = new JsonContent(data)
             
             base.ExecuteRequestAsync<Webhook>(req, HttpMethod.Put, CancellationToken.None, content, "webhook")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

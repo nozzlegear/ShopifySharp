@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Page> GetAsync(long pageId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"pages/{pageId}.json");
+            var req = BuildRequestUri($"pages/{pageId}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -49,7 +49,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Page> CreateAsync(Page page, PageCreateOptions options = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("pages.json");
+            var req = BuildRequestUri("pages.json");
             var body = page.ToDictionary();
 
             if (options != null)
@@ -72,7 +72,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Page> UpdateAsync(long pageId, Page page, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"pages/{pageId}.json");
+            var req = BuildRequestUri($"pages/{pageId}.json");
             var content = new JsonContent(new
             {
                 page = page
@@ -85,7 +85,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long pageId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"pages/{pageId}.json");
+            var req = BuildRequestUri($"pages/{pageId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

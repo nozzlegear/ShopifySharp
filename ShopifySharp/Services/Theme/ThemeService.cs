@@ -26,7 +26,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Theme> GetAsync(long themeId, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"themes/{themeId}.json");
+            var req = BuildRequestUri($"themes/{themeId}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -49,7 +49,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task<Theme> UpdateAsync(long themeId, Theme theme, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"themes/{themeId}.json");
+            var req = BuildRequestUri($"themes/{themeId}.json");
             var content = new JsonContent(new
             {
                 theme = theme
@@ -62,14 +62,14 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task DeleteAsync(long themeId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"themes/{themeId}.json");
+            var req = BuildRequestUri($"themes/{themeId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }
 
         private async Task<Theme> _CreateAsync(Theme theme, CancellationToken cancellationToken, string sourceUrl = null)
         {
-            var req = PrepareRequest("themes.json");
+            var req = BuildRequestUri("themes.json");
             var body = theme.ToDictionary();
 
             if (!string.IsNullOrEmpty(sourceUrl))

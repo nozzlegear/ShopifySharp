@@ -31,7 +31,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<PriceRule> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"price_rules/{id}.json");
+            var req = BuildRequestUri($"price_rules/{id}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -46,7 +46,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<PriceRule> CreateAsync(PriceRule rule, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("price_rules.json");
+            var req = BuildRequestUri("price_rules.json");
             var body = rule.ToDictionary();
             var content = new JsonContent(new
             {
@@ -60,7 +60,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<PriceRule> UpdateAsync(long id, PriceRule rule, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"price_rules/{id}.json");
+            var req = BuildRequestUri($"price_rules/{id}.json");
             var content = new JsonContent(new
             {
                 price_rule = rule
@@ -73,7 +73,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"price_rules/{id}.json");
+            var req = BuildRequestUri($"price_rules/{id}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

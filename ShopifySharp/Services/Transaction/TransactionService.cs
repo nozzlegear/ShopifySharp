@@ -30,7 +30,7 @@ namespace ShopifySharp
 
         public virtual async Task<Transaction> CreateAsync(long orderId, Transaction transaction, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"orders/{orderId}/transactions.json");
+            var req = BuildRequestUri($"orders/{orderId}/transactions.json");
             var content = new JsonContent(new
             {
                 transaction = transaction

@@ -20,7 +20,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task UninstallAppAsync(CancellationToken cancellationToken = default)
         {
-            var request = PrepareRequest("api_permissions/current.json");
+            var request = BuildRequestUri("api_permissions/current.json");
 
             await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
         }

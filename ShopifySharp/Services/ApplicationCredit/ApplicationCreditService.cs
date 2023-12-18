@@ -34,7 +34,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<ApplicationCredit> CreateAsync(ApplicationCredit credit, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"application_credits.json");
+            var req = BuildRequestUri($"application_credits.json");
             var body = new JsonContent(new
             {
                 application_credit = credit,

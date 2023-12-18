@@ -38,7 +38,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Collect> CreateAsync(Collect collect, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("collects.json");
+            var req = BuildRequestUri("collects.json");
             var content = new JsonContent(new
             {
                 collect = collect
@@ -51,7 +51,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long collectId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"collects/{collectId}.json");
+            var req = BuildRequestUri($"collects/{collectId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

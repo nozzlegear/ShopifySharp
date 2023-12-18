@@ -118,7 +118,13 @@ namespace ShopifySharp
             _HttpClientFactory = factory ?? new InternalHttpClientFactory();
         }
 
-        protected RequestUri PrepareRequest(string path)
+        /// <summary>
+        /// Builds a <see cref="RequestUri"/> by merging the <see cref="_ShopUri"/> with Shopify's admin path and the <paramref name="path"/> parameter.
+        /// </summary>
+        /// <param name="path">
+        /// The request's path, which will be added to <c>/admin/api</c> or /admin/api/<see cref="APIVersion"/> if the service supports API versioning.
+        /// </param>
+        protected virtual RequestUri BuildRequestUri(string path)
         {
             var ub = new UriBuilder(_ShopUri)
             {
@@ -129,6 +135,10 @@ namespace ShopifySharp
 
             return new RequestUri(ub.Uri);
         }
+
+        [Obsolete("This method is deprecated and has been replaced by BuildAdminRequestUri(string, bool).")]
+        protected RequestUri PrepareRequest(string path) =>
+            BuildRequestUri(path);
 
         /// <summary>
         /// Prepares a request to the path and appends the shop's access token header if applicable.
@@ -249,8 +259,8 @@ namespace ShopifySharp
             CancellationToken cancellationToken
         )
         {
-            var req = PrepareRequest(path);
-            var response = await ExecuteRequestAsync<T>(req, method, cancellationToken: cancellationToken, content: content, rootElement: resultRootElt);
+            var requestUri = BuildRequestUri(path);
+            var response = await ExecuteRequestAsync<T>(requestUri, method, cancellationToken: cancellationToken, content: content, rootElement: resultRootElt);
             return response.Result;
         }
 
@@ -291,19 +301,19 @@ namespace ShopifySharp
             CancellationToken cancellationToken
         )
         {
-            var req = PrepareRequest(path);
+            var requestUri = BuildRequestUri(path);
 
             if (queryParams != null)
             {
-                req.QueryParams.AddRange(queryParams.ToQueryParameters());
+                requestUri.QueryParams.AddRange(queryParams.ToQueryParameters());
             }
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.QueryParams.Add("fields", fields);
+                requestUri.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<T>(req, HttpMethod.Get, cancellationToken: cancellationToken, rootElement: resultRootElt, headers: headers);
+            return await ExecuteRequestAsync<T>(requestUri, HttpMethod.Get, cancellationToken: cancellationToken, rootElement: resultRootElt, headers: headers);
         }
 
         protected async Task<T> ExecuteGetAsync<T>(

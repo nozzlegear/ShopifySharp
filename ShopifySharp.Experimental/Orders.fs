@@ -3,8 +3,6 @@
 open System.Collections.Generic
 open System.Net.Http
 open System.Threading
-open System.Threading
-open System.Threading
 open ShopifySharp
 open ShopifySharp.Infrastructure
 
@@ -274,25 +272,25 @@ module Orders =
         do match policy with | None -> (); | Some p -> base.SetExecutionPolicy p
 
         member x.CreateAsync (order: OrderProperties) =
-            let req = base.PrepareRequest "orders.json"
+            let req = base.BuildRequestUri("orders.json")
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, CancellationToken.None, content, "order")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
             
         member x.CreateAsync(order: OrderProperties, options: CreationOptions.CreationOptionProperties) =
-            let req = base.PrepareRequest "orders.json"
+            let req = base.BuildRequestUri("orders.json")
             let data = dict [ "order", mergeOrderAndCreationOptions order options |> JsonValue.MapPropertyValuesToObjects ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Order>(req, HttpMethod.Post, CancellationToken.None, content, "order")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
             
         member x.UpdateAsync (id: int64, order: OrderProperties) =
-            let req = base.PrepareRequest (sprintf "orders/%i.json" id)
+            let req = base.BuildRequestUri($"orders/{id}.json")
             let data = dict [ "order" => order ]
             let content = new JsonContent(data)
             base.ExecuteRequestAsync<Order>(req, HttpMethod.Put, CancellationToken.None, content, "order")
-            |> mapTask (fun response -> response.Result)
+            |> mapTask (_.Result)
 
         static member NewService domain accessToken = Service(domain, accessToken)
         static member NewServiceWithPolicy domain accessToken policy = Service(domain, accessToken, policy)

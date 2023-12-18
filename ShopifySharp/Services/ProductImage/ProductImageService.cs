@@ -40,7 +40,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task<ProductImage> CreateAsync(long productId, ProductImage image, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}/images.json");
+            var req = BuildRequestUri($"products/{productId}/images.json");
             var content = new JsonContent(new
             {
                 image = image
@@ -53,7 +53,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task<ProductImage> UpdateAsync(long productId, long productImageId, ProductImage image, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}/images/{productImageId}.json");
+            var req = BuildRequestUri($"products/{productId}/images/{productImageId}.json");
             var content = new JsonContent(new
             {
                 image = image
@@ -66,7 +66,7 @@ namespace ShopifySharp
 		///<inheritdoc />
         public virtual async Task DeleteAsync(long productId, long imageId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"products/{productId}/images/{imageId}.json");
+            var req = BuildRequestUri($"products/{productId}/images/{imageId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

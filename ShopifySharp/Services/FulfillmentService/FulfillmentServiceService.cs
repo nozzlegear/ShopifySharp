@@ -27,7 +27,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentServiceEntity> CreateAsync(FulfillmentServiceEntity fulfillmentServiceEntity, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_services.json");
+            var req = BuildRequestUri($"fulfillment_services.json");
             var body = fulfillmentServiceEntity.ToDictionary();
 
             var content = new JsonContent(new
@@ -42,7 +42,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<FulfillmentServiceEntity> UpdateAsync(long fulfillmentServiceId, FulfillmentServiceEntity fulfillmentServiceEntity, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_services/{fulfillmentServiceId}.json");
+            var req = BuildRequestUri($"fulfillment_services/{fulfillmentServiceId}.json");
             var body = fulfillmentServiceEntity.ToDictionary();
 
             var content = new JsonContent(new
@@ -57,7 +57,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task DeleteAsync(long fulfillmentServiceId, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_services/{fulfillmentServiceId}.json");
+            var req = BuildRequestUri($"fulfillment_services/{fulfillmentServiceId}.json");
 
             await ExecuteRequestAsync(req, HttpMethod.Delete, cancellationToken);
         }

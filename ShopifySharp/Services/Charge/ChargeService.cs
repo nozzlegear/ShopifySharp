@@ -22,7 +22,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Charge> CreateAsync(Charge charge, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("application_charges.json");
+            var req = BuildRequestUri("application_charges.json");
             var content = new JsonContent(new { application_charge = charge });
 
             var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, cancellationToken, content, "application_charge");
@@ -32,7 +32,7 @@ namespace ShopifySharp
         /// <inheritdoc />
         public virtual async Task<Charge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"application_charges/{id}.json");
+            var req = BuildRequestUri($"application_charges/{id}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
