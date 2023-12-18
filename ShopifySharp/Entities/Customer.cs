@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
 

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShopifySharp.Enums;
-using ShopifySharp.Converters;
 
 namespace ShopifySharp
 {

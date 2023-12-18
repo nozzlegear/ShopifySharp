@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using ShopifySharp.Converters;
 using ShopifySharp.Infrastructure;
 using System;
 using Xunit;

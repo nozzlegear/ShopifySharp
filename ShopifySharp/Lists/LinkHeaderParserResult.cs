@@ -1,6 +1,4 @@
-﻿using ShopifySharp.Filters;
-
-namespace ShopifySharp.Lists
+﻿namespace ShopifySharp.Lists
 {
     public class LinkHeaderParseResult<T>
     {

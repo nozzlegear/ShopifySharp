@@ -1,11 +1,5 @@
-﻿using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 using Newtonsoft.Json;
-using ShopifySharp.Enums;
-using System.Runtime.Serialization;
-using System.Reflection;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 
 namespace ShopifySharp.Converters
 {
