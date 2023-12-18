@@ -20,10 +20,10 @@ namespace ShopifySharp
         #nullable enable
 
         public virtual string APIVersion => "2023-07";
+        public virtual bool SupportsAPIVersioning => true;
 
         protected Uri _ShopUri { get; set; }
         protected string _AccessToken { get; set; }
-        protected virtual bool SupportsAPIVersioning => true;
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
         private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
