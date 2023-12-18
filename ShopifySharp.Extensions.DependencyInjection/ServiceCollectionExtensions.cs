@@ -92,6 +92,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IPriceRuleServiceFactory, PriceRuleServiceFactory>();
         services.TryAddSingleton<IProductImageServiceFactory, ProductImageServiceFactory>();
         services.TryAddSingleton<IProductListingServiceFactory, ProductListingServiceFactory>();
+        services.TryAddSingleton<IProductServiceFactory, ProductServiceFactory>();
         services.TryAddSingleton<IProductVariantServiceFactory, ProductVariantServiceFactory>();
         services.TryAddSingleton<IRecurringChargeServiceFactory, RecurringChargeServiceFactory>();
         services.TryAddSingleton<IRedirectServiceFactory, RedirectServiceFactory>();
