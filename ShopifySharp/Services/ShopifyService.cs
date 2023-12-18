@@ -218,9 +218,6 @@ namespace ShopifySharp
         /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
-        /// </remarks>
         protected async Task<RequestResult<JToken>> ExecuteRequestAsync(
             RequestUri uri,
             HttpMethod method,
@@ -236,9 +233,6 @@ namespace ShopifySharp
         /// Executes a request and returns the given type. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
-        /// </remarks>
         protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(
             RequestUri uri,
             HttpMethod method,
