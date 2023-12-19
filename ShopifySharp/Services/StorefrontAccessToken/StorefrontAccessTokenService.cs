@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -12,7 +13,8 @@ namespace ShopifySharp
     public class StorefrontAccessTokenService : ShopifyService, IStorefrontAccessTokenService
     {
         public StorefrontAccessTokenService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal StorefrontAccessTokenService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         /// <inheritdoc />
         public async Task<StorefrontAccessToken> CreateAsync(string title, CancellationToken cancellationToken = default)
         {

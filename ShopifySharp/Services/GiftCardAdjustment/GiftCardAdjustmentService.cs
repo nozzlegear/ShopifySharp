@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -17,7 +18,8 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public GiftCardAdjustmentService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal GiftCardAdjustmentService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<IEnumerable<GiftCardAdjustment>>($"gift_cards/{giftCardId}/adjustments.json", "adjustments", cancellationToken: cancellationToken);
 

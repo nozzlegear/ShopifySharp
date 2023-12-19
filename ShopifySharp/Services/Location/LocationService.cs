@@ -2,6 +2,7 @@
 using ShopifySharp.Lists;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -16,7 +17,8 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public LocationService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal LocationService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         public virtual async Task<Location> GetAsync(long id, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<Location>($"locations/{id}.json", "location", cancellationToken: cancellationToken);
 

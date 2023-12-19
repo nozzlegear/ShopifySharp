@@ -4,6 +4,7 @@ using ShopifySharp.Lists;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -15,7 +16,8 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CustomCollectionService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal CustomCollectionService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         /// <inheritdoc />
         public virtual async Task<ListResult<CustomCollection>> ListAsync(ListFilter<CustomCollection> filter = null, CancellationToken cancellationToken = default) => await ExecuteGetListAsync("custom_collections.json", "custom_collections", filter, cancellationToken);
 
