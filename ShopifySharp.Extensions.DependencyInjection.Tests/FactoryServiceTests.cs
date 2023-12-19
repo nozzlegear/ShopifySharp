@@ -1,5 +1,3 @@
-using ShopifySharp.Utilities;
-
 namespace ShopifySharp.Extensions.DependencyInjection.Tests;
 
 public class FactoryServiceTests
@@ -46,24 +44,23 @@ public class FactoryServiceTests
     }
 
     [Fact]
-    public async Task FactoryServices_WhenDomainUtilityIsInjected_ShouldCreateServiceWithTheUtility()
+    public void FactoryServices_WhenDomainUtilityIsInjected_ShouldCreateServiceWithTheUtility()
     {
         // Setup
         var container = new ServiceCollection();
         container.AddShopifySharpServiceFactories();
         container.AddShopifySharpUtilities(options =>
         {
-            options.DomainUtility = new ShopifyDomainUtility();
+            options.DomainUtility = new TestDomainUtility();
         });
         var serviceProvider = container.BuildServiceProvider();
 
         // Act
         var orderServiceFactory = serviceProvider.GetRequiredService<IOrderServiceFactory>();
-        var orderService = orderServiceFactory.Create(_credentials);
-        var act = () => orderService.ListAsync();
+        // The constructor will use the domain utility to turn the domain string into a uri
+        var act = () => orderServiceFactory.Create(_credentials);
 
         // Assert
-        await act.Should()
-            .ThrowAsync<TestException>();
+        act.Should().Throw<TestException>();
     }
 }
