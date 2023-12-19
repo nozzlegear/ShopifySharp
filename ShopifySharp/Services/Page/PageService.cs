@@ -4,6 +4,7 @@ using ShopifySharp.Lists;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -18,7 +19,8 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public PageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal PageService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         /// <inheritdoc />
         public virtual async Task<int> CountAsync(PageCountFilter filter = null, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<int>("pages/count.json", "count", filter, cancellationToken);

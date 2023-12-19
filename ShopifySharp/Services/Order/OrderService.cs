@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -20,8 +21,10 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public OrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
 
+        internal OrderService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+
         /// <inheritdoc />
-        public virtual async Task<int> CountAsync(OrderCountFilter filter = null, CancellationToken cancellationToken = default) => 
+        public virtual async Task<int> CountAsync(OrderCountFilter filter = null, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<int>("orders/count.json", "count", filter, cancellationToken);
 
         /// <inheritdoc />

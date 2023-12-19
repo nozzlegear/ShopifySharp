@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -26,6 +27,11 @@ namespace ShopifySharp
         {
             _organizationId = organizationId;
             _apiVersion = apiVersion;
+        }
+
+        public PartnerService(long organizationId, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base("partners.shopify.com", accessToken, shopifyDomainUtility)
+        {
+            _organizationId = organizationId;
         }
 
         /// <inheritdoc />

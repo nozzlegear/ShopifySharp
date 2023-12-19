@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using System.Text.Json;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -30,6 +31,11 @@ namespace ShopifySharp
         public GraphService(string myShopifyUrl, string shopAccessToken, string apiVersion = null) : base(myShopifyUrl, shopAccessToken) 
         {
             _apiVersion = apiVersion;
+        }
+
+        public GraphService(string myShopifyUrl, string shopAccessToken, IShopifyDomainUtility shopifyDomainUtility) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+        {
+
         }
 
         public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)

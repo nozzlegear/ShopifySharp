@@ -2,6 +2,7 @@
 using ShopifySharp.Lists;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -16,7 +17,8 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public WebhookService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal WebhookService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         /// <inheritdoc />
         public virtual async Task<int> CountAsync(WebhookCountFilter filter = null, CancellationToken cancellationToken = default) =>
             await ExecuteGetAsync<int>("webhooks/count.json", "count", filter, cancellationToken);

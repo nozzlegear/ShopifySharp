@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Entities.SalesChannel;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -14,7 +15,8 @@ namespace ShopifySharp
     public class CheckoutSalesChannelService: ShopifyService, ICheckoutSalesChannelService
     {
         public CheckoutSalesChannelService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal CheckoutSalesChannelService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         /// <inheritdoc />
         public virtual async Task<CheckoutSalesChannel> GetAsync(string token, CancellationToken cancellationToken = default)
         {

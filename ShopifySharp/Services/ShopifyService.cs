@@ -27,9 +27,16 @@ namespace ShopifySharp
 
         private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
         private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
-        private readonly IShopifyDomainUtility _domainUtility = new ShopifyDomainUtility();
         private IRequestExecutionPolicy _ExecutionPolicy;
         private HttpClient _Client;
+
+        protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility domainUtility)
+        {
+            _ShopUri = domainUtility.BuildShopDomainUri(shopDomain);
+            _AccessToken = accessToken;
+            _Client = _HttpClientFactory.CreateClient();
+            _ExecutionPolicy = _GlobalExecutionPolicy;
+        }
 
         /// <summary>
         /// Creates a new instance of the service using a Shopify shop domain and access token.
@@ -38,7 +45,8 @@ namespace ShopifySharp
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         protected ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
-            _ShopUri = _domainUtility.BuildShopDomainUri(myShopifyUrl);
+            var domainUtility = new ShopifyDomainUtility();
+            _ShopUri = domainUtility.BuildShopDomainUri(myShopifyUrl);
             _AccessToken = shopAccessToken;
             _Client = _HttpClientFactory.CreateClient();
             _ExecutionPolicy = _GlobalExecutionPolicy;
@@ -49,7 +57,8 @@ namespace ShopifySharp
         /// </summary>
         protected ShopifyService(ShopifyApiCredentials credentials)
         {
-            _ShopUri = _domainUtility.BuildShopDomainUri(credentials.ShopDomain);
+            var domainUtility = new ShopifyDomainUtility();
+            _ShopUri = domainUtility.BuildShopDomainUri(credentials.ShopDomain);
             _AccessToken = credentials.AccessToken;
             _Client = _HttpClientFactory.CreateClient();
             _ExecutionPolicy = _GlobalExecutionPolicy;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -20,7 +21,8 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public AccessScopeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal AccessScopeService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
         /// <inheritdoc />
         public virtual async Task<IEnumerable<AccessScope>> ListAsync(CancellationToken cancellationToken = default)
         {
