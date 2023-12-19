@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IUsageChargeServiceFactory
     IUsageChargeService Create(ShopifyApiCredentials credentials);
 }
 
-public class UsageChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IUsageChargeServiceFactory
+public class UsageChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IUsageChargeServiceFactory
 {
     /// <inheritDoc />
     public virtual IUsageChargeService Create(string shopDomain, string accessToken)
     {
-        var service = new UsageChargeService(shopDomain, accessToken);
+        IUsageChargeService service = shopifyDomainUtility is null ? new UsageChargeService(shopDomain, accessToken) : new UsageChargeService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

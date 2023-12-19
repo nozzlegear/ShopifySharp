@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IScriptTagServiceFactory
     IScriptTagService Create(ShopifyApiCredentials credentials);
 }
 
-public class ScriptTagServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IScriptTagServiceFactory
+public class ScriptTagServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IScriptTagServiceFactory
 {
     /// <inheritDoc />
     public virtual IScriptTagService Create(string shopDomain, string accessToken)
     {
-        var service = new ScriptTagService(shopDomain, accessToken);
+        IScriptTagService service = shopifyDomainUtility is null ? new ScriptTagService(shopDomain, accessToken) : new ScriptTagService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

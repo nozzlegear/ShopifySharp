@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IPageServiceFactory
     IPageService Create(ShopifyApiCredentials credentials);
 }
 
-public class PageServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IPageServiceFactory
+public class PageServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IPageServiceFactory
 {
     /// <inheritDoc />
     public virtual IPageService Create(string shopDomain, string accessToken)
     {
-        var service = new PageService(shopDomain, accessToken);
+        IPageService service = shopifyDomainUtility is null ? new PageService(shopDomain, accessToken) : new PageService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

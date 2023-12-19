@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IGraphServiceFactory
     IGraphService Create(ShopifyApiCredentials credentials);
 }
 
-public class GraphServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IGraphServiceFactory
+public class GraphServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IGraphServiceFactory
 {
     /// <inheritDoc />
     public virtual IGraphService Create(string shopDomain, string accessToken)
     {
-        var service = new GraphService(shopDomain, accessToken);
+        IGraphService service = shopifyDomainUtility is null ? new GraphService(shopDomain, accessToken) : new GraphService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

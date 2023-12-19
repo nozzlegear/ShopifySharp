@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IStorefrontAccessTokenServiceFactory
     IStorefrontAccessTokenService Create(ShopifyApiCredentials credentials);
 }
 
-public class StorefrontAccessTokenServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IStorefrontAccessTokenServiceFactory
+public class StorefrontAccessTokenServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IStorefrontAccessTokenServiceFactory
 {
     /// <inheritDoc />
     public virtual IStorefrontAccessTokenService Create(string shopDomain, string accessToken)
     {
-        var service = new StorefrontAccessTokenService(shopDomain, accessToken);
+        IStorefrontAccessTokenService service = shopifyDomainUtility is null ? new StorefrontAccessTokenService(shopDomain, accessToken) : new StorefrontAccessTokenService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

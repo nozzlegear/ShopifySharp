@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface I@@REPLACEME@@Factory
     I@@REPLACEME@@ Create(ShopifyApiCredentials credentials);
 }
 
-public class @@REPLACEME@@Factory(IRequestExecutionPolicy? requestExecutionPolicy = null) : I@@REPLACEME@@Factory
+public class @@REPLACEME@@Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : I@@REPLACEME@@Factory
 {
     /// <inheritDoc />
     public virtual I@@REPLACEME@@ Create(string shopDomain, string accessToken)
     {
-        var service = new @@REPLACEME@@(shopDomain, accessToken);
+        I@@REPLACEME@@ service = shopifyDomainUtility is null ? new @@REPLACEME@@(shopDomain, accessToken) : new @@REPLACEME@@(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

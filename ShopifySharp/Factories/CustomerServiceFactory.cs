@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface ICustomerServiceFactory
     ICustomerService Create(ShopifyApiCredentials credentials);
 }
 
-public class CustomerServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICustomerServiceFactory
+public class CustomerServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ICustomerServiceFactory
 {
     /// <inheritDoc />
     public virtual ICustomerService Create(string shopDomain, string accessToken)
     {
-        var service = new CustomerService(shopDomain, accessToken);
+        ICustomerService service = shopifyDomainUtility is null ? new CustomerService(shopDomain, accessToken) : new CustomerService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

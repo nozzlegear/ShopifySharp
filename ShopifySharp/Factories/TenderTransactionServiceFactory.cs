@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface ITenderTransactionServiceFactory
     ITenderTransactionService Create(ShopifyApiCredentials credentials);
 }
 
-public class TenderTransactionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ITenderTransactionServiceFactory
+public class TenderTransactionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ITenderTransactionServiceFactory
 {
     /// <inheritDoc />
     public virtual ITenderTransactionService Create(string shopDomain, string accessToken)
     {
-        var service = new TenderTransactionService(shopDomain, accessToken);
+        ITenderTransactionService service = shopifyDomainUtility is null ? new TenderTransactionService(shopDomain, accessToken) : new TenderTransactionService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

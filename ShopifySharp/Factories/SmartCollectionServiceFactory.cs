@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface ISmartCollectionServiceFactory
     ISmartCollectionService Create(ShopifyApiCredentials credentials);
 }
 
-public class SmartCollectionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ISmartCollectionServiceFactory
+public class SmartCollectionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ISmartCollectionServiceFactory
 {
     /// <inheritDoc />
     public virtual ISmartCollectionService Create(string shopDomain, string accessToken)
     {
-        var service = new SmartCollectionService(shopDomain, accessToken);
+        ISmartCollectionService service = shopifyDomainUtility is null ? new SmartCollectionService(shopDomain, accessToken) : new SmartCollectionService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

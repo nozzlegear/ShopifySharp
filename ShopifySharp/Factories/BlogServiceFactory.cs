@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IBlogServiceFactory
     IBlogService Create(ShopifyApiCredentials credentials);
 }
 
-public class BlogServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IBlogServiceFactory
+public class BlogServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IBlogServiceFactory
 {
     /// <inheritDoc />
     public virtual IBlogService Create(string shopDomain, string accessToken)
     {
-        var service = new BlogService(shopDomain, accessToken);
+        IBlogService service = shopifyDomainUtility is null ? new BlogService(shopDomain, accessToken) : new BlogService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {
