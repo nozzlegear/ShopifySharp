@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using ShopifySharp.Factories;
@@ -32,13 +33,40 @@ public static class ServiceCollectionExtensions
     /// <item><see cref="IShopifyDomainUtility"/></item>
     /// <item><see cref="IShopifyRequestValidationUtility"/></item>
     /// </list>
+    /// <param name="configure">An optional configuration action for configuring the utilities.</param>
     /// </summary>
-    public static IServiceCollection AddShopifySharpUtilities(this IServiceCollection services)
+    public static IServiceCollection AddShopifySharpUtilities(this IServiceCollection services, Action<ShopifySharpUtilityOptions>? configure = null)
     {
+        var options = new ShopifySharpUtilityOptions();
+        configure?.Invoke(options);
+
         // TODO: add ServiceLifetime parameter
-        services.TryAddSingleton<IShopifyOauthUtility, ShopifyOauthUtility>();
-        services.TryAddSingleton<IShopifyDomainUtility, ShopifyDomainUtility>();
-        services.TryAddSingleton<IShopifyRequestValidationUtility, ShopifyRequestValidationUtility>();
+        if(options.OauthUtility != null)
+        {
+            services.AddSingleton(options.OauthUtility);
+        }
+        else
+        {
+            services.TryAddSingleton<IShopifyOauthUtility, ShopifyOauthUtility>();
+        }
+
+        if(options.DomainUtility != null)
+        {
+            services.AddSingleton(options.DomainUtility);
+        }
+        else
+        {
+            services.TryAddSingleton<IShopifyDomainUtility, ShopifyDomainUtility>();
+        }
+
+        if(options.RequestValidationUtility != null)
+        {
+            services.AddSingleton(options.RequestValidationUtility);
+        }
+        else
+        {
+            services.TryAddSingleton<IShopifyRequestValidationUtility, ShopifyRequestValidationUtility>();
+        }
 
         return services;
     }
