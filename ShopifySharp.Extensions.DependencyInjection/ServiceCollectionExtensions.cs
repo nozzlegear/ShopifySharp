@@ -16,13 +16,14 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Adds a <see cref="IRequestExecutionPolicy"/> to your Dependency Injection container. ShopifySharp service factories
     /// managed by your container will use this policy when creating ShopifySharp services.
+    /// <p>Note: Policies are not true middleware, ShopifySharp services can only use one policy at this time.</p>
     /// </summary>
     /// <typeparam name="T">A class that implements ShopifySharp's <see cref="IRequestExecutionPolicy"/> interface.</typeparam>
     public static IServiceCollection AddShopifySharpRequestExecutionPolicy<T>(this IServiceCollection services)
         where T : class, IRequestExecutionPolicy
     {
         // TODO: add ServiceLifetime parameter
-        services.TryAddSingleton<IRequestExecutionPolicy, T>();
+        services.AddSingleton<IRequestExecutionPolicy, T>();
         return services;
     }
 
