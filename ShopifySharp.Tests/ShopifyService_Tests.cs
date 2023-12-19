@@ -5,12 +5,16 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using ShopifySharp.Filters;
 using Xunit;
+
+// TODO: move the tests in this file to the ShopifySharp.Tests.Services.ShopifyServiceTests file
 
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "ShopifyService"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
+    [TestSubject(typeof(ShopifyService))]
     public class ShopifyService_Tests
     {
         string ReasonPhrase(HttpStatusCode code)
