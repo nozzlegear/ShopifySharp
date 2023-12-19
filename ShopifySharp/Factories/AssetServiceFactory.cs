@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IAssetServiceFactory
     IAssetService Create(ShopifyApiCredentials credentials);
 }
 
-public class AssetServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IAssetServiceFactory
+public class AssetServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IAssetServiceFactory
 {
     /// <inheritDoc />
     public virtual IAssetService Create(string shopDomain, string accessToken)
     {
-        var service = new AssetService(shopDomain, accessToken);
+        IAssetService service = shopifyDomainUtility is null ? new AssetService(shopDomain, accessToken) : new AssetService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

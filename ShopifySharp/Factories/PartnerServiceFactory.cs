@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IPartnerServiceFactory
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
-public class PartnerServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IPartnerServiceFactory
+public class PartnerServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IPartnerServiceFactory
 {
     /// <inheritDoc />
     public virtual IPartnerService Create(long partnerOrganizationId, string accessToken)
     {
-        var service = new PartnerService(partnerOrganizationId, accessToken);
+        var service = shopifyDomainUtility is null ? new PartnerService(partnerOrganizationId, accessToken) : new PartnerService(partnerOrganizationId, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

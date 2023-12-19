@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IAccessScopeServiceFactory
     IAccessScopeService Create(ShopifyApiCredentials credentials);
 }
 
-public class AccessScopeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IAccessScopeServiceFactory
+public class AccessScopeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IAccessScopeServiceFactory
 {
     /// <inheritDoc />
     public virtual IAccessScopeService Create(string shopDomain, string accessToken)
     {
-        var service = new AccessScopeService(shopDomain, accessToken);
+        IAccessScopeService service = shopifyDomainUtility is null ? new AccessScopeService(shopDomain, accessToken) : new AccessScopeService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

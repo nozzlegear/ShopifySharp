@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IGiftCardAdjustmentServiceFactory
     IGiftCardAdjustmentService Create(ShopifyApiCredentials credentials);
 }
 
-public class GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IGiftCardAdjustmentServiceFactory
+public class GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IGiftCardAdjustmentServiceFactory
 {
     /// <inheritDoc />
     public virtual IGiftCardAdjustmentService Create(string shopDomain, string accessToken)
     {
-        var service = new GiftCardAdjustmentService(shopDomain, accessToken);
+        IGiftCardAdjustmentService service = shopifyDomainUtility is null ? new GiftCardAdjustmentService(shopDomain, accessToken) : new GiftCardAdjustmentService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

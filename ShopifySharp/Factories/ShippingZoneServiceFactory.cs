@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IShippingZoneServiceFactory
     IShippingZoneService Create(ShopifyApiCredentials credentials);
 }
 
-public class ShippingZoneServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IShippingZoneServiceFactory
+public class ShippingZoneServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IShippingZoneServiceFactory
 {
     /// <inheritDoc />
     public virtual IShippingZoneService Create(string shopDomain, string accessToken)
     {
-        var service = new ShippingZoneService(shopDomain, accessToken);
+        IShippingZoneService service = shopifyDomainUtility is null ? new ShippingZoneService(shopDomain, accessToken) : new ShippingZoneService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

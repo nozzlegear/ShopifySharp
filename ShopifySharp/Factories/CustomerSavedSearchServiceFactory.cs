@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface ICustomerSavedSearchServiceFactory
     ICustomerSavedSearchService Create(ShopifyApiCredentials credentials);
 }
 
-public class CustomerSavedSearchServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICustomerSavedSearchServiceFactory
+public class CustomerSavedSearchServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ICustomerSavedSearchServiceFactory
 {
     /// <inheritDoc />
     public virtual ICustomerSavedSearchService Create(string shopDomain, string accessToken)
     {
-        var service = new CustomerSavedSearchService(shopDomain, accessToken);
+        ICustomerSavedSearchService service = shopifyDomainUtility is null ? new CustomerSavedSearchService(shopDomain, accessToken) : new CustomerSavedSearchService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

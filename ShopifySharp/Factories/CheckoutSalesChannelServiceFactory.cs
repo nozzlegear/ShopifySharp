@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface ICheckoutSalesChannelServiceFactory
     ICheckoutSalesChannelService Create(ShopifyApiCredentials credentials);
 }
 
-public class CheckoutSalesChannelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : ICheckoutSalesChannelServiceFactory
+public class CheckoutSalesChannelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ICheckoutSalesChannelServiceFactory
 {
     /// <inheritDoc />
     public virtual ICheckoutSalesChannelService Create(string shopDomain, string accessToken)
     {
-        var service = new CheckoutSalesChannelService(shopDomain, accessToken);
+        ICheckoutSalesChannelService service = shopifyDomainUtility is null ? new CheckoutSalesChannelService(shopDomain, accessToken) : new CheckoutSalesChannelService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

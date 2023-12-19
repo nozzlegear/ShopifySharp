@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
@@ -18,12 +19,12 @@ public interface IFulfillmentRequestServiceFactory
     IFulfillmentRequestService Create(ShopifyApiCredentials credentials);
 }
 
-public class FulfillmentRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null) : IFulfillmentRequestServiceFactory
+public class FulfillmentRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IFulfillmentRequestServiceFactory
 {
     /// <inheritDoc />
     public virtual IFulfillmentRequestService Create(string shopDomain, string accessToken)
     {
-        var service = new FulfillmentRequestService(shopDomain, accessToken);
+        IFulfillmentRequestService service = shopifyDomainUtility is null ? new FulfillmentRequestService(shopDomain, accessToken) : new FulfillmentRequestService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {
