@@ -1,3 +1,5 @@
+using ShopifySharp.Utilities;
+
 namespace ShopifySharp.Extensions.DependencyInjection.Tests;
 
 public class FactoryServiceTests
@@ -31,6 +33,28 @@ public class FactoryServiceTests
         var container = new ServiceCollection();
         container.AddShopifySharpServiceFactories();
         container.AddShopifySharpRequestExecutionPolicy<TestRequestExecutionPolicy>();
+        var serviceProvider = container.BuildServiceProvider();
+
+        // Act
+        var orderServiceFactory = serviceProvider.GetRequiredService<IOrderServiceFactory>();
+        var orderService = orderServiceFactory.Create(_credentials);
+        var act = () => orderService.ListAsync();
+
+        // Assert
+        await act.Should()
+            .ThrowAsync<TestException>();
+    }
+
+    [Fact]
+    public async Task FactoryServices_WhenDomainUtilityIsInjected_ShouldCreateServiceWithTheUtility()
+    {
+        // Setup
+        var container = new ServiceCollection();
+        container.AddShopifySharpServiceFactories();
+        container.AddShopifySharpUtilities(options =>
+        {
+            options.DomainUtility = new ShopifyDomainUtility();
+        });
         var serviceProvider = container.BuildServiceProvider();
 
         // Act
