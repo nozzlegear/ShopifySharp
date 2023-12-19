@@ -55,8 +55,6 @@ namespace ShopifySharp
             _ExecutionPolicy = _GlobalExecutionPolicy;
         }
 
-        #nullable disable
-
         /// <summary>
         /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
         /// </summary>
@@ -79,6 +77,8 @@ namespace ShopifySharp
 
             return uriBuilder.Uri;
         }
+
+        #nullable disable
 
         /// <summary>
         /// Sets the execution policy for this instance only. This policy will always be used over the global execution policy.
