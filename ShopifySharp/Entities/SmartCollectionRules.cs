@@ -24,5 +24,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("column")]
         public string Column { get; set; }
+
+        /// <summary>
+        /// The id of the object that points to additional attributes for the collection rule. This is only required when using metafield definition rules.
+        /// </summary>
+        [JsonProperty("condition_object_id")]
+        public long? ConditionObjectId { get; set; }
     }
 }

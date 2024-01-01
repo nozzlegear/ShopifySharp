@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0;netstandard2.1;net7.0;netstandard2.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <LangVersion>Latest</LangVersion>
+    <VersionPrefix>1.2.0</VersionPrefix>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Description>Adds support for injecting ShopifySharp's services and service factories into your .NET classes using Microsoft's Dependency Injection containers.</Description>
+    <Authors>Nozzlegear</Authors>
+    <Copyright>Nozzlegear Software</Copyright>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
+    <PackageTags>Shopify;Ecommerce;DependencyInjection;DI</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="microsoft.extensions.dependencyinjection" Version="8.0.0" />
+  </ItemGroup>
+</Project>

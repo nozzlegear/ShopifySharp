@@ -1,7 +1,5 @@
 using ShopifySharp.Filters;
-using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ShopifySharp.Lists
 {

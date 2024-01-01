@@ -1,27 +1,30 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net48</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
-    <VersionPrefix>6.1.0</VersionPrefix>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <VersionPrefix>6.10.0</VersionPrefix>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <LangVersion>8</LangVersion>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
     <Authors>Nozzlegear</Authors>
     <Copyright>Nozzlegear Software</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/nozzlegear/shopifysharp/master/LICENSE</PackageLicenseUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
-    <PackageTags>shopify,ecommerce</PackageTags>
+    <PackageTags>Shopify;Ecommerce;Rest;Graphql</PackageTags>
+    <PackageReadme>For detailed usage examples and documentation, check our Github repository at [https://github.com/nozzlegear/shopifysharp](https://github.com/nozzlegear/shopifysharp).</PackageReadme>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Net.Http" />

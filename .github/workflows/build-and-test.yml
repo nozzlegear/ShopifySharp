@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master, setup-github-actions ]
 
-# Cancel any in-progress build/test runs 
+# Cancel any in-progress build/test runs
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
 concurrency:
   group: ci-${{ github.ref }}
@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     name: "Build"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     environment: "Build Environment"
 
     steps:
@@ -30,7 +30,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          6.0.x
+          8.0.x
+          7.0.x
 
     - name: Build and pack
       run: fish .github/scripts/build.fish
@@ -80,7 +81,7 @@ jobs:
 
   test:
     name: "Unit tests"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     # Do not run this job until the build job completes
     needs: test-windows
     environment: "Unit test environment"
@@ -100,6 +101,12 @@ jobs:
         && sudo apt-get -qq update \
         && sudo apt-get -qq install fish parallel
 
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: |
+          8.0.x
+
     - name: Checkout branch
       uses: actions/checkout@master
 
@@ -117,7 +124,7 @@ jobs:
 
   publish:
     name: "Publish prerelease packages"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: test
     environment: "Prerelease deployment environment"
 
@@ -126,8 +133,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: |
-          6.0.x
-          3.1.x
+          8.0.x
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -140,4 +146,4 @@ jobs:
 
     - name: Publish package to Nuget
       # Prerelease packages have a `-b*.nupkg` suffix
-      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg 
+      run: dotnet nuget push --skip-duplicate -k ${{ secrets.NUGET_TOKEN }} -s "https://api.nuget.org/v3/index.json" ./artifacts/*-b*.nupkg

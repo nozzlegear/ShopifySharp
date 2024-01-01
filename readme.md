@@ -34,25 +34,19 @@ It's difficult to find blog posts or tutorials about building Shopify apps, and 
 
 # Installation
 
-ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). Use the package manager
-console in Visual Studio to install it:
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). You can install it with the dotnet command line:
 
-```pwsh
-Install-Package ShopifySharp
-```
+| Package                                                                                                                   | Installation                                                     | Documentation                                                                               |
+|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| [ShopifySharp](https://www.nuget.org/packages/ShopifySharp)                                                               | `dotnet add package shopifysharp`                                | [Click here.](#using-shopifysharp-with-a-public-shopify-app) New documentation coming soon! |
+| [ShopifySharp.Extensions.DependencyInjection](https://www.nuget.org/packages/ShopifySharp.Extensions.DependencyInjection) | `dotnet add package shopifysharp.extensions.dependencyinjection` | [Click here.](./ShopifySharp.Extensions.DependencyInjection/README.md)                      |
 
-If you're using .NET Core, you can use the `dotnet` command from your favorite shell:
-
-```sh
-dotnet add package shopifysharp
-```
-
-# API support
+# Shopify API version support
 
 Shopify has begun versioning their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
 
 | ShopifySharp version | Shopify API version |
-| -------------------- | ------------------- |
+|----------------------|---------------------|
 | 4.x and below        | None, unsupported   |
 | 5.0.0 - 5.5.0        | 2019-10             |
 | 5.6.0 - 5.7.0        | 2020-07             |
@@ -61,11 +55,11 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 5.14.0 - 5.15.0      | 2021-10             |
 | 5.16.0 - 5.18.11     | 2022-04             |
 | 5.19.0 - 5.19.1      | 2022-07             |
-| 6.0.1 and above      | 2023-01             |
+| 6.0.1 - 6.2.0        | 2023-01             |
+| 6.3.0 and above      | 2023-07             |
 
 **Note:** ShopifySharp dropped support for .NET Framework 4.5 in version 5.14.0. [More details in #438.](https://github.com/nozzlegear/ShopifySharp/issues/438)
-
-**A migration guide for migrating from ShopifySharp 5.x to ShopifySharp 6.0+ is coming soon.**
+The oldest version of .NET Framework we can support is [whichever version is supported by .NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions).
 
 # Frequently Asked Questions
 
@@ -98,6 +92,43 @@ product = await productService.UpdateAsync(productId, product);
 ```
 
 We're looking for feedback on methods to improve object updating and property serialization in ShopifySharp. [You can offer feedback here](https://github.com/nozzlegear/ShopifySharp/issues/388), and check out these issues ([#284](https://github.com/nozzlegear/ShopifySharp/issues/284), [#367](https://github.com/nozzlegear/ShopifySharp/issues/367), [#373](https://github.com/nozzlegear/ShopifySharp/issues/373), [#379](https://github.com/nozzlegear/ShopifySharp/issues/379), [#642](https://github.com/nozzlegear/ShopifySharp/issues/642)) for further history on the problem.
+
+### Question: How can I use ShopifySharp with Dependency Injection?
+
+Install the [ShopifySharp.Extensions.DependencyInjection package from Nuget](https://nuget.org/packages/ShopifySharp.Extensions.DependencyInjection), which adds support for injecting ShopifySharp services into .NET classes using Microsoft's Dependency Injection framework. To do this, it exposes several methods that extend the [IServiceCollection interface](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-8.0). Microsoft's DI framework will then make the ShopifySharp services available to the rest of your code when you add the interfaces to your class constructors.
+
+```cs
+// In your Program.cs or Startup.cs file, or wherever you register your Dependency Injection services
+public class DependencyInjectionExample(IServiceCollection services)
+{
+    // ...
+    
+    // Add ShopifySharp's service factories and the LeakyBucketExecutionPolicy to your DI container
+    services.AddShopifySharp<LeakyBucketExecutionPolicy>(options =>
+    {
+        options.RequestExecutionPolicy = new LeakyBucketExecutionPolicy(); 
+    });
+}
+
+// In the class where you want to use a ShopifySharp service
+public class MyClass(IOrderServiceFactory orderServiceFactory)
+{
+    public async Task ListOrdersForUser()
+    {
+        var user = await DoSomethingToGetUser();
+        var credentials = new ShopifyRestApiCredentials(user.ShopDomain, user.AccessToken);
+        var orderService = orderServiceFactory.Create(credentials);
+        
+        // Because the service was created using the injected factory class, 
+        // it's automatically using the LeakyBucket request policy. That means it will
+        // gracefully handle Shopify's API request limit and will wait if it hits the
+        // limit (instead of throwing an exception).
+        var orders = await ordrService.ListAsync();
+    }
+}
+```
+
+Check the [package's documentation](./ShopifySharp.Extensions.DependencyInjection/README.md) for more information.
 
 # A work-in-progress
 
@@ -1349,7 +1380,7 @@ Fulfillments can only be cancelled if their `Status` is `pending`.
 
 ```cs
 var service = new FulfillmentService(myShopifyUrl, shopAccessToken);
-await service.CancelAsync(orderId, fulfillmentId);
+await service.CancelAsync(fulfillmentId)
 ```
 
 ---
@@ -2877,7 +2908,7 @@ However, ShopifySharp also has request execution policies that you can use to im
 
 1. `DefaultRequestExecutionPolicy`: This is the default policy, which will throw a `ShopifyRateLimitException` when the API rate limit has been reached.
 2. `RetryExecutionPolicy`: If a request throws a `ShopifyRateLimitException`, this policy will keep retrying it until it is successful.
-3. `SmartRetryExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
+3. `LeakyBucketExecutionPolicy`: This policy attempts to use a leaky bucket strategy by proactively limiting the number of requests that will result in a `ShopifyRateLimitException`. For example: if 100 requests are created in parallel, only 40 should be sent immediately, and the remaining 60 requests should be throttled at 1 per 500ms.
 
 You have two different ways to set an execution policy. You can set a policy on a per-instance basis:
 
@@ -2895,7 +2926,7 @@ ShopifyService.SetGlobalExecutionPolicy(new RetryExecutionPolicy());
 
 Note that **instance-specific policies will always be used over global execution policies**. In addition, if you clear the instance-specific policy by passing `null`, **the instance will then switch over to the global execution policy**.
 
-Keep in mind that the `RetryExecutionPolicy` and the `SmartRetryExecutionPolicy` will keep retrying your requests – potentially until the end of time – until they are successful. It's up to you to ensure that such a strategy won't impact the performance of your applications.
+Keep in mind that the `RetryExecutionPolicy` and the `LeakyBucketExecutionPolicy` will keep retrying your requests – potentially until the end of time – until they are successful. It's up to you to ensure that such a strategy won't impact the performance of your applications.
 
 If you need a custom policy to do something more complicated or to e.g. implement request logging, you can create your own request policy that extends the `ShopifySharp.IRequestExecutionPolicy` interface. [Check here](https://github.com/nozzlegear/ShopifySharp/blob/master/ShopifySharp/Infrastructure/Policies/RetryExecutionPolicy.cs) for an example.
 

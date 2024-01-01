@@ -1,17 +1,15 @@
-﻿using System;
-using System.Net.Http;
+﻿using ShopifySharp.Filters;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using ShopifySharp.Filters;
-using ShopifySharp.Infrastructure;
+using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
     /// <summary>
     /// A service for manipulating Shopify's RecurringApplicationCharge API.
     /// </summary>
-    public class RecurringChargeService : ShopifyService
+    public class RecurringChargeService : ShopifyService, IRecurringChargeService
     {
         /// <summary>
         /// Creates a new instance of <see cref="RecurringChargeService" />.
@@ -19,46 +17,22 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public RecurringChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+        internal RecurringChargeService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
+        /// <inheritdoc />
+        public virtual async Task<RecurringCharge> CreateAsync(RecurringCharge charge, CancellationToken cancellationToken = default) =>
+            await ExecutePostAsync<RecurringCharge>("recurring_application_charges.json", "recurring_application_charge", cancellationToken, new { recurring_application_charge = charge });
 
-        /// <summary>
-        /// Creates a <see cref="RecurringCharge"/>.
-        /// </summary>
-        /// <param name="charge">The <see cref="RecurringCharge"/> to create.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The new <see cref="RecurringCharge"/>.</returns>
-        public virtual async Task<RecurringCharge> CreateAsync(RecurringCharge charge, CancellationToken cancellationToken = default)
-        {
-            return await ExecutePostAsync<RecurringCharge>("recurring_application_charges.json", "recurring_application_charge", cancellationToken, new { recurring_application_charge = charge });
-        }
+        /// <inheritdoc />
+        public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default) =>
+            await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields, cancellationToken);
 
-        /// <summary>
-        /// Retrieves the <see cref="RecurringCharge"/> with the given id.
-        /// </summary>
-        /// <param name="id">The id of the charge to retrieve.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The <see cref="RecurringCharge"/>.</returns>
-        public virtual async Task<RecurringCharge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
-        {
-            return await ExecuteGetAsync<RecurringCharge>($"recurring_application_charges/{id}.json", "recurring_application_charge", fields, cancellationToken);
-        }
+        /// <inheritdoc />
+        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null, CancellationToken cancellationToken = default) =>
+            await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter, cancellationToken);
 
-        /// <summary>
-        /// Retrieves a list of all past and present <see cref="RecurringCharge"/> objects.
-        /// </summary>
-        public virtual async Task<IEnumerable<RecurringCharge>> ListAsync(RecurringChargeListFilter filter = null, CancellationToken cancellationToken = default)
-        {
-            return await ExecuteGetAsync<IEnumerable<RecurringCharge>>("recurring_application_charges.json", "recurring_application_charges", filter, cancellationToken);
-        }
-
-        /// <summary>
-        /// Deletes a <see cref="RecurringCharge"/>.
-        /// </summary>
-        /// <param name="id">The id of the charge to delete.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
-        {
+        /// <inheritdoc />
+        public virtual async Task DeleteAsync(long id, CancellationToken cancellationToken = default) =>
             await ExecuteDeleteAsync($"recurring_application_charges/{id}.json", cancellationToken);
-        }
     }
 }

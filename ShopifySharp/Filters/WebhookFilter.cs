@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using ShopifySharp.Enums;
 
 namespace ShopifySharp.Filters
 {

@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System;
 
 namespace ShopifySharp.Infrastructure
 {

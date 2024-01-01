@@ -1,7 +1,8 @@
 ﻿using ShopifySharp.Infrastructure;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -16,10 +17,12 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public CancellationRequestService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal CancellationRequestService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> CreateAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/cancellation_request.json");
+            var req = BuildRequestUri($@"fulfillment_orders/{fulfillmentOrderId}/cancellation_request.json");
             var cancellationRequest = new CancellationRequest { Message = message };
             var body = cancellationRequest.ToDictionary();
 
@@ -32,9 +35,10 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> AcceptAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/cancellation_request/accept.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/cancellation_request/accept.json");
             var cancellationRequest = new CancellationRequest { Message = message };
             var body = cancellationRequest.ToDictionary();
 
@@ -47,9 +51,10 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> RejectAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/cancellation_request/reject.json");
+            var req = BuildRequestUri($@"fulfillment_orders/{fulfillmentOrderId}/cancellation_request/reject.json");
             var cancellationRequest = new CancellationRequest { Message = message };
             var body = cancellationRequest.ToDictionary();
 

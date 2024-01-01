@@ -1,11 +1,6 @@
+using System;
 using Newtonsoft.Json;
 using ShopifySharp.Converters;
-using ShopifySharp.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -63,5 +58,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("updated_at")]
         public DateTimeOffset? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// The currency of the price of the application charge.
+        /// </summary>
+        [JsonProperty("currency")]
+        public string Currency { get; set; }
     }
 }

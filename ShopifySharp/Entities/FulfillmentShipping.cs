@@ -29,7 +29,13 @@ namespace ShopifySharp
         public TrackingInfo TrackingInfo { get; set; }
 
         /// <summary>
-        /// The fulfillment order line items to be requested for fulfillment. If left blank, all line items of the fulfillment order are requested for fulfillment.
+        /// The address of the fulfillment location.
+        /// </summary>
+        [JsonProperty("origin_address")]
+        public FulfillmentOriginAddress OriginAddress { get; set; }
+
+        /// <summary>
+        /// The fulfillment order line items that have to be fulfilled.
         /// </summary>
         [JsonProperty("line_items_by_fulfillment_order")]
         public IEnumerable<LineItemsByFulfillmentOrder> FulfillmentRequestOrderLineItems { get; set; }

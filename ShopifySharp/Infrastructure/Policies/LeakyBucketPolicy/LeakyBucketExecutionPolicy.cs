@@ -18,7 +18,6 @@ namespace ShopifySharp
     public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
     {
         private const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
-        public const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
 
         private static ConcurrentDictionary<string, MultiShopifyAPIBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, MultiShopifyAPIBucket>();
 
@@ -66,31 +65,32 @@ namespace ShopifySharp
                             await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost.Value, cancellationToken);
 
                         var graphRes = await executeRequestAsync(request);
-                        var json = graphRes.Result as JToken;
+                        var jsonDoc = graphRes.Result switch
+                        {
+                            System.Text.Json.JsonDocument systemTextJsonDoc => systemTextJsonDoc,
+                            JToken jsonNetDoc => System.Text.Json.JsonDocument.Parse(jsonNetDoc.ToString(Newtonsoft.Json.Formatting.None)),
+                            _ => throw new Exception($"Unexpected non json result of type {graphRes.Response.GetType().Name} for GraphQL Admin API")
+                        };
 
                         if (bucket != null)
                         {
-                            var cost = json.SelectToken("extensions.cost");
-                            if (cost != null)
+                            var graphBucketState = graphRes.GetGraphQLBucketState(jsonDoc);
+                            if (graphBucketState != null)
                             {
-                                var throttleStatus = cost["throttleStatus"];
-                                int maximumAvailable = (int)throttleStatus["maximumAvailable"];
-                                int restoreRate = (int)throttleStatus["restoreRate"];
-                                int currentlyAvailable = (int)throttleStatus["currentlyAvailable"];
-                                int actualQueryCost = (int?)cost["actualQueryCost"] ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
+                                int actualQueryCost = graphBucketState.ActualQueryCost ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
                                 int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
-                                bucket.SetGraphQLBucketState(maximumAvailable, restoreRate, currentlyAvailable, refund);
+                                bucket.SetGraphQLBucketState(graphBucketState.MaxAvailable, graphBucketState.RestoreRate, graphBucketState.CurrentlyAvailable, refund);
 
                                 //The user might have supplied no cost or an invalid cost
                                 //We fix the query cost so the correct value is used if a retry is needed
-                                graphqlQueryCost = (int)cost["requestedQueryCost"];
+                                graphqlQueryCost = graphBucketState.RequestedQueryCost;
                             }
                         }
 
-                        if (json.SelectToken("errors")
-                            ?.Children()
-                            .Any(r => r.SelectToken("extensions.code")?.Value<string>() == "THROTTLED")
-                            == true)
+                        if (jsonDoc.RootElement.TryGetProperty("errors", out var errors) && 
+                            errors.EnumerateArray().Any(error => error.TryGetProperty("extensions", out var extensions) && 
+                                                                 extensions.TryGetProperty("code", out var code) &&
+                                                                 code.GetString() == "THROTTLED"))
                         {
                             await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                             break;
@@ -108,16 +108,9 @@ namespace ShopifySharp
 
                             if (bucket != null)
                             {
-                                var apiCallLimitHeaderValue = GetRestCallLimit(restRes.Response);
-                                if (apiCallLimitHeaderValue != null)
-                                {
-                                    var split = apiCallLimitHeaderValue.Split('/');
-                                    if (split.Length == 2 && int.TryParse(split[0], out int currentlyUsed) &&
-                                                             int.TryParse(split[1], out int maxAvailable))
-                                    {
-                                        bucket.SetRESTBucketState(maxAvailable, maxAvailable - currentlyUsed);
-                                    }
-                                }
+                                var restBucketState = restRes.GetRestBucketState();
+                                if (restBucketState != null)
+                                    bucket.SetRESTBucketState(restBucketState.MaxAvailable, restBucketState.MaxAvailable - restBucketState.CurrentlyUsed);
                             }
 
                             return restRes;
@@ -145,13 +138,6 @@ namespace ShopifySharp
                         }
                 }
             }
-        }
-
-        private string GetRestCallLimit(HttpResponseMessage response)
-        {
-            return response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT)
-                                       .Value
-                                       ?.FirstOrDefault();
         }
 
         private string GetAccessToken(HttpRequestMessage client)

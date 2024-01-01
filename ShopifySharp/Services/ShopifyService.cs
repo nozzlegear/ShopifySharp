@@ -1,4 +1,5 @@
-﻿using System;
+﻿// ReSharper disable InconsistentNaming
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -6,73 +7,87 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json;
-using System.IO;
 using System.Threading;
+using ShopifySharp.Credentials;
 using ShopifySharp.Lists;
 using ShopifySharp.Filters;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
-    public abstract class ShopifyService
+    public abstract class ShopifyService : IShopifyService
     {
-        public virtual string APIVersion => "2023-01";
+        #nullable enable
 
-        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
-
-        private static IHttpClientFactory _HttpClientFactory = new DefaultHttpClientFactory();
-
-        private HttpClient _Client;
-
-        private IRequestExecutionPolicy _ExecutionPolicy;
+        public virtual string APIVersion => "2023-07";
+        public virtual bool SupportsAPIVersioning => true;
 
         protected Uri _ShopUri { get; set; }
-
         protected string _AccessToken { get; set; }
 
-        protected virtual bool SupportsAPIVersioning => true;
+        private static IRequestExecutionPolicy _GlobalExecutionPolicy = new DefaultRequestExecutionPolicy();
+        private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
+        private IRequestExecutionPolicy _ExecutionPolicy;
+        private HttpClient _Client;
+
+        protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility domainUtility)
+        {
+            _ShopUri = domainUtility.BuildShopDomainUri(shopDomain);
+            _AccessToken = accessToken;
+            _Client = _HttpClientFactory.CreateClient();
+            _ExecutionPolicy = _GlobalExecutionPolicy;
+        }
 
         /// <summary>
-        /// Creates a new instance of <see cref="ShopifyService" />.
+        /// Creates a new instance of the service using a Shopify shop domain and access token.
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         protected ShopifyService(string myShopifyUrl, string shopAccessToken)
         {
-            _ShopUri = BuildShopUri(myShopifyUrl, false);
+            var domainUtility = new ShopifyDomainUtility();
+            _ShopUri = domainUtility.BuildShopDomainUri(myShopifyUrl);
             _AccessToken = shopAccessToken;
             _Client = _HttpClientFactory.CreateClient();
             _ExecutionPolicy = _GlobalExecutionPolicy;
         }
 
         /// <summary>
-        /// Attempts to build a shop API <see cref="Uri"/> for the given shop. Will throw a <see cref="ShopifyException"/> if the URL cannot be formatted.
+        /// Creates a new instance of the service using the Shopify shop domain and access token in the <paramref name="credentials"/>.
         /// </summary>
-        /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-        /// <exception cref="ShopifyException">Thrown if the given URL cannot be converted into a well-formed URI.</exception>
-        /// <returns>The shop's API <see cref="Uri"/>.</returns>
-        public static Uri BuildShopUri(string myShopifyUrl, bool withAdminPath)
+        protected ShopifyService(ShopifyApiCredentials credentials)
         {
-            if (Uri.IsWellFormedUriString(myShopifyUrl, UriKind.Absolute) == false)
-            {
-                //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.
-                //Try to fix that by adding a scheme and checking again.
-                if (Uri.IsWellFormedUriString("https://" + myShopifyUrl, UriKind.Absolute) == false)
-                {
-                    throw new ShopifyException($"The given {nameof(myShopifyUrl)} cannot be converted into a well-formed URI.");
-                }
+            var domainUtility = new ShopifyDomainUtility();
+            _ShopUri = domainUtility.BuildShopDomainUri(credentials.ShopDomain);
+            _AccessToken = credentials.AccessToken;
+            _Client = _HttpClientFactory.CreateClient();
+            _ExecutionPolicy = _GlobalExecutionPolicy;
+        }
 
-                myShopifyUrl = "https://" + myShopifyUrl;
-            }
+        /// <summary>
+        /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
+        /// </summary>
+        /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
+        /// <param name="withAdminPath">Whether the <c>/admin</c> path should be included in the resulting URI.</param>
+        [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp. Please use the ShopifySharp.Utilities.ShopifyDomainUtility instead.")]
+        // TODO: remove this method after 6-8 weeks
+        public static Uri BuildShopUri(string shopDomain, bool withAdminPath)
+        {
+            var domainUtility = new ShopifyDomainUtility();
+            var shopUri = domainUtility.BuildShopDomainUri(shopDomain);
 
-            var builder = new UriBuilder(myShopifyUrl)
+            if (!withAdminPath)
+                return shopUri;
+
+            var uriBuilder = new UriBuilder(shopUri)
             {
-                Scheme = "https:",
-                Port = 443, //SSL port
-                Path = withAdminPath ? "admin" : ""
+                Path = "admin"
             };
 
-            return builder.Uri;
+            return uriBuilder.Uri;
         }
+
+        #nullable disable
 
         /// <summary>
         /// Sets the execution policy for this instance only. This policy will always be used over the global execution policy.
@@ -109,14 +124,20 @@ namespace ShopifySharp
         /// </summary>
         public static void SetGlobalHttpClientFactory(IHttpClientFactory factory)
         {
-            _HttpClientFactory = factory ?? new DefaultHttpClientFactory();
+            _HttpClientFactory = factory ?? new InternalHttpClientFactory();
         }
 
-        protected RequestUri PrepareRequest(string path)
+        /// <summary>
+        /// Builds a <see cref="RequestUri"/> by merging the <see cref="_ShopUri"/> with Shopify's admin path and the <paramref name="path"/> parameter.
+        /// </summary>
+        /// <param name="path">
+        /// The request's path, which will be added to <c>/admin/api</c> or /admin/api/<see cref="APIVersion"/> if the service supports API versioning.
+        /// </param>
+        protected virtual RequestUri BuildRequestUri(string path)
         {
             var ub = new UriBuilder(_ShopUri)
             {
-                Scheme = "https:",
+                Scheme = Uri.UriSchemeHttps,
                 Port = 443,
                 Path = SupportsAPIVersioning ? $"admin/api/{APIVersion}/{path}" : $"admin/{path}"
             };
@@ -124,10 +145,14 @@ namespace ShopifySharp
             return new RequestUri(ub.Uri);
         }
 
+        [Obsolete("This method is deprecated and has been replaced by BuildAdminRequestUri(string, bool).")]
+        protected RequestUri PrepareRequest(string path) =>
+            BuildRequestUri(path);
+
         /// <summary>
         /// Prepares a request to the path and appends the shop's access token header if applicable.
         /// </summary>
-        protected CloneableRequestMessage PrepareRequestMessage(RequestUri uri, HttpMethod method, HttpContent content, Dictionary<string, string> headers)
+        protected CloneableRequestMessage PrepareRequestMessage(RequestUri uri, HttpMethod method, HttpContent content, IDictionary<string, string> headers = null)
         {
             var msg = new CloneableRequestMessage(uri.ToUri(), method, content);
 
@@ -141,7 +166,9 @@ namespace ShopifySharp
             if (headers != null)
             {
                 foreach (var kv in headers)
+                {
                     msg.Headers.Add(kv.Key, kv.Value);
+                }
             }
 
             return msg;
@@ -151,26 +178,27 @@ namespace ShopifySharp
         /// Attempts to parse the Link header from a web response. Returns either the header value or null if it does not exist.
         /// </summary>
         /// <remarks>
-        /// The Link header only exists on list requests. 
+        /// The Link header only exists on list requests.
         /// </remarks>
         private string ReadLinkHeader(HttpResponseMessage response)
         {
             var linkHeaderValues = response.Headers
-                                 .FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase))
-                                 .Value;
+                .FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase))
+                .Value;
 
             return linkHeaderValues == null ? null : string.Join(", ", linkHeaderValues);
         }
 
-        /// <summary>
-        /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
-        /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
-        /// </summary>
-        /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseClient"/> and <paramref name="content" /> when finished.
-        /// </remarks>
-        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method,
-            CancellationToken cancellationToken, HttpContent content = null, Dictionary<string, string> headers = null, int? graphqlQueryCost = null)
+        protected async Task<RequestResult<T>> ExecuteRequestCoreAsync<T>(
+            RequestUri uri,
+            HttpMethod method,
+            CancellationToken cancellationToken,
+            HttpContent content,
+            Dictionary<string, string> headers,
+            string rootElement,
+            int? graphqlQueryCost,
+            DateParseHandling? dateParseHandlingOverride = null
+        )
         {
             using (var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers))
             {
@@ -185,19 +213,9 @@ namespace ShopifySharp
                         //Check for and throw exception when necessary.
                         CheckResponseExceptions(response, rawResult);
 
-                        JToken jtoken = null;
+                        var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                        // Don't parse the result when the request was Delete.
-                        if (baseRequestMessage.Method != HttpMethod.Delete)
-                        {
-                            // Make sure that dates are not stripped of any timezone information if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
-                            using (var reader = new JsonTextReader(new StringReader(rawResult)) { DateParseHandling = DateParseHandling.None })
-                            {
-                                jtoken = await JObject.LoadAsync(reader, cancellationToken);
-                            }
-                        }
-
-                        return new RequestResult<JToken>(response, jtoken, rawResult, ReadLinkHeader(response));
+                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
                     }
                 }, cancellationToken, graphqlQueryCost);
 
@@ -206,95 +224,130 @@ namespace ShopifySharp
         }
 
         /// <summary>
+        /// Executes a request and returns a JToken for querying. Throws an exception when the response is invalid.
+        /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
+        /// </summary>
+        protected async Task<RequestResult<JToken>> ExecuteRequestAsync(
+            RequestUri uri,
+            HttpMethod method,
+            CancellationToken cancellationToken,
+            HttpContent content = null,
+            Dictionary<string, string> headers = null
+        )
+        {
+            return await ExecuteRequestCoreAsync<JToken>(uri, method, cancellationToken, content, headers, null, null);
+        }
+
+        /// <summary>
         /// Executes a request and returns the given type. Throws an exception when the response is invalid.
         /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
         /// </summary>
-        /// <remarks>
-        /// This method will automatically dispose the <paramref name="baseRequestMessage" /> when finished.
-        /// </remarks>
-        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(RequestUri uri, HttpMethod method,
-            CancellationToken cancellationToken, HttpContent content = null, string rootElement = null, Dictionary<string, string> headers = null)
+        protected async Task<RequestResult<T>> ExecuteRequestAsync<T>(
+            RequestUri uri,
+            HttpMethod method,
+            CancellationToken cancellationToken,
+            HttpContent content = null,
+            string rootElement = null,
+            Dictionary<string, string> headers = null
+        )
         {
-            using (var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers))
-            {
-                var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
-                {
-                    var request = _Client.SendAsync(requestMessage, cancellationToken);
-
-                    using (var response = await request)
-                    {
-                        var rawResult = await response.Content.ReadAsStringAsync();
-
-                        //Check for and throw exception when necessary.
-                        CheckResponseExceptions(response, rawResult);
-
-                        T result = default;
-                        if (rootElement != null)
-                        {
-                            // This method may fail when the method was Delete, which is intendend.
-                            // Delete methods should not be parsing the response JSON and should instead
-                            // be using the non-generic ExecuteRequestAsync.
-                            result = Serializer.Deserialize<T>(rawResult, rootElement);
-                        }
-
-                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
-                    }
-                }, cancellationToken);
-
-                return policyResult;
-            }
+            return await ExecuteRequestCoreAsync<T>(uri, method, cancellationToken, content, headers, rootElement, null);
         }
 
-        private async Task<T> ExecuteWithContentCoreAsync<T>(string path, string resultRootElt, HttpMethod method, JsonContent content, CancellationToken cancellationToken)
+        private async Task<T> ExecuteWithContentCoreAsync<T>(
+            string path,
+            string resultRootElt,
+            HttpMethod method,
+            HttpContent content,
+            CancellationToken cancellationToken
+        )
         {
-            var req = PrepareRequest(path);
-            var response = await ExecuteRequestAsync<T>(req, method, cancellationToken: cancellationToken, content: content, rootElement: resultRootElt);
+            var requestUri = BuildRequestUri(path);
+            var response = await ExecuteRequestAsync<T>(requestUri, method, cancellationToken: cancellationToken, content: content, rootElement: resultRootElt);
             return response.Result;
         }
 
-        protected async Task<T> ExecutePostAsync<T>(string path, string resultRootElt, CancellationToken cancellationToken, object jsonContent = null)
+        protected async Task<T> ExecutePostAsync<T>(
+            string path,
+            string resultRootElt,
+            CancellationToken cancellationToken,
+            object jsonContent = null
+        )
         {
             return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Post, jsonContent == null ? null : new JsonContent(jsonContent), cancellationToken);
         }
 
-        protected async Task<T> ExecutePutAsync<T>(string path, string resultRootElt, CancellationToken cancellationToken, object jsonContent = null)
+        protected async Task<T> ExecutePutAsync<T>(
+            string path,
+            string resultRootElt,
+            CancellationToken cancellationToken,
+            object jsonContent = null
+        )
         {
             return await ExecuteWithContentCoreAsync<T>(path, resultRootElt, HttpMethod.Put, jsonContent == null ? null : new JsonContent(jsonContent), cancellationToken);
         }
 
-        protected async Task ExecuteDeleteAsync(string path, CancellationToken cancellationToken)
+        protected async Task ExecuteDeleteAsync(
+            string path,
+            CancellationToken cancellationToken
+        )
         {
             await ExecuteWithContentCoreAsync<JToken>(path, null, HttpMethod.Delete, null, cancellationToken);
         }
 
-        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(string path, string resultRootElt, Parameterizable queryParams, string fields, Dictionary<string, string> headers, CancellationToken cancellationToken)
+        private async Task<RequestResult<T>> ExecuteGetCoreAsync<T>(
+            string path,
+            string resultRootElt,
+            Parameterizable queryParams,
+            string fields,
+            Dictionary<string, string> headers,
+            CancellationToken cancellationToken
+        )
         {
-            var req = PrepareRequest(path);
+            var requestUri = BuildRequestUri(path);
 
             if (queryParams != null)
             {
-                req.QueryParams.AddRange(queryParams.ToQueryParameters());
+                requestUri.QueryParams.AddRange(queryParams.ToQueryParameters());
             }
 
             if (!string.IsNullOrEmpty(fields))
             {
-                req.QueryParams.Add("fields", fields);
+                requestUri.QueryParams.Add("fields", fields);
             }
 
-            return await ExecuteRequestAsync<T>(req, HttpMethod.Get, cancellationToken: cancellationToken, rootElement: resultRootElt, headers: headers);
+            return await ExecuteRequestAsync<T>(requestUri, HttpMethod.Get, cancellationToken: cancellationToken, rootElement: resultRootElt, headers: headers);
         }
 
-        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, string fields, CancellationToken cancellationToken = default, Dictionary<string, string> headers = null)
+        protected async Task<T> ExecuteGetAsync<T>(
+            string path,
+            string resultRootElt,
+            string fields,
+            CancellationToken cancellationToken = default,
+            Dictionary<string, string> headers = null
+        )
         {
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, null, fields, headers, cancellationToken)).Result;
         }
 
-        protected async Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null, CancellationToken cancellationToken = default, Dictionary<string, string> headers = null)
+        protected async Task<T> ExecuteGetAsync<T>(
+            string path,
+            string resultRootElt,
+            Parameterizable queryParams = null,
+            CancellationToken cancellationToken = default,
+            Dictionary<string, string> headers = null
+        )
         {
             return (await ExecuteGetCoreAsync<T>(path, resultRootElt, queryParams, null, headers, cancellationToken)).Result;
         }
 
-        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(string path, string resultRootElt, ListFilter<T> filter, CancellationToken cancellationToken = default, Dictionary<string, string> headers = null)
+        protected async Task<ListResult<T>> ExecuteGetListAsync<T>(
+            string path,
+            string resultRootElt,
+            ListFilter<T> filter,
+            CancellationToken cancellationToken = default,
+            Dictionary<string, string> headers = null
+        )
         {
             var result = await ExecuteGetCoreAsync<List<T>>(path, resultRootElt, filter, null, headers, cancellationToken);
             return ParseLinkHeaderToListResult(result);
@@ -304,13 +357,13 @@ namespace ShopifySharp
         /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
         /// </summary>
         /// <param name="response">The response.</param>
-        /// <<param name="rawResponse">The response body returned by Shopify.</param>
+        /// <param name="rawResponse">The response body returned by Shopify.</param>
         public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
             var statusCode = (int)response.StatusCode;
 
             // No error if response was between 200 and 300.
-            if (statusCode >= 200 && statusCode < 300)
+            if (statusCode is >= 200 and < 300)
             {
                 return;
             }
@@ -325,7 +378,7 @@ namespace ShopifySharp
             {
                 string rateExceptionMessage;
                 IEnumerable<string> errors;
-                
+
                 if (TryParseErrorJson(rawResponse, out var rateLimitErrors))
                 {
                     rateExceptionMessage = $"({statusMessage}) {rateLimitErrors.First()}";
@@ -335,7 +388,7 @@ namespace ShopifySharp
                 {
                     var baseMessage = "Exceeded the rate limit for api client. Reduce request rates to resume uninterrupted service.";
                     rateExceptionMessage = $"({statusMessage}) {baseMessage}";
-                    errors = new List<string>{ baseMessage };
+                    errors = new List<string> { baseMessage };
                 }
 
                 throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId);
@@ -356,19 +409,19 @@ namespace ShopifySharp
 
                     switch (totalErrors)
                     {
-                        case 1 :
+                        case 1:
                             exceptionMessage = baseErrorMessage;
                             break;
-                        
+
                         case 2:
                             exceptionMessage = $"{baseErrorMessage} (and one other error)";
                             break;
-                        
+
                         default:
                             exceptionMessage = $"{baseErrorMessage} (and {totalErrors} other errors)";
                             break;
                     }
-                    
+
                     errors = parsedErrors;
                 }
                 else
@@ -393,12 +446,12 @@ namespace ShopifySharp
         }
 
         /// <summary>
-        /// Attempts to parse a JSON string for Shopify API errors. Returns false if the string cannot be parsed or contains no errors. 
+        /// Attempts to parse a JSON string for Shopify API errors. Returns false if the string cannot be parsed or contains no errors.
         /// </summary>
         public static bool TryParseErrorJson(string json, out List<string> output)
         {
             output = null;
-            
+
             if (string.IsNullOrEmpty(json))
             {
                 return false;
@@ -427,14 +480,14 @@ namespace ShopifySharp
                     // Error is type #4
                     var description = parsed["error_description"].Value<string>();
                     var errorType = parsed["error"].Value<string>();
-                    
+
                     errors.Add($"{errorType}: {description}");
                 }
                 else if (parsed.Any(p => p.Path == "error"))
                 {
                     // Error is type #5
                     var description = parsed["error"].Value<string>();
-                    
+
                     errors.Add(description);
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
@@ -459,7 +512,7 @@ namespace ShopifySharp
                             if (val.Type == JTokenType.String)
                             {
                                 var description = val.Value<string>();
-                                
+
                                 errors.Add($"{name}: {description}");
                             }
                             else if (val.Type == JTokenType.Array)
@@ -488,12 +541,12 @@ namespace ShopifySharp
             }
 
             output = errors;
-            
+
             return true;
         }
 
         /// <summary>
-        /// Parses a link header value into a <see cref="ShopifySharp.Lists.ListResult"/>. The Items property will need to be manually set. 
+        /// Parses a link header value into a <see cref="ShopifySharp.Lists.ListResult{T}"/>. The Items property will need to be manually set.
         /// </summary>
         protected ListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {

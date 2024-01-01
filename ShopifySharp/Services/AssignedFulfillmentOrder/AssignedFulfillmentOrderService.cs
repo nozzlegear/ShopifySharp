@@ -1,7 +1,8 @@
 ﻿using ShopifySharp.Filters;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -12,13 +13,10 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public AssignedFulfillmentOrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken)
-        {
-        }
-
-        public virtual async Task<IEnumerable<FulfillmentOrder>> ListAsync(AssignedFulfillmentOrderFilter filter, CancellationToken cancellationToken = default)
-        {
-            return await ExecuteGetAsync<List<FulfillmentOrder>>("assigned_fulfillment_orders.json", "fulfillment_orders", filter, cancellationToken);
-        }
+        public AssignedFulfillmentOrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+        internal AssignedFulfillmentOrderService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
+        public virtual async Task<IEnumerable<FulfillmentOrder>> ListAsync(AssignedFulfillmentOrderFilter filter, CancellationToken cancellationToken = default) =>
+			await ExecuteGetAsync<List<FulfillmentOrder>>("assigned_fulfillment_orders.json", "fulfillment_orders", filter, cancellationToken);
     }
 }

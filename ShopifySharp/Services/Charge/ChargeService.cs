@@ -1,17 +1,17 @@
-﻿using System;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using ShopifySharp.Filters;
+﻿using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
     /// <summary>
     /// A service for manipulating Shopify's ApplicationCharge API.
     /// </summary>
-    public class ChargeService : ShopifyService
+    public class ChargeService : ShopifyService, IChargeService
     {
         /// <summary>
         /// Creates a new instance of <see cref="ChargeService" />.
@@ -19,32 +19,22 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ChargeService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        /// <summary>
-        /// Creates a <see cref="Charge"/>.
-        /// </summary>
-        /// <param name="charge">The <see cref="Charge"/> to create.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The new <see cref="Charge"/>.</returns>
+        internal ChargeService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
+        /// <inheritdoc />
         public virtual async Task<Charge> CreateAsync(Charge charge, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("application_charges.json");
+            var req = BuildRequestUri("application_charges.json");
             var content = new JsonContent(new { application_charge = charge });
 
             var response = await ExecuteRequestAsync<Charge>(req, HttpMethod.Post, cancellationToken, content, "application_charge");
             return response.Result;
         }
 
-        /// <summary>
-        /// Retrieves the <see cref="Charge"/> with the given id.
-        /// </summary>
-        /// <param name="id">The id of the charge to retrieve.</param>
-        /// <param name="fields">A comma-separated list of fields to return.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The <see cref="Charge"/>.</returns>
+        /// <inheritdoc />
         public virtual async Task<Charge> GetAsync(long id, string fields = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"application_charges/{id}.json");
+            var req = BuildRequestUri($"application_charges/{id}.json");
 
             if (!string.IsNullOrEmpty(fields))
             {
@@ -55,14 +45,8 @@ namespace ShopifySharp
             return response.Result;
         }
 
-        /// <summary>
-        /// Retrieves a list of all past and present <see cref="Charge"/> objects.
-        /// </summary>
-        /// <param name="filter">Options for filtering the list.</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null, CancellationToken cancellationToken = default)
-        {
-            return await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter, cancellationToken);
-        }
+        /// <inheritdoc />
+        public virtual async Task<IEnumerable<Charge>> ListAsync(ChargeListFilter filter = null, CancellationToken cancellationToken = default) =>
+            await ExecuteGetAsync< IEnumerable < Charge >>("application_charges.json", "application_charges", filter, cancellationToken);
     }
 }

@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace ShopifySharp.Filters
 {
     /// <summary>

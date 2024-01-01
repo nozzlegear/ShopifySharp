@@ -7,9 +7,8 @@ namespace ShopifySharp
     /// The FulfillmentRequest resource represents a fulfillment request made by the merchant to a fulfillment service for a fulfillment order.
     /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest">API Reference</see>
     /// </summary>
-    public interface IFulfillmentRequestService
+    public interface IFulfillmentRequestService : IShopifyService
     {
-
         /// <summary>
         /// Accepts a fulfillment request sent to a fulfillment service for a fulfillment order.
         /// <see href="https://shopify.dev/docs/api/admin-rest/2022-07/resources/fulfillmentrequest#post-fulfillment-orders-fulfillment-order-id-fulfillment-request-accept">API Reference</see>
@@ -29,7 +28,6 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <exception cref="ShopifyException"></exception>
         Task<FulfillmentOrder> CreateAsync(long fulfillmentOrderId, FulfillmentRequest fulfillmentRequest, CancellationToken cancellationToken = default);
-
 
         /// <summary>
         /// Rejects a fulfillment request sent to a fulfillment service for a fulfillment order.

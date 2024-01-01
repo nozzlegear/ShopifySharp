@@ -1,0 +1,93 @@
+{
+  "id": "c1-3d906b8fc6190196853b56bd73e0591f",
+  "token": "c1-3d906b8fc6190196853b56bd73e0591f",
+  "line_items": [
+    {
+      "id": 44901482430754,
+      "properties": {
+        "customization_name": "John Doe",
+        "__hidden_prop": "Foo",
+        "bool_prop": true,
+        "int_prop": 2,
+        "obj_prop": {
+          "Foo": "bar"
+        },
+        "array_prop": [
+          1,
+          2,
+          3
+        ]
+      },
+      "quantity": 1,
+      "variant_id": 44901482430754,
+      "key": "44901482430754:503be4e3a92c9dc298f5f4b66dbc8b1c",
+      "discounted_price": "600.00",
+      "discounts": [],
+      "gift_card": false,
+      "grams": 0,
+      "line_price": "600.00",
+      "original_line_price": "600.00",
+      "original_price": "600.00",
+      "price": "600.00",
+      "product_id": 8213868020002,
+      "sku": "",
+      "taxable": true,
+      "title": "The Collection Snowboard: Hydrogen",
+      "total_discount": "0.00",
+      "vendor": "Hydrogen Vendor",
+      "discounted_price_set": {
+        "shop_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        }
+      },
+      "line_price_set": {
+        "shop_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        }
+      },
+      "original_line_price_set": {
+        "shop_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        }
+      },
+      "price_set": {
+        "shop_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "600.0",
+          "currency_code": "USD"
+        }
+      },
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "0.0",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0.0",
+          "currency_code": "USD"
+        }
+      }
+    }
+  ],
+  "note": "",
+  "updated_at": "2023-12-11T17:16:29.756Z",
+  "created_at": "2023-12-11T17:14:07.906Z"
+}

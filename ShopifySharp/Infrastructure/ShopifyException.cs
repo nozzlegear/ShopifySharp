@@ -8,23 +8,19 @@ namespace ShopifySharp
 {
     public class ShopifyException : Exception
     {
+        [Obsolete("This property is deprecated and will be removed in a future version of ShopifySharp.")]
         public HttpResponseMessage HttpResponse { get; }
 
+        /// The Http response status code.
         public HttpStatusCode HttpStatusCode { get; }
 
-        /// <summary>
         /// The XRequestId header returned by Shopify. Can be used when working with the Shopify support team to identify the failed request.
-        /// </summary>
         public string RequestId { get; }
 
-        /// <remarks>
-        /// List is always initialized to ensure null reference errors won't be thrown when trying to check error messages.
-        /// </remarks>
+        /// A list of error messages returned by Shopify.
         public IEnumerable<string> Errors { get; } = Enumerable.Empty<string>();
 
-        /// <summary>
-        /// The raw JSON string returned by Shopify.
-        /// </summary>
+        /// The raw string body returned by Shopify.
         public string RawBody { get; }
 
         public ShopifyException() { }

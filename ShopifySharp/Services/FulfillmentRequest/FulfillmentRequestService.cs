@@ -1,7 +1,8 @@
 ﻿using ShopifySharp.Infrastructure;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
@@ -16,10 +17,12 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public FulfillmentRequestService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
+        internal FulfillmentRequestService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> CreateAsync(long fulfillmentOrderId, FulfillmentRequest fulfillmentRequest, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request.json");
+            var req = BuildRequestUri($@"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request.json");
             var body = fulfillmentRequest.ToDictionary();
 
             var content = new JsonContent(new
@@ -31,9 +34,10 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> AcceptAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request/accept.json");
+            var req = BuildRequestUri($"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request/accept.json");
             var fulfillmentRequest = new FulfillmentRequest { Message = message };
             var body = fulfillmentRequest.ToDictionary();
 
@@ -46,9 +50,10 @@ namespace ShopifySharp
             return response.Result;
         }
 
+        /// <inheritdoc />
         public virtual async Task<FulfillmentOrder> RejectAsync(long fulfillmentOrderId, string message, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest($@"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request/reject.json");
+            var req = BuildRequestUri($@"fulfillment_orders/{fulfillmentOrderId}/fulfillment_request/reject.json");
             var fulfillmentRequest = new FulfillmentRequest { Message = message };
             var body = fulfillmentRequest.ToDictionary();
 

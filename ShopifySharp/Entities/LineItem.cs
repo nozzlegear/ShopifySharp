@@ -1,12 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using ShopifySharp.Converters;
-using ShopifySharp.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -209,5 +204,11 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("fulfillment_line_item_id")]
         public long? FulfillmentLineItemId { get; set; }
+
+        /// <summary>
+        /// A list of attributed staffs for this line item
+        /// </summary>
+        [JsonProperty("attributed_staffs")]
+        public IEnumerable<LineItemAttributedStaff> AttributedStaffs { get; set; }
     }
 }

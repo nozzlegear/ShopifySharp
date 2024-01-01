@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,8 +58,17 @@ namespace ShopifySharp
 
         public void SetState(int maximumAvailable, int restoreRatePerSecond, double currentlyAvailable)
         {
-            if (maximumAvailable <= 0 || currentlyAvailable < 0 || restoreRatePerSecond <= 0 || currentlyAvailable > maximumAvailable)
-                throw new ArgumentOutOfRangeException();
+            if (maximumAvailable <= 0)
+                throw new ArgumentOutOfRangeException($"{nameof(maximumAvailable)} ({maximumAvailable}) must be greater than zero");
+
+            if (currentlyAvailable < 0)
+                throw new ArgumentOutOfRangeException($"{nameof(currentlyAvailable)} ({currentlyAvailable}) must be positive or zero.");
+
+            if (restoreRatePerSecond <= 0)
+                throw new ArgumentOutOfRangeException($"{nameof(restoreRatePerSecond)} ({restoreRatePerSecond}) must be greater than zero");
+
+            if (currentlyAvailable > maximumAvailable)
+                throw new ArgumentOutOfRangeException($"{nameof(currentlyAvailable)} ({currentlyAvailable}) must not be greater than {nameof(maximumAvailable)} ({maximumAvailable})");
 
             lock (_lock)
             {

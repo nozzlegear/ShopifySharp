@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		readme.md = readme.md
 		scripts\test.ps1 = scripts\test.ps1
+		docs\contribution-guide.md = docs\contribution-guide.md
 	EndProjectSection
 EndProject
 Global
@@ -30,5 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {77A035FF-E801-4F3C-BD9D-86BA80B37C99}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D44F97F5-4C76-405E-8E41-EEBE6C90F414} = {86BAC93E-824A-4860-ADC1-9A398E1FED12}
+		{1D5FA585-B39C-49E2-A405-935A2EE58222} = {86BAC93E-824A-4860-ADC1-9A398E1FED12}
 	EndGlobalSection
 EndGlobal

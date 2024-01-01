@@ -1,13 +1,16 @@
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShopifySharp.Enums;
-using ShopifySharp.Converters;
 
 namespace ShopifySharp
 {
     public class InventoryLevel
     {
+        /// <summary>
+        /// The GraphQL Admin API Id
+        /// </summary>
+        [JsonProperty("admin_graphql_api_id")]
+        public string AdminGraphQLAPIId { get; set; }
+
         /// <summary>
         /// The unique identifier of the inventory item that the inventory level belongs to.
         /// </summary>

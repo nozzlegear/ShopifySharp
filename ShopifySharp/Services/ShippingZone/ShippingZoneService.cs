@@ -1,17 +1,16 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
+﻿using ShopifySharp.Filters;
 using System.Collections.Generic;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
-using ShopifySharp.Filters;
+using System.Threading;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp
 {
     /// <summary>
     /// A service for retrieve Shopify shipping zones.
     /// </summary>
-    public class ShippingZoneService : ShopifyService
+    public class ShippingZoneService : ShopifyService, IShippingZoneService
     {
         /// <summary>
         /// Creates a new instance of <see cref="ShippingZoneService" />.
@@ -19,13 +18,12 @@ namespace ShopifySharp
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
         /// <param name="shopAccessToken">An API access token for the shop.</param>
         public ShippingZoneService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
-
-        /// <summary>
-        /// Retrieves a list of all shipping zones. 
-        /// </summary>
+        internal ShippingZoneService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+ 
+        /// <inheritdoc />
         public virtual async Task<IEnumerable<ShippingZone>> ListAsync(ShippingZoneListFilter filter = null, CancellationToken cancellationToken = default)
         {
-            var req = PrepareRequest("shipping_zones.json");
+            var req = BuildRequestUri("shipping_zones.json");
             
             if (filter != null)
             {

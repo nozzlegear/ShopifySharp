@@ -1,11 +1,5 @@
 using Newtonsoft.Json;
-using ShopifySharp.Converters;
-using ShopifySharp.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
@@ -154,11 +148,27 @@ namespace ShopifySharp
         public CurrencyExchangeAdjustment CurrencyExchangeAdjustment { get; set; }
 
         /// <summary>
+        /// payments_refund_attributes are available only if the following criteria apply:
+        /// The store is on a Shopify Plus plan.
+        /// The store uses Shopify Payments.
+        /// The order transaction kind is either refund or void.
+        /// If the criteria isn't met, then the payments_refund_attributes property is omitted.
+        /// </summary>
+        [JsonProperty("payments_refund_attributes")]
+        public PaymentsRefundAttributes PaymentsRefundAttributes { get; set; }
+
+        /// <summary>
         /// Unique ID is now sent to payment providers when a customer pays at checkout. 
         /// This ID can be used to match order information between Shopify and payment providers. An Order can have more than one Payment ID. 
         /// It only includes successful or pending payments. It does not include captures and refunds.
         /// </summary>
         [JsonProperty("payment_id")]
         public string PaymentId { get; set; }
+
+        /// <summary>
+        /// Specifies the available amount with currency to capture on the gateway in shop and presentment currencies. Only available when an amount is capturable or manually mark as paid.
+        /// </summary>
+        [JsonProperty("total_unsettled_set")]
+        public PriceSet TotalUnsettledSet { get; set; }
     }
 }
