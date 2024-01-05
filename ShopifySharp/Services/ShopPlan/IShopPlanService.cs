@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp;
 
-public interface IShopPlanService
+public interface IShopPlanService : IShopifyService
 {
     /// Uses Shopify's GraphQL API to get the shop's subscription plan.
     Task<ShopPlan> GetShopPlanAsync(CancellationToken cancellationToken = default);
