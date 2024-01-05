@@ -128,6 +128,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IRefundServiceFactory, RefundServiceFactory>();
         services.TryAddSingleton<IScriptTagServiceFactory, ScriptTagServiceFactory>();
         services.TryAddSingleton<IShippingZoneServiceFactory, ShippingZoneServiceFactory>();
+        services.TryAddSingleton<IShopPlanServiceFactory, ShopPlanServiceFactory>();
         services.TryAddSingleton<IShopServiceFactory, ShopServiceFactory>();
         services.TryAddSingleton<IShopifyPaymentsServiceFactory, ShopifyPaymentsServiceFactory>();
         services.TryAddSingleton<ISmartCollectionServiceFactory, SmartCollectionServiceFactory>();
