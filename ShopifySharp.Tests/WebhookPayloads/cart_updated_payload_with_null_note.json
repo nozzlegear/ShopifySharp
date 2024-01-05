@@ -1,0 +1,80 @@
+{
+  "id": "c1-f880804cdbfc39c683dc9fad79ab940a",
+  "token": "c1-f880804cdbfc39c683dc9fad79ab940a",
+  "line_items": [
+    {
+      "id": 44901482856738,
+      "properties": null,
+      "quantity": 3,
+      "variant_id": 44901482856738,
+      "key": "44901482856738:f81223baedf50c10666b0a66c7f612b6",
+      "discounted_price": "749.95",
+      "discounts": [],
+      "gift_card": false,
+      "grams": 0,
+      "line_price": "2249.85",
+      "original_line_price": "2249.85",
+      "original_price": "749.95",
+      "price": "749.95",
+      "product_id": 8213868347682,
+      "sku": "test-sku",
+      "taxable": true,
+      "title": "The Collection Snowboard: Liquid",
+      "total_discount": "0.00",
+      "vendor": "Hydrogen Vendor",
+      "discounted_price_set": {
+        "shop_money": {
+          "amount": "749.95",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "749.95",
+          "currency_code": "USD"
+        }
+      },
+      "line_price_set": {
+        "shop_money": {
+          "amount": "2249.85",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "2249.85",
+          "currency_code": "USD"
+        }
+      },
+      "original_line_price_set": {
+        "shop_money": {
+          "amount": "2249.85",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "2249.85",
+          "currency_code": "USD"
+        }
+      },
+      "price_set": {
+        "shop_money": {
+          "amount": "749.95",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "749.95",
+          "currency_code": "USD"
+        }
+      },
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "0.0",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0.0",
+          "currency_code": "USD"
+        }
+      }
+    }
+  ],
+  "note": null,
+  "updated_at": "2023-12-11T04:44:14.751Z",
+  "created_at": "2023-12-11T04:40:09.792Z"
+}

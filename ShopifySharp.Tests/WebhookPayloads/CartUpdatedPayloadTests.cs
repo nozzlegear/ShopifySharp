@@ -14,6 +14,7 @@ namespace ShopifySharp.Tests.WebhookPayloads
     {
         private const string JsonFilePath = "./WebhookPayloads/cart_updated_payload.json";
         private const string JsonWithPropertiesFilePath = "./WebhookPayloads/cart_updated_payload_with_properties.json";
+        private const string JsonWithNullNoteFilePath = "./WebhookPayloads/cart_updated_payload_with_null_note.json";
 
         [Fact]
         public async Task ShouldDeserializeACartWebhookUpdatedRequest()
@@ -36,6 +37,23 @@ namespace ShopifySharp.Tests.WebhookPayloads
             subject.CreatedAt.Should().Be(new DateTimeOffset(2023, 12, 11, 04, 40, 09, 792, TimeSpan.FromHours(0)));
             subject.UpdatedAt.Should().Be(new DateTimeOffset(2023, 12, 11, 04, 44, 14, 751, TimeSpan.FromHours(0)));
             subject.LineItems.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task ShouldDeserializeACartWebhookUpdatedRequest_WithNullNote()
+        {
+            // Setup
+            var json = await ReadJsonFile(JsonWithNullNoteFilePath);
+
+            // Act
+            var act = () => Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json);
+
+            // Test
+            act.Should().NotThrow();
+
+            var subject = act.Should().NotThrow().Subject;
+
+            subject.Note.Should().BeNull();
         }
 
         [Fact]
