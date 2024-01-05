@@ -42,5 +42,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>CartUpdatedPayloadTests.cs</DependentUpon>
     </Content>
+    <Content Include="WebhookPayloads\cart_updated_payload_with_null_note.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>CartUpdatedPayloadTests.cs</DependentUpon>
+    </Content>
   </ItemGroup>
 </Project>
