@@ -21,7 +21,7 @@ namespace ShopifySharp.Tests
             string url = MultipassService.GetMultipassUrl(
                 Fixture.Create(),
                 Utils.MyShopifyUrl,
-                Utils.AccessToken
+                Utils.MultipassSecret
             );
 
             Assert.True(!string.IsNullOrEmpty(url));
@@ -33,7 +33,7 @@ namespace ShopifySharp.Tests
     {
         public Guid Guid = Guid.NewGuid();
 
-        public Customer Create() => new Customer()
+        public MultipassRequest Create() => new MultipassRequest()
         {
             Email = Guid.NewGuid().ToString() + "@example.com",
             CreatedAt = DateTimeOffset.Now,
@@ -41,6 +41,7 @@ namespace ShopifySharp.Tests
             LastName = "Doe",
             VerifiedEmail = true,
             MultipassIdentifier = Guid.ToString(),
+            ReturnTo = $"{Utils.MyShopifyUrl}",
             Addresses = new List<Address>()
             {
                 new Address()
