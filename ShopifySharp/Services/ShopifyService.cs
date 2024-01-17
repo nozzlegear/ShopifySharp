@@ -391,7 +391,21 @@ namespace ShopifySharp
                     errors = new List<string> { baseMessage };
                 }
 
-                throw new ShopifyRateLimitException(response, code, errors, rateExceptionMessage, rawResponse, requestId);
+                var reason = response.Headers.Contains(RestBucketState.RESPONSE_HEADER_API_CALL_LIMIT)
+                        ? ShopifyRateLimitReason.Other
+                        : ShopifyRateLimitReason.BucketFull;
+                var strRetryAfter = response.Headers
+                    .FirstOrDefault(kvp => kvp.Key == "Retry-After")
+                    .Value
+                    ?.FirstOrDefault();
+                int? retryAfterSeconds = null;
+
+                if (int.TryParse(strRetryAfter, out var retryValue))
+                {
+                    retryAfterSeconds = retryValue;
+                }
+
+                throw new ShopifyRateLimitException(reason, retryAfterSeconds, code, requestId, errors.ToList(), rawResponse);
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
