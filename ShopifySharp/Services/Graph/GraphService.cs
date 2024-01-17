@@ -139,7 +139,7 @@ namespace ShopifySharp
                 var requestIdHeader = requestResult.Response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
                 var requestId = requestIdHeader.Value?.FirstOrDefault();
 
-                throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
+                throw new ShopifyException(HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
             }
         }
     }

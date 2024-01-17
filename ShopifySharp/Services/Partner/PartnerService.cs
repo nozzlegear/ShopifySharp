@@ -72,7 +72,7 @@ namespace ShopifySharp
 
             var message = requestResult.Result["errors"].FirstOrDefault()?["message"]?.ToString();
 
-            throw new ShopifyException(requestResult.Response, HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
+            throw new ShopifyException(HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
         }
     }
 }
