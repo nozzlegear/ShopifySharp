@@ -388,7 +388,7 @@ namespace ShopifySharp
                 }
                 else
                 {
-                    var baseMessage = "Exceeded the rate limit for api client. Reduce request rates to resume uninterrupted service.";
+                    const string baseMessage = "Exceeded the rate limit for api client. Reduce request rates to resume uninterrupted service.";
                     rateExceptionMessage = $"({statusMessage}) {baseMessage}";
                     errors = new List<string> { baseMessage };
                 }
@@ -407,7 +407,7 @@ namespace ShopifySharp
                     retryAfterSeconds = retryValue;
                 }
 
-                throw new ShopifyRateLimitException(reason, retryAfterSeconds, code, requestId, errors.ToList(), rawResponse);
+                throw new ShopifyRateLimitException(code, errors.ToList(), rateExceptionMessage, rawResponse, requestId, reason, retryAfterSeconds);
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
