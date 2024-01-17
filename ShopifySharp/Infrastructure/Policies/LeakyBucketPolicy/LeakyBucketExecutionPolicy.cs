@@ -22,7 +22,10 @@ namespace ShopifySharp
         private static ConcurrentDictionary<string, MultiShopifyAPIBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, MultiShopifyAPIBucket>();
 
         private readonly bool _retryRESTOnlyIfLeakyBucketFull;
+
         private readonly Func<RequestContext> _getRequestContext;
+
+        private static readonly TimeSpan DefaultRetryDelay = TimeSpan.FromSeconds(1);
 
         /// <summary>
         /// Creates a new LeakyBucketExecutionPolicy.
@@ -34,7 +37,7 @@ namespace ShopifySharp
         /// If false, then the policy also retries for other types of 429. For example, Shopify will return a 429 if one tries to create too many products too quickly on dev stores
         /// </param>
         /// <param name="getRequestContext">Indicates the current request context, either Foreground or Background.
-        /// Foreground requests will be priortized to execute before any background requests can run.
+        /// Foreground requests will be prioritized to execute before any background requests can run.
         /// RequestContext.Foregroud can be used for requests where a user is waiting (e.g loading a web page to show results of query).
         /// RequestContext.Background can be used for background requests triggered by job, where no user is waiting.
         /// By default, all requests are served in FIFO order</param>
@@ -48,96 +51,154 @@ namespace ShopifySharp
         {
             var accessToken = GetAccessToken(baseRequest);
             var bucket = accessToken == null ? null : _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new MultiShopifyAPIBucket(_getRequestContext));
-            APIType apiType = APIType.RESTAdmin;
+            var apiType = APIType.RESTAdmin;
+
             if (baseRequest.RequestUri.AbsolutePath.EndsWith("graphql.json"))
                 apiType = baseRequest.RequestUri.Host == "partners.shopify.com" ? APIType.GraphQLPartner : APIType.GraphQLAdmin;
 
-            while (true)
+            return apiType switch
             {
-                var request = baseRequest.Clone();
+                APIType.GraphQLAdmin => await ExecuteGraphAdminRequest(
+                    executeRequestAsync,
+                    cancellationToken,
+                    // If the user didn't pass a request query cost, we assume a cost of 50
+                    graphqlQueryCost ?? 50,
+                    bucket,
+                    request),
+                APIType.RESTAdmin => await ExecuteRestAdminRequest(
+                    executeRequestAsync,
+                    cancellationToken,
+                    bucket,
+                    request),
+                APIType.GraphQLPartner => await ExecuteGraphPartnerRequest(
+                    executeRequestAsync,
+                    cancellationToken,
+                    bucket,
+                    request),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
-                switch (apiType)
+        private async Task<RequestResult<T>> ExecuteGraphPartnerRequest<T>(
+            ExecuteRequestAsync<T> executeRequestAsync,
+            CancellationToken cancellationToken,
+            MultiShopifyAPIBucket bucket,
+            CloneableRequestMessage request
+        )
+        {
+            // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
+            request = request.Clone();
+
+            if (bucket != null)
+            {
+                await bucket.WaitForAvailableGraphQLPartnerAsync(cancellationToken);
+            }
+
+            try
+            {
+                return await executeRequestAsync(request);
+            }
+            catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
+            {
+                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                return await ExecuteGraphPartnerRequest(executeRequestAsync, cancellationToken, bucket, request);
+            }
+        }
+
+        private static async Task<RequestResult<T>> ExecuteGraphAdminRequest<T>(
+            ExecuteRequestAsync<T> executeRequestAsync,
+            CancellationToken cancellationToken,
+            int graphqlQueryCost,
+            MultiShopifyAPIBucket bucket,
+            CloneableRequestMessage request
+        )
+        {
+            // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
+            request = request.Clone();
+
+            if (bucket != null)
+            {
+                await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost, cancellationToken);
+            }
+
+            RequestResult<T> graphRes = await executeRequestAsync(request);
+
+            var jsonDoc = graphRes.Result switch
+            {
+                System.Text.Json.JsonDocument systemTextJsonDoc => systemTextJsonDoc,
+                JToken jsonNetDoc => System.Text.Json.JsonDocument.Parse(jsonNetDoc.ToString(Newtonsoft.Json.Formatting.None)),
+                _ => throw new Exception($"Unexpected non json result of type {graphRes.Response.GetType().Name} for GraphQL Admin API")
+            };
+
+            if (bucket != null)
+            {
+                var graphBucketState = graphRes.GetGraphQLBucketState(jsonDoc);
+                if (graphBucketState != null)
                 {
-                    case APIType.GraphQLAdmin:
-                        //if the user didn't pass a request query cost, we assume a cost of 50
-                        graphqlQueryCost = graphqlQueryCost ?? 50;
-                        if (bucket != null)
-                            await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost.Value, cancellationToken);
+                    var actualQueryCost = graphBucketState.ActualQueryCost ?? graphqlQueryCost;
+                    var refund = graphqlQueryCost- actualQueryCost;//may be negative if user didn't supply query cost
+                    bucket.SetGraphQLBucketState(graphBucketState.MaxAvailable, graphBucketState.RestoreRate, graphBucketState.CurrentlyAvailable, refund);
 
-                        var graphRes = await executeRequestAsync(request);
-                        var jsonDoc = graphRes.Result switch
-                        {
-                            System.Text.Json.JsonDocument systemTextJsonDoc => systemTextJsonDoc,
-                            JToken jsonNetDoc => System.Text.Json.JsonDocument.Parse(jsonNetDoc.ToString(Newtonsoft.Json.Formatting.None)),
-                            _ => throw new Exception($"Unexpected non json result of type {graphRes.Response.GetType().Name} for GraphQL Admin API")
-                        };
-
-                        if (bucket != null)
-                        {
-                            var graphBucketState = graphRes.GetGraphQLBucketState(jsonDoc);
-                            if (graphBucketState != null)
-                            {
-                                int actualQueryCost = graphBucketState.ActualQueryCost ?? graphqlQueryCost.Value;//actual query cost is null if THROTTLED
-                                int refund = graphqlQueryCost.Value - actualQueryCost;//may be negative if user didn't supply query cost
-                                bucket.SetGraphQLBucketState(graphBucketState.MaxAvailable, graphBucketState.RestoreRate, graphBucketState.CurrentlyAvailable, refund);
-
-                                //The user might have supplied no cost or an invalid cost
-                                //We fix the query cost so the correct value is used if a retry is needed
-                                graphqlQueryCost = graphBucketState.RequestedQueryCost;
-                            }
-                        }
-
-                        if (jsonDoc.RootElement.TryGetProperty("errors", out var errors) && 
-                            errors.EnumerateArray().Any(error => error.TryGetProperty("extensions", out var extensions) && 
-                                                                 extensions.TryGetProperty("code", out var code) &&
-                                                                 code.GetString() == "THROTTLED"))
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                            break;
-                        }
-
-                        return graphRes;
-
-                    case APIType.RESTAdmin:
-                        try
-                        {
-                            if (bucket != null)
-                                await bucket.WaitForAvailableRESTAsync(cancellationToken);
-
-                            var restRes = await executeRequestAsync(request);
-
-                            if (bucket != null)
-                            {
-                                var restBucketState = restRes.GetRestBucketState();
-                                if (restBucketState != null)
-                                    bucket.SetRESTBucketState(restBucketState.MaxAvailable, restBucketState.MaxAvailable - restBucketState.CurrentlyUsed);
-                            }
-
-                            return restRes;
-                        }
-                        catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
-                        {
-                            //Only retry if breach caused by full bucket
-                            //Shopify sometimes return 429 for other limits (e.g if too many variants are created)
-                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                            break;
-                        }
-
-                    case APIType.GraphQLPartner:
-                        try
-                        {
-                            if (bucket != null)
-                                await bucket.WaitForAvailableGraphQLPartnerAsync(cancellationToken);
-
-                            return await executeRequestAsync(request);
-                        }
-                        catch (ShopifyRateLimitException)
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-                            break;
-                        }
+                    //The user might have supplied no cost or an invalid cost
+                    //We fix the query cost so the correct value is used if a retry is needed
+                    graphqlQueryCost = graphBucketState.RequestedQueryCost;
                 }
             }
+
+            if (jsonDoc.RootElement.TryGetProperty("errors", out var errors) &&
+                errors.EnumerateArray().Any(error => error.TryGetProperty("extensions", out var extensions) &&
+                                                     extensions.TryGetProperty("code", out var code) &&
+                                                     code.GetString() == "THROTTLED"))
+            {
+                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                return await ExecuteGraphAdminRequest(
+                    executeRequestAsync,
+                    cancellationToken,
+                    graphqlQueryCost,
+                    bucket,
+                    request
+                );
+            }
+
+            return graphRes;
+        }
+
+        private async Task<RequestResult<T>> ExecuteRestAdminRequest<T>(
+            ExecuteRequestAsync<T> executeRequestAsync,
+            CancellationToken cancellationToken,
+            MultiShopifyAPIBucket bucket,
+            CloneableRequestMessage request
+        )
+        {
+            // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
+            request = request.Clone();
+
+            if (bucket != null)
+            {
+                await bucket.WaitForAvailableRESTAsync(cancellationToken);
+            }
+
+            RequestResult<T> restRes;
+
+            try
+            {
+                restRes = await executeRequestAsync(request);
+            }
+            catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
+            {
+                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                return await ExecuteRestAdminRequest(executeRequestAsync, cancellationToken, bucket, request);
+            }
+
+            if (bucket != null)
+            {
+                var restBucketState = restRes.GetRestBucketState();
+                if (restBucketState != null)
+                    bucket.SetRESTBucketState(restBucketState.MaxAvailable,
+                        restBucketState.MaxAvailable - restBucketState.CurrentlyUsed);
+            }
+
+            return restRes;
         }
 
         private string GetAccessToken(HttpRequestMessage client)
