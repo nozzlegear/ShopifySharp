@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using System.Net;
 using ShopifySharp.Infrastructure;
 
@@ -6,13 +7,14 @@ namespace ShopifySharp;
 
 /// An exception thrown when an API call has reached Shopify's rate limit.
 public class ShopifyRateLimitException(
-    ShopifyRateLimitReason reason,
-    int? retryAfterSeconds,
     HttpStatusCode statusCode,
-    string requestId,
     ICollection<string> errors,
-    string rawResponseBody)
-    : ShopifyHttpException(statusCode, requestId, errors, rawResponseBody)
+    string message,
+    string rawResponseBody,
+    string? requestId,
+    ShopifyRateLimitReason reason,
+    int? retryAfterSeconds)
+    : ShopifyHttpException(statusCode, errors, message, rawResponseBody, requestId)
 {
     public readonly int? RetryAfterSeconds = retryAfterSeconds;
 
