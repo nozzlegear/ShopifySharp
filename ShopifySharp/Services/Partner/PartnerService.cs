@@ -71,7 +71,7 @@ namespace ShopifySharp
                 }
             }
 
-            var message = requestResult.Result["errors"].FirstOrDefault()?["message"]?.ToString();
+            var message = errorList.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
 
             throw new ShopifyHttpException(HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
         }
