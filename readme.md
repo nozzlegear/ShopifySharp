@@ -35,7 +35,7 @@ ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp
 
 | Package                                                                                                                   | Installation                                                     | Documentation                                                                               |
 |---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| [ShopifySharp](https://www.nuget.org/packages/ShopifySharp)                                                               | `dotnet add package shopifysharp`                                | [Click here.](#using-shopifysharp-with-a-public-shopify-app) New documentation coming soon! |
+| [ShopifySharp](https://www.nuget.org/packages/ShopifySharp)                                                               | `dotnet add package shopifysharp`                                | [Click here.](https://github.com/nozzlegear/ShopifySharp/wiki)                              |
 | [ShopifySharp.Extensions.DependencyInjection](https://www.nuget.org/packages/ShopifySharp.Extensions.DependencyInjection) | `dotnet add package shopifysharp.extensions.dependencyinjection` | [Click here.](./ShopifySharp.Extensions.DependencyInjection/README.md)                      |
 
 # Shopify API version support
@@ -65,8 +65,9 @@ Check the [package's documentation](./ShopifySharp.Extensions.DependencyInjectio
 
 I first started working on ShopifySharp because .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps, which didn't exist several years ago. My goal is to eventually reach 100% compatibility with the Shopify REST API, but, with that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
 
+# Documentation
 
-
+Click the link here to be brought to all of the documentation: [ShopifySharp Wiki](https://github.com/nozzlegear/ShopifySharp/wiki)
 
 # Contributing to ShopifySharp
 
