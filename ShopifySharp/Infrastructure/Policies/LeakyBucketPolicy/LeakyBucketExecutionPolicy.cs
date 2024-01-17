@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
@@ -18,6 +19,10 @@ namespace ShopifySharp
     public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
     {
         private const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
+
+        /// An arbitrary magic number that short-circuits 503 Server Unavailable retries, preventing applications getting
+        /// stuck in endless retry loops in cases where Shopify is down.
+        private const int MaxServiceUnavailableRetries = 10;
 
         private static ConcurrentDictionary<string, MultiShopifyAPIBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, MultiShopifyAPIBucket>();
 
@@ -64,17 +69,17 @@ namespace ShopifySharp
                     // If the user didn't pass a request query cost, we assume a cost of 50
                     graphqlQueryCost ?? 50,
                     bucket,
-                    request),
+                    baseRequest),
                 APIType.RESTAdmin => await ExecuteRestAdminRequest(
                     executeRequestAsync,
                     cancellationToken,
                     bucket,
-                    request),
+                    baseRequest),
                 APIType.GraphQLPartner => await ExecuteGraphPartnerRequest(
                     executeRequestAsync,
                     cancellationToken,
                     bucket,
-                    request),
+                    baseRequest),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -83,7 +88,8 @@ namespace ShopifySharp
             ExecuteRequestAsync<T> executeRequestAsync,
             CancellationToken cancellationToken,
             MultiShopifyAPIBucket bucket,
-            CloneableRequestMessage request
+            CloneableRequestMessage request,
+            int totalRetriesDueToServiceUnavailableResponse = 0
         )
         {
             // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
@@ -98,6 +104,11 @@ namespace ShopifySharp
             {
                 return await executeRequestAsync(request);
             }
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode == HttpStatusCode.ServiceUnavailable && totalRetriesDueToServiceUnavailableResponse <= MaxServiceUnavailableRetries)
+            {
+                // 503 Service Unavailable errors should be retried until we reach the maximum amount of retries
+                return await ExecuteGraphPartnerRequest(executeRequestAsync, cancellationToken, bucket, request, totalRetriesDueToServiceUnavailableResponse + 1);
+            }
             catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
             {
                 await Task.Delay(DefaultRetryDelay, cancellationToken);
@@ -110,7 +121,8 @@ namespace ShopifySharp
             CancellationToken cancellationToken,
             int graphqlQueryCost,
             MultiShopifyAPIBucket bucket,
-            CloneableRequestMessage request
+            CloneableRequestMessage request,
+            int totalRetriesDueToServiceUnavailableResponse = 0
         )
         {
             // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
@@ -121,7 +133,24 @@ namespace ShopifySharp
                 await bucket.WaitForAvailableGraphQLAsync(graphqlQueryCost, cancellationToken);
             }
 
-            RequestResult<T> graphRes = await executeRequestAsync(request);
+            RequestResult<T> graphRes;
+
+            try
+            {
+                graphRes = await executeRequestAsync(request);
+            }
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode == HttpStatusCode.ServiceUnavailable && totalRetriesDueToServiceUnavailableResponse <= MaxServiceUnavailableRetries)
+            {
+                // 503 Service Unavailable errors should be retried until we reach the maximum amount of retries
+                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                return await ExecuteGraphAdminRequest(executeRequestAsync,
+                    cancellationToken,
+                    graphqlQueryCost,
+                    bucket,
+                    request,
+                    totalRetriesDueToServiceUnavailableResponse + 1
+                );
+            }
 
             var jsonDoc = graphRes.Result switch
             {
@@ -151,7 +180,7 @@ namespace ShopifySharp
                                                      code.GetString() == "THROTTLED"))
             {
                 await Task.Delay(DefaultRetryDelay, cancellationToken);
-                return await ExecuteGraphAdminRequest(
+                return await ExecuteGraphAdminRequest<T>(
                     executeRequestAsync,
                     cancellationToken,
                     graphqlQueryCost,
@@ -167,7 +196,8 @@ namespace ShopifySharp
             ExecuteRequestAsync<T> executeRequestAsync,
             CancellationToken cancellationToken,
             MultiShopifyAPIBucket bucket,
-            CloneableRequestMessage request
+            CloneableRequestMessage request,
+            int totalRetriesDueToServiceUnavailableResponse = 0
         )
         {
             // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
@@ -183,6 +213,16 @@ namespace ShopifySharp
             try
             {
                 restRes = await executeRequestAsync(request);
+            }
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode == HttpStatusCode.ServiceUnavailable && totalRetriesDueToServiceUnavailableResponse <= MaxServiceUnavailableRetries)
+            {
+                // 503 Service Unavailable errors should be retried until we reach the maximum amount of retries
+                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                return await ExecuteRestAdminRequest(executeRequestAsync,
+                    cancellationToken,
+                    bucket,
+                    request,
+                    totalRetriesDueToServiceUnavailableResponse + 1);
             }
             catch (ShopifyRateLimitException ex) when (ex.Reason == ShopifyRateLimitReason.BucketFull || !_retryRESTOnlyIfLeakyBucketFull)
             {
