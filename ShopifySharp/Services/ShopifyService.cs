@@ -201,27 +201,27 @@ namespace ShopifySharp
             DateParseHandling? dateParseHandlingOverride = null
         )
         {
-            using (var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers))
+            using var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers);
+            var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
             {
-                var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
-                {
-                    var request = _Client.SendAsync(requestMessage, cancellationToken);
+                var request = _Client.SendAsync(requestMessage, cancellationToken);
 
-                    using (var response = await request)
-                    {
-                        var rawResult = await response.Content.ReadAsStringAsync();
+                using var response = await request;
+                #if NETSTANDARD2_0
+                var rawResult = await response.Content.ReadAsStringAsync();
+                #else
+                var rawResult = await response.Content.ReadAsStringAsync(cancellationToken);
+                #endif
 
-                        //Check for and throw exception when necessary.
-                        CheckResponseExceptions(response, rawResult);
+                //Check for and throw exception when necessary.
+                CheckResponseExceptions(response, rawResult);
 
-                        var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
+                var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                        return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
-                    }
-                }, cancellationToken, graphqlQueryCost);
+                return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
+            }, cancellationToken, graphqlQueryCost);
 
-                return policyResult;
-            }
+            return policyResult;
         }
 
         /// <summary>
