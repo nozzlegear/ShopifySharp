@@ -59,10 +59,11 @@ public class ShopifyDomainUtility : IShopifyDomainUtility
 
         try
         {
+            const string headerName = "X-ShopId";
             var response = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-            var hasShopIdHeader = response.Headers.Any(h => h.Key.Equals("X-ShopId", StringComparison.OrdinalIgnoreCase));
+            var headerValues = response.Headers.FirstOrDefault(h => h.Key.Equals(headerName, StringComparison.OrdinalIgnoreCase)).Value;
 
-            return hasShopIdHeader;
+            return headerValues != null && headerValues.Any(v => !string.IsNullOrWhiteSpace(v));
         }
         catch (HttpRequestException)
         {
