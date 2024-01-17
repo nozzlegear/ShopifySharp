@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
@@ -368,10 +369,9 @@ namespace ShopifySharp
                 return;
             }
 
-            var requestIdHeader = response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
-            var requestId = requestIdHeader.Value?.FirstOrDefault();
             var code = response.StatusCode;
             var statusMessage = $"{(int)code} {response.ReasonPhrase}";
+            var requestId = ParseRequestIdResponseHeader(response.Headers);
 
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if ((int)code == 429 /* Too many requests */)
@@ -565,6 +565,13 @@ namespace ShopifySharp
         protected ListResult<T> ParseLinkHeaderToListResult<T>(RequestResult<List<T>> requestResult)
         {
             return new ListResult<T>(requestResult.Result, requestResult.RawLinkHeaderValue == null ? null : LinkHeaderParser.Parse<T>(requestResult.RawLinkHeaderValue));
+        }
+
+        #nullable enable
+        protected static string? ParseRequestIdResponseHeader(HttpResponseHeaders responseHeaders)
+        {
+            const string headerName = "X-Request-Id";
+            return responseHeaders.TryGetValues(headerName, out var headerValues) ? headerValues.First() : null;
         }
     }
 }

@@ -58,6 +58,7 @@ namespace ShopifySharp
                 return;
             }
 
+            var requestId = ParseRequestIdResponseHeader(requestResult.Response.Headers);
             var errorList = new List<string>();
 
             foreach (var error in requestResult.Result["errors"])
@@ -72,7 +73,7 @@ namespace ShopifySharp
 
             var message = requestResult.Result["errors"].FirstOrDefault()?["message"]?.ToString();
 
-            throw new ShopifyException(HttpStatusCode.OK, errorList, message, requestResult.RawResult, "");
+            throw new ShopifyException(HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
         }
     }
 }

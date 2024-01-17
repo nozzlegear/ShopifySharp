@@ -135,9 +135,7 @@ namespace ShopifySharp
                 }
 
                 var message = res["errors"].FirstOrDefault()?["message"]?.ToString();
-
-                var requestIdHeader = requestResult.Response.Headers.FirstOrDefault(h => h.Key.Equals("X-Request-Id", StringComparison.OrdinalIgnoreCase));
-                var requestId = requestIdHeader.Value?.FirstOrDefault();
+                var requestId = ParseRequestIdResponseHeader(requestResult.Response.Headers);
 
                 throw new ShopifyException(HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
             }
