@@ -14,9 +14,9 @@ namespace ShopifySharp
         [Obsolete("This property has been moved to the " + nameof(ShopifyHttpException) + " and will be removed in a future version of ShopifySharp.")]
         public HttpStatusCode HttpStatusCode { get; }
 
-        /// The XRequestId header returned by Shopify. Can be used when working with the Shopify support team to identify the failed request.
+        /// The X-Request-Id header returned by Shopify. Can be used when working with the Shopify support team to identify the failed request.
         [Obsolete("This property has been moved to the " + nameof(ShopifyHttpException) + " and will be removed in a future version of ShopifySharp.")]
-        public string RequestId { get; }
+        public string? RequestId { get; }
 
         /// A list of error messages returned by Shopify.
         [Obsolete("This property has been moved to the " + nameof(ShopifyHttpException) + " and will be removed in a future version of ShopifySharp.")]
@@ -35,7 +35,8 @@ namespace ShopifySharp
             IEnumerable<string> errors,
             string message,
             string rawBody,
-            string requestId) : base(message)
+            string? requestId
+        ) : base(message)
         {
             HttpStatusCode = httpStatusCode;
             Errors = (errors ?? Enumerable.Empty<string>()).ToArray();
