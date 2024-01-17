@@ -441,10 +441,7 @@ namespace ShopifySharp
                 else
                 {
                     exceptionMessage = $"({statusMessage}) Shopify returned {statusMessage}, but ShopifySharp was unable to parse the response JSON.";
-                    errors = new List<string>
-                    {
-                        exceptionMessage
-                    };
+                    errors = [];
                 }
 
                 throw new ShopifyHttpException(code, errors.ToList(), exceptionMessage, rawResponse, requestId);
