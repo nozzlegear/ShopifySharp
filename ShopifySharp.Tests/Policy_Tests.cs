@@ -1,32 +1,33 @@
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Xunit;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests.Policies;
+
+[Trait("Category", "Policy")]
+[TestSubject(typeof(PolicyService))]
+public class PolicyServiceTests
 {
-    [Trait("Category", "Policy")]
-    public class Policy_Tests
+    PolicyService Service { get; } = new PolicyService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public PolicyServiceTests()
     {
-        PolicyService Service { get; } = new PolicyService(Utils.MyShopifyUrl, Utils.AccessToken);
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+    }
 
-        public Policy_Tests()
+    [Fact]
+    public async Task Lists_Orders()
+    {
+        var list = await Service.ListAsync();
+
+        Assert.NotNull(list);
+
+        foreach (var policy in list)
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-        }
-
-        [Fact]
-        public async Task Lists_Orders()
-        {
-            var list = await Service.ListAsync();
-
-            Assert.NotNull(list);
-
-            foreach (var policy in list)
-            {
-                EmptyAssert.NotNullOrEmpty(policy.Title);
-                Assert.NotNull(policy.CreatedAt);
-                Assert.NotNull(policy.UpdatedAt);
-            }
+            EmptyAssert.NotNullOrEmpty(policy.Title);
+            Assert.NotNull(policy.CreatedAt);
+            Assert.NotNull(policy.UpdatedAt);
         }
     }
 }
