@@ -447,7 +447,7 @@ namespace ShopifySharp
                     };
                 }
 
-                throw new ShopifyException(response, code, errors, exceptionMessage, rawResponse, requestId);
+                throw new ShopifyException(code, errors, exceptionMessage, rawResponse, requestId);
             }
 
             var message = $"({statusMessage}) Shopify returned {statusMessage}, but there was no JSON to parse into an error message.";
@@ -456,7 +456,7 @@ namespace ShopifySharp
                 message
             };
 
-            throw new ShopifyException(response, code, customErrors, message, rawResponse, requestId);
+            throw new ShopifyException(code, customErrors, message, rawResponse, requestId);
         }
 
         /// <summary>

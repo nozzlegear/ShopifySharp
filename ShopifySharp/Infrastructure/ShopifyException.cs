@@ -10,9 +10,6 @@ namespace ShopifySharp
 {
     public class ShopifyException : Exception
     {
-        [Obsolete("This property is deprecated and will be removed in a future version of ShopifySharp.")]
-        public HttpResponseMessage HttpResponse { get; }
-
         /// The Http response status code.
         [Obsolete("This property has been moved to the " + nameof(ShopifyHttpException) + " and will be removed in a future version of ShopifySharp.")]
         public HttpStatusCode HttpStatusCode { get; }
@@ -33,14 +30,13 @@ namespace ShopifySharp
 
         public ShopifyException(string message, Exception? innerException = null) : base(message, innerException) { }
 
-        public ShopifyException(HttpResponseMessage response,
+        public ShopifyException(
             HttpStatusCode httpStatusCode,
             IEnumerable<string> errors,
             string message,
             string rawBody,
             string requestId) : base(message)
         {
-            HttpResponse = response;
             HttpStatusCode = httpStatusCode;
             Errors = (errors ?? Enumerable.Empty<string>()).ToArray();
             RawBody = rawBody;
