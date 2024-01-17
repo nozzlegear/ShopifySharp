@@ -42,6 +42,7 @@ namespace ShopifySharp
 
         private static string ValidateShopifyUrl(string shopifyUrl)
         {
+            // TODO: refactor this to use the domain utility
             if (Uri.IsWellFormedUriString(shopifyUrl, UriKind.Absolute) == false)
             {
                 //Shopify typically returns the shop URL without a scheme. If the user is storing that as-is, the uri will not be well formed.

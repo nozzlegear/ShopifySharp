@@ -361,6 +361,8 @@ namespace ShopifySharp
         /// <param name="rawResponse">The response body returned by Shopify.</param>
         public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
         {
+            // TODO: make this method protected virtual so inheriting members can override it (e.g. the PartnerService which is doing its own custom error checking right now)
+
             var statusCode = (int)response.StatusCode;
 
             // No error if response was between 200 and 300.
@@ -410,6 +412,7 @@ namespace ShopifySharp
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
 
+            // TODO: there's probably a better way to check if the content type is json
             if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
             {
                 IEnumerable<string> errors;
@@ -461,6 +464,7 @@ namespace ShopifySharp
         /// </summary>
         public static bool TryParseErrorJson(string json, out List<string> output)
         {
+            // TODO: obsolete and replace this with a json error parsing util?
             output = null;
 
             if (string.IsNullOrEmpty(json))

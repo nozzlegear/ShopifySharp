@@ -33,6 +33,7 @@ namespace ShopifySharp.Lists
 
             string matchedUrl = match.Groups[1].Value;
 
+            // TODO: refactor this to use the domain utility?
             if (!Uri.TryCreate(matchedUrl, UriKind.Absolute, out var uri))
             {
                 throw new ShopifyException($"Cannot parse page link url: '{matchedUrl}'");

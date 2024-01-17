@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -13,6 +14,7 @@ using Xunit;
 namespace ShopifySharp.Tests
 {
     [Trait("Category", "ShopifyException"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
+    [TestSubject(typeof(ShopifyException)), TestSubject(typeof(ShopifyRateLimitException))]
     public class ShopifyException_Tests
     {
         private HttpRequestMessage PrepareRequest(HttpMethod method, string path, HttpContent content = null)
@@ -286,6 +288,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Catches_Rate_Limit()
         {
+            // TODO: refactor this to use Dependency Injection and fake the rate limit response
+
             int requestCount = 60;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             ShopifyRateLimitException ex = null;
@@ -316,6 +320,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task Catches_Rate_Limit_With_Base_Exception()
         {
+            // TODO: refactor this to use Dependency Injection and fake the rate limit response
+
             int requestCount = 60;
             var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
             ShopifyException ex = null;
