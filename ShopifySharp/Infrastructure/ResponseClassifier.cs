@@ -59,7 +59,7 @@ internal class ResponseClassifier(bool retryUnexpectedRateLimitResponse, int max
             return retryUnexpectedRateLimitResponse;
         }
 
-        if (ex is ShopifyHttpException { HttpStatusCode: var statusCode } && IsRetriableStatusCode(statusCode) && totalRetriesAttempted <= maximumNonRateLimitRetriesPerRequest)
+        if (ex is ShopifyHttpException { HttpStatusCode: var statusCode } && IsRetriableStatusCode(statusCode) && totalRetriesAttempted < maximumNonRateLimitRetriesPerRequest)
         {
             return true;
         }
