@@ -75,7 +75,7 @@ namespace ShopifySharp.Tests
             };
             // Serialize the GraphQL query and the variables into a JToken. Must use a JToken for now, or else the service
             // will assume we are using a GraphQL string and send with the wrong content type.
-            var serializerSettings = Infrastructure.Serializer.CreateNewtonsoftSettings();
+            var serializerSettings = ShopifySharp.Infrastructure.Serializer.CreateNewtonsoftSettings();
             var serializer = JsonSerializer.Create(serializerSettings);
             var requestBody =  JToken.FromObject(new
             {
