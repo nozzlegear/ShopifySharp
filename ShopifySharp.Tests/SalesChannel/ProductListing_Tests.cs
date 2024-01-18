@@ -5,112 +5,111 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "ProductListing")]
+public class ProductListing_Tests : IClassFixture<ProductListing_Tests_Fixture>
 {
-    [Trait("Category", "ProductListing")]
-    public class ProductListing_Tests : IClassFixture<ProductListing_Tests_Fixture>
+    private ProductListing_Tests_Fixture Fixture { get; }
+
+    public ProductListing_Tests(ProductListing_Tests_Fixture fixture)
     {
-        private ProductListing_Tests_Fixture Fixture { get; }
-
-        public ProductListing_Tests(ProductListing_Tests_Fixture fixture)
-        {
-            this.Fixture = fixture;
-        }
+        this.Fixture = fixture;
+    }
         
-        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
-        public async Task Counts_Products()
-        {
-            var count = await Fixture.Service.CountAsync();
+    [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
+    public async Task Counts_Products()
+    {
+        var count = await Fixture.Service.CountAsync();
 
-            Assert.True(count > 0);
+        Assert.True(count > 0);
+    }
+
+    [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
+    public async Task Lists_Products_NoFilter()
+    {
+        var list = await Fixture.Service.ListAsync();
+
+        Assert.True(list.Items.Any());
+        if (list.LinkHeader != null)
+        {
+            Assert.NotNull(list.LinkHeader.NextLink);
+            Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
+            Assert.NotNull(list.LinkHeader.NextLink.Url);
         }
+    }
+}
 
-        [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
-        public async Task Lists_Products_NoFilter()
+public class ProductListing_Tests_Fixture : IAsyncLifetime
+{
+    public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public ProductListingService Service { get; } = new ProductListingService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public List<Product> Created { get; } = new List<Product>();
+
+    public string Title => "ShopifySharp Test Product";
+
+    public string Vendor = "Auntie Dot";
+
+    public string BodyHtml => "<strong>This product was created while testing ShopifySharp!</strong>";
+
+    public string ProductType => "Foobars";
+
+    public async Task InitializeAsync()
+    {
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            
+        // Create one for count, list, get, etc. orders.
+        await Create();
+    }
+
+    public async Task DisposeAsync()
+    {
+        foreach (var obj in Created)
         {
-            var list = await Fixture.Service.ListAsync();
-
-            Assert.True(list.Items.Any());
-            if (list.LinkHeader != null)
+            try
             {
-                Assert.NotNull(list.LinkHeader.NextLink);
-                Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
-                Assert.NotNull(list.LinkHeader.NextLink.Url);
+                await Service.DeleteAsync(obj.Id.Value);
+                await ProductService.DeleteAsync(obj.Id.Value);
+            }
+            catch (ShopifyException ex)
+            {
+                if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine($"Failed to delete created Product with id {obj.Id.Value}. {ex.Message}");
+                }
             }
         }
     }
 
-    public class ProductListing_Tests_Fixture : IAsyncLifetime
+    /// <summary>
+    /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+    /// </summary>
+    public async Task<Product> Create(bool skipAddToCreateList = false, ProductCreateOptions options = null)
     {
-        public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
-        public ProductListingService Service { get; } = new ProductListingService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-        public List<Product> Created { get; } = new List<Product>();
-
-        public string Title => "ShopifySharp Test Product";
-
-        public string Vendor = "Auntie Dot";
-
-        public string BodyHtml => "<strong>This product was created while testing ShopifySharp!</strong>";
-
-        public string ProductType => "Foobars";
-
-        public async Task InitializeAsync()
+        var obj = await ProductService.CreateAsync(new Product()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-            
-            // Create one for count, list, get, etc. orders.
-            await Create();
-        }
-
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in Created)
+            Title = Title,
+            Vendor = Vendor,
+            BodyHtml = BodyHtml,
+            ProductType = ProductType,
+            Handle = Guid.NewGuid().ToString(),
+            Images = new List<ProductImage>
             {
-                try
+                new ProductImage
                 {
-                    await Service.DeleteAsync(obj.Id.Value);
-                    await ProductService.DeleteAsync(obj.Id.Value);
+                    Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
                 }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created Product with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
+            },
+        }, options);
 
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        public async Task<Product> Create(bool skipAddToCreateList = false, ProductCreateOptions options = null)
+        if (!skipAddToCreateList)
         {
-            var obj = await ProductService.CreateAsync(new Product()
-            {
-                Title = Title,
-                Vendor = Vendor,
-                BodyHtml = BodyHtml,
-                ProductType = ProductType,
-                Handle = Guid.NewGuid().ToString(),
-                Images = new List<ProductImage>
-                {
-                    new ProductImage
-                    {
-                        Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                    }
-                },
-            }, options);
-
-            if (!skipAddToCreateList)
-            {
-                Created.Add(obj);
-            }
-
-            var productListing = await Service.CreateAsync(obj.Id.Value);
-
-            return obj;
+            Created.Add(obj);
         }
+
+        var productListing = await Service.CreateAsync(obj.Id.Value);
+
+        return obj;
     }
 }

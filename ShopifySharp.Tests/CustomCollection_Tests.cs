@@ -6,147 +6,146 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "CustomCollection")]
+public class CustomCollection_Tests : IClassFixture<CustomCollection_Tests_Fixture>
 {
-    [Trait("Category", "CustomCollection")]
-    public class CustomCollection_Tests : IClassFixture<CustomCollection_Tests_Fixture>
+    private CustomCollection_Tests_Fixture Fixture { get; }
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public CustomCollection_Tests(CustomCollection_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
     {
-        private CustomCollection_Tests_Fixture Fixture { get; }
-        private readonly ITestOutputHelper _testOutputHelper;
+        this.Fixture = fixture;
+        _testOutputHelper = testOutputHelper;
+    }
 
-        public CustomCollection_Tests(CustomCollection_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
+    [Fact]
+    public async Task Counts_CustomCollections()
+    {
+        var count = await Fixture.Service.CountAsync();
+
+        Assert.True(count > 0);
+    }
+
+    [Fact]
+    public async Task Lists_CustomCollections()
+    {
+        var list = await Fixture.Service.ListAsync();
+
+        Assert.True(list.Items.Count() > 0);
+    }
+
+    [Fact]
+    public async Task Gets_CustomCollections()
+    {
+        var collection = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+
+        Assert.NotNull(collection);
+        Assert.True(collection.Id.HasValue);
+        Assert.Equal(Fixture.Title, collection.Title);
+    }
+
+    [Fact]
+    public async Task Deletes_CustomCollections()
+    {
+        var created = await Fixture.Create(true);
+        bool threw = false;
+
+        try
         {
-            this.Fixture = fixture;
-            _testOutputHelper = testOutputHelper;
+            await Fixture.Service.DeleteAsync(created.Id.Value);
+        }
+        catch (ShopifyException ex)
+        {
+            _testOutputHelper.WriteLine($"{nameof(Deletes_CustomCollections)} failed. {ex.Message}");
+
+            threw = true;
         }
 
-        [Fact]
-        public async Task Counts_CustomCollections()
+        Assert.False(threw);
+    }
+
+
+    [Fact]
+    public async Task Creates_CustomCollections()
+    {
+        var collection = await Fixture.Create();
+
+        Assert.NotNull(collection);
+        Assert.True(collection.Id.HasValue);
+        Assert.Equal(Fixture.Title, collection.Title);
+    }
+
+    [Fact]
+    public async Task Updates_CustomCollections()
+    {
+        string newTitle = "New Title";
+        var created = await Fixture.Create();
+        long id = created.Id.Value;
+
+        created.Title = newTitle;
+        created.Id = null;
+
+        var updated = await Fixture.Service.UpdateAsync(id, created);
+
+        // Reset the id so the Fixture can properly delete this object.
+        created.Id = id;
+
+        Assert.Equal(newTitle, updated.Title);
+    }
+}
+
+public class CustomCollection_Tests_Fixture : IAsyncLifetime
+{
+    public CustomCollectionService Service { get; } = new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public List<CustomCollection> Created { get; } = new List<CustomCollection>();
+
+    public string Title => "Things";
+
+    public async Task InitializeAsync()
+    {
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+
+        // Create one collection for use with count, list, get, etc. tests.
+        await Create();
+    }
+
+    public async Task DisposeAsync()
+    {
+        foreach (var obj in Created)
         {
-            var count = await Fixture.Service.CountAsync();
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Lists_CustomCollections()
-        {
-            var list = await Fixture.Service.ListAsync();
-
-            Assert.True(list.Items.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Gets_CustomCollections()
-        {
-            var collection = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
-
-            Assert.NotNull(collection);
-            Assert.True(collection.Id.HasValue);
-            Assert.Equal(Fixture.Title, collection.Title);
-        }
-
-        [Fact]
-        public async Task Deletes_CustomCollections()
-        {
-            var created = await Fixture.Create(true);
-            bool threw = false;
-
             try
             {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
+                await Service.DeleteAsync(obj.Id.Value);
             }
             catch (ShopifyException ex)
             {
-                _testOutputHelper.WriteLine($"{nameof(Deletes_CustomCollections)} failed. {ex.Message}");
-
-                threw = true;
+                if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine($"Failed to delete created CustomCollection with id {obj.Id.Value}. {ex.Message}");
+                }
             }
-
-            Assert.False(threw);
-        }
-
-
-        [Fact]
-        public async Task Creates_CustomCollections()
-        {
-            var collection = await Fixture.Create();
-
-            Assert.NotNull(collection);
-            Assert.True(collection.Id.HasValue);
-            Assert.Equal(Fixture.Title, collection.Title);
-        }
-
-        [Fact]
-        public async Task Updates_CustomCollections()
-        {
-            string newTitle = "New Title";
-            var created = await Fixture.Create();
-            long id = created.Id.Value;
-
-            created.Title = newTitle;
-            created.Id = null;
-
-            var updated = await Fixture.Service.UpdateAsync(id, created);
-
-            // Reset the id so the Fixture can properly delete this object.
-            created.Id = id;
-
-            Assert.Equal(newTitle, updated.Title);
         }
     }
 
-    public class CustomCollection_Tests_Fixture : IAsyncLifetime
+    /// <summary>
+    /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+    /// </summary>
+    public async Task<CustomCollection> Create(bool skipAddToCreatedList = false)
     {
-        public CustomCollectionService Service { get; } = new CustomCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-        public List<CustomCollection> Created { get; } = new List<CustomCollection>();
-
-        public string Title => "Things";
-
-        public async Task InitializeAsync()
+        var obj = await Service.CreateAsync(new CustomCollection()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            Title = Title,
+            Published = false
+        });
 
-            // Create one collection for use with count, list, get, etc. tests.
-            await Create();
+        if (!skipAddToCreatedList)
+        {
+            Created.Add(obj);
         }
 
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in Created)
-            {
-                try
-                {
-                    await Service.DeleteAsync(obj.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created CustomCollection with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        public async Task<CustomCollection> Create(bool skipAddToCreatedList = false)
-        {
-            var obj = await Service.CreateAsync(new CustomCollection()
-            {
-                Title = Title,
-                Published = false
-            });
-
-            if (!skipAddToCreatedList)
-            {
-                Created.Add(obj);
-            }
-
-            return obj;
-        }
+        return obj;
     }
 }

@@ -6,153 +6,152 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "Webhook")]
+public class Webhook_Tests : IClassFixture<Webhook_Tests_Fixture>
 {
-    [Trait("Category", "Webhook")]
-    public class Webhook_Tests : IClassFixture<Webhook_Tests_Fixture>
+    private Webhook_Tests_Fixture Fixture { get; }
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public Webhook_Tests(Webhook_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
     {
-        private Webhook_Tests_Fixture Fixture { get; }
-        private readonly ITestOutputHelper _testOutputHelper;
+        this.Fixture = fixture;
+        _testOutputHelper = testOutputHelper;
+    }
 
-        public Webhook_Tests(Webhook_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
+    [Fact]
+    public async Task Counts_Webhooks()
+    {
+        var count = await Fixture.Service.CountAsync();
+
+        Assert.True(count > 0);
+    }
+
+    [Fact]
+    public async Task Lists_Webhooks()
+    {
+        var list = await Fixture.Service.ListAsync();
+
+        Assert.True(list.Items.Count() > 0);
+    }
+
+    [Fact]
+    public async Task Deletes_Webhooks()
+    {
+        var created = await Fixture.Create(true);
+        bool threw = false;
+
+        try
         {
-            this.Fixture = fixture;
-            _testOutputHelper = testOutputHelper;
+            await Fixture.Service.DeleteAsync(created.Id.Value);
+        }
+        catch (ShopifyException ex)
+        {
+            _testOutputHelper.WriteLine($"{nameof(Deletes_Webhooks)} failed. {ex.Message}");
+
+            threw = true;
         }
 
-        [Fact]
-        public async Task Counts_Webhooks()
+        Assert.False(threw);
+    }
+
+    [Fact]
+    public async Task Gets_Webhooks()
+    {
+        var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+
+        Assert.NotNull(obj);
+        Assert.True(obj.Id.HasValue);
+        Assert.Equal(Fixture.Format, obj.Format);
+        Assert.StartsWith(Fixture.UrlPrefix, obj.Address);
+    }
+
+    [Fact]
+    public async Task Creates_Webhooks()
+    {
+        var obj = await Fixture.Create();
+
+        Assert.NotNull(obj);
+        Assert.True(obj.Id.HasValue);
+        Assert.Equal(Fixture.Format, obj.Format);
+        Assert.StartsWith(Fixture.UrlPrefix, obj.Address);
+    }
+
+    [Fact]
+    public async Task Updates_Webhooks()
+    {
+        string newValue = "https://requestb.in/" + Guid.NewGuid();
+        var created = await Fixture.Create();
+        long id = created.Id.Value;
+
+        created.Address = newValue;
+        created.Id = null;
+
+        var updated = await Fixture.Service.UpdateAsync(id, created);
+
+        // Reset the id so the Fixture can properly delete this object.
+        created.Id = id;
+
+        Assert.Equal(newValue, updated.Address);
+    }
+}
+
+public class Webhook_Tests_Fixture : IAsyncLifetime
+{
+    public WebhookService Service { get; } = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public List<Webhook> Created { get; } = new List<Webhook>();
+
+    public string UrlPrefix => "https://requestb.in/";
+
+    public string Format => "json";
+
+    public async Task InitializeAsync()
+    {
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+
+        // Create one collection for use with count, list, get, etc. tests.
+        await Create();
+    }
+
+    public async Task DisposeAsync()
+    {
+        foreach (var obj in Created)
         {
-            var count = await Fixture.Service.CountAsync();
-
-            Assert.True(count > 0);
-        }
-
-        [Fact]
-        public async Task Lists_Webhooks()
-        {
-            var list = await Fixture.Service.ListAsync();
-
-            Assert.True(list.Items.Count() > 0);
-        }
-
-        [Fact]
-        public async Task Deletes_Webhooks()
-        {
-            var created = await Fixture.Create(true);
-            bool threw = false;
-
             try
             {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
+                await Service.DeleteAsync(obj.Id.Value);
             }
             catch (ShopifyException ex)
             {
-                _testOutputHelper.WriteLine($"{nameof(Deletes_Webhooks)} failed. {ex.Message}");
-
-                threw = true;
+                if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine($"Failed to delete created Webhook with id {obj.Id.Value}. {ex.Message}");
+                }
             }
-
-            Assert.False(threw);
-        }
-
-        [Fact]
-        public async Task Gets_Webhooks()
-        {
-            var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
-
-            Assert.NotNull(obj);
-            Assert.True(obj.Id.HasValue);
-            Assert.Equal(Fixture.Format, obj.Format);
-            Assert.StartsWith(Fixture.UrlPrefix, obj.Address);
-        }
-
-        [Fact]
-        public async Task Creates_Webhooks()
-        {
-            var obj = await Fixture.Create();
-
-            Assert.NotNull(obj);
-            Assert.True(obj.Id.HasValue);
-            Assert.Equal(Fixture.Format, obj.Format);
-            Assert.StartsWith(Fixture.UrlPrefix, obj.Address);
-        }
-
-        [Fact]
-        public async Task Updates_Webhooks()
-        {
-            string newValue = "https://requestb.in/" + Guid.NewGuid();
-            var created = await Fixture.Create();
-            long id = created.Id.Value;
-
-            created.Address = newValue;
-            created.Id = null;
-
-            var updated = await Fixture.Service.UpdateAsync(id, created);
-
-            // Reset the id so the Fixture can properly delete this object.
-            created.Id = id;
-
-            Assert.Equal(newValue, updated.Address);
         }
     }
 
-    public class Webhook_Tests_Fixture : IAsyncLifetime
+    /// <summary>
+    /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
+    /// </summary>
+    public async Task<Webhook> Create(bool skipAddToCreatedList = false, string topic = "orders/create")
     {
-        public WebhookService Service { get; } = new WebhookService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-        public List<Webhook> Created { get; } = new List<Webhook>();
-
-        public string UrlPrefix => "https://requestb.in/";
-
-        public string Format => "json";
-
-        public async Task InitializeAsync()
+        var obj = await Service.CreateAsync(new Webhook()
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            Address = UrlPrefix + Guid.NewGuid(),
+            CreatedAt = DateTime.UtcNow,
+            Fields = new string[] { "field1", "field2" },
+            Format = Format,
+            Topic = topic,
+        });
 
-            // Create one collection for use with count, list, get, etc. tests.
-            await Create();
+        if (!skipAddToCreatedList)
+        {
+            Created.Add(obj);
         }
 
-        public async Task DisposeAsync()
-        {
-            foreach (var obj in Created)
-            {
-                try
-                {
-                    await Service.DeleteAsync(obj.Id.Value);
-                }
-                catch (ShopifyException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete created Webhook with id {obj.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
-        /// </summary>
-        public async Task<Webhook> Create(bool skipAddToCreatedList = false, string topic = "orders/create")
-        {
-            var obj = await Service.CreateAsync(new Webhook()
-            {
-                Address = UrlPrefix + Guid.NewGuid(),
-                CreatedAt = DateTime.UtcNow,
-                Fields = new string[] { "field1", "field2" },
-                Format = Format,
-                Topic = topic,
-            });
-
-            if (!skipAddToCreatedList)
-            {
-                Created.Add(obj);
-            }
-
-            return obj;
-        }
+        return obj;
     }
 }

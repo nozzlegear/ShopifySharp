@@ -1,60 +1,58 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+/// <remarks>
+/// For the tests below to pass, the required permissions must be granted AND Shopify payments must be set as a payment provider in the store's settings
+/// </remarks>
+[Trait("Category", "Shopify payments")]
+public class ShopifyPayments_Tests
 {
+    ShopifyPaymentsService Service { get; } = new ShopifyPaymentsService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    /// <remarks>
-    /// For the tests below to pass, the required permissions must be granted AND Shopify payments must be set as a payment provider in the store's settings
-    /// </remarks>
-    [Trait("Category", "Shopify payments")]
-    public class ShopifyPayments_Tests
+    public ShopifyPayments_Tests()
     {
-        ShopifyPaymentsService Service { get; } = new ShopifyPaymentsService(Utils.MyShopifyUrl, Utils.AccessToken);
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+    }
 
-        public ShopifyPayments_Tests()
+    [Fact]
+    public async Task GetBalance()
+    {
+        if (await Service.IsShopifyPaymentApiEnabledAsync())
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            var balances = await Service.GetBalanceAsync();
+            Assert.NotNull(balances);
         }
+    }
 
-        [Fact]
-        public async Task GetBalance()
+    [Fact]
+    public async Task GetPayouts()
+    {
+        if (await Service.IsShopifyPaymentApiEnabledAsync())
         {
-            if (await Service.IsShopifyPaymentApiEnabledAsync())
-            {
-                var balances = await Service.GetBalanceAsync();
-                Assert.NotNull(balances);
-            }
+            var payouts = await Service.ListPayoutsAsync();
+            Assert.NotNull(payouts);
         }
+    }
 
-        [Fact]
-        public async Task GetPayouts()
+    [Fact]
+    public async Task GetDisputes()
+    {
+        if (await Service.IsShopifyPaymentApiEnabledAsync())
         {
-            if (await Service.IsShopifyPaymentApiEnabledAsync())
-            {
-                var payouts = await Service.ListPayoutsAsync();
-                Assert.NotNull(payouts);
-            }
+            var disputes = await Service.ListDisputesAsync();
+            Assert.NotNull(disputes);
         }
+    }
 
-        [Fact]
-        public async Task GetDisputes()
+    [Fact]
+    public async Task GetTransactions()
+    {
+        if (await Service.IsShopifyPaymentApiEnabledAsync())
         {
-            if (await Service.IsShopifyPaymentApiEnabledAsync())
-            {
-                var disputes = await Service.ListDisputesAsync();
-                Assert.NotNull(disputes);
-            }
-        }
-
-        [Fact]
-        public async Task GetTransactions()
-        {
-            if (await Service.IsShopifyPaymentApiEnabledAsync())
-            {
-                var transactions = await Service.ListTransactionsAsync();
-                Assert.NotNull(transactions);
-            }
+            var transactions = await Service.ListTransactionsAsync();
+            Assert.NotNull(transactions);
         }
     }
 }

@@ -4,52 +4,51 @@ using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "TenderTransaction")]
+public class TenderTransaction_Tests : IClassFixture<TenderTransaction_Tests_Fixture>
 {
-    [Trait("Category", "TenderTransaction")]
-    public class TenderTransaction_Tests : IClassFixture<TenderTransaction_Tests_Fixture>
+    private TenderTransaction_Tests_Fixture Fixture { get; }
+
+    public TenderTransaction_Tests(TenderTransaction_Tests_Fixture fixture)
     {
-        private TenderTransaction_Tests_Fixture Fixture { get; }
-
-        public TenderTransaction_Tests(TenderTransaction_Tests_Fixture fixture)
-        {
-            Fixture = fixture;
-        }
-
-        [Fact]
-        public async Task Lists_TenderTransactions()
-        {
-            var list = await Fixture.Service.ListAsync();
-            
-            Assert.True(list.Items.Any());
-        }
-
-        [Fact]
-        public async Task Lists_TenderTransactions_WithFilter()
-        {
-            var list = await Fixture.Service.ListAsync(new TenderTransactionListFilter
-            {
-                ProcessedAtMin = DateTime.Now.AddDays(30)
-            });
-
-            Assert.True(!list.Items.Any());
-        }
+        Fixture = fixture;
     }
 
-    public class TenderTransaction_Tests_Fixture : IAsyncLifetime
+    [Fact]
+    public async Task Lists_TenderTransactions()
     {
-        public TenderTransactionService Service { get; } = new TenderTransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
+        var list = await Fixture.Service.ListAsync();
+            
+        Assert.True(list.Items.Any());
+    }
 
-        public Task InitializeAsync()
+    [Fact]
+    public async Task Lists_TenderTransactions_WithFilter()
+    {
+        var list = await Fixture.Service.ListAsync(new TenderTransactionListFilter
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+            ProcessedAtMin = DateTime.Now.AddDays(30)
+        });
 
-            return Task.CompletedTask;
-        }
+        Assert.True(!list.Items.Any());
+    }
+}
 
-        public Task DisposeAsync()
-        {
-            return Task.CompletedTask;
-        }
+public class TenderTransaction_Tests_Fixture : IAsyncLifetime
+{
+    public TenderTransactionService Service { get; } = new TenderTransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public Task InitializeAsync()
+    {
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+
+        return Task.CompletedTask;
+    }
+
+    public Task DisposeAsync()
+    {
+        return Task.CompletedTask;
     }
 }

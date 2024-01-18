@@ -3,40 +3,39 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "Access scope")]
+public class AccessScope_Tests : IClassFixture<AccessScope_Tests_Fixture>
 {
-    [Trait("Category", "Access scope")]
-    public class AccessScope_Tests : IClassFixture<AccessScope_Tests_Fixture>
+    private AccessScope_Tests_Fixture Fixture { get; }
+
+    public AccessScope_Tests(AccessScope_Tests_Fixture fixture)
     {
-        private AccessScope_Tests_Fixture Fixture { get; }
-
-        public AccessScope_Tests(AccessScope_Tests_Fixture fixture)
-        {
-            this.Fixture = fixture;
-        }
-
-        [Fact]
-        public async Task List()
-        {
-            var scopes = await Fixture.Service.ListAsync();
-            Assert.True(scopes.Count() > 0);
-        }
+        this.Fixture = fixture;
     }
 
-    public class AccessScope_Tests_Fixture : IAsyncLifetime
+    [Fact]
+    public async Task List()
     {
-        public AccessScopeService Service { get; } = new AccessScopeService(Utils.MyShopifyUrl, Utils.AccessToken);
+        var scopes = await Fixture.Service.ListAsync();
+        Assert.True(scopes.Count() > 0);
+    }
+}
 
-        public Task InitializeAsync()
-        {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+public class AccessScope_Tests_Fixture : IAsyncLifetime
+{
+    public AccessScopeService Service { get; } = new AccessScopeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-            return Task.CompletedTask;
-        }
+    public Task InitializeAsync()
+    {
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
-        public Task DisposeAsync()
-        {
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
+    }
+
+    public Task DisposeAsync()
+    {
+        return Task.CompletedTask;
     }
 }

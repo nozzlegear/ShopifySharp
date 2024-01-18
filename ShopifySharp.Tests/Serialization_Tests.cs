@@ -3,15 +3,15 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "Serialization")]
+public class Serialization_Tests
 {
-    [Trait("Category", "Serialization")]
-    public class Serialization_Tests
+    [Fact]
+    public void DeserializeOrderWithPropertiesAsArray()
     {
-        [Fact]
-        public void DeserializeOrderWithPropertiesAsArray()
-        {
-            string json = @"
+        string json = @"
 {
   ""id"": 123,
   ""line_items"":
@@ -23,16 +23,16 @@ namespace ShopifySharp.Tests
   ]
 }
 ";
-            var order = JsonConvert.DeserializeObject<Order>(json);
-            Assert.NotNull(order.LineItems.First().Properties);
-            Assert.Equal("myName", order.LineItems.First().Properties.First().Name);
-            Assert.Equal("myValue", order.LineItems.First().Properties.First().Value);
-        }
+        var order = JsonConvert.DeserializeObject<Order>(json);
+        Assert.NotNull(order.LineItems.First().Properties);
+        Assert.Equal("myName", order.LineItems.First().Properties.First().Name);
+        Assert.Equal("myValue", order.LineItems.First().Properties.First().Value);
+    }
 
-        [Fact]
-        public void DeserializeOrderWithPropertiesAsObjectInsteadOfArray()
-        {
-            string json = @"
+    [Fact]
+    public void DeserializeOrderWithPropertiesAsObjectInsteadOfArray()
+    {
+        string json = @"
 {
   ""id"": 123,
   ""line_items"":
@@ -44,21 +44,20 @@ namespace ShopifySharp.Tests
   ]
 }
 ";
-            var order = JsonConvert.DeserializeObject<Order>(json);
-            Assert.Null(order.LineItems.First().Properties);
-        }
+        var order = JsonConvert.DeserializeObject<Order>(json);
+        Assert.Null(order.LineItems.First().Properties);
+    }
 
-        [Fact]
-        public void Ensure_Filter_Properties_Are_Nullable()
+    [Fact]
+    public void Ensure_Filter_Properties_Are_Nullable()
+    {
+        foreach (var pty in typeof(ShopifyService).Assembly
+                     .DefinedTypes
+                     .Where(t => t.Name.EndsWith("Filter"))
+                     .SelectMany(t => t.GetProperties()))
         {
-            foreach (var pty in typeof(ShopifyService).Assembly
-                                              .DefinedTypes
-                                              .Where(t => t.Name.EndsWith("Filter"))
-                                              .SelectMany(t => t.GetProperties()))
-            {
-                bool isNullable = !pty.PropertyType.IsValueType || Nullable.GetUnderlyingType(pty.PropertyType) != null;
-                Assert.True(isNullable, $"Filter property {pty.DeclaringType.Name}.{pty.Name} is not nullable");
-            }
+            bool isNullable = !pty.PropertyType.IsValueType || Nullable.GetUnderlyingType(pty.PropertyType) != null;
+            Assert.True(isNullable, $"Filter property {pty.DeclaringType.Name}.{pty.Name} is not nullable");
         }
     }
 }

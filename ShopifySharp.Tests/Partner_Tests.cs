@@ -8,7 +8,7 @@ using Xunit;
 namespace ShopifySharp.Tests;
 
 [Trait("Category", "Partners")]
-public class Partner_Tests
+public class PartnerTests
 {
     private async Task<JToken> Query(string query, IRequestExecutionPolicy policy = null)
     {

@@ -1,29 +1,28 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "ShippingZone")]
+public class ShippingZone_Tests
 {
-    [Trait("Category", "ShippingZone")]
-    public class ShippingZone_Tests
+    ShippingZoneService Service { get; } = new ShippingZoneService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public ShippingZone_Tests()
     {
-        ShippingZoneService Service { get; } = new ShippingZoneService(Utils.MyShopifyUrl, Utils.AccessToken);
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+    }
 
-        public ShippingZone_Tests()
+    [Fact]
+    public async Task Lists_ShippingZones()
+    {
+        var shippingZones = await Service.ListAsync();
+
+        Assert.NotNull(shippingZones);
+
+        foreach (var shippingZone in shippingZones)
         {
-            Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-        }
-
-        [Fact]
-        public async Task Lists_ShippingZones()
-        {
-            var shippingZones = await Service.ListAsync();
-
-            Assert.NotNull(shippingZones);
-
-            foreach (var shippingZone in shippingZones)
-            {
-                Assert.NotNull(shippingZone.Name);
-            }
+            Assert.NotNull(shippingZone.Name);
         }
     }
 }
