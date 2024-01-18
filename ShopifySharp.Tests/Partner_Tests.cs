@@ -47,7 +47,11 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task InvalidQueryMustThrowException()
         {
-            await Assert.ThrowsAsync<ShopifyException>(() => Query("{{ query }"));
+            const string graphQuery = "{{ query }";
+
+            var act = () => Query(graphQuery);
+
+            await act.Should().ThrowExactlyAsync<ShopifyHttpException>();
         }
 
         [Fact]
