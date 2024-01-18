@@ -6,6 +6,7 @@ namespace ShopifySharp
 {
     internal class MultiShopifyAPIBucket
     {
+        // TODO: were these increased to 80?
         private const int DEFAULT_REST_MAX_AVAILABLE = 40;
         private const int DEFAULT_REST_RESTORE_RATE = 2;
 
