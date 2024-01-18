@@ -2,12 +2,14 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using Xunit;
 
 namespace ShopifySharp.Tests;
 
-[Trait("Category", "Partners")]
+[Trait("Category", "PartnerService")]
+[TestSubject(typeof(PartnerService))]
 public class PartnerTests
 {
     private async Task<JToken> Query(string query, IRequestExecutionPolicy policy = null)
