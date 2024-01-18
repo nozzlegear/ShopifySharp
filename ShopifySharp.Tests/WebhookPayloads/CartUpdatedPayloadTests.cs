@@ -23,7 +23,7 @@ namespace ShopifySharp.Tests.WebhookPayloads
             var json = await ReadJsonFile();
 
             // Act
-            var act = () => Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json);
+            var act = () => ShopifySharp.Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json);
 
             // Test
             act.Should().NotThrow();
@@ -46,7 +46,7 @@ namespace ShopifySharp.Tests.WebhookPayloads
             var json = await ReadJsonFile(JsonWithNullNoteFilePath);
 
             // Act
-            var act = () => Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json);
+            var act = () => ShopifySharp.Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json);
 
             // Test
             act.Should().NotThrow();
@@ -63,7 +63,7 @@ namespace ShopifySharp.Tests.WebhookPayloads
             var json = await ReadJsonFile();
 
             // Act
-            var lineItems = Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json).LineItems;
+            var lineItems = ShopifySharp.Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json).LineItems;
             var lineItem = lineItems.Single();
 
             // Test
@@ -94,7 +94,7 @@ namespace ShopifySharp.Tests.WebhookPayloads
             var json = await ReadJsonFile();
 
             // Act
-            var lineItems = Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json).LineItems;
+            var lineItems = ShopifySharp.Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json).LineItems;
             var lineItem = lineItems.Single();
 
             // Test
@@ -120,7 +120,7 @@ namespace ShopifySharp.Tests.WebhookPayloads
             var json = await ReadJsonFile(JsonWithPropertiesFilePath);
 
             // Act
-            var lineItems = Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json).LineItems;
+            var lineItems = ShopifySharp.Infrastructure.Serializer.Deserialize<CartUpdatedPayload>(json).LineItems;
             var properties = lineItems.Single().Properties;
 
             // Test

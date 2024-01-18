@@ -219,7 +219,7 @@ namespace ShopifySharp.Tests
   ]
 }
 ";
-            var order = Infrastructure.Serializer.Deserialize<Order>(orderJson);
+            var order = ShopifySharp.Infrastructure.Serializer.Deserialize<Order>(orderJson);
             Assert.Null(order.LineItems.First().TipPaymentGateway);
             Assert.True(order.LineItems.First().TipPaymentGatewaySpecified);
         }
