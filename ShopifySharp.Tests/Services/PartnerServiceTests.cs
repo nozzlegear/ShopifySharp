@@ -6,11 +6,11 @@ using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using Xunit;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Services;
 
 [Trait("Category", "PartnerService")]
 [TestSubject(typeof(PartnerService))]
-public class PartnerTests
+public class PartnerServiceTests
 {
     private async Task<JToken> Query(string query, IRequestExecutionPolicy policy = null)
     {
