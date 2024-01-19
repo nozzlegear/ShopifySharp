@@ -31,7 +31,7 @@
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Wish.GraphQLSchemaGenerator" Version="1.5.2" />
+    <PackageReference Include="Wish.GraphQLSchemaGenerator" Version="1.5.3" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="WebhookPayloads\cart_updated_payload.json">
