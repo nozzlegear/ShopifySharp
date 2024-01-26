@@ -118,7 +118,7 @@ namespace ShopifySharp
             while (true)
             {
                 // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-                request = request.Clone();
+                request = await request.CloneAsync();
 
                 if (bucket != null)
                 {
@@ -155,7 +155,7 @@ namespace ShopifySharp
             while (true)
             {
                 // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-                request = request.Clone();
+                request = await request.CloneAsync();
 
                 if (bucket != null)
                 {
@@ -229,7 +229,7 @@ namespace ShopifySharp
             while (true)
             {
                 // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-                request = request.Clone();
+                request = await request.CloneAsync();
 
                 if (bucket != null)
                 {

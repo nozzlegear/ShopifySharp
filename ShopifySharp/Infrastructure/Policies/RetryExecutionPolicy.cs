@@ -52,7 +52,7 @@ namespace ShopifySharp
 
             while (true)
             {
-                request = request.Clone();
+                var request = await request.CloneAsync();
 
                 try
                 {
