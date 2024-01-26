@@ -41,7 +41,7 @@ namespace ShopifySharp
         }
 
         public async Task<RequestResult<T>> Run<T>(
-            CloneableRequestMessage request,
+            CloneableRequestMessage baseRequest,
             ExecuteRequestAsync<T> executeRequestAsync,
             CancellationToken cancellationToken,
             int? graphqlQueryCost = null
@@ -52,7 +52,7 @@ namespace ShopifySharp
 
             while (true)
             {
-                var request = await request.CloneAsync();
+                using var request = await baseRequest.CloneAsync();
 
                 try
                 {
