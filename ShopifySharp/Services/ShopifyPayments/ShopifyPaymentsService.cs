@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp
@@ -30,7 +31,7 @@ namespace ShopifySharp
                 await this.GetBalanceAsync(cancellationToken);
                 return true;
             }
-            catch (ShopifyException ex) when (ex.HttpStatusCode == HttpStatusCode.NotFound)
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode == HttpStatusCode.NotFound)
             {
                 return false;
             }
