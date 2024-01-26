@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Utilities;
-using Newtonsoft.Json.Linq;
 
-namespace ShopifySharp.Services;
+namespace ShopifySharp;
 
 /// A service for getting the shop's current Shopify subscription plan. This is a convenience wrapper around the Shopify GraphQL API.
 public class ShopPlanService : GraphService, IShopPlanService
