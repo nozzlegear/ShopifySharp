@@ -110,7 +110,7 @@ namespace ShopifySharp
             ExecuteRequestAsync<T> executeRequestAsync,
             CancellationToken cancellationToken,
             MultiShopifyAPIBucket bucket,
-            CloneableRequestMessage request
+            CloneableRequestMessage baseRequest
         )
         {
             var totalRetriesDueToServiceUnavailableResponse = 0;
@@ -118,7 +118,7 @@ namespace ShopifySharp
             while (true)
             {
                 // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-                request = await request.CloneAsync();
+                using var request = await baseRequest.CloneAsync();
 
                 if (bucket != null)
                 {
@@ -147,7 +147,7 @@ namespace ShopifySharp
             CancellationToken cancellationToken,
             int graphqlQueryCost,
             MultiShopifyAPIBucket bucket,
-            CloneableRequestMessage request
+            CloneableRequestMessage baseRequest
         )
         {
             var totalRetriesDueToServiceUnavailableResponse = 0;
@@ -155,7 +155,7 @@ namespace ShopifySharp
             while (true)
             {
                 // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-                request = await request.CloneAsync();
+                var request = await baseRequest.CloneAsync();
 
                 if (bucket != null)
                 {
@@ -221,7 +221,7 @@ namespace ShopifySharp
             ExecuteRequestAsync<T> executeRequestAsync,
             CancellationToken cancellationToken,
             MultiShopifyAPIBucket bucket,
-            CloneableRequestMessage request
+            CloneableRequestMessage baseRequest
         )
         {
             var totalRetriesDueToServiceUnavailableResponse = 0;
@@ -229,7 +229,7 @@ namespace ShopifySharp
             while (true)
             {
                 // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-                request = await request.CloneAsync();
+                using var request = await baseRequest.CloneAsync();
 
                 if (bucket != null)
                 {
