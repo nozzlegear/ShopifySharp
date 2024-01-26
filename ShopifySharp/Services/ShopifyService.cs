@@ -204,9 +204,8 @@ namespace ShopifySharp
             using var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers);
             var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
             {
-                var request = _Client.SendAsync(requestMessage, cancellationToken);
+                using var response = await _Client.SendAsync(requestMessage, cancellationToken);
 
-                using var response = await request;
                 #if NETSTANDARD2_0
                 var rawResult = await response.Content.ReadAsStringAsync();
                 #else
