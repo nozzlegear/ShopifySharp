@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ShopifySharp
 {
@@ -11,9 +11,9 @@ namespace ShopifySharp
 
         public const string RESPONSE_HEADER_API_CALL_LIMIT = "X-Shopify-Shop-Api-Call-Limit";
 
-        public static RestBucketState Get(HttpResponseMessage response)
+        public static RestBucketState Get(HttpResponseHeaders responseHeaders)
         {
-            string headerValue = response.Headers.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT)
+            string headerValue = responseHeaders.FirstOrDefault(kvp => kvp.Key == RESPONSE_HEADER_API_CALL_LIMIT)
                                        .Value
                                        ?.FirstOrDefault();
 
