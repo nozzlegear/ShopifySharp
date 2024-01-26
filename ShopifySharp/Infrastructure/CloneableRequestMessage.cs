@@ -14,6 +14,7 @@ namespace ShopifySharp.Infrastructure
             }
         }
 
+        [Obsolete("This method has been replaced with " + nameof(CloneAsync) + ", it will be removed in a future version of ShopifySharp.")]
         public CloneableRequestMessage Clone()
         {
             var newContent = Content;

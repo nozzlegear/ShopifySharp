@@ -6,6 +6,7 @@ namespace ShopifySharp
 {
     public class RequestResult<T>
     {
+        [Obsolete("This property is obsolete and will be removed in a future version of ShopifySharp. If you need to use the response headers, please use the " + nameof(ResponseHeaders) + " property instead.")]
         public HttpResponseMessage Response { get; }
 
         public HttpResponseHeaders ResponseHeaders { get; }
@@ -19,6 +20,7 @@ namespace ShopifySharp
         /// </summary>
         public string RawLinkHeaderValue { get; }
 
+        [Obsolete("This constructor is obsolete and will be removed in a future version of ShopifySharp.")]
         public RequestResult(HttpResponseMessage response, T result, string rawResult, string rawLinkHeaderValue)
         {
             this.Response = response;
