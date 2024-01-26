@@ -4,7 +4,6 @@
 
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
-using ShopifySharp.Services;
 
 namespace ShopifySharp.Factories;
 

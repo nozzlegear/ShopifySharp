@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
-using ShopifySharp.Services;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services;
