@@ -184,7 +184,7 @@ namespace ShopifySharp
                 {
                     System.Text.Json.JsonDocument systemTextJsonDoc => systemTextJsonDoc,
                     JToken jsonNetDoc => System.Text.Json.JsonDocument.Parse(jsonNetDoc.ToString(Newtonsoft.Json.Formatting.None)),
-                    _ => throw new Exception($"Unexpected non json result of type {result.Response.GetType().Name} for GraphQL Admin API")
+                    _ => throw new ShopifyException("Unexpected json result for GraphQL Admin API", new ArgumentException("Unexpected json result for GraphQL Admin API", nameof(result.Result)))
                 };
 
                 if (bucket != null)

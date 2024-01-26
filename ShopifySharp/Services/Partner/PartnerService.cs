@@ -58,7 +58,7 @@ namespace ShopifySharp
                 return;
             }
 
-            var requestId = ParseRequestIdResponseHeader(requestResult.Response.Headers);
+            var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
             var errorList = new List<string>();
 
             foreach (var error in requestResult.Result["errors"])

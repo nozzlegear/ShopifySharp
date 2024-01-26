@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace ShopifySharp
 {
@@ -6,10 +8,12 @@ namespace ShopifySharp
     {
         public HttpResponseMessage Response { get; }
 
+        public HttpResponseHeaders ResponseHeaders { get; }
+
         public T Result { get; }
 
         public string RawResult { get; }
-        
+
         /// <summary>
         /// Only exists for list requests, will be null or empty for all others. 
         /// </summary>
@@ -18,14 +22,29 @@ namespace ShopifySharp
         public RequestResult(HttpResponseMessage response, T result, string rawResult, string rawLinkHeaderValue)
         {
             this.Response = response;
+            this.ResponseHeaders = response.Headers;
             this.Result = result;
             this.RawResult = rawResult;
             this.RawLinkHeaderValue = rawLinkHeaderValue;
         }
 
+        public RequestResult(
+            HttpResponseMessage httpResponseMessage,
+            HttpResponseHeaders httpResponseHeaders,
+            T result,
+            string rawResult,
+            string rawLinkHeaderValue)
+        {
+            Response = httpResponseMessage;
+            ResponseHeaders = httpResponseHeaders;
+            Result = result;
+            RawResult = rawResult;
+            RawLinkHeaderValue = rawLinkHeaderValue;
+        }
+
         public RestBucketState GetRestBucketState()
         {
-            return RestBucketState.Get(this.Response);
+            return RestBucketState.Get(ResponseHeaders);
         }
 
         public GraphQLBucketState GetGraphQLBucketState(System.Text.Json.JsonDocument response)

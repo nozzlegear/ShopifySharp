@@ -181,9 +181,9 @@ namespace ShopifySharp
         /// <remarks>
         /// The Link header only exists on list requests.
         /// </remarks>
-        private string ReadLinkHeader(HttpResponseMessage response)
+        private string ReadLinkHeader(HttpResponseHeaders responseHeaders)
         {
-            var linkHeaderValues = response.Headers
+            var linkHeaderValues = responseHeaders
                 .FirstOrDefault(h => h.Key.Equals("link", StringComparison.OrdinalIgnoreCase))
                 .Value;
 
@@ -218,7 +218,7 @@ namespace ShopifySharp
 
                 var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                return new RequestResult<T>(response, result, rawResult, ReadLinkHeader(response));
+                return new RequestResult<T>(response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
             }, cancellationToken, graphqlQueryCost);
 
             return policyResult;
