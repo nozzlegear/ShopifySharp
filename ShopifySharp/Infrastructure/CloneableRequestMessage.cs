@@ -46,17 +46,7 @@ namespace ShopifySharp.Infrastructure
 
         public async Task<CloneableRequestMessage> CloneAsync()
         {
-            HttpContent newContent = Content switch
-            {
-                JsonContent c => c.Clone(),
-                // TODO: use new ReadOnlyMemoryContent(bytes) when cloning. Can import System.Memory from Nuget for netstandard2.0 targets
-                StringContent s => new StreamContent(await s.ReadAsStreamAsync()),
-                StreamContent s => new StreamContent(await s.ReadAsStreamAsync()),
-                ByteArrayContent b => new ByteArrayContent(await b.ReadAsByteArrayAsync()),
-                null => null,
-                _ => throw new ArgumentOutOfRangeException(nameof(Content), Content.GetType().FullName, "Unhandled HttpContent type, ")
-            };
-
+            var newContent = Content is null ? null : await CloneToStreamOrReadOnlyMemoryContent(Content);
             var cloned = new CloneableRequestMessage(RequestUri, Method, newContent);
 
             // Copy over the request's headers which includes the access token if set
@@ -66,6 +56,28 @@ namespace ShopifySharp.Infrastructure
             }
 
             return cloned;
+        }
+
+        private static async Task<HttpContent> CloneToStreamOrReadOnlyMemoryContent(HttpContent originalStreamContent)
+        {
+            HttpContent clonedContent;
+
+#if NET6_0_OR_GREATER
+            var rs = new ReadOnlyMemory<byte>(await originalStreamContent.ReadAsByteArrayAsync());
+            clonedContent = new ReadOnlyMemoryContent(rs);
+#else
+            var ms = new MemoryStream();
+            await originalStreamContent.CopyToAsync(ms);
+            ms.Position = 0;
+            clonedContent = new StreamContent(ms);
+#endif
+
+            foreach (var header in originalStreamContent.Headers)
+            {
+                clonedContent.Headers.Add(header.Key, header.Value);
+            }
+
+            return clonedContent;
         }
     }
 }
