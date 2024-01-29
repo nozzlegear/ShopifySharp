@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -22,6 +23,14 @@ namespace ShopifySharp.Infrastructure
             if (newContent is JsonContent c)
             {
                 newContent = c.Clone();
+
+                foreach (var header in Content.Headers)
+                {
+                    if (!newContent.Headers.Contains(header.Key))
+                    {
+                        newContent.Headers.Add(header.Key, header.Value);
+                    }
+                }
             }
 
             var cloned = new CloneableRequestMessage(RequestUri, Method, newContent);
