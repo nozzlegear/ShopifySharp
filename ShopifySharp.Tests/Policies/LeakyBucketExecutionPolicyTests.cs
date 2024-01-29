@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,7 +13,7 @@ namespace ShopifySharp.Tests.Policies;
 [TestSubject(typeof(LeakyBucketExecutionPolicy))]
 public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
 {
-    private readonly Order _order = new Order()
+    private readonly Order _order = new()
     {
         LineItems = new List<LineItem>()
         {
@@ -28,34 +29,44 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
         Test = true
     };
 
-    private readonly OrderService _orderService = new(Utils.MyShopifyUrl, Utils.AccessToken);
+    private readonly Blog _blog = new ()
+    {
+        Title = "some-blog-title",
+        Tags = "some-tags",
+    };
+
+    private readonly BlogService _blogService = new(Utils.MyShopifyUrl, Utils.AccessToken);
     private readonly GraphService _graphService = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
     [Fact]
     public async Task NonFullLeakyBucketBreachShouldNotAttemptRetry()
     {
-        _orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-        bool caught = false;
-        try
+        var orderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+        orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+
+        var act = async () =>
         {
-            //trip the 5 orders per minute limit on dev stores
+            // This test must use the OrderService, as orders on a dev store have a special rate limit of 5 per minute
             foreach (var _ in Enumerable.Range(0, 10))
             {
-                await _orderService.CreateAsync(_order);
+                await orderService.CreateAsync(_order, new OrderCreateOptions
+                {
+                    SendWebhooks = false,
+                    SendReceipt = false,
+                    SendFulfillmentReceipt = false
+                });
             }
-        }
-        catch (ShopifyRateLimitException ex)
-        {
-            caught = true;
-            Assert.True(ex.Reason != ShopifyRateLimitReason.BucketFull);
-        }
-        Assert.True(caught);
+        };
+
+        await act.Should()
+            .ThrowExactlyAsync<ShopifyRateLimitException>()
+            .Where(x => x.Reason == ShopifyRateLimitReason.Other);
     }
 
     [Fact]
     public async Task NonFullLeakyBucketBreachShouldRetryWhenConstructorBoolIsFalse()
     {
-        _orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+        _blogService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
 
         bool caught = false;
 
@@ -64,7 +75,7 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
             //trip the 5 orders per minute limit on dev stores
             foreach (var _ in Enumerable.Range(0, 6))
             {
-                await _orderService.CreateAsync(_order);
+                await _blogService.CreateAsync(_blog);
             }
         }
         catch (ShopifyRateLimitException)
@@ -78,14 +89,14 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
     [Fact]
     public async Task LeakyBucketRestBreachShouldAttemptRetry()
     {
-        _orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        _blogService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
         bool caught = false;
 
         try
         {
             //trip the 40/seconds bucket limit
-            await Task.WhenAll(Enumerable.Range(0, 45).Select(async _ => await _orderService.ListAsync()));
+            await Task.WhenAll(Enumerable.Range(0, 45).Select(async _ => await _blogService.ListAsync()));
         }
         catch (ShopifyRateLimitException)
         {
@@ -142,9 +153,8 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
         var context = RequestContext.Background;
         // ReSharper disable once AccessToModifiedClosure
         var policy = new LeakyBucketExecutionPolicy(getRequestContext: () => context);
-        var filter = new Filters.OrderListFilter
+        var filter = new Filters.BlogListFilter
         {
-            Status = "any",
             Limit = 1,
             Fields = "id"
         };
@@ -155,7 +165,7 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
         async Task ListInBackground()
         {
             var tasks = Enumerable.Range(0, 50)
-                .Select(_ => _orderService.ListAsync(filter));
+                .Select(_ => _blogService.ListAsync(filter));
 
             await Task.WhenAll(tasks);
 
@@ -165,14 +175,14 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
         async Task ListInForeground()
         {
             var tasks = Enumerable.Range(0, 10)
-                .Select(_ => _orderService.ListAsync(filter));
+                .Select(_ => _blogService.ListAsync(filter));
 
             await Task.WhenAll(tasks);
 
             foregroundCompletedAt = DateTime.UtcNow;
         }
 
-        _orderService.SetExecutionPolicy(policy);
+        _blogService.SetExecutionPolicy(policy);
 
         // Kick off background requests, which will trigger a throttle
         var bgTask = ListInBackground();
