@@ -98,8 +98,9 @@ public class CloneableRequestMessageTests
         {
             Headers = { {"some-key-1", "some-value-1"} }
         };
-        var baseRequest = new CloneableRequestMessage(Host, Method, jsonContent);
+        var baseRequest = new TestCloneableRequestMessage(Host, Method, jsonContent);
 
+        // Act
         var act = () =>
         {
             for (var i = 0; i < 5; i++)
@@ -115,7 +116,9 @@ public class CloneableRequestMessageTests
             }
         };
 
+        // Assert
         act.Should().NotThrow();
+        baseRequest.Disposed.Should().BeFalse();
     }
 
     #region CloneAsync
@@ -342,7 +345,7 @@ public class CloneableRequestMessageTests
                 { "Content-Type", "fake/stream" }
             }
         };
-        var baseRequest = new CloneableRequestMessage(Host, Method, streamContent);
+        var baseRequest = new TestCloneableRequestMessage(Host, Method, streamContent);
         baseRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
@@ -369,6 +372,7 @@ public class CloneableRequestMessageTests
         };
 
         await act.Should().NotThrowAsync();
+        baseRequest.Disposed.Should().BeFalse();
     }
 
     #endregion
