@@ -131,10 +131,16 @@ public class CloneableRequestMessageTests
     public async Task CloneAsync_ShouldCloneStringContent_AndPreserveHeaders()
     {
         // Setup
-        var stringContent = new StringContent("some-string-content", System.Text.Encoding.UTF8, MediaTypeHeaderValue.Parse("fake/string"))
+        var stringContent = new StringContent("some-string-content")
         {
-            Headers = { {"some-key-1", "some-value-1"} }
+            Headers = 
+            { 
+                {"some-key-1", "some-value-1"}
+            }
         };
+        // The StringContent class has weird class-specific logic around the Content-Type header that set it explicitly
+        stringContent.Headers.Remove("Content-Type");
+        stringContent.Headers.Add("Content-Type", "fake/string");
         var cloneableRequest = new CloneableRequestMessage(Host, Method, stringContent);
         cloneableRequest.Headers.Add("some-key-2", "some-value-2");
 
