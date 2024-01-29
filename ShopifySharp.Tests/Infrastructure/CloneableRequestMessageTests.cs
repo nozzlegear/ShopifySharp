@@ -3,12 +3,12 @@ using System;
 using System.Text;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using Xunit;
+#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace ShopifySharp.Tests.Infrastructure;
 
@@ -401,12 +401,9 @@ public class CloneableRequestMessageTests
         baseRequest.Disposed.Should().BeFalse();
     }
 
-    class TestCloneableRequestMessage : CloneableRequestMessage
+    private class TestCloneableRequestMessage(Uri url, HttpMethod method, HttpContent? content = null)
+        : CloneableRequestMessage(url, method, content)
     {
-        public TestCloneableRequestMessage(Uri url, HttpMethod method, HttpContent? content = null) : base(url, method, content)
-        {
-        }
-
         public bool Disposed { get; private set; }
 
         protected override void Dispose(bool disposing)
