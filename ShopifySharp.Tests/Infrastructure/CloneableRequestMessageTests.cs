@@ -69,6 +69,28 @@ public class CloneableRequestMessageTests
     }
 
     [Fact]
+    public void Clone_ShouldNotThrowWhenCloningDisposedRequest()
+    {
+        // The original Clone method did not interact with the underlying request's memory stream. Instead,
+        // it holds the original data object in memory and reserializes it to a byte array on each clone.
+        // It is only serializing the request/content into an Http pipeline that will throw an exception here.
+
+        // Setup
+        var jsonContent = new JsonContent(new { Foo = "bar" })
+        {
+            Headers = { {"some-key-1", "some-value-1"} }
+        };
+        var cloneableRequest = new CloneableRequestMessage(Host, Method, jsonContent);
+        cloneableRequest.Dispose();
+
+        // Act
+        var clonedRequest = () => cloneableRequest.Clone();
+
+        // Assert
+        clonedRequest.Should().NotThrow();
+    }
+
+    [Fact]
     public void Clone_ShouldCloneMultipleTimesWithoutDisposalExceptions()
     {
         // Setup
@@ -97,6 +119,43 @@ public class CloneableRequestMessageTests
     }
 
     #region CloneAsync
+
+    [Fact]
+    public async Task CloneAsync_ShouldThrowWhenCloningDisposedRequest()
+    {
+        // Setup
+        var jsonContent = new JsonContent(new { Foo = "bar" })
+        {
+            Headers = { {"some-key-1", "some-value-1"} }
+        };
+        var cloneableRequest = new CloneableRequestMessage(Host, Method, jsonContent);
+        cloneableRequest.Dispose();
+
+        // Act
+        var clonedRequest = async () => await cloneableRequest.CloneAsync();
+
+        // Assert
+        await clonedRequest.Should().ThrowAsync<ObjectDisposedException>();
+    }
+
+    [Fact]
+    public async Task CloneAsync_ShouldCloneWithNoHttpContent_AndPreserveHeaders()
+    {
+        // Setup
+        var cloneableRequest = new CloneableRequestMessage(Host, Method);
+        cloneableRequest.Headers.Add("some-key", "some-value");
+
+        // Act
+        var clonedRequest = await cloneableRequest.CloneAsync();
+
+        // Assert
+        clonedRequest.Should().NotBeNull();
+        clonedRequest.RequestUri.Should().Be(Host);
+        clonedRequest.Method.Should().Be(Method);
+        clonedRequest.Content.Should().BeNull();
+        clonedRequest.Headers.Should().ContainKey("some-key")
+            .WhoseValue.Should().BeEquivalentTo(["some-value"]);
+    }
 
     [Fact]
     public async Task CloneAsync_ShouldCloneJsonContent_AndPreserveHeaders()
