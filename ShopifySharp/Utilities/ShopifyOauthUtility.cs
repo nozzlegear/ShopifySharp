@@ -288,6 +288,7 @@ public class ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null) : 
         ShopifyService.CheckResponseExceptions(response, rawDataString);
 
         var json = JToken.Parse(rawDataString);
+        // TODO: throw a ShopifyJsonParseException if value is null. Exception should have a RawBody property.
         return new AuthorizationResult(json.Value<string>("access_token"), json.Value<string>("scope")?.Split(','));
     }
 
