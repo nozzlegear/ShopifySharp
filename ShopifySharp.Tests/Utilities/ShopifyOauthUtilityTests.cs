@@ -186,7 +186,7 @@ public class ShopifyOauthUtilityTests
         });
         var send = async () =>
         {
-            var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://127.0.0.1"));
+            var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, shopDomain));
             response.EnsureSuccessStatusCode();
         };
 
