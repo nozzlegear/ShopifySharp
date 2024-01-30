@@ -281,10 +281,9 @@ public class ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null) : 
             access_token = existingStoreAccessToken
         });
 
-        using var client = _httpClientFactory.CreateClient();
-        using var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
-        var request = client.SendAsync(msg);
-        var response = await request;
+        var client = _httpClientFactory.CreateClient();
+        using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
+        using var response = await client.SendAsync(request);
         var rawDataString = await response.Content.ReadAsStringAsync();
 
         ShopifyService.CheckResponseExceptions(response, rawDataString);
