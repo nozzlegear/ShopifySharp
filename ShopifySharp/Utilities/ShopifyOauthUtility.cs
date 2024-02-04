@@ -237,10 +237,9 @@ public class ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null) : 
             code,
         });
 
-        using var client = new HttpClient();
-        using var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
-        var request = client.SendAsync(msg);
-        var response = await request;
+        var client = _httpClientFactory.CreateClient();
+        using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
+        using var response = await client.SendAsync(request);
         var rawDataString = await response.Content.ReadAsStringAsync();
 
         ShopifyService.CheckResponseExceptions(response, rawDataString);
@@ -281,15 +280,15 @@ public class ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null) : 
             access_token = existingStoreAccessToken
         });
 
-        using var client = _httpClientFactory.CreateClient();
-        using var msg = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
-        var request = client.SendAsync(msg);
-        var response = await request;
+        var client = _httpClientFactory.CreateClient();
+        using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
+        using var response = await client.SendAsync(request);
         var rawDataString = await response.Content.ReadAsStringAsync();
 
         ShopifyService.CheckResponseExceptions(response, rawDataString);
 
         var json = JToken.Parse(rawDataString);
+        // TODO: throw a ShopifyJsonParseException if value is null. Exception should have a RawBody property.
         return new AuthorizationResult(json.Value<string>("access_token"), json.Value<string>("scope")?.Split(','));
     }
 

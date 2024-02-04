@@ -3,12 +3,12 @@ using System;
 using System.Text;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using Xunit;
+#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace ShopifySharp.Tests.Infrastructure;
 
@@ -69,6 +69,28 @@ public class CloneableRequestMessageTests
     }
 
     [Fact]
+    public void Clone_ShouldNotThrowWhenCloningDisposedRequest()
+    {
+        // The original Clone method did not interact with the underlying request's memory stream. Instead,
+        // it holds the original data object in memory and reserializes it to a byte array on each clone.
+        // It is only serializing the request/content into an Http pipeline that will throw an exception here.
+
+        // Setup
+        var jsonContent = new JsonContent(new { Foo = "bar" })
+        {
+            Headers = { {"some-key-1", "some-value-1"} }
+        };
+        var cloneableRequest = new CloneableRequestMessage(Host, Method, jsonContent);
+        cloneableRequest.Dispose();
+
+        // Act
+        var clonedRequest = () => cloneableRequest.Clone();
+
+        // Assert
+        clonedRequest.Should().NotThrow();
+    }
+
+    [Fact]
     public void Clone_ShouldCloneMultipleTimesWithoutDisposalExceptions()
     {
         // Setup
@@ -76,8 +98,9 @@ public class CloneableRequestMessageTests
         {
             Headers = { {"some-key-1", "some-value-1"} }
         };
-        var baseRequest = new CloneableRequestMessage(Host, Method, jsonContent);
+        var baseRequest = new TestCloneableRequestMessage(Host, Method, jsonContent);
 
+        // Act
         var act = () =>
         {
             for (var i = 0; i < 5; i++)
@@ -93,10 +116,49 @@ public class CloneableRequestMessageTests
             }
         };
 
+        // Assert
         act.Should().NotThrow();
+        baseRequest.Disposed.Should().BeFalse();
     }
 
     #region CloneAsync
+
+    [Fact]
+    public async Task CloneAsync_ShouldThrowWhenCloningDisposedRequest()
+    {
+        // Setup
+        var jsonContent = new JsonContent(new { Foo = "bar" })
+        {
+            Headers = { {"some-key-1", "some-value-1"} }
+        };
+        var cloneableRequest = new CloneableRequestMessage(Host, Method, jsonContent);
+        cloneableRequest.Dispose();
+
+        // Act
+        var clonedRequest = async () => await cloneableRequest.CloneAsync();
+
+        // Assert
+        await clonedRequest.Should().ThrowAsync<ObjectDisposedException>();
+    }
+
+    [Fact]
+    public async Task CloneAsync_ShouldCloneWithNoHttpContent_AndPreserveHeaders()
+    {
+        // Setup
+        var cloneableRequest = new CloneableRequestMessage(Host, Method);
+        cloneableRequest.Headers.Add("some-key", "some-value");
+
+        // Act
+        var clonedRequest = await cloneableRequest.CloneAsync();
+
+        // Assert
+        clonedRequest.Should().NotBeNull();
+        clonedRequest.RequestUri.Should().Be(Host);
+        clonedRequest.Method.Should().Be(Method);
+        clonedRequest.Content.Should().BeNull();
+        clonedRequest.Headers.Should().ContainKey("some-key")
+            .WhoseValue.Should().BeEquivalentTo(["some-value"]);
+    }
 
     [Fact]
     public async Task CloneAsync_ShouldCloneJsonContent_AndPreserveHeaders()
@@ -283,7 +345,7 @@ public class CloneableRequestMessageTests
                 { "Content-Type", "fake/stream" }
             }
         };
-        var baseRequest = new CloneableRequestMessage(Host, Method, streamContent);
+        var baseRequest = new TestCloneableRequestMessage(Host, Method, streamContent);
         baseRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
@@ -310,6 +372,7 @@ public class CloneableRequestMessageTests
         };
 
         await act.Should().NotThrowAsync();
+        baseRequest.Disposed.Should().BeFalse();
     }
 
     #endregion
@@ -338,12 +401,9 @@ public class CloneableRequestMessageTests
         baseRequest.Disposed.Should().BeFalse();
     }
 
-    class TestCloneableRequestMessage : CloneableRequestMessage
+    private class TestCloneableRequestMessage(Uri url, HttpMethod method, HttpContent? content = null)
+        : CloneableRequestMessage(url, method, content)
     {
-        public TestCloneableRequestMessage(Uri url, HttpMethod method, HttpContent? content = null) : base(url, method, content)
-        {
-        }
-
         public bool Disposed { get; private set; }
 
         protected override void Dispose(bool disposing)

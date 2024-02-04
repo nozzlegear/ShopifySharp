@@ -1,12 +1,15 @@
 #nullable enable
 using System;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using ShopifySharp.Enums;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Utilities;
 using Xunit;
@@ -159,4 +162,37 @@ public class ShopifyOauthUtilityTests
         // Assert
         act.Should().Throw<TestException>();
     }
+
+    #if NET8_0_OR_GREATER
+    [Fact]
+    public async Task RefreshAccessTokenAsync_ShouldNotDisposeHttpClient()
+    {
+        // This is testing the fix for the issue described in #1005 and #1006
+
+        // Setup
+        const string shopDomain = "some-shop-domain";
+        _utility = new ShopifyOauthUtility();
+        var factory = new InternalHttpClientFactory();
+        var client = factory.CreateClient("some-name");
+
+        // Act
+        var refresh = async () => await _utility.RefreshAccessTokenAsync(new RefreshAccessTokenOptions
+        {
+            ClientId = "some-client-id",
+            ClientSecret = "some-client-secret",
+            ExistingStoreAccessToken = "some-existing-store-access-token",
+            RefreshToken = "some-refresh-token",
+            ShopDomain = shopDomain
+        });
+        var send = async () =>
+        {
+            var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, shopDomain));
+            response.EnsureSuccessStatusCode();
+        };
+
+        // Assert
+        await refresh.Should().ThrowAsync<HttpRequestException>();
+        await send.Should().NotThrowAsync<ObjectDisposedException>();
+    }
+    #endif
 }
