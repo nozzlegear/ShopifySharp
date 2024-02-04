@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IScriptTagServiceFactory
-{
-    /// Creates a new instance of the <see cref="IScriptTagService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IScriptTagService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IScriptTagService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IScriptTagService Create(ShopifyApiCredentials credentials);
-}
+public interface IScriptTagServiceFactory : IServiceFactory<IScriptTagService>;
 
 public class ScriptTagServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IScriptTagServiceFactory
 {

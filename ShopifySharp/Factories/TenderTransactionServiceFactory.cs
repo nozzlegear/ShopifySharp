@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface ITenderTransactionServiceFactory
-{
-    /// Creates a new instance of the <see cref="ITenderTransactionService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    ITenderTransactionService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="ITenderTransactionService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    ITenderTransactionService Create(ShopifyApiCredentials credentials);
-}
+public interface ITenderTransactionServiceFactory : IServiceFactory<ITenderTransactionService>;
 
 public class TenderTransactionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ITenderTransactionServiceFactory
 {
