@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IDraftOrderServiceFactory
-{
-    /// Creates a new instance of the <see cref="IDraftOrderService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IDraftOrderService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IDraftOrderService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IDraftOrderService Create(ShopifyApiCredentials credentials);
-}
+public interface IDraftOrderServiceFactory : IServiceFactory<IDraftOrderService>;
 
 public class DraftOrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IDraftOrderServiceFactory
 {

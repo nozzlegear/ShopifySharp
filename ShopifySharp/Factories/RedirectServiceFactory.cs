@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IRedirectServiceFactory
-{
-    /// Creates a new instance of the <see cref="IRedirectService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IRedirectService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IRedirectService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IRedirectService Create(ShopifyApiCredentials credentials);
-}
+public interface IRedirectServiceFactory : IServiceFactory<IRedirectService>;
 
 public class RedirectServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IRedirectServiceFactory
 {

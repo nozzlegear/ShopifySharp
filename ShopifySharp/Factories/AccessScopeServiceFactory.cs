@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IAccessScopeServiceFactory
-{
-    /// Creates a new instance of the <see cref="IAccessScopeService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IAccessScopeService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IAccessScopeService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IAccessScopeService Create(ShopifyApiCredentials credentials);
-}
+public interface IAccessScopeServiceFactory : IServiceFactory<IAccessScopeService>;
 
 public class AccessScopeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IAccessScopeServiceFactory
 {

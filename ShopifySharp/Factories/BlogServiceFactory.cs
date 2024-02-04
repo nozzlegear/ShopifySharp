@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IBlogServiceFactory
-{
-    /// Creates a new instance of the <see cref="IBlogService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IBlogService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IBlogService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IBlogService Create(ShopifyApiCredentials credentials);
-}
+public interface IBlogServiceFactory : IServiceFactory<IBlogService>;
 
 public class BlogServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IBlogServiceFactory
 {

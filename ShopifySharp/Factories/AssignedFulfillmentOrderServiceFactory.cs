@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IAssignedFulfillmentOrderServiceFactory
-{
-    /// Creates a new instance of the <see cref="IAssignedFulfillmentOrderService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IAssignedFulfillmentOrderService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IAssignedFulfillmentOrderService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IAssignedFulfillmentOrderService Create(ShopifyApiCredentials credentials);
-}
+public interface IAssignedFulfillmentOrderServiceFactory : IServiceFactory<IAssignedFulfillmentOrderService>;
 
 public class AssignedFulfillmentOrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IAssignedFulfillmentOrderServiceFactory
 {

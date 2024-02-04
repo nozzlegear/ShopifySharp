@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IProductImageServiceFactory
-{
-    /// Creates a new instance of the <see cref="IProductImageService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IProductImageService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IProductImageService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IProductImageService Create(ShopifyApiCredentials credentials);
-}
+public interface IProductImageServiceFactory : IServiceFactory<IProductImageService>;
 
 public class ProductImageServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IProductImageServiceFactory
 {

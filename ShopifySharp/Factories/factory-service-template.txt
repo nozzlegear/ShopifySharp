@@ -7,19 +7,9 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface I@@REPLACEME@@Factory
-{
-    /// Creates a new instance of the <see cref="I@@REPLACEME@@" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    I@@REPLACEME@@ Create(string shopDomain, string accessToken);
+public interface I@@REPLACEME@@Factory : IServiceFactory<I@@REPLACEME@@>;
 
-    /// Creates a new instance of the <see cref="I@@REPLACEME@@" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    I@@REPLACEME@@ Create(ShopifyApiCredentials credentials);
-}
-
-public class @@REPLACEME@@Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : I@@REPLACEME@@Factory
+public class @@REPLACEME@@Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IServiceFactory<I@@REPLACEME@@>
 {
     /// <inheritDoc />
     public virtual I@@REPLACEME@@ Create(string shopDomain, string accessToken)

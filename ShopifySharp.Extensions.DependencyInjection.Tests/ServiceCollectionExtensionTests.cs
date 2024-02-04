@@ -1,4 +1,5 @@
 using ShopifySharp.Utilities;
+using System.Reflection;
 
 namespace ShopifySharp.Extensions.DependencyInjection.Tests;
 
@@ -140,12 +141,35 @@ public class ServiceCollectionExtensionTests
 
         // Assert
         var serviceProvider = container.BuildServiceProvider();
-        var orderServiceFactory = serviceProvider.GetService<IOrderServiceFactory>();
+        var assembly = Assembly.GetAssembly(typeof(IServiceFactory<>));
 
-        orderServiceFactory.Should()
-            .NotBeNull()
-            .And
-            .BeOfType<OrderServiceFactory>();
+        if (assembly == null)
+        {
+            throw new InvalidOperationException("No assembly found for IServiceFactory interface. Ensure you are scanning the correct assembly.");
+        }
+
+        var serviceFactoryTypes = assembly
+            ?.GetTypes()
+            .Where(t => t.IsInterface
+                        && t.IsPublic
+                        && t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IServiceFactory<>)))
+            .ToList();
+
+        if (serviceFactoryTypes == null || !serviceFactoryTypes.Any())
+        {
+            throw new InvalidOperationException("No IServiceFactory interfaces found. Ensure you are scanning the correct assembly.");
+        }
+
+        foreach (var serviceType in serviceFactoryTypes)
+        {
+            var resolvedService = serviceProvider.GetService(serviceType);
+            var concreteType = assembly.GetType($"ShopifySharp.Factories.{serviceType.Name.Substring(1)}");
+
+            resolvedService.Should()
+                .NotBeNull()
+                .And
+                .BeOfType(concreteType);
+        }
     }
 
     [Fact]

@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IInventoryLevelServiceFactory
-{
-    /// Creates a new instance of the <see cref="IInventoryLevelService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IInventoryLevelService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IInventoryLevelService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IInventoryLevelService Create(ShopifyApiCredentials credentials);
-}
+public interface IInventoryLevelServiceFactory : IServiceFactory<IInventoryLevelService>;
 
 public class InventoryLevelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IInventoryLevelServiceFactory
 {

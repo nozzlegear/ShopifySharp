@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface ISmartCollectionServiceFactory
-{
-    /// Creates a new instance of the <see cref="ISmartCollectionService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    ISmartCollectionService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="ISmartCollectionService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    ISmartCollectionService Create(ShopifyApiCredentials credentials);
-}
+public interface ISmartCollectionServiceFactory : IServiceFactory<ISmartCollectionService>;
 
 public class SmartCollectionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ISmartCollectionServiceFactory
 {

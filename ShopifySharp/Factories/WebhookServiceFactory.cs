@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IWebhookServiceFactory
-{
-    /// Creates a new instance of the <see cref="IWebhookService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IWebhookService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IWebhookService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IWebhookService Create(ShopifyApiCredentials credentials);
-}
+public interface IWebhookServiceFactory : IServiceFactory<IWebhookService>;
 
 public class WebhookServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IWebhookServiceFactory
 {

@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IUserServiceFactory
-{
-    /// Creates a new instance of the <see cref="IUserService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IUserService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IUserService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IUserService Create(ShopifyApiCredentials credentials);
-}
+public interface IUserServiceFactory : IServiceFactory<IUserService>;
 
 public class UserServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IUserServiceFactory
 {

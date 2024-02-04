@@ -7,17 +7,7 @@ using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Factories;
 
-public interface IApplicationCreditServiceFactory
-{
-    /// Creates a new instance of the <see cref="IApplicationCreditService" /> with the given credentials.
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="accessToken">An API access token for the shop.</param>
-    IApplicationCreditService Create(string shopDomain, string accessToken);
-
-    /// Creates a new instance of the <see cref="IApplicationCreditService" /> with the given credentials.
-    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
-    IApplicationCreditService Create(ShopifyApiCredentials credentials);
-}
+public interface IApplicationCreditServiceFactory : IServiceFactory<IApplicationCreditService>;
 
 public class ApplicationCreditServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IApplicationCreditServiceFactory
 {
