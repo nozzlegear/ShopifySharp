@@ -1377,100 +1377,6 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///Return type for `appRevenueAttributionRecordCreate` mutation.
-    ///</summary>
-    public class AppRevenueAttributionRecordCreatePayload : GraphQLObject<AppRevenueAttributionRecordCreatePayload>
-    {
-        ///<summary>
-        ///The created app revenue attribution record.
-        ///</summary>
-        public AppRevenueAttributionRecord? appRevenueAttributionRecord { get; set; }
-        ///<summary>
-        ///The list of errors that occurred from executing the mutation.
-        ///</summary>
-        public IEnumerable<AppRevenueAttributionRecordCreateUserError>? userErrors { get; set; }
-    }
-
-    ///<summary>
-    ///An error that occurs during the execution of `AppRevenueAttributionRecordCreate`.
-    ///</summary>
-    public class AppRevenueAttributionRecordCreateUserError : GraphQLObject<AppRevenueAttributionRecordCreateUserError>, IDisplayableError
-    {
-        ///<summary>
-        ///The error code.
-        ///</summary>
-        public AppRevenueAttributionRecordCreateUserErrorCode? code { get; set; }
-        ///<summary>
-        ///The path to the input field that caused the error.
-        ///</summary>
-        public IEnumerable<string>? field { get; set; }
-        ///<summary>
-        ///The error message.
-        ///</summary>
-        public string? message { get; set; }
-    }
-
-    ///<summary>
-    ///Possible error codes that can be returned by `AppRevenueAttributionRecordCreateUserError`.
-    ///</summary>
-    public enum AppRevenueAttributionRecordCreateUserErrorCode
-    {
-        ///<summary>
-        ///The input value is invalid.
-        ///</summary>
-        INVALID,
-        ///<summary>
-        ///The input value is already taken.
-        ///</summary>
-        TAKEN,
-    }
-
-    ///<summary>
-    ///Return type for `appRevenueAttributionRecordDelete` mutation.
-    ///</summary>
-    public class AppRevenueAttributionRecordDeletePayload : GraphQLObject<AppRevenueAttributionRecordDeletePayload>
-    {
-        ///<summary>
-        ///The ID of the revenue attribution that was deleted, if one was.
-        ///</summary>
-        public string? deletedId { get; set; }
-        ///<summary>
-        ///The list of errors that occurred from executing the mutation.
-        ///</summary>
-        public IEnumerable<AppRevenueAttributionRecordDeleteUserError>? userErrors { get; set; }
-    }
-
-    ///<summary>
-    ///An error that occurs during the execution of `AppRevenueAttributionRecordDelete`.
-    ///</summary>
-    public class AppRevenueAttributionRecordDeleteUserError : GraphQLObject<AppRevenueAttributionRecordDeleteUserError>, IDisplayableError
-    {
-        ///<summary>
-        ///The error code.
-        ///</summary>
-        public AppRevenueAttributionRecordDeleteUserErrorCode? code { get; set; }
-        ///<summary>
-        ///The path to the input field that caused the error.
-        ///</summary>
-        public IEnumerable<string>? field { get; set; }
-        ///<summary>
-        ///The error message.
-        ///</summary>
-        public string? message { get; set; }
-    }
-
-    ///<summary>
-    ///Possible error codes that can be returned by `AppRevenueAttributionRecordDeleteUserError`.
-    ///</summary>
-    public enum AppRevenueAttributionRecordDeleteUserErrorCode
-    {
-        ///<summary>
-        ///The input value is invalid.
-        ///</summary>
-        INVALID,
-    }
-
-    ///<summary>
     ///An auto-generated type which holds one AppRevenueAttributionRecord and a cursor during pagination.
     ///</summary>
     public class AppRevenueAttributionRecordEdge : GraphQLObject<AppRevenueAttributionRecordEdge>, IEdge<AppRevenueAttributionRecord>
@@ -2125,6 +2031,22 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
+    ///Generic payment details that are related to a transaction.
+    ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(CardPaymentDetails), typeDiscriminator: "CardPaymentDetails")]
+    [JsonDerivedType(typeof(ShopPayInstallmentsPaymentDetails), typeDiscriminator: "ShopPayInstallmentsPaymentDetails")]
+    public interface IBasePaymentDetails : IGraphQLObject
+    {
+        public CardPaymentDetails? AsCardPaymentDetails() => this as CardPaymentDetails;
+        public ShopPayInstallmentsPaymentDetails? AsShopPayInstallmentsPaymentDetails() => this as ShopPayInstallmentsPaymentDetails;
+        ///<summary>
+        ///The name of payment method used by the buyer.
+        ///</summary>
+        public string? paymentMethodName { get; }
+    }
+
+    ///<summary>
     ///Basic events chronicle resource activities such as the creation of an article, the fulfillment of an order, or
     ///the addition of a product.
     ///</summary>
@@ -2216,6 +2138,10 @@ namespace ShopifySharp.GraphQL
         ///Origin time needs to be within the selected billing cycle's start and end at date.
         ///</summary>
         ORIGIN_TIME_OUT_OF_RANGE,
+        ///<summary>
+        ///Subscription contract is under review.
+        ///</summary>
+        CONTRACT_UNDER_REVIEW,
     }
 
     ///<summary>
@@ -2842,7 +2768,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public string? marketName { get; set; }
         ///<summary>
-        ///The selected market region country code for the draft order.
+        ///The selected country code that determines the pricing of the draft order.
         ///</summary>
         public CountryCode? marketRegionCountryCode { get; set; }
         ///<summary>
@@ -3303,7 +3229,7 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Card payment details related to a transaction.
     ///</summary>
-    public class CardPaymentDetails : GraphQLObject<CardPaymentDetails>, IPaymentDetails
+    public class CardPaymentDetails : GraphQLObject<CardPaymentDetails>, IBasePaymentDetails, IPaymentDetails
     {
         ///<summary>
         ///The response code from the address verification system (AVS). The code is always a single letter.
@@ -3337,6 +3263,10 @@ namespace ShopifySharp.GraphQL
         ///The customer's credit card number, with most of the leading digits redacted.
         ///</summary>
         public string? number { get; set; }
+        ///<summary>
+        ///The name of payment method used by the buyer.
+        ///</summary>
+        public string? paymentMethodName { get; set; }
         ///<summary>
         ///Digital wallet used for the payment.
         ///</summary>
@@ -3778,6 +3708,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         CATALOG_CONTEXT_DOES_NOT_SUPPORT_QUANTITY_RULES,
         ///<summary>
+        ///Quantity price breaks can be associated only with company location catalogs.
+        ///</summary>
+        CATALOG_CONTEXT_DOES_NOT_SUPPORT_QUANTITY_PRICE_BREAKS,
+        ///<summary>
         ///The catalog can't be associated with more than one market.
         ///</summary>
         CANNOT_ADD_MORE_THAN_ONE_MARKET,
@@ -4054,6 +3988,1069 @@ namespace ShopifySharp.GraphQL
         ///A globally-unique ID.
         ///</summary>
         public string? id { get; set; }
+    }
+
+    ///<summary>
+    ///The settings of checkout visual customizations.
+    ///
+    ///To learn more about updating checkout branding settings, refer to the
+    ///[checkoutBrandingUpsert](https://shopify.dev/api/admin-graphql/unstable/mutations/checkoutBrandingUpsert) mutation.
+    ///</summary>
+    public class CheckoutBranding : GraphQLObject<CheckoutBranding>
+    {
+        ///<summary>
+        ///The customizations that apply to specific components or areas of the user interface.
+        ///</summary>
+        public CheckoutBrandingCustomizations? customizations { get; set; }
+        ///<summary>
+        ///The design system allows you to set values that represent specific attributes
+        ///of your brand like color and font. These attributes are used throughout the user
+        ///interface. This brings consistency and allows you to easily make broad design changes.
+        ///</summary>
+        public CheckoutBrandingDesignSystem? designSystem { get; set; }
+    }
+
+    ///<summary>
+    ///Possible values for the background style.
+    ///</summary>
+    public enum CheckoutBrandingBackgroundStyle
+    {
+        ///<summary>
+        ///The Solid background style.
+        ///</summary>
+        SOLID,
+        ///<summary>
+        ///The None background style.
+        ///</summary>
+        NONE,
+    }
+
+    ///<summary>
+    ///Possible values for the border.
+    ///</summary>
+    public enum CheckoutBrandingBorder
+    {
+        ///<summary>
+        ///The None border.
+        ///</summary>
+        NONE,
+        ///<summary>
+        ///The Block End border.
+        ///</summary>
+        BLOCK_END,
+        ///<summary>
+        ///The Full border.
+        ///</summary>
+        FULL,
+    }
+
+    ///<summary>
+    ///The buttons customizations.
+    ///</summary>
+    public class CheckoutBrandingButton : GraphQLObject<CheckoutBrandingButton>
+    {
+        ///<summary>
+        ///The background style used for buttons.
+        ///</summary>
+        public CheckoutBrandingBackgroundStyle? background { get; set; }
+        ///<summary>
+        ///The block padding used for buttons.
+        ///</summary>
+        public CheckoutBrandingSpacing? blockPadding { get; set; }
+        ///<summary>
+        ///The border used for buttons.
+        ///</summary>
+        public CheckoutBrandingSimpleBorder? border { get; set; }
+        ///<summary>
+        ///The corner radius used for buttons.
+        ///</summary>
+        public CheckoutBrandingCornerRadius? cornerRadius { get; set; }
+        ///<summary>
+        ///The inline padding used for buttons.
+        ///</summary>
+        public CheckoutBrandingSpacing? inlinePadding { get; set; }
+        ///<summary>
+        ///The typography used for buttons.
+        ///</summary>
+        public CheckoutBrandingTypographyStyle? typography { get; set; }
+    }
+
+    ///<summary>
+    ///Colors for buttons.
+    ///</summary>
+    public class CheckoutBrandingButtonColorRoles : GraphQLObject<CheckoutBrandingButtonColorRoles>
+    {
+        ///<summary>
+        ///The color of accented objects (links and focused state).
+        ///</summary>
+        public string? accent { get; set; }
+        ///<summary>
+        ///The color of the background.
+        ///</summary>
+        public string? background { get; set; }
+        ///<summary>
+        ///The color of borders.
+        ///</summary>
+        public string? border { get; set; }
+        ///<summary>
+        ///The decorative color for highlighting specific parts of the user interface.
+        ///</summary>
+        public string? decorative { get; set; }
+        ///<summary>
+        ///The colors of the button on hover.
+        ///</summary>
+        public CheckoutBrandingColorRoles? hover { get; set; }
+        ///<summary>
+        ///The color of icons.
+        ///</summary>
+        public string? icon { get; set; }
+        ///<summary>
+        ///The color of text.
+        ///</summary>
+        public string? text { get; set; }
+    }
+
+    ///<summary>
+    ///The checkboxes customizations.
+    ///</summary>
+    public class CheckoutBrandingCheckbox : GraphQLObject<CheckoutBrandingCheckbox>
+    {
+        ///<summary>
+        ///The corner radius used for checkboxes.
+        ///</summary>
+        public CheckoutBrandingCornerRadius? cornerRadius { get; set; }
+    }
+
+    ///<summary>
+    ///A set of colors for customizing the overall look and feel of the checkout.
+    ///</summary>
+    public class CheckoutBrandingColorGlobal : GraphQLObject<CheckoutBrandingColorGlobal>
+    {
+        ///<summary>
+        ///A color used for interaction, like links and focus states.
+        ///</summary>
+        public string? accent { get; set; }
+        ///<summary>
+        ///A color strongly associated with the merchant, currently used for elements
+        ///like primary and secondary buttons.
+        ///</summary>
+        public string? brand { get; set; }
+        ///<summary>
+        ///A semantic color used for components that communicate critical content.
+        ///</summary>
+        public string? critical { get; set; }
+        ///<summary>
+        ///A color used to highlight certain areas of the user interface.
+        ///</summary>
+        public string? decorative { get; set; }
+        ///<summary>
+        ///A semantic color used for components that communicate informative content.
+        ///</summary>
+        public string? info { get; set; }
+        ///<summary>
+        ///A semantic color used for components that communicate successful actions.
+        ///</summary>
+        public string? success { get; set; }
+        ///<summary>
+        ///A semantic color used for components that display content that requires attention.
+        ///</summary>
+        public string? warning { get; set; }
+    }
+
+    ///<summary>
+    ///A group of colors used together on a surface.
+    ///</summary>
+    public class CheckoutBrandingColorRoles : GraphQLObject<CheckoutBrandingColorRoles>
+    {
+        ///<summary>
+        ///The color of accented objects (links and focused state).
+        ///</summary>
+        public string? accent { get; set; }
+        ///<summary>
+        ///The color of the background.
+        ///</summary>
+        public string? background { get; set; }
+        ///<summary>
+        ///The color of borders.
+        ///</summary>
+        public string? border { get; set; }
+        ///<summary>
+        ///The decorative color for highlighting specific parts of the user interface.
+        ///</summary>
+        public string? decorative { get; set; }
+        ///<summary>
+        ///The color of icons.
+        ///</summary>
+        public string? icon { get; set; }
+        ///<summary>
+        ///The color of text.
+        ///</summary>
+        public string? text { get; set; }
+    }
+
+    ///<summary>
+    ///A base set of color customizations that is applied to an area of Checkout, from which every component
+    ///pulls its colors from.
+    ///</summary>
+    public class CheckoutBrandingColorScheme : GraphQLObject<CheckoutBrandingColorScheme>
+    {
+        ///<summary>
+        ///The main colors of a scheme.
+        ///</summary>
+        public CheckoutBrandingColorRoles? @base { get; set; }
+        ///<summary>
+        ///The colors of form controls.
+        ///</summary>
+        public CheckoutBrandingControlColorRoles? control { get; set; }
+        ///<summary>
+        ///The colors of the primary button.
+        ///</summary>
+        public CheckoutBrandingButtonColorRoles? primaryButton { get; set; }
+        ///<summary>
+        ///The colors of the secondary button.
+        ///</summary>
+        public CheckoutBrandingButtonColorRoles? secondaryButton { get; set; }
+    }
+
+    ///<summary>
+    ///The possible color schemes.
+    ///</summary>
+    public enum CheckoutBrandingColorSchemeSelection
+    {
+        ///<summary>
+        ///Transparent color scheme selection.
+        ///</summary>
+        TRANSPARENT,
+        ///<summary>
+        ///Color Scheme1 color scheme selection.
+        ///</summary>
+        COLOR_SCHEME1,
+        ///<summary>
+        ///Color Scheme2 color scheme selection.
+        ///</summary>
+        COLOR_SCHEME2,
+    }
+
+    ///<summary>
+    ///The color schemes.
+    ///</summary>
+    public class CheckoutBrandingColorSchemes : GraphQLObject<CheckoutBrandingColorSchemes>
+    {
+        ///<summary>
+        ///The primary scheme. By default, it’s used for the main area of the interface.
+        ///</summary>
+        public CheckoutBrandingColorScheme? scheme1 { get; set; }
+        ///<summary>
+        ///The secondary scheme. By default, it’s used for secondary areas, like Checkout’s Order Summary.
+        ///</summary>
+        public CheckoutBrandingColorScheme? scheme2 { get; set; }
+    }
+
+    ///<summary>
+    ///The possible colors.
+    ///</summary>
+    public enum CheckoutBrandingColorSelection
+    {
+        ///<summary>
+        ///Transparent color selection.
+        ///</summary>
+        TRANSPARENT,
+    }
+
+    ///<summary>
+    ///The color settings for global colors and color schemes.
+    ///</summary>
+    public class CheckoutBrandingColors : GraphQLObject<CheckoutBrandingColors>
+    {
+        ///<summary>
+        ///A group of global colors for customizing the overall look and feel of the user interface.
+        ///</summary>
+        public CheckoutBrandingColorGlobal? global { get; set; }
+        ///<summary>
+        ///A set of color schemes which apply to different areas of the user interface.
+        ///</summary>
+        public CheckoutBrandingColorSchemes? schemes { get; set; }
+    }
+
+    ///<summary>
+    ///The form controls customizations.
+    ///</summary>
+    public class CheckoutBrandingControl : GraphQLObject<CheckoutBrandingControl>
+    {
+        ///<summary>
+        ///The border used for form controls.
+        ///</summary>
+        public CheckoutBrandingSimpleBorder? border { get; set; }
+        ///<summary>
+        ///Set to TRANSPARENT to define transparent form controls. If null, form controls inherit colors from their scheme settings (for example, the main section inherits from `design_system.colors.schemes.scheme1.control` by default). Note that usage of the `customizations.control.color` setting to customize the form control color is deprecated.
+        ///</summary>
+        public CheckoutBrandingColorSelection? color { get; set; }
+        ///<summary>
+        ///The corner radius used for form controls.
+        ///</summary>
+        public CheckoutBrandingCornerRadius? cornerRadius { get; set; }
+        ///<summary>
+        ///The label position used for form controls.
+        ///</summary>
+        public CheckoutBrandingLabelPosition? labelPosition { get; set; }
+    }
+
+    ///<summary>
+    ///Colors for form controls.
+    ///</summary>
+    public class CheckoutBrandingControlColorRoles : GraphQLObject<CheckoutBrandingControlColorRoles>
+    {
+        ///<summary>
+        ///The color of accented objects (links and focused state).
+        ///</summary>
+        public string? accent { get; set; }
+        ///<summary>
+        ///The color of the background.
+        ///</summary>
+        public string? background { get; set; }
+        ///<summary>
+        ///The color of borders.
+        ///</summary>
+        public string? border { get; set; }
+        ///<summary>
+        ///The decorative color for highlighting specific parts of the user interface.
+        ///</summary>
+        public string? decorative { get; set; }
+        ///<summary>
+        ///The color of icons.
+        ///</summary>
+        public string? icon { get; set; }
+        ///<summary>
+        ///The colors of selected controls.
+        ///</summary>
+        public CheckoutBrandingColorRoles? selected { get; set; }
+        ///<summary>
+        ///The color of text.
+        ///</summary>
+        public string? text { get; set; }
+    }
+
+    ///<summary>
+    ///Possible values for the corner radius.
+    ///</summary>
+    public enum CheckoutBrandingCornerRadius
+    {
+        ///<summary>
+        ///The None corner radius.
+        ///</summary>
+        NONE,
+        ///<summary>
+        ///The Small corner radius.
+        ///</summary>
+        SMALL,
+        ///<summary>
+        ///The Base corner radius.
+        ///</summary>
+        BASE,
+        ///<summary>
+        ///The Large corner radius.
+        ///</summary>
+        LARGE,
+    }
+
+    ///<summary>
+    ///The corner radius variables.
+    ///</summary>
+    public class CheckoutBrandingCornerRadiusVariables : GraphQLObject<CheckoutBrandingCornerRadiusVariables>
+    {
+        ///<summary>
+        ///The pixel value for base corner radiuses.
+        ///</summary>
+        public int? @base { get; set; }
+        ///<summary>
+        ///The pixel value for large corner radiuses.
+        ///</summary>
+        public int? large { get; set; }
+        ///<summary>
+        ///The pixel value for small corner radiuses.
+        ///</summary>
+        public int? small { get; set; }
+    }
+
+    ///<summary>
+    ///A custom font.
+    ///</summary>
+    public class CheckoutBrandingCustomFont : GraphQLObject<CheckoutBrandingCustomFont>, ICheckoutBrandingFont
+    {
+        ///<summary>
+        ///Globally unique ID reference to the custom font file.
+        ///</summary>
+        public string? genericFileId { get; set; }
+        ///<summary>
+        ///The font sources.
+        ///</summary>
+        public string? sources { get; set; }
+        ///<summary>
+        ///The font weight.
+        ///</summary>
+        public int? weight { get; set; }
+    }
+
+    ///<summary>
+    ///The customizations that apply to specific components or areas of the user interface.
+    ///</summary>
+    public class CheckoutBrandingCustomizations : GraphQLObject<CheckoutBrandingCustomizations>
+    {
+        ///<summary>
+        ///The checkboxes customizations.
+        ///</summary>
+        public CheckoutBrandingCheckbox? checkbox { get; set; }
+        ///<summary>
+        ///The form controls customizations.
+        ///</summary>
+        public CheckoutBrandingControl? control { get; set; }
+        ///<summary>
+        ///The favicon image.
+        ///</summary>
+        public CheckoutBrandingImage? favicon { get; set; }
+        ///<summary>
+        ///The global customizations.
+        ///</summary>
+        public CheckoutBrandingGlobal? global { get; set; }
+        ///<summary>
+        ///The header customizations.
+        ///</summary>
+        public CheckoutBrandingHeader? header { get; set; }
+        ///<summary>
+        ///The Heading Level 1 customizations.
+        ///</summary>
+        public CheckoutBrandingHeadingLevel? headingLevel1 { get; set; }
+        ///<summary>
+        ///The Heading Level 2 customizations.
+        ///</summary>
+        public CheckoutBrandingHeadingLevel? headingLevel2 { get; set; }
+        ///<summary>
+        ///The Heading Level 3 customizations.
+        ///</summary>
+        public CheckoutBrandingHeadingLevel? headingLevel3 { get; set; }
+        ///<summary>
+        ///The main area customizations.
+        ///</summary>
+        public CheckoutBrandingMain? main { get; set; }
+        ///<summary>
+        ///The merchandise thumbnails customizations.
+        ///</summary>
+        public CheckoutBrandingMerchandiseThumbnail? merchandiseThumbnail { get; set; }
+        ///<summary>
+        ///The order summary customizations.
+        ///</summary>
+        public CheckoutBrandingOrderSummary? orderSummary { get; set; }
+        ///<summary>
+        ///The primary buttons customizations.
+        ///</summary>
+        public CheckoutBrandingButton? primaryButton { get; set; }
+        ///<summary>
+        ///The secondary buttons customizations.
+        ///</summary>
+        public CheckoutBrandingButton? secondaryButton { get; set; }
+        ///<summary>
+        ///The selects customizations.
+        ///</summary>
+        public CheckoutBrandingSelect? select { get; set; }
+        ///<summary>
+        ///The text fields customizations.
+        ///</summary>
+        public CheckoutBrandingTextField? textField { get; set; }
+    }
+
+    ///<summary>
+    ///The design system allows you to set values that represent specific attributes
+    ///of your brand like color and font. These attributes are used throughout the user
+    ///interface. This brings consistency and allows you to easily make broad design changes.
+    ///</summary>
+    public class CheckoutBrandingDesignSystem : GraphQLObject<CheckoutBrandingDesignSystem>
+    {
+        ///<summary>
+        ///The color settings for global colors and color schemes.
+        ///</summary>
+        public CheckoutBrandingColors? colors { get; set; }
+        ///<summary>
+        ///The corner radius variables.
+        ///</summary>
+        public CheckoutBrandingCornerRadiusVariables? cornerRadius { get; set; }
+        ///<summary>
+        ///The typography.
+        ///</summary>
+        public CheckoutBrandingTypography? typography { get; set; }
+    }
+
+    ///<summary>
+    ///A font.
+    ///</summary>
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+    [JsonDerivedType(typeof(CheckoutBrandingCustomFont), typeDiscriminator: "CheckoutBrandingCustomFont")]
+    [JsonDerivedType(typeof(CheckoutBrandingShopifyFont), typeDiscriminator: "CheckoutBrandingShopifyFont")]
+    public interface ICheckoutBrandingFont : IGraphQLObject
+    {
+        public CheckoutBrandingCustomFont? AsCheckoutBrandingCustomFont() => this as CheckoutBrandingCustomFont;
+        public CheckoutBrandingShopifyFont? AsCheckoutBrandingShopifyFont() => this as CheckoutBrandingShopifyFont;
+        ///<summary>
+        ///The font sources.
+        ///</summary>
+        public string? sources { get; }
+        ///<summary>
+        ///The font weight.
+        ///</summary>
+        public int? weight { get; }
+    }
+
+    ///<summary>
+    ///A font group.
+    ///</summary>
+    public class CheckoutBrandingFontGroup : GraphQLObject<CheckoutBrandingFontGroup>
+    {
+        ///<summary>
+        ///The base font.
+        ///</summary>
+        public ICheckoutBrandingFont? @base { get; set; }
+        ///<summary>
+        ///The bold font.
+        ///</summary>
+        public ICheckoutBrandingFont? bold { get; set; }
+        ///<summary>
+        ///The font loading strategy.
+        ///</summary>
+        public CheckoutBrandingFontLoadingStrategy? loadingStrategy { get; set; }
+        ///<summary>
+        ///The font group name.
+        ///</summary>
+        public string? name { get; set; }
+    }
+
+    ///<summary>
+    ///The font loading strategy determines how a font face is displayed after it is loaded or failed to load.
+    ///For more information: https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display.
+    ///</summary>
+    public enum CheckoutBrandingFontLoadingStrategy
+    {
+        ///<summary>
+        ///The font display strategy is defined by the browser user agent.
+        ///</summary>
+        AUTO,
+        ///<summary>
+        ///Gives the font face a short block period and an infinite swap period.
+        ///</summary>
+        BLOCK,
+        ///<summary>
+        ///Gives the font face an extremely small block period and an infinite swap period.
+        ///</summary>
+        SWAP,
+        ///<summary>
+        ///Gives the font face an extremely small block period and a short swap period.
+        ///</summary>
+        FALLBACK,
+        ///<summary>
+        ///Gives the font face an extremely small block period and no swap period.
+        ///</summary>
+        OPTIONAL,
+    }
+
+    ///<summary>
+    ///The font size.
+    ///</summary>
+    public class CheckoutBrandingFontSize : GraphQLObject<CheckoutBrandingFontSize>
+    {
+        ///<summary>
+        ///The base font size.
+        ///</summary>
+        public float? @base { get; set; }
+        ///<summary>
+        ///The scale ratio used to derive all font sizes such as small and large.
+        ///</summary>
+        public float? ratio { get; set; }
+    }
+
+    ///<summary>
+    ///The global customizations.
+    ///</summary>
+    public class CheckoutBrandingGlobal : GraphQLObject<CheckoutBrandingGlobal>
+    {
+        ///<summary>
+        ///The global corner radius.
+        ///</summary>
+        public CheckoutBrandingGlobalCornerRadius? cornerRadius { get; set; }
+        ///<summary>
+        ///The global typography customizations.
+        ///</summary>
+        public CheckoutBrandingTypographyStyleGlobal? typography { get; set; }
+    }
+
+    ///<summary>
+    ///Possible values for the corner radius.
+    ///</summary>
+    public enum CheckoutBrandingGlobalCornerRadius
+    {
+        ///<summary>
+        ///The None corner radius.
+        ///</summary>
+        NONE,
+    }
+
+    ///<summary>
+    ///The header customizations.
+    ///</summary>
+    public class CheckoutBrandingHeader : GraphQLObject<CheckoutBrandingHeader>
+    {
+        ///<summary>
+        ///The header alignment.
+        ///</summary>
+        public CheckoutBrandingHeaderAlignment? alignment { get; set; }
+        ///<summary>
+        ///The background image of the header.
+        ///</summary>
+        public CheckoutBrandingImage? banner { get; set; }
+        ///<summary>
+        ///The store logo.
+        ///</summary>
+        public CheckoutBrandingLogo? logo { get; set; }
+        ///<summary>
+        ///The header position.
+        ///</summary>
+        public CheckoutBrandingHeaderPosition? position { get; set; }
+    }
+
+    ///<summary>
+    ///The possible header alignments.
+    ///</summary>
+    public enum CheckoutBrandingHeaderAlignment
+    {
+        ///<summary>
+        ///Start alignment.
+        ///</summary>
+        START,
+        ///<summary>
+        ///Center alignment.
+        ///</summary>
+        CENTER,
+        ///<summary>
+        ///End alignment.
+        ///</summary>
+        END,
+    }
+
+    ///<summary>
+    ///The possible header positions.
+    ///</summary>
+    public enum CheckoutBrandingHeaderPosition
+    {
+        ///<summary>
+        ///Inline position.
+        ///</summary>
+        INLINE,
+        ///<summary>
+        ///Secondary inline position.
+        ///</summary>
+        INLINE_SECONDARY,
+        ///<summary>
+        ///Start position.
+        ///</summary>
+        START,
+    }
+
+    ///<summary>
+    ///The heading level customizations.
+    ///</summary>
+    public class CheckoutBrandingHeadingLevel : GraphQLObject<CheckoutBrandingHeadingLevel>
+    {
+        ///<summary>
+        ///The typography customizations used for headings.
+        ///</summary>
+        public CheckoutBrandingTypographyStyle? typography { get; set; }
+    }
+
+    ///<summary>
+    ///A checkout branding image.
+    ///</summary>
+    public class CheckoutBrandingImage : GraphQLObject<CheckoutBrandingImage>
+    {
+        ///<summary>
+        ///The image details.
+        ///</summary>
+        public Image? image { get; set; }
+    }
+
+    ///<summary>
+    ///Possible values for the label position.
+    ///</summary>
+    public enum CheckoutBrandingLabelPosition
+    {
+        ///<summary>
+        ///The Inside label position.
+        ///</summary>
+        INSIDE,
+        ///<summary>
+        ///The Outside label position.
+        ///</summary>
+        OUTSIDE,
+    }
+
+    ///<summary>
+    ///The store logo customizations.
+    ///</summary>
+    public class CheckoutBrandingLogo : GraphQLObject<CheckoutBrandingLogo>
+    {
+        ///<summary>
+        ///The logo image.
+        ///</summary>
+        public Image? image { get; set; }
+        ///<summary>
+        ///The maximum width of the logo.
+        ///</summary>
+        public int? maxWidth { get; set; }
+    }
+
+    ///<summary>
+    ///The main container customizations.
+    ///</summary>
+    public class CheckoutBrandingMain : GraphQLObject<CheckoutBrandingMain>
+    {
+        ///<summary>
+        ///The background image of the main container.
+        ///</summary>
+        public CheckoutBrandingImage? backgroundImage { get; set; }
+        ///<summary>
+        ///The selected color scheme of the main container.
+        ///</summary>
+        public CheckoutBrandingColorSchemeSelection? colorScheme { get; set; }
+    }
+
+    ///<summary>
+    ///The merchandise thumbnails customizations.
+    ///</summary>
+    public class CheckoutBrandingMerchandiseThumbnail : GraphQLObject<CheckoutBrandingMerchandiseThumbnail>
+    {
+        ///<summary>
+        ///The border used for merchandise thumbnails.
+        ///</summary>
+        public CheckoutBrandingSimpleBorder? border { get; set; }
+        ///<summary>
+        ///The corner radius used for merchandise thumbnails.
+        ///</summary>
+        public CheckoutBrandingCornerRadius? cornerRadius { get; set; }
+    }
+
+    ///<summary>
+    ///The order summary customizations.
+    ///</summary>
+    public class CheckoutBrandingOrderSummary : GraphQLObject<CheckoutBrandingOrderSummary>
+    {
+        ///<summary>
+        ///The background image of the order summary container.
+        ///</summary>
+        public CheckoutBrandingImage? backgroundImage { get; set; }
+        ///<summary>
+        ///The selected color scheme of the order summary container.
+        ///</summary>
+        public CheckoutBrandingColorSchemeSelection? colorScheme { get; set; }
+    }
+
+    ///<summary>
+    ///The selects customizations.
+    ///</summary>
+    public class CheckoutBrandingSelect : GraphQLObject<CheckoutBrandingSelect>
+    {
+        ///<summary>
+        ///The border used for selects.
+        ///</summary>
+        public CheckoutBrandingBorder? border { get; set; }
+        ///<summary>
+        ///The typography customizations used for selects.
+        ///</summary>
+        public CheckoutBrandingTypographyStyle? typography { get; set; }
+    }
+
+    ///<summary>
+    ///A Shopify font.
+    ///</summary>
+    public class CheckoutBrandingShopifyFont : GraphQLObject<CheckoutBrandingShopifyFont>, ICheckoutBrandingFont
+    {
+        ///<summary>
+        ///The font sources.
+        ///</summary>
+        public string? sources { get; set; }
+        ///<summary>
+        ///The font weight.
+        ///</summary>
+        public int? weight { get; set; }
+    }
+
+    ///<summary>
+    ///Possible values for the simple border.
+    ///</summary>
+    public enum CheckoutBrandingSimpleBorder
+    {
+        ///<summary>
+        ///The None simple border.
+        ///</summary>
+        NONE,
+        ///<summary>
+        ///The Full simple border.
+        ///</summary>
+        FULL,
+    }
+
+    ///<summary>
+    ///Possible values for the spacing.
+    ///</summary>
+    public enum CheckoutBrandingSpacing
+    {
+        ///<summary>
+        ///The None spacing.
+        ///</summary>
+        NONE,
+        ///<summary>
+        ///The Extra Tight spacing.
+        ///</summary>
+        EXTRA_TIGHT,
+        ///<summary>
+        ///The Tight spacing.
+        ///</summary>
+        TIGHT,
+        ///<summary>
+        ///The Base spacing.
+        ///</summary>
+        BASE,
+        ///<summary>
+        ///The Loose spacing.
+        ///</summary>
+        LOOSE,
+        ///<summary>
+        ///The Extra Loose spacing.
+        ///</summary>
+        EXTRA_LOOSE,
+    }
+
+    ///<summary>
+    ///The text fields customizations.
+    ///</summary>
+    public class CheckoutBrandingTextField : GraphQLObject<CheckoutBrandingTextField>
+    {
+        ///<summary>
+        ///The border used for text fields.
+        ///</summary>
+        public CheckoutBrandingBorder? border { get; set; }
+        ///<summary>
+        ///The typography customizations used for text fields.
+        ///</summary>
+        public CheckoutBrandingTypographyStyle? typography { get; set; }
+    }
+
+    ///<summary>
+    ///The typography settings.
+    ///</summary>
+    public class CheckoutBrandingTypography : GraphQLObject<CheckoutBrandingTypography>
+    {
+        ///<summary>
+        ///A font group used for most components such as text, buttons and form controls.
+        ///</summary>
+        public CheckoutBrandingFontGroup? primary { get; set; }
+        ///<summary>
+        ///A font group used for heading components by default.
+        ///</summary>
+        public CheckoutBrandingFontGroup? secondary { get; set; }
+        ///<summary>
+        ///The font size.
+        ///</summary>
+        public CheckoutBrandingFontSize? size { get; set; }
+    }
+
+    ///<summary>
+    ///The font selection.
+    ///</summary>
+    public enum CheckoutBrandingTypographyFont
+    {
+        ///<summary>
+        ///The primary font.
+        ///</summary>
+        PRIMARY,
+        ///<summary>
+        ///The secondary font.
+        ///</summary>
+        SECONDARY,
+    }
+
+    ///<summary>
+    ///Possible values for the typography kerning.
+    ///</summary>
+    public enum CheckoutBrandingTypographyKerning
+    {
+        ///<summary>
+        ///Base or default kerning.
+        ///</summary>
+        BASE,
+        ///<summary>
+        ///Loose kerning, leaving more space than the default in between characters.
+        ///</summary>
+        LOOSE,
+        ///<summary>
+        ///Extra loose kerning, leaving even more space in between characters.
+        ///</summary>
+        EXTRA_LOOSE,
+    }
+
+    ///<summary>
+    ///Possible values for the typography letter case.
+    ///</summary>
+    public enum CheckoutBrandingTypographyLetterCase
+    {
+        ///<summary>
+        ///All letters are is lower case.
+        ///</summary>
+        LOWER,
+        ///<summary>
+        ///No letter casing applied.
+        ///</summary>
+        NONE,
+        ///<summary>
+        ///Capitalize the first letter of each word.
+        ///</summary>
+        TITLE,
+        ///<summary>
+        ///All letters are uppercase.
+        ///</summary>
+        UPPER,
+    }
+
+    ///<summary>
+    ///Possible values for the font size.
+    ///</summary>
+    public enum CheckoutBrandingTypographySize
+    {
+        ///<summary>
+        ///The extra small font size.
+        ///</summary>
+        EXTRA_SMALL,
+        ///<summary>
+        ///The small font size.
+        ///</summary>
+        SMALL,
+        ///<summary>
+        ///The base font size.
+        ///</summary>
+        BASE,
+        ///<summary>
+        ///The medium font size.
+        ///</summary>
+        MEDIUM,
+        ///<summary>
+        ///The large font size.
+        ///</summary>
+        LARGE,
+        ///<summary>
+        ///The extra large font size.
+        ///</summary>
+        EXTRA_LARGE,
+        ///<summary>
+        ///The extra extra large font size.
+        ///</summary>
+        EXTRA_EXTRA_LARGE,
+    }
+
+    ///<summary>
+    ///The typography customizations.
+    ///</summary>
+    public class CheckoutBrandingTypographyStyle : GraphQLObject<CheckoutBrandingTypographyStyle>
+    {
+        ///<summary>
+        ///The font.
+        ///</summary>
+        public CheckoutBrandingTypographyFont? font { get; set; }
+        ///<summary>
+        ///The kerning.
+        ///</summary>
+        public CheckoutBrandingTypographyKerning? kerning { get; set; }
+        ///<summary>
+        ///The letter case.
+        ///</summary>
+        public CheckoutBrandingTypographyLetterCase? letterCase { get; set; }
+        ///<summary>
+        ///The font size.
+        ///</summary>
+        public CheckoutBrandingTypographySize? size { get; set; }
+        ///<summary>
+        ///The font weight.
+        ///</summary>
+        public CheckoutBrandingTypographyWeight? weight { get; set; }
+    }
+
+    ///<summary>
+    ///The global typography customizations.
+    ///</summary>
+    public class CheckoutBrandingTypographyStyleGlobal : GraphQLObject<CheckoutBrandingTypographyStyleGlobal>
+    {
+        ///<summary>
+        ///The kerning.
+        ///</summary>
+        public CheckoutBrandingTypographyKerning? kerning { get; set; }
+        ///<summary>
+        ///The letter case.
+        ///</summary>
+        public CheckoutBrandingTypographyLetterCase? letterCase { get; set; }
+    }
+
+    ///<summary>
+    ///Possible values for the font weight.
+    ///</summary>
+    public enum CheckoutBrandingTypographyWeight
+    {
+        ///<summary>
+        ///The base weight.
+        ///</summary>
+        BASE,
+        ///<summary>
+        ///The bold weight.
+        ///</summary>
+        BOLD,
+    }
+
+    ///<summary>
+    ///Return type for `checkoutBrandingUpsert` mutation.
+    ///</summary>
+    public class CheckoutBrandingUpsertPayload : GraphQLObject<CheckoutBrandingUpsertPayload>
+    {
+        ///<summary>
+        ///Returns the new checkout branding settings.
+        ///</summary>
+        public CheckoutBranding? checkoutBranding { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<CheckoutBrandingUpsertUserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///An error that occurs during the execution of `CheckoutBrandingUpsert`.
+    ///</summary>
+    public class CheckoutBrandingUpsertUserError : GraphQLObject<CheckoutBrandingUpsertUserError>, IDisplayableError
+    {
+        ///<summary>
+        ///The error code.
+        ///</summary>
+        public CheckoutBrandingUpsertUserErrorCode? code { get; set; }
+        ///<summary>
+        ///The path to the input field that caused the error.
+        ///</summary>
+        public IEnumerable<string>? field { get; set; }
+        ///<summary>
+        ///The error message.
+        ///</summary>
+        public string? message { get; set; }
+    }
+
+    ///<summary>
+    ///Possible error codes that can be returned by `CheckoutBrandingUpsertUserError`.
+    ///</summary>
+    public enum CheckoutBrandingUpsertUserErrorCode
+    {
+        ///<summary>
+        ///Unexpected internal error happened.
+        ///</summary>
+        INTERNAL_ERROR,
     }
 
     ///<summary>
@@ -7302,7 +8299,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         TN,
         ///<summary>
-        ///Turkey.
+        ///Türkiye.
         ///</summary>
         TR,
         ///<summary>
@@ -8229,18 +9226,6 @@ namespace ShopifySharp.GraphQL
         ///The total amount that the customer has spent on orders in their lifetime.
         ///</summary>
         public MoneyV2? amountSpent { get; set; }
-
-        ///<summary>
-        ///The average amount that the customer spent per order.
-        ///</summary>
-        [Obsolete("This field is no longer supported.")]
-        public decimal? averageOrderAmount { get; set; }
-
-        ///<summary>
-        ///The average amount that the customer spent per order.
-        ///</summary>
-        [Obsolete("This field is no longer supported.")]
-        public MoneyV2? averageOrderAmountV2 { get; set; }
         ///<summary>
         ///Whether the merchant can delete the customer from their store.
         ///
@@ -8437,6 +9422,44 @@ namespace ShopifySharp.GraphQL
         ///Whether the customer has verified their email address. Defaults to `true` if the customer is created through the Shopify admin or API.
         ///</summary>
         public bool? verifiedEmail { get; set; }
+    }
+
+    ///<summary>
+    ///Information about the shop's customer accounts.
+    ///</summary>
+    public class CustomerAccountsV2 : GraphQLObject<CustomerAccountsV2>
+    {
+        ///<summary>
+        ///Indicates which version of customer accounts the merchant is using in online store and checkout.
+        ///</summary>
+        public CustomerAccountsVersion? customerAccountsVersion { get; set; }
+        ///<summary>
+        ///Login links are shown in online store and checkout.
+        ///</summary>
+        public bool? loginLinksVisibleOnStorefrontAndCheckout { get; set; }
+        ///<summary>
+        ///Customers are required to log in to their account before checkout.
+        ///</summary>
+        public bool? loginRequiredAtCheckout { get; set; }
+        ///<summary>
+        ///The root url for the customer accounts pages.
+        ///</summary>
+        public string? url { get; set; }
+    }
+
+    ///<summary>
+    ///The login redirection target for customer accounts.
+    ///</summary>
+    public enum CustomerAccountsVersion
+    {
+        ///<summary>
+        ///The customer is redirected to the classic customer accounts login page.
+        ///</summary>
+        CLASSIC,
+        ///<summary>
+        ///The customer is redirected to the new customer accounts login page.
+        ///</summary>
+        NEW_CUSTOMER_ACCOUNTS,
     }
 
     ///<summary>
@@ -11496,6 +12519,10 @@ namespace ShopifySharp.GraphQL
         ///The earliest delivery date and time when the fulfillment is expected to arrive at the buyer's location.
         ///</summary>
         public DateTime? minDeliveryDateTime { get; set; }
+        ///<summary>
+        ///A reference to the shipping method.
+        ///</summary>
+        public string? serviceCode { get; set; }
     }
 
     ///<summary>
@@ -12004,6 +13031,7 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(DiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
     [JsonDerivedType(typeof(DiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
     [JsonDerivedType(typeof(DiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
+    [JsonDerivedType(typeof(DiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
     [JsonDerivedType(typeof(DiscountCodeApp), typeDiscriminator: "DiscountCodeApp")]
     [JsonDerivedType(typeof(DiscountCodeBasic), typeDiscriminator: "DiscountCodeBasic")]
     [JsonDerivedType(typeof(DiscountCodeBxgy), typeDiscriminator: "DiscountCodeBxgy")]
@@ -12013,6 +13041,7 @@ namespace ShopifySharp.GraphQL
         public DiscountAutomaticApp? AsDiscountAutomaticApp() => this as DiscountAutomaticApp;
         public DiscountAutomaticBasic? AsDiscountAutomaticBasic() => this as DiscountAutomaticBasic;
         public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this as DiscountAutomaticBxgy;
+        public DiscountAutomaticFreeShipping? AsDiscountAutomaticFreeShipping() => this as DiscountAutomaticFreeShipping;
         public DiscountCodeApp? AsDiscountCodeApp() => this as DiscountCodeApp;
         public DiscountCodeBasic? AsDiscountCodeBasic() => this as DiscountCodeBasic;
         public DiscountCodeBxgy? AsDiscountCodeBxgy() => this as DiscountCodeBxgy;
@@ -12241,11 +13270,13 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(DiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
     [JsonDerivedType(typeof(DiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
     [JsonDerivedType(typeof(DiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
+    [JsonDerivedType(typeof(DiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
     public interface IDiscountAutomatic : IGraphQLObject
     {
         public DiscountAutomaticApp? AsDiscountAutomaticApp() => this as DiscountAutomaticApp;
         public DiscountAutomaticBasic? AsDiscountAutomaticBasic() => this as DiscountAutomaticBasic;
         public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this as DiscountAutomaticBxgy;
+        public DiscountAutomaticFreeShipping? AsDiscountAutomaticFreeShipping() => this as DiscountAutomaticFreeShipping;
         ///<summary>
         ///The number of times the discount has been used. This value is updated asynchronously and can be different than the actual usage count.
         ///</summary>
@@ -12413,6 +13444,10 @@ namespace ShopifySharp.GraphQL
         ///The minimum subtotal or quantity that's required for the discount to be applied.
         ///</summary>
         public IDiscountMinimumRequirement? minimumRequirement { get; set; }
+        ///<summary>
+        ///The number of times a discount applies on recurring purchases (subscriptions).
+        ///</summary>
+        public int? recurringCycleLimit { get; set; }
         ///<summary>
         ///A short summary of the discount.
         ///</summary>
@@ -12657,6 +13692,119 @@ namespace ShopifySharp.GraphQL
         ///The item at the end of DiscountAutomaticEdge.
         ///</summary>
         public IDiscountAutomatic? node { get; set; }
+    }
+
+    ///<summary>
+    ///An automatic discount that offers customers free shipping on their order.
+    ///</summary>
+    public class DiscountAutomaticFreeShipping : GraphQLObject<DiscountAutomaticFreeShipping>, IDiscount, IDiscountAutomatic
+    {
+        ///<summary>
+        ///Whether the discount applies on regular one-time-purchase shipping lines.
+        ///</summary>
+        public bool? appliesOnOneTimePurchase { get; set; }
+        ///<summary>
+        ///Whether the discount applies on subscription shipping lines.
+        ///</summary>
+        public bool? appliesOnSubscription { get; set; }
+        ///<summary>
+        ///The number of times that the discount has been used. This value is updated asynchronously and can be different than the actual usage count.
+        ///</summary>
+        public int? asyncUsageCount { get; set; }
+        ///<summary>
+        ///Determines which discount classes the discount can combine with.
+        ///</summary>
+        public DiscountCombinesWith? combinesWith { get; set; }
+        ///<summary>
+        ///The date and time when the discount was created.
+        ///</summary>
+        public DateTime? createdAt { get; set; }
+        ///<summary>
+        ///A shipping destination that qualifies for the discount.
+        ///</summary>
+        public IDiscountShippingDestinationSelection? destinationSelection { get; set; }
+        ///<summary>
+        ///The class of the discount for combining purposes.
+        ///</summary>
+        public ShippingDiscountClass? discountClass { get; set; }
+        ///<summary>
+        ///The date and time when the discount ends. For open-ended discounts, use `null`.
+        ///</summary>
+        public DateTime? endsAt { get; set; }
+        ///<summary>
+        ///Indicates whether there are any timeline comments on the discount.
+        ///</summary>
+        public bool? hasTimelineComment { get; set; }
+        ///<summary>
+        ///The maximum shipping price amount accepted to qualify for the discount.
+        ///</summary>
+        public MoneyV2? maximumShippingPrice { get; set; }
+        ///<summary>
+        ///The minimum subtotal or quantity that's required for the discount to be applied.
+        ///</summary>
+        public IDiscountMinimumRequirement? minimumRequirement { get; set; }
+        ///<summary>
+        ///The number of times a discount applies on recurring purchases (subscriptions).
+        ///</summary>
+        public int? recurringCycleLimit { get; set; }
+        ///<summary>
+        ///A short summary of the discount.
+        ///</summary>
+        public string? shortSummary { get; set; }
+        ///<summary>
+        ///The date and time when the discount starts.
+        ///</summary>
+        public DateTime? startsAt { get; set; }
+        ///<summary>
+        ///The status of the discount.
+        ///</summary>
+        public DiscountStatus? status { get; set; }
+        ///<summary>
+        ///A detailed summary of the discount.
+        ///</summary>
+        public string? summary { get; set; }
+        ///<summary>
+        ///The title of the discount.
+        ///</summary>
+        public string? title { get; set; }
+        ///<summary>
+        ///The total sales from orders where the discount was used.
+        ///</summary>
+        public MoneyV2? totalSales { get; set; }
+        ///<summary>
+        ///The date and time when the discount was updated.
+        ///</summary>
+        public DateTime? updatedAt { get; set; }
+    }
+
+    ///<summary>
+    ///Return type for `discountAutomaticFreeShippingCreate` mutation.
+    ///</summary>
+    public class DiscountAutomaticFreeShippingCreatePayload : GraphQLObject<DiscountAutomaticFreeShippingCreatePayload>
+    {
+        ///<summary>
+        ///The created automatic discount.
+        ///</summary>
+        public DiscountAutomaticNode? automaticDiscountNode { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///Return type for `discountAutomaticFreeShippingUpdate` mutation.
+    ///</summary>
+    public class DiscountAutomaticFreeShippingUpdatePayload : GraphQLObject<DiscountAutomaticFreeShippingUpdatePayload>
+    {
+        ///<summary>
+        ///The updated automatic discount.
+        ///</summary>
+        public DiscountAutomaticNode? automaticDiscountNode { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<DiscountUserError>? userErrors { get; set; }
     }
 
     ///<summary>
@@ -14390,8 +15538,6 @@ namespace ShopifySharp.GraphQL
     [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
     [JsonDerivedType(typeof(AbandonmentEmailStateUpdateUserError), typeDiscriminator: "AbandonmentEmailStateUpdateUserError")]
     [JsonDerivedType(typeof(AbandonmentUpdateActivitiesDeliveryStatusesUserError), typeDiscriminator: "AbandonmentUpdateActivitiesDeliveryStatusesUserError")]
-    [JsonDerivedType(typeof(AppRevenueAttributionRecordCreateUserError), typeDiscriminator: "AppRevenueAttributionRecordCreateUserError")]
-    [JsonDerivedType(typeof(AppRevenueAttributionRecordDeleteUserError), typeDiscriminator: "AppRevenueAttributionRecordDeleteUserError")]
     [JsonDerivedType(typeof(AppSubscriptionTrialExtendUserError), typeDiscriminator: "AppSubscriptionTrialExtendUserError")]
     [JsonDerivedType(typeof(BillingAttemptUserError), typeDiscriminator: "BillingAttemptUserError")]
     [JsonDerivedType(typeof(BulkMutationUserError), typeDiscriminator: "BulkMutationUserError")]
@@ -14400,6 +15546,7 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(CartTransformCreateUserError), typeDiscriminator: "CartTransformCreateUserError")]
     [JsonDerivedType(typeof(CartTransformDeleteUserError), typeDiscriminator: "CartTransformDeleteUserError")]
     [JsonDerivedType(typeof(CatalogUserError), typeDiscriminator: "CatalogUserError")]
+    [JsonDerivedType(typeof(CheckoutBrandingUpsertUserError), typeDiscriminator: "CheckoutBrandingUpsertUserError")]
     [JsonDerivedType(typeof(CollectionAddProductsV2UserError), typeDiscriminator: "CollectionAddProductsV2UserError")]
     [JsonDerivedType(typeof(CustomerEmailMarketingConsentUpdateUserError), typeDiscriminator: "CustomerEmailMarketingConsentUpdateUserError")]
     [JsonDerivedType(typeof(CustomerMergeUserError), typeDiscriminator: "CustomerMergeUserError")]
@@ -14419,6 +15566,8 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(ErrorsServerPixelUserError), typeDiscriminator: "ErrorsServerPixelUserError")]
     [JsonDerivedType(typeof(ErrorsWebPixelUserError), typeDiscriminator: "ErrorsWebPixelUserError")]
     [JsonDerivedType(typeof(FilesUserError), typeDiscriminator: "FilesUserError")]
+    [JsonDerivedType(typeof(FulfillmentConstraintRuleCreateUserError), typeDiscriminator: "FulfillmentConstraintRuleCreateUserError")]
+    [JsonDerivedType(typeof(FulfillmentConstraintRuleDeleteUserError), typeDiscriminator: "FulfillmentConstraintRuleDeleteUserError")]
     [JsonDerivedType(typeof(FulfillmentOrderHoldUserError), typeDiscriminator: "FulfillmentOrderHoldUserError")]
     [JsonDerivedType(typeof(FulfillmentOrderLineItemsPreparedForPickupUserError), typeDiscriminator: "FulfillmentOrderLineItemsPreparedForPickupUserError")]
     [JsonDerivedType(typeof(FulfillmentOrderMergeUserError), typeDiscriminator: "FulfillmentOrderMergeUserError")]
@@ -14474,6 +15623,7 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(PubSubWebhookSubscriptionCreateUserError), typeDiscriminator: "PubSubWebhookSubscriptionCreateUserError")]
     [JsonDerivedType(typeof(PubSubWebhookSubscriptionUpdateUserError), typeDiscriminator: "PubSubWebhookSubscriptionUpdateUserError")]
     [JsonDerivedType(typeof(PublicationUserError), typeDiscriminator: "PublicationUserError")]
+    [JsonDerivedType(typeof(QuantityPricingByVariantUserError), typeDiscriminator: "QuantityPricingByVariantUserError")]
     [JsonDerivedType(typeof(QuantityRuleUserError), typeDiscriminator: "QuantityRuleUserError")]
     [JsonDerivedType(typeof(ReturnUserError), typeDiscriminator: "ReturnUserError")]
     [JsonDerivedType(typeof(SellingPlanGroupUserError), typeDiscriminator: "SellingPlanGroupUserError")]
@@ -14495,8 +15645,6 @@ namespace ShopifySharp.GraphQL
     {
         public AbandonmentEmailStateUpdateUserError? AsAbandonmentEmailStateUpdateUserError() => this as AbandonmentEmailStateUpdateUserError;
         public AbandonmentUpdateActivitiesDeliveryStatusesUserError? AsAbandonmentUpdateActivitiesDeliveryStatusesUserError() => this as AbandonmentUpdateActivitiesDeliveryStatusesUserError;
-        public AppRevenueAttributionRecordCreateUserError? AsAppRevenueAttributionRecordCreateUserError() => this as AppRevenueAttributionRecordCreateUserError;
-        public AppRevenueAttributionRecordDeleteUserError? AsAppRevenueAttributionRecordDeleteUserError() => this as AppRevenueAttributionRecordDeleteUserError;
         public AppSubscriptionTrialExtendUserError? AsAppSubscriptionTrialExtendUserError() => this as AppSubscriptionTrialExtendUserError;
         public BillingAttemptUserError? AsBillingAttemptUserError() => this as BillingAttemptUserError;
         public BulkMutationUserError? AsBulkMutationUserError() => this as BulkMutationUserError;
@@ -14505,6 +15653,7 @@ namespace ShopifySharp.GraphQL
         public CartTransformCreateUserError? AsCartTransformCreateUserError() => this as CartTransformCreateUserError;
         public CartTransformDeleteUserError? AsCartTransformDeleteUserError() => this as CartTransformDeleteUserError;
         public CatalogUserError? AsCatalogUserError() => this as CatalogUserError;
+        public CheckoutBrandingUpsertUserError? AsCheckoutBrandingUpsertUserError() => this as CheckoutBrandingUpsertUserError;
         public CollectionAddProductsV2UserError? AsCollectionAddProductsV2UserError() => this as CollectionAddProductsV2UserError;
         public CustomerEmailMarketingConsentUpdateUserError? AsCustomerEmailMarketingConsentUpdateUserError() => this as CustomerEmailMarketingConsentUpdateUserError;
         public CustomerMergeUserError? AsCustomerMergeUserError() => this as CustomerMergeUserError;
@@ -14524,6 +15673,8 @@ namespace ShopifySharp.GraphQL
         public ErrorsServerPixelUserError? AsErrorsServerPixelUserError() => this as ErrorsServerPixelUserError;
         public ErrorsWebPixelUserError? AsErrorsWebPixelUserError() => this as ErrorsWebPixelUserError;
         public FilesUserError? AsFilesUserError() => this as FilesUserError;
+        public FulfillmentConstraintRuleCreateUserError? AsFulfillmentConstraintRuleCreateUserError() => this as FulfillmentConstraintRuleCreateUserError;
+        public FulfillmentConstraintRuleDeleteUserError? AsFulfillmentConstraintRuleDeleteUserError() => this as FulfillmentConstraintRuleDeleteUserError;
         public FulfillmentOrderHoldUserError? AsFulfillmentOrderHoldUserError() => this as FulfillmentOrderHoldUserError;
         public FulfillmentOrderLineItemsPreparedForPickupUserError? AsFulfillmentOrderLineItemsPreparedForPickupUserError() => this as FulfillmentOrderLineItemsPreparedForPickupUserError;
         public FulfillmentOrderMergeUserError? AsFulfillmentOrderMergeUserError() => this as FulfillmentOrderMergeUserError;
@@ -14578,6 +15729,7 @@ namespace ShopifySharp.GraphQL
         public PubSubWebhookSubscriptionCreateUserError? AsPubSubWebhookSubscriptionCreateUserError() => this as PubSubWebhookSubscriptionCreateUserError;
         public PubSubWebhookSubscriptionUpdateUserError? AsPubSubWebhookSubscriptionUpdateUserError() => this as PubSubWebhookSubscriptionUpdateUserError;
         public PublicationUserError? AsPublicationUserError() => this as PublicationUserError;
+        public QuantityPricingByVariantUserError? AsQuantityPricingByVariantUserError() => this as QuantityPricingByVariantUserError;
         public QuantityRuleUserError? AsQuantityRuleUserError() => this as QuantityRuleUserError;
         public ReturnUserError? AsReturnUserError() => this as ReturnUserError;
         public SellingPlanGroupUserError? AsSellingPlanGroupUserError() => this as SellingPlanGroupUserError;
@@ -14851,7 +16003,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public string? marketName { get; set; }
         ///<summary>
-        ///The selected market region country code for the draft order.
+        ///The selected country code that determines the pricing of the draft order.
         ///</summary>
         public CountryCode? marketRegionCountryCode { get; set; }
         ///<summary>
@@ -16680,6 +17832,25 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
+    ///Return type for `flowGenerateSignature` mutation.
+    ///</summary>
+    public class FlowGenerateSignaturePayload : GraphQLObject<FlowGenerateSignaturePayload>
+    {
+        ///<summary>
+        ///The payload used to generate the signature.
+        ///</summary>
+        public string? payload { get; set; }
+        ///<summary>
+        ///The generated signature.
+        ///</summary>
+        public string? signature { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<UserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
     ///Return type for `flowTriggerReceive` mutation.
     ///</summary>
     public class FlowTriggerReceivePayload : GraphQLObject<FlowTriggerReceivePayload>
@@ -16814,6 +17985,155 @@ namespace ShopifySharp.GraphQL
         ///Information to aid in pagination.
         ///</summary>
         public PageInfo? pageInfo { get; set; }
+    }
+
+    ///<summary>
+    ///A fulfillment constraint rule.
+    ///</summary>
+    public class FulfillmentConstraintRule : GraphQLObject<FulfillmentConstraintRule>, IHasMetafields, INode
+    {
+        ///<summary>
+        ///The ID for the fulfillment constraint function.
+        ///</summary>
+        public ShopifyFunction? function { get; set; }
+        ///<summary>
+        ///A globally-unique ID.
+        ///</summary>
+        public string? id { get; set; }
+        ///<summary>
+        ///Returns a metafield by namespace and key that belongs to the resource.
+        ///</summary>
+        public Metafield? metafield { get; set; }
+        ///<summary>
+        ///List of metafields that belong to the resource.
+        ///</summary>
+        public MetafieldConnection? metafields { get; set; }
+
+        ///<summary>
+        ///Returns a private metafield by namespace and key that belongs to the resource.
+        ///</summary>
+        [Obsolete("Metafields created using a reserved namespace are private by default. See our guide for\n[migrating private metafields](https://shopify.dev/docs/apps/custom-data/metafields/migrate-private-metafields).")]
+        public PrivateMetafield? privateMetafield { get; set; }
+
+        ///<summary>
+        ///List of private metafields that belong to the resource.
+        ///</summary>
+        [Obsolete("Metafields created using a reserved namespace are private by default. See our guide for\n[migrating private metafields](https://shopify.dev/docs/apps/custom-data/metafields/migrate-private-metafields).")]
+        public PrivateMetafieldConnection? privateMetafields { get; set; }
+    }
+
+    ///<summary>
+    ///Return type for `fulfillmentConstraintRuleCreate` mutation.
+    ///</summary>
+    public class FulfillmentConstraintRuleCreatePayload : GraphQLObject<FulfillmentConstraintRuleCreatePayload>
+    {
+        ///<summary>
+        ///The newly created fulfillment constraint rule.
+        ///</summary>
+        public FulfillmentConstraintRule? fulfillmentConstraintRule { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<FulfillmentConstraintRuleCreateUserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///An error that occurs during the execution of `FulfillmentConstraintRuleCreate`.
+    ///</summary>
+    public class FulfillmentConstraintRuleCreateUserError : GraphQLObject<FulfillmentConstraintRuleCreateUserError>, IDisplayableError
+    {
+        ///<summary>
+        ///The error code.
+        ///</summary>
+        public FulfillmentConstraintRuleCreateUserErrorCode? code { get; set; }
+        ///<summary>
+        ///The path to the input field that caused the error.
+        ///</summary>
+        public IEnumerable<string>? field { get; set; }
+        ///<summary>
+        ///The error message.
+        ///</summary>
+        public string? message { get; set; }
+    }
+
+    ///<summary>
+    ///Possible error codes that can be returned by `FulfillmentConstraintRuleCreateUserError`.
+    ///</summary>
+    public enum FulfillmentConstraintRuleCreateUserErrorCode
+    {
+        ///<summary>
+        ///Failed to create fulfillment constraint rule due to invalid input.
+        ///</summary>
+        INPUT_INVALID,
+        ///<summary>
+        ///No Shopify Function found for provided function_id.
+        ///</summary>
+        FUNCTION_NOT_FOUND,
+        ///<summary>
+        ///A fulfillment constraint rule already exists for the provided function_id.
+        ///</summary>
+        FUNCTION_ALREADY_REGISTERED,
+        ///<summary>
+        ///Function does not implement the required interface for this fulfillment constraint rule.
+        ///</summary>
+        FUNCTION_DOES_NOT_IMPLEMENT,
+        ///<summary>
+        ///Shop must be on a Shopify Plus plan to activate functions from a custom app.
+        ///</summary>
+        CUSTOM_APP_FUNCTION_NOT_ELIGIBLE,
+        ///<summary>
+        ///Function is pending deletion and cannot have new rules created against it.
+        ///</summary>
+        FUNCTION_PENDING_DELETION,
+    }
+
+    ///<summary>
+    ///Return type for `fulfillmentConstraintRuleDelete` mutation.
+    ///</summary>
+    public class FulfillmentConstraintRuleDeletePayload : GraphQLObject<FulfillmentConstraintRuleDeletePayload>
+    {
+        ///<summary>
+        ///Whether or not the fulfillment constraint rule was successfully deleted.
+        ///</summary>
+        public bool? success { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<FulfillmentConstraintRuleDeleteUserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///An error that occurs during the execution of `FulfillmentConstraintRuleDelete`.
+    ///</summary>
+    public class FulfillmentConstraintRuleDeleteUserError : GraphQLObject<FulfillmentConstraintRuleDeleteUserError>, IDisplayableError
+    {
+        ///<summary>
+        ///The error code.
+        ///</summary>
+        public FulfillmentConstraintRuleDeleteUserErrorCode? code { get; set; }
+        ///<summary>
+        ///The path to the input field that caused the error.
+        ///</summary>
+        public IEnumerable<string>? field { get; set; }
+        ///<summary>
+        ///The error message.
+        ///</summary>
+        public string? message { get; set; }
+    }
+
+    ///<summary>
+    ///Possible error codes that can be returned by `FulfillmentConstraintRuleDeleteUserError`.
+    ///</summary>
+    public enum FulfillmentConstraintRuleDeleteUserErrorCode
+    {
+        ///<summary>
+        ///Could not find fulfillment constraint rule for provided id.
+        ///</summary>
+        NOT_FOUND,
+        ///<summary>
+        ///Unauthorized app scope.
+        ///</summary>
+        UNAUTHORIZED_APP_SCOPE,
     }
 
     ///<summary>
@@ -17393,6 +18713,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public FulfillmentOrderAssignedLocation? assignedLocation { get; set; }
         ///<summary>
+        ///ID of the channel that created the order.
+        ///</summary>
+        public string? channelId { get; set; }
+        ///<summary>
         ///Date and time when the fulfillment order was created.
         ///</summary>
         public DateTime? createdAt { get; set; }
@@ -17444,6 +18768,21 @@ namespace ShopifySharp.GraphQL
         ///The order that's associated with the fulfillment order.
         ///</summary>
         public Order? order { get; set; }
+        ///<summary>
+        ///ID of the order that's associated with the fulfillment order.
+        ///</summary>
+        public string? orderId { get; set; }
+        ///<summary>
+        ///The unique identifier for the order that appears on the order page in the Shopify admin and the <b>Order status</b> page.
+        ///For example, "#1001", "EN1001", or "1001-A".
+        ///This value isn't unique across multiple stores.
+        ///</summary>
+        public string? orderName { get; set; }
+        ///<summary>
+        ///The date and time when the order was processed.
+        ///This date and time might not match the date and time when the order was created.
+        ///</summary>
+        public DateTime? orderProcessedAt { get; set; }
         ///<summary>
         ///The request status of the fulfillment order.
         ///</summary>
@@ -17862,9 +19201,11 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         [Obsolete("          As of API version 2023-01, this field has been deprecated. The order line item associated with a `FulfillmentOrderLineItem`\n          shouldn't be used to determine what to fulfill. Use the `FulfillmentOrderLineItem` and `FulfillmentOrder` objects\n          instead. An order `LineItem` represents a single line item on an order, but it doesn't represent what should be fulfilled.")]
         public LineItem? lineItem { get; set; }
+
         ///<summary>
         ///The variant unit price without discounts applied, in shop and presentment currencies.
         ///</summary>
+        [Obsolete("Use `financialSummaries` instead.")]
         public MoneyBag? originalUnitPriceSet { get; set; }
         ///<summary>
         ///The title of the product.
@@ -18415,7 +19756,12 @@ namespace ShopifySharp.GraphQL
     public class FulfillmentOrderReschedulePayload : GraphQLObject<FulfillmentOrderReschedulePayload>
     {
         ///<summary>
-        ///The fulfillment order that was rescheduled.
+        ///A fulfillment order with the rescheduled line items.
+        ///
+        ///Fulfillment orders may be merged if they have the same `fulfillAt` datetime.
+        ///
+        ///If the fulfillment order is merged then the resulting fulfillment order will be returned.
+        ///Otherwise the original fulfillment order will be returned with an updated `fulfillAt` datetime.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
         ///<summary>
@@ -19659,6 +21005,7 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(DiscountCodeNode), typeDiscriminator: "DiscountCodeNode")]
     [JsonDerivedType(typeof(DiscountNode), typeDiscriminator: "DiscountNode")]
     [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+    [JsonDerivedType(typeof(FulfillmentConstraintRule), typeDiscriminator: "FulfillmentConstraintRule")]
     [JsonDerivedType(typeof(Image), typeDiscriminator: "Image")]
     [JsonDerivedType(typeof(Location), typeDiscriminator: "Location")]
     [JsonDerivedType(typeof(Market), typeDiscriminator: "Market")]
@@ -19682,6 +21029,7 @@ namespace ShopifySharp.GraphQL
         public DiscountCodeNode? AsDiscountCodeNode() => this as DiscountCodeNode;
         public DiscountNode? AsDiscountNode() => this as DiscountNode;
         public DraftOrder? AsDraftOrder() => this as DraftOrder;
+        public FulfillmentConstraintRule? AsFulfillmentConstraintRule() => this as FulfillmentConstraintRule;
         public Image? AsImage() => this as Image;
         public Location? AsLocation() => this as Location;
         public Market? AsMarket() => this as Market;
@@ -21423,6 +22771,10 @@ namespace ShopifySharp.GraphQL
         [Obsolete("Use `discountedUnitPriceSet` instead.")]
         public decimal? discountedUnitPrice { get; set; }
         ///<summary>
+        ///The approximate split price of the line item, including any discounts that apply to the entire order.
+        ///</summary>
+        public MoneyBag? discountedUnitPriceAfterAllDiscountsSet { get; set; }
+        ///<summary>
         ///The approximate split price of a line item unit, in shop and presentment currencies. This value doesn't include discounts applied to the entire order.
         ///</summary>
         public MoneyBag? discountedUnitPriceSet { get; set; }
@@ -21515,7 +22867,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public int? quantity { get; set; }
         ///<summary>
-        ///The line item's quantity, minus the removed quantity.
+        ///The line item's quantity, minus the refunded quantity.
         ///</summary>
         public int? refundableQuantity { get; set; }
         ///<summary>
@@ -21649,6 +23001,14 @@ namespace ShopifySharp.GraphQL
         ///Title of the line item group.
         ///</summary>
         public string? title { get; set; }
+        ///<summary>
+        ///ID of the variant of the line item group.
+        ///</summary>
+        public string? variantId { get; set; }
+        ///<summary>
+        ///SKU of the variant of the line item group.
+        ///</summary>
+        public string? variantSku { get; set; }
     }
 
     ///<summary>
@@ -21753,7 +23113,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public int? quantity { get; set; }
         ///<summary>
-        ///The line item's quantity, minus the removed quantity.
+        ///The line item's quantity, minus the refunded quantity.
         ///</summary>
         public int? refundableQuantity { get; set; }
         ///<summary>
@@ -22691,6 +24051,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         CANNOT_DISABLE_ONLINE_ORDER_FULFILLMENT,
         ///<summary>
+        ///Cannot modify the online order fulfillment preference for fulfillment service locations.
+        ///</summary>
+        CANNOT_MODIFY_ONLINE_ORDER_FULFILLMENT_FOR_FS_LOCATION,
+        ///<summary>
         ///The type is invalid.
         ///</summary>
         INVALID_TYPE,
@@ -23073,6 +24437,14 @@ namespace ShopifySharp.GraphQL
         ///If it's the primary market and it has multiple web presences, then this field will return the primary domain web presence.
         ///</summary>
         public MarketWebPresence? webPresence { get; set; }
+        ///<summary>
+        ///The market’s web presences, which defines its SEO strategy. This can be a different domain,
+        ///subdomain, or subfolders of the primary domain. Each web presence comprises one or more
+        ///language variants. If a market doesn't have any web presences, then the market is accessible on the
+        ///primary market's domains using [country
+        ///selectors](https://shopify.dev/themes/internationalization/multiple-currencies-languages#the-country-selector).
+        ///</summary>
+        public MarketWebPresenceConnection? webPresences { get; set; }
     }
 
     ///<summary>
@@ -23192,7 +24564,8 @@ namespace ShopifySharp.GraphQL
         ///Whether or not local currencies are enabled. If enabled, then prices will
         ///be converted to give each customer the best experience based on their
         ///region. If disabled, then all customers in this market will see prices
-        ///in the market's base currency.
+        ///in the market's base currency. For single country markets this will be true when
+        ///the market's base currency is the same as the default currency for the region.
         ///</summary>
         public bool? localCurrencies { get; set; }
     }
@@ -23661,6 +25034,18 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         CANNOT_ADD_WEB_PRESENCE_TO_PRIMARY_MARKET,
         ///<summary>
+        ///Can't add another web presence to the market.
+        ///</summary>
+        MARKET_REACHED_WEB_PRESENCE_LIMIT,
+        ///<summary>
+        ///Can't have multiple subfolder web presences per market.
+        ///</summary>
+        CANNOT_HAVE_MULTIPLE_SUBFOLDERS_PER_MARKET,
+        ///<summary>
+        ///Can't have both subfolder and domain web presences.
+        ///</summary>
+        CANNOT_HAVE_BOTH_SUBFOLDER_AND_DOMAIN_WEB_PRESENCES,
+        ///<summary>
         ///One of `subfolderSuffix` or `domainId` is required.
         ///</summary>
         REQUIRES_DOMAIN_OR_SUBFOLDER,
@@ -23728,7 +25113,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The ISO code for the default locale. When a domain is used, this is the locale that will
         ///be used when the domain root is accessed. For example, if French is the default locale,
-        ///and `example.ca` is the market’s domian, then `example.ca` will load in French.
+        ///and `example.ca` is the market’s domain, then `example.ca` will load in French.
         ///</summary>
         public string? defaultLocale { get; set; }
         ///<summary>
@@ -23745,13 +25130,32 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public Market? market { get; set; }
         ///<summary>
-        ///The list of root URLs for each of the web presence’s locales.
+        ///The list of root URLs for each of the web presence’s locales. As of version `2024-04` this value will no longer have a trailing slash.
         ///</summary>
         public IEnumerable<MarketWebPresenceRootUrl>? rootUrls { get; set; }
         ///<summary>
         ///The market-specific suffix of the subfolders defined by the web presence. Example: in `/en-us` the subfolder suffix is `us`. This field will be null if `domain` isn't null.
         ///</summary>
         public string? subfolderSuffix { get; set; }
+    }
+
+    ///<summary>
+    ///An auto-generated type for paginating through multiple MarketWebPresences.
+    ///</summary>
+    public class MarketWebPresenceConnection : GraphQLObject<MarketWebPresenceConnection>, IConnectionWithNodesAndEdges<MarketWebPresenceEdge, MarketWebPresence>
+    {
+        ///<summary>
+        ///A list of edges.
+        ///</summary>
+        public IEnumerable<MarketWebPresenceEdge>? edges { get; set; }
+        ///<summary>
+        ///A list of the nodes contained in MarketWebPresenceEdge.
+        ///</summary>
+        public IEnumerable<MarketWebPresence>? nodes { get; set; }
+        ///<summary>
+        ///Information to aid in pagination.
+        ///</summary>
+        public PageInfo? pageInfo { get; set; }
     }
 
     ///<summary>
@@ -23786,6 +25190,21 @@ namespace ShopifySharp.GraphQL
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public IEnumerable<MarketUserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///An auto-generated type which holds one MarketWebPresence and a cursor during pagination.
+    ///</summary>
+    public class MarketWebPresenceEdge : GraphQLObject<MarketWebPresenceEdge>, IEdge<MarketWebPresence>
+    {
+        ///<summary>
+        ///A cursor for use in pagination.
+        ///</summary>
+        public string? cursor { get; set; }
+        ///<summary>
+        ///The item at the end of MarketWebPresenceEdge.
+        ///</summary>
+        public MarketWebPresence? node { get; set; }
     }
 
     ///<summary>
@@ -23861,9 +25280,11 @@ namespace ShopifySharp.GraphQL
         ///Whether the marketing activity is in the main workflow version of the marketing automation.
         ///</summary>
         public bool? inMainWorkflowVersion { get; set; }
+
         ///<summary>
-        ///The available marketing channels for a marketing activity.
+        ///The medium through which the marketing activity and event reached consumers. This is used for reporting aggregation.
         ///</summary>
+        [Obsolete("Use `marketingChannelType` instead.")]
         public MarketingChannel? marketingChannel { get; set; }
         ///<summary>
         ///Associated marketing event of this marketing activity.
@@ -24232,7 +25653,7 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///The available marketing channels for a marketing activity or event. A marketing channel is broad category of marketing, used for reporting aggregation.
+    ///The medium through which the marketing activity and event reached consumers. This is used for reporting aggregation.
     ///</summary>
     public enum MarketingChannel
     {
@@ -24264,27 +25685,27 @@ namespace ShopifySharp.GraphQL
     public class MarketingEngagement : GraphQLObject<MarketingEngagement>
     {
         ///<summary>
-        ///The total ad spend for the day, if the marketing event is a paid ad with a daily spend.
+        ///The total ad spend for the marketing content. Recurring weekly, monthly, or yearly spend needs to be divided into daily amounts.
         ///</summary>
         public MoneyV2? adSpend { get; set; }
         ///<summary>
-        ///The total number of clicks on the marketing event for the day.
+        ///The total number of interactions, such as a button press or a screen touch, that occurred on the marketing content.
         ///</summary>
         public int? clicksCount { get; set; }
         ///<summary>
-        ///The total number of comments on marketing content for the day.
+        ///The total number of comments on the marketing content.
         ///</summary>
         public int? commentsCount { get; set; }
         ///<summary>
-        ///The total number of complaints for the day. For message-based platforms such as email or SMS, this represents the number of marketing emails or messages that were marked as spam. For social media platforms, this represents the number of dislikes or the number of times marketing content was reported.
+        ///The total number of complaints on the marketing content. For message-based platforms such as email or SMS, this represents the number of marketing emails or messages that were marked as spam. For social media platforms, this represents the number of dislikes or the number of times marketing content was reported.
         ///</summary>
         public int? complaintsCount { get; set; }
         ///<summary>
-        ///The total number of fails for the day. For message-based platforms such as email or SMS, this represents the number of bounced marketing emails or messages.
+        ///The total number of fails for the marketing content. For message-based platforms such as email or SMS, this represents the number of bounced marketing emails or messages.
         ///</summary>
         public int? failsCount { get; set; }
         ///<summary>
-        ///The total number of favorites, likes, saves, or bookmarks for the day.
+        ///The total number of favorites, likes, saves, or bookmarks on the marketing content.
         ///</summary>
         public int? favoritesCount { get; set; }
         ///<summary>
@@ -24292,11 +25713,11 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public DateTime? fetchedAt { get; set; }
         ///<summary>
-        ///The total number of impressions for the day.
+        ///The total number of times marketing content was displayed to users, whether or not an interaction occurred. For message-based platforms such as email or SMS, this represents the number of marketing emails or messages that were delivered.
         ///</summary>
         public int? impressionsCount { get; set; }
         ///<summary>
-        ///Whether the engagements are reported as lifetime values rather than daily totals.
+        ///Whether the engagements are reported as lifetime totals rather than daily increments.
         ///</summary>
         public bool? isCumulative { get; set; }
         ///<summary>
@@ -24308,31 +25729,31 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public DateOnly? occurredOn { get; set; }
         ///<summary>
-        ///The total number of marketing emails or messages that were sent for the day.
+        ///The total number of marketing emails or messages that were sent.
         ///</summary>
         public int? sendsCount { get; set; }
         ///<summary>
-        ///The total number of times marketing content was distributed or reposted to either one's own network of followers through a social media platform or other digital channels for the day. For message-based platforms such as email or SMS, this represents the number of times marketing emails or messages were forwarded.
+        ///The total number of times marketing content was distributed or reposted to either one's own network of followers through a social media platform or other digital channels. For message-based platforms such as email or SMS, this represents the number of times marketing emails or messages were forwarded.
         ///</summary>
         public int? sharesCount { get; set; }
         ///<summary>
-        ///The total number of unique clicks on marketing content for the day.
+        ///The total number of unique clicks on the marketing content.
         ///</summary>
         public int? uniqueClicksCount { get; set; }
         ///<summary>
-        ///The total number of unique views for the day. For message-based platforms such as  email or SMS, this represents the number of unique users that opened a marketing email or message. For video-based content, this represents the number of unique users that played video content.
+        ///The total number of all users who saw marketing content since it was published. For  message-based platforms such as email or SMS, this represents the number of unique users that opened a  marketing email or message. For video-based content, this represents the number of unique users that  played video content.
         ///</summary>
         public int? uniqueViewsCount { get; set; }
         ///<summary>
-        ///The total number of unsubscribes for the day. For social media platforms, this represents the number of unfollows.
+        ///The total number of unsubscribes on the marketing content. For social media platforms, this represents the number of unfollows.
         ///</summary>
         public int? unsubscribesCount { get; set; }
         ///<summary>
-        ///The UTC Offset that the app is using to determine which date to allocate spend to.
+        ///The time difference, in hours, between UTC and the time zone used to aggregate these metrics.
         ///</summary>
         public TimeSpan? utcOffset { get; set; }
         ///<summary>
-        ///The total number of views for the day. For message-based platforms such as email or SMS, this represents the number of times marketing emails or messages were opened. For video-based content, this represents the number of times videos were played.
+        ///The total number of views on the marketing content. For message-based platforms such as email or SMS, this represents the number of times marketing emails or messages were opened. For video-based content, this represents the number of times videos were played.
         ///</summary>
         public int? viewsCount { get; set; }
     }
@@ -24361,9 +25782,11 @@ namespace ShopifySharp.GraphQL
         ///The app that the marketing event is attributed to.
         ///</summary>
         public App? app { get; set; }
+
         ///<summary>
-        ///The marketing channel used by the marketing event.
+        ///The medium through which the marketing activity and event reached consumers. This is used for reporting aggregation.
         ///</summary>
+        [Obsolete("Use `marketingChannelType` instead.")]
         public MarketingChannel? channel { get; set; }
         ///<summary>
         ///A human-readable description of the marketing event.
@@ -24937,6 +26360,10 @@ namespace ShopifySharp.GraphQL
         ///The size of the original file in bytes.
         ///</summary>
         public int? fileSize { get; set; }
+        ///<summary>
+        ///The URL of the original image, valid only for a short period.
+        ///</summary>
+        public string? url { get; set; }
     }
 
     ///<summary>
@@ -25247,6 +26674,26 @@ namespace ShopifySharp.GraphQL
         ///The default admin access setting used for the metafields under this definition.
         ///</summary>
         public MetafieldAdminAccess? admin { get; set; }
+        ///<summary>
+        ///The explicit grants for this metafield definition, superseding the default admin access
+        ///for the specified grantees.
+        ///</summary>
+        public IEnumerable<MetafieldAccessGrant>? grants { get; set; }
+    }
+
+    ///<summary>
+    ///An explicit access grant for the metafields under this definition.
+    ///</summary>
+    public class MetafieldAccessGrant : GraphQLObject<MetafieldAccessGrant>
+    {
+        ///<summary>
+        ///The level of access the grantee has.
+        ///</summary>
+        public MetafieldGrantAccessLevel? access { get; set; }
+        ///<summary>
+        ///The grantee being granted access.
+        ///</summary>
+        public string? grantee { get; set; }
     }
 
     ///<summary>
@@ -25489,6 +26936,10 @@ namespace ShopifySharp.GraphQL
         ///You have reached the maximum allowed definitions for automated collections.
         ///</summary>
         OWNER_TYPE_LIMIT_EXCEEDED_FOR_AUTOMATED_COLLECTIONS,
+        ///<summary>
+        ///The maximum limit of grants per definition type has been exceeded.
+        ///</summary>
+        GRANT_LIMIT_EXCEEDED,
     }
 
     ///<summary>
@@ -25859,6 +27310,14 @@ namespace ShopifySharp.GraphQL
         ///You have reached the maximum allowed definitions for automated collections.
         ///</summary>
         OWNER_TYPE_LIMIT_EXCEEDED_FOR_AUTOMATED_COLLECTIONS,
+        ///<summary>
+        ///You cannot change the metaobject definition pointed to by a metaobject reference metafield definition.
+        ///</summary>
+        METAOBJECT_DEFINITION_CHANGED,
+        ///<summary>
+        ///The maximum limit of grants per definition type has been exceeded.
+        ///</summary>
+        GRANT_LIMIT_EXCEEDED,
     }
 
     ///<summary>
@@ -25935,6 +27394,21 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
+    ///Possible access levels for explicit metafield access grants.
+    ///</summary>
+    public enum MetafieldGrantAccessLevel
+    {
+        ///<summary>
+        ///Read metafield access.
+        ///</summary>
+        READ,
+        ///<summary>
+        ///Read and write metafield access.
+        ///</summary>
+        READ_WRITE,
+    }
+
+    ///<summary>
     ///Possible types of a metafield's owner resource.
     ///</summary>
     public enum MetafieldOwnerType
@@ -26004,6 +27478,10 @@ namespace ShopifySharp.GraphQL
         ///The Page metafield owner type.
         ///</summary>
         PAGE,
+        ///<summary>
+        ///The Fulfillment Constraint Rule metafield owner type.
+        ///</summary>
+        FULFILLMENT_CONSTRAINT_RULE,
         ///<summary>
         ///The Discount metafield owner type.
         ///</summary>
@@ -26551,9 +28029,17 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectCapabilities : GraphQLObject<MetaobjectCapabilities>
     {
         ///<summary>
+        ///Indicates whether a metaobject definition can be displayed as a page on the Online Store.
+        ///</summary>
+        public MetaobjectCapabilitiesOnlineStore? onlineStore { get; set; }
+        ///<summary>
         ///Indicate whether a metaobject definition is publishable.
         ///</summary>
         public MetaobjectCapabilitiesPublishable? publishable { get; set; }
+        ///<summary>
+        ///Indicate whether a metaobject definition is renderable and exposes SEO data.
+        ///</summary>
+        public MetaobjectCapabilitiesRenderable? renderable { get; set; }
         ///<summary>
         ///Indicate whether a metaobject definition is translatable.
         ///</summary>
@@ -26561,10 +28047,40 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
+    ///The Online Store capability of a metaobject definition.
+    ///</summary>
+    public class MetaobjectCapabilitiesOnlineStore : GraphQLObject<MetaobjectCapabilitiesOnlineStore>
+    {
+        ///<summary>
+        ///The data associated with the Online Store capability.
+        ///</summary>
+        public MetaobjectCapabilityDefinitionDataOnlineStore? data { get; set; }
+        ///<summary>
+        ///Indicates if the capability is enabled.
+        ///</summary>
+        public bool? enabled { get; set; }
+    }
+
+    ///<summary>
     ///The publishable capability of a metaobject definition.
     ///</summary>
     public class MetaobjectCapabilitiesPublishable : GraphQLObject<MetaobjectCapabilitiesPublishable>
     {
+        ///<summary>
+        ///Indicates if the capability is enabled.
+        ///</summary>
+        public bool? enabled { get; set; }
+    }
+
+    ///<summary>
+    ///The renderable capability of a metaobject definition.
+    ///</summary>
+    public class MetaobjectCapabilitiesRenderable : GraphQLObject<MetaobjectCapabilitiesRenderable>
+    {
+        ///<summary>
+        ///The data associated with the renderable capability.
+        ///</summary>
+        public MetaobjectCapabilityDefinitionDataRenderable? data { get; set; }
         ///<summary>
         ///Indicates if the capability is enabled.
         ///</summary>
@@ -26588,9 +28104,24 @@ namespace ShopifySharp.GraphQL
     public class MetaobjectCapabilityData : GraphQLObject<MetaobjectCapabilityData>
     {
         ///<summary>
+        ///The Online Store capability for this metaobject.
+        ///</summary>
+        public MetaobjectCapabilityDataOnlineStore? onlineStore { get; set; }
+        ///<summary>
         ///The publishable capability for this metaobject.
         ///</summary>
         public MetaobjectCapabilityDataPublishable? publishable { get; set; }
+    }
+
+    ///<summary>
+    ///The Online Store capability for the parent metaobject.
+    ///</summary>
+    public class MetaobjectCapabilityDataOnlineStore : GraphQLObject<MetaobjectCapabilityDataOnlineStore>
+    {
+        ///<summary>
+        ///The theme template used when viewing the metaobject in a store.
+        ///</summary>
+        public string? templateSuffix { get; set; }
     }
 
     ///<summary>
@@ -26602,6 +28133,36 @@ namespace ShopifySharp.GraphQL
         ///The visibility status of this metaobject across all channels.
         ///</summary>
         public MetaobjectStatus? status { get; set; }
+    }
+
+    ///<summary>
+    ///The Online Store capability data for the metaobject definition.
+    ///</summary>
+    public class MetaobjectCapabilityDefinitionDataOnlineStore : GraphQLObject<MetaobjectCapabilityDefinitionDataOnlineStore>
+    {
+        ///<summary>
+        ///Flag indicating if a sufficient number of redirects are available to redirect all published entries.
+        ///</summary>
+        public bool? canCreateRedirects { get; set; }
+        ///<summary>
+        ///The URL handle for accessing pages of this metaobject type in the Online Store.
+        ///</summary>
+        public string? urlHandle { get; set; }
+    }
+
+    ///<summary>
+    ///The renderable capability data for the metaobject definition.
+    ///</summary>
+    public class MetaobjectCapabilityDefinitionDataRenderable : GraphQLObject<MetaobjectCapabilityDefinitionDataRenderable>
+    {
+        ///<summary>
+        ///The metaobject field used as an alias for the SEO page description.
+        ///</summary>
+        public string? metaDescriptionKey { get; set; }
+        ///<summary>
+        ///The metaobject field used as an alias for the SEO page title.
+        ///</summary>
+        public string? metaTitleKey { get; set; }
     }
 
     ///<summary>
@@ -27043,6 +28604,26 @@ namespace ShopifySharp.GraphQL
         ///The capability you are using is not enabled.
         ///</summary>
         CAPABILITY_NOT_ENABLED,
+        ///<summary>
+        ///The Online Store URL handle is already taken.
+        ///</summary>
+        URL_HANDLE_TAKEN,
+        ///<summary>
+        ///The Online Store URL handle is invalid.
+        ///</summary>
+        URL_HANDLE_INVALID,
+        ///<summary>
+        ///The Online Store URL handle cannot be blank.
+        ///</summary>
+        URL_HANDLE_BLANK,
+        ///<summary>
+        ///Renderable data input is referencing an invalid field.
+        ///</summary>
+        FIELD_TYPE_INVALID,
+        ///<summary>
+        ///The input is missing required keys.
+        ///</summary>
+        MISSING_REQUIRED_KEYS,
     }
 
     ///<summary>
@@ -27207,18 +28788,6 @@ namespace ShopifySharp.GraphQL
         ///Test and demo shops aren't charged.
         ///</summary>
         public AppPurchaseOneTimeCreatePayload? appPurchaseOneTimeCreate { get; set; }
-
-        ///<summary>
-        ///Creates a record of the attributed revenue for the app. This mutation should only be used to capture transactions that are not managed by the Billing API.
-        ///</summary>
-        [Obsolete("This mutation will be removed in a future version.")]
-        public AppRevenueAttributionRecordCreatePayload? appRevenueAttributionRecordCreate { get; set; }
-
-        ///<summary>
-        ///Deletes a record of the attributed revenue for the app.
-        ///</summary>
-        [Obsolete("This mutation will be removed in a future version.")]
-        public AppRevenueAttributionRecordDeletePayload? appRevenueAttributionRecordDelete { get; set; }
         ///<summary>
         ///Cancels an app subscription on a store.
         ///</summary>
@@ -27288,6 +28857,10 @@ namespace ShopifySharp.GraphQL
         ///Updates an existing catalog.
         ///</summary>
         public CatalogUpdatePayload? catalogUpdate { get; set; }
+        ///<summary>
+        ///Updates the checkout branding settings for a [checkout profile](https://shopify.dev/api/admin-graphql/unstable/queries/checkoutProfile). If the settings don't exist, then new settings are created. The checkout branding settings applied to a published checkout profile will be immediately visible within the store's checkout. The checkout branding settings applied to a draft checkout profile could be previewed within the admin checkout editor.
+        ///</summary>
+        public CheckoutBrandingUpsertPayload? checkoutBrandingUpsert { get; set; }
         ///<summary>
         ///Adds products to a collection.
         ///</summary>
@@ -27639,6 +29212,14 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public DiscountAutomaticDeletePayload? discountAutomaticDelete { get; set; }
         ///<summary>
+        ///Creates a free shipping automatic discount.
+        ///</summary>
+        public DiscountAutomaticFreeShippingCreatePayload? discountAutomaticFreeShippingCreate { get; set; }
+        ///<summary>
+        ///Updates a free shipping automatic discount.
+        ///</summary>
+        public DiscountAutomaticFreeShippingUpdatePayload? discountAutomaticFreeShippingUpdate { get; set; }
+        ///<summary>
         ///Activates a code discount.
         ///</summary>
         public DiscountCodeActivatePayload? discountCodeActivate { get; set; }
@@ -27800,6 +29381,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public FileUpdatePayload? fileUpdate { get; set; }
         ///<summary>
+        ///Generates a signature for a Flow action payload.
+        ///</summary>
+        public FlowGenerateSignaturePayload? flowGenerateSignature { get; set; }
+        ///<summary>
         ///Triggers any workflows that begin with the trigger specified in the request body. To learn more, refer to [_Create Shopify Flow triggers_](https://shopify.dev/apps/flow/triggers).
         ///</summary>
         public FlowTriggerReceivePayload? flowTriggerReceive { get; set; }
@@ -27807,6 +29392,14 @@ namespace ShopifySharp.GraphQL
         ///Cancels a fulfillment.
         ///</summary>
         public FulfillmentCancelPayload? fulfillmentCancel { get; set; }
+        ///<summary>
+        ///Creates a fulfillment constraint rule and its metafield.
+        ///</summary>
+        public FulfillmentConstraintRuleCreatePayload? fulfillmentConstraintRuleCreate { get; set; }
+        ///<summary>
+        ///Deletes a fulfillment constraint rule and its metafields.
+        ///</summary>
+        public FulfillmentConstraintRuleDeletePayload? fulfillmentConstraintRuleDelete { get; set; }
         ///<summary>
         ///Creates a fulfillment for one or many fulfillment orders.
         ///The fulfillment orders are associated with the same order and are assigned to the same location.
@@ -27903,6 +29496,10 @@ namespace ShopifySharp.GraphQL
         public FulfillmentOrderReleaseHoldPayload? fulfillmentOrderReleaseHold { get; set; }
         ///<summary>
         ///Reschedules a scheduled fulfillment order.
+        ///
+        ///Updates the value of the `fulfillAt` field on a scheduled fulfillment order.
+        ///
+        ///The fulfillment order will be marked as ready for fulfillment at this date and time.
         ///</summary>
         public FulfillmentOrderReschedulePayload? fulfillmentOrderReschedule { get; set; }
         ///<summary>
@@ -28103,11 +29700,13 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public MarketingActivityUpdateExternalPayload? marketingActivityUpdateExternal { get; set; }
         ///<summary>
-        ///Creates a new marketing event engagement for a marketing activity or a marketing channel.
+        ///Creates a new marketing engagement for a marketing activity or a marketing channel.
         ///</summary>
         public MarketingEngagementCreatePayload? marketingEngagementCreate { get; set; }
         ///<summary>
-        ///Creates a metafield definition.
+        ///Creates a metafield definition. Any metafields existing under the same owner type, namespace, and key will be
+        ///checked against this definition and will have their type updated accordingly. For metafields that are not
+        ///valid, they will remain unchanged but any attempts to update them must align with this definition.
         ///</summary>
         public MetafieldDefinitionCreatePayload? metafieldDefinitionCreate { get; set; }
         ///<summary>
@@ -28209,7 +29808,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public OrderEditAddCustomItemPayload? orderEditAddCustomItem { get; set; }
         ///<summary>
-        ///Adds a discount to a newly added line item on the current order edit. More information on how to use the GraphQL Admin API to edit an existing order, refer to [Edit existing orders](https://shopify.dev/apps/fulfillment/order-management-apps/order-editing).
+        ///Adds a discount to a line item on the current order edit. For more information on how to use the GraphQL Admin API to edit an existing order, refer to [Edit existing orders](https://shopify.dev/apps/fulfillment/order-management-apps/order-editing).
         ///</summary>
         public OrderEditAddLineItemDiscountPayload? orderEditAddLineItemDiscount { get; set; }
         ///<summary>
@@ -28231,7 +29830,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public OrderEditRemoveLineItemDiscountPayload? orderEditRemoveLineItemDiscount { get; set; }
         ///<summary>
-        ///Sets the quantity of a line item on an order that is being edited. More information on how to use the GraphQL Admin API to edit an existing order, refer to [Edit existing orders](https://shopify.dev/apps/fulfillment/order-management-apps/order-editing).
+        ///Sets the quantity of a line item on an order that is being edited. For more information on how to use the GraphQL Admin API to edit an existing order, refer to [Edit existing orders](https://shopify.dev/apps/fulfillment/order-management-apps/order-editing).
         ///</summary>
         public OrderEditSetQuantityPayload? orderEditSetQuantity { get; set; }
         ///<summary>
@@ -28619,6 +30218,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public PublishableUnpublishToCurrentChannelPayload? publishableUnpublishToCurrentChannel { get; set; }
         ///<summary>
+        ///Updates quantity pricing on a price list. You can use the `quantityPricingByVariantUpdate` mutation to set fixed prices, quantity rules, and quantity price breaks. This mutation does not allow partial successes. If any of the requested resources fail to update, none of the requested resources will be updated. Delete operations are executed before create operations.
+        ///</summary>
+        public QuantityPricingByVariantUpdatePayload? quantityPricingByVariantUpdate { get; set; }
+        ///<summary>
         ///Creates or updates existing quantity rules on a price list.
         ///You can use the `quantityRulesAdd` mutation to set order level minimums, maximumums and increments for specific product variants.
         ///</summary>
@@ -28660,7 +30263,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public ReturnDeclineRequestPayload? returnDeclineRequest { get; set; }
         ///<summary>
-        ///Refunds a return and associates it with the related return request.
+        ///Refunds a return when its status is `OPEN` or `CLOSED` and associates it with the related return request.
         ///</summary>
         public ReturnRefundPayload? returnRefund { get; set; }
         ///<summary>
@@ -28911,7 +30514,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public SubscriptionContractProductChangePayload? subscriptionContractProductChange { get; set; }
         ///<summary>
-        ///Sets the next billing date of a Subscription Contract.
+        ///Sets the next billing date of a Subscription Contract. This field is managed by the apps.
+        ///        Alternatively you can utilize our
+        ///        [Billing Cycles APIs](https://shopify.dev/docs/apps/selling-strategies/subscriptions/billing-cycles),
+        ///        which provide auto-computed billing dates and additional functionalities.
         ///</summary>
         public SubscriptionContractSetNextBillingDatePayload? subscriptionContractSetNextBillingDate { get; set; }
         ///<summary>
@@ -29192,6 +30798,7 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(ExchangeV2), typeDiscriminator: "ExchangeV2")]
     [JsonDerivedType(typeof(ExternalVideo), typeDiscriminator: "ExternalVideo")]
     [JsonDerivedType(typeof(Fulfillment), typeDiscriminator: "Fulfillment")]
+    [JsonDerivedType(typeof(FulfillmentConstraintRule), typeDiscriminator: "FulfillmentConstraintRule")]
     [JsonDerivedType(typeof(FulfillmentEvent), typeDiscriminator: "FulfillmentEvent")]
     [JsonDerivedType(typeof(FulfillmentLineItem), typeDiscriminator: "FulfillmentLineItem")]
     [JsonDerivedType(typeof(FulfillmentOrder), typeDiscriminator: "FulfillmentOrder")]
@@ -29243,6 +30850,7 @@ namespace ShopifySharp.GraphQL
     [JsonDerivedType(typeof(ProductVariantComponent), typeDiscriminator: "ProductVariantComponent")]
     [JsonDerivedType(typeof(Publication), typeDiscriminator: "Publication")]
     [JsonDerivedType(typeof(PublicationResourceOperation), typeDiscriminator: "PublicationResourceOperation")]
+    [JsonDerivedType(typeof(QuantityPriceBreak), typeDiscriminator: "QuantityPriceBreak")]
     [JsonDerivedType(typeof(Refund), typeDiscriminator: "Refund")]
     [JsonDerivedType(typeof(Return), typeDiscriminator: "Return")]
     [JsonDerivedType(typeof(ReturnLineItem), typeDiscriminator: "ReturnLineItem")]
@@ -29345,6 +30953,7 @@ namespace ShopifySharp.GraphQL
         public ExchangeV2? AsExchangeV2() => this as ExchangeV2;
         public ExternalVideo? AsExternalVideo() => this as ExternalVideo;
         public Fulfillment? AsFulfillment() => this as Fulfillment;
+        public FulfillmentConstraintRule? AsFulfillmentConstraintRule() => this as FulfillmentConstraintRule;
         public FulfillmentEvent? AsFulfillmentEvent() => this as FulfillmentEvent;
         public FulfillmentLineItem? AsFulfillmentLineItem() => this as FulfillmentLineItem;
         public FulfillmentOrder? AsFulfillmentOrder() => this as FulfillmentOrder;
@@ -29396,6 +31005,7 @@ namespace ShopifySharp.GraphQL
         public ProductVariantComponent? AsProductVariantComponent() => this as ProductVariantComponent;
         public Publication? AsPublication() => this as Publication;
         public PublicationResourceOperation? AsPublicationResourceOperation() => this as PublicationResourceOperation;
+        public QuantityPriceBreak? AsQuantityPriceBreak() => this as QuantityPriceBreak;
         public Refund? AsRefund() => this as Refund;
         public Return? AsReturn() => this as Return;
         public ReturnLineItem? AsReturnLineItem() => this as ReturnLineItem;
@@ -29565,6 +31175,10 @@ namespace ShopifySharp.GraphQL
         ///Returns `null` if the order wasn't canceled.
         ///</summary>
         public OrderCancelReason? cancelReason { get; set; }
+        ///<summary>
+        ///Cancellation details for the order.
+        ///</summary>
+        public OrderCancellation? cancellation { get; set; }
         ///<summary>
         ///The date and time when the order was canceled.
         ///Returns `null` if the order wasn't canceled.
@@ -30016,6 +31630,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public ShippingLineConnection? shippingLines { get; set; }
         ///<summary>
+        ///The Shopify Protect details for the order. If Shopify Protect is disabled for the shop, then this will be null.
+        ///</summary>
+        public ShopifyProtectOrderSummary? shopifyProtect { get; set; }
+        ///<summary>
         ///A unique POS or third party order identifier.
         ///For example, "1234-12-1000" or "111-98567-54". The `receipt_number` field is derived from this value for POS orders.
         ///</summary>
@@ -30279,9 +31897,24 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         INVENTORY,
         ///<summary>
+        ///Staff made an error.
+        ///</summary>
+        STAFF,
+        ///<summary>
         ///The order was canceled for an unlisted reason.
         ///</summary>
         OTHER,
+    }
+
+    ///<summary>
+    ///Details about the order cancellation.
+    ///</summary>
+    public class OrderCancellation : GraphQLObject<OrderCancellation>
+    {
+        ///<summary>
+        ///Staff provided note for the order cancellation.
+        ///</summary>
+        public string? staffNote { get; set; }
     }
 
     ///<summary>
@@ -32003,45 +33636,15 @@ namespace ShopifySharp.GraphQL
     ///</summary>
     [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
     [JsonDerivedType(typeof(CardPaymentDetails), typeDiscriminator: "CardPaymentDetails")]
+    [JsonDerivedType(typeof(ShopPayInstallmentsPaymentDetails), typeDiscriminator: "ShopPayInstallmentsPaymentDetails")]
     public interface IPaymentDetails : IGraphQLObject
     {
         public CardPaymentDetails? AsCardPaymentDetails() => this as CardPaymentDetails;
+        public ShopPayInstallmentsPaymentDetails? AsShopPayInstallmentsPaymentDetails() => this as ShopPayInstallmentsPaymentDetails;
         ///<summary>
-        ///The response code from the address verification system (AVS). The code is always a single letter.
+        ///The name of payment method used by the buyer.
         ///</summary>
-        public string? avsResultCode { get; set; }
-        ///<summary>
-        ///The issuer identification number (IIN), formerly known as bank identification number (BIN) of the customer's credit card. This is made up of the first few digits of the credit card number.
-        ///</summary>
-        public string? bin { get; set; }
-        ///<summary>
-        ///The name of the company that issued the customer's credit card.
-        ///</summary>
-        public string? company { get; set; }
-        ///<summary>
-        ///The response code from the credit card company indicating whether the customer entered the card security code, or card verification value, correctly. The code is a single letter or empty string.
-        ///</summary>
-        public string? cvvResultCode { get; set; }
-        ///<summary>
-        ///The month in which the used credit card expires.
-        ///</summary>
-        public int? expirationMonth { get; set; }
-        ///<summary>
-        ///The year in which the used credit card expires.
-        ///</summary>
-        public int? expirationYear { get; set; }
-        ///<summary>
-        ///The holder of the credit card.
-        ///</summary>
-        public string? name { get; set; }
-        ///<summary>
-        ///The customer's credit card number, with most of the leading digits redacted.
-        ///</summary>
-        public string? number { get; set; }
-        ///<summary>
-        ///Digital wallet used for the payment.
-        ///</summary>
-        public DigitalWallet? wallet { get; set; }
+        public string? paymentMethodName { get; set; }
     }
 
     ///<summary>
@@ -32904,6 +34507,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public MoneyV2? price { get; set; }
         ///<summary>
+        ///A list of quantity breaks for the product variant.
+        ///</summary>
+        public QuantityPriceBreakConnection? quantityPriceBreaks { get; set; }
+        ///<summary>
         ///The product variant associated with this price.
         ///</summary>
         public ProductVariant? variant { get; set; }
@@ -33132,6 +34739,10 @@ namespace ShopifySharp.GraphQL
         ///Quantity rules can be associated only with company location catalogs.
         ///</summary>
         CATALOG_CONTEXT_DOES_NOT_SUPPORT_QUANTITY_RULES,
+        ///<summary>
+        ///Quantity price breaks can be associated only with company location catalogs.
+        ///</summary>
+        CATALOG_CONTEXT_DOES_NOT_SUPPORT_QUANTITY_PRICE_BREAKS,
         ///<summary>
         ///Only one context rule option may be specified.
         ///</summary>
@@ -34484,6 +36095,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public CollectionConnection? collections { get; set; }
         ///<summary>
+        ///The compare-at price range of the product in the default shop currency.
+        ///</summary>
+        public ProductCompareAtPriceRange? compareAtPriceRange { get; set; }
+        ///<summary>
         ///The pricing that applies for a customer in a given context.
         ///</summary>
         public ProductContextualPricing? contextualPricing { get; set; }
@@ -34544,6 +36159,10 @@ namespace ShopifySharp.GraphQL
         ///Whether the product has out of stock variants.
         ///</summary>
         public bool? hasOutOfStockVariants { get; set; }
+        ///<summary>
+        ///Determines if at least one of the product variant requires components. The default value is `false`.
+        ///</summary>
+        public bool? hasVariantsThatRequiresComponents { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -34888,6 +36507,21 @@ namespace ShopifySharp.GraphQL
         ///Don't use this sort key when no search query is specified.
         ///</summary>
         RELEVANCE,
+    }
+
+    ///<summary>
+    ///The compare-at price range of the product.
+    ///</summary>
+    public class ProductCompareAtPriceRange : GraphQLObject<ProductCompareAtPriceRange>
+    {
+        ///<summary>
+        ///The highest variant's compare-at price.
+        ///</summary>
+        public MoneyV2? maxVariantCompareAtPrice { get; set; }
+        ///<summary>
+        ///The lowest variant's compare-at price.
+        ///</summary>
+        public MoneyV2? minVariantCompareAtPrice { get; set; }
     }
 
     ///<summary>
@@ -36257,6 +37891,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public MoneyV2? price { get; set; }
         ///<summary>
+        ///A list of quantity breaks for the product variant.
+        ///</summary>
+        public QuantityPriceBreakConnection? quantityPriceBreaks { get; set; }
+        ///<summary>
         ///The quantity rule applied for a given context.
         ///</summary>
         public QuantityRule? quantityRule { get; set; }
@@ -37563,6 +39201,273 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
+    ///Quantity price breaks lets you offer different rates that are based on the
+    ///amount of a specific variant being ordered.
+    ///</summary>
+    public class QuantityPriceBreak : GraphQLObject<QuantityPriceBreak>, INode
+    {
+        ///<summary>
+        ///A globally-unique ID.
+        ///</summary>
+        public string? id { get; set; }
+        ///<summary>
+        ///Minimum quantity required to reach new quantity break price.
+        ///</summary>
+        public int? minimumQuantity { get; set; }
+        ///<summary>
+        ///The price of variant after reaching the minimum quanity.
+        ///</summary>
+        public MoneyV2? price { get; set; }
+        ///<summary>
+        ///The price list associated with this quantity break.
+        ///</summary>
+        public PriceList? priceList { get; set; }
+        ///<summary>
+        ///The product variant associated with this quantity break.
+        ///</summary>
+        public ProductVariant? variant { get; set; }
+    }
+
+    ///<summary>
+    ///An auto-generated type for paginating through multiple QuantityPriceBreaks.
+    ///</summary>
+    public class QuantityPriceBreakConnection : GraphQLObject<QuantityPriceBreakConnection>, IConnectionWithNodesAndEdges<QuantityPriceBreakEdge, QuantityPriceBreak>
+    {
+        ///<summary>
+        ///A list of edges.
+        ///</summary>
+        public IEnumerable<QuantityPriceBreakEdge>? edges { get; set; }
+        ///<summary>
+        ///A list of the nodes contained in QuantityPriceBreakEdge.
+        ///</summary>
+        public IEnumerable<QuantityPriceBreak>? nodes { get; set; }
+        ///<summary>
+        ///Information to aid in pagination.
+        ///</summary>
+        public PageInfo? pageInfo { get; set; }
+        ///<summary>
+        ///The total count of QuantityPriceBreaks.
+        ///</summary>
+        public ulong? totalCount { get; set; }
+    }
+
+    ///<summary>
+    ///An auto-generated type which holds one QuantityPriceBreak and a cursor during pagination.
+    ///</summary>
+    public class QuantityPriceBreakEdge : GraphQLObject<QuantityPriceBreakEdge>, IEdge<QuantityPriceBreak>
+    {
+        ///<summary>
+        ///A cursor for use in pagination.
+        ///</summary>
+        public string? cursor { get; set; }
+        ///<summary>
+        ///The item at the end of QuantityPriceBreakEdge.
+        ///</summary>
+        public QuantityPriceBreak? node { get; set; }
+    }
+
+    ///<summary>
+    ///The set of valid sort keys for the QuantityPriceBreak query.
+    ///</summary>
+    public enum QuantityPriceBreakSortKeys
+    {
+        ///<summary>
+        ///Sort by the `minimum_quantity` value.
+        ///</summary>
+        MINIMUM_QUANTITY,
+        ///<summary>
+        ///Sort by the `id` value.
+        ///</summary>
+        ID,
+        ///<summary>
+        ///Sort by relevance to the search terms when the `query` parameter is specified on the connection.
+        ///Don't use this sort key when no search query is specified.
+        ///</summary>
+        RELEVANCE,
+    }
+
+    ///<summary>
+    ///Return type for `quantityPricingByVariantUpdate` mutation.
+    ///</summary>
+    public class QuantityPricingByVariantUpdatePayload : GraphQLObject<QuantityPricingByVariantUpdatePayload>
+    {
+        ///<summary>
+        ///The variants for which quantity pricing was created successfully in the price list.
+        ///</summary>
+        public IEnumerable<ProductVariant>? productVariants { get; set; }
+        ///<summary>
+        ///The list of errors that occurred from executing the mutation.
+        ///</summary>
+        public IEnumerable<QuantityPricingByVariantUserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///Error codes for failed volume pricing operations.
+    ///</summary>
+    public class QuantityPricingByVariantUserError : GraphQLObject<QuantityPricingByVariantUserError>, IDisplayableError
+    {
+        ///<summary>
+        ///The error code.
+        ///</summary>
+        public QuantityPricingByVariantUserErrorCode? code { get; set; }
+        ///<summary>
+        ///The path to the input field that caused the error.
+        ///</summary>
+        public IEnumerable<string>? field { get; set; }
+        ///<summary>
+        ///The error message.
+        ///</summary>
+        public string? message { get; set; }
+    }
+
+    ///<summary>
+    ///Possible error codes that can be returned by `QuantityPricingByVariantUserError`.
+    ///</summary>
+    public enum QuantityPricingByVariantUserErrorCode
+    {
+        ///<summary>
+        ///The input value is blank.
+        ///</summary>
+        BLANK,
+        ///<summary>
+        ///Price List does not exist.
+        ///</summary>
+        PRICE_LIST_NOT_FOUND,
+        ///<summary>
+        ///Something went wrong when trying to update quantity pricing. Please try again later.
+        ///</summary>
+        GENERIC_ERROR,
+        ///<summary>
+        ///Invalid quantity price break.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_INVALID,
+        ///<summary>
+        ///Quantity price break's fixed price not found.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_PRICE_LIST_PRICE_NOT_FOUND,
+        ///<summary>
+        ///Exceeded the allowed number of quantity price breaks per variant.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_LIMIT_EXCEEDED,
+        ///<summary>
+        ///Price list and quantity price break currency mismatch.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_CURRENCY_MISMATCH,
+        ///<summary>
+        ///Failed to save quantity price break.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_FAILED_TO_SAVE,
+        ///<summary>
+        ///Quantity price break miniumum is less than the quantity rule minimum.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_MIN_LOWER_THAN_QUANTITY_RULES_MIN,
+        ///<summary>
+        ///Quantity price break miniumum is higher than the quantity rule maximum.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_MIN_HIGHER_THAN_QUANTITY_RULES_MAX,
+        ///<summary>
+        ///Quantity price break miniumum is not multiple of the quantity rule increment.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_MIN_NOT_A_MULTIPLE_OF_QUANTITY_RULES_INCREMENT,
+        ///<summary>
+        ///Quantity price break variant not found.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_VARIANT_NOT_FOUND,
+        ///<summary>
+        ///Quantity price breaks to add inputs must be unique by variant id and minimum quantity.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_ADD_DUPLICATE_INPUT_FOR_VARIANT_AND_MIN,
+        ///<summary>
+        ///Quantity price break not found.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_DELETE_NOT_FOUND,
+        ///<summary>
+        ///Failed to delete quantity price break.
+        ///</summary>
+        QUANTITY_PRICE_BREAK_DELETE_FAILED,
+        ///<summary>
+        ///Quantity rule variant not found.
+        ///</summary>
+        QUANTITY_RULE_ADD_VARIANT_NOT_FOUND,
+        ///<summary>
+        ///Quantity rule minimum is higher than the quantity price break minimum.
+        ///</summary>
+        QUANTITY_RULE_ADD_MIN_HIGHER_THAN_QUANTITY_PRICE_BREAK_MIN,
+        ///<summary>
+        ///Quantity rule maximum is less than the quantity price break minimum.
+        ///</summary>
+        QUANTITY_RULE_ADD_MAX_LOWER_THAN_QUANTITY_PRICE_BREAK_MIN,
+        ///<summary>
+        ///Quantity rule increment must be a multiple of the quantity price break minimum.
+        ///</summary>
+        QUANTITY_RULE_ADD_INCREMENT_NOT_A_MULTIPLE_OF_QUANTITY_PRICE_BREAK_MIN,
+        ///<summary>
+        ///Quantity rule catalog context not supported.
+        ///</summary>
+        QUANTITY_RULE_ADD_CATALOG_CONTEXT_NOT_SUPPORTED,
+        ///<summary>
+        ///Quantity rule increment is greater than minimum.
+        ///</summary>
+        QUANTITY_RULE_ADD_INCREMENT_IS_GREATER_THAN_MINIMUM,
+        ///<summary>
+        ///Quantity rule minimum is not a multiple of increment.
+        ///</summary>
+        QUANTITY_RULE_ADD_MINIMUM_NOT_A_MULTIPLE_OF_INCREMENT,
+        ///<summary>
+        ///Quantity rule maximum is not a multiple of increment.
+        ///</summary>
+        QUANTITY_RULE_ADD_MAXIMUM_NOT_A_MULTIPLE_OF_INCREMENT,
+        ///<summary>
+        ///Quantity rule minimum is greater than maximum.
+        ///</summary>
+        QUANTITY_RULE_ADD_MINIMUM_GREATER_THAN_MAXIMUM,
+        ///<summary>
+        ///Quantity rule increment is less than one.
+        ///</summary>
+        QUANTITY_RULE_ADD_INCREMENT_IS_LESS_THAN_ONE,
+        ///<summary>
+        ///Quantity rule minimum is less than one.
+        ///</summary>
+        QUANTITY_RULE_ADD_MINIMUM_IS_LESS_THAN_ONE,
+        ///<summary>
+        ///Quantity rule maximum is less than one.
+        ///</summary>
+        QUANTITY_RULE_ADD_MAXIMUM_IS_LESS_THAN_ONE,
+        ///<summary>
+        ///Quantity rules to add inputs must be unique by variant id.
+        ///</summary>
+        QUANTITY_RULE_ADD_DUPLICATE_INPUT_FOR_VARIANT,
+        ///<summary>
+        ///Quantity rule not found.
+        ///</summary>
+        QUANTITY_RULE_DELETE_RULE_NOT_FOUND,
+        ///<summary>
+        ///Quantity rule variant not found.
+        ///</summary>
+        QUANTITY_RULE_DELETE_VARIANT_NOT_FOUND,
+        ///<summary>
+        ///Price list and fixed price currency mismatch.
+        ///</summary>
+        PRICE_ADD_CURRENCY_MISMATCH,
+        ///<summary>
+        ///Fixed price's variant not found.
+        ///</summary>
+        PRICE_ADD_VARIANT_NOT_FOUND,
+        ///<summary>
+        ///Prices to add inputs must be unique by variant id.
+        ///</summary>
+        PRICE_ADD_DUPLICATE_INPUT_FOR_VARIANT,
+        ///<summary>
+        ///Price is not fixed.
+        ///</summary>
+        PRICE_DELETE_PRICE_NOT_FIXED,
+        ///<summary>
+        ///Fixed price's variant not found.
+        ///</summary>
+        PRICE_DELETE_VARIANT_NOT_FOUND,
+    }
+
+    ///<summary>
     ///The quantity rule for the product variant in a given context.
     ///</summary>
     public class QuantityRule : GraphQLObject<QuantityRule>
@@ -37617,7 +39522,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public PageInfo? pageInfo { get; set; }
         ///<summary>
-        ///The total count of QuantityRules. Note: The maximum count limit is 10000.
+        ///The total count of QuantityRules.
         ///</summary>
         public ulong? totalCount { get; set; }
     }
@@ -37697,6 +39602,18 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         MINIMUM_IS_GREATER_THAN_MAXIMUM,
         ///<summary>
+        ///Minimum must be less than or equal to all quantity price break minimums associated with this variant in the specified price list.
+        ///</summary>
+        MINIMUM_IS_HIGHER_THAN_QUANTITY_PRICE_BREAK_MINIMUM,
+        ///<summary>
+        ///Maximum must be greater than or equal to all quantity price break minimums associated with this variant in the specified price list.
+        ///</summary>
+        MAXIMUM_IS_LOWER_THAN_QUANTITY_PRICE_BREAK_MINIMUM,
+        ///<summary>
+        ///Increment must be a multiple of all quantity price break minimums associated with this variant in the specified price list.
+        ///</summary>
+        INCREMENT_NOT_A_MULTIPLE_OF_QUANTITY_PRICE_BREAK_MINIMUM,
+        ///<summary>
         ///Increment must be lower than or equal to the minimum.
         ///</summary>
         INCREMENT_IS_GREATER_THAN_MINIMUM,
@@ -37716,6 +39633,10 @@ namespace ShopifySharp.GraphQL
         ///Quantity rules can be associated only with company location catalogs.
         ///</summary>
         CATALOG_CONTEXT_DOES_NOT_SUPPORT_QUANTITY_RULES,
+        ///<summary>
+        ///Quantity rule inputs must be unique by variant id.
+        ///</summary>
+        DUPLICATE_INPUT_FOR_VARIANT,
         ///<summary>
         ///Something went wrong when trying to save the quantity rule. Please try again later.
         ///</summary>
@@ -37859,6 +39780,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         [Obsolete("Use `publications` instead.")]
         public ChannelConnection? channels { get; set; }
+        ///<summary>
+        ///Returns the checkout branding settings for a checkout profile.
+        ///</summary>
+        public CheckoutBranding? checkoutBranding { get; set; }
         ///<summary>
         ///A checkout profile on a shop.
         ///</summary>
@@ -38058,6 +39983,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public Fulfillment? fulfillment { get; set; }
         ///<summary>
+        ///The fulfillment constraint rules that belong to a shop.
+        ///</summary>
+        public IEnumerable<FulfillmentConstraintRule>? fulfillmentConstraintRules { get; set; }
+        ///<summary>
         ///Returns a Fulfillment order resource by ID.
         ///</summary>
         public FulfillmentOrder? fulfillmentOrder { get; set; }
@@ -38177,10 +40106,6 @@ namespace ShopifySharp.GraphQL
         ///The markets configured for the shop.
         ///</summary>
         public MarketConnection? markets { get; set; }
-        ///<summary>
-        ///Returns a metafield by ID.
-        ///</summary>
-        public Metafield? metafield { get; set; }
         ///<summary>
         ///Returns a metafield definition by ID.
         ///</summary>
@@ -38998,29 +40923,6 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///A resource limit represents the limits that the resource has.
-    ///</summary>
-    public class ResourceLimit : GraphQLObject<ResourceLimit>
-    {
-        ///<summary>
-        ///Whether the resource is available.
-        ///</summary>
-        public bool? available { get; set; }
-        ///<summary>
-        ///Quantity available. If null the quantity available is unlimited.
-        ///</summary>
-        public int? quantityAvailable { get; set; }
-        ///<summary>
-        ///Quantity limit of the resource. If null the quantity is unlimited.
-        ///</summary>
-        public int? quantityLimit { get; set; }
-        ///<summary>
-        ///Quantity used of the resource. If null the quantity used can't be retrieved.
-        ///</summary>
-        public int? quantityUsed { get; set; }
-    }
-
-    ///<summary>
     ///Represents a merchandising background operation interface.
     ///</summary>
     [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
@@ -39239,7 +41141,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public SuggestedReturnRefund? suggestedRefund { get; set; }
         ///<summary>
-        ///The sum of all line item quantities for the return. Includes the total quantity of both return line items and exchange line items.
+        ///The sum of all return line item quantities for the return.
         ///</summary>
         public int? totalQuantity { get; set; }
     }
@@ -42490,6 +44392,14 @@ namespace ShopifySharp.GraphQL
         ///A selling plan can't have both fixed and recurring delivery policies.
         ///</summary>
         ONLY_ONE_OF_FIXED_OR_RECURRING_DELIVERY,
+        ///<summary>
+        ///Billing policy's interval is too large.
+        ///</summary>
+        BILLING_POLICY_INTERVAL_TOO_LARGE,
+        ///<summary>
+        ///Delivery policy's interval is too large.
+        ///</summary>
+        DELIVERY_POLICY_INTERVAL_TOO_LARGE,
     }
 
     ///<summary>
@@ -42714,7 +44624,7 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///Represents a recurring selling plan pricing policy.
+    ///Represents a recurring selling plan pricing policy. It applies after the fixed pricing policy. By using the afterCycle parameter, you can specify the cycle when the recurring pricing policy comes into effect. Recurring pricing policies are not available for deferred purchase options.
     ///</summary>
     public class SellingPlanRecurringPricingPolicy : GraphQLObject<SellingPlanRecurringPricingPolicy>, ISellingPlanPricingPolicyBase, ISellingPlanPricingPolicy
     {
@@ -43256,6 +45166,10 @@ namespace ShopifySharp.GraphQL
         ///Whether customer accounts are required, optional, or disabled for the shop.
         ///</summary>
         public ShopCustomerAccountsSetting? customerAccounts { get; set; }
+        ///<summary>
+        ///Information about the shop's customer accounts.
+        ///</summary>
+        public CustomerAccountsV2? customerAccountsV2 { get; set; }
 
         ///<summary>
         ///List of the shop's customer saved searches.
@@ -43514,12 +45428,6 @@ namespace ShopifySharp.GraphQL
         ///The list of all legal policies associated with a shop.
         ///</summary>
         public IEnumerable<ShopPolicy>? shopPolicies { get; set; }
-
-        ///<summary>
-        ///Shopify Payments account information, including balances and payouts.
-        ///</summary>
-        [Obsolete("Use `QueryRoot.shopifyPaymentsAccount` instead.")]
-        public ShopifyPaymentsAccount? shopifyPaymentsAccount { get; set; }
         ///<summary>
         ///The paginated list of the shop's staff members.
         ///</summary>
@@ -43812,9 +45720,11 @@ namespace ShopifySharp.GraphQL
         ///internationally.
         ///</summary>
         public bool? harmonizedSystemCode { get; set; }
+
         ///<summary>
         ///Whether a shop can enable international domains.
         ///</summary>
+        [Obsolete("All shops have international domains through Shopify Markets.")]
         public bool? internationalDomains { get; set; }
         ///<summary>
         ///Whether a shop can enable international price overrides.
@@ -43945,6 +45855,17 @@ namespace ShopifySharp.GraphQL
         ///The list of errors that occurred from executing the mutation.
         ///</summary>
         public IEnumerable<UserError>? userErrors { get; set; }
+    }
+
+    ///<summary>
+    ///Shop Pay Installments payment details related to a transaction.
+    ///</summary>
+    public class ShopPayInstallmentsPaymentDetails : GraphQLObject<ShopPayInstallmentsPaymentDetails>, IBasePaymentDetails, IPaymentDetails
+    {
+        ///<summary>
+        ///The name of payment method used by the buyer.
+        ///</summary>
+        public string? paymentMethodName { get; set; }
     }
 
     ///<summary>
@@ -44155,12 +46076,6 @@ namespace ShopifySharp.GraphQL
         ///Whether the shop has reached the limit of the number of URL redirects it can make for resources.
         ///</summary>
         public bool? redirectLimitReached { get; set; }
-
-        ///<summary>
-        ///The maximum number of variants allowed per shop. If the shop has unlimited SKUs, then the quantity used can't be retrieved.
-        ///</summary>
-        [Obsolete("This field is deprecated. After the 2023-10 version, we no longer set limits on number of SKUs per shop. Use `maxProductVariants` instead.")]
-        public ResourceLimit? skuResourceLimits { get; set; }
     }
 
     ///<summary>
@@ -45232,6 +47147,80 @@ namespace ShopifySharp.GraphQL
         ///The given name of the individual to verify.
         ///</summary>
         public string? givenName { get; set; }
+    }
+
+    ///<summary>
+    ///The status of an order's eligibility for protection against fraudulent chargebacks by Shopify Protect.
+    ///</summary>
+    public enum ShopifyProtectEligibilityStatus
+    {
+        ///<summary>
+        ///The eligibility of the order is pending and has not yet been determined.
+        ///</summary>
+        PENDING,
+        ///<summary>
+        ///The order is eligible for protection against fraudulent chargebacks.
+        ///If an order is updated, the order's eligibility may change and protection could be removed.
+        ///</summary>
+        ELIGIBLE,
+        ///<summary>
+        ///The order isn't eligible for protection against fraudulent chargebacks.
+        ///</summary>
+        NOT_ELIGIBLE,
+    }
+
+    ///<summary>
+    ///The eligibility details of an order's protection against fraudulent chargebacks by Shopify Protect.
+    ///</summary>
+    public class ShopifyProtectOrderEligibility : GraphQLObject<ShopifyProtectOrderEligibility>
+    {
+        ///<summary>
+        ///The status of whether an order is eligible for protection against fraudulent chargebacks.
+        ///</summary>
+        public ShopifyProtectEligibilityStatus? status { get; set; }
+    }
+
+    ///<summary>
+    ///A summary of Shopify Protect details for an order.
+    ///</summary>
+    public class ShopifyProtectOrderSummary : GraphQLObject<ShopifyProtectOrderSummary>
+    {
+        ///<summary>
+        ///The eligibility details of an order's protection against fraudulent chargebacks.
+        ///</summary>
+        public ShopifyProtectOrderEligibility? eligibility { get; set; }
+        ///<summary>
+        ///The status of the order's protection against fraudulent chargebacks.
+        ///</summary>
+        public ShopifyProtectStatus? status { get; set; }
+    }
+
+    ///<summary>
+    ///The status of an order's protection with Shopify Protect.
+    ///</summary>
+    public enum ShopifyProtectStatus
+    {
+        ///<summary>
+        ///The protection for the order is pending and has not yet been determined.
+        ///</summary>
+        PENDING,
+        ///<summary>
+        ///The protection for the order is active and eligible for reimbursement against fraudulent chargebacks.
+        ///If an order is updated, the order's eligibility may change and protection could become inactive.
+        ///</summary>
+        ACTIVE,
+        ///<summary>
+        ///The protection for an order isn't active because the order didn't meet eligibility requirements.
+        ///</summary>
+        INACTIVE,
+        ///<summary>
+        ///The order received a fraudulent chargeback and it was protected.
+        ///</summary>
+        PROTECTED,
+        ///<summary>
+        ///The order received a chargeback but the order wasn't protected because it didn't meet coverage requirements.
+        ///</summary>
+        NOT_PROTECTED,
     }
 
     ///<summary>
@@ -46712,7 +48701,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public SubscriptionLineConnection? lines { get; set; }
         ///<summary>
-        ///The next billing date for the subscription contract.
+        ///The next billing date for the subscription contract. This field is managed by the apps.
+        ///        Alternatively you can utilize our
+        ///        [Billing Cycles APIs](https://shopify.dev/docs/apps/selling-strategies/subscriptions/billing-cycles),
+        ///        which provide auto-computed billing dates and additional functionalities.
         ///</summary>
         public DateTime? nextBillingDate { get; set; }
         ///<summary>
@@ -49358,7 +51350,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         PAYMENT_GATEWAY,
         ///<summary>
-        ///An online store product. Translatable fields: `title`, `body_html`, `handle`, `meta_title`, `meta_description`.
+        ///An online store product. Translatable fields: `title`, `body_html`, `handle`, `product_type`, `meta_title`, `meta_description`.
         ///</summary>
         PRODUCT,
         ///<summary>
@@ -49367,7 +51359,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         PRODUCT_OPTION,
         ///<summary>
-        ///An online store product variant. Translatable fields: `title`, `option1`, `option2`, `option3`. The field `title` has been deprecated.
+        ///An online store product variant. Translatable fields: `option1`, `option2`, `option3`.
         ///</summary>
         PRODUCT_VARIANT,
         ///<summary>
@@ -51187,9 +53179,22 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         MARKETS_DELETE,
         ///<summary>
-        ///The webhook topic for `fulfillment_orders/rescheduled` events. Triggers when a fulfillment order is rescheduled Requires at least one of the following scopes: read_merchant_managed_fulfillment_orders, read_assigned_fulfillment_orders, read_third_party_fulfillment_orders.
+        ///The webhook topic for `orders/shopify_protect_eligibility_changed` events. Occurs whenever Shopify Protect's eligibility for an order is changed. Requires the `read_orders` scope.
+        ///</summary>
+        ORDERS_SHOPIFY_PROTECT_ELIGIBILITY_CHANGED,
+        ///<summary>
+        ///The webhook topic for `fulfillment_orders/rescheduled` events. Triggers when a fulfillment order is rescheduled.
+        ///
+        ///Fulfillment orders may be merged if they have the same `fulfillAt` datetime.
+        ///If the fulfillment order is merged then the resulting fulfillment order will be indicated in the webhook body.
+        ///Otherwise it will be the original fulfillment order with an updated `fulfill_at` datetime.
+        /// Requires at least one of the following scopes: read_merchant_managed_fulfillment_orders, read_assigned_fulfillment_orders, read_third_party_fulfillment_orders.
         ///</summary>
         FULFILLMENT_ORDERS_RESCHEDULED,
+        ///<summary>
+        ///The webhook topic for `publications/delete` events. Occurs whenever a publication is deleted. Requires the `read_publications` scope.
+        ///</summary>
+        PUBLICATIONS_DELETE,
         ///<summary>
         ///The webhook topic for `audit_events/admin_api_activity` events. Triggers for each auditable Admin API request. This topic is limited to one active subscription per Plus store and requires the use of Google Cloud Pub/Sub or AWS EventBridge. Requires the `read_audit_events` scope.
         ///</summary>
