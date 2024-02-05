@@ -20,7 +20,7 @@ public class AssignedFulfillmentOrder_Tests : IClassFixture<AssignedFulfillmentO
     public async Task ListsCancellationRequests_AssignedFulfillmentOrders()
     {
         var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter(){AssignmentStatus = "cancellation_requested" });
-            
+
         Assert.NotNull(result);
     }
 
@@ -29,22 +29,31 @@ public class AssignedFulfillmentOrder_Tests : IClassFixture<AssignedFulfillmentO
     {
         var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_requested" });
 
-        Assert.NotNull(result);
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ListsAcceptedRequests_AssignedFulfillmentOrders()
+        {
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_accepted" });
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ListsUnsubmittedFulfillmentOrders_AssignedFulfillmentOrders()
+        {
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_unsubmitted", Limit = 1 });
+
+            Assert.NotNull(result);
+        }
     }
-    [Fact]
-    public async Task ListsAcceptedRequests_AssignedFulfillmentOrders()
+
+    public class AssignedFulfillmentOrder_Tests_Fixture : IAsyncLifetime
     {
-        var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_accepted" });
+        public AssignedFulfillmentOrderService Service { get; } = new AssignedFulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-        Assert.NotNull(result);
-    }
-}
-
-public class AssignedFulfillmentOrder_Tests_Fixture : IAsyncLifetime
-{
-    public AssignedFulfillmentOrderService Service { get; } = new AssignedFulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        
-    public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
+        public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
     public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 

@@ -3,13 +3,14 @@ using Newtonsoft.Json;
 
 namespace ShopifySharp.Filters
 {
-    public class AssignedFulfillmentOrderFilter : Parameterizable
+    public class AssignedFulfillmentOrderFilter : ListFilter<AssignedFulfillmentOrder>
     {
         /// <summary>
         /// <para>
         /// The assignment status of the fulfillment orders that should be returned:
         /// </para>
         /// <para>
+        /// <c>"fulfillment_unsubmitted"</c>: Fulfillment orders for which the merchant hasn't yet requested fulfillment. Filtering by this value is supported as of the 2023-04 API version.
         /// <c>"cancellation_requested"</c>: Fulfillment orders for which the merchant has requested cancellation of the previously accepted fulfillment request.
         /// </para>
         /// <para>
