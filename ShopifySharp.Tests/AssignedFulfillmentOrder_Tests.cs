@@ -1,7 +1,6 @@
 using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -20,8 +19,8 @@ namespace ShopifySharp.Tests
         [Fact]
         public async Task ListsCancellationRequests_AssignedFulfillmentOrders()
         {
-            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter(){AssignmentStatus = "cancellation_requested" });
-            
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "cancellation_requested" });
+
             Assert.NotNull(result);
         }
 
@@ -32,10 +31,19 @@ namespace ShopifySharp.Tests
 
             Assert.NotNull(result);
         }
+
         [Fact]
         public async Task ListsAcceptedRequests_AssignedFulfillmentOrders()
         {
             var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_accepted" });
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ListsUnsubmittedFulfillmentOrders_AssignedFulfillmentOrders()
+        {
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_unsubmitted", Limit = 1 });
 
             Assert.NotNull(result);
         }
@@ -44,7 +52,7 @@ namespace ShopifySharp.Tests
     public class AssignedFulfillmentOrder_Tests_Fixture : IAsyncLifetime
     {
         public AssignedFulfillmentOrderService Service { get; } = new AssignedFulfillmentOrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        
+
         public FulfillmentService FulfillmentService { get; } = new FulfillmentService(Utils.MyShopifyUrl, Utils.AccessToken);
 
         public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);

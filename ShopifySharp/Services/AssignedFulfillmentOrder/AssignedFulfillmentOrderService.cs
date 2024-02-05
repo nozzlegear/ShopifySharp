@@ -1,5 +1,5 @@
 ﻿using ShopifySharp.Filters;
-using System.Collections.Generic;
+using ShopifySharp.Lists;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,9 +16,14 @@ namespace ShopifySharp
         {
         }
 
-        public virtual async Task<IEnumerable<FulfillmentOrder>> ListAsync(AssignedFulfillmentOrderFilter filter, CancellationToken cancellationToken = default)
+        public virtual async Task<ListResult<AssignedFulfillmentOrder>> ListAsync(ListFilter<AssignedFulfillmentOrder> filter, CancellationToken cancellationToken = default)
         {
-            return await ExecuteGetAsync<List<FulfillmentOrder>>("assigned_fulfillment_orders.json", "fulfillment_orders", filter, cancellationToken);
+            return await ExecuteGetListAsync("assigned_fulfillment_orders.json", "fulfillment_orders", filter, cancellationToken);
+        }
+
+        public virtual async Task<ListResult<AssignedFulfillmentOrder>> ListAsync(AssignedFulfillmentOrderFilter filter = null, CancellationToken cancellationToken = default)
+        {
+            return await ListAsync(filter?.AsListFilter(), cancellationToken);
         }
     }
 }
