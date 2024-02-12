@@ -55,6 +55,7 @@ namespace ShopifySharp
         /// <returns>A JsonElement containing the data from the request.</returns>
         Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default);
 
+#if NET6_0_OR_GREATER
         /// <summary>
         /// Executes a Graph API Call.
         /// </summary>
@@ -78,5 +79,6 @@ namespace ShopifySharp
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>A <see cref="TResult"/> containing the data from the request.</returns>
         Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default) where TResult : class;
+#endif
     }
 }
