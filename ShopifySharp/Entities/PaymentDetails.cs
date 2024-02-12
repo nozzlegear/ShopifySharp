@@ -30,5 +30,17 @@ namespace ShopifySharp
 
         [JsonProperty("credit_card_expiration_year")]
         public int? CreditCardExpirationYear { get; set; }
+
+        /// <summary>
+        /// The name of the payment method used by the buyer to complete the order transaction.
+        /// </summary>
+        [JsonProperty("payment_method_name")]
+        public string PaymentMethodName { get; set; }
+
+        /// <summary>
+        /// Details for payment methods that require additional buyer action to complete the order transaction.
+        /// </summary>
+        [JsonProperty("buyer_action_info")]
+        public object BuyerActionInfo { get; set; }
     }
 }
