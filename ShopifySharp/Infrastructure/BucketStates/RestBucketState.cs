@@ -13,7 +13,7 @@ namespace ShopifySharp
 
         public static RestBucketState Get(HttpResponseHeaders responseHeaders)
         {
-            string headerValue = responseHeaders.GetValues(RESPONSE_HEADER_API_CALL_LIMIT)?.FirstOrDefault();
+            string headerValue = responseHeaders.TryGetValues(RESPONSE_HEADER_API_CALL_LIMIT, out var values) ? values?.FirstOrDefault() : null;
 
             if (headerValue == null)
                 return null;
