@@ -54,7 +54,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -76,7 +76,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -98,7 +98,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -120,7 +120,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -142,7 +142,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -164,7 +164,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -187,7 +187,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {
@@ -209,7 +209,7 @@ public class ShopifyService_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, json);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
         catch (ShopifyException e)
         {

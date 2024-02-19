@@ -51,7 +51,7 @@ public class ShopifyException_Tests
 
         try
         {
-            ShopifyService.CheckResponseExceptions(res, rawBody);
+            ShopifyService.CheckResponseExceptions(string.Empty, res, rawBody);
         }
         catch (ShopifyException e)
         {
@@ -82,21 +82,21 @@ public class ShopifyException_Tests
                     var req = client.SendAsync(msg);
                     response = await req;
                     rawBody = await response.Content.ReadAsStringAsync();
-                }
 
-                try
-                {
-                    ShopifyService.CheckResponseExceptions(response, rawBody);
-                }
-                catch (ShopifyRateLimitException)
-                {
-                    // Ignore this exception and retry the request.
-                    // RateLimitExceptions may happen when all Exception tests are running and
-                    // execution policies are retrying.
-                }
-                catch (ShopifyException e)
-                {
-                    ex = e;
+                    try
+                    {
+                        ShopifyService.CheckResponseExceptions(msg.ToString(), response, rawBody);
+                    }
+                    catch (ShopifyRateLimitException)
+                    {
+                        // Ignore this exception and retry the request.
+                        // RateLimitExceptions may happen when all Exception tests are running and
+                        // execution policies are retrying.
+                    }
+                    catch (ShopifyException e)
+                    {
+                        ex = e;
+                    }
                 }
             }
         }
@@ -124,21 +124,21 @@ public class ShopifyException_Tests
                     var req = client.SendAsync(msg);
                     response = await req;
                     rawBody = await response.Content.ReadAsStringAsync();
-                }
 
-                try
-                {
-                    ShopifyService.CheckResponseExceptions(response, rawBody);
-                }
-                catch (ShopifyRateLimitException)
-                {
-                    // Ignore this exception and retry the request.
-                    // RateLimitExceptions may happen when all Exception tests are running and
-                    // execution policies are retrying.
-                }
-                catch (ShopifyException e)
-                {
-                    ex = e;
+                    try
+                    {
+                        ShopifyService.CheckResponseExceptions(msg.ToString(), response, rawBody);
+                    }
+                    catch (ShopifyRateLimitException)
+                    {
+                        // Ignore this exception and retry the request.
+                        // RateLimitExceptions may happen when all Exception tests are running and
+                        // execution policies are retrying.
+                    }
+                    catch (ShopifyException e)
+                    {
+                        ex = e;
+                    }
                 }
             }
         }
@@ -148,7 +148,7 @@ public class ShopifyException_Tests
         Assert.Equal("(400 Bad Request) order: Required parameter missing or invalid", ex.Message);
 
         var error = ex.Errors.First();
-            
+
         Assert.Equal("order: Required parameter missing or invalid", error);
     }
 
@@ -197,26 +197,26 @@ public class ShopifyException_Tests
             while (ex == null)
             {
                 // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
-                using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new {order })))
+                using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new { order })))
                 {
                     var req = client.SendAsync(msg);
                     response = await req;
                     rawBody = await response.Content.ReadAsStringAsync();
-                }
 
-                try
-                {
-                    ShopifyService.CheckResponseExceptions(response, rawBody);
-                }
-                catch (ShopifyRateLimitException)
-                {
-                    // Ignore this exception and retry the request.
-                    // RateLimitExceptions may happen when all Exception tests are running and
-                    // execution policies are retrying.
-                }
-                catch (ShopifyException e)
-                {
-                    ex = e;
+                    try
+                    {
+                        ShopifyService.CheckResponseExceptions(msg.ToString(), response, rawBody);
+                    }
+                    catch (ShopifyRateLimitException)
+                    {
+                        // Ignore this exception and retry the request.
+                        // RateLimitExceptions may happen when all Exception tests are running and
+                        // execution policies are retrying.
+                    }
+                    catch (ShopifyException e)
+                    {
+                        ex = e;
+                    }
                 }
             }
         }
@@ -227,7 +227,7 @@ public class ShopifyException_Tests
         Assert.Equal("(422 Unprocessable Entity) order: Tax lines must be associated with either order or line item but not both", ex.Message);
 
         var error = ex.Errors.First();
-            
+
         Assert.Equal("order: Tax lines must be associated with either order or line item but not both", error);
     }
 

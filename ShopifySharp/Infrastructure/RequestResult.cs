@@ -6,6 +6,8 @@ namespace ShopifySharp
 {
     public class RequestResult<T>
     {
+        public string RequestInfo { get; }
+
         [Obsolete("This property is obsolete and will be removed in a future version of ShopifySharp. If you need to use the response headers, please use the " + nameof(ResponseHeaders) + " property instead.")]
         public HttpResponseMessage Response { get; }
 
@@ -31,12 +33,14 @@ namespace ShopifySharp
         }
 
         public RequestResult(
+            string requestInfo,
             HttpResponseMessage httpResponseMessage,
             HttpResponseHeaders httpResponseHeaders,
             T result,
             string rawResult,
             string rawLinkHeaderValue)
         {
+            RequestInfo = requestInfo;
             Response = httpResponseMessage;
             ResponseHeaders = httpResponseHeaders;
             Result = result;

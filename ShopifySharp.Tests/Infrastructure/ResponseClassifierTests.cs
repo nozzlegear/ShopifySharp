@@ -131,7 +131,7 @@ public class ResponseClassifierTest
 
     private ShopifyRateLimitException CreateRateLimitException(ShopifyRateLimitReason reason)
     {
-        return new ShopifyRateLimitException((HttpStatusCode)429,
+        return new ShopifyRateLimitException(string.Empty, (HttpStatusCode)429,
             [],
             "some-exception-message",
             "some-raw-response-body",
@@ -142,7 +142,7 @@ public class ResponseClassifierTest
 
     private ShopifyHttpException CreateHttpException(int statusCode)
     {
-        return new ShopifyHttpException((HttpStatusCode)statusCode,
+        return new ShopifyHttpException(string.Empty, (HttpStatusCode)statusCode,
             [],
             "some-exception-message",
             "some-raw-response-body",
