@@ -213,11 +213,11 @@ namespace ShopifySharp
                 #endif
 
                 //Check for and throw exception when necessary.
-                CheckResponseExceptions(response, rawResult);
+                CheckResponseExceptions(baseRequestMessage.ToString(), response, rawResult);
 
                 var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                return new RequestResult<T>(response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
+                return new RequestResult<T>(baseRequestMessage.ToString(), response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
             }, cancellationToken, graphqlQueryCost);
 
             return policyResult;
@@ -358,7 +358,7 @@ namespace ShopifySharp
         /// </summary>
         /// <param name="response">The response.</param>
         /// <param name="rawResponse">The response body returned by Shopify.</param>
-        public static void CheckResponseExceptions(HttpResponseMessage response, string rawResponse)
+        public static void CheckResponseExceptions(string requestInfo, HttpResponseMessage response, string rawResponse)
         {
             // TODO: make this method protected virtual so inheriting members can override it (e.g. the PartnerService which is doing its own custom error checking right now)
 
@@ -406,7 +406,7 @@ namespace ShopifySharp
                     retryAfterSeconds = retryValue;
                 }
 
-                throw new ShopifyRateLimitException(code, errors.ToList(), rateExceptionMessage, rawResponse, requestId, reason, retryAfterSeconds);
+                throw new ShopifyRateLimitException(requestInfo, code, errors.ToList(), rateExceptionMessage, rawResponse, requestId, reason, retryAfterSeconds);
             }
 
             var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault();
@@ -446,7 +446,7 @@ namespace ShopifySharp
                     errors = [];
                 }
 
-                throw new ShopifyHttpException(code, errors.ToList(), exceptionMessage, rawResponse, requestId);
+                throw new ShopifyHttpException(requestInfo, code, errors.ToList(), exceptionMessage, rawResponse, requestId);
             }
 
             var message = $"({statusMessage}) Shopify returned {statusMessage}, but there was no JSON to parse into an error message.";
@@ -455,7 +455,7 @@ namespace ShopifySharp
                 message
             };
 
-            throw new ShopifyHttpException(code, customErrors, message, rawResponse, requestId);
+            throw new ShopifyHttpException(requestInfo, code, customErrors, message, rawResponse, requestId);
         }
 
         /// <summary>
