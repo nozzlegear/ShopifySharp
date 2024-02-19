@@ -9,7 +9,7 @@ namespace ShopifySharp
         private class Request
         {
             public int cost;
-            public SemaphoreSlim semaphore = new SemaphoreSlim(0, 1);
+            public FifoSemaphore fifoSemaphore = new FifoSemaphore(0, 1);
             public CancellationToken cancelToken;
 
             public Request(int cost, CancellationToken cancelToken)
@@ -109,7 +109,7 @@ namespace ShopifySharp
                 if (_waitingRequests.Count == 1)
                     ScheduleTryGrantNextPendingRequest(r);
             }
-            await r.semaphore.WaitAsync(cancellationToken);
+            await r.fifoSemaphore.WaitAsync(cancellationToken);
         }
 
         private void ScheduleTryGrantNextPendingRequest(Request r)
@@ -132,7 +132,7 @@ namespace ShopifySharp
                     var r = _waitingRequests.Dequeue();
                     if (!r.cancelToken.IsCancellationRequested)
                     {
-                        r.semaphore.Release();
+                        r.fifoSemaphore.Release();
                         ConsumeAvailable(r);
                     }
                 }
