@@ -73,11 +73,11 @@ namespace ShopifySharp
 		public virtual async Task<ListResult<ShopifyPaymentsTransaction>> ListTransactionsAsync(ShopifyPaymentsTransactionListFilter filter = null, CancellationToken cancellationToken = default) =>
 			await ListTransactionsAsync(filter?.AsListFilter(), cancellationToken);
 		
-		/// <inheritdoc />
+		/// <inheritdoc /> //
 		public async Task<ShopifyPaymentsDisputeEvidence> GetDisputeEvidenceAsync(long disputeId, CancellationToken cancellationToken = default) =>
 			await ExecuteGetAsync<ShopifyPaymentsDisputeEvidence>($"shopify_payments/disputes/{disputeId}/dispute_evidences.json", "dispute_evidence", cancellationToken: cancellationToken);
 		
-		/// <inheritdoc />
+		/// <inheritdoc /> //
 		public async Task<ShopifyPaymentsDisputeEvidence> UpdateDisputeEvidenceAsync(long disputeId, ShopifyPaymentsDisputeEvidenceUpdate updateRequest, CancellationToken cancellationToken = default) =>
 			await ExecutePutAsync<ShopifyPaymentsDisputeEvidence>($"shopify_payments/disputes/{disputeId}/dispute_evidences.json", "dispute_evidence", cancellationToken: cancellationToken, updateRequest);
 	}
