@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp
 {
-	public class ShopifyPaymentsDisputeEvidenceAddress : ShopifyObject
+	public class ShopifyPaymentsDisputeEvidenceAddress
 	{
 		/// <summary>
 		/// The street address of the shipping / billing location.
