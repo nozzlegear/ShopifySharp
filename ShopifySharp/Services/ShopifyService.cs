@@ -18,7 +18,9 @@ namespace ShopifySharp
 {
     public abstract class ShopifyService : IShopifyService
     {
-        #nullable enable
+        public const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
+
+#nullable enable
 
         public virtual string APIVersion => "2024-01";
         public virtual bool SupportsAPIVersioning => true;
@@ -159,7 +161,7 @@ namespace ShopifySharp
 
             if (!string.IsNullOrEmpty(_AccessToken))
             {
-                msg.Headers.Add("X-Shopify-Access-Token", _AccessToken);
+                msg.Headers.Add(REQUEST_HEADER_ACCESS_TOKEN, _AccessToken);
             }
 
             msg.Headers.Add("Accept", "application/json");
@@ -213,11 +215,11 @@ namespace ShopifySharp
                 #endif
 
                 //Check for and throw exception when necessary.
-                CheckResponseExceptions(baseRequestMessage.ToString(), response, rawResult);
+                CheckResponseExceptions(baseRequestMessage.GetRequestInfo(), response, rawResult);
 
                 var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                return new RequestResult<T>(baseRequestMessage.ToString(), response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
+                return new RequestResult<T>(baseRequestMessage.GetRequestInfo(), response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
             }, cancellationToken, graphqlQueryCost);
 
             return policyResult;
