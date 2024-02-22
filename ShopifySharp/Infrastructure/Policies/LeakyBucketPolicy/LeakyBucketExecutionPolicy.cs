@@ -17,8 +17,6 @@ namespace ShopifySharp
     /// </summary>
     public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
     {
-        private const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
-
         private static ConcurrentDictionary<string, MultiShopifyAPIBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, MultiShopifyAPIBucket>();
 
         private readonly Func<RequestContext> _getRequestContext;
@@ -269,7 +267,7 @@ namespace ShopifySharp
 
         private string GetAccessToken(HttpRequestMessage client)
         {
-            return client.Headers.TryGetValues(REQUEST_HEADER_ACCESS_TOKEN, out var values) ?
+            return client.Headers.TryGetValues(ShopifyService.REQUEST_HEADER_ACCESS_TOKEN, out var values) ?
                 values.FirstOrDefault() :
                 null;
         }

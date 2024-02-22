@@ -30,7 +30,7 @@ public class ShopifyException_Tests
             Content = content
         };
 
-        msg.Headers.Add("X-Shopify-Access-Token", Utils.AccessToken);
+        msg.Headers.Add(ShopifyService.REQUEST_HEADER_ACCESS_TOKEN, Utils.AccessToken);
 
         return msg;
     }
@@ -85,7 +85,7 @@ public class ShopifyException_Tests
 
                     try
                     {
-                        ShopifyService.CheckResponseExceptions(msg.ToString(), response, rawBody);
+                        ShopifyService.CheckResponseExceptions(string.Empty, response, rawBody);
                     }
                     catch (ShopifyRateLimitException)
                     {
@@ -127,7 +127,7 @@ public class ShopifyException_Tests
 
                     try
                     {
-                        ShopifyService.CheckResponseExceptions(msg.ToString(), response, rawBody);
+                        ShopifyService.CheckResponseExceptions(string.Empty, response, rawBody);
                     }
                     catch (ShopifyRateLimitException)
                     {
@@ -205,7 +205,7 @@ public class ShopifyException_Tests
 
                     try
                     {
-                        ShopifyService.CheckResponseExceptions(msg.ToString(), response, rawBody);
+                        ShopifyService.CheckResponseExceptions(string.Empty, response, rawBody);
                     }
                     catch (ShopifyRateLimitException)
                     {

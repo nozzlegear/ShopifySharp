@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -66,7 +66,7 @@ namespace ShopifySharp.Infrastructure
             var rs = new ReadOnlyMemory<byte>(await originalStreamContent.ReadAsByteArrayAsync());
             clonedContent = new ReadOnlyMemoryContent(rs);
 #else
-            var ms = new MemoryStream();
+            var ms = new System.IO.MemoryStream();
             await originalStreamContent.CopyToAsync(ms);
             ms.Position = 0;
             clonedContent = new StreamContent(ms);
@@ -78,6 +78,21 @@ namespace ShopifySharp.Infrastructure
             }
 
             return clonedContent;
+        }
+
+        public string GetRequestInfo()
+        {
+            var headers = this.Headers.Where(kv => kv.Value != null && kv.Key != ShopifyService.REQUEST_HEADER_ACCESS_TOKEN)
+                                      .Select(kv => $"\t{kv.Key}: {string.Join(", ", kv.Value)}");
+            return $"""
+                        Method: {this.Method}
+                        RequestUri: {this.RequestUri}
+                        Content: {this.Content?.GetType().Name}
+                        Headers:
+                        [
+                        {string.Join(Environment.NewLine, headers)}
+                        ]
+                        """;
         }
     }
 }
