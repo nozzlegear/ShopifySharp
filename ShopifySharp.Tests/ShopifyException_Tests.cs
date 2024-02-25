@@ -152,7 +152,7 @@ public class ShopifyException_Tests
         Assert.Equal("order: Required parameter missing or invalid", error);
     }
 
-    [Fact]
+    [Fact(Skip = "This doesn't seem to generate an error anymore")]
     public async Task Throws_On_Error_Arrays()
     {
         //Creating an order with tax lines on both line items and the order will return an error
@@ -206,6 +206,7 @@ public class ShopifyException_Tests
                     try
                     {
                         ShopifyService.CheckResponseExceptions(string.Empty, response, rawBody);
+                        Assert.True(false, "Expected an error");
                     }
                     catch (ShopifyRateLimitException)
                     {
