@@ -64,6 +64,6 @@ namespace ShopifySharp
         public ShopifyPaymentsDisputeEvidenceAddress BillingAddress { get; set; }
 
         [JsonProperty("fulfillments")]
-        public ShopifyPaymentsDisputeEvidenceFulfillment[] Fulfillments { get; set; }
+        public IEnumerable<ShopifyPaymentsDisputeEvidenceFulfillment> Fulfillments { get; set; }
     }
 }
