@@ -80,18 +80,25 @@ namespace ShopifySharp.Infrastructure
             return clonedContent;
         }
 
-        public string GetRequestInfo()
+        public async Task<string> GetRequestInfo()
         {
             var headers = this.Headers.Where(kv => kv.Value != null && kv.Key != ShopifyService.REQUEST_HEADER_ACCESS_TOKEN)
                                       .Select(kv => $"\t{kv.Key}: {string.Join(", ", kv.Value)}");
+            var contents = this.Content switch
+            {
+                StringContent strContent => await strContent.ReadAsStringAsync(),
+                null => "(none)",
+                _ => this.Content.GetType().Name
+            };
+
             return $"""
                         Method: {this.Method}
                         RequestUri: {this.RequestUri}
-                        Content: {this.Content?.GetType().Name}
                         Headers:
                         [
                         {string.Join(Environment.NewLine, headers)}
                         ]
+                        Content: {contents}
                         """;
         }
     }
