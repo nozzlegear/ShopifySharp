@@ -215,11 +215,11 @@ namespace ShopifySharp
                 #endif
 
                 //Check for and throw exception when necessary.
-                CheckResponseExceptions(baseRequestMessage.GetRequestInfo(), response, rawResult);
+                CheckResponseExceptions(await baseRequestMessage.GetRequestInfo(), response, rawResult);
 
                 var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
 
-                return new RequestResult<T>(baseRequestMessage.GetRequestInfo(), response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
+                return new RequestResult<T>(await baseRequestMessage.GetRequestInfo(), response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
             }, cancellationToken, graphqlQueryCost);
 
             return policyResult;
