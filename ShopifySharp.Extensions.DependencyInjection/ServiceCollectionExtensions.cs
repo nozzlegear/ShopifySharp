@@ -46,7 +46,7 @@ public static class ServiceCollectionExtensions
         
         if(options.OauthUtility != null)
         {
-            services.Add(new ServiceDescriptor(typeof(IShopifyOauthUtility), options.OauthUtility, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IShopifyOauthUtility), f => options.OauthUtility, lifetime));
         }
         else
         {
@@ -55,7 +55,7 @@ public static class ServiceCollectionExtensions
 
         if(options.DomainUtility != null)
         {
-            services.Add(new ServiceDescriptor(typeof(IShopifyDomainUtility), options.DomainUtility, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IShopifyDomainUtility), f => options.DomainUtility, lifetime));
         }
         else
         {
@@ -64,7 +64,7 @@ public static class ServiceCollectionExtensions
 
         if(options.RequestValidationUtility != null)
         {
-            services.Add(new ServiceDescriptor(typeof(IShopifyRequestValidationUtility), options.RequestValidationUtility, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IShopifyRequestValidationUtility), f => options.RequestValidationUtility, lifetime));
         }
         else
         {
