@@ -37,7 +37,7 @@ public static class ServiceCollectionExtensions
     /// <item><see cref="IShopifyRequestValidationUtility"/></item>
     /// </list>
     /// <param name="configure">An optional configuration action for configuring the utilities.</param>
-    /// <param name="lifetime">The lifetime of <see cref="IRequestExecutionPolicy"/>.</param>
+    /// <param name="lifetime">The lifetime of the ShopifySharp's utilities.</param>
     /// </summary>
     public static IServiceCollection AddShopifySharpUtilities(this IServiceCollection services, Action<ShopifySharpUtilityOptions>? configure = null, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
@@ -76,9 +76,9 @@ public static class ServiceCollectionExtensions
 
     /// <summary>
     /// Adds ShopifySharp's service factories to your Dependency Injection container. If you've added an <see cref="IRequestExecutionPolicy"/>,
-    /// the service factories will use it when creating ShopifySharp services.
-    /// <param name="lifetime">The lifetime of <see cref="IRequestExecutionPolicy"/>.</param>
+    /// the service factories will use it when creating ShopifySharp services.    
     /// </summary>
+    /// <param name="lifetime">The lifetime of ShopifySharp's service factories.</param>
     public static IServiceCollection AddShopifySharpServiceFactories(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         var assembly = Assembly.GetAssembly(typeof(IServiceFactory<>));
@@ -116,7 +116,7 @@ public static class ServiceCollectionExtensions
     /// </list>
     /// </summary>
     /// <param name="services"></param>
-    /// <param name="lifetime">The lifetime of <see cref="IRequestExecutionPolicy"/>.</param>
+    /// <param name="lifetime">The lifetime of all ShopifySharp's Dependency Injection services</param>
     /// <typeparam name="T"></typeparam>
     public static IServiceCollection AddShopifySharp<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
         where T : class, IRequestExecutionPolicy
