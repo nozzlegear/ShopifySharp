@@ -222,3 +222,6 @@ ModelManifest.xml
  
 # Ignore signing keys
 *.snk
+
+# Ignore nvim mergetool files
+*.orig
