@@ -173,7 +173,7 @@ public class ServiceCollectionExtensionTests
     }
 
     [Fact]
-    public void AddShopifySharp_AddsRequestExecutionPolicy_ThenAddsServiceFactories()
+    public void AddShopifySharp_AddsRequestExecutionPolicy_AddsUtilities_ThenAddsServiceFactories()
     {
         // Setup
         var container = new ServiceCollection();
@@ -195,5 +195,45 @@ public class ServiceCollectionExtensionTests
             .NotBeNull()
             .And
             .BeOfType<OrderServiceFactory>();
+    }
+
+    [Theory]
+    [InlineData(ServiceLifetime.Scoped)]
+    [InlineData(ServiceLifetime.Singleton)]
+    [InlineData(ServiceLifetime.Transient)]
+    public void AddShopifySharp_AddsRequestExecutionPolicy_AddsUtilities_ThenAddsServiceFactories_WithServiceLifetime(ServiceLifetime serviceLifetime)
+    {
+        // Setup
+        var container = new ServiceCollection();
+
+        // Act
+        container.AddShopifySharp<TestRequestExecutionPolicy>(serviceLifetime);
+
+        // Assert
+        var serviceProvider = container.BuildServiceProvider();
+        var domainUtility = serviceProvider.GetServiceInstances<IShopifyDomainUtility>();
+        var policy = serviceProvider.GetServiceInstances<IRequestExecutionPolicy>();
+        var orderServiceFactory = serviceProvider.GetServiceInstances<IOrderServiceFactory>();
+
+        domainUtility.Instance1.Should()
+           .NotBeNull()
+           .And
+           .ValidLifetimeInstance(domainUtility.Instance2
+           .Should()
+           .NotBeNull(), serviceLifetime);
+
+        policy.Instance1.Should()
+            .NotBeNull()
+            .And
+            .ValidLifetimeInstance(policy.Instance2
+            .Should()
+            .NotBeNull(), serviceLifetime);
+
+        orderServiceFactory.Instance1.Should()
+            .NotBeNull()
+            .And
+            .ValidLifetimeInstance(orderServiceFactory.Instance2
+            .Should()
+            .NotBeNull(), serviceLifetime);
     }
 }
