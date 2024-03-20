@@ -32,3 +32,14 @@ public class TestDomainUtility : IShopifyDomainUtility
         throw new TestException();
     }
 }
+
+public class TestServiceLifetime<T> where T : class
+{
+    public readonly T? Instance1, Instance2;
+
+    public TestServiceLifetime(T? instance1, T? instance2)
+    {
+        Instance1 = instance1;
+        Instance2 = instance2;
+    }
+}
