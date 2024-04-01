@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using ShopifySharp.Converters;
 
 namespace ShopifySharp;
 
@@ -34,6 +36,12 @@ public class CheckoutLineItem
     /// </summary>
     [JsonProperty("grams")]
     public long? Grams { get; set; }
+
+    /// <summary>
+    /// The line price of the item, based on price multiplied by quantity.
+    /// </summary>
+    [JsonProperty("line_price")]
+    public decimal? LinePrice { get; set; }
 
     /// <summary>
     /// The price of the item before discounts have been applied.
@@ -148,6 +156,12 @@ public class CheckoutLineItem
     /// </summary>
     [JsonProperty("total_discount_set")]
     public PriceSet TotalDiscountSet { get; set; }
+
+    /// <summary>
+    /// A list of the discounts applied to the line item.
+    /// </summary>
+    [JsonProperty("applied_discounts")]
+    public ICollection<CheckoutLineItemAppliedDiscount> AppliedDiscounts { get; set; }
 
     /// <summary>
     /// An ordered list of amounts allocated by discount applications. Each discount allocation is associated to a particular discount application.
