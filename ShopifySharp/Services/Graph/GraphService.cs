@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
@@ -139,6 +139,7 @@ public class GraphService : ShopifyService, IGraphService
     /// <param name="req">The RequestUri.</param>
     /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
     /// <param name="graphqlQueryCost">An estimation of the cost of this query.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>A JToken containing the data from the request.</returns>
     protected virtual async Task<T> SendAsync<T>(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
     {
@@ -177,4 +178,3 @@ public class GraphService : ShopifyService, IGraphService
         }
     }
 }
-
