@@ -59,6 +59,7 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
+        // TODO: add a test for this method to ensure it still works until removed
         var response = await SendAsync<JToken>(new GraphRequest
         {
             Query = body.SelectToken("query").Value<string>(),
@@ -161,20 +162,26 @@ public class GraphService : ShopifyService, IGraphService
         });
         var requestUri = BuildRequestUri("graphql.json");
         var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+        // TODO: implement an `ExecuteGraphRequestAsync<T>` that returns a `ParsedGraphResult<T>`, or maybe an `ExecuteRequestAsync` that just returns the raw body string (plus headers and other stuff in RequestResult<T>, without the <T>)
         var response = await ExecuteRequestCoreAsync<T>(requestUri, HttpMethod.Post, cancellationToken, requestContent, null, null, graphRequest.EstimatedQueryCost, DateParseHandling.None);
 
+        // TODO: allow developer to configure whether an exception is thrown if errors are detected in the graph response?
+        // It may sometimes be preferable to have the request return without throwing, and just inspect the `userErrors` object
         CheckForErrors(response);
 
         return response.Result;
     }
 
     /// <summary>
-    /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors. This loses the requestId, but otherwise is capable of passing along the message.
+    /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
+    /// This loses the requestId, but otherwise is capable of passing along the message.
     /// </summary>
     /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
     /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
     protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
     {
+        // TODO: we're parsing json twice here – once when parsing for errors, and once when parsing the actual data result for the caller
+        // To fix, we should just deserialize once into some kind of object like { data?: T, errors?: UserErrors, extensions?: Extensions }
         var parsedData = _graphSerializer.DeserializeFromJson<ParsedGraphResponse<T>>(requestResult.RawResult);
 
         if (parsedData?.UserErrors is null)
