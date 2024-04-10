@@ -8,7 +8,7 @@ using ShopifySharp.Graph;
 namespace ShopifySharp;
 
 [Serializable]
-public class ParsedGraphResponse<T>
+public class ParsedGraphResult<T>
 {
     [JsonProperty("data"), JsonPropertyName("data")]
     public T? Data { get; set; }
