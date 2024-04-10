@@ -37,6 +37,16 @@ public class RequestResult<T>
         StatusCode = statusCode;
     }
 
+    public RequestResult<T2> Transform<T2>(T2 content)
+    {
+        return new RequestResult<T2>(RequestInfo,
+            ResponseHeaders,
+            content,
+            RawResult,
+            RawLinkHeaderValue,
+            StatusCode);
+    }
+
     public RestBucketState? GetRestBucketState()
     {
         return RestBucketState.Get(ResponseHeaders);
