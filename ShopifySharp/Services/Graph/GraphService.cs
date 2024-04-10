@@ -85,7 +85,7 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JsonDocument>(new GraphRequest 
+        var response = await SendAsync<JsonDocument>(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
@@ -98,7 +98,7 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JsonDocument>(new GraphRequest 
+        var response = await SendAsync<JsonDocument>(new GraphRequest
         {
             Query = request.Query,
             Variables = request.Variables,
@@ -113,7 +113,7 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        return await SendAsync<TResult>(new GraphRequest 
+        return await SendAsync<TResult>(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
@@ -158,13 +158,11 @@ public class GraphService : ShopifyService, IGraphService
 #endif
 
     /// <summary>
-    /// Content agnostic way to send the request, regardless of Json or GraphQL.
+    /// Sends a GraphQL request with variables to Shopify's GraphQL API.
     /// </summary>
-    /// <param name="req">The RequestUri.</param>
-    /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
-    /// <param name="graphqlQueryCost">An estimation of the cost of this query.</param>
+    /// <param name="graphRequest"></param>
     /// <param name="cancellationToken"></param>
-    protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
     {
         var json = _graphSerializer.SerializeToJson(new Dictionary<string, object>
         {
@@ -176,16 +174,41 @@ public class GraphService : ShopifyService, IGraphService
         var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
         var parsedGraphData = _graphSerializer.DeserializeFromJson<ParsedGraphResult<T>>(result.RawResult);
 
-        // TODO: allow developer to configure whether an exception is thrown if errors are detected in the graph response?
-        // It may sometimes be preferable to have the request return without throwing, and just inspect the `userErrors` object
-        CheckForErrors(result);
+        if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            ThrowIfResponseContainsErrors(parsedGraphData, result);
+        }
 
-        return parsedGraphData.Data;
+        return _graphSerializer.DeserializeFromJson<T>(result.RawResult);
     }
 
     /// <summary>
     /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
-    /// This loses the requestId, but otherwise is capable of passing along the message.
+    /// </summary>
+    /// <exception cref="ShopifyHttpException">Thrown if <paramref name="parsedGraphResult"/> contains any <c>userErrors</c> entries.</exception>
+    private static void ThrowIfResponseContainsErrors<T>(ParsedGraphResult<T> parsedGraphResult, RequestResult<string> requestResult)
+    {
+        if (parsedGraphResult?.UserErrors is null)
+            return;
+
+        var errorList = new List<string>();
+
+        foreach (var error in parsedGraphResult.UserErrors)
+        {
+            if (error.Message is not null)
+            {
+                errorList.Add(error.Message);
+            }
+        }
+
+        var message = errorList.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
+        var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
+
+        throw new ShopifyHttpException(requestResult.RequestInfo, HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
+    }
+
+    /// <summary>
+    /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
     /// </summary>
     /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
     /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
