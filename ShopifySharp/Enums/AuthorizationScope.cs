@@ -194,6 +194,12 @@ namespace ShopifySharp.Enums
         ReadGates,
 
         [EnumMember(Value = "write_gates")]
-        WriteGates
+        WriteGates,
+
+        [EnumMember(Value = "read_returns")]
+        ReadReturns,
+
+        [EnumMember(Value = "write_returns")]
+        WriteReturns        
     }
 }
