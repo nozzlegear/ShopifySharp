@@ -142,7 +142,7 @@ public class ResponseClassifierTest
 
     private ShopifyHttpException CreateHttpException(int statusCode)
     {
-        return new ShopifyHttpException(string.Empty, (HttpStatusCode)statusCode,
+        return new ShopifyHttpException((HttpStatusCode)statusCode,
             [],
             "some-exception-message",
             "some-raw-response-body",
