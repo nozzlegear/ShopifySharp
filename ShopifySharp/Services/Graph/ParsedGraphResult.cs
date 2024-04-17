@@ -15,4 +15,6 @@ public class ParsedGraphResult<T>
 
     [JsonProperty("userErrors"), JsonPropertyName("userErrors")]
     public ICollection<GraphUserError>? UserErrors { get; set; }
+
+    public GraphExtensions? Extensions { get; set; }
 }
