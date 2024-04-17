@@ -9,8 +9,8 @@ public class ShopifyHttpException(
     ICollection<string> errors,
     string message,
     string rawResponseBody,
-    string? requestId
-) : ShopifyException(statusCode, errors, message, rawResponseBody, requestId)
+    string? requestId)
+    : ShopifyException(statusCode, errors, message, rawResponseBody, requestId)
 {
     /// The Http response status code.
     public new readonly HttpStatusCode HttpStatusCode = statusCode;
@@ -25,5 +25,17 @@ public class ShopifyHttpException(
     public new readonly string? RequestId = requestId;
 
     /// Extra details about the request, for logging purposes.
-    public readonly string? RequestInfo = requestInfo;
+    public readonly string? RequestInfo;
+
+    public ShopifyHttpException(
+        string requestInfo,
+        HttpStatusCode statusCode,
+        ICollection<string> errors,
+        string message,
+        string rawResponseBody,
+        string? requestId)
+        : this(statusCode, errors, message, rawResponseBody, requestId)
+    {
+        RequestInfo = requestInfo;
+    }
 }
