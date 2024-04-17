@@ -5,7 +5,6 @@ using System.Net;
 namespace ShopifySharp.Infrastructure;
 
 public class ShopifyHttpException(
-    string requestInfo,
     HttpStatusCode statusCode,
     ICollection<string> errors,
     string message,
@@ -25,5 +24,6 @@ public class ShopifyHttpException(
     /// The X-Request-Id header returned by Shopify. This can be used when working with the Shopify support team to identify the failed request.
     public new readonly string? RequestId = requestId;
 
-    public readonly string RequestInfo = requestInfo;
+    /// Extra details about the request, for logging purposes.
+    public readonly string? RequestInfo = requestInfo;
 }
