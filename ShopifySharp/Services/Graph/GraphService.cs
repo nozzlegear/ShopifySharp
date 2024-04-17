@@ -160,7 +160,7 @@ public class GraphService : ShopifyService, IGraphService
 #endif
 
     /// <summary>
-    /// Sends a GraphQL request with variables to Shopify's GraphQL API.
+    /// Sends a Graph request with variables to Shopify's Graph API.
     /// </summary>
     /// <param name="graphRequest"></param>
     /// <param name="cancellationToken"></param>
