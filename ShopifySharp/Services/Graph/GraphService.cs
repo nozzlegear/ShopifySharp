@@ -179,6 +179,26 @@ public class GraphService : ShopifyService, IGraphService
         return _graphSerializer.DeserializeFromJson<T>(result.RawResult);
     }
 
+    private bool TryParseUserErrors(JsonDocument jsonDocument, out ICollection<UserError> userErrors)
+    {
+        userErrors = [];
+
+        if (!jsonDocument.RootElement.TryGetProperty("root.userErrors", out var userErrorsEl))
+            return false;
+
+        if (userErrorsEl.ValueKind != JsonValueKind.Array)
+            return false;
+
+        if (userErrorsEl.GetArrayLength() == 0)
+            return false;
+
+        userErrors = userErrorsEl
+            .Deserialize<ICollection<UserError>>()
+            .ToList();
+
+        return true;
+    }
+
     /// <summary>
     /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
     /// </summary>
