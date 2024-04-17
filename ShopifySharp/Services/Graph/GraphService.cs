@@ -220,6 +220,7 @@ public class GraphService : ShopifyService, IGraphService
     /// </summary>
     /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
     /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
+    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp.")]
     protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
     {
         var jsonDocument = JsonDocument.Parse(requestResult.RawResult);
