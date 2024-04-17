@@ -4,6 +4,5 @@ namespace ShopifySharp.Graph;
 
 public class GraphExtensions
 {
-    // TODO: add extensions properties
+    public required GraphRequestCostExtension Cost { get; set; }
 }
-
