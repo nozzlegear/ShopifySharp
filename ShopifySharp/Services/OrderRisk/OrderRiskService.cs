@@ -5,12 +5,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Utilities;
+using System;
 
 namespace ShopifySharp
 {
     /// <summary>
     /// A service for manipulating Shopify order risks.
     /// </summary>
+    [Obsolete("https://shopify.dev/docs/api/release-notes/2024-04#AccordionItem85")]
     public class OrderRiskService : ShopifyService, IOrderRiskService
     {
         /// <summary>

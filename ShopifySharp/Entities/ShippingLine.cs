@@ -18,6 +18,12 @@ namespace ShopifySharp
         public string Code { get; set; }
 
         /// <summary>
+        /// Whether the shipping line has been removed from the order.
+        /// </summary>
+        [JsonProperty("is_removed")]
+        public bool? IsRemoved { get; set; }
+
+        /// <summary>
         /// The phone number used for the shipment.
         /// </summary>
         [JsonProperty("phone")]

@@ -6,12 +6,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Utilities;
+using System;
 
 namespace ShopifySharp
 {
     /// <summary>
     /// A service for working with abandoned checkouts.
     /// </summary>
+    [Obsolete("https://shopify.dev/changelog/deprecation-of-checkout-apis")]
     public class CheckoutService : ShopifyService, ICheckoutService
     {
         /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
