@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 
 namespace ShopifySharp
 {
@@ -91,6 +92,7 @@ namespace ShopifySharp
         /// Whether the fulfillment service wants to register for APIs related to fulfillment orders.
         /// </summary>
         [JsonProperty("fulfillment_orders_opt_in")]
+        [Obsolete("https://shopify.dev/changelog/deprecation-of-the-fulfillmentservice-fulfillmentordersoptin-field")]
         public bool? FulfillmentOrdersOptIn { get; set; }
     }
 }

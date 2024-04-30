@@ -28,7 +28,8 @@ namespace ShopifySharp.Tests
                 { "JSON", "string" },
                 { "FormattedString", "string" },
                 { "ARN", "string" },
-                { "StorefrontID", "string" }
+                { "StorefrontID", "string" },
+                { "Color", "string" },
             };
             string csharpCode = await new GraphQLTypeGenerator().GenerateTypesAsync("ShopifySharp.GraphQL", scalarNameToTypeName, async query =>
             {

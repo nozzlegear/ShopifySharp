@@ -22,7 +22,7 @@ namespace ShopifySharp
 
 #nullable enable
 
-        public virtual string APIVersion => "2024-01";
+        public virtual string APIVersion => "2024-04";
         public virtual bool SupportsAPIVersioning => true;
 
         protected Uri _ShopUri { get; set; }
