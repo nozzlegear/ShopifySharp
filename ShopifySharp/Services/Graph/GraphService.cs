@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using ShopifySharp.Infrastructure;
+﻿using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -11,134 +9,223 @@ using System.Threading;
 using System;
 using System.Text.Json;
 using ShopifySharp.Utilities;
+using Newtonsoft.Json.Linq;
+using ShopifySharp.GraphQL;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+/// <summary>
+/// A service for using or manipulating Shopify's Graph API.
+/// </summary>
+public class GraphService : ShopifyService, IGraphService
 {
-    /// <summary>
-    /// A service for using or manipulating Shopify's Graph API.
-    /// </summary>
-    public class GraphService : ShopifyService, IGraphService
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly string _apiVersion;
+
+    public override string APIVersion => _apiVersion ?? base.APIVersion;
+
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        string apiVersion = null,
+        JsonSerializerOptions jsonSerializerOptions = null
+    ) : base(myShopifyUrl, shopAccessToken)
     {
-        private readonly string _apiVersion;
+        _apiVersion = apiVersion;
+        _jsonSerializerOptions = jsonSerializerOptions;
+    }
 
-        public override string APIVersion => _apiVersion ?? base.APIVersion;
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        IShopifyDomainUtility shopifyDomainUtility,
+        JsonSerializerOptions jsonSerializerOptions = null
+    ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+    {
+        _jsonSerializerOptions = jsonSerializerOptions;
+    }
 
-        /// <summary>
-        /// Creates a new instance of <see cref="GraphService" />.
-        /// </summary>
-        /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-        /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public GraphService(string myShopifyUrl, string shopAccessToken, string apiVersion = null) : base(myShopifyUrl, shopAccessToken) 
+    public virtual async Task<T> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    {
+        var response = await SendAsync<JsonDocument>(graphRequest, cancellationToken);
+        // TODO: return a GraphResult<T>
+        return response.RootElement.GetProperty("data").Deserialize<T>(_jsonSerializerOptions);
+    }
+
+    public virtual async Task<JsonDocument> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<JsonDocument>(graphRequest, cancellationToken);
+    }
+
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
+    public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    {
+        // TODO: add a test for this method to ensure it still works until removed
+        var response = await SendAsync<JToken>(new GraphRequest
         {
-            _apiVersion = apiVersion;
-        }
+            Query = body.SelectToken("query").Value<string>(),
+            Variables = body.SelectToken("variables").Value<Dictionary<string, object>>(),
+            EstimatedQueryCost = graphqlQueryCost
+        }, cancellationToken);
 
-        public GraphService(string myShopifyUrl, string shopAccessToken, IShopifyDomainUtility shopifyDomainUtility) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+        return response.SelectToken("data");
+    }
+
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
+    public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    {
+        var response = await SendAsync<JToken>(new GraphRequest
         {
+            Query = graphqlQuery,
+            Variables = null,
+            EstimatedQueryCost = graphqlQueryCost
+        }, cancellationToken);
 
-        }
+        return response.SelectToken("data");
+    }
 
-        public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
+    public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    {
+        var response = await SendAsync<JsonDocument>(new GraphRequest
         {
-            var res = await PostAsync<JToken>(body.ToString(Formatting.None), "application/json", graphqlQueryCost, cancellationToken);
-            return res["data"];
-        }
+            Query = graphqlQuery,
+            Variables = null,
+            EstimatedQueryCost = graphqlQueryCost,
+        }, cancellationToken);
 
-        public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-        {
-            var res = await PostAsync<JToken>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
-            return res["data"];
-        }
+        return response.RootElement.GetProperty("data");
+    }
 
-        public virtual Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
+    public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    {
+        var response = await SendAsync<JsonDocument>(new GraphRequest
         {
-            return SendAsync(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
-        }
+            Query = request.Query,
+            Variables = request.Variables,
+            EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
+        }, cancellationToken);
 
-        public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-        {
-            var body = System.Text.Json.JsonSerializer.Serialize(request);
-            var res = await PostAsync<JsonDocument>(body, "application/json", graphqlQueryCost, cancellationToken);
-            return res.RootElement.GetProperty("data");
-        }
+        return response.RootElement.GetProperty("data");
+    }
 
 #if NET6_0_OR_GREATER
-        public virtual Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-            where TResult : class
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
+    public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        where TResult : class
+    {
+        return await SendAsync<TResult>(new GraphRequest
         {
-            return SendAsync<TResult>(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
-        }
+            Query = graphqlQuery,
+            Variables = null,
+            EstimatedQueryCost = graphqlQueryCost,
+        }, cancellationToken);
+    }
 
-        /// <summary>
-        /// Issue a single value query and return the value as an strongly typed object.
-        /// Use a type from the ShopifySharp.GraphQL namespace
-        /// </summary>
-        /// <typeparam name="TResult">Use a type from the ShopifySharp.GraphQL namespace</typeparam>
-        /// <param name="request"></param>
-        /// <param name="graphqlQueryCost"></param>
-        /// <param name="cancellationToken"></param>
-        public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-            where TResult : class
+    /// <summary>
+    /// Issue a single value query and return the value as an strongly typed object.
+    /// Use a type from the ShopifySharp.GraphQL namespace
+    /// </summary>
+    /// <typeparam name="TResult">Use a type from the ShopifySharp.GraphQL namespace</typeparam>
+    /// <param name="request"></param>
+    /// <param name="graphqlQueryCost"></param>
+    /// <param name="cancellationToken"></param>
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
+    public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+        where TResult : class
+    {
+        // TODO: add a test for this line that's now been replaced. Are we losing any significant functionality by dropping the `.Single()`? Would this have failed for e.g. mutations that return both `userErrors` and `actualObject`?
+        // var ptyElt = elt.EnumerateObject().Single().Value;
+
+        return await SendAsync<TResult>(new GraphRequest
         {
-            var elt = await this.SendAsync(request, graphqlQueryCost, cancellationToken);
-            var ptyElt = elt.EnumerateObject().Single().Value;
-            return GraphQL.Serializer.Deserialize<TResult>(ptyElt.GetRawText());
-        }
+            Query = request.Query,
+            Variables = request.Variables,
+            EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
+        }, cancellationToken);
+    }
 #endif
 
-        private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken)
+    /// <summary>
+    /// Sends a Graph request with variables to Shopify's Graph API.
+    /// </summary>
+    /// <param name="graphRequest"></param>
+    /// <param name="cancellationToken"></param>
+    protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
+    {
+        var json = JsonSerializer.Serialize(new Dictionary<string, object>
         {
-            var req = BuildRequestUri("graphql.json");
+            {"query", graphRequest.Query},
+            {"variables", graphRequest.Variables},
+        });
+        var requestUri = BuildRequestUri("graphql.json");
+        var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+        var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
 
-            var content = new StringContent(body, Encoding.UTF8, mediaType);
+        using var jsonDocument = JsonDocument.Parse(result.RawResult);
 
-            var res = await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken);
-
-            return res;
+        if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            ThrowIfResponseContainsErrors(jsonDocument, result);
         }
 
-        /// <summary>
-        /// Content agnostic way to send the request, regardless of Json or GraphQL.
-        /// </summary>
-        /// <param name="req">The RequestUri.</param>
-        /// <param name="content">The HttpContent, be it GraphQL or Json.</param>
-        /// <param name="graphqlQueryCost">An estimation of the cost of this query.</param>
-        /// <returns>A JToken containing the data from the request.</returns>
-        protected virtual async Task<T> SendAsync<T>(RequestUri req, HttpContent content, int? graphqlQueryCost, CancellationToken cancellationToken = default)
-        {
-            var response = await ExecuteRequestCoreAsync<T>(req, HttpMethod.Post, cancellationToken, content, null, null, graphqlQueryCost, DateParseHandling.None);
+        return jsonDocument.Deserialize<T>(_jsonSerializerOptions);
+    }
 
-            CheckForErrors(response);
+    private bool TryParseUserErrors(JsonDocument jsonDocument, out ICollection<UserError> userErrors)
+    {
+        userErrors = [];
 
-            return response.Result;
-        }
+        if (!jsonDocument.RootElement.TryGetProperty("root.userErrors", out var userErrorsEl))
+            return false;
 
-        /// <summary>
-        /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors. This loses the requestId, but otherwise is capable of passing along the message.
-        /// </summary>
-        /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
-        /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
-        protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
-        {
-            var res = JToken.Parse(requestResult.RawResult);
+        if (userErrorsEl.ValueKind != JsonValueKind.Array)
+            return false;
 
-            if (res["errors"] != null)
-            {
-                var errorList = new List<string>();
+        if (userErrorsEl.GetArrayLength() == 0)
+            return false;
 
-                foreach (var error in res["errors"])
-                {
-                    if (error["message"] is not null)
-                    {
-                        errorList.Add(error["message"].ToString());
-                    }
-                }
+        userErrors = userErrorsEl
+            .Deserialize<ICollection<UserError>>()
+            .ToList();
 
-                var message = errorList.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
-                var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
+        return true;
+    }
 
-                throw new ShopifyHttpException(requestResult.RequestInfo, HttpStatusCode.OK, errorList, message, requestResult.RawResult, requestId);
-            }
-        }
+    /// <summary>
+    /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
+    /// </summary>
+    /// <exception cref="ShopifyHttpException">Thrown if <paramref name="jsonDocument"/> contains any <c>userErrors</c> entries.</exception>
+    private void ThrowIfResponseContainsErrors<T>(JsonDocument jsonDocument, RequestResult<T> requestResult)
+    {
+        if (!TryParseUserErrors(jsonDocument, out var userErrors))
+            return;
+
+        var errorMessages = userErrors
+            .Select(u => u.message)
+            .ToList();
+
+        if (errorMessages.Count == 0)
+            // Suspicious, TryParseUserErrors already checked that the array length was not 0
+            return;
+
+        var message = errorMessages.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
+        var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
+
+        throw new ShopifyHttpException(requestResult.RequestInfo, HttpStatusCode.OK, errorMessages, message, requestResult.RawResult, requestId);
+    }
+
+    /// <summary>
+    /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
+    /// </summary>
+    /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
+    /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
+    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp.")]
+    protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
+    {
+        var jsonDocument = JsonDocument.Parse(requestResult.RawResult);
+
+        ThrowIfResponseContainsErrors(jsonDocument, requestResult);
     }
 }

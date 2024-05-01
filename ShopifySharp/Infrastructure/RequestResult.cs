@@ -48,6 +48,11 @@ namespace ShopifySharp
             RawLinkHeaderValue = rawLinkHeaderValue;
         }
 
+        public RequestResult<T2> Transform<T2>(T2 content)
+        {
+            return new RequestResult<T2>(RequestInfo, Response, ResponseHeaders, content, RawResult, RawLinkHeaderValue);
+        }
+
         public RestBucketState GetRestBucketState()
         {
             return RestBucketState.Get(ResponseHeaders);

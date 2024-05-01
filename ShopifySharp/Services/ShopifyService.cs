@@ -192,15 +192,28 @@ namespace ShopifySharp
             return linkHeaderValues == null ? null : string.Join(", ", linkHeaderValues);
         }
 
-        protected async Task<RequestResult<T>> ExecuteRequestCoreAsync<T>(
+        /// <summary>
+        /// Executes a request
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="method"></param>
+        /// <param name="content"></param>
+        /// <param name="headers"></param>
+        /// <param name="rootElement"></param>
+        /// <param name="graphqlQueryCost"></param>
+        /// <param name="dateParseHandlingOverride"></param>
+        /// <param name="cancellationToken"></param>
+        /// <remarks>
+        /// This method is explicitly internal rather than protected because I'm planning to replace all of the `ExecuteXYZ`
+        /// methods with an Http pipeline (see https://github.com/nozzlegear/shopifysharp/issues/1001)
+        /// </remarks>
+        internal async Task<RequestResult<string>> ExecuteRequestCoreAsync(
             RequestUri uri,
             HttpMethod method,
-            CancellationToken cancellationToken,
             HttpContent content,
             Dictionary<string, string> headers,
-            string rootElement,
             int? graphqlQueryCost,
-            DateParseHandling? dateParseHandlingOverride = null
+            CancellationToken cancellationToken = default
         )
         {
             using var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers);
@@ -217,12 +230,33 @@ namespace ShopifySharp
                 //Check for and throw exception when necessary.
                 CheckResponseExceptions(await baseRequestMessage.GetRequestInfo(), response, rawResult);
 
-                var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
-
-                return new RequestResult<T>(await baseRequestMessage.GetRequestInfo(), response, response.Headers, result, rawResult, ReadLinkHeader(response.Headers));
+                return new RequestResult<string>(await baseRequestMessage.GetRequestInfo(), response, response.Headers, string.Empty, rawResult, ReadLinkHeader(response.Headers));
             }, cancellationToken, graphqlQueryCost);
 
             return policyResult;
+        }
+
+        protected async Task<RequestResult<T>> ExecuteRequestCoreAsync<T>(
+            RequestUri uri,
+            HttpMethod method,
+            CancellationToken cancellationToken,
+            HttpContent content,
+            Dictionary<string, string> headers,
+            string rootElement,
+            int? graphqlQueryCost,
+            DateParseHandling? dateParseHandlingOverride = null
+        )
+        {
+            var result = await ExecuteRequestCoreAsync(
+                uri,
+                method,
+                content,
+                headers,
+                graphqlQueryCost,
+                cancellationToken
+            );
+            var data = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(result.RawResult, rootElement);
+            return result.Transform(data);
         }
 
         /// <summary>
