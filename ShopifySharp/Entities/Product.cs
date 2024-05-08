@@ -116,5 +116,12 @@ namespace ShopifySharp
         /// </summary>
         [JsonProperty("metafields")]
         public IEnumerable<MetaField> Metafields { get; set; }
+
+        /// <summary>
+        /// The GraphQL IDs of all of the product's variants
+        /// See https://shopify.dev/docs/api/admin/migrate/new-product-model/api-updates#webhook-updates
+        /// </summary>
+        [JsonProperty("variant_gids")]
+        public IEnumerable<ShopifyObjectGid> VariantGids { get; set; }
     }
 }
