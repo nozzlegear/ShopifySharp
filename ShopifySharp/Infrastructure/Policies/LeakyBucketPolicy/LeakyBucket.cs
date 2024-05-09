@@ -126,19 +126,35 @@ namespace ShopifySharp
         {
             lock (_lock)
             {
-                while (_waitingRequests.Count > 0 &&
-                       (_waitingRequests.Peek().cancelToken.IsCancellationRequested || ComputedCurrentlyAvailable >= _waitingRequests.Peek().cost))
+                while (_waitingRequests.Count > 0)
                 {
-                    var r = _waitingRequests.Dequeue();
-                    if (!r.cancelToken.IsCancellationRequested)
+                    var nextRequest = _waitingRequests.Peek();
+
+                    if (nextRequest.cancelToken.IsCancellationRequested)
                     {
-                        r.semaphore.Release();
-                        ConsumeAvailable(r);
+                        _waitingRequests.Dequeue();
+                        // TODO: dispose the request here? Is the HttpRequestMessage still sitting in memory?
+                        continue;
+                    }
+
+                    if (ComputedCurrentlyAvailable >= nextRequest.cost)
+                    {
+                        // Proceed with current request
+                        _waitingRequests.Dequeue();
+                        nextRequest.semaphore.Release();
+                        ConsumeAvailable(nextRequest);
+                    }
+                    else
+                    {
+                        // Not enough capacity, exit the loop
+                        break;
                     }
                 }
 
                 if (_waitingRequests.Count > 0)
+                {
                     ScheduleTryGrantNextPendingRequest(_waitingRequests.Peek());
+                }
             }
         }
     }
