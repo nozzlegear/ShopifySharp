@@ -109,7 +109,21 @@ namespace ShopifySharp
                 if (_waitingRequests.Count == 1)
                     ScheduleTryGrantNextPendingRequest(r);
             }
-            await r.semaphore.WaitAsync(cancellationToken);
+
+            try
+            {
+                await r.semaphore.WaitAsync(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                // TODO: log here once ShopifySharp supports logging
+                lock (_lock)
+                {
+                    _waitingRequests.RemoveAndUpdateQueue(r);
+                }
+
+                throw;
+            }
         }
 
         private void ScheduleTryGrantNextPendingRequest(Request r)
