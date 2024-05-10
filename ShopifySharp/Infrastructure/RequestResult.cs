@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -14,6 +15,8 @@ public class RequestResult<T>
 
     public HttpResponseHeaders ResponseHeaders { get; }
 
+    public HttpStatusCode StatusCode { get; }
+
     public T Result { get; }
 
     public string RawResult { get; }
@@ -26,11 +29,12 @@ public class RequestResult<T>
     [Obsolete("This constructor is obsolete and will be removed in a future version of ShopifySharp.")]
     public RequestResult(HttpResponseMessage response, T result, string rawResult, string rawLinkHeaderValue)
     {
-        this.Response = response;
-        this.ResponseHeaders = response.Headers;
-        this.Result = result;
-        this.RawResult = rawResult;
-        this.RawLinkHeaderValue = rawLinkHeaderValue;
+        Response = response;
+        ResponseHeaders = response.Headers;
+        Result = result;
+        RawResult = rawResult;
+        RawLinkHeaderValue = rawLinkHeaderValue;
+        StatusCode = response.StatusCode;
     }
 
     public RequestResult(
@@ -39,7 +43,8 @@ public class RequestResult<T>
         HttpResponseHeaders httpResponseHeaders,
         T result,
         string rawResult,
-        string rawLinkHeaderValue)
+        string rawLinkHeaderValue,
+        HttpStatusCode statusCode)
     {
         RequestInfo = requestInfo;
         Response = httpResponseMessage;
@@ -47,6 +52,7 @@ public class RequestResult<T>
         Result = result;
         RawResult = rawResult;
         RawLinkHeaderValue = rawLinkHeaderValue;
+        StatusCode = statusCode;
     }
 
     public RestBucketState GetRestBucketState()
