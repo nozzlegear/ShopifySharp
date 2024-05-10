@@ -81,7 +81,7 @@ internal class LeakyBucket
         if (requestCost > MaximumAvailable)
             throw new ShopifyException($"Requested query cost of {requestCost} is larger than maximum available {MaximumAvailable}");
 
-        var r = new LeakyBucketRequest(requestCost, cancellationToken);
+        using var r = new LeakyBucketRequest(requestCost, cancellationToken);
 
         lock (_lock)
         {
