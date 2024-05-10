@@ -1,24 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
 
 namespace ShopifySharp
 {
     internal class LeakyBucket
     {
-        private class Request
-        {
-            public int cost;
-            public SemaphoreSlim semaphore = new SemaphoreSlim(0, 1);
-            public CancellationToken cancelToken;
-
-            public Request(int cost, CancellationToken cancelToken)
-            {
-                this.cost = cost;
-                this.cancelToken = cancelToken;
-            }
-        }
-
         internal int MaximumAvailable { get; private set; }
 
         internal int RestoreRatePerSecond { get; private set; }
@@ -32,7 +20,7 @@ namespace ShopifySharp
 
         private readonly Func<DateTime> _getTime;
 
-        private readonly ContextAwareQueue<Request> _waitingRequests;
+        private readonly ContextAwareQueue<LeakyBucketRequest> _waitingRequests;
 
         private object _lock = new object();
 
@@ -49,7 +37,7 @@ namespace ShopifySharp
                 throw new ArgumentOutOfRangeException();
 
             _getTime = getTime;
-            _waitingRequests = new ContextAwareQueue<Request>(getRequestContext ?? (new Func<RequestContext>(() => RequestContext.Foreground)));
+            _waitingRequests = new ContextAwareQueue<LeakyBucketRequest>(getRequestContext ?? (new Func<RequestContext>(() => RequestContext.Foreground)));
             MaximumAvailable = maximumAvailable;
             RestoreRatePerSecond = restoreRatePerSecond;
             LastCurrentlyAvailable = maximumAvailable;
@@ -80,11 +68,11 @@ namespace ShopifySharp
             TryGrantNextPendingRequest();
         }
 
-        private void ConsumeAvailable(Request r)
+        private void ConsumeAvailable(LeakyBucketRequest r)
         {
             lock (_lock)
             {
-                LastCurrentlyAvailable = this.ComputedCurrentlyAvailable - r.cost;
+                LastCurrentlyAvailable = this.ComputedCurrentlyAvailable - r.Cost;
                 LastUpdatedAt = _getTime();
             }
         }
@@ -94,7 +82,7 @@ namespace ShopifySharp
             if (requestCost > MaximumAvailable)
                 throw new ShopifyException($"Requested query cost of {requestCost} is larger than maximum available {MaximumAvailable}");
 
-            var r = new Request(requestCost, cancellationToken);
+            var r = new LeakyBucketRequest(requestCost, cancellationToken);
 
             lock (_lock)
             {
@@ -112,7 +100,7 @@ namespace ShopifySharp
 
             try
             {
-                await r.semaphore.WaitAsync(cancellationToken);
+                await r.Semaphore.WaitAsync(cancellationToken);
             }
             catch (OperationCanceledException)
             {
@@ -126,11 +114,11 @@ namespace ShopifySharp
             }
         }
 
-        private void ScheduleTryGrantNextPendingRequest(Request r)
+        private void ScheduleTryGrantNextPendingRequest(LeakyBucketRequest r)
         {
             _cancelNextSchedule?.Cancel();
             _cancelNextSchedule = new CancellationTokenSource();
-            var waitFor = TimeSpan.FromSeconds(Math.Max(0, (r.cost - ComputedCurrentlyAvailable) / (float)RestoreRatePerSecond));
+            var waitFor = TimeSpan.FromSeconds(Math.Max(0, (r.Cost - ComputedCurrentlyAvailable) / (float)RestoreRatePerSecond));
             _ = Task.Delay(waitFor, _cancelNextSchedule.Token)
                                   .ContinueWith(_ => TryGrantNextPendingRequest(),
                                                      TaskContinuationOptions.OnlyOnRanToCompletion);
@@ -144,18 +132,18 @@ namespace ShopifySharp
                 {
                     var nextRequest = _waitingRequests.Peek();
 
-                    if (nextRequest.cancelToken.IsCancellationRequested)
+                    if (nextRequest.CancellationToken.IsCancellationRequested)
                     {
                         _waitingRequests.Dequeue();
                         // TODO: dispose the request here? Is the HttpRequestMessage still sitting in memory?
                         continue;
                     }
 
-                    if (ComputedCurrentlyAvailable >= nextRequest.cost)
+                    if (ComputedCurrentlyAvailable >= nextRequest.Cost)
                     {
                         // Proceed with current request
                         _waitingRequests.Dequeue();
-                        nextRequest.semaphore.Release();
+                        nextRequest.Semaphore.Release();
                         ConsumeAvailable(nextRequest);
                     }
                     else
