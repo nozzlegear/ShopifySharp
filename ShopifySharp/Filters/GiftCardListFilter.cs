@@ -1,22 +1,21 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-namespace ShopifySharp.Filters
+namespace ShopifySharp.Filters;
+
+/// <summary>
+/// Options for filtering gift cards. 
+/// </summary>
+public class GiftCardListFilter : ListFilter<GiftCard>
 {
     /// <summary>
-    /// Options for filtering gift cards. 
+    /// Restrict results to after the specified ID
     /// </summary>
-    public class GiftCardListFilter : ListFilter<GiftCard>
-    {
-        /// <summary>
-        /// Restrict results to after the specified ID
-        /// </summary>
-        [JsonProperty("since_id")]
-        public long? SinceId { get; set; }
+    [JsonProperty("since_id")]
+    public long? SinceId { get; set; }
         
-        /// <summary>
-        /// Restricts results to those with the given status. Known values are "enabled", "disabled".
-        /// </summary>
-        [JsonProperty("status")]
-        public string Status { get; set; }
-    }
+    /// <summary>
+    /// Restricts results to those with the given status. Known values are "enabled", "disabled".
+    /// </summary>
+    [JsonProperty("status")]
+    public string Status { get; set; }
 }

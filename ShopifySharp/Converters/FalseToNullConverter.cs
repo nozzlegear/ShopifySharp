@@ -1,73 +1,72 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
-namespace ShopifySharp.Converters
+namespace ShopifySharp.Converters;
+
+/// <summary>
+/// A custom boolean converter that converts False to null and null to False.
+/// </summary>
+public class FalseToNullConverter : JsonConverter
 {
-    /// <summary>
-    /// A custom boolean converter that converts False to null and null to False.
-    /// </summary>
-    public class FalseToNullConverter : JsonConverter
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        if(reader.Value?.ToString() == null || reader.Value?.ToString() == "")
         {
-            if(reader.Value?.ToString() == null || reader.Value?.ToString() == "")
+            return false;
+        }
+        else
+        {
+            bool output = false;
+
+            if (bool.TryParse(reader.Value.ToString(), out output))
             {
-                return false;
+                return output;
             }
             else
             {
-                bool output = false;
-
-                if (bool.TryParse(reader.Value.ToString(), out output))
-                {
-                    return output;
-                }
-                else
-                {
-                    throw new JsonReaderException($"Cannot convert given JSON value with {nameof(FalseToNullConverter)}.");
-                }
+                throw new JsonReaderException($"Cannot convert given JSON value with {nameof(FalseToNullConverter)}.");
             }
         }
+    }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+        if (value == null)
         {
-            if (value == null)
+            writer.WriteNull();
+        }
+        else
+        {
+            bool boolean = bool.Parse(value.ToString());
+
+            if(boolean == false)
             {
                 writer.WriteNull();
             }
             else
             {
-                bool boolean = bool.Parse(value.ToString());
-
-                if(boolean == false)
-                {
-                    writer.WriteNull();
-                }
-                else
-                {
-                    writer.WriteValue(true);
-                }
+                writer.WriteValue(true);
             }
         }
+    }
 
-        public override bool CanConvert(Type objectType)
+    public override bool CanConvert(Type objectType)
+    {
+        if(objectType == typeof(string))
         {
-            if(objectType == typeof(string))
-            {
-                return true;
-            }
-            else if(objectType == typeof(bool))
-            {
-                return true;
-            }
-            else if(objectType == typeof(Nullable))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
+        }
+        else if(objectType == typeof(bool))
+        {
+            return true;
+        }
+        else if(objectType == typeof(Nullable))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

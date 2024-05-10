@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+public class PrerequisiteToEntitlementPurchase
 {
-    public class PrerequisiteToEntitlementPurchase
-    {
-        [JsonProperty("prerequisite_amount")]
-        public string PrerequisiteAmount { get; set; }
-    }
+    [JsonProperty("prerequisite_amount")]
+    public string PrerequisiteAmount { get; set; }
 }

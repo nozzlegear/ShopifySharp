@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+internal static class DictionaryExtensions
 {
-    internal static class DictionaryExtensions
+    public static void AddRange(this IDictionary<string, object> dictionary, IEnumerable<KeyValuePair<string, object>> kvps)
     {
-        public static void AddRange(this IDictionary<string, object> dictionary, IEnumerable<KeyValuePair<string, object>> kvps)
+        foreach (var kvp in kvps)
         {
-            foreach (var kvp in kvps)
-            {
-                dictionary.Add(kvp.Key, kvp.Value);
-            }
+            dictionary.Add(kvp.Key, kvp.Value);
         }
     }
 }

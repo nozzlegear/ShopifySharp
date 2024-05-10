@@ -1,65 +1,64 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace ShopifySharp.Lists
+namespace ShopifySharp.Lists;
+
+public static class LinkHeaderParser
 {
-    public static class LinkHeaderParser
+    private static Regex _regexPrevLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=""previous""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    private static Regex _regexNextLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=""next""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+    public static LinkHeaderParseResult<T> Parse<T>(string linkHeaderValue)
     {
-        private static Regex _regexPrevLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=""previous""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
-        private static Regex _regexNextLink = new Regex(@"<(https://[^>]*)>\s*;\s*rel=""next""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        var prevLink = GetPageInfoParam<T>(linkHeaderValue, _regexPrevLink);
+        var nextLink = GetPageInfoParam<T>(linkHeaderValue, _regexNextLink);
 
-        public static LinkHeaderParseResult<T> Parse<T>(string linkHeaderValue)
+        if (prevLink == null && nextLink == null)
         {
-            var prevLink = GetPageInfoParam<T>(linkHeaderValue, _regexPrevLink);
-            var nextLink = GetPageInfoParam<T>(linkHeaderValue, _regexNextLink);
-
-            if (prevLink == null && nextLink == null)
-            {
-                throw new ShopifyException($"Found neither a 'previous' or 'next' url in the link header: '{linkHeaderValue}'");
-            }
-
-            return new LinkHeaderParseResult<T>(prevLink, nextLink);
+            throw new ShopifyException($"Found neither a 'previous' or 'next' url in the link header: '{linkHeaderValue}'");
         }
 
-        private static PagingLink<T> GetPageInfoParam<T>(string linkHeaderValue, Regex linkRegex)
+        return new LinkHeaderParseResult<T>(prevLink, nextLink);
+    }
+
+    private static PagingLink<T> GetPageInfoParam<T>(string linkHeaderValue, Regex linkRegex)
+    {
+        var match = linkRegex.Match(linkHeaderValue);
+
+        if (!match.Success || match.Groups.Count < 2 || !match.Groups[1].Success)
         {
-            var match = linkRegex.Match(linkHeaderValue);
+            return null;
+        }
 
-            if (!match.Success || match.Groups.Count < 2 || !match.Groups[1].Success)
-            {
-                return null;
-            }
+        string matchedUrl = match.Groups[1].Value;
 
-            string matchedUrl = match.Groups[1].Value;
+        // TODO: refactor this to use the domain utility?
+        if (!Uri.TryCreate(matchedUrl, UriKind.Absolute, out var uri))
+        {
+            throw new ShopifyException($"Cannot parse page link url: '{matchedUrl}'");
+        }
 
-            // TODO: refactor this to use the domain utility?
-            if (!Uri.TryCreate(matchedUrl, UriKind.Absolute, out var uri))
-            {
-                throw new ShopifyException($"Cannot parse page link url: '{matchedUrl}'");
-            }
+        var decodedUriQuery = Uri.UnescapeDataString(uri.Query);
 
-            var decodedUriQuery = Uri.UnescapeDataString(uri.Query);
+        string GetQueryParam(string name) 
+        {
+            return decodedUriQuery.Split('?', '&')
+                .FirstOrDefault(p => p.StartsWith($"{name}="))
+                ?.Substring ($"{name}=".Length);
+        }
 
-            string GetQueryParam(string name) 
-            {
-                return decodedUriQuery.Split('?', '&')
-                    .FirstOrDefault(p => p.StartsWith($"{name}="))
-                    ?.Substring ($"{name}=".Length);
-            }
+        string pageInfo = GetQueryParam("page_info");
+        string fields = GetQueryParam("fields");
 
-            string pageInfo = GetQueryParam("page_info");
-            string fields = GetQueryParam("fields");
+        if (pageInfo == null)
+        {
+            throw new ShopifyException($"Cannot parse page link's page info parameter: '{matchedUrl}'");
+        }
 
-            if (pageInfo == null)
-            {
-                throw new ShopifyException($"Cannot parse page link's page info parameter: '{matchedUrl}'");
-            }
-
-            int.TryParse(GetQueryParam("limit"), out int limit);
+        int.TryParse(GetQueryParam("limit"), out int limit);
             
 
-            return new PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null, fields ?? null);
-        }
+        return new PagingLink<T>(matchedUrl, pageInfo, limit != 0 ? (int?)limit : null, fields ?? null);
     }
 }

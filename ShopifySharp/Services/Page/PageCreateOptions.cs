@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+public class PageCreateOptions : Parameterizable
 {
-    public class PageCreateOptions : Parameterizable
-    {
-        [JsonProperty("published")]
-        public bool? Published { get; set; }
-    }
+    [JsonProperty("published")]
+    public bool? Published { get; set; }
 }

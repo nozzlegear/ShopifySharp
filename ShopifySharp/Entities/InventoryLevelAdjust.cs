@@ -1,25 +1,24 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+public class InventoryLevelAdjust
 {
-    public class InventoryLevelAdjust
-    {
-        /// <summary>
-        /// The unique identifier of the inventory item that the inventory level belongs to.
-        /// </summary>
-        [JsonProperty("inventory_item_id")]
-        public long? InventoryItemId { get; set; }
+    /// <summary>
+    /// The unique identifier of the inventory item that the inventory level belongs to.
+    /// </summary>
+    [JsonProperty("inventory_item_id")]
+    public long? InventoryItemId { get; set; }
 
-        /// <summary>
-        /// The unique identifier of the location that the inventory level belongs to.
-        /// </summary>
-        [JsonProperty("location_id")]
-        public long? LocationId { get; set; }
+    /// <summary>
+    /// The unique identifier of the location that the inventory level belongs to.
+    /// </summary>
+    [JsonProperty("location_id")]
+    public long? LocationId { get; set; }
 
-        /// <summary>
-        /// The quantity adjust of inventory items.
-        /// </summary>
-        [JsonProperty("available_adjustment")]
-        public int? AvailableAdjustment { get; set; }
-    }
+    /// <summary>
+    /// The quantity adjust of inventory items.
+    /// </summary>
+    [JsonProperty("available_adjustment")]
+    public int? AvailableAdjustment { get; set; }
 }

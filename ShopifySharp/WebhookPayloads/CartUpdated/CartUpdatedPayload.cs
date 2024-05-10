@@ -4,29 +4,28 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace ShopifySharp.WebhookPayloads.CartUpdated
+namespace ShopifySharp.WebhookPayloads.CartUpdated;
+
+/// <summary>
+/// The object sent by Shopify's <c>carts/update</c> webhook.
+/// </summary>
+public class CartUpdatedPayload
 {
-    /// <summary>
-    /// The object sent by Shopify's <c>carts/update</c> webhook.
-    /// </summary>
-    public class CartUpdatedPayload
-    {
-        [JsonProperty("created_at")]
-        public DateTimeOffset CreatedAt { get; set; }
+    [JsonProperty("created_at")]
+    public DateTimeOffset CreatedAt { get; set; }
 
-        [JsonProperty("id")]
-        public string Id { get; set; }
+    [JsonProperty("id")]
+    public string Id { get; set; }
 
-        [JsonProperty("line_items")]
-        public ICollection<CartUpdatedLineItem> LineItems { get; set; }
+    [JsonProperty("line_items")]
+    public ICollection<CartUpdatedLineItem> LineItems { get; set; }
 
-        [JsonProperty("note")]
-        public string? Note { get; set; }
+    [JsonProperty("note")]
+    public string? Note { get; set; }
 
-        [JsonProperty("token")]
-        public string Token { get; set; }
+    [JsonProperty("token")]
+    public string Token { get; set; }
 
-        [JsonProperty("updated_at")]
-        public DateTimeOffset UpdatedAt { get; set; }
-    }
+    [JsonProperty("updated_at")]
+    public DateTimeOffset UpdatedAt { get; set; }
 }

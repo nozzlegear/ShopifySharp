@@ -1,22 +1,21 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+/// <summary>
+/// Options for updating a <see cref="Customer"/>. 
+/// </summary>
+public class CustomerUpdateOptions : Parameterizable
 {
     /// <summary>
-    /// Options for updating a <see cref="Customer"/>. 
+    /// An optional password for the user. Default is null.
     /// </summary>
-    public class CustomerUpdateOptions : Parameterizable
-    {
-        /// <summary>
-        /// An optional password for the user. Default is null.
-        /// </summary>
-        [JsonProperty("password")]
-        public string Password { get; set; }
+    [JsonProperty("password")]
+    public string Password { get; set; }
 
-        /// <summary>
-        /// Should be set and match <see cref="Password"/>. Default is null.
-        /// </summary>
-        [JsonProperty("password_confirmation")]
-        public string PasswordConfirmation { get; set; }
-    }
+    /// <summary>
+    /// Should be set and match <see cref="Password"/>. Default is null.
+    /// </summary>
+    [JsonProperty("password_confirmation")]
+    public string PasswordConfirmation { get; set; }
 }

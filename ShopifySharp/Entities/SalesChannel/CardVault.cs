@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-namespace ShopifySharp.Entities.SalesChannel
+namespace ShopifySharp.Entities.SalesChannel;
+
+public class CardVault
 {
-    public class CardVault
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-    }
+    [JsonProperty("id")]
+    public string Id { get; set; }
 }

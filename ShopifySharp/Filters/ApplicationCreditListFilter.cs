@@ -1,6 +1,5 @@
-namespace ShopifySharp.Filters
+namespace ShopifySharp.Filters;
+
+public class ApplicationCreditListFilter : ListFilter<ApplicationCredit>
 {
-    public class ApplicationCreditListFilter : ListFilter<ApplicationCredit>
-    {
-    }
 }

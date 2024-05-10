@@ -1,22 +1,21 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+/// <summary>
+/// An object representing a properties for <see cref="LineItem.Properties"/>
+/// </summary>
+public class LineItemProperty
 {
     /// <summary>
-    /// An object representing a properties for <see cref="LineItem.Properties"/>
+    /// The name of the note attribute.
     /// </summary>
-    public class LineItemProperty
-    {
-        /// <summary>
-        /// The name of the note attribute.
-        /// </summary>
-        [JsonProperty("name")]
-        public object Name { get; set; }
+    [JsonProperty("name")]
+    public object Name { get; set; }
 
-        /// <summary>
-        /// The value of the note attribute.
-        /// </summary>
-        [JsonProperty("value")]
-        public object Value { get; set; }
-    }
+    /// <summary>
+    /// The value of the note attribute.
+    /// </summary>
+    [JsonProperty("value")]
+    public object Value { get; set; }
 }

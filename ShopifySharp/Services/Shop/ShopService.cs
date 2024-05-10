@@ -1,30 +1,29 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Utilities;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+public class ShopService: ShopifyService, IShopService
 {
-    public class ShopService: ShopifyService, IShopService
-    {
-        /// <summary>
-        /// Creates a new instance of <see cref="ShopService" />.
-        /// </summary>
-        /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-        /// <param name="shopAccessToken">An API access token for the shop.</param>
-        public ShopService(string myShopifyUrl, string shopAccessToken): base(myShopifyUrl, shopAccessToken) { }
-        internal ShopService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
+    /// <summary>
+    /// Creates a new instance of <see cref="ShopService" />.
+    /// </summary>
+    /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
+    /// <param name="shopAccessToken">An API access token for the shop.</param>
+    public ShopService(string myShopifyUrl, string shopAccessToken): base(myShopifyUrl, shopAccessToken) { }
+    internal ShopService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
          
-        /// <inheritdoc />
-        public virtual async Task<Shop> GetAsync(CancellationToken cancellationToken = default) =>
-            await ExecuteGetAsync<Shop>("shop.json", "shop", cancellationToken: cancellationToken);
+    /// <inheritdoc />
+    public virtual async Task<Shop> GetAsync(CancellationToken cancellationToken = default) =>
+        await ExecuteGetAsync<Shop>("shop.json", "shop", cancellationToken: cancellationToken);
 
-        /// <inheritdoc />
-        public virtual async Task UninstallAppAsync(CancellationToken cancellationToken = default)
-        {
-            var request = BuildRequestUri("api_permissions/current.json");
+    /// <inheritdoc />
+    public virtual async Task UninstallAppAsync(CancellationToken cancellationToken = default)
+    {
+        var request = BuildRequestUri("api_permissions/current.json");
 
-            await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
-        }
+        await ExecuteRequestAsync(request, HttpMethod.Delete, cancellationToken: cancellationToken);
     }
 }

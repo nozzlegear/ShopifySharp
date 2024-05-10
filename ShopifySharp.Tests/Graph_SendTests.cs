@@ -4,24 +4,24 @@ using System.Threading.Tasks;
 using ShopifySharp.GraphQL;
 using Xunit;
 
-namespace ShopifySharp.Tests
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "Graph")]
+public class Graph_SendTests
 {
-    [Trait("Category", "Graph")]
-    public class Graph_SendTests
+    [Fact]
+    public async Task GetOrders()
     {
-        [Fact]
-        public async Task GetOrders()
+        foreach (var policy in new IRequestExecutionPolicy[]
+                 {
+                     new DefaultRequestExecutionPolicy(),
+                     new RetryExecutionPolicy(),
+                     new LeakyBucketExecutionPolicy()
+                 })
         {
-            foreach (var policy in new IRequestExecutionPolicy[]
-            {
-                new DefaultRequestExecutionPolicy(),
-                new RetryExecutionPolicy(),
-                new LeakyBucketExecutionPolicy()
-            })
-            {
-                var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-                svc.SetExecutionPolicy(policy);
-                var res = await svc.SendAsync<OrderConnection>(@"
+            var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+            svc.SetExecutionPolicy(policy);
+            var res = await svc.SendAsync<OrderConnection>(@"
 {
 	orders(first:10)
   {
@@ -43,33 +43,33 @@ namespace ShopifySharp.Tests
   }
 }
 ");
-                var orders = res.nodes;
-                Assert.True(orders.Count() > 0);
-                var o = orders.First();
-                Assert.True(o.name != null);
-                Assert.True(o.lineItems.nodes.First().quantity != null);
-                var commentEventEmbed = o as ICommentEventEmbed;
-                Assert.NotNull(commentEventEmbed);
-                Assert.NotNull(commentEventEmbed.AsOrder());
-                Assert.Null(commentEventEmbed.AsCustomer());
-            }
+            var orders = res.nodes;
+            Assert.True(orders.Count() > 0);
+            var o = orders.First();
+            Assert.True(o.name != null);
+            Assert.True(o.lineItems.nodes.First().quantity != null);
+            var commentEventEmbed = o as ICommentEventEmbed;
+            Assert.NotNull(commentEventEmbed);
+            Assert.NotNull(commentEventEmbed.AsOrder());
+            Assert.Null(commentEventEmbed.AsCustomer());
         }
+    }
 
-        [Fact]
-        public async Task GetOrdersWithVariables()
+    [Fact]
+    public async Task GetOrdersWithVariables()
+    {
+        foreach (var policy in new IRequestExecutionPolicy[]
+                 {
+                     new DefaultRequestExecutionPolicy(),
+                     new RetryExecutionPolicy(),
+                     new LeakyBucketExecutionPolicy()
+                 })
         {
-            foreach (var policy in new IRequestExecutionPolicy[]
+            var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+            svc.SetExecutionPolicy(policy);
+            var res = await svc.SendAsync<OrderConnection>(new GraphRequest
             {
-                new DefaultRequestExecutionPolicy(),
-                new RetryExecutionPolicy(),
-                new LeakyBucketExecutionPolicy()
-            })
-            {
-                var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-                svc.SetExecutionPolicy(policy);
-                var res = await svc.SendAsync<OrderConnection>(new GraphRequest
-                {
-                    query =
+                query =
                     @"
 query ($firstOrders: Int!, $firstLineItems: Int!)
 {
@@ -92,22 +92,21 @@ query ($firstOrders: Int!, $firstLineItems: Int!)
     }
   }
 }",
-                    variables = new
-                    {
-                        firstOrders = 10,
-                        firstLineItems = 20
-                    }
-                });
-                var orders = res.nodes;
-                Assert.True(orders.Count() > 0);
-                var o = orders.First();
-                Assert.True(o.name != null);
-                Assert.True(o.lineItems.nodes.First().quantity != null);
-                var commentEventEmbed = o as ICommentEventEmbed;
-                Assert.NotNull(commentEventEmbed);
-                Assert.NotNull(commentEventEmbed.AsOrder());
-                Assert.Null(commentEventEmbed.AsCustomer());
-            }
+                variables = new
+                {
+                    firstOrders = 10,
+                    firstLineItems = 20
+                }
+            });
+            var orders = res.nodes;
+            Assert.True(orders.Count() > 0);
+            var o = orders.First();
+            Assert.True(o.name != null);
+            Assert.True(o.lineItems.nodes.First().quantity != null);
+            var commentEventEmbed = o as ICommentEventEmbed;
+            Assert.NotNull(commentEventEmbed);
+            Assert.NotNull(commentEventEmbed.AsOrder());
+            Assert.Null(commentEventEmbed.AsCustomer());
         }
     }
 }

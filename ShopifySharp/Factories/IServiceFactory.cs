@@ -1,4 +1,4 @@
-﻿using ShopifySharp.Credentials;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Factories;
 

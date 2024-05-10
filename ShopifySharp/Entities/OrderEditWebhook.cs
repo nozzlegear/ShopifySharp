@@ -1,16 +1,15 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+/// <summary>
+/// An object representing a Shopify order edit webhook (orders/edited topic)
+/// </summary>
+public class OrderEditWebhook
 {
     /// <summary>
-    /// An object representing a Shopify order edit webhook (orders/edited topic)
+    /// The OrderEdit object
     /// </summary>
-    public class OrderEditWebhook
-    {
-        /// <summary>
-        /// The OrderEdit object
-        /// </summary>
-        [JsonProperty("order_edit")]
-        public OrderEdit OrderEdit { get; set; }
-    }
+    [JsonProperty("order_edit")]
+    public OrderEdit OrderEdit { get; set; }
 }

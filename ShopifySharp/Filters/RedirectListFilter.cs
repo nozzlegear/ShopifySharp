@@ -1,22 +1,21 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-namespace ShopifySharp.Filters
+namespace ShopifySharp.Filters;
+
+/// <summary>
+/// Options for filtering lists of Redirects.
+/// </summary>
+public class RedirectListFilter : ListFilter<Redirect>
 {
     /// <summary>
-    /// Options for filtering lists of Redirects.
+    /// Filters the result to those with the given path.
     /// </summary>
-    public class RedirectListFilter : ListFilter<Redirect>
-    {
-        /// <summary>
-        /// Filters the result to those with the given path.
-        /// </summary>
-        [JsonProperty("path")]
-        public string Path { get; set; }
+    [JsonProperty("path")]
+    public string Path { get; set; }
 
-        /// <summary>
-        /// Filters the result to those with the given target.
-        /// </summary>
-        [JsonProperty("target")]
-        public string Target { get; set; }
-    }
+    /// <summary>
+    /// Filters the result to those with the given target.
+    /// </summary>
+    [JsonProperty("target")]
+    public string Target { get; set; }
 }

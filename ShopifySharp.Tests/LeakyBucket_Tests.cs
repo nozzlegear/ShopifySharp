@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
 using Xunit;
 
@@ -124,7 +126,7 @@ public class LeakyBucket_Tests
         Assert.False(task3.IsCompleted);
 
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
-            
+
         await PassSeconds(1);
         Assert.True(task1.IsCompleted);
         Assert.False(task2.IsCompleted);

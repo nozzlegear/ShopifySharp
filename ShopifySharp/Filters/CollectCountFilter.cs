@@ -1,22 +1,21 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
-namespace ShopifySharp.Filters
+namespace ShopifySharp.Filters;
+
+/// <summary>
+/// Options for filtering a count of Collects. 
+/// </summary>
+public class CollectCountFilter : Parameterizable
 {
     /// <summary>
-    /// Options for filtering a count of Collects. 
+    /// An optional product id to retrieve. 
     /// </summary>
-    public class CollectCountFilter : Parameterizable
-    {
-        /// <summary>
-        /// An optional product id to retrieve. 
-        /// </summary>
-        [JsonProperty("product_id")]
-        public long? ProductId { get; set; }
+    [JsonProperty("product_id")]
+    public long? ProductId { get; set; }
 
-        /// <summary>
-        /// An optional collection id to retrieve. 
-        /// </summary>
-        [JsonProperty("collection_id")]
-        public long? CollectionId { get; set; }
-    }
+    /// <summary>
+    /// An optional collection id to retrieve. 
+    /// </summary>
+    [JsonProperty("collection_id")]
+    public long? CollectionId { get; set; }
 }

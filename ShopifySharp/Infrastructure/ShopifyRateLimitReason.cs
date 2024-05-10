@@ -1,8 +1,7 @@
-﻿namespace ShopifySharp
+namespace ShopifySharp;
+
+public enum ShopifyRateLimitReason
 {
-    public enum ShopifyRateLimitReason
-    {
-        BucketFull,
-        Other
-    }
+    BucketFull,
+    Other
 }

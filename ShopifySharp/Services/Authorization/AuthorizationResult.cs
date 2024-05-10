@@ -1,10 +1,9 @@
-﻿#nullable enable
+#nullable enable
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+public class AuthorizationResult(string accessToken, string[]? grantedScopes)
 {
-    public class AuthorizationResult(string accessToken, string[]? grantedScopes)
-    {
-        public string AccessToken { get; } = accessToken;
-        public string[]? GrantedScopes { get; } = grantedScopes;
-    }
+    public string AccessToken { get; } = accessToken;
+    public string[]? GrantedScopes { get; } = grantedScopes;
 }

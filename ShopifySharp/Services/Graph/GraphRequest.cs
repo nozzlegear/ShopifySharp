@@ -1,9 +1,8 @@
-﻿namespace ShopifySharp
-{
-    public class GraphRequest
-    {
-        public string query { get; set; }
+namespace ShopifySharp;
 
-        public object variables { get; set; }
-    }
+public class GraphRequest
+{
+    public string query { get; set; }
+
+    public object variables { get; set; }
 }

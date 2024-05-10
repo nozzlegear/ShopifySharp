@@ -1,6 +1,5 @@
-namespace ShopifySharp.Filters
+namespace ShopifySharp.Filters;
+
+public class LocationListFilter : ListFilter<Location>
 {
-    public class LocationListFilter : ListFilter<Location>
-    {
-    }
 }

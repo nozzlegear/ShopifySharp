@@ -1,11 +1,10 @@
 using Newtonsoft.Json;
 
-namespace ShopifySharp
+namespace ShopifySharp;
+
+public class ShopifyObjectGid
 {
-    public class ShopifyObjectGid
-    {
-        //The GraphQL ID of the object
-        [JsonProperty("admin_graphql_api_id")]
-        public string AdminGraphQLAPIId { get; set; }
-    }
+    //The GraphQL ID of the object
+    [JsonProperty("admin_graphql_api_id")]
+    public string AdminGraphQLAPIId { get; set; }
 }
