@@ -55,12 +55,12 @@ public class RequestResult<T>
         StatusCode = statusCode;
     }
 
-    public RestBucketState GetRestBucketState()
+    public RestBucketState? GetRestBucketState()
     {
         return RestBucketState.Get(ResponseHeaders);
     }
 
-    public GraphQLBucketState GetGraphQLBucketState(System.Text.Json.JsonDocument response)
+    public GraphQLBucketState? GetGraphQLBucketState(System.Text.Json.JsonDocument response)
     {
         return GraphQLBucketState.Get(response);
     }
