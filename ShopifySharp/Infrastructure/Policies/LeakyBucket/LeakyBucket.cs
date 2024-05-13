@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
+namespace ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
 internal class LeakyBucket
 {

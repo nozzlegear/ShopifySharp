@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Infrastructure;
 using Newtonsoft.Json.Linq;
-using ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
+using ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
 // ReSharper disable once CheckNamespace
 namespace ShopifySharp;

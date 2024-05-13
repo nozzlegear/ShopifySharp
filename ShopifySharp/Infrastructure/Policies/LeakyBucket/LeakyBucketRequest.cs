@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
+namespace ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
 internal sealed class LeakyBucketRequest(int cost, CancellationToken cancellationToken) : IDisposable
 {

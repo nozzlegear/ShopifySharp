@@ -1,4 +1,4 @@
-namespace ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
+namespace ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
 internal enum ApiType : byte
 {

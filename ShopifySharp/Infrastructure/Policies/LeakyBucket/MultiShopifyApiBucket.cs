@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
+namespace ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
 internal class MultiShopifyApiBucket
 {
@@ -18,18 +18,18 @@ internal class MultiShopifyApiBucket
     private const int DEFAULT_GRAPHQL_PARTNER_RESTORE_RATE = 4;
 
 
-    private LeakyBucket RESTBucket { get; }
+    private Policies.LeakyBucket.LeakyBucket RESTBucket { get; }
 
-    private LeakyBucket GraphQLBucket { get; }
+    private Policies.LeakyBucket.LeakyBucket GraphQLBucket { get; }
 
-    private LeakyBucket GraphQLPartnersBucket { get; }
+    private Policies.LeakyBucket.LeakyBucket GraphQLPartnersBucket { get; }
 
     public MultiShopifyApiBucket(Func<RequestContext> getRequestContext)
     {
-        RESTBucket = new LeakyBucket(DEFAULT_REST_MAX_AVAILABLE, DEFAULT_REST_RESTORE_RATE, getRequestContext);
-        GraphQLBucket = new LeakyBucket(DEFAULT_GRAPHQL_MAX_AVAILABLE, DEFAULT_GRAPHQL_RESTORE_RATE,
+        RESTBucket = new Policies.LeakyBucket.LeakyBucket(DEFAULT_REST_MAX_AVAILABLE, DEFAULT_REST_RESTORE_RATE, getRequestContext);
+        GraphQLBucket = new Policies.LeakyBucket.LeakyBucket(DEFAULT_GRAPHQL_MAX_AVAILABLE, DEFAULT_GRAPHQL_RESTORE_RATE,
             getRequestContext);
-        GraphQLPartnersBucket = new LeakyBucket(DEFAULT_GRAPHQL_PARTNER_MAX_AVAILABLE,
+        GraphQLPartnersBucket = new Policies.LeakyBucket.LeakyBucket(DEFAULT_GRAPHQL_PARTNER_MAX_AVAILABLE,
             DEFAULT_GRAPHQL_PARTNER_RESTORE_RATE, getRequestContext);
     }
 
