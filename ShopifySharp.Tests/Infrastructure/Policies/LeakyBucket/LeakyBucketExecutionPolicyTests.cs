@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShopifySharp.Tests.Policies;
+namespace ShopifySharp.Tests.Infrastructure.Policies.LeakyBucket;
 
 [Trait("Category", "Retry policies"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
 [TestSubject(typeof(LeakyBucketExecutionPolicy))]

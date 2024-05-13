@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ShopifySharp;
+namespace ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
 internal class ContextAwareQueue<T>
 {

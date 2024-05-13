@@ -1,23 +1,23 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
-using ShopifySharp.Infrastructure.Policies.LeakyBucketPolicy;
+using JetBrains.Annotations;
 using Xunit;
+using Bucket = ShopifySharp.Infrastructure.Policies.LeakyBucket.LeakyBucket;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Infrastructure.Policies.LeakyBucket;
 
 [Trait("Category", "LeakyBucket"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
-public class LeakyBucket_Tests
+[TestSubject(typeof(Bucket))]
+public class LeakyBucketTests
 {
-    private DateTime now;
+    private DateTime _now;
 
     [Fact]
     public void RunSynchronouslyIfEnoughAvailable()
     {
-        now = DateTime.UtcNow;
+        _now = DateTime.UtcNow;
 
-        var b = new LeakyBucket(40, 2, () => now);
+        var b = new Bucket(40, 2, () => _now);
         Assert.Equal(40, b.ComputedCurrentlyAvailable);
 
         Assert.True(b.WaitForAvailableAsync(1).IsCompleted);
@@ -29,16 +29,16 @@ public class LeakyBucket_Tests
         Assert.True(b.WaitForAvailableAsync(1).IsCompleted);
         Assert.Equal(37, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(1);
+        _now = _now.AddSeconds(1);
         Assert.Equal(39, b.ComputedCurrentlyAvailable);
     }
 
     [Fact]
     public void WaitIfNotEnoughAvailable()
     {
-        now = DateTime.UtcNow;
+        _now = DateTime.UtcNow;
 
-        var b = new LeakyBucket(10, 2, () => now);
+        var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
         Assert.True(b.WaitForAvailableAsync(9).IsCompleted);
@@ -54,40 +54,40 @@ public class LeakyBucket_Tests
     [Fact]
     public void ReplenishUpToMaximum()
     {
-        now = DateTime.UtcNow;
+        _now = DateTime.UtcNow;
 
-        var b = new LeakyBucket(10, 2, () => now);
+        var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
         Assert.True(b.WaitForAvailableAsync(5).IsCompleted);
         Assert.Equal(5, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(1);
+        _now = _now.AddSeconds(1);
         Assert.Equal(7, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(1);
+        _now = _now.AddSeconds(1);
         Assert.Equal(9, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(1);
+        _now = _now.AddSeconds(1);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
         b.SetState(20, 3, b.ComputedCurrentlyAvailable);
-        now = now.AddSeconds(1);
+        _now = _now.AddSeconds(1);
         Assert.Equal(13, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(2);
+        _now = _now.AddSeconds(2);
         Assert.Equal(19, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(1);
+        _now = _now.AddSeconds(1);
         Assert.Equal(20, b.ComputedCurrentlyAvailable);
     }
 
     [Fact]
     public async Task BlockedSingleCallsCompleteAfterEnoughTime()
     {
-        now = DateTime.UtcNow;
+        _now = DateTime.UtcNow;
 
-        var b = new LeakyBucket(10, 2, () => now);
+        var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
         Assert.True(b.WaitForAvailableAsync(5).IsCompleted);
@@ -108,9 +108,9 @@ public class LeakyBucket_Tests
     [Fact]
     public async Task BlockedMultipleCallsCompleteAfterEnoughTime()
     {
-        now = DateTime.UtcNow;
+        _now = DateTime.UtcNow;
 
-        var b = new LeakyBucket(10, 2, () => now);
+        var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
         Assert.True(b.WaitForAvailableAsync(9).IsCompleted);
@@ -142,7 +142,7 @@ public class LeakyBucket_Tests
         Assert.True(task3.IsCompleted);
         Assert.Equal(0, b.ComputedCurrentlyAvailable);
 
-        now = now.AddSeconds(5);
+        _now = _now.AddSeconds(5);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
         Assert.True(b.WaitForAvailableAsync(4).IsCompleted);
@@ -162,7 +162,7 @@ public class LeakyBucket_Tests
 
     private async Task PassSeconds(int seconds)
     {
-        now = now.AddSeconds(seconds);
+        _now = _now.AddSeconds(seconds);
         await Task.Delay(TimeSpan.FromSeconds(seconds * 1.2));
     }
 }
