@@ -2,6 +2,21 @@ using System.Net;
 
 namespace ShopifySharp.Infrastructure;
 
+internal interface IResponseClassifier
+{
+    /// <summary>
+    /// Specifies if the request should be retried based on the response status code.
+    /// </summary>
+    bool IsRetriableStatusCode(HttpStatusCode statusCode);
+
+    /// <summary>
+    /// Specifies if the request was not successful based on the exception thrown.
+    /// </summary>
+    /// <param name="ex">The exception being checked.</param>
+    /// <param name="totalRetriesAttempted">The total number of retries that have been attempted for the request that caused this exception.</param>
+    bool IsRetriableException(ShopifyException ex, int totalRetriesAttempted);
+}
+
 /// <summary>
 /// A type that analyzes HTTP responses and exceptions and determines if they should be retried,
 /// and/or analyzes responses and determines if they should be treated as error responses.
@@ -19,12 +34,10 @@ namespace ShopifySharp.Infrastructure;
 /// https://github.com/Azure/azure-sdk-for-net/blob/68a0baaf8fecfb6dc6847acc3140f1a206d327db/sdk/core/Azure.Core/src/ResponseClassifier.cs
 /// </remarks>
 internal class ResponseClassifier(bool retryUnexpectedRateLimitResponse, int maximumNonRateLimitRetriesPerRequest = 3)
+    : IResponseClassifier
 {
     // TODO: once the API design is finalized, make this class public and available to everyone using ShopifySharp
 
-    /// <summary>
-    /// Specifies if the request should be retried based on the response status code.
-    /// </summary>
     public virtual bool IsRetriableStatusCode(HttpStatusCode statusCode)
     {
         switch ((int)statusCode)
@@ -41,11 +54,6 @@ internal class ResponseClassifier(bool retryUnexpectedRateLimitResponse, int max
         }
     }
 
-    /// <summary>
-    /// Specifies if the request was not successful based on the exception thrown.
-    /// </summary>
-    /// <param name="ex">The exception being checked.</param>
-    /// <param name="totalRetriesAttempted">The total number of retries that have been attempted for the request that caused this exception.</param>
     public virtual bool IsRetriableException(ShopifyException ex, int totalRetriesAttempted)
     {
         if (ex is ShopifyRateLimitException { Reason: ShopifyRateLimitReason.BucketFull })
