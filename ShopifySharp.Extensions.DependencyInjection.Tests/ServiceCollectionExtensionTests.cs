@@ -1,5 +1,6 @@
 using ShopifySharp.Utilities;
 using System.Reflection;
+using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 
 namespace ShopifySharp.Extensions.DependencyInjection.Tests;
 
@@ -43,6 +44,33 @@ public class ServiceCollectionExtensionTests
             .NotBeNull()
             .And
             .BeOfType<TestRequestExecutionPolicy>();
+    }
+
+    [Fact]
+    public void AddShopifySharpRequestExecutionPolicy_WhenThePolicyIsExponentialRetry_AddsDefaultOptionsWhenTheyDontAlreadyExist()
+    {
+        // Setup
+        var container = new ServiceCollection();
+
+        // Act
+        container.AddShopifySharpRequestExecutionPolicy<ExponentialRetryPolicy>();
+
+        // Assert
+        var serviceProvider = container.BuildServiceProvider();
+        var options = serviceProvider.GetService<ExponentialRetryPolicyOptions>();
+        var policy = serviceProvider.GetService<IRequestExecutionPolicy>();
+
+        options.Should()
+            .NotBeNull()
+            .And
+            .BeOfType<ExponentialRetryPolicyOptions>()
+            .And
+            .BeEquivalentTo(ExponentialRetryPolicyOptions.Default());
+
+        policy.Should()
+            .NotBeNull()
+            .And
+            .BeOfType<ExponentialRetryPolicy>();
     }
 
     [Fact]
@@ -149,7 +177,7 @@ public class ServiceCollectionExtensionTests
         }
 
         var serviceFactoryTypes = assembly
-            ?.GetTypes()
+            .GetTypes()
             .Where(t => t.IsInterface
                         && t.IsPublic
                         && t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IServiceFactory<>)))
@@ -195,6 +223,33 @@ public class ServiceCollectionExtensionTests
             .NotBeNull()
             .And
             .BeOfType<OrderServiceFactory>();
+    }
+
+    [Fact]
+    public void AddShopifySharp_WhenThePolicyIsExponentialRetry_AddsDefaultOptionsWhenTheyDontAlreadyExist()
+    {
+        // Setup
+        var container = new ServiceCollection();
+
+        // Act
+        container.AddShopifySharp<ExponentialRetryPolicy>();
+
+        // Assert
+        var serviceProvider = container.BuildServiceProvider();
+        var options = serviceProvider.GetService<ExponentialRetryPolicyOptions>();
+        var policy = serviceProvider.GetService<IRequestExecutionPolicy>();
+
+        options.Should()
+            .NotBeNull()
+            .And
+            .BeOfType<ExponentialRetryPolicyOptions>()
+            .And
+            .BeEquivalentTo(ExponentialRetryPolicyOptions.Default());
+
+        policy.Should()
+            .NotBeNull()
+            .And
+            .BeOfType<ExponentialRetryPolicy>();
     }
 
     [Theory]
