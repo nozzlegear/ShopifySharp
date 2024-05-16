@@ -161,6 +161,36 @@ public class ExponentialRetryPolicyTests
         });
     }
 
+    [Fact]
+    public async Task Run_ShouldRetryImmediatelyWhenConfigured()
+    {
+        const bool firstRetryIsImmediate = true;
+        var ex = new TestShopifyException();
+        var iteration = 0;
+
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
+            .Do(_ =>
+            {
+                if (iteration >= 3) throw new TestException();
+                iteration++;
+                throw ex;
+            });
+        _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
+            .Returns(true);
+
+        var policy = SetupPolicy(x => x.FirstRetryIsImmediate = firstRetryIsImmediate);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+
+        await act.Should().ThrowAsync<TestException>();
+        iteration.Should().Be(3);
+        Received.InOrder(() =>
+        {
+            _taskScheduler.DelayAsync(TimeSpan.Zero, Arg.Any<CancellationToken>());
+            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
+            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
+        });
+    }
+
     [Fact(Timeout = 1000)]
     public async Task Run_ShouldHandleNullMaxRetries()
     {
@@ -172,9 +202,9 @@ public class ExponentialRetryPolicyTests
             .Do(_ =>
             {
                 iteration++;
-                    // Cancel after 20 loops
-                    if (iteration == expectedIterations)
-                        throw new TestException();
+                // Cancel after 20 loops
+                if (iteration == expectedIterations)
+                    throw new TestException();
                 throw ex;
             });
 
@@ -297,7 +327,6 @@ public class ExponentialRetryPolicyTests
 
         _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Throw(ex);
-
         _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
             .Returns(true);
 
@@ -312,6 +341,7 @@ public class ExponentialRetryPolicyTests
         // For now, we expect this test to execute the request, check the exception and wait. This
         // is because the cancellation token source puts the cancellation on a different thread when
         // cancellation is requested.
+        // TODO: This seems to be a little bit flaky due to the comment above, sometimes the test receives a second _executeRequest before cancelling
         Received.InOrder(() =>
         {
             _executeRequest.Invoke(_cloneableRequestMessage);
