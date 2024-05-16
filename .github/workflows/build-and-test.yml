@@ -3,6 +3,7 @@ name: Build/Test Pipeline
 on:
   push:
     branches: [ master, setup-github-actions ]
+  workflow_dispatch:
 
 # Cancel any in-progress build/test runs
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
@@ -25,6 +26,8 @@ jobs:
 
     - name: Checkout branch
       uses: actions/checkout@v3
+      with:
+        ref: ${{ github.ref }}
 
     - name: Setup dotnet
       uses: actions/setup-dotnet@v4
