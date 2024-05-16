@@ -42,7 +42,7 @@ public class RetryExecutionPolicy : IRequestExecutionPolicy
     }
 
     public async Task<RequestResult<T>> Run<T>(
-        CloneableRequestMessage baseRequest,
+        CloneableRequestMessage baseRequestMessage,
         ExecuteRequestAsync<T> executeRequestAsync,
         CancellationToken cancellationToken,
         int? graphqlQueryCost = null
@@ -53,7 +53,7 @@ public class RetryExecutionPolicy : IRequestExecutionPolicy
 
         while (true)
         {
-            using var request = await baseRequest.CloneAsync();
+            using var request = await baseRequestMessage.CloneAsync();
 
             try
             {

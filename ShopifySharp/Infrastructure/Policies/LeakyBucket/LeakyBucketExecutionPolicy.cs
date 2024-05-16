@@ -74,14 +74,14 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
         _getRequestContext = getRequestContext ?? (() => RequestContext.Foreground);
     }
 
-    public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequest, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null)
+    public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequestMessage, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null)
     {
-        var accessToken = GetAccessToken(baseRequest);
+        var accessToken = GetAccessToken(baseRequestMessage);
         var bucket = accessToken == null ? null : _shopAccessTokenToLeakyBucket.GetOrAdd(accessToken, _ => new MultiShopifyApiBucket(_getRequestContext));
         var apiType = ApiType.RestAdmin;
 
-        if (baseRequest?.RequestUri?.AbsolutePath.EndsWith("graphql.json") == true)
-            apiType = baseRequest.RequestUri.Host == "partners.shopify.com" ? ApiType.GraphQlPartner : ApiType.GraphQlAdmin;
+        if (baseRequestMessage?.RequestUri?.AbsolutePath.EndsWith("graphql.json") == true)
+            apiType = baseRequestMessage.RequestUri.Host == "partners.shopify.com" ? ApiType.GraphQlPartner : ApiType.GraphQlAdmin;
 
         return apiType switch
         {
@@ -91,17 +91,17 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
                 // If the user didn't pass a request query cost, we assume a cost of 50
                 graphqlQueryCost ?? 50,
                 bucket,
-                baseRequest),
+                baseRequestMessage),
             ApiType.RestAdmin => await ExecuteRestAdminRequest(
                 executeRequestAsync,
                 cancellationToken,
                 bucket,
-                baseRequest),
+                baseRequestMessage),
             ApiType.GraphQlPartner => await ExecuteGraphPartnerRequest(
                 executeRequestAsync,
                 cancellationToken,
                 bucket,
-                baseRequest),
+                baseRequestMessage),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
