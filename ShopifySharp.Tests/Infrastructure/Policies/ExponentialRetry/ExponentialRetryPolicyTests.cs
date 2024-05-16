@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NSubstitute;
-using NSubstitute.Core;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using ShopifySharp.Tests.TestClasses;
@@ -21,16 +20,21 @@ public class ExponentialRetryPolicyTests
     private readonly IResponseClassifier _responseClassifier;
     private readonly ITaskScheduler _taskScheduler;
     private readonly ExecuteRequestAsync<int> _executeRequest;
+    private readonly TestCloneableRequestMessage _cloneableRequestMessage;
 
     public ExponentialRetryPolicyTests()
     {
         _responseClassifier = Substitute.For<IResponseClassifier>();
         _taskScheduler = Substitute.For<ITaskScheduler>();
         _executeRequest = Substitute.For<ExecuteRequestAsync<int>>();
+        _cloneableRequestMessage = Substitute.For<TestCloneableRequestMessage>();
 
         // Always return a completed task when the scheduler wants to delay, so no actual time is spent waiting during a test
         _taskScheduler.DelayAsync(Arg.Any<TimeSpan>())
             .Returns(Task.CompletedTask);
+        // Always have the test request message return itself when cloned
+        _cloneableRequestMessage.CloneAsync(Arg.Any<CancellationToken>())
+            .Returns(_cloneableRequestMessage);
     }
 
     private ExponentialRetryPolicy SetupPolicy([CanBeNull] Action<ExponentialRetryPolicyOptions> configure = null)
@@ -67,14 +71,13 @@ public class ExponentialRetryPolicyTests
     public async Task Run_ShouldReturnResult()
     {
         const int expectedValue = 5;
-        var request = new TestCloneableRequestMessage();
         var expectedResult = new TestRequestResult<int>(expectedValue);
 
-        _executeRequest.Invoke(request)
+        _executeRequest.Invoke(_cloneableRequestMessage)
             .Returns(expectedResult);
 
         var policy = SetupPolicy();
-        var result = await policy.Run(request, _executeRequest, CancellationToken.None);
+        var result = await policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
         result.Should().NotBeNull();
         result.Result.Should().Be(expectedValue);
@@ -97,15 +100,14 @@ public class ExponentialRetryPolicyTests
     public async Task Run_ShouldThrowWhenRequestIsNotRetriableAsync()
     {
         var ex = new TestShopifyException();
-        var request = Substitute.For<TestCloneableRequestMessage>();
 
-        _executeRequest.When(x => x.Invoke(request))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Throw(ex);
         _responseClassifier.IsRetriableException(ex, 1)
             .Returns(false);
 
         var policy = SetupPolicy();
-        var act = () => policy.Run(request, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
         await act.Should().ThrowAsync<TestShopifyException>();
         _responseClassifier.Received(1).IsRetriableException(ex, 1);
@@ -115,14 +117,13 @@ public class ExponentialRetryPolicyTests
     public async Task Run_ShouldRetryWhenRequestIsRetriableAsync()
     {
         const int expectedValue = 5;
-        var request = new TestCloneableRequestMessage();
         var expectedResult = new TestRequestResult<int>(expectedValue);
         var ex = new TestShopifyException();
         var iteration = 0;
 
-        _executeRequest(Arg.Any<CloneableRequestMessage>())
+        _executeRequest(_cloneableRequestMessage)
             .Returns(expectedResult);
-        _executeRequest.When(x => x.Invoke(Arg.Any<CloneableRequestMessage>()))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Do(_ =>
             {
                 iteration++;
@@ -136,7 +137,7 @@ public class ExponentialRetryPolicyTests
             .Returns(false);
 
         var policy = SetupPolicy();
-        var act = () => policy.Run(request, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
         var result = await act.Should().NotThrowAsync();
         result.Subject.Should().NotBeNull();
@@ -144,19 +145,19 @@ public class ExponentialRetryPolicyTests
         iteration.Should().Be(4);
         Received.InOrder(() =>
         {
-            _executeRequest.Invoke(request);
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 1);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(Arg.Any<CloneableRequestMessage>());
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 2);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(Arg.Any<CloneableRequestMessage>());
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 3);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(400), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(Arg.Any<CloneableRequestMessage>());
+            _executeRequest.Invoke(_cloneableRequestMessage);
         });
     }
 
@@ -165,10 +166,9 @@ public class ExponentialRetryPolicyTests
     {
         const int expectedIterations = 20;
         var ex = new TestShopifyException();
-        var request = new TestCloneableRequestMessage();
         var iteration = 0;
 
-        _executeRequest.When(x => x.Invoke(Arg.Any<CloneableRequestMessage>()))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Do(_ =>
             {
                 iteration++;
@@ -186,11 +186,11 @@ public class ExponentialRetryPolicyTests
             x.MaximumRetriesBeforeRequestCancellation = null;
             x.MaximumDelayBeforeRequestCancellation = TimeSpan.FromSeconds(5);
         });
-        var act = () => policy.Run(request, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
         await act.Should().ThrowAsync<TestException>();
         iteration.Should().Be(expectedIterations);
-        await _executeRequest.Received(expectedIterations).Invoke(Arg.Any<CloneableRequestMessage>());
+        await _executeRequest.Received(expectedIterations).Invoke(_cloneableRequestMessage);
         // These will receive one less call, because TestException is not caught by the policy and crashes/exits the run
         _responseClassifier.Received(expectedIterations - 1).IsRetriableException(ex, Arg.Is<int>(x => x >= 1 && x <= expectedIterations));
         await _taskScheduler.Received(expectedIterations - 1).DelayAsync(Arg.Any<TimeSpan>(), Arg.Any<CancellationToken>());
@@ -201,10 +201,9 @@ public class ExponentialRetryPolicyTests
     {
         const int maximumRetries = 2;
         var ex = new TestShopifyException();
-        var request = new TestCloneableRequestMessage();
         var iteration = 0;
 
-        _executeRequest.When(x => x.Invoke(Arg.Any<CloneableRequestMessage>()))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Do(_ =>
             {
                 iteration++;
@@ -215,7 +214,7 @@ public class ExponentialRetryPolicyTests
             .Returns(true);
 
         var policy = SetupPolicy(x => x.MaximumRetriesBeforeRequestCancellation = maximumRetries);
-        var act = () => policy.Run(request, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
         await act.Should().ThrowAsync<ShopifyExponentialRetryCanceledException>()
             .Where(x => x.CurrentTry == maximumRetries)
@@ -223,11 +222,11 @@ public class ExponentialRetryPolicyTests
         iteration.Should().Be(maximumRetries);
         Received.InOrder(() =>
         {
-            _executeRequest.Invoke(request);
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 1);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(Arg.Any<CloneableRequestMessage>());
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 2);
         });
         await _taskScheduler.Received(0)
@@ -240,11 +239,10 @@ public class ExponentialRetryPolicyTests
         const int backoffInMilliseconds = 50;
         const int expectedIterationsAfterReachingMaximum = 3;
         var ex = new TestShopifyException();
-        var request = new TestCloneableRequestMessage();
         var maximumDelayBetweenRetries = TimeSpan.FromMilliseconds(777);
         var currentDelaySeenCount = 0;
 
-        _executeRequest.When(x => x.Invoke(Arg.Any<CloneableRequestMessage>()))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Throw(ex);
         _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
             .Returns(true);
@@ -270,7 +268,7 @@ public class ExponentialRetryPolicyTests
             x.MaximumDelayBetweenRetries = maximumDelayBetweenRetries;
             x.MaximumDelayBeforeRequestCancellation = TimeSpan.FromMinutes(1);
         });
-        var act = () => policy.Run(request, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
         await act.Should().ThrowAsync<TestException>();
         Received.InOrder(() =>
@@ -294,11 +292,10 @@ public class ExponentialRetryPolicyTests
         const int maximumDelayMilliseconds = 0;
         const int maximumRetries = 100;
         var ex = new TestShopifyException();
-        var request = new TestCloneableRequestMessage();
         var timeout = new TimeSpan(maximumDelayMilliseconds);
         var inputCancellationToken = CancellationToken.None;
 
-        _executeRequest.When(x => x.Invoke(Arg.Any<CloneableRequestMessage>()))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Throw(ex);
 
         _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
@@ -309,7 +306,7 @@ public class ExponentialRetryPolicyTests
             x.MaximumDelayBeforeRequestCancellation = timeout;
             x.MaximumRetriesBeforeRequestCancellation = maximumRetries;
         });
-        var act = () => policy.Run(request, _executeRequest, inputCancellationToken);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, inputCancellationToken);
 
         await act.Should().ThrowAsync<OperationCanceledException>();
         // For now, we expect this test to execute the request, check the exception and wait. This
@@ -317,7 +314,7 @@ public class ExponentialRetryPolicyTests
         // cancellation is requested.
         Received.InOrder(() =>
         {
-            _executeRequest.Invoke(request);
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 1);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(BackoffInMilliseconds), Arg.Any<CancellationToken>());
         });
@@ -328,11 +325,10 @@ public class ExponentialRetryPolicyTests
     {
         const int maximumRetries = 100;
         var ex = new TestShopifyException();
-        var request = new TestCloneableRequestMessage();
         var inputCancellationToken = new CancellationTokenSource();
         var iteration = 0;
 
-        _executeRequest.When(x => x.Invoke(Arg.Any<CloneableRequestMessage>()))
+        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
             .Do(_ =>
             {
                 iteration++;
@@ -344,16 +340,16 @@ public class ExponentialRetryPolicyTests
             .Returns(true);
 
         var policy = SetupPolicy(x => x.MaximumRetriesBeforeRequestCancellation = maximumRetries);
-        var act = () => policy.Run(request, _executeRequest, inputCancellationToken.Token);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, inputCancellationToken.Token);
 
         await act.Should().ThrowAsync<OperationCanceledException>();
         Received.InOrder(() =>
         {
-            _executeRequest.Invoke(request);
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 1);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(Arg.Any<CloneableRequestMessage>());
+            _executeRequest.Invoke(_cloneableRequestMessage);
             _responseClassifier.IsRetriableException(ex, 2);
             _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
         });

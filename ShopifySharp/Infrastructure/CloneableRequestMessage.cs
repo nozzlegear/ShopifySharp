@@ -45,7 +45,7 @@ public class CloneableRequestMessage: HttpRequestMessage
         return cloned;
     }
 
-    public async Task<CloneableRequestMessage> CloneAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<CloneableRequestMessage> CloneAsync(CancellationToken cancellationToken = default)
     {
         var newContent = Content is null ? null : await CloneToStreamOrReadOnlyMemoryContent(Content, cancellationToken);
         var cloned = new CloneableRequestMessage(RequestUri, Method, newContent);
