@@ -53,7 +53,7 @@ public class RetryExecutionPolicy : IRequestExecutionPolicy
 
         while (true)
         {
-            using var request = await baseRequestMessage.CloneAsync();
+            using var request = await baseRequestMessage.CloneAsync(cancellationToken);
 
             try
             {

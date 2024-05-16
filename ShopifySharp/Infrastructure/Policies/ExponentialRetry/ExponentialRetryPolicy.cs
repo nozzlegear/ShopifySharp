@@ -43,7 +43,7 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
     {
         var currentTry = 1;
         var useMaximumDelayBetweenRetries = false;
-        var combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        using var combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         if (_options.MaximumDelayBeforeRequestCancellation is not null)
             combinedCancellationToken.CancelAfter(_options.MaximumDelayBeforeRequestCancellation.Value);
@@ -52,7 +52,7 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
         {
             combinedCancellationToken.Token.ThrowIfCancellationRequested();
 
-            using var clonedRequestMessage = await baseRequestMessage.CloneAsync();
+            using var clonedRequestMessage = await baseRequestMessage.CloneAsync(combinedCancellationToken.Token);
 
             try
             {
@@ -81,18 +81,10 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
             }
             else
             {
-                try
-                {
-                    nextDelay = TimeSpan.FromMilliseconds(Math.Pow(2, currentTry - 1) * _options.InitialBackoffInMilliseconds);
+                nextDelay = TimeSpan.FromMilliseconds(Math.Pow(2, currentTry - 1) * _options.InitialBackoffInMilliseconds);
 
-                    if (nextDelay > _options.MaximumDelayBetweenRetries)
-                    {
-                        nextDelay = _options.MaximumDelayBetweenRetries;
-                    }
-                }
-                catch (OverflowException)
+                if (nextDelay > _options.MaximumDelayBetweenRetries)
                 {
-                    // TODO: add logging here once ShopifySharp supports it
                     useMaximumDelayBetweenRetries = true;
                     nextDelay = _options.MaximumDelayBetweenRetries;
                 }

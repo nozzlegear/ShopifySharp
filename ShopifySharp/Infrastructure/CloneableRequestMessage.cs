@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ShopifySharp.Infrastructure;
@@ -44,9 +45,9 @@ public class CloneableRequestMessage: HttpRequestMessage
         return cloned;
     }
 
-    public async Task<CloneableRequestMessage> CloneAsync()
+    public async Task<CloneableRequestMessage> CloneAsync(CancellationToken cancellationToken = default)
     {
-        var newContent = Content is null ? null : await CloneToStreamOrReadOnlyMemoryContent(Content);
+        var newContent = Content is null ? null : await CloneToStreamOrReadOnlyMemoryContent(Content, cancellationToken);
         var cloned = new CloneableRequestMessage(RequestUri, Method, newContent);
 
         // Copy over the request's headers which includes the access token if set
@@ -58,12 +59,12 @@ public class CloneableRequestMessage: HttpRequestMessage
         return cloned;
     }
 
-    private static async Task<HttpContent> CloneToStreamOrReadOnlyMemoryContent(HttpContent originalStreamContent)
+    private static async Task<HttpContent> CloneToStreamOrReadOnlyMemoryContent(HttpContent originalStreamContent, CancellationToken cancellationToken = default)
     {
         HttpContent clonedContent;
 
 #if NET6_0_OR_GREATER
-        var rs = new ReadOnlyMemory<byte>(await originalStreamContent.ReadAsByteArrayAsync());
+        var rs = new ReadOnlyMemory<byte>(await originalStreamContent.ReadAsByteArrayAsync(cancellationToken));
         clonedContent = new ReadOnlyMemoryContent(rs);
 #else
             var ms = new System.IO.MemoryStream();

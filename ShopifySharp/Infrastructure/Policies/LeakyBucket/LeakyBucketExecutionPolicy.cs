@@ -118,7 +118,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
         while (true)
         {
             // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-            using var request = await baseRequest.CloneAsync();
+            using var request = await baseRequest.CloneAsync(cancellationToken);
 
             if (bucket != null)
             {
@@ -155,7 +155,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
         while (true)
         {
             // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-            var request = await baseRequest.CloneAsync();
+            var request = await baseRequest.CloneAsync(cancellationToken);
 
             if (bucket != null)
             {
@@ -229,7 +229,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
         while (true)
         {
             // TODO: add a check to see if the request should be cloned, so the clone can be skipped on the first request
-            using var request = await baseRequest.CloneAsync();
+            using var request = await baseRequest.CloneAsync(cancellationToken);
 
             if (bucket != null)
             {
