@@ -10,23 +10,45 @@ namespace ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 /// </summary>
 public record ExponentialRetryPolicyOptions
 {
+    /// <summary>
+    /// Indicates whether the policy should immediately retry the first failure per request before applying the
+    /// exponential backoff strategy.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if the first retry should be immediate; otherwise, <c>false</c>.
+    /// </value>
+    /// <remarks>
+    /// Setting this property to <c>true</c> can be useful in scenarios where transient failures are likely and
+    /// immediate retry might resolve the failure. If set to <c>false</c>, all retries including the first one
+    /// will follow the exponential backoff intervals.
+    /// </remarks>
+    public bool FirstRetryIsImmediate { get; set; }
+
 #if NET8_0_OR_GREATER
     public required int InitialBackoffInMilliseconds { get; set; }
+
+    /// <summary>
     /// The maximum amount of time that can be spent waiting before retrying a request. This is an effective cap on the
     /// exponential growth of the policy's retry delay, which could eventually lead to an overflow without it.
+    /// </summary>
     public required TimeSpan MaximumDelayBetweenRetries { get; set; }
 #else
     public int InitialBackoffInMilliseconds { get; set; }
+    /// <summary>
     /// The maximum amount of time that can be spent waiting before retrying a request. This is an effective cap on the
     /// exponential growth of the policy's retry delay, which could eventually lead to an overflow without it.
+    /// </summary>
     public TimeSpan MaximumDelayBetweenRetries { get; set; }
 #endif
     public int? MaximumRetriesBeforeRequestCancellation { get; set; }
     public TimeSpan? MaximumDelayBeforeRequestCancellation { get; set; }
 
     /// <summary>
-    /// Validates this instance and throws an <see cref="ArgumentException"/> if misconfigured.
+    /// Validates this instance and throws <see cref="ArgumentException"/> if misconfigured.
     /// </summary>
+    /// <throws>
+    /// <see cref="ArgumentException"/> when the options are misconfigured.
+    /// </throws>
     public void Validate()
     {
         if (InitialBackoffInMilliseconds <= 0)
@@ -42,6 +64,7 @@ public record ExponentialRetryPolicyOptions
     public static ExponentialRetryPolicyOptions Default() =>
         new()
         {
+            FirstRetryIsImmediate = false,
             MaximumRetriesBeforeRequestCancellation = 10,
             MaximumDelayBetweenRetries = TimeSpan.FromSeconds(1),
             MaximumDelayBeforeRequestCancellation = TimeSpan.FromSeconds(5),
