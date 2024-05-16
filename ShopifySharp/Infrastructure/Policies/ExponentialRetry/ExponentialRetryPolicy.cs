@@ -56,8 +56,7 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
 
             try
             {
-                var value = await executeRequestAsync.Invoke(clonedRequestMessage);
-                return value;
+                return await executeRequestAsync.Invoke(clonedRequestMessage);
             }
             catch (ShopifyException ex)
             {
