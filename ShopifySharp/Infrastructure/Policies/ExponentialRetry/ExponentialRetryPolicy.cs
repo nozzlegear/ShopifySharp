@@ -36,14 +36,13 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
     }
 
     public async Task<RequestResult<T>> Run<T>(
-        CloneableRequestMessage requestMessage,
+        CloneableRequestMessage baseRequestMessage,
         ExecuteRequestAsync<T> executeRequestAsync,
         CancellationToken cancellationToken,
         int? graphqlQueryCost = null)
     {
         var currentTry = 1;
         var useMaximumDelayBetweenRetries = false;
-        var clonedRequestMessage = requestMessage;
         var combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         if (_options.MaximumDelayBeforeRequestCancellation is not null)
@@ -52,6 +51,8 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
         while (true)
         {
             combinedCancellationToken.Token.ThrowIfCancellationRequested();
+
+            using var clonedRequestMessage = await baseRequestMessage.CloneAsync();
 
             try
             {
@@ -101,7 +102,6 @@ public class ExponentialRetryPolicy : IRequestExecutionPolicy
 
             // Delay and then try again
             await _taskScheduler.DelayAsync(nextDelay, combinedCancellationToken.Token);
-            clonedRequestMessage = await requestMessage.CloneAsync();
         }
     }
 }
