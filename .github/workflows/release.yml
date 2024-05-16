@@ -19,7 +19,7 @@ on:
 jobs:
   publish:
     name: "Publish release packages"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     environment: "Release deployment environment"
 
     steps:
@@ -30,18 +30,17 @@ jobs:
         && sudo apt-get -qq install fish parallel
 
     - name: Setup dotnet
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
           8.0.x
-          7.0.x
 
     - name: Install dotnet tools
       run: |
         dotnet tool install -g dotnet-setversion
 
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Bump package version
       run: setversion -p "${{ inputs.package_version }}" "${{inputs.package_id }}/${{ inputs.package_id }}.csproj"
@@ -54,7 +53,7 @@ jobs:
         ARTIFACT_DIR: "./artifacts"
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: artifacts
         if-no-files-found: error
