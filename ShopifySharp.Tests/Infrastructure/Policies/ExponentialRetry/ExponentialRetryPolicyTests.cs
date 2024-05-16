@@ -81,6 +81,19 @@ public class ExponentialRetryPolicyTests
     }
 
     [Fact]
+    public async Task Run_ShouldDisposeClonedRequestMessages()
+    {
+        _cloneableRequestMessage.When(x => x.Dispose())
+            .Throw<TestException>();
+
+        var policy = SetupPolicy();
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+
+        await act.Should().ThrowAsync<TestException>();
+        _cloneableRequestMessage.Received(1).Dispose();
+    }
+
+    [Fact]
     public async Task Run_ShouldThrowWhenRequestIsNotRetriableAsync()
     {
         var ex = new TestShopifyException();
