@@ -129,6 +129,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs: test
     environment: "Prerelease deployment environment"
+    # Only publish prerelease packages on the master branch
+    if: ${{ github.ref_name == 'master' }}
 
     steps:
     - name: Setup dotnet
