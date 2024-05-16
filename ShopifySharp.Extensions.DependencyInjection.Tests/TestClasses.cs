@@ -8,7 +8,7 @@ public class TestException : Exception;
 public class TestRequestExecutionPolicy : IRequestExecutionPolicy
 {
     public Task<RequestResult<T>> Run<T>(
-        CloneableRequestMessage requestMessage,
+        CloneableRequestMessage baseRequestMessage,
         ExecuteRequestAsync<T> executeRequestAsync,
         CancellationToken cancellationToken,
         int? graphqlQueryCost = null
