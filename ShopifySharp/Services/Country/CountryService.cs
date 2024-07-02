@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -11,6 +12,7 @@ namespace ShopifySharp;
 /// <summary>
 /// A service for manipulating Shopify countries.
 /// </summary>
+[Obsolete("The Country Service REST endpoint has been deprecated by Shopify and will be removed in a future version of ShopifySharp. Shopify recommends you use the GraphQL equivalent instead.")]
 public class CountryService : ShopifyService, ICountryService
 {
     /// <summary>
