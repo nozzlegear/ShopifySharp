@@ -170,4 +170,12 @@ public class Transaction : ShopifyObject
     /// </summary>
     [JsonProperty("total_unsettled_set")]
     public PriceSet TotalUnsettledSet { get; set; }
+
+    #nullable enable
+    /// <summary>
+    /// The reason for the adjustment that is associated with the transaction. If the source_type is not an adjustment, the value will be null.
+    /// </summary>
+    [JsonProperty("adjustment_reason")]
+    public string? AdjustmentReason { get; set; }
+    #nullable disable
 }
