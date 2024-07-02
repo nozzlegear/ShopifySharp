@@ -30,6 +30,7 @@ public class GenerateGraphQLSchema_Test
             { "ARN", "string" },
             { "StorefrontID", "string" },
             { "Color", "string" },
+            { "BigInt", "long" },
         };
         string csharpCode = await new GraphQLTypeGenerator().GenerateTypesAsync("ShopifySharp.GraphQL", scalarNameToTypeName, async query =>
         {
