@@ -125,10 +125,6 @@ public abstract class ShopifyService : IShopifyService
         return new RequestUri(ub.Uri);
     }
 
-    [Obsolete("This method is deprecated and has been replaced by BuildAdminRequestUri(string, bool).")]
-    protected RequestUri PrepareRequest(string path) =>
-        BuildRequestUri(path);
-
     /// <summary>
     /// Prepares a request to the path and appends the shop's access token header if applicable.
     /// </summary>
