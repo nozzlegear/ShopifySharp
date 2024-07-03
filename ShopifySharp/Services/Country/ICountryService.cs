@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
@@ -5,6 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp;
 
+[Obsolete("https://shopify.dev/changelog/deprecation-notice-country-and-province-endpoints-in-admin-rest-api")]
 public interface ICountryService : IShopifyService
 {
     /// <summary>
