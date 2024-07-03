@@ -16,35 +16,6 @@ public class CloneableRequestMessage: HttpRequestMessage
         }
     }
 
-    [Obsolete("This method has been replaced with " + nameof(CloneAsync) + ", it will be removed in a future version of ShopifySharp.")]
-    public CloneableRequestMessage Clone()
-    {
-        var newContent = Content;
-
-        if (newContent is JsonContent c)
-        {
-            newContent = c.Clone();
-
-            foreach (var header in Content.Headers)
-            {
-                if (!newContent.Headers.Contains(header.Key))
-                {
-                    newContent.Headers.Add(header.Key, header.Value);
-                }
-            }
-        }
-
-        var cloned = new CloneableRequestMessage(RequestUri, Method, newContent);
-
-        // Copy over the request's headers which includes the access token if set
-        foreach (var header in Headers)
-        {
-            cloned.Headers.Add(header.Key, header.Value);
-        }
-
-        return cloned;
-    }
-
     public virtual async Task<CloneableRequestMessage> CloneAsync(CancellationToken cancellationToken = default)
     {
         var newContent = Content is null ? null : await CloneToStreamOrReadOnlyMemoryContent(Content, cancellationToken);
