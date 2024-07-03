@@ -50,13 +50,13 @@ public class ShopifyService_Tests
     {
         var json = "{}";
         var res = BadResponse(HttpStatusCode.InternalServerError, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -72,13 +72,13 @@ public class ShopifyService_Tests
         var json = "<p>testing</p>";
         var res = BadResponse(HttpStatusCode.InternalServerError, json);
         res.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -94,13 +94,13 @@ public class ShopifyService_Tests
         var json = "{\"errors\":\"foo error message\"}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -116,13 +116,13 @@ public class ShopifyService_Tests
         var json = "{\"errors\":{\"order\":\"foo error message\"}}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -138,13 +138,13 @@ public class ShopifyService_Tests
         var json = "{\"errors\":{\"order\":[\"foo error message\"]}}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -160,13 +160,13 @@ public class ShopifyService_Tests
         var json = "{\"errors\":{\"order\":[\"foo error message\",\"bar error message\"]}}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -183,13 +183,13 @@ public class ShopifyService_Tests
         var json = "{\"error\":\"foo\",\"error_description\":\"bar\"}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -205,13 +205,13 @@ public class ShopifyService_Tests
         var json = "{\"error\":\"location_id must be specified when creating fulfillments.\"}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, json);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }

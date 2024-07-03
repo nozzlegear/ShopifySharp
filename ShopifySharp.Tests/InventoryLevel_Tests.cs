@@ -196,7 +196,7 @@ public class InventoryLevel_Tests_Fixture : IAsyncLifetime
             {
                 await Service.DeleteAsync(created.InventoryItemId.Value, created.LocationId.Value);
             }
-            catch (ShopifyException ex) when ((int) ex.HttpStatusCode == 406)
+            catch (ShopifyHttpException ex) when ((int) ex.HttpStatusCode == 406)
             {
                 // The last inventory level for an item cannot be deleted. In this case, Shopify will return a 406.
             }

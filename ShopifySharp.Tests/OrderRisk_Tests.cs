@@ -145,7 +145,7 @@ public class OrderRisk_Tests_Fixture : IAsyncLifetime
             {
                 await Service.DeleteAsync(OrderId, obj.Id.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {

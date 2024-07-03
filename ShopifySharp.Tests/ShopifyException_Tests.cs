@@ -47,13 +47,13 @@ public class ShopifyException_Tests
         };
         res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         try
         {
             ShopifyService.CheckResponseExceptions(string.Empty, res, rawBody);
         }
-        catch (ShopifyException e)
+        catch (ShopifyHttpException e)
         {
             ex = e;
         }
@@ -70,7 +70,7 @@ public class ShopifyException_Tests
     {
         HttpResponseMessage response;
         string rawBody;
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         using (var client = new HttpClient())
         {
@@ -93,7 +93,7 @@ public class ShopifyException_Tests
                         // RateLimitExceptions may happen when all Exception tests are running and
                         // execution policies are retrying.
                     }
-                    catch (ShopifyException e)
+                    catch (ShopifyHttpException e)
                     {
                         ex = e;
                     }
@@ -112,7 +112,7 @@ public class ShopifyException_Tests
     {
         HttpResponseMessage response;
         string rawBody;
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         using (var client = new HttpClient())
         {
@@ -135,7 +135,7 @@ public class ShopifyException_Tests
                         // RateLimitExceptions may happen when all Exception tests are running and
                         // execution policies are retrying.
                     }
-                    catch (ShopifyException e)
+                    catch (ShopifyHttpException e)
                     {
                         ex = e;
                     }
@@ -190,7 +190,7 @@ public class ShopifyException_Tests
         };
         HttpResponseMessage response;
         string rawBody;
-        ShopifyException ex = null;
+        ShopifyHttpException ex = null;
 
         using (var client = new HttpClient())
         {
@@ -214,7 +214,7 @@ public class ShopifyException_Tests
                         // RateLimitExceptions may happen when all Exception tests are running and
                         // execution policies are retrying.
                     }
-                    catch (ShopifyException e)
+                    catch (ShopifyHttpException e)
                     {
                         ex = e;
                     }
@@ -325,7 +325,7 @@ public class ShopifyException_Tests
 
         int requestCount = 60;
         var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        ShopifyException ex = null;
+        ShopifyRateLimitException ex = null;
 
         try
         {
@@ -336,7 +336,7 @@ public class ShopifyException_Tests
 
             await Task.WhenAll(tasks);
         }
-        catch (ShopifyException e)
+        catch (ShopifyRateLimitException e)
         {
             ex = e;
         }

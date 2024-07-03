@@ -144,7 +144,7 @@ public class Collect_Tests_Fixture : IAsyncLifetime
                 await Service.DeleteAsync(obj.Id.Value);
                 await ProductService.DeleteAsync(obj.ProductId.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {
@@ -158,7 +158,7 @@ public class Collect_Tests_Fixture : IAsyncLifetime
         {
             await CustomCollectionService.DeleteAsync(CollectionId);
         }
-        catch (ShopifyException ex) when ((int)ex.HttpStatusCode == 404)
+        catch (ShopifyHttpException ex) when ((int)ex.HttpStatusCode == 404)
         {
             // Collection has already been deleted
         }

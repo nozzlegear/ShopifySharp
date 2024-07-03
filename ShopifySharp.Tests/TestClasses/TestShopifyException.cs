@@ -2,7 +2,7 @@
 
 namespace ShopifySharp.Tests.TestClasses;
 
-public class TestShopifyException : ShopifyException
+public class TestShopifyException() : ShopifyException("A test exception")
 {
     public override string ToString()
     {
