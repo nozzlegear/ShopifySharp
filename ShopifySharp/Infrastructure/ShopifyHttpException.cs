@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp;
 
 public class ShopifyHttpException(
     HttpStatusCode statusCode,
