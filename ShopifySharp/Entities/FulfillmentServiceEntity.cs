@@ -87,11 +87,4 @@ public class FulfillmentServiceEntity : ShopifyObject
     /// </summary>
     [JsonProperty("service_name")]
     public string ServiceName { get; set; }
-
-    /// <summary>
-    /// Whether the fulfillment service wants to register for APIs related to fulfillment orders.
-    /// </summary>
-    [JsonProperty("fulfillment_orders_opt_in")]
-    [Obsolete("https://shopify.dev/changelog/deprecation-of-the-fulfillmentservice-fulfillmentordersoptin-field")]
-    public bool? FulfillmentOrdersOptIn { get; set; }
 }
