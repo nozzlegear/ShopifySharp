@@ -8,7 +8,6 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using Xunit;
-#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace ShopifySharp.Tests.Infrastructure;
 
@@ -19,107 +18,6 @@ public class CloneableRequestMessageTests
 {
     private static readonly Uri Host = new("https://fake-url.com/admin/api.json");
     private static readonly HttpMethod Method = HttpMethod.Post;
-
-    [Fact]
-    public void Clone_ShouldCloneWithNoHttpContent_AndPreserveHeaders()
-    {
-        // Setup
-        var cloneableRequest = new CloneableRequestMessage(Host, Method);
-        cloneableRequest.Headers.Add("some-key", "some-value");
-
-        // Act
-        var clonedRequest = cloneableRequest.Clone();
-
-        // Assert
-        clonedRequest.Should().NotBeNull();
-        clonedRequest.RequestUri.Should().Be(Host);
-        clonedRequest.Method.Should().Be(Method);
-        clonedRequest.Content.Should().BeNull();
-        clonedRequest.Headers.Should().ContainKey("some-key")
-            .WhoseValue.Should().Contain("some-value");
-    }
-
-    [Fact]
-    public void Clone_ShouldCloneJsonContent_AndPreserveHeaders()
-    {
-        // Setup
-        var jsonContent = new JsonContent(new { Foo = "bar" })
-        {
-            Headers = { {"some-key-1", "some-value-1"} }
-        };
-        var cloneableRequest = new CloneableRequestMessage(Host, Method, jsonContent);
-        cloneableRequest.Headers.Add("some-key-2", "some-value-2");
-
-        // Act
-        var clonedRequest = cloneableRequest.Clone();
-
-        // Assert
-        clonedRequest.Should().NotBeNull();
-        clonedRequest.RequestUri.Should().Be(Host);
-        clonedRequest.Method.Should().Be(Method);
-        clonedRequest.Content.Should().NotBeNull();
-        clonedRequest.Content!.Headers.Should().ContainKey("Content-Type")
-            .WhoseValue.Should().BeEquivalentTo(["application/json"]);
-        clonedRequest.Content!.Headers.Should().ContainKey("some-key-1")
-            .WhoseValue.Should().BeEquivalentTo(["some-value-1"]);
-        clonedRequest.Content!.Headers.Should().ContainKey("some-key-1")
-            .WhoseValue.Should().BeEquivalentTo(["some-value-1"]);
-        clonedRequest.Headers.Should().ContainKey("some-key-2")
-            .WhoseValue.Should().BeEquivalentTo(["some-value-2"]);
-    }
-
-    [Fact]
-    public void Clone_ShouldNotThrowWhenCloningDisposedRequest()
-    {
-        // The original Clone method did not interact with the underlying request's memory stream. Instead,
-        // it holds the original data object in memory and reserializes it to a byte array on each clone.
-        // It is only serializing the request/content into an Http pipeline that will throw an exception here.
-
-        // Setup
-        var jsonContent = new JsonContent(new { Foo = "bar" })
-        {
-            Headers = { {"some-key-1", "some-value-1"} }
-        };
-        var cloneableRequest = new CloneableRequestMessage(Host, Method, jsonContent);
-        cloneableRequest.Dispose();
-
-        // Act
-        var clonedRequest = () => cloneableRequest.Clone();
-
-        // Assert
-        clonedRequest.Should().NotThrow();
-    }
-
-    [Fact]
-    public void Clone_ShouldCloneMultipleTimesWithoutDisposalExceptions()
-    {
-        // Setup
-        var jsonContent = new JsonContent(new { Foo = "bar" })
-        {
-            Headers = { {"some-key-1", "some-value-1"} }
-        };
-        var baseRequest = new TestCloneableRequestMessage(Host, Method, jsonContent);
-
-        // Act
-        var act = () =>
-        {
-            for (var i = 0; i < 5; i++)
-            {
-                var clonedRequest = baseRequest.Clone();
-
-                clonedRequest.Should().NotBeNull();
-                clonedRequest.RequestUri.Should().Be(Host);
-                clonedRequest.Method.Should().Be(Method);
-                clonedRequest.Content.Should().NotBeNull();
-                clonedRequest.Content!.Headers.Should().ContainKey("Content-Type")
-                    .WhoseValue.Should().BeEquivalentTo(["application/json"]);
-            }
-        };
-
-        // Assert
-        act.Should().NotThrow();
-        baseRequest.Disposed.Should().BeFalse();
-    }
 
     #region CloneAsync
 
