@@ -10,7 +10,7 @@ public class ShopifyHttpException(
     string message,
     string rawResponseBody,
     string? requestId)
-    : ShopifyException(statusCode, errors, message, rawResponseBody, requestId)
+    : ShopifyException(message)
 {
     /// The Http response status code.
     public new readonly HttpStatusCode HttpStatusCode = statusCode;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using ShopifySharp.Infrastructure;
 using Xunit;
 using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
@@ -150,7 +151,7 @@ public class Article_Tests_Fixture : IAsyncLifetime
             {
                 await Service.DeleteAsync(BlogId.Value, article.Id.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {

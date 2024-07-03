@@ -108,7 +108,7 @@ public class Collection_Tests_Fixture : IAsyncLifetime
                 await CollectService.DeleteAsync(obj.Id.Value);
                 await ProductService.DeleteAsync(obj.ProductId.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {

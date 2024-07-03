@@ -96,7 +96,7 @@ public class InventoryItem_Tests_Fixture : IAsyncLifetime
             {
                 await VariantService.DeleteAsync(ProductId, obj.Id.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {

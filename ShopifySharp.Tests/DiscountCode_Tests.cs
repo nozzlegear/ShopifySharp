@@ -174,7 +174,7 @@ public class DiscountCodes_Tests_Fixture : IAsyncLifetime
             {
                 await DiscountCodeService.DeleteAsync(obj.PriceRuleId.Value, obj.Id.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {
@@ -192,7 +192,7 @@ public class DiscountCodes_Tests_Fixture : IAsyncLifetime
             {
                 await PriceRuleService.DeleteAsync(obj.Id.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {

@@ -218,7 +218,7 @@ public class Fulfillment_Tests_Fixture : IAsyncLifetime
             {
                 await OrderService.DeleteAsync(obj.Id.Value);
             }
-            catch (ShopifyException ex)
+            catch (ShopifyHttpException ex)
             {
                 if ((int)ex.HttpStatusCode != 404)
                 {
