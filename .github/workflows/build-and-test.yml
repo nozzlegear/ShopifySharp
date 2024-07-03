@@ -74,7 +74,7 @@ jobs:
       shell: pwsh
 
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: framework-test-results
         path: TestResults
@@ -140,7 +140,7 @@ jobs:
           8.0.x
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: artifacts
         path: ./artifacts
