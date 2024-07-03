@@ -67,29 +67,6 @@ public abstract class ShopifyService : IShopifyService
         _ExecutionPolicy = _GlobalExecutionPolicy;
     }
 
-    /// <summary>
-    /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
-    /// </summary>
-    /// <param name="shopDomain">The shop's *.myshopify.com URL.</param>
-    /// <param name="withAdminPath">Whether the <c>/admin</c> path should be included in the resulting URI.</param>
-    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp. Please use the ShopifySharp.Utilities.ShopifyDomainUtility instead.")]
-    // TODO: remove this method after 6-8 weeks
-    public static Uri BuildShopUri(string shopDomain, bool withAdminPath)
-    {
-        var domainUtility = new ShopifyDomainUtility();
-        var shopUri = domainUtility.BuildShopDomainUri(shopDomain);
-
-        if (!withAdminPath)
-            return shopUri;
-
-        var uriBuilder = new UriBuilder(shopUri)
-        {
-            Path = "admin"
-        };
-
-        return uriBuilder.Uri;
-    }
-
 #nullable disable
 
     /// <summary>
