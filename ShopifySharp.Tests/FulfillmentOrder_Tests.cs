@@ -353,7 +353,6 @@ public class FulfillmentOrder_Tests_Fixture : IAsyncLifetime
                 TrackingSupport = true,
                 RequiresShippingMethod = false,
                 Format = "json",
-                FulfillmentOrdersOptIn = true,
             });
         }
 
