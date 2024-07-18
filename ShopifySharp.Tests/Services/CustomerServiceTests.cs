@@ -156,22 +156,33 @@ public class CustomerServiceTests(
     [Fact]
     public async Task Searches_For_Customers()
     {
-        // It takes anywhere between 3 seconds to 30 seconds for Shopify to index new customers for searches.
-        // Rather than putting a 20 second Thread.Sleep in the test, we'll just assume it's successful if the
-        // test doesn't throw an exception.
-        bool threw = false;
+        var searchTry = 0;
 
-        try
+        // Setup
+        var customer = await Fixture.Create();
+        var filter = new CustomerSearchListFilter
         {
-            var search = await Fixture.Service.SearchAsync(new CustomerSearchListFilter { Query = "John" });
-        }
-        catch (ShopifyException ex)
+            Query = $"email:{customer.Email}",
+        };
+
+        // Act
+        var search = await Fixture.Service.SearchAsync(filter);
+
+        while (!search.Items.Any() && searchTry < 4)
         {
-
-            threw = true;
+            // The search index has a bit of a delay to it. Try up to 4 times before asserting.
+            searchTry++;
+            await Task.Delay(1000);
+            search = await Fixture.Service.SearchAsync(filter);
         }
 
-        Assert.False(threw);
+        // Assert
+        search.Should()
+            .NotBeNull();
+        search.Items.Should()
+            .NotBeEmpty()
+            .And.HaveCount(1)
+            .And.AllSatisfy(c => c.Email.Should().Be(customer.Email));
     }
 
     [Fact]
