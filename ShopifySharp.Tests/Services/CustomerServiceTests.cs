@@ -241,13 +241,39 @@ public class CustomerServiceTests(
         Assert.NotEmpty(url);
         Assert.Contains("account/activate", url);
     }
+
+    [Fact]
+    public async Task ListOrdersForCustomer()
+    {
+        // Setup
+        var created = await Fixture.Create();
+        var order = await Fixture.CreateOrder(created.Id.Value);
+
+        // Act
+        var orders = await Fixture.Service.ListOrdersForCustomerAsync(created.Id.Value, new CustomerOrderListFilter
+        {
+            Status = "any"
+        });
+
+        // Assert
+        orders
+            .Should().NotBeNull()
+            .And.NotBeEmpty()
+            .And.AllSatisfy(x =>
+                x.Id.Should().HaveValue()
+                    .And.Be(order.Id));
+    }
 }
 
 public class CustomerServiceTestsFixture : IAsyncLifetime
 {
-    public CustomerService Service { get; } = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public CustomerService Service { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public List<Customer> Created { get; } = new List<Customer>();
+    public OrderService OrderService { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public List<Customer> Created { get; } = [];
+
+    public List<Order> CreatedOrders { get; } = [];
 
     public string FirstName => "John";
 
@@ -257,7 +283,9 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        var policy = new LeakyBucketExecutionPolicy();
+        Service.SetExecutionPolicy(policy);
+        OrderService.SetExecutionPolicy(policy);
 
         // Create one customer for use with count, list, get, etc. tests.
         await Create();
@@ -276,6 +304,21 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {
                     Console.WriteLine($"Failed to delete created Customer with id {obj.Id.Value}. {ex.Message}");
+                }
+            }
+        }
+
+        foreach (var order in CreatedOrders)
+        {
+            try
+            {
+                await Service.DeleteAsync(order.Id.Value);
+            }
+            catch (ShopifyHttpException ex)
+            {
+                if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine($"Failed to delete created Order with id {order.Id.Value}. {ex.Message}");
                 }
             }
         }
@@ -319,6 +362,63 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
         {
             Created.Add(obj);
         }
+
+        return obj;
+    }
+
+    public async Task<Order> CreateOrder(long customerId)
+    {
+        var obj = await OrderService.CreateAsync(new Order
+        {
+            CreatedAt = DateTime.UtcNow,
+            BillingAddress = new Address
+            {
+                Address1 = "123 4th Street",
+                City = "Minneapolis",
+                Province = "Minnesota",
+                ProvinceCode = "MN",
+                Zip = "55401",
+                Phone = "555-555-5555",
+                FirstName = "John",
+                LastName = "Doe",
+                Company = "Tomorrow Corporation",
+                Country = "United States",
+                CountryCode = "US",
+                Default = true,
+            },
+            LineItems = new List<LineItem>()
+            {
+                new LineItem()
+                {
+                    Name = "Test Line Item",
+                    Title = "Test Line Item Title",
+                    Quantity = 2,
+                    Price = 5
+                },
+                new LineItem()
+                {
+                    Name = "Test Line Item 2",
+                    Title = "Test Line Item Title 2",
+                    Quantity = 2,
+                    Price = 5
+                }
+            },
+            FinancialStatus = "paid",
+            TotalPrice = 5.00m,
+            Note = Note,
+            Test = true,
+            Customer = new Customer
+            {
+                Id = customerId
+            }
+        }, new OrderCreateOptions
+        {
+            SendReceipt = false,
+            SendWebhooks = false,
+            SendFulfillmentReceipt = false,
+        });
+
+        CreatedOrders.Add(obj);
 
         return obj;
     }
