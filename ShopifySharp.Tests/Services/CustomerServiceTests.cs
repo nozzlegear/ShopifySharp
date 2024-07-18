@@ -1,26 +1,24 @@
-using ShopifySharp.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
+using ShopifySharp.Filters;
 using Xunit;
 using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Extensions.EmptyExtensions;
+// ReSharper disable PossibleInvalidOperationException
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Services;
 
 [Trait("Category", "Customer")]
-public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
+public class CustomerServiceTests(
+    CustomerServiceTestsFixture fixture,
+    ITestOutputHelper testOutputHelper)
+    : IClassFixture<CustomerServiceTestsFixture>
 {
-    private Customer_Tests_Fixture Fixture { get; }
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public Customer_Tests(Customer_Tests_Fixture fixture, ITestOutputHelper testOutputHelper)
-    {
-        Fixture = fixture;
-        _testOutputHelper = testOutputHelper;
-    }
+    private CustomerServiceTestsFixture Fixture { get; } = fixture;
 
     [Fact]
     public async Task Counts_Customers()
@@ -50,7 +48,7 @@ public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
         }
         catch (ShopifyException ex)
         {
-            _testOutputHelper.WriteLine($"{nameof(Deletes_Customers)} failed. {ex.Message}");
+            testOutputHelper.WriteLine($"{nameof(Deletes_Customers)} failed. {ex.Message}");
 
             threw = true;
         }
@@ -169,7 +167,6 @@ public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
         }
         catch (ShopifyException ex)
         {
-            _testOutputHelper.WriteLine($"{nameof(Searches_For_Customers)} failed. {ex.Message}");
 
             threw = true;
         }
@@ -202,8 +199,6 @@ public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
     public async Task SendInvite_Customers_Default()
     {
         var created = await Fixture.Create();
-        long id = created.Id.Value;
-
         var invite = await Fixture.Service.SendInviteAsync(created.Id.Value);
 
         Assert.NotNull(invite);
@@ -213,8 +208,6 @@ public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
     public async Task SendInvite_Customers_Custom()
     {
         var created = await Fixture.Create();
-        long id = created.Id.Value;
-
         var options = new CustomerInvite()
         {
             Subject = "Custom Subject courtesy of ShopifySharp",
@@ -232,8 +225,6 @@ public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
     public async Task GetAccountActivationUrl_Customers()
     {
         var created = await Fixture.Create();
-        long id = created.Id.Value;
-
         var url = await Fixture.Service.GetAccountActivationUrl(created.Id.Value);
 
         Assert.NotEmpty(url);
@@ -241,7 +232,7 @@ public class Customer_Tests : IClassFixture<Customer_Tests_Fixture>
     }
 }
 
-public class Customer_Tests_Fixture : IAsyncLifetime
+public class CustomerServiceTestsFixture : IAsyncLifetime
 {
     public CustomerService Service { get; } = new CustomerService(Utils.MyShopifyUrl, Utils.AccessToken);
 
@@ -307,7 +298,11 @@ public class Customer_Tests_Fixture : IAsyncLifetime
             VerifiedEmail = true,
             Note = Note,
             State = "enabled"
-        }, options);
+        }, options ?? new CustomerCreateOptions
+        {
+            SendEmailInvite = false,
+            SendWelcomeEmail = false,
+        });
 
         if (!skipAddToCreatedList)
         {
