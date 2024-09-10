@@ -113,9 +113,9 @@ public interface IMetaFieldService : IShopifyService
     /// </summary>
     /// <param name="metafield">A new metafield. Id should be set to null.</param>
     /// <param name="resourceId">The Id of the resource the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
-    /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
+    /// <param name="resourceType">The resource type the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
     /// <param name="parentResourceId">The Id of the parent resource the metafield will be associated with. This can be blogs, products.</param>
-    /// <param name="parentResourceType">The resource type the metaifeld will be associated with. This can be articles, variants.</param>
+    /// <param name="parentResourceType">The resource type the metafield will be associated with. This can be articles, variants.</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, long parentResourceId, string parentResourceType, CancellationToken cancellationToken = default);
 
@@ -124,7 +124,7 @@ public interface IMetaFieldService : IShopifyService
     /// </summary>
     /// <param name="metafield">A new metafield. Id should be set to null.</param>
     /// <param name="resourceId">The Id of the resource the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
-    /// <param name="resourceType">The resource type the metaifeld will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
+    /// <param name="resourceType">The resource type the metafield will be associated with. This can be variants, products, orders, customers, custom_collections, etc.</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     Task<MetaField> CreateAsync(MetaField metafield, long resourceId, string resourceType, CancellationToken cancellationToken = default);
 
