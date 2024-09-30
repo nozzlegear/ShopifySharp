@@ -8,7 +8,6 @@
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="fsharp.core" />
     <PackageReference Include="JetBrains.Annotations" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
