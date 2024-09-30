@@ -25,6 +25,6 @@
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="microsoft.extensions.dependencyinjection" Version="8.0.0" />
+    <PackageReference Include="microsoft.extensions.dependencyinjection" />
   </ItemGroup>
 </Project>

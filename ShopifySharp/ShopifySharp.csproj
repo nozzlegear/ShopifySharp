@@ -20,9 +20,9 @@
     <PackageReadme>For detailed usage examples and documentation, check our Github repository at [https://github.com/nozzlegear/shopifysharp](https://github.com/nozzlegear/shopifysharp).</PackageReadme>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.1.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
-    <PackageReference Include="newtonsoft.json" Version="13.0.2" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
+    <PackageReference Include="newtonsoft.json" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 </Project>
