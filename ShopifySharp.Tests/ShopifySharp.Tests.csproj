@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotenvfile" />
+    <PackageReference Include="FakeItEasy" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="fsharp.core" />
     <PackageReference Include="JetBrains.Annotations" />
