@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Services.Graph;
 
 [Serializable]
 public class GraphOrderEdge
@@ -38,14 +38,13 @@ public class GraphListOrdersResult
 }
 
 [Trait("Category", "Graph")]
-public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
+public partial class GraphServiceTests
 {
-    private readonly Graph_Tests_Fixture _fixture;
+    private readonly GraphService _sut = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public Graph_Tests(Graph_Tests_Fixture fixture)
+    public GraphServiceTests()
     {
-        _fixture = fixture;
-        _fixture.Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        _sut.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
     }
 
     [Fact(DisplayName = "Lists orders using the GraphService")]
@@ -84,7 +83,7 @@ public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
         }, serializer);
         // Send the request. For now this must be sent as a JToken, or else the service will assume it is a GraphQL
         // string and send it with the wrong content type.
-        var jToken = await _fixture.Service.PostAsync(requestBody);
+        var jToken = await _sut.PostAsync(requestBody);
         var listResult = jToken["orders"]?.ToObject<GraphListOrdersResult>();
 
         Assert.NotNull(listResult);
@@ -98,20 +97,5 @@ public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
             Assert.NotNull(edge.Node.Name);
             Assert.NotNull(edge.Node.Tags);
         });
-    }
-}
-
-public class Graph_Tests_Fixture : IAsyncLifetime
-{
-    public readonly GraphService Service = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-    public Task InitializeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    public Task DisposeAsync()
-    {
-        return Task.CompletedTask;
     }
 }
