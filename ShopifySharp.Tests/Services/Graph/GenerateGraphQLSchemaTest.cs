@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Wish.GraphQLSchemaGenerator;
 using Xunit;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Services.Graph;
 
 [Trait("Category", "GraphQL")]
-public class GenerateGraphQLSchema_Test
+public class GenerateGraphQlSchemaTest
 {
     [Fact(Skip = "This test should be run manually to re-generate the GraphQL types whenever the API version is upgraded")]
     public async Task GenerateGraphQLTypes()
