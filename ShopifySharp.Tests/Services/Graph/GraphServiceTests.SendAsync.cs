@@ -6,6 +6,7 @@ using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
+[Trait("Category", "Graph")]
 public partial class GraphServiceTests
 {
     [Fact]
