@@ -177,9 +177,7 @@ public class GraphService : ShopifyService, IGraphService
         using var jsonDocument = JsonDocument.Parse(result.RawResult);
 
         if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
-        {
             ThrowIfResponseContainsErrors(jsonDocument, result);
-        }
 
         return jsonDocument.Deserialize<T>(_jsonSerializerOptions);
     }
@@ -198,7 +196,7 @@ public class GraphService : ShopifyService, IGraphService
             return false;
 
         userErrors = userErrorsEl
-            .Deserialize<ICollection<GraphUserError>>()
+            .Deserialize<ICollection<GraphUserError>>(_jsonSerializerOptions)
             .ToList();
 
         return true;
