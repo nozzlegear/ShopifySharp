@@ -52,7 +52,7 @@ public class GraphServiceErrorHandlingTests
                     {
                       "code": "some-code",
                       "message": "some-message",
-                      "field": "some-field"
+                      "field": ["some-field"]
                     }
                   ]
                 }
@@ -99,7 +99,7 @@ public class GraphServiceErrorHandlingTests
                     {
                       "code": "some-code-1",
                       "message": "some-message-1",
-                      "field": "some-field-1"
+                      "field": ["some-field-1"]
                     }
                   ]
                 },
@@ -108,7 +108,7 @@ public class GraphServiceErrorHandlingTests
                     {
                       "code": "some-code-2",
                       "message": "some-message-2",
-                      "field": "some-field-2"
+                      "field": ["some-field-2"]
                     }
                   ]
                 }
