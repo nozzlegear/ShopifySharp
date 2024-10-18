@@ -8,7 +8,7 @@ public class TaxLine
     /// Whether the channel that submitted the tax line is responsible for remitting it.
     /// </summary>
     [JsonProperty("channelLiable")]
-    public bool ChannelLiable { get; set; }
+    public bool? ChannelLiable { get; set; }
 
     /// <summary>
     /// The amount of tax to be charged.
