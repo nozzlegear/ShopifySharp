@@ -38,9 +38,11 @@ public class GraphServiceErrorHandlingTests
         return result;
     }
 
-    [Fact]
-    public async Task WhenErrorHandlingIsEnabled_AndUserErrorsAreReturned_ShouldThrow()
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenUserErrorsAreReturnedFromASingleOperation_ShouldThrowAccordingToGraphRequestUserErrorHandling(GraphRequestUserErrorHandling userErrorHandling)
     {
+        // Setup
         const string userErrorsJson =
             """
             {
@@ -63,19 +65,31 @@ public class GraphServiceErrorHandlingTests
             .WithReturnType<Task<RequestResult<string>>>()
             .Returns(response);
 
+        // Act
         var act = () => _sut.PostAsync(new GraphRequest
         {
             Query = "some-graph-request-query",
-            UserErrorHandling = GraphRequestUserErrorHandling.Throw
+            UserErrorHandling = userErrorHandling
         });
 
-        await act.Should()
-            .ThrowAsync<ShopifyException>();
+        // Assert
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            await act.Should()
+                .ThrowAsync<ShopifyException>("{0} == {1}", nameof(userErrorHandling), GraphRequestUserErrorHandling.Throw);
+        }
+        else
+        {
+            await act.Should()
+                .NotThrowAsync("{0} != {1} (actual value == {2})", nameof(userErrorHandling), GraphRequestUserErrorHandling.Throw, userErrorHandling);
+        }
     }
 
-    [Fact]
-    public async Task WhenErrorHandlingIsEnabled_AndUserErrorsAreReturnedInMultipleOperations_ShouldThrow()
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenUserErrorsAreReturnedFromMultipleOperations_ShouldThrowAccordingToGraphRequestUserErrorHandling(GraphRequestUserErrorHandling userErrorHandling)
     {
+        // Setup
         const string userErrorsJson =
             """
             {
@@ -107,26 +121,38 @@ public class GraphServiceErrorHandlingTests
             .WithReturnType<Task<RequestResult<string>>>()
             .Returns(response);
 
+        // Act
         var act = () => _sut.PostAsync(new GraphRequest
         {
             Query = "some-graph-request-query",
-            UserErrorHandling = GraphRequestUserErrorHandling.Throw
+            UserErrorHandling = userErrorHandling
         });
 
-        await act.Should()
-            .ThrowAsync<ShopifyException>();
+        // Assert
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            await act.Should()
+                .ThrowAsync<ShopifyException>("{0} == {1}", nameof(userErrorHandling), GraphRequestUserErrorHandling.Throw);
+        }
+        else
+        {
+            await act.Should()
+                .NotThrowAsync("{0} != {1} (actual value == {2})", nameof(userErrorHandling), GraphRequestUserErrorHandling.Throw, userErrorHandling);
+        }
     }
 
-    [Fact]
-    public async Task WhenErrorHandlingIsEnabled_AndNoUserErrorsAreReturned_ShouldNotThrow()
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenNoUserErrorsAreReturned_ShouldNotThrow(GraphRequestUserErrorHandling userErrorHandling)
     {
         // Setup
-        const int expectedFoo = 7;
+        const string expectedPropertyName = "foo";
+        const int expectedPropertyValue = 7;
         var responseJson =
             $$"""
               {
                 "data": {
-                  "foo": {{expectedFoo}}
+                  "{{expectedPropertyName}}": {{expectedPropertyValue}}
                 }
               }
               """;
@@ -140,35 +166,17 @@ public class GraphServiceErrorHandlingTests
         var act = async () => await _sut.PostAsync(new GraphRequest
         {
             Query = "some-graph-request-query",
-            UserErrorHandling = GraphRequestUserErrorHandling.Throw
+            UserErrorHandling = userErrorHandling
         });
 
         // Assert
         await act.Should()
-            .NotThrowAsync<ShopifyException>();
+            .NotThrowAsync();
 
         var result = await act();
         result.RootElement.GetProperty("foo")
             .GetInt32()
             .Should()
-            .Be(expectedFoo);
-    }
-
-    [Fact]
-    public async Task WhenErrorHandlingIsDisabled_AndUserErrorsAreReturned_ShouldNotThrow()
-    {
-        Assert.Fail("nyi");
-    }
-
-    [Fact]
-    public async Task WhenErrorHandlingIsDisabled_AndUserErrorsAreReturnedInMultipleOperations_ShouldNotThrow()
-    {
-        Assert.Fail("nyi");
-    }
-
-    [Fact]
-    public async Task WhenErrorHandlingIsDisabled_AndNoUserErrorsAreReturned_ShouldNotThrow()
-    {
-        Assert.Fail("nyi");
+            .Be(expectedPropertyValue);
     }
 }
