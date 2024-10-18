@@ -179,4 +179,52 @@ public class GraphServiceErrorHandlingTests
             .Should()
             .Be(expectedPropertyValue);
     }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenUserErrorsAreReturned_AndUserErrorsJsonIsInvalidOrUnexpected_ShouldThrowAccordingToGraphRequestUserErrorHandling(
+        GraphRequestUserErrorHandling userErrorHandling
+    )
+    {
+        // Setup
+        string userErrorsJson=
+            $$"""
+            {
+              "data": {
+                "someOperation1": {
+                  "userErrors": "some-user-errors"
+                }
+              }
+            }
+            """;
+        var response = MakeRequestResult(userErrorsJson);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = () => _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            // Assert
+            var exn = await act.Should()
+                .ThrowAsync<ShopifyJsonParseException>("failure to parse JSON should result in an exception regardless of UserErrorHandling setting")
+                .WithMessage($"Failed to parse userErrors property, expected Array but got String");
+
+            exn.Which.JsonElement.HasValue.Should().Be(true);
+            exn.Which.JsonElement!.Value.GetProperty("userErrors").Should().NotBeNull();
+            exn.Which.JsonElement!.Value.GetProperty("userErrors").GetString().Should().Be("some-user-errors");
+        }
+        else
+        {
+            await act.Should()
+                .NotThrowAsync("{0} != {1} (actual value == {2})", nameof(userErrorHandling), GraphRequestUserErrorHandling.Throw, userErrorHandling);
+        }
+    }
 }
