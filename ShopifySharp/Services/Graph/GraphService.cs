@@ -183,11 +183,11 @@ public class GraphService : ShopifyService, IGraphService
         return jsonDocument.Deserialize<T>(_jsonSerializerOptions);
     }
 
-    private bool TryParseUserErrors(JsonDocument jsonDocument, out ICollection<GraphUserError> userErrors)
+    private bool TryParseUserErrors(JsonProperty jsonProperty, out ICollection<GraphUserError> userErrors)
     {
         userErrors = [];
 
-        if (!jsonDocument.RootElement.TryGetProperty("root.userErrors", out var userErrorsEl))
+        if (!jsonProperty.Value.TryGetProperty("userErrors", out var userErrorsEl))
             return false;
 
         if (userErrorsEl.ValueKind != JsonValueKind.Array)
@@ -209,21 +209,27 @@ public class GraphService : ShopifyService, IGraphService
     /// <exception cref="ShopifyHttpException">Thrown if <paramref name="jsonDocument"/> contains any <c>userErrors</c> entries.</exception>
     private void ThrowIfResponseContainsErrors<T>(JsonDocument jsonDocument, RequestResult<T> requestResult)
     {
-        if (!TryParseUserErrors(jsonDocument, out var userErrors))
-            return;
+        foreach (var jsonProperty in jsonDocument.RootElement.GetProperty("data").EnumerateObject())
+        {
+            if (jsonProperty.Value.ValueKind != JsonValueKind.Object)
+                continue;
 
-        var errorMessages = userErrors
-            .Select(u => u.Message)
-            .ToList();
+            if (!TryParseUserErrors(jsonProperty, out var userErrors))
+                continue;
 
-        if (errorMessages.Count == 0)
-            // Suspicious, TryParseUserErrors already checked that the array length was not 0
-            return;
+            var errorMessages = userErrors
+                .Select(u => u.Message)
+                .ToList();
 
-        var message = errorMessages.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
-        var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
+            if (errorMessages.Count == 0)
+                // Suspicious, TryParseUserErrors already checked that the array length was not 0
+                continue;
 
-        throw new ShopifyHttpException(requestResult.RequestInfo, HttpStatusCode.OK, errorMessages, message, requestResult.RawResult, requestId);
+            var message = errorMessages.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
+            var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
+
+            throw new ShopifyHttpException(requestResult.RequestInfo!, HttpStatusCode.OK, errorMessages, message, requestResult.RawResult, requestId);
+        }
     }
 
     /// <summary>
