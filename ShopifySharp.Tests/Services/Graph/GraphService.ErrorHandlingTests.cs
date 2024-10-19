@@ -288,6 +288,109 @@ public class GraphServiceErrorHandlingTests
         {
             await act.Should()
                 .NotThrowAsync("{0} != {1} (actual value == {2})", nameof(userErrorHandling), GraphRequestUserErrorHandling.Throw, userErrorHandling);
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenUserErrorsAreReturned_AndArrayContainsAUserErrorWithEmptyValues_ShouldThrowShopifyGraphUserErrorsException(
+        [CombinatorialValues("null", "\"\"")] string messageValue,
+        [CombinatorialValues("null", "\"\"")] string codeValue,
+        GraphRequestUserErrorHandling graphRequestUserErrorHandling
+    )
+    {
+        // Setup
+        const string operationPropertyName = "someOperation";
+        const string expectedPropertyName = "foo";
+        const int expectedPropertyValue = 7;
+        var responseJson =
+            $$"""
+              {
+                "data": {
+                  "{{operationPropertyName}}": {
+                    "{{expectedPropertyName}}": {{expectedPropertyValue}},
+                    "{{UserErrorsPropertyName}}": [
+                      {
+                        "code": {{codeValue}},
+                        "message": {{messageValue}}
+                      }
+                    ]
+                  }
+                }
+              }
+              """;
+        var response = MakeRequestResult(responseJson);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = graphRequestUserErrorHandling
+        });
+
+        // Assert
+        if (graphRequestUserErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            var exn = await act.Should()
+                .ThrowExactlyAsync<ShopifyGraphUserErrorsException>();
+            exn.And.GraphUserErrors.Should()
+                .HaveCount(1);
+        }
+        else
+        {
+            await act.Should()
+                .NotThrowAsync();
+        }
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenUserErrorsAreReturned_AndArrayContainsAnEmptyUserError_ShouldThrowShopifyGraphUserErrorsException(
+        GraphRequestUserErrorHandling graphRequestUserErrorHandling
+    )
+    {
+        // Setup
+        const string operationPropertyName = "someOperation";
+        const string expectedPropertyName = "foo";
+        const string responseJson =
+            $$"""
+              {
+                "data": {
+                  "{{operationPropertyName}}": {
+                    "{{expectedPropertyName}}": 7,
+                    "{{UserErrorsPropertyName}}": [{}]
+                  }
+                }
+              }
+              """;
+        var response = MakeRequestResult(responseJson);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = graphRequestUserErrorHandling
+        });
+
+        if (graphRequestUserErrorHandling == GraphRequestUserErrorHandling.Throw)
+        {
+            // Assert
+            var exn = await act.Should()
+                .ThrowExactlyAsync<ShopifyGraphUserErrorsException>();
+            exn.And.GraphUserErrors.Should()
+                .HaveCount(1)
+                .And
+                .Satisfy(x => x.Code == null && x.Message == "" && x.Field.Count == 0);
+        }
+        else
+        {
+            await act.Should()
+                .NotThrowAsync();
         }
     }
 }
