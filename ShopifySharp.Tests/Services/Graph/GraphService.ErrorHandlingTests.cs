@@ -148,13 +148,18 @@ public class GraphServiceErrorHandlingTests
     public async Task WhenNoUserErrorsAreReturned_ShouldNotThrow(GraphRequestUserErrorHandling userErrorHandling)
     {
         // Setup
-        const string expectedPropertyName = "foo";
+        const string operationPropertyName = "some-operation-property-name";
+        const string expectedPropertyName1 = "foo";
+        const string expectedPropertyName2 = "bar";
         const int expectedPropertyValue = 7;
         var responseJson =
             $$"""
               {
                 "data": {
-                  "{{expectedPropertyName}}": {{expectedPropertyValue}}
+                  "{{expectedPropertyName1}}": {{expectedPropertyValue}},
+                  "{{operationPropertyName}}": {
+                    "{{expectedPropertyName2}}": {{expectedPropertyValue}}
+                  }
                 }
               }
               """;
@@ -176,7 +181,14 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        result.RootElement.GetProperty(expectedPropertyName)
+        result.RootElement.GetProperty(expectedPropertyName1)
+            .GetInt32()
+            .Should()
+            .Be(expectedPropertyValue);
+
+        var operation = result.RootElement.GetProperty(operationPropertyName);
+        operation.Should().NotBeNull();
+        operation.GetProperty(expectedPropertyName2)
             .GetInt32()
             .Should()
             .Be(expectedPropertyValue);
@@ -187,14 +199,17 @@ public class GraphServiceErrorHandlingTests
     public async Task WhenUserErrorsAreReturned_AndArrayIsEmptyWithZeroErrors_ShouldNotThrow(GraphRequestUserErrorHandling userErrorHandling)
     {
         // Setup
+        const string operationPropertyName = "someOperation";
         const string expectedPropertyName = "foo";
         const int expectedPropertyValue = 7;
         var responseJson =
             $$"""
               {
                 "data": {
-                  "{{expectedPropertyName}}": {{expectedPropertyValue}},
-                  "{{UserErrorsPropertyName}}": []
+                  "{{operationPropertyName}}": {
+                    "{{expectedPropertyName}}": {{expectedPropertyValue}},
+                    "{{UserErrorsPropertyName}}": []
+                  }
                 }
               }
               """;
@@ -216,11 +231,15 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        result.RootElement.GetProperty(expectedPropertyName)
+        var operation = result.RootElement.GetProperty(operationPropertyName);
+
+        operation.Should().NotBeNull();
+
+        operation.GetProperty(expectedPropertyName)
             .GetInt32()
             .Should()
             .Be(expectedPropertyValue);
-        result.RootElement.GetProperty(UserErrorsPropertyName)
+        operation.GetProperty(UserErrorsPropertyName)
             .GetArrayLength()
             .Should()
             .Be(0);
@@ -233,7 +252,7 @@ public class GraphServiceErrorHandlingTests
     )
     {
         // Setup
-        string userErrorsJson=
+        var userErrorsJson=
             $$"""
             {
               "data": {
