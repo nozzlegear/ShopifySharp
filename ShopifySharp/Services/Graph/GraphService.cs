@@ -223,9 +223,8 @@ public class GraphService : ShopifyService, IGraphService
                 .Select(u => u.Message)
                 .ToList();
 
-            if (errorMessages.Count == 0)
-                // Suspicious, TryParseUserErrors already checked that the array length was not 0
-                continue;
+            if (!errorMessages.Any())
+                continue; // Need a test that has userErrors.message == blank
 
             var message = errorMessages.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
             var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
