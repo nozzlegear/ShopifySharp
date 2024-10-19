@@ -11,6 +11,8 @@ namespace ShopifySharp.Tests.Services.Graph;
 [Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceErrorHandlingTests
 {
+    private const string UserErrorsPropertyName = "userErrors";
+
     private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>(x => x.Strict());
 
     private readonly GraphService _sut;
@@ -174,10 +176,54 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        result.RootElement.GetProperty("foo")
+        result.RootElement.GetProperty(expectedPropertyName)
             .GetInt32()
             .Should()
             .Be(expectedPropertyValue);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenUserErrorsAreReturned_AndArrayIsEmptyWithZeroErrors_ShouldNotThrow(GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string expectedPropertyName = "foo";
+        const int expectedPropertyValue = 7;
+        var responseJson =
+            $$"""
+              {
+                "data": {
+                  "{{expectedPropertyName}}": {{expectedPropertyValue}},
+                  "{{UserErrorsPropertyName}}": []
+                }
+              }
+              """;
+        var response = MakeRequestResult(responseJson);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        await act.Should()
+            .NotThrowAsync();
+
+        var result = await act();
+        result.RootElement.GetProperty(expectedPropertyName)
+            .GetInt32()
+            .Should()
+            .Be(expectedPropertyValue);
+        result.RootElement.GetProperty(UserErrorsPropertyName)
+            .GetArrayLength()
+            .Should()
+            .Be(0);
     }
 
     [Theory]
@@ -192,7 +238,7 @@ public class GraphServiceErrorHandlingTests
             {
               "data": {
                 "someOperation1": {
-                  "userErrors": "some-user-errors"
+                  "{{UserErrorsPropertyName}}": "some-user-errors"
                 }
               }
             }
@@ -217,9 +263,7 @@ public class GraphServiceErrorHandlingTests
                 .ThrowAsync<ShopifyJsonParseException>("failure to parse JSON should result in an exception regardless of UserErrorHandling setting")
                 .WithMessage($"Failed to parse userErrors property, expected Array but got String");
 
-            exn.Which.JsonElement.HasValue.Should().Be(true);
-            exn.Which.JsonElement!.Value.GetProperty("userErrors").Should().NotBeNull();
-            exn.Which.JsonElement!.Value.GetProperty("userErrors").GetString().Should().Be("some-user-errors");
+            exn.Which.JsonPropertyName.Should().Be(UserErrorsPropertyName);
         }
         else
         {
