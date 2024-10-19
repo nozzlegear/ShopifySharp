@@ -5,21 +5,17 @@ using System.Text.Json;
 namespace ShopifySharp;
 
 [Serializable]
-public class ShopifyJsonParseException : ShopifyException
+public class ShopifyJsonParseException(
+    string message,
+    string? jsonPropertyName,
+    string? requestId = null,
+    ShopifyException? innerException = null)
+    : ShopifyException(message, innerException)
 {
-    public ShopifyJsonParseException(string message,
-        JsonProperty? sourceJson,
-        string? requestId = null,
-        ShopifyException? innerException = null) : base(message, innerException)
-    {
-        JsonElement = sourceJson?.Value.Clone();
-        RequestId = requestId;
-    }
-
     /// <summary>
-    /// The element that caused the exception. May be null if it was not possible to capture the element.
+    /// The name of the json property that caused the exception. May be null if it was not possible to capture the name.
     /// </summary>
-    public JsonElement? JsonElement { get; }
+    public string? JsonPropertyName { get; } = jsonPropertyName;
 
-    public string? RequestId { get; }
+    public string? RequestId { get; } = requestId;
 }
