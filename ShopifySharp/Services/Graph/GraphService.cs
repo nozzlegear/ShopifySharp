@@ -184,15 +184,16 @@ public class GraphService : ShopifyService, IGraphService
 
     private bool TryParseUserErrors(JsonProperty jsonProperty, out ICollection<GraphUserError> userErrors)
     {
+        const string userErrorsPropertyName = "userErrors";
         userErrors = [];
 
-        if (!jsonProperty.Value.TryGetProperty("userErrors", out var userErrorsProperty))
+        if (!jsonProperty.Value.TryGetProperty(userErrorsPropertyName, out var userErrorsProperty))
             return false;
 
         if (userErrorsProperty.ValueKind != JsonValueKind.Array)
             throw new ShopifyJsonParseException(
-                $"Failed to parse userErrors property, expected {JsonValueKind.Array} but got {userErrorsProperty.ValueKind}",
-                jsonProperty);
+                $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueKind.Array} but got {userErrorsProperty.ValueKind}",
+                userErrorsPropertyName);
 
         if (userErrorsProperty.GetArrayLength() == 0)
             return false;
@@ -229,7 +230,7 @@ public class GraphService : ShopifyService, IGraphService
             var message = errorMessages.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
             var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
 
-            throw new ShopifyJsonParseException(message, jsonProperty, requestId);
+            throw new ShopifyJsonParseException(message, jsonProperty.Name, requestId);
         }
     }
 
