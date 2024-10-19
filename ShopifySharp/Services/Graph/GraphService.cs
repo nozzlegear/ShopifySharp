@@ -183,7 +183,8 @@ public class GraphService : ShopifyService, IGraphService
                 $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueKind.Array} but got {userErrorsProperty.ValueKind}",
                 userErrorsPropertyName);
 
-        if (userErrorsProperty.GetArrayLength() == 0)
+        var totalArrayLength = userErrorsProperty.GetArrayLength();
+        if (totalArrayLength == 0)
             return false;
 
         userErrors = userErrorsProperty
@@ -202,7 +203,7 @@ public class GraphService : ShopifyService, IGraphService
         foreach (var jsonProperty in jsonDocument.RootElement.GetProperty("data").EnumerateObject())
         {
             if (jsonProperty.Value.ValueKind != JsonValueKind.Object)
-                continue;
+                continue; // error here: "userErrors" needs to be a child of "someOperation"
 
             if (!TryParseUserErrors(jsonProperty, out var userErrors))
                 continue;
