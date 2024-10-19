@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
@@ -239,7 +240,7 @@ public class GraphService : ShopifyService, IGraphService
     /// </summary>
     /// <param name="requestResult">The <see cref="RequestResult{JToken}" /> response from ExecuteRequestAsync.</param>
     /// <exception cref="ShopifyException">Thrown if <paramref name="requestResult"/> contains an error.</exception>
-    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp.")]
+    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp."), ExcludeFromCodeCoverage]
     protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
     {
         var jsonDocument = JsonDocument.Parse(requestResult.RawResult);
