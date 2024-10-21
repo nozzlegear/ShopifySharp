@@ -202,7 +202,7 @@ public class GraphService : ShopifyService, IGraphService
             .Deserialize<ICollection<GraphUserError>>(_jsonSerializerOptions)
             .ToList();
 
-        return true;
+        return userErrors.Count > 0;
     }
 
     /// <summary>
@@ -219,17 +219,9 @@ public class GraphService : ShopifyService, IGraphService
             if (!TryParseUserErrors(jsonProperty, out var userErrors))
                 continue;
 
-            var errorMessages = userErrors
-                .Select(u => u.Message)
-                .ToList();
-
-            if (!errorMessages.Any())
-                continue; // Need a test that has userErrors.message == blank
-
-            var message = errorMessages.FirstOrDefault() ?? "Unable to parse Shopify's error response, please inspect exception's RawBody property and report this issue to the ShopifySharp maintainers.";
             var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
 
-            throw new ShopifyJsonParseException(message, jsonProperty.Name, requestId);
+            throw new ShopifyGraphUserErrorsException(userErrors, requestId);
         }
     }
 
