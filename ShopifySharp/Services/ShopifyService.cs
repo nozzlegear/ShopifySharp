@@ -33,8 +33,9 @@ public abstract class ShopifyService : IShopifyService
     private IRequestExecutionPolicy _ExecutionPolicy;
     private HttpClient _Client;
 
-    protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility domainUtility)
+    protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility? domainUtility)
     {
+        domainUtility ??= new ShopifyDomainUtility();
         _ShopUri = domainUtility.BuildShopDomainUri(shopDomain);
         _AccessToken = accessToken;
         _Client = _HttpClientFactory.CreateClient();

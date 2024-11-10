@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
@@ -10,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using ShopifySharp.Utilities;
 using ShopifySharp.Graph;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp;
 
@@ -19,6 +19,7 @@ namespace ShopifySharp;
 public class GraphService : ShopifyService, IGraphService
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly string _apiVersion;
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
@@ -43,6 +44,22 @@ public class GraphService : ShopifyService, IGraphService
     {
         _jsonSerializerOptions = jsonSerializerOptions;
     }
+
+    #nullable enable
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        string? apiVersion,
+        IHttpContentSerializer? httpContentSerializer,
+        IShopifyDomainUtility? shopifyDomainUtility,
+        JsonSerializerOptions? jsonSerializerOptions
+    ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+    {
+        _apiVersion = apiVersion;
+        _jsonSerializerOptions = jsonSerializerOptions;
+        _httpContentSerializer = httpContentSerializer;
+    }
+    #nullable disable
 
     public virtual async Task<T> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
@@ -165,13 +182,8 @@ public class GraphService : ShopifyService, IGraphService
     /// <param name="cancellationToken"></param>
     protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
     {
-        var json = JsonSerializer.Serialize(new Dictionary<string, object>
-        {
-            {"query", graphRequest.Query},
-            {"variables", graphRequest.Variables},
-        });
         var requestUri = BuildRequestUri("graphql.json");
-        var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+        using var requestContent = _httpContentSerializer.SerializeGraphRequest(requestUri, graphRequest);
         var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
 
         using var jsonDocument = JsonDocument.Parse(result.RawResult);
