@@ -1,13 +1,14 @@
 #if NET8_0_OR_GREATER
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
-[Trait("Category", "Graph")]
-public partial class GraphServiceTests
+[Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
+public class GraphServiceSendAsyncTests
 {
     [Fact]
     public async Task GetOrders()

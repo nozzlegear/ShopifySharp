@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace ShopifySharp.Infrastructure;
 
