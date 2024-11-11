@@ -3,6 +3,10 @@ using Newtonsoft.Json.Linq;
 using ShopifySharp.Converters;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace ShopifySharp.Infrastructure;
 
@@ -23,6 +27,17 @@ public static class Serializer
             }
         };
     }
+
+    // TODO: investigate standardizing the ShopifySharp.GraphQL.Serializer.Options defaults with these defaults
+    public static readonly JsonSerializerOptions SerializerDefaults = new()
+    {
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        Converters =
+        {
+            new JsonStringEnumConverter()
+        },
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
     public static string Serialize(object data) => JsonConvert.SerializeObject(data, CreateNewtonsoftSettings());
 
@@ -53,10 +68,8 @@ public static class Serializer
             jToken = jToken.SelectToken(rootElementPath);
             return jToken.ToObject<T>(JsonSerializer.Create(settings));
         }
-        else
-        {
-            return JsonConvert.DeserializeObject<T>(json, settings);
-        }
+
+        return JsonConvert.DeserializeObject<T>(json, settings);
     }
 
     private static T DeserializeWithSystemTextJson<T>(string json)

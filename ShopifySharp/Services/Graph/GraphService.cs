@@ -33,7 +33,7 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(myShopifyUrl, shopAccessToken)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = jsonSerializerOptions;
+        _jsonSerializerOptions = jsonSerializerOptions ?? Serializer.SerializerDefaults;
     }
 
     public GraphService(
@@ -43,7 +43,7 @@ public class GraphService : ShopifyService, IGraphService
         JsonSerializerOptions jsonSerializerOptions = null
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
-        _jsonSerializerOptions = jsonSerializerOptions;
+        _jsonSerializerOptions = jsonSerializerOptions ?? Serializer.SerializerDefaults;
     }
 
     #nullable enable
@@ -57,7 +57,7 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = jsonSerializerOptions;
+        _jsonSerializerOptions = jsonSerializerOptions ?? Serializer.SerializerDefaults;
         _httpContentSerializer = httpContentSerializer;
     }
     #nullable disable
