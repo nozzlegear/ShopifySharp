@@ -1,6 +1,7 @@
 #if NET6_0_OR_GREATER
 #nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -50,35 +51,54 @@ namespace ShopifySharp.GraphQL
         public static string ToJson(this IGraphQLObject o) => Serializer.Serialize(o);
     }
 
+    public interface IEdge
+    {
+        string? cursor { get; set; }
+
+        object? node { get; set; }
+    }
+
+    public interface IEdge<TNode> : IEdge
+    {
+        object? IEdge.node { get => this.node; set => this.node = (TNode? )value; }
+        new TNode? node { get; set; }
+    }
+
+    public interface IConnection
+    {
+        PageInfo? pageInfo { get; set; }
+    }
+
+    public interface IConnectionWithNodes : IConnection
+    {
+        IEnumerable? nodes { get; set; }
+    }
+
+    public interface IConnectionWithNodes<TNode> : IConnectionWithNodes
+    {
+        IEnumerable? IConnectionWithNodes.nodes { get => this.nodes; set => this.nodes = (IEnumerable<TNode>? )value; }
+        new IEnumerable<TNode>? nodes { get; set; }
+    }
+
+    public interface IConnectionWithEdges : IConnection
+    {
+        IEnumerable<IEdge>? edges { get; set; }
+    }
+
+    public interface IConnectionWithEdges<TNode> : IConnectionWithEdges
+    {
+        IEnumerable<IEdge>? IConnectionWithEdges.edges { get => this.edges; set => this.edges = (IEnumerable<IEdge<TNode>>? )value; }
+        new IEnumerable<IEdge<TNode>>? edges { get; set; }
+    }
+
     public interface IConnectionWithEdges<TEdge, TNode> : IConnectionWithEdges<TNode> where TEdge : IEdge<TNode>
     {
-        IEnumerable<IEdge<TNode>>? IConnectionWithEdges<TNode>.edges => this.edges?.Cast<IEdge<TNode>>();
-        new IEnumerable<TEdge>? edges { get; }
-    }
-
-    public interface IConnectionWithEdges<TNode>
-    {
-        PageInfo? pageInfo { get; }
-
-        IEnumerable<IEdge<TNode>>? edges { get; }
-    }
-
-    public interface IConnectionWithNodes<TNode>
-    {
-        PageInfo? pageInfo { get; }
-
-        IEnumerable<TNode>? nodes { get; }
+        IEnumerable<IEdge<TNode>>? IConnectionWithEdges<TNode>.edges { get => this.edges?.Cast<IEdge<TNode>>(); set => this.edges = value?.Cast<TEdge>(); }
+        new IEnumerable<TEdge>? edges { get; set; }
     }
 
     public interface IConnectionWithNodesAndEdges<TEdge, TNode> : IConnectionWithEdges<TEdge, TNode>, IConnectionWithNodes<TNode> where TEdge : IEdge<TNode>
     {
-    }
-
-    public interface IEdge<TNode>
-    {
-        string? cursor { get; }
-
-        TNode? node { get; }
     }
 
     ///<summary>
@@ -2297,6 +2317,58 @@ namespace ShopifySharp.GraphQL
     ///<summary>
     ///Basic events chronicle resource activities such as the creation of an article, the fulfillment of an order, or
     ///the addition of a product.
+    ///
+    ///### General events
+    ///
+    ///| Action | Description  |
+    ///|---|---|
+    ///| `create` | The item was created. |
+    ///| `destroy` | The item was destroyed. |
+    ///| `published` | The item was published. |
+    ///| `unpublished` | The item was unpublished. |
+    ///| `update` | The item was updated.  |
+    ///
+    ///### Order events
+    ///
+    ///Order events can be divided into the following categories:
+    ///
+    ///- *Authorization*: Includes whether the authorization succeeded, failed, or is pending.
+    ///- *Capture*: Includes whether the capture succeeded, failed, or is pending.
+    ///- *Email*: Includes confirmation or cancellation of the order, as well as shipping.
+    ///- *Fulfillment*: Includes whether the fulfillment succeeded, failed, or is pending. Also includes cancellation, restocking, and fulfillment updates.
+    ///- *Order*: Includess the placement, confirmation, closing, re-opening, and cancellation of the order.
+    ///- *Refund*: Includes whether the refund succeeded, failed, or is pending.
+    ///- *Sale*: Includes whether the sale succeeded, failed, or is pending.
+    ///- *Void*: Includes whether the void succeeded, failed, or is pending.
+    ///
+    ///| Action  | Message  | Description  |
+    ///|---|---|---|
+    ///| `authorization_failure` | The customer, unsuccessfully, tried to authorize: `{money_amount}`. | Authorization failed. The funds cannot be captured. |
+    ///| `authorization_pending` | Authorization for `{money_amount}` is pending. | Authorization pending. |
+    ///| `authorization_success` | The customer successfully authorized us to capture: `{money_amount}`. | Authorization was successful and the funds are available for capture. |
+    ///| `cancelled` | Order was cancelled by `{shop_staff_name}`. | The order was cancelled. |
+    ///| `capture_failure` | We failed to capture: `{money_amount}`. | The capture failed. The funds cannot be transferred to the shop. |
+    ///| `capture_pending` | Capture for `{money_amount}` is pending. | The capture is in process. The funds are not yet available to the shop. |
+    ///| `capture_success` | We successfully captured: `{money_amount}` | The capture was successful and the funds are now available to the shop. |
+    ///| `closed` | Order was closed. | The order was closed. |
+    ///| `confirmed` | Received a new order: `{order_number}` by `{customer_name}`. | The order was confirmed. |
+    ///| `fulfillment_cancelled` | We cancelled `{number_of_line_items}` from being fulfilled by the third party fulfillment service. | Fulfillment for one or more of the line_items failed. |
+    ///| `fulfillment_pending` | We submitted `{number_of_line_items}` to the third party service. | One or more of the line_items has been assigned to a third party service for fulfillment. |
+    ///| `fulfillment_success` | We successfully fulfilled line_items. | Fulfillment was successful for one or more line_items. |
+    ///| `mail_sent` | `{message_type}` email was sent to the customer. | An email was sent to the customer. |
+    ///| `placed` | Order was placed. | An order was placed by the customer. |
+    ///| `re_opened` | Order was re-opened. | An order was re-opened. |
+    ///| `refund_failure` | We failed to refund `{money_amount}`. | The refund failed. The funds are still with the shop. |
+    ///| `refund_pending` | Refund of `{money_amount}` is still pending. | The refund is in process. The funds are still with shop. |
+    ///| `refund_success` | We successfully refunded `{money_amount}`. | The refund was successful. The funds have been transferred to the customer. |
+    ///| `restock_line_items` | We restocked `{number_of_line_items}`. |	One or more of the order's line items have been restocked. |
+    ///| `sale_failure` | The customer failed to pay `{money_amount}`. | The sale failed. The funds are not available to the shop. |
+    ///| `sale_pending` | The `{money_amount}` is pending. | The sale is in process. The funds are not yet available to the shop. |
+    ///| `sale_success` | We successfully captured `{money_amount}`. | The sale was successful. The funds are now with the shop. |
+    ///| `update` | `{order_number}` was updated. | The order was updated. |
+    ///| `void_failure` | We failed to void the authorization. | Voiding the authorization failed. The authorization is still valid. |
+    ///| `void_pending` | Authorization void is pending. | Voiding the authorization is in process. The authorization is still valid. |
+    ///| `void_success` | We successfully voided the authorization. | Voiding the authorization was successful. The authorization is no longer valid. |
     ///</summary>
     public class BasicEvent : GraphQLObject<BasicEvent>, IEvent, INode
     {
@@ -2816,10 +2888,12 @@ namespace ShopifySharp.GraphQL
         ///Whether to allow customers to use editable shipping addresses.
         ///</summary>
         public bool? editableShippingAddress { get; set; }
+
         ///<summary>
         ///Whether a buyer must pay at checkout or they can also choose to pay
         ///later using net terms.
         ///</summary>
+        [Obsolete("Please use `checkoutToDraft`(must be false) and `paymentTermsTemplate`(must be nil) to derive this instead.")]
         public bool? payNowOnly { get; set; }
         ///<summary>
         ///Represents the merchant configured payment terms.
@@ -3047,9 +3121,11 @@ namespace ShopifySharp.GraphQL
         ///The name of the selected market.
         ///</summary>
         public string? marketName { get; set; }
+
         ///<summary>
         ///The selected country code that determines the pricing.
         ///</summary>
+        [Obsolete("This field is now incompatible with Markets.")]
         public CountryCode? marketRegionCountryCode { get; set; }
         ///<summary>
         ///The assigned phone number.
@@ -7680,7 +7756,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         OPTION_NOT_FOUND,
         ///<summary>
-        ///Unable to add products with different options.
+        ///All child products must include the same options.
         ///</summary>
         OPTIONS_MUST_BE_EQUAL_TO_THE_OTHER_COMPONENTS,
         ///<summary>
@@ -18494,9 +18570,11 @@ namespace ShopifySharp.GraphQL
         ///The name of the selected market.
         ///</summary>
         public string? marketName { get; set; }
+
         ///<summary>
         ///The selected country code that determines the pricing.
         ///</summary>
+        [Obsolete("This field is now incompatible with Markets.")]
         public CountryCode? marketRegionCountryCode { get; set; }
         ///<summary>
         ///A [custom field](https://shopify.dev/docs/apps/build/custom-data),
@@ -21802,7 +21880,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         RELEASE_HOLD,
         ///<summary>
-        ///Applies a fulfillment hold on an open fulfillment order. The corresponding mutation for this action is `fulfillmentOrderHold`.
+        ///Applies a fulfillment hold on the fulfillment order. The corresponding mutation for this action is `fulfillmentOrderHold`.
         ///</summary>
         HOLD,
         ///<summary>
@@ -23338,8 +23416,8 @@ namespace ShopifySharp.GraphQL
         ///
         ///  * 4PX
         ///  * AGS
+        ///  * Amazon
         ///  * Amazon Logistics UK
-        ///  * Amazon Logistics US
         ///  * An Post
         ///  * Anjun Logistics
         ///  * APC
@@ -26907,12 +26985,16 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///Represents the location where the physical good resides.
+    ///Represents the location where the physical good resides. You can stock inventory at active locations. Active
+    ///locations that have `fulfills_online_orders: true` and are configured with a shipping rate, pickup enabled or
+    ///local delivery will be able to sell from their storefront.
     ///</summary>
     public class Location : GraphQLObject<Location>, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode, IMetafieldReferencer
     {
         ///<summary>
-        ///Whether this location can be reactivated.
+        ///Whether the location can be reactivated. If `false`, then trying to activate the location with the
+        ///[`LocationActivate`](https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationActivate)
+        ///mutation will return an error that describes why the location can't be activated.
         ///</summary>
         public bool? activatable { get; set; }
         ///<summary>
@@ -26928,7 +27010,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public DateTime? createdAt { get; set; }
         ///<summary>
-        ///Whether this location can be deactivated.
+        ///Whether this location can be deactivated. If `true`, then the location can be deactivated by calling the
+        ///[`LocationDeactivate`](https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDeactivate)
+        ///mutation. If `false`, then calling the mutation to deactivate it will return an error that describes why the
+        ///location can't be deactivated.
         ///</summary>
         public bool? deactivatable { get; set; }
         ///<summary>
@@ -26968,7 +27053,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public InventoryLevelConnection? inventoryLevels { get; set; }
         ///<summary>
-        ///Whether the location is active.
+        ///Whether the location is active. A deactivated location can be activated (change `isActive: true`) if it has
+        ///`activatable` set to `true` by calling the
+        ///[`locationActivate`](https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationActivate)
+        ///mutation.
         ///</summary>
         public bool? isActive { get; set; }
         ///<summary>
@@ -34131,7 +34219,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public FulfillmentOrderClosePayload? fulfillmentOrderClose { get; set; }
         ///<summary>
-        ///Applies a fulfillment hold on an open fulfillment order.
+        ///Applies a fulfillment hold on a fulfillment order.
         ///</summary>
         public FulfillmentOrderHoldPayload? fulfillmentOrderHold { get; set; }
         ///<summary>
@@ -34332,7 +34420,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public InventorySetScheduledChangesPayload? inventorySetScheduledChanges { get; set; }
         ///<summary>
-        ///Activates a location.
+        ///Activates a location so that you can stock inventory at the location. Refer to the
+        ///[`isActive`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Location#field-isactive) and
+        ///[`activatable`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Location#field-activatable)
+        ///fields on the `Location` object.
         ///</summary>
         public LocationActivatePayload? locationActivate { get; set; }
         ///<summary>
@@ -36621,12 +36712,12 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         public string? note { get; set; }
         ///<summary>
-        ///The total amount of additional fees after returns, in shop and presentment currencies.
-        ///Returns `null` if there are no additional fees for the order.
+        ///The total amount of additional fees at the time of order creation, in shop and presentment currencies.
+        ///Returns `null` if additional fees aren't applicable.
         ///</summary>
         public MoneyBag? originalTotalAdditionalFeesSet { get; set; }
         ///<summary>
-        ///The total amount of duties before returns, in shop and presentment currencies.
+        ///The total amount of duties at the time of order creation, in shop and presentment currencies.
         ///Returns `null` if duties aren't applicable.
         ///</summary>
         public MoneyBag? originalTotalDutiesSet { get; set; }
@@ -39192,6 +39283,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Amount owed for this payment schedule.
         ///</summary>
+        [Obsolete("Use `balanceDue`, `totalBalance`, or `Order.totalOutstandingSet` instead.")]
         public MoneyV2? amount { get; set; }
         ///<summary>
         ///Date and time when the payment schedule is paid or fulfilled.
@@ -52859,9 +52951,11 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         [Obsolete("All shops support multi-location inventory. Use `QueryRoot.locations` to determine whether shop has more than one location.")]
         public bool? multiLocation { get; set; }
+
         ///<summary>
         ///Whether a shop has access to the onboarding visual.
         ///</summary>
+        [Obsolete("No longer supported.")]
         public bool? onboardingVisual { get; set; }
         ///<summary>
         ///Whether a shop is configured to sell subscriptions with PayPal Express.
@@ -53077,7 +53171,7 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         LEGAL_NOTICE,
         ///<summary>
-        ///The purchase options cancellation policy.
+        ///The cancellation policy.
         ///</summary>
         SUBSCRIPTION_POLICY,
         ///<summary>
@@ -55075,6 +55169,10 @@ namespace ShopifySharp.GraphQL
         ///</summary>
         CREATE_AND_EDIT_CUSTOMERS,
         ///<summary>
+        ///The staff member can create and edit gift cards.
+        ///</summary>
+        CREATE_AND_EDIT_GIFT_CARDS,
+        ///<summary>
         ///The staff member can view customers.
         ///</summary>
         CUSTOMERS,
@@ -55082,6 +55180,10 @@ namespace ShopifySharp.GraphQL
         ///The staff member can view the Shopify Home page, which includes sales information and other shop data.
         ///</summary>
         DASHBOARD,
+        ///<summary>
+        ///The staff member can deactivate gift cards.
+        ///</summary>
+        DEACTIVATE_GIFT_CARDS,
         ///<summary>
         ///The staff member can delete customers.
         ///</summary>
@@ -55106,6 +55208,10 @@ namespace ShopifySharp.GraphQL
         ///The staff member can export customers.
         ///</summary>
         EXPORT_CUSTOMERS,
+        ///<summary>
+        ///The staff member can export gift cards.
+        ///</summary>
+        EXPORT_GIFT_CARDS,
         ///<summary>
         ///The staff has the same permissions as the [store owner](https://shopify.dev/en/manual/your-account/staff-accounts/staff-permissions#store-owner-permissions) with some exceptions, such as modifying the account billing or deleting staff accounts.
         ///</summary>
@@ -55195,7 +55301,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///Access permissions for the staff member.
         ///</summary>
-        [Obsolete("Use StaffMember.permissions.userPermissions instead")]
+        [Obsolete("There's no alternative field to use instead.")]
         public IEnumerable<StaffMemberPermission>? permissions { get; set; }
     }
 
@@ -56073,12 +56179,12 @@ namespace ShopifySharp.GraphQL
     }
 
     ///<summary>
-    ///An auto-generated type for paginating through a list of Strings.
+    ///An auto-generated type for paginating through multiple Strings.
     ///</summary>
     public class StringConnection : GraphQLObject<StringConnection>, IConnectionWithEdges<StringEdge, string>
     {
         ///<summary>
-        ///A list of edges.
+        ///The connection between the node and its parent. Each edge contains a minimum of the edge's cursor and the node.
         ///</summary>
         public IEnumerable<StringEdge>? edges { get; set; }
         ///<summary>
@@ -56136,13 +56242,17 @@ namespace ShopifySharp.GraphQL
         ///The date and time when the billing attempt was created.
         ///</summary>
         public DateTime? createdAt { get; set; }
+
         ///<summary>
         ///A code corresponding to a payment error during processing.
         ///</summary>
+        [Obsolete("As of API version 2025-01, use `processingError.code` instead to get the errorCode")]
         public SubscriptionBillingAttemptErrorCode? errorCode { get; set; }
+
         ///<summary>
         ///A message describing a payment error during processing.
         ///</summary>
+        [Obsolete("As of API version 2025-01, use `processingError.message` instead to get the errorMessage")]
         public string? errorMessage { get; set; }
         ///<summary>
         ///A globally-unique ID.
@@ -61584,7 +61694,7 @@ namespace ShopifySharp.GraphQL
     ///The supported topics for webhook subscriptions. You can use webhook subscriptions to receive
     ///notifications about particular events in a shop.
     ///
-    ///You create mandatory webhooks either via the
+    ///You create [mandatory webhooks](https://shopify.dev/apps/webhooks/configuration/mandatory-webhooks#mandatory-compliance-webhooks) either via the
     ///[Partner Dashboard](https://shopify.dev/apps/webhooks/configuration/mandatory-webhooks#subscribe-to-privacy-webhooks)
     ///or by updating the [app configuration file](https://shopify.dev/apps/tools/cli/configuration#app-configuration-file-example).
     ///
@@ -62218,8 +62328,9 @@ namespace ShopifySharp.GraphQL
         ///The webhook topic for `orders/risk_assessment_changed` events. Triggers when a new risk assessment is available on the order.
         ///This can be the first or a subsequent risk assessment.
         ///New risk assessments can be provided until the order is marked as fulfilled.
-        ///Includes the risk level, risk facts and the provider. Does not include the risk recommendation for the order.
-        ///The order and shop are identified in the headers.
+        ///Includes the risk level, risk facts, the provider and the order ID.
+        ///Does not include the risk recommendation for the order.
+        ///The Shop ID is available in the headers.
         /// Requires the `read_orders` scope.
         ///</summary>
         ORDERS_RISK_ASSESSMENT_CHANGED,
