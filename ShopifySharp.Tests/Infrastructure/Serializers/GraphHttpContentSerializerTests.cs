@@ -10,11 +10,11 @@ using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure.Serializers;
 
-[Trait("Category", "Serializer"), TestSubject(typeof(GraphHttpContentSerializer))]
+[Trait("Category", "Serializers"), TestSubject(typeof(GraphHttpContentSerializer))]
 public class GraphHttpContentSerializerTests
 {
     private const string Query = "some-query";
-    private readonly RequestUri _requestUri = new RequestUri(new Uri("https://example.com"));
+    private readonly RequestUri _requestUri = new (new Uri("https://example.com"));
 
     private readonly GraphHttpContentSerializer _sut = new(Serializer.SerializerDefaults);
 
@@ -89,36 +89,32 @@ public class GraphHttpContentSerializerTests
     #region Serializer.SerializerDefaults
 
     [Fact]
-    public void WhenSerializingGraphRequest_ShouldOnlySerializeTheQueryAndVariablesPropertiesAndIgnoreAllOtherProperties()
+    public async Task WhenSerializingGraphRequest_ShouldOnlySerializeTheQueryAndVariablesPropertiesAndIgnoreAllOtherProperties()
     {
         // Setup
+        var variables = new Dictionary<string, object>
+        {
+            { "baz", "bat" },
+            { "hello", null },
+            { "world", 1 }
+        };
+        const string expectedJson =
+            $$$"""
+              {"query":"{{{Query}}}","variables":{"baz":"bat","hello":null,"world":1}}
+              """;
 
         // Act
+        var result = _sut.SerializeGraphRequest(_requestUri, new GraphRequest
+        {
+            Query = Query,
+            Variables = variables,
+            EstimatedQueryCost = 123,
+            UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow
+        });
+        var jsonStr = await result.ReadAsStringAsync();
 
         // Assert
-        Assert.Fail("not yet implemented");
-    }
-
-    [Fact]
-    public void WhenSerializingGraphRequest_ShouldSerializeQueryAndVariablesPropertiesToCamelCase()
-    {
-        // Setup
-
-        // Act
-
-        // Assert
-        Assert.Fail("not yet implemented");
-    }
-
-    [Fact]
-    public void WhenSerializingGraphRequest_AndItIncludesEstimatedErrorCost_ShouldNotSerializeEstimatedErrorCostToJson()
-    {
-        // Setup
-
-        // Act
-
-        // Assert
-        Assert.Fail("not yet implemented");
+        jsonStr.Should().Be(expectedJson);
     }
 
     #endregion

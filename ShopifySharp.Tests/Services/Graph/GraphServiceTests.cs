@@ -46,8 +46,9 @@ public class GraphListOrdersResult
 [Trait("Category", "Graph")]
 public class GraphServiceTests
 {
-    private readonly JsonSerializerOptions _serializerSettings = new();
+    private readonly JsonSerializerOptions _serializerSettings = Serializer.SerializerDefaults;
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
+    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
     private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly GraphService _sut;
 
@@ -55,12 +56,16 @@ public class GraphServiceTests
     {
         _httpContentSerializer = A.Fake<IHttpContentSerializer>(x =>
             x.Wrapping(new GraphHttpContentSerializer(_serializerSettings)));
+
+        A.CallTo(() => _dependencyContainer.TryGetService<JsonSerializerOptions>())
+            .Returns(_serializerSettings);
+        A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>())
+            .Returns(_httpContentSerializer);
+
         _sut = new GraphService(Utils.MyShopifyUrl,
             Utils.AccessToken,
             null,
-            _httpContentSerializer,
-            null,
-            _serializerSettings);
+            _dependencyContainer);
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 
