@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using FakeItEasy;
+using FluentAssertions;
 using Newtonsoft.Json.Linq;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Services.Graph;
+using ShopifySharp.Tests.TestClasses;
 using Xunit;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Services.Graph;
 
 [Serializable]
 public class GraphOrderEdge
@@ -38,14 +44,52 @@ public class GraphListOrdersResult
 }
 
 [Trait("Category", "Graph")]
-public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
+public class GraphServiceTests
 {
-    private readonly Graph_Tests_Fixture _fixture;
+    private readonly JsonSerializerOptions _serializerSettings = Serializer.SerializerDefaults;
+    private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
+    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
+    private readonly IHttpContentSerializer _httpContentSerializer;
+    private readonly GraphService _sut;
 
-    public Graph_Tests(Graph_Tests_Fixture fixture)
+    public GraphServiceTests()
     {
-        _fixture = fixture;
-        _fixture.Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        _httpContentSerializer = A.Fake<IHttpContentSerializer>(x =>
+            x.Wrapping(new GraphHttpContentSerializer(_serializerSettings)));
+
+        A.CallTo(() => _dependencyContainer.TryGetService<JsonSerializerOptions>())
+            .Returns(_serializerSettings);
+        A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>())
+            .Returns(_httpContentSerializer);
+
+        _sut = new GraphService(Utils.MyShopifyUrl,
+            Utils.AccessToken,
+            null,
+            _dependencyContainer);
+        _sut.SetExecutionPolicy(_executionPolicy);
+    }
+
+    [Fact]
+    public async Task WhenSendingGraphRequest_ShouldUseHttpContentSerializer()
+    {
+        // Setup
+        var request = new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            Variables = new Dictionary<string, object>
+            {
+                { "foo", "bar" }
+            }
+        };
+
+        A.CallTo(() => _httpContentSerializer.SerializeGraphRequest(A<RequestUri>._, request))
+            .Throws<TestException>();
+
+        // Act
+        var act = () => _sut.PostAsync(request);
+
+        // Assert
+        await act.Should().ThrowAsync<TestException>();
     }
 
     [Fact(DisplayName = "Lists orders using the GraphService")]
@@ -75,7 +119,7 @@ public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
         };
         // Serialize the GraphQL query and the variables into a JToken. Must use a JToken for now, or else the service
         // will assume we are using a GraphQL string and send with the wrong content type.
-        var serializerSettings = ShopifySharp.Infrastructure.Serializer.CreateNewtonsoftSettings();
+        var serializerSettings = Serializer.CreateNewtonsoftSettings();
         var serializer = JsonSerializer.Create(serializerSettings);
         var requestBody =  JToken.FromObject(new
         {
@@ -84,7 +128,7 @@ public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
         }, serializer);
         // Send the request. For now this must be sent as a JToken, or else the service will assume it is a GraphQL
         // string and send it with the wrong content type.
-        var jToken = await _fixture.Service.PostAsync(requestBody);
+        var jToken = await _sut.PostAsync(requestBody);
         var listResult = jToken["orders"]?.ToObject<GraphListOrdersResult>();
 
         Assert.NotNull(listResult);
@@ -98,20 +142,5 @@ public class Graph_Tests : IClassFixture<Graph_Tests_Fixture>
             Assert.NotNull(edge.Node.Name);
             Assert.NotNull(edge.Node.Tags);
         });
-    }
-}
-
-public class Graph_Tests_Fixture : IAsyncLifetime
-{
-    public readonly GraphService Service = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-
-    public Task InitializeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    public Task DisposeAsync()
-    {
-        return Task.CompletedTask;
     }
 }

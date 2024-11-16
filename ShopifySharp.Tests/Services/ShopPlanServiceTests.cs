@@ -9,7 +9,7 @@ namespace ShopifySharp.Tests.Services;
 [TestSubject(typeof(ShopPlanService))]
 public class ShopPlanServiceTests
 {
-    ShopPlanService service = new(Utils.MyShopifyUrl, Utils.AccessToken);
+    ShopPlanService service = new(Utils.MyShopifyUrl, Utils.AccessToken, dependencyContainer: null);
 
     [Fact]
     public async Task GetShopPlanAsync_ShouldGetThePlanAsync()
