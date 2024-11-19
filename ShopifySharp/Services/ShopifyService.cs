@@ -209,7 +209,7 @@ public abstract class ShopifyService : IShopifyService
             return new RequestResult<string>(
                 await baseRequestMessage.GetRequestInfo(),
                 response.Headers,
-                string.Empty,
+                rawResult,
                 rawResult,
                 ReadLinkHeader(response.Headers),
                 response.StatusCode
