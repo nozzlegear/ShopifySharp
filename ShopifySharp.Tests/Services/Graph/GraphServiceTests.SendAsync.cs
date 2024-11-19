@@ -1,24 +1,79 @@
+#pragma warning disable CS0618 // Type or member is obsolete
 #if NET8_0_OR_GREATER
 using System;
-using System.Linq;
-using System.Text.Json;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
-using ShopifySharp.Infrastructure.Serialization.Http;
-using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using Xunit;
-using Serializer = ShopifySharp.Infrastructure.Serializer;
 using FakeItEasy;
+using Serializer = ShopifySharp.Infrastructure.Serializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
 [Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceSendAsyncTests
 {
+    private const string Query =
+        """
+        {
+          orders(first:10)
+          {
+            nodes
+            {
+              id
+              createdAt
+              name
+              phone
+              lineItems(first: 10)
+              {
+                nodes
+                {
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+        }
+        """;
+
+    private const string QueryWithVariables =
+        """
+        query ($firstOrders: Int!, $firstLineItems: Int!)
+        {
+          orders(first: $firstOrders)
+          {
+            nodes
+            {
+              id
+              createdAt
+              name
+              phone
+              lineItems(first: $firstLineItems)
+              {
+                nodes
+                {
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+        }
+        """;
+
+    private static readonly object QueryVariables = new
+    {
+        firstOrders = 10,
+        firstLineItems = 20
+    };
+
+    private static readonly GraphRequest GraphRequestForVariables = new() { query = QueryWithVariables, variables = QueryVariables };
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
     private readonly GraphService _sut;
 
@@ -39,10 +94,24 @@ public class GraphServiceSendAsyncTests
         ];
     }
 
+    private static RequestResult<string> MakeRequestResult(string responseJson)
+    {
+        var response = new HttpResponseMessage(HttpStatusCode.OK);
+        return new RequestResult<string>(
+            "some-request-info",
+            response.Headers,
+            responseJson,
+            responseJson,
+            "some-raw-link-header-value",
+            HttpStatusCode.OK
+        );
+    }
+
     [Theory(DisplayName = "Deprecated SendAsync<TResult> should deserialize the single child property of data to TResult")]
     [CombinatorialData]
     public async Task SendAsync_T_DeprecatedMethod_ShouldDeserializeSingleChildPropertyOfDataToResult(
-        [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
+        [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy,
+        bool withVariables
     )
     {
         // Setup
@@ -73,144 +142,29 @@ public class GraphServiceSendAsyncTests
                       "quantity" : 1
                     } ]
                   }
-                }, {
-                  "id" : "gid://shopify/Order/2275319238",
-                  "createdAt" : "2016-01-07T16:37:04Z",
-                  "name" : "#1003",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/2276382918",
-                  "createdAt" : "2016-01-07T20:40:46Z",
-                  "name" : "#1004",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/2299017414",
-                  "createdAt" : "2016-01-13T17:49:09Z",
-                  "name" : "#1005",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/2300111622",
-                  "createdAt" : "2016-01-13T21:41:56Z",
-                  "name" : "#1006",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/2681387846",
-                  "createdAt" : "2016-04-01T20:15:21Z",
-                  "name" : "#1007",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/3052034118",
-                  "createdAt" : "2016-05-04T21:32:45Z",
-                  "name" : "#1008",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 2
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/3076231174",
-                  "createdAt" : "2016-05-06T14:17:17Z",
-                  "name" : "#1009",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                }, {
-                  "id" : "gid://shopify/Order/3799668102",
-                  "createdAt" : "2016-07-17T05:28:00Z",
-                  "name" : "#1010",
-                  "phone" : null,
-                  "lineItems" : {
-                    "nodes" : [ {
-                      "title" : "The Spud Who Loved Me",
-                      "quantity" : 1
-                    } ]
-                  }
-                } ]
-              }
-            },
-            "extensions" : {
-              "cost" : {
-                "requestedQueryCost" : 30,
-                "actualQueryCost" : 18,
-                "throttleStatus" : {
-                  "maximumAvailable" : 2000.0,
-                  "currentlyAvailable" : 1982,
-                  "restoreRate" : 100.0
-                }
+                }]
               }
             }
           }
           """;
-        const string query =
-          """
-          {
-            orders(first:10)
-            {
-              nodes
-              {
-                id
-                createdAt
-                name
-                phone
-                lineItems(first: 10)
-                {
-                  nodes
-                  {
-                    title
-                    quantity
-                  }
-                }
-              }
-            }
-          }
-          """;
-        var service = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
-        service.SetExecutionPolicy(policy);
+        var response = MakeRequestResult(expectedJson);
+
+        _sut.SetExecutionPolicy(policy);
+        A.CallTo(policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
 
         // Act
-        var result = await service.SendAsync<OrderConnection>(query);
+        OrderConnection result;
+
+        if (withVariables)
+          result = await _sut.SendAsync<OrderConnection>(Query);
+        else
+          result = await _sut.SendAsync<OrderConnection>(GraphRequestForVariables);
 
         // Assert
-        var orders = result.nodes;
-
-        orders.Should()
-          .NotBeNullOrEmpty()
+        result.nodes
+          .Should().NotBeNullOrEmpty()
           .And.AllSatisfy(o => o.name.Should().NotBeNull())
           .And.AllSatisfy(o =>
             o.lineItems?.nodes
@@ -223,77 +177,106 @@ public class GraphServiceSendAsyncTests
               .Which.Should().NotBeNull());
     }
 
-    [Theory(DisplayName = "Deprecated SendAsync<TResult> should deserialize the single child property of data to TResult")]
-    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsUserErrors()
-    {
-      Assert.Fail("NYI");
-    }
-
-    [Fact(DisplayName = "Deprecated SendAsync<TResult> should deserialize the single child property of data to TResult")]
-    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsMultipleChildProperties()
-    {
-      Assert.Fail("NYI");
-    }
-
-    [Fact(DisplayName = "Deprecated SendAsync<TResult> should deserialize the single child property of data to TResult")]
-    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsZeroChildProperties()
-    {
-      Assert.Fail("NYI");
-    }
-
-    [Fact(DisplayName = "Deprecated SendAsync<TResult> should deserialize the single child property of data to TResult")]
-    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsUserErrors()
-    {
-      Assert.Fail("NYI");
-    }
-
-    [Theory(DisplayName = "Deprecated SendAsync<TResult> (with variables) should deserialize the single child property of data to TResult")]
+    [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when result contains user errors")]
     [CombinatorialData]
-    public async Task SendAsync_T_DeprecatedMethodWithVariables_ShouldDeserializeSingleChildPropertyOfDataToResult(
-        [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
-    )
+    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsUserErrors(bool withVariables)
     {
-        var svc = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken, null, null);
-        svc.SetExecutionPolicy(policy);
-        var res = await svc.SendAsync<OrderConnection>(new GraphRequest
-        {
-            query = @"
-query ($firstOrders: Int!, $firstLineItems: Int!)
-{
-  orders(first: $firstOrders)
-  {
-    nodes
-    {
-      id
-      createdAt
-      name
-      phone
-      lineItems(first: $firstLineItems)
-      {
-        nodes
-        {
-          title
-          quantity
-        }
-      }
-    }
-  }
-}",
-            variables = new
-            {
-                firstOrders = 10,
-                firstLineItems = 20
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "data" : {
+              "orders" : {
+                "userErrors": [{ "code": "foo", "message": "bar" }]
+              }
             }
-        });
-        var orders = res.nodes;
-        Assert.True(orders.Count() > 0);
-        var o = orders.First();
-        Assert.True(o.name != null);
-        Assert.True(o.lineItems.nodes.First().quantity != null);
-        var commentEventEmbed = o as ICommentEventEmbed;
-        Assert.NotNull(commentEventEmbed);
-        Assert.NotNull(commentEventEmbed.AsOrder());
-        Assert.Null(commentEventEmbed.AsCustomer());
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+
+        A.CallTo(_executionPolicy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        Func<Task<OrderConnection>> act;
+
+        if (withVariables)
+          act = () => _sut.SendAsync<OrderConnection>(Query);
+        else
+          act = () => _sut.SendAsync<OrderConnection>(GraphRequestForVariables);
+
+        // Assert
+        await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
+    }
+
+    [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when result contains multiple child properties")]
+    [CombinatorialData]
+    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsMultipleChildProperties(bool withVariables)
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "data" : {
+              "orders" : {
+                "nodes": []
+              },
+              "customers": {
+                "nodes": []
+              }
+            }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+
+        A.CallTo(_executionPolicy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        Func<Task<OrderConnection>> act;
+
+        if (withVariables)
+          act = () => _sut.SendAsync<OrderConnection>(Query);
+        else
+          act = () => _sut.SendAsync<OrderConnection>(GraphRequestForVariables);
+
+        // Assert
+        await act.Should()
+          .ThrowAsync<InvalidOperationException>()
+          .WithMessage("Sequence contains more than one element");
+    }
+
+    [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when result contains zero child properties")]
+    [CombinatorialData]
+    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsZeroChildProperties(bool withVariables)
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "data" : { }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+
+        A.CallTo(_executionPolicy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        Func<Task<OrderConnection>> act;
+
+        if (withVariables)
+          act = () => _sut.SendAsync<OrderConnection>(Query);
+        else
+          act = () => _sut.SendAsync<OrderConnection>(GraphRequestForVariables);
+
+        // Assert
+        await act.Should()
+          .ThrowAsync<InvalidOperationException>()
+          .WithMessage("Sequence contains no elements");
     }
 }
 #endif
