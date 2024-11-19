@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Infrastructure;
@@ -180,10 +181,11 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
                 continue;
             }
 
-            var jsonDoc = result.Result switch
+            var jsonDoc = result switch
             {
-                System.Text.Json.JsonDocument systemTextJsonDoc => systemTextJsonDoc,
-                JToken jsonNetDoc => System.Text.Json.JsonDocument.Parse(jsonNetDoc.ToString(Newtonsoft.Json.Formatting.None)),
+                RequestResult<JsonDocument> systemTextJsonDoc => systemTextJsonDoc.Result,
+                RequestResult<JToken> jsonNetDoc => JsonDocument.Parse(jsonNetDoc.Result.ToString(Newtonsoft.Json.Formatting.None)),
+                not null => JsonDocument.Parse(result.RawResult),
                 _ => throw new ShopifyException("Unexpected json result for GraphQL Admin API", new ArgumentException("Unexpected json result for GraphQL Admin API", nameof(result.Result)))
             };
 
