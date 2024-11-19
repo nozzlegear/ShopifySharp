@@ -131,12 +131,18 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        return await SendAsync<TResult>(new GraphRequest
+        var result = await SendAsync<JsonDocument>(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
             EstimatedQueryCost = graphqlQueryCost,
+            UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
+
+        var data = result.RootElement.GetProperty("data");
+        // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
+        // It is expected that the method will throw if more than one property is found in the json object.
+        return data.EnumerateObject().Single().Value.Deserialize<TResult>();
     }
 
     /// <summary>
@@ -151,15 +157,18 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        // TODO: add a test for this line that's now been replaced. Are we losing any significant functionality by dropping the `.Single()`? Would this have failed for e.g. mutations that return both `userErrors` and `actualObject`?
-        // var ptyElt = elt.EnumerateObject().Single().Value;
-
-        return await SendAsync<TResult>(new GraphRequest
+        var result = await SendAsync<JsonDocument>(new GraphRequest
         {
             Query = request.Query,
             Variables = request.Variables,
             EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
+            UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
+
+        var data = result.RootElement.GetProperty("data");
+        // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
+        // It is expected that the method will throw if more than one property is found in the json object.
+        return data.EnumerateObject().Single().Value.Deserialize<TResult>();
     }
 
     public virtual Task<object> PostAsync(string graphqlQuery, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
