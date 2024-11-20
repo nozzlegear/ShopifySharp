@@ -175,9 +175,7 @@ public abstract class ShopifyService : IShopifyService
     /// <param name="method"></param>
     /// <param name="content"></param>
     /// <param name="headers"></param>
-    /// <param name="rootElement"></param>
     /// <param name="graphqlQueryCost"></param>
-    /// <param name="dateParseHandlingOverride"></param>
     /// <param name="cancellationToken"></param>
     /// <remarks>
     /// This method is explicitly internal rather than protected because I'm planning to replace all of the `ExecuteXYZ`

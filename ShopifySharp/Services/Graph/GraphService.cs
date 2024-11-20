@@ -7,6 +7,7 @@ using System.Threading;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using Newtonsoft.Json;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Graph;
@@ -76,28 +77,41 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        // TODO: add a test for this method to ensure it still works until removed
-        var response = await SendAsync<JToken>(new GraphRequest
+        if (body is null)
+            throw new ArgumentNullException(nameof(body));
+
+        var query = body.SelectToken("query");
+
+        if (query is null || query.Type != JTokenType.String)
+            throw new ArgumentException($"The type of the required `query` property should be {JTokenType.String}, but it was {query?.Type ?? JTokenType.Null}", nameof(body));
+
+        var response = await SendAsync<JsonDocument>(new GraphRequest
         {
-            Query = body.SelectToken("query").Value<string>(),
-            Variables = body.SelectToken("variables").Value<Dictionary<string, object>>(),
+            Query = query.Value<string>(),
+            Variables = body.SelectToken("variables")?.ToObject<Dictionary<string, object>>(),
             EstimatedQueryCost = graphqlQueryCost
         }, cancellationToken);
 
-        return response.SelectToken("data");
+        // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
+        return Serializer.Deserialize<JToken>(response.RootElement.GetProperty("data").GetRawText(),
+            null,
+            DateParseHandling.None);
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JToken>(new GraphRequest
+        var response = await SendAsync<JsonDocument>(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
             EstimatedQueryCost = graphqlQueryCost
         }, cancellationToken);
-
-        return response.SelectToken("data");
+        // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
+        var thing = response.RootElement.GetProperty("data");
+        return Serializer.Deserialize<JToken>(thing.GetRawText(),
+            null,
+            DateParseHandling.None);
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
