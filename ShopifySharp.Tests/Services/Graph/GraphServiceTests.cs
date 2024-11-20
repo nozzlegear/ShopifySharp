@@ -47,7 +47,7 @@ public class GraphListOrdersResult
 public class GraphServiceTests
 {
     private readonly JsonSerializerOptions _serializerSettings = Serializer.SerializerDefaults;
-    private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
+    private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy()));
     private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
     private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly GraphService _sut;
