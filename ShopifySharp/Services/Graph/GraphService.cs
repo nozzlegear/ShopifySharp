@@ -35,8 +35,8 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(shopifyApiCredentials, dependencyContainer)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, Serializer.SerializerDefaults);
-        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, new GraphHttpContentSerializer(_jsonSerializerOptions));
+        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, () => Serializer.SerializerDefaults);
+        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, () => new GraphHttpContentSerializer(_jsonSerializerOptions));
     }
 
     public GraphService(
@@ -47,8 +47,8 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(myShopifyUrl, shopAccessToken, null)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, Serializer.SerializerDefaults);
-        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, new GraphHttpContentSerializer(_jsonSerializerOptions));
+        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, () => Serializer.SerializerDefaults);
+        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, () => new GraphHttpContentSerializer(_jsonSerializerOptions));
     }
 
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
