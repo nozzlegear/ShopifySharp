@@ -62,7 +62,7 @@ public abstract class ShopifyService : IShopifyService
     /// </summary>
     protected ShopifyService(ShopifyApiCredentials credentials, IDependencyContainer? dependencyContainer)
     {
-        var domainUtility = InternalDependencyContainerConsolidation.GetServiceOrDefault<IShopifyDomainUtility, ShopifyDomainUtility>(dependencyContainer);
+        var domainUtility = InternalDependencyContainerConsolidation.GetServiceOrDefault<IShopifyDomainUtility>(dependencyContainer, () => new ShopifyDomainUtility());
         _ShopUri = domainUtility.BuildShopDomainUri(credentials.ShopDomain);
         _AccessToken = credentials.AccessToken;
         _Client = _HttpClientFactory.CreateClient();

@@ -20,13 +20,13 @@ namespace ShopifySharp;
 /// </summary>
 public class GraphService : ShopifyService, IGraphService
 {
+    #nullable enable
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly IHttpContentSerializer _httpContentSerializer;
-    private readonly string _apiVersion;
+    private readonly string? _apiVersion;
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
 
-    #nullable enable
     public GraphService(
         ShopifyApiCredentials shopifyApiCredentials,
         string? apiVersion,
@@ -34,8 +34,7 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(shopifyApiCredentials, dependencyContainer)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, Serializer.SerializerDefaults);
-        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, new GraphHttpContentSerializer(_jsonSerializerOptions));
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(dependencyContainer);
     }
 
     public GraphService(
@@ -46,8 +45,7 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(myShopifyUrl, shopAccessToken, null)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, Serializer.SerializerDefaults);
-        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, new GraphHttpContentSerializer(_jsonSerializerOptions));
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(dependencyContainer);
     }
 
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
@@ -57,7 +55,20 @@ public class GraphService : ShopifyService, IGraphService
         IShopifyDomainUtility shopifyDomainUtility
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
-        throw new NotImplementedException();
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
+    }
+
+    private static (JsonSerializerOptions, IHttpContentSerializer) InitializeDependencies(IDependencyContainer? dependencyContainer)
+    {
+        var jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(
+            dependencyContainer,
+            () => Serializer.SerializerDefaults
+        );
+        var httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(
+            dependencyContainer,
+            () => new GraphHttpContentSerializer(jsonSerializerOptions)
+        );
+        return (jsonSerializerOptions, httpContentSerializer);
     }
 
     #nullable disable
