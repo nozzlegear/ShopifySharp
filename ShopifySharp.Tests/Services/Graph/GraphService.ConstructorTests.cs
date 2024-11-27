@@ -33,7 +33,7 @@ public class GraphServiceConstructorTests
 
         typeof(GraphService)
             .Should()
-            .HavePrivateField(nameof(GraphService.APIVersion), sut)
+            .HavePublicProperty(nameof(GraphService.APIVersion), sut)
             .And
             .BeOfType<string>()
             .And
