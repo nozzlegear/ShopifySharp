@@ -87,30 +87,22 @@ internal class LeakyBucket
         {
             if (ComputedCurrentlyAvailable >= requestCost && _waitingRequests.Count == 0)
             {
+                //there is enough capacity to proceed immediately
                 ConsumeAvailable(r);
                 return;
             }
 
+            //otherwise, we queue the request for further processing
             _waitingRequests.Enqueue(r);
 
+            //if it's the very first request, we schedule it to be released in the future once enough capacity is available
             if (_waitingRequests.Count == 1)
                 ScheduleTryGrantNextPendingRequest(r);
         }
 
-        try
-        {
-            await r.Semaphore.WaitAsync(cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            // TODO: log here once ShopifySharp supports logging
-            lock (_lock)
-            {
-                _waitingRequests.RemoveAndUpdateQueue(r);
-            }
-
-            throw;
-        }
+        //TaskCanceledException can bubble up
+        //The request will be dequeued when the semaphore is released
+        await r.WaitAsync(cancellationToken);
     }
 
     private void ScheduleTryGrantNextPendingRequest(LeakyBucketRequest r)
@@ -134,15 +126,13 @@ internal class LeakyBucket
                 if (nextRequest.CancellationToken.IsCancellationRequested)
                 {
                     _waitingRequests.Dequeue();
-                    // TODO: dispose the request here? Is the HttpRequestMessage still sitting in memory?
-                    continue;
+                    nextRequest.Release();
                 }
-
-                if (ComputedCurrentlyAvailable >= nextRequest.Cost)
+                else if (ComputedCurrentlyAvailable >= nextRequest.Cost)
                 {
                     // Proceed with current request
                     _waitingRequests.Dequeue();
-                    nextRequest.Semaphore.Release();
+                    nextRequest.Release();
                     ConsumeAvailable(nextRequest);
                 }
                 else
