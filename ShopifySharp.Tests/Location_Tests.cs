@@ -14,7 +14,7 @@ public class Location_Tests
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
     }
 
-    [Fact]
+    [Fact(Skip = "read_locations scope is required as of 2024-10")]
     public async Task Lists_Locations()
     {
         var list = await Service.ListAsync();
@@ -22,7 +22,7 @@ public class Location_Tests
         Assert.NotNull(list);
     }
 
-    [Fact]
+    [Fact(Skip = "read_locations scope is required as of 2024-10")]
     public async Task Gets_Locations()
     {
         var list = await Service.ListAsync();
