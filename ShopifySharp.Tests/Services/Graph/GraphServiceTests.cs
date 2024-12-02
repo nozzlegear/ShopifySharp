@@ -46,7 +46,7 @@ public class GraphListOrdersResult
 [Trait("Category", "Graph")]
 public class GraphServiceTests
 {
-    private readonly JsonSerializerOptions _serializerSettings = Serializer.SerializerDefaults;
+    private readonly JsonSerializerOptions _jsonSerializerOptions = Serializer.GraphSerializerOptions;
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy()));
     private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
     private readonly IHttpContentSerializer _httpContentSerializer;
@@ -55,10 +55,10 @@ public class GraphServiceTests
     public GraphServiceTests()
     {
         _httpContentSerializer = A.Fake<IHttpContentSerializer>(x =>
-            x.Wrapping(new GraphHttpContentSerializer(_serializerSettings)));
+            x.Wrapping(new GraphHttpContentSerializer(_jsonSerializerOptions)));
 
         A.CallTo(() => _dependencyContainer.TryGetService<JsonSerializerOptions>())
-            .Returns(_serializerSettings);
+            .Returns(_jsonSerializerOptions);
         A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>())
             .Returns(_httpContentSerializer);
 
