@@ -65,7 +65,7 @@ public class GraphService : ShopifyService, IGraphService
     {
         var jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(
             dependencyContainer,
-            () => Serializer.SerializerDefaults
+            () => Serializer.GraphSerializerOptions
         );
         var httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(
             dependencyContainer,
