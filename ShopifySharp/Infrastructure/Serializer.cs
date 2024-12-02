@@ -29,7 +29,7 @@ public static class Serializer
     }
 
     // TODO: investigate standardizing the ShopifySharp.GraphQL.Serializer.Options defaults with these defaults
-    public static readonly JsonSerializerOptions SerializerDefaults = new()
+    internal static readonly JsonSerializerOptions SerializerDefaults = new()
     {
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
         Converters =
