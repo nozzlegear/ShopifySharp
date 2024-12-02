@@ -1,5 +1,4 @@
 #pragma warning disable CS0618 // Type or member is obsolete
-#if NET8_0_OR_GREATER
 using System;
 using System.Net;
 using System.Net.Http;
@@ -7,7 +6,9 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
+#if NET6_0_OR_GREATER
 using ShopifySharp.GraphQL;
+#endif
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using Xunit;
 using FakeItEasy;
@@ -107,9 +108,11 @@ public class GraphServiceSendAsyncTests
         );
     }
 
-    [Theory(DisplayName = "Deprecated SendAsync<TResult> should deserialize the single child property of data to TResult")]
+#if NET8_0_OR_GREATER
+
+    [Theory(DisplayName = "Deprecated SendAsync<TResult> should succeed")]
     [CombinatorialData]
-    public async Task SendAsync_T_DeprecatedMethod_ShouldDeserializeSingleChildPropertyOfDataToResult(
+    public async Task SendAsync_T_DeprecatedMethod_ShouldSucceed(
         [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy,
         bool withVariables
     )
@@ -179,7 +182,7 @@ public class GraphServiceSendAsyncTests
 
     [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when result contains user errors")]
     [CombinatorialData]
-    public async Task SendAsync_T_DeprecatedMethod_ShouldThrowWhenResultContainsUserErrors(bool withVariables)
+    public async Task SendAsync_T_DeprecatedMethod_WhenResultContainsUserErrors_ShouldThrow(bool withVariables)
     {
         // Setup
         const string expectedJson =
@@ -312,3 +315,109 @@ public class GraphServiceSendAsyncTests
     }
 
 #endif
+
+    #region [Deprecated] Task<JsonElement> SendAsync(string graphqlQuery)
+
+    [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should succeed")]
+    [CombinatorialData]
+    public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_ShouldSucceed(
+      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
+    )
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "data" : {
+              "orders" : {
+                "nodes": []
+              },
+              "customers": {
+                "nodes": []
+              }
+            }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+
+        _sut.SetExecutionPolicy(policy);
+        A.CallTo(policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = () => _sut.SendAsync(Query);
+
+        // Assert
+        await act.Should().NotThrowAsync();
+
+        var data = await act();
+        data.TryGetProperty("orders", out _).Should().BeTrue();
+        data.TryGetProperty("customers", out _).Should().BeTrue();
+    }
+
+    [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should throw when there is no root \"data\" property")]
+    [CombinatorialData]
+    public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_WhenThereIsNoRootDataProperty_ShouldThrow(
+      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)]
+      IRequestExecutionPolicy policy
+    )
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "foo": { }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+        var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
+
+        _sut.SetExecutionPolicy(policy);
+        policyCall.Returns(response);
+
+        // Act
+        var act = () => _sut.SendAsync(Query);
+
+        // Assert
+        await act.Should()
+          .ThrowAsync<ShopifyJsonParseException>()
+          .WithMessage("The JSON response from Shopify does not contain the expected 'data' property.")
+          .Where(x => x.JsonPropertyName == "data");
+
+        policyCall.MustHaveHappenedOnceOrMore();
+    }
+
+    [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should not throw when the root \"data\" property contains user errors")]
+    [CombinatorialData]
+    public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_WhenTheRootDataPropertyContainsUserErrors_ShouldNotThrow(
+      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)]
+      IRequestExecutionPolicy policy
+    )
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "data" : {
+              "orders" : {
+                "userErrors": [{ "code": "foo", "message": "bar" }]
+              }
+            }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+        var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
+
+        _sut.SetExecutionPolicy(policy);
+        policyCall.Returns(response);
+
+        // Act
+        var act = () => _sut.SendAsync(Query);
+
+        // Assert
+        await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
+    }
+
+    #endregion
+}
