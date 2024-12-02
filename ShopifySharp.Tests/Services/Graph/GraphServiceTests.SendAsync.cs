@@ -77,7 +77,7 @@ public class GraphServiceSendAsyncTests
     };
 
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
-    private readonly IHttpContentSerializer _httpContentSerializer = A.Fake<IHttpContentSerializer>(x => x.Wrapping(new GraphHttpContentSerializer(Serializer.SerializerDefaults)));
+    private readonly IHttpContentSerializer _httpContentSerializer = A.Fake<IHttpContentSerializer>(x => x.Wrapping(new GraphHttpContentSerializer(Serializer.GraphSerializerOptions)));
     private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
     private readonly GraphService _sut;
 
