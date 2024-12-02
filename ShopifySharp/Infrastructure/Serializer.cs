@@ -36,6 +36,7 @@ public static class Serializer
         {
             new JsonStringEnumConverter()
         },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
