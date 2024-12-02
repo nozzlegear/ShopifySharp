@@ -56,7 +56,10 @@ public class ShopPlanService : GraphService, IShopPlanService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        return result.RootElement.GetProperty("shop")
+        return result.Json
+            .RootElement
+            .GetProperty("data")
+            .GetProperty("shop")
             .GetProperty("plan")
             .Deserialize<ShopPlan>(_jsonSerializerOptions)!;
     }
