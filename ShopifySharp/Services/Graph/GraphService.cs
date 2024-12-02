@@ -21,6 +21,8 @@ namespace ShopifySharp;
 /// </summary>
 public class GraphService : ShopifyService, IGraphService
 {
+    private const string DataPropertyName = "data";
+
     #nullable enable
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly IHttpContentSerializer _httpContentSerializer;
@@ -78,7 +80,7 @@ public class GraphService : ShopifyService, IGraphService
     {
         var response = await SendAsync<JsonDocument>(graphRequest, cancellationToken);
         // TODO: return a GraphResult<T>
-        return response.RootElement.GetProperty("data").Deserialize<T>(_jsonSerializerOptions);
+        return response.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
     }
 
     public virtual async Task<JsonDocument> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
@@ -105,7 +107,7 @@ public class GraphService : ShopifyService, IGraphService
         }, cancellationToken);
 
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
-        return Serializer.Deserialize<JToken>(response.RootElement.GetProperty("data").GetRawText(),
+        return Serializer.Deserialize<JToken>(response.RootElement.GetProperty(DataPropertyName).GetRawText(),
             null,
             DateParseHandling.None);
     }
@@ -120,7 +122,7 @@ public class GraphService : ShopifyService, IGraphService
             EstimatedQueryCost = graphqlQueryCost
         }, cancellationToken);
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
-        var thing = response.RootElement.GetProperty("data");
+        var thing = response.RootElement.GetProperty(DataPropertyName);
         return Serializer.Deserialize<JToken>(thing.GetRawText(),
             null,
             DateParseHandling.None);
@@ -136,7 +138,7 @@ public class GraphService : ShopifyService, IGraphService
             EstimatedQueryCost = graphqlQueryCost,
         }, cancellationToken);
 
-        return response.RootElement.GetProperty("data");
+        return response.RootElement.GetProperty(DataPropertyName);
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
@@ -149,7 +151,7 @@ public class GraphService : ShopifyService, IGraphService
             EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
         }, cancellationToken);
 
-        return response.RootElement.GetProperty("data");
+        return response.RootElement.GetProperty(DataPropertyName);
     }
 
 #if NET6_0_OR_GREATER
@@ -165,7 +167,7 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        var data = result.RootElement.GetProperty("data");
+        var data = result.RootElement.GetProperty(DataPropertyName);
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
         return data.EnumerateObject().Single().Value.Deserialize<TResult>();
@@ -191,7 +193,7 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        var data = result.RootElement.GetProperty("data");
+        var data = result.RootElement.GetProperty(DataPropertyName);
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
         return data.EnumerateObject().Single().Value.Deserialize<TResult>();
@@ -246,7 +248,12 @@ public class GraphService : ShopifyService, IGraphService
     /// <exception cref="ShopifyHttpException">Thrown if <paramref name="jsonDocument"/> contains any <c>userErrors</c> entries.</exception>
     private void ThrowIfResponseContainsErrors<T>(JsonDocument jsonDocument, RequestResult<T> requestResult)
     {
-        foreach (var jsonProperty in jsonDocument.RootElement.GetProperty("data").EnumerateObject())
+        if (!jsonDocument.RootElement.TryGetProperty(DataPropertyName, out var dataElement))
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain the expected '{DataPropertyName}' property.",
+                DataPropertyName);
+
+        foreach (var jsonProperty in dataElement.EnumerateObject())
         {
             if (jsonProperty.Value.ValueKind != JsonValueKind.Object)
                 continue;
