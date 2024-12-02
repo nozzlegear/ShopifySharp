@@ -278,5 +278,37 @@ public class GraphServiceSendAsyncTests
           .ThrowAsync<InvalidOperationException>()
           .WithMessage("Sequence contains no elements");
     }
-}
+
+    [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when there is no root \"data\" property")]
+    [CombinatorialData]
+    public async Task SendAsync_T_DeprecatedMethod_WhenThereIsNoRootDataProperty_ShouldThrow(bool withVariables)
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "foo": { }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+
+        A.CallTo(_executionPolicy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        Func<Task<OrderConnection>> act;
+
+        if (withVariables)
+          act = () => _sut.SendAsync<OrderConnection>(Query);
+        else
+          act = () => _sut.SendAsync<OrderConnection>(GraphRequestForVariables);
+
+        // Assert
+        await act.Should()
+          .ThrowAsync<ShopifyJsonParseException>()
+          .WithMessage("The JSON response from Shopify does not contain the expected 'data' property.")
+          .Where(x => x.JsonPropertyName == "data");
+    }
+
 #endif
