@@ -76,16 +76,23 @@ public class GraphService : ShopifyService, IGraphService
 
     #nullable disable
 
-    public virtual async Task<T> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    public virtual async Task<GraphResult<T>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JsonDocument>(graphRequest, cancellationToken);
-        // TODO: return a GraphResult<T>
-        return response.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
+        using var response = await SendAsync<JsonDocument>(graphRequest, cancellationToken);
+        var data = response.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
+        var extensions = ParseGraphExtensions(response);
+
+        return new GraphResult<T>
+        {
+            Data = data,
+            Extensions = extensions,
+            RequestId = string.Empty,
+        };
     }
 
     public virtual async Task<JsonDocument> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<JsonDocument>(graphRequest, cancellationToken);
+        return await SendAsync<JsonDocument>(graphRequest, cancellationToken);
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
@@ -216,6 +223,9 @@ public class GraphService : ShopifyService, IGraphService
         if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
             ThrowIfResponseContainsErrors(jsonDocument, result);
 
+        if (typeof(T) == typeof(JsonDocument))
+            return jsonDocument as T;
+
         return jsonDocument.Deserialize<T>(_jsonSerializerOptions);
     }
 
@@ -266,6 +276,17 @@ public class GraphService : ShopifyService, IGraphService
             throw new ShopifyGraphUserErrorsException(userErrors, requestId);
         }
     }
+
+    #nullable enable
+    protected GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument)
+    {
+        const string propertyName = "extensions";
+
+        return jsonDocument.RootElement.TryGetProperty(propertyName, out var extensions)
+            ? extensions.Deserialize<GraphExtensions>(_jsonSerializerOptions)
+            : null;
+    }
+    #nullable disable
 
     /// <summary>
     /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
