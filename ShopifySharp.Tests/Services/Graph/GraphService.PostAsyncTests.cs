@@ -1,15 +1,18 @@
 #pragma warning disable CS0618 // Type or member is obsolete
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using ShopifySharp.Tests.TestClasses;
 using Xunit;
+using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
@@ -268,6 +271,61 @@ public class GraphServicePostAsyncTests
         await result.Should()
             .ThrowExactlyAsync<ShopifyGraphUserErrorsException>()
             .WithMessage("foo: bar");
+    }
+
+    [Fact(DisplayName = "Lists orders using the GraphService")]
+    public async Task PostAsync_DeprecatedMethods_ShouldListOrders()
+    {
+        // Setup
+        const string query = @"
+              query listOrdersWithTag($limit: Int!) {
+                orders(first: $limit) {
+                  pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                  }
+                  edges {
+                    cursor
+                    node {
+                      id
+                      name
+                      tags
+                    }
+                  }
+                }
+              }
+            ";
+        var variables = new Dictionary<string, object>
+        {
+            { "limit", 10 }
+        };
+        var serializerSettings = Serializer.CreateNewtonsoftSettings();
+        var serializer = NewtonsoftSerializer.Create(serializerSettings);
+        var requestBody =  JToken.FromObject(new
+        {
+            query = query,
+            variables = variables
+        }, serializer);
+
+        // This is an integration test, so use a real execution policy
+        _sut.SetExecutionPolicy(new DefaultRequestExecutionPolicy());
+
+        // Act
+        var jToken = await _sut.PostAsync(requestBody);
+        var listResult = jToken["orders"]?.ToObject<GraphListOrdersResult>();
+
+        // Assert
+        listResult.Should().NotBeNull();
+        listResult?.PageInfo.Should().NotBeNull();
+        listResult?.Edges.Should().NotBeNullOrEmpty();
+        listResult?.Edges.Should().AllSatisfy(edge =>
+        {
+            edge.Cursor.Should().NotBeNullOrWhiteSpace();
+            edge.Node.Should().NotBeNull();
+            edge.Node.Id.Should().NotBeNullOrWhiteSpace();
+            edge.Node.Name.Should().NotBeNullOrWhiteSpace();
+            edge.Node.Tags.Should().NotBeNull();
+        });
     }
 
     /// <summary>
