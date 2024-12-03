@@ -74,26 +74,26 @@ public class GraphService : ShopifyService, IGraphService
         return (jsonSerializerOptions, httpContentSerializer);
     }
 
-    #nullable disable
-
-    public virtual async Task<GraphResult<T>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    public virtual async Task<GraphResult<T?>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        using var response = await SendAsync<JsonDocument>(graphRequest, cancellationToken);
-        var data = response.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
-        var extensions = ParseGraphExtensions(response);
+        using var response = await SendAsync(graphRequest, cancellationToken);
+        var data = response.Json.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
+        var extensions = ParseGraphExtensions(response.Json);
 
-        return new GraphResult<T>
+        return new GraphResult<T?>
         {
             Data = data,
             Extensions = extensions,
-            RequestId = string.Empty,
+            RequestId = response.RequestId,
         };
     }
 
-    public virtual async Task<JsonDocument> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    public virtual async Task<GraphResult> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        return await SendAsync<JsonDocument>(graphRequest, cancellationToken);
+        return await SendAsync(graphRequest, cancellationToken);
     }
+
+    #nullable disable
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
@@ -212,23 +212,42 @@ public class GraphService : ShopifyService, IGraphService
     /// </summary>
     /// <param name="graphRequest"></param>
     /// <param name="cancellationToken"></param>
-    protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
+    protected async Task<GraphResult> SendAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
         var requestUri = BuildRequestUri("graphql.json");
         using var requestContent = _httpContentSerializer.SerializeGraphRequest(requestUri, graphRequest);
         var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
 
-        using var jsonDocument = JsonDocument.Parse(result.RawResult);
+        var requestId = ParseRequestIdResponseHeader(result.ResponseHeaders);
+        var jsonDocument = JsonDocument.Parse(result.RawResult);
 
         if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
-            ThrowIfResponseContainsErrors(jsonDocument, result);
+            ThrowIfResponseContainsErrors(jsonDocument, requestId);
 
-        if (typeof(T) == typeof(JsonDocument))
-            return jsonDocument as T;
-
-        return jsonDocument.Deserialize<T>(_jsonSerializerOptions);
+        return new GraphResult
+        {
+            Json = jsonDocument
+        };
     }
 
+    /// <summary>
+    /// Sends a Graph request with variables to Shopify's Graph API.
+    /// </summary>
+    /// <param name="graphRequest"></param>
+    /// <param name="cancellationToken"></param>
+    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp.")]
+    protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
+    {
+        var graphResult = await SendAsync(graphRequest, cancellationToken);
+
+        if (typeof(T) == typeof(JsonDocument))
+            return graphResult.Json as T;
+
+        using (graphResult)
+            return graphResult.Json.Deserialize<T>(_jsonSerializerOptions);
+    }
+
+    #nullable enable
     private bool TryParseUserErrors(JsonProperty jsonProperty, out ICollection<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
@@ -246,8 +265,8 @@ public class GraphService : ShopifyService, IGraphService
             return false;
 
         userErrors = userErrorsProperty
-            .Deserialize<ICollection<GraphUserError>>(_jsonSerializerOptions)
-            .ToList();
+            .Deserialize<ICollection<GraphUserError>>(_jsonSerializerOptions)?
+            .ToList() ?? [];
 
         return userErrors.Count > 0;
     }
@@ -256,12 +275,14 @@ public class GraphService : ShopifyService, IGraphService
     /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
     /// </summary>
     /// <exception cref="ShopifyHttpException">Thrown if <paramref name="jsonDocument"/> contains any <c>userErrors</c> entries.</exception>
-    private void ThrowIfResponseContainsErrors<T>(JsonDocument jsonDocument, RequestResult<T> requestResult)
+    private void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
     {
         if (!jsonDocument.RootElement.TryGetProperty(DataPropertyName, out var dataElement))
             throw new ShopifyJsonParseException(
                 $"The JSON response from Shopify does not contain the expected '{DataPropertyName}' property.",
-                DataPropertyName);
+                DataPropertyName,
+                requestId
+            );
 
         foreach (var jsonProperty in dataElement.EnumerateObject())
         {
@@ -271,13 +292,10 @@ public class GraphService : ShopifyService, IGraphService
             if (!TryParseUserErrors(jsonProperty, out var userErrors))
                 continue;
 
-            var requestId = ParseRequestIdResponseHeader(requestResult.ResponseHeaders);
-
             throw new ShopifyGraphUserErrorsException(userErrors, requestId);
         }
     }
 
-    #nullable enable
     protected GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument)
     {
         const string propertyName = "extensions";
@@ -298,6 +316,6 @@ public class GraphService : ShopifyService, IGraphService
     {
         var jsonDocument = JsonDocument.Parse(requestResult.RawResult);
 
-        ThrowIfResponseContainsErrors(jsonDocument, requestResult);
+        ThrowIfResponseContainsErrors(jsonDocument, ParseRequestIdResponseHeader(requestResult.ResponseHeaders));
     }
 }

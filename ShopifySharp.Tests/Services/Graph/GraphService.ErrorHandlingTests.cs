@@ -23,7 +23,7 @@ public class GraphServiceErrorHandlingTests
         const string shopAccessToken = "some-shop-access-token";
         const string myShopifyUrl = "https://example.com";
 
-        _sut = new GraphService(myShopifyUrl, shopAccessToken, null, null);
+        _sut = new GraphService(myShopifyUrl, shopAccessToken);
         _sut.SetExecutionPolicy(_policy);
     }
 
@@ -48,6 +48,7 @@ public class GraphServiceErrorHandlingTests
     )
     {
         // Setup
+        const string dataPropertyName = "data";
         const string operationPropertyName = "some-operation-property-name";
         const string expectedPropertyName1 = "foo";
         const string expectedPropertyName2 = "bar";
@@ -55,7 +56,7 @@ public class GraphServiceErrorHandlingTests
         var responseJson =
             $$"""
               {
-                "data": {
+                "{{dataPropertyName}}": {
                   "{{expectedPropertyName1}}": {{expectedPropertyValue}},
                   "{{operationPropertyName}}": {
                     "{{expectedPropertyName2}}": {{expectedPropertyValue}}
@@ -81,12 +82,16 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        result.RootElement.GetProperty(expectedPropertyName1)
+        result.Json.RootElement
+            .GetProperty(dataPropertyName)
+            .GetProperty(expectedPropertyName1)
             .GetInt32()
             .Should()
             .Be(expectedPropertyValue);
 
-        var operation = result.RootElement.GetProperty(operationPropertyName);
+        var operation = result.Json.RootElement
+            .GetProperty(dataPropertyName)
+            .GetProperty(operationPropertyName);
         operation.Should().NotBeNull();
         operation.GetProperty(expectedPropertyName2)
             .GetInt32()
@@ -263,12 +268,13 @@ public class GraphServiceErrorHandlingTests
     )
     {
         // Setup
+        const string dataPropertyName = "data";
         const string operationPropertyName = "someOperation";
         const string expectedPropertyName = "foo";
         const string responseJson =
             $$"""
               {
-                "data": {
+                "{{dataPropertyName}}": {
                   "{{operationPropertyName}}": {
                     "{{expectedPropertyName}}": 7,
                     "{{UserErrorsPropertyName}}": []
@@ -294,7 +300,9 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        var operation = result.RootElement.GetProperty(operationPropertyName);
+        var operation = result.Json.RootElement
+            .GetProperty(dataPropertyName)
+            .GetProperty(operationPropertyName);
 
         operation.Should().NotBeNull();
     }
@@ -308,13 +316,14 @@ public class GraphServiceErrorHandlingTests
     )
     {
         // Setup
+        const string dataPropertyName = "data";
         const string operationPropertyName = "someOperation";
         const string expectedPropertyName = "foo";
         const int expectedPropertyValue = 7;
         var responseJson =
             $$"""
               {
-                "data": {
+                "{{dataPropertyName}}": {
                   "{{operationPropertyName}}": {
                     "{{expectedPropertyName}}": {{expectedPropertyValue}},
                     "{{UserErrorsPropertyName}}": [
@@ -362,12 +371,13 @@ public class GraphServiceErrorHandlingTests
     )
     {
         // Setup
+        const string dataPropertyName = "data";
         const string operationPropertyName = "someOperation";
         const string expectedPropertyName = "foo";
         const string responseJson =
             $$"""
               {
-                "data": {
+                "{{dataPropertyName}}": {
                   "{{operationPropertyName}}": {
                     "{{expectedPropertyName}}": 7,
                     "{{UserErrorsPropertyName}}": [{}]
