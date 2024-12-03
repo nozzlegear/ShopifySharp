@@ -22,7 +22,7 @@ public interface IGraphService : IShopifyService
     /// <param name="graphRequest">An object containing the GraphQL query to be executed. Variables are optional. Use <see cref="GraphRequest.EstimatedQueryCost" /> to provide an estimated query cost to any <see cref="IRequestExecutionPolicy" />, to avoid sending a request that will be throttled.</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <returns>A JToken containing the data from the request.</returns>
-    Task<JsonDocument> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default);
+    Task<GraphResult> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default);
 
     #region Deprecated methods
 
