@@ -105,7 +105,7 @@ public class GraphService : ShopifyService, IGraphService
         if (query is null || query.Type != JTokenType.String)
             throw new ArgumentException($"The type of the required `query` property should be {JTokenType.String}, but it was {query?.Type ?? JTokenType.Null}", nameof(body));
 
-        var response = await SendAsync<JsonDocument>(new GraphRequest
+        using var response = await SendAsync(new GraphRequest
         {
             Query = query.Value<string>(),
             Variables = body.SelectToken("variables")?.ToObject<Dictionary<string, object>>(),
@@ -113,7 +113,7 @@ public class GraphService : ShopifyService, IGraphService
         }, cancellationToken);
 
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
-        return Serializer.Deserialize<JToken>(response.RootElement.GetProperty(DataPropertyName).GetRawText(),
+        return Serializer.Deserialize<JToken>(response.Json.RootElement.GetProperty(DataPropertyName).GetRawText(),
             null,
             DateParseHandling.None);
     }
@@ -121,14 +121,14 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JsonDocument>(new GraphRequest
+        using var response = await SendAsync(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
             EstimatedQueryCost = graphqlQueryCost
         }, cancellationToken);
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
-        var thing = response.RootElement.GetProperty(DataPropertyName);
+        var thing = response.Json.RootElement.GetProperty(DataPropertyName);
         return Serializer.Deserialize<JToken>(thing.GetRawText(),
             null,
             DateParseHandling.None);
@@ -137,27 +137,27 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JsonDocument>(new GraphRequest
+        using var response = await SendAsync(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
             EstimatedQueryCost = graphqlQueryCost,
         }, cancellationToken);
 
-        return response.RootElement.GetProperty(DataPropertyName);
+        return response.Json.RootElement.GetProperty(DataPropertyName).Clone();
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        var response = await SendAsync<JsonDocument>(new GraphRequest
+        using var response = await SendAsync(new GraphRequest
         {
             Query = request.Query,
             Variables = request.Variables,
             EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
         }, cancellationToken);
 
-        return response.RootElement.GetProperty(DataPropertyName);
+        return response.Json.RootElement.GetProperty(DataPropertyName).Clone();
     }
 
 #if NET6_0_OR_GREATER
@@ -165,7 +165,7 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        var result = await SendAsync<JsonDocument>(new GraphRequest
+        using var result = await SendAsync(new GraphRequest
         {
             Query = graphqlQuery,
             Variables = null,
@@ -173,7 +173,7 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        var data = result.RootElement.GetProperty(DataPropertyName);
+        var data = result.Json.RootElement.GetProperty(DataPropertyName);
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
         return data.EnumerateObject().Single().Value.Deserialize<TResult>();
@@ -191,7 +191,7 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        var result = await SendAsync<JsonDocument>(new GraphRequest
+        using var result = await SendAsync(new GraphRequest
         {
             Query = request.Query,
             Variables = request.Variables,
@@ -199,7 +199,7 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        var data = result.RootElement.GetProperty(DataPropertyName);
+        var data = result.Json.RootElement.GetProperty(DataPropertyName);
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
         return data.EnumerateObject().Single().Value.Deserialize<TResult>();
@@ -249,13 +249,8 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp.")]
     protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
     {
-        var graphResult = await SendAsync(graphRequest, cancellationToken);
-
-        if (typeof(T) == typeof(JsonDocument))
-            return graphResult.Json as T;
-
-        using (graphResult)
-            return graphResult.Json.Deserialize<T>(_jsonSerializerOptions);
+        using var graphResult = await SendAsync(graphRequest, cancellationToken);
+        return graphResult.Json.Deserialize<T>(_jsonSerializerOptions);
     }
 
     #nullable enable
