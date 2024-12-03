@@ -109,7 +109,8 @@ public class GraphService : ShopifyService, IGraphService
         {
             Query = query.Value<string>(),
             Variables = body.SelectToken("variables")?.ToObject<Dictionary<string, object>>(),
-            EstimatedQueryCost = graphqlQueryCost
+            EstimatedQueryCost = graphqlQueryCost,
+            UserErrorHandling = GraphRequestUserErrorHandling.Throw,
         }, cancellationToken);
 
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
@@ -125,7 +126,8 @@ public class GraphService : ShopifyService, IGraphService
         {
             Query = graphqlQuery,
             Variables = null,
-            EstimatedQueryCost = graphqlQueryCost
+            EstimatedQueryCost = graphqlQueryCost,
+            UserErrorHandling = GraphRequestUserErrorHandling.Throw,
         }, cancellationToken);
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
         var thing = response.Json.RootElement.GetProperty(DataPropertyName);
@@ -142,6 +144,7 @@ public class GraphService : ShopifyService, IGraphService
             Query = graphqlQuery,
             Variables = null,
             EstimatedQueryCost = graphqlQueryCost,
+            UserErrorHandling = GraphRequestUserErrorHandling.Throw,
         }, cancellationToken);
 
         return response.Json.RootElement.GetProperty(DataPropertyName).Clone();
@@ -155,6 +158,7 @@ public class GraphService : ShopifyService, IGraphService
             Query = request.Query,
             Variables = request.Variables,
             EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
+            UserErrorHandling = request.UserErrorHandling
         }, cancellationToken);
 
         return response.Json.RootElement.GetProperty(DataPropertyName).Clone();
@@ -196,7 +200,7 @@ public class GraphService : ShopifyService, IGraphService
             Query = request.Query,
             Variables = request.Variables,
             EstimatedQueryCost = graphqlQueryCost ?? request.EstimatedQueryCost,
-            UserErrorHandling = GraphRequestUserErrorHandling.Throw
+            UserErrorHandling = request.UserErrorHandling
         }, cancellationToken);
 
         var data = result.Json.RootElement.GetProperty(DataPropertyName);
