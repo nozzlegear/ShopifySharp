@@ -199,9 +199,8 @@ public class GraphServiceSendAsyncTests
               .Which.Should().NotBeNull());
     }
 
-    [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when result contains user errors")]
-    [CombinatorialData]
-    public async Task SendAsync_T_DeprecatedMethod_WhenResultContainsUserErrors_ShouldThrow(bool withVariables)
+    [Fact(DisplayName = "Deprecated SendAsync<TResult>(string graphQuery) should throw when result contains user errors")]
+    public async Task SendAsync_T_DeprecatedMethod_WhenResultContainsUserErrors_ShouldThrow()
     {
         // Setup
         const string expectedJson =
@@ -221,15 +220,44 @@ public class GraphServiceSendAsyncTests
             .Returns(response);
 
         // Act
-        Func<Task<OrderConnection>> act;
-
-        if (withVariables)
-          act = () => _sut.SendAsync<OrderConnection>(Query);
-        else
-          act = () => _sut.SendAsync<OrderConnection>(MakeGraphRequest());
+        var act = () => _sut.SendAsync<OrderConnection>(Query);
 
         // Assert
         await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
+    }
+
+    [Theory(DisplayName = "Deprecated SendAsync<TResult>(GraphRequest graphRequest) should throw when result contains user errors")]
+    [CombinatorialData]
+    public async Task SendAsync_T_DeprecatedMethod_AcceptingGraphRequestParameter_WhenResultContainsUserErrorsAndTheGraphRequestIsConfiguredToThrow_ShouldThrow(
+        GraphRequestUserErrorHandling userErrorHandling
+    )
+    {
+        // Setup
+        const string expectedJson =
+          """
+          {
+            "data" : {
+              "orders" : {
+                "userErrors": [{ "code": "foo", "message": "bar" }]
+              }
+            }
+          }
+          """;
+        var response = MakeRequestResult(expectedJson);
+        var request = MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
+
+        A.CallTo(_executionPolicy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = () => _sut.SendAsync<OrderConnection>(request);
+
+        // Assert
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+            await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
+        else
+            await act.Should().NotThrowAsync();
     }
 
     [Theory(DisplayName = "Deprecated SendAsync<TResult> should throw when result contains multiple child properties")]
@@ -410,8 +438,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should not throw when the root \"data\" property contains user errors")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_WhenTheRootDataPropertyContainsUserErrors_ShouldNotThrow(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)]
-      IRequestExecutionPolicy policy
+      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
     )
     {
         // Setup
@@ -559,11 +586,11 @@ public class GraphServiceSendAsyncTests
         policyCall.MustHaveHappenedOnceOrMore();
     }
 
-    [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest request) should not throw when the root \"data\" property contains user errors")]
+    [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest request) should throw when the root \"data\" property contains user errors and the GraphRequest is configured to throw")]
     [CombinatorialData]
-    public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_WhenTheRootDataPropertyContainsUserErrors_ShouldNotThrow(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)]
-      IRequestExecutionPolicy policy
+    public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_WhenTheRootDataPropertyContainsUserErrorsAndTheGraphRequestIsConfiguredToThrow_ShouldThrow(
+      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy,
+      GraphRequestUserErrorHandling userErrorHandling
     )
     {
         // Setup
@@ -578,7 +605,7 @@ public class GraphServiceSendAsyncTests
           }
           """;
         var response = MakeRequestResult(expectedJson);
-        var graphRequest = MakeGraphRequest();
+        var graphRequest = MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
         var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
 
         _sut.SetExecutionPolicy(policy);
@@ -588,7 +615,10 @@ public class GraphServiceSendAsyncTests
         var act = () => _sut.SendAsync(graphRequest);
 
         // Assert
-        await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+            await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
+        else
+            await act.Should().NotThrowAsync();
     }
 
     #endregion
