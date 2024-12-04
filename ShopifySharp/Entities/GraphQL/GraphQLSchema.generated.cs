@@ -433,7 +433,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The number of hours since the customer has last abandoned a checkout.
         ///</summary>
-        public float? hoursSinceLastAbandonedCheckout { get; set; }
+        public decimal? hoursSinceLastAbandonedCheckout { get; set; }
         ///<summary>
         ///A globally-unique ID.
         ///</summary>
@@ -2020,7 +2020,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value of a discount.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -4780,7 +4780,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The value of the fee as a percentage.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -6994,11 +6994,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The base font size.
         ///</summary>
-        public float? @base { get; set; }
+        public decimal? @base { get; set; }
         ///<summary>
         ///The scale ratio used to derive all font sizes such as small and large.
         ///</summary>
-        public float? ratio { get; set; }
+        public decimal? ratio { get; set; }
     }
 
     ///<summary>
@@ -16830,7 +16830,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The merchant-defined percentage-of-rate fee for this participant.
         ///</summary>
-        public float? percentageOfRateFee { get; set; }
+        public decimal? percentageOfRateFee { get; set; }
     }
 
     ///<summary>
@@ -17294,7 +17294,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value of the deposit.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -17305,7 +17305,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value of the deposit.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -19526,7 +19526,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value of the discount.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -20716,7 +20716,7 @@ namespace ShopifySharp.GraphQL
         ///The order level discount amount. If `valueType` is `"percentage"`,
         ///then `value` is the percentage discount.
         ///</summary>
-        public float? value { get; set; }
+        public decimal? value { get; set; }
         ///<summary>
         ///Type of the order-level discount.
         ///</summary>
@@ -23360,11 +23360,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The latitude where this fulfillment event occurred.
         ///</summary>
-        public float? latitude { get; set; }
+        public decimal? latitude { get; set; }
         ///<summary>
         ///The longitude where this fulfillment event occurred.
         ///</summary>
-        public float? longitude { get; set; }
+        public decimal? longitude { get; set; }
         ///<summary>
         ///A message associated with this fulfillment event.
         ///</summary>
@@ -29654,11 +29654,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The approximate latitude coordinates of the location.
         ///</summary>
-        public float? latitude { get; set; }
+        public decimal? latitude { get; set; }
         ///<summary>
         ///The approximate longitude coordinates of the location.
         ///</summary>
-        public float? longitude { get; set; }
+        public decimal? longitude { get; set; }
         ///<summary>
         ///The phone number of the location.
         ///</summary>
@@ -30151,11 +30151,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The latitude coordinate of the customer address.
         ///</summary>
-        public float? latitude { get; set; }
+        public decimal? latitude { get; set; }
         ///<summary>
         ///The longitude coordinate of the customer address.
         ///</summary>
-        public float? longitude { get; set; }
+        public decimal? longitude { get; set; }
         ///<summary>
         ///The full name of the customer, based on firstName and lastName.
         ///</summary>
@@ -42970,7 +42970,7 @@ namespace ShopifySharp.GraphQL
         ///The value of price adjustment, where positive numbers reduce the prices and negative numbers
         ///increase them.
         ///</summary>
-        public float? value { get; set; }
+        public decimal? value { get; set; }
     }
 
     ///<summary>
@@ -43917,7 +43917,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percent value of the price rule.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -44116,7 +44116,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value of the object. This is a number between -100 (free) and 0 (no discount).
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -50696,7 +50696,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The value of the fee as a percentage.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -52780,11 +52780,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The average of a given attribute.
         ///</summary>
-        public float? average { get; set; }
+        public decimal? average { get; set; }
         ///<summary>
         ///The sum of a given attribute.
         ///</summary>
-        public float? sum { get; set; }
+        public decimal? sum { get; set; }
     }
 
     ///<summary>
@@ -53513,7 +53513,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value of the price used for checkout charge.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -54383,7 +54383,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The percentage value.
         ///</summary>
-        public float? percentage { get; set; }
+        public decimal? percentage { get; set; }
     }
 
     ///<summary>
@@ -55429,11 +55429,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The latitude coordinate of the address.
         ///</summary>
-        public float? latitude { get; set; }
+        public decimal? latitude { get; set; }
         ///<summary>
         ///The longitude coordinate of the address.
         ///</summary>
-        public float? longitude { get; set; }
+        public decimal? longitude { get; set; }
 
         ///<summary>
         ///The full name, based on firstName and lastName.
@@ -62187,11 +62187,11 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The proportion of the line item price that the tax represents as a decimal.
         ///</summary>
-        public float? rate { get; set; }
+        public decimal? rate { get; set; }
         ///<summary>
         ///The proportion of the line item price that the tax represents as a percentage.
         ///</summary>
-        public float? ratePercentage { get; set; }
+        public decimal? ratePercentage { get; set; }
         ///<summary>
         ///The source of the tax.
         ///</summary>
@@ -63450,7 +63450,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The quantity value for the unit price measurement.
         ///</summary>
-        public float? quantityValue { get; set; }
+        public decimal? quantityValue { get; set; }
         ///<summary>
         ///The reference unit for the unit price measurement.
         ///</summary>
@@ -64418,15 +64418,15 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The x coordinate of Vector3.
         ///</summary>
-        public float? x { get; set; }
+        public decimal? x { get; set; }
         ///<summary>
         ///The y coordinate of Vector3.
         ///</summary>
-        public float? y { get; set; }
+        public decimal? y { get; set; }
         ///<summary>
         ///The z coordinate of Vector3.
         ///</summary>
-        public float? z { get; set; }
+        public decimal? z { get; set; }
     }
 
     ///<summary>
@@ -65638,7 +65638,7 @@ namespace ShopifySharp.GraphQL
         ///<summary>
         ///The weight value using the unit system specified with `unit`.
         ///</summary>
-        public float? value { get; set; }
+        public decimal? value { get; set; }
     }
 
     ///<summary>

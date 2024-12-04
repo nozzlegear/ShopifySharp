@@ -20,6 +20,7 @@ public class GenerateGraphQLSchema_Test
             { "UnsignedInt64", "ulong" },
             { "Money", "decimal" },
             { "Decimal", "decimal" },
+            { "Float", "decimal" },
             { "DateTime", "DateTime" },//GraphQL datetimes are always UTC
             { "Date", "DateOnly" },
             { "UtcOffset", "TimeSpan" },
