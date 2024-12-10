@@ -80,9 +80,19 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
+        return (TResult)await SendAsync(request, typeof(TResult), graphqlQueryCost, cancellationToken);
+    }
+
+    public virtual Task<object> SendAsync(string graphqlQuery, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    {
+        return SendAsync(new GraphRequest { query = graphqlQuery }, resultType, graphqlQueryCost, cancellationToken);
+    }
+
+    public virtual async Task<object> SendAsync(GraphRequest request, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    {
         var elt = await this.SendAsync(request, graphqlQueryCost, cancellationToken);
         var ptyElt = elt.EnumerateObject().Single().Value;
-        return GraphQL.Serializer.Deserialize<TResult>(ptyElt.GetRawText());
+        return GraphQL.Serializer.Deserialize(ptyElt.GetRawText(), resultType);
     }
 #endif
 
