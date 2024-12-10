@@ -88,7 +88,7 @@ public class GraphService : ShopifyService, IGraphService
         return SendAsync(new GraphRequest { query = graphqlQuery }, resultType, graphqlQueryCost, cancellationToken);
     }
 
-    public virtual async Task<object> SendAsync(GraphRequest request, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    public virtual async Task<object> PostAsync(GraphRequest request, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
         var elt = await this.SendAsync(request, graphqlQueryCost, cancellationToken);
         var ptyElt = elt.EnumerateObject().Single().Value;
