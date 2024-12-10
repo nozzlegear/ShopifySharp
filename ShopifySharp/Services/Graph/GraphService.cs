@@ -80,12 +80,12 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        return (TResult)await SendAsync(request, typeof(TResult), graphqlQueryCost, cancellationToken);
+        return (TResult)await PostAsync(request, typeof(TResult), graphqlQueryCost, cancellationToken);
     }
 
-    public virtual Task<object> SendAsync(string graphqlQuery, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    public virtual Task<object> PostAsync(string graphqlQuery, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        return SendAsync(new GraphRequest { query = graphqlQuery }, resultType, graphqlQueryCost, cancellationToken);
+        return PostAsync(new GraphRequest { query = graphqlQuery }, resultType, graphqlQueryCost, cancellationToken);
     }
 
     public virtual async Task<object> PostAsync(GraphRequest request, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
