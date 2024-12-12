@@ -1,20 +1,36 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface ICheckoutServiceFactory : IServiceFactory<ICheckoutService>;
 
-public class CheckoutServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ICheckoutServiceFactory
+public class CheckoutServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICheckoutService>
 {
-    /// <inheritDoc />
-    public virtual ICheckoutService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public CheckoutServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        ICheckoutService service = shopifyDomainUtility is null ? new CheckoutService(shopDomain, accessToken) : new CheckoutService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual ICheckoutService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual ICheckoutService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        ICheckoutService service = shopifyDomainUtility is null ? new CheckoutService(credentials.ShopDomain, credentials.AccessToken) : new CheckoutService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -23,8 +39,4 @@ public class CheckoutServiceFactory(IRequestExecutionPolicy? requestExecutionPol
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual ICheckoutService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }

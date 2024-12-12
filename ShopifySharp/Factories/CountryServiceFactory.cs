@@ -1,3 +1,4 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
@@ -5,19 +6,31 @@
 using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
-[Obsolete("https://shopify.dev/changelog/deprecation-notice-country-and-province-endpoints-in-admin-rest-api")]
 public interface ICountryServiceFactory : IServiceFactory<ICountryService>;
 
-[Obsolete("https://shopify.dev/changelog/deprecation-notice-country-and-province-endpoints-in-admin-rest-api")]
-public class CountryServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ICountryServiceFactory
+public class CountryServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICountryService>
 {
-    /// <inheritDoc />
-    public virtual ICountryService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public CountryServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        ICountryService service = shopifyDomainUtility is null ? new CountryService(shopDomain, accessToken) : new CountryService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual ICountryService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual ICountryService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        ICountryService service = shopifyDomainUtility is null ? new CountryService(credentials.ShopDomain, credentials.AccessToken) : new CountryService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -26,8 +39,4 @@ public class CountryServiceFactory(IRequestExecutionPolicy? requestExecutionPoli
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual ICountryService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }

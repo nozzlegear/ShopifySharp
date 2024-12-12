@@ -1,20 +1,36 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IOrderServiceFactory : IServiceFactory<IOrderService>;
 
-public class OrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IOrderServiceFactory
+public class OrderServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IOrderService>
 {
-    /// <inheritDoc />
-    public virtual IOrderService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public OrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        IOrderService service = shopifyDomainUtility is null ? new OrderService(shopDomain, accessToken) : new OrderService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual IOrderService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IOrderService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        IOrderService service = shopifyDomainUtility is null ? new OrderService(credentials.ShopDomain, credentials.AccessToken) : new OrderService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -23,8 +39,4 @@ public class OrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual IOrderService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }

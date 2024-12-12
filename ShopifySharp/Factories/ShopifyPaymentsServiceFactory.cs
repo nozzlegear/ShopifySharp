@@ -1,20 +1,36 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IShopifyPaymentsServiceFactory : IServiceFactory<IShopifyPaymentsService>;
 
-public class ShopifyPaymentsServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IShopifyPaymentsServiceFactory
+public class ShopifyPaymentsServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IShopifyPaymentsService>
 {
-    /// <inheritDoc />
-    public virtual IShopifyPaymentsService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public ShopifyPaymentsServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        IShopifyPaymentsService service = shopifyDomainUtility is null ? new ShopifyPaymentsService(shopDomain, accessToken) : new ShopifyPaymentsService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual IShopifyPaymentsService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IShopifyPaymentsService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        IShopifyPaymentsService service = shopifyDomainUtility is null ? new ShopifyPaymentsService(credentials.ShopDomain, credentials.AccessToken) : new ShopifyPaymentsService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -23,8 +39,4 @@ public class ShopifyPaymentsServiceFactory(IRequestExecutionPolicy? requestExecu
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual IShopifyPaymentsService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }

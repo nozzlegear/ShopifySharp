@@ -1,20 +1,36 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IArticleServiceFactory : IServiceFactory<IArticleService>;
 
-public class ArticleServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IArticleServiceFactory
+public class ArticleServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IArticleService>
 {
-    /// <inheritDoc />
-    public virtual IArticleService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public ArticleServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        IArticleService service = shopifyDomainUtility is null ? new ArticleService(shopDomain, accessToken) : new ArticleService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual IArticleService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IArticleService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        IArticleService service = shopifyDomainUtility is null ? new ArticleService(credentials.ShopDomain, credentials.AccessToken) : new ArticleService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -23,8 +39,4 @@ public class ArticleServiceFactory(IRequestExecutionPolicy? requestExecutionPoli
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual IArticleService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }
