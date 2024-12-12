@@ -1,20 +1,36 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface ICancellationRequestServiceFactory : IServiceFactory<ICancellationRequestService>;
 
-public class CancellationRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ICancellationRequestServiceFactory
+public class CancellationRequestServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICancellationRequestService>
 {
-    /// <inheritDoc />
-    public virtual ICancellationRequestService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public CancellationRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        ICancellationRequestService service = shopifyDomainUtility is null ? new CancellationRequestService(shopDomain, accessToken) : new CancellationRequestService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual ICancellationRequestService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual ICancellationRequestService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        ICancellationRequestService service = shopifyDomainUtility is null ? new CancellationRequestService(credentials.ShopDomain, credentials.AccessToken) : new CancellationRequestService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -23,8 +39,4 @@ public class CancellationRequestServiceFactory(IRequestExecutionPolicy? requestE
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual ICancellationRequestService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }

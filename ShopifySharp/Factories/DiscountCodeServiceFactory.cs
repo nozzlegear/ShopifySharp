@@ -1,20 +1,36 @@
+
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IDiscountCodeServiceFactory : IServiceFactory<IDiscountCodeService>;
 
-public class DiscountCodeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IDiscountCodeServiceFactory
+public class DiscountCodeServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IDiscountCodeService>
 {
-    /// <inheritDoc />
-    public virtual IDiscountCodeService Create(string shopDomain, string accessToken)
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public DiscountCodeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
     {
-        IDiscountCodeService service = shopifyDomainUtility is null ? new DiscountCodeService(shopDomain, accessToken) : new DiscountCodeService(shopDomain, accessToken, shopifyDomainUtility);
+
+    }
+
+    /// <inheritDoc />
+    public virtual IDiscountCodeService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        IDiscountCodeService service = shopifyDomainUtility is null ? new DiscountCodeService(credentials.ShopDomain, credentials.AccessToken) : new DiscountCodeService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
 
         if (requestExecutionPolicy is not null)
         {
@@ -23,8 +39,4 @@ public class DiscountCodeServiceFactory(IRequestExecutionPolicy? requestExecutio
 
         return service;
     }
-
-    /// <inheritDoc />
-    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
 }
