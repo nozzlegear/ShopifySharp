@@ -3,6 +3,7 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Credentials;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
 
@@ -14,6 +15,11 @@ public class ShopPlanService : GraphService, IShopPlanService
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
     public ShopPlanService(string shopDomain, string accessToken, IDependencyContainer? dependencyContainer) : base(shopDomain, accessToken, null, dependencyContainer)
+    {
+        _jsonSerializerOptions = InitializeDependencies(dependencyContainer);
+    }
+
+    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IDependencyContainer? dependencyContainer) : base(shopifyApiCredentials, null, dependencyContainer)
     {
         _jsonSerializerOptions = InitializeDependencies(dependencyContainer);
     }
