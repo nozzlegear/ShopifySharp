@@ -22,7 +22,7 @@ public interface IPartnerServiceFactory
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
-public class PartnerServiceFactory(IDependencyContainer? dependencyContainer = null) : IPartnerServiceFactory
+public class PartnerServiceFactory(IDependencyContainer? dependencyContainer) : IPartnerServiceFactory
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public PartnerServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ILocationServiceFactory : IServiceFactory<ILocationService>;
 
-public class LocationServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ILocationService>
+public class LocationServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ILocationService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public LocationServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

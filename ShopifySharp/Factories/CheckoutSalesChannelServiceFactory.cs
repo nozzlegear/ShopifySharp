@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICheckoutSalesChannelServiceFactory : IServiceFactory<ICheckoutSalesChannelService>;
 
-public class CheckoutSalesChannelServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICheckoutSalesChannelService>
+public class CheckoutSalesChannelServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ICheckoutSalesChannelService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public CheckoutSalesChannelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

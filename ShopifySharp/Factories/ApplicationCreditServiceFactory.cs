@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IApplicationCreditServiceFactory : IServiceFactory<IApplicationCreditService>;
 
-public class ApplicationCreditServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IApplicationCreditService>
+public class ApplicationCreditServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IApplicationCreditService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public ApplicationCreditServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

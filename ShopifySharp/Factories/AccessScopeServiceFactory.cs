@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IAccessScopeServiceFactory : IServiceFactory<IAccessScopeService>;
 
-public class AccessScopeServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IAccessScopeService>
+public class AccessScopeServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IAccessScopeService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public AccessScopeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

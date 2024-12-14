@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICountryServiceFactory : IServiceFactory<ICountryService>;
 
-public class CountryServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICountryService>
+public class CountryServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ICountryService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public CountryServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IUsageChargeServiceFactory : IServiceFactory<IUsageChargeService>;
 
-public class UsageChargeServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IUsageChargeService>
+public class UsageChargeServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IUsageChargeService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public UsageChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

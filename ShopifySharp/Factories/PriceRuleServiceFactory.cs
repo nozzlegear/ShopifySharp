@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IPriceRuleServiceFactory : IServiceFactory<IPriceRuleService>;
 
-public class PriceRuleServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IPriceRuleService>
+public class PriceRuleServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IPriceRuleService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public PriceRuleServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

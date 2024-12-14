@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IStorefrontAccessTokenServiceFactory : IServiceFactory<IStorefrontAccessTokenService>;
 
-public class StorefrontAccessTokenServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IStorefrontAccessTokenService>
+public class StorefrontAccessTokenServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IStorefrontAccessTokenService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public StorefrontAccessTokenServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

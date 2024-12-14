@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IDiscountCodeServiceFactory : IServiceFactory<IDiscountCodeService>;
 
-public class DiscountCodeServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IDiscountCodeService>
+public class DiscountCodeServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IDiscountCodeService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public DiscountCodeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

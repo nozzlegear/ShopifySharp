@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IDraftOrderServiceFactory : IServiceFactory<IDraftOrderService>;
 
-public class DraftOrderServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IDraftOrderService>
+public class DraftOrderServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IDraftOrderService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public DraftOrderServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

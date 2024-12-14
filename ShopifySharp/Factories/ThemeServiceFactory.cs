@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IThemeServiceFactory : IServiceFactory<IThemeService>;
 
-public class ThemeServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IThemeService>
+public class ThemeServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IThemeService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public ThemeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

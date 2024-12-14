@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IInventoryLevelServiceFactory : IServiceFactory<IInventoryLevelService>;
 
-public class InventoryLevelServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IInventoryLevelService>
+public class InventoryLevelServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IInventoryLevelService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public InventoryLevelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

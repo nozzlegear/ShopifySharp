@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IFulfillmentRequestServiceFactory : IServiceFactory<IFulfillmentRequestService>;
 
-public class FulfillmentRequestServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IFulfillmentRequestService>
+public class FulfillmentRequestServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IFulfillmentRequestService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public FulfillmentRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
