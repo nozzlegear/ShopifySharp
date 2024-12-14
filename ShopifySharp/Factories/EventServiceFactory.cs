@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IEventServiceFactory : IServiceFactory<IEventService>;
 
-public class EventServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IEventService>
+public class EventServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IEventService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public EventServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IScriptTagServiceFactory : IServiceFactory<IScriptTagService>;
 
-public class ScriptTagServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IScriptTagService>
+public class ScriptTagServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IScriptTagService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public ScriptTagServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

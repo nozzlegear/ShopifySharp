@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IMetaFieldServiceFactory : IServiceFactory<IMetaFieldService>;
 
-public class MetaFieldServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IMetaFieldService>
+public class MetaFieldServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IMetaFieldService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public MetaFieldServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICancellationRequestServiceFactory : IServiceFactory<ICancellationRequestService>;
 
-public class CancellationRequestServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICancellationRequestService>
+public class CancellationRequestServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ICancellationRequestService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public CancellationRequestServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

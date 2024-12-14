@@ -27,7 +27,7 @@ public interface IPartnerServiceFactory
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
-public class <#= TypeName #>Factory(IDependencyContainer? dependencyContainer = null) : IPartnerServiceFactory
+public class <#= TypeName #>Factory(IDependencyContainer? dependencyContainer) : IPartnerServiceFactory
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
@@ -58,7 +58,7 @@ public class <#= TypeName #>Factory(IDependencyContainer? dependencyContainer = 
 <# } else { #>
 public interface I<#= TypeName #>Factory : IServiceFactory<I<#= TypeName #>>;
 
-public class <#= TypeName #>Factory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<I<#= TypeName #>>
+public class <#= TypeName #>Factory(IDependencyContainer? dependencyContainer) : IServiceFactory<I<#= TypeName #>>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

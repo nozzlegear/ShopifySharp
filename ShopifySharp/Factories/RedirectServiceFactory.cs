@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IRedirectServiceFactory : IServiceFactory<IRedirectService>;
 
-public class RedirectServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IRedirectService>
+public class RedirectServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IRedirectService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public RedirectServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

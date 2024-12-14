@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IWebhookServiceFactory : IServiceFactory<IWebhookService>;
 
-public class WebhookServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IWebhookService>
+public class WebhookServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IWebhookService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public WebhookServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

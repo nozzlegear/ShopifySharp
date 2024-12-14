@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IRefundServiceFactory : IServiceFactory<IRefundService>;
 
-public class RefundServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IRefundService>
+public class RefundServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IRefundService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public RefundServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

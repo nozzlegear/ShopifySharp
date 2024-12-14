@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IAssetServiceFactory : IServiceFactory<IAssetService>;
 
-public class AssetServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IAssetService>
+public class AssetServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IAssetService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public AssetServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

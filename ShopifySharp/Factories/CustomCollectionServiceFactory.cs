@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICustomCollectionServiceFactory : IServiceFactory<ICustomCollectionService>;
 
-public class CustomCollectionServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<ICustomCollectionService>
+public class CustomCollectionServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ICustomCollectionService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public CustomCollectionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

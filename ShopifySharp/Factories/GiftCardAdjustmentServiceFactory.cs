@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IGiftCardAdjustmentServiceFactory : IServiceFactory<IGiftCardAdjustmentService>;
 
-public class GiftCardAdjustmentServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IGiftCardAdjustmentService>
+public class GiftCardAdjustmentServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IGiftCardAdjustmentService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

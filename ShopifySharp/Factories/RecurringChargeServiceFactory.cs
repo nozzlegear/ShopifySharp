@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IRecurringChargeServiceFactory : IServiceFactory<IRecurringChargeService>;
 
-public class RecurringChargeServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IRecurringChargeService>
+public class RecurringChargeServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IRecurringChargeService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public RecurringChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)

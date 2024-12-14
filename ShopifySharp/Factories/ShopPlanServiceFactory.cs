@@ -12,7 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IShopPlanServiceFactory : IServiceFactory<IShopPlanService>;
 
-public class ShopPlanServiceFactory(IDependencyContainer? dependencyContainer = null) : IServiceFactory<IShopPlanService>
+public class ShopPlanServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IShopPlanService>
 {
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public ShopPlanServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
