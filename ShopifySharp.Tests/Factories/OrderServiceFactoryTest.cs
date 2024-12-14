@@ -1,7 +1,9 @@
+using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Factories;
+using ShopifySharp.Infrastructure;
 using Xunit;
 
 namespace ShopifySharp.Tests.Factories;
@@ -13,13 +15,19 @@ public class OrderServiceFactoryTest
     private const string ShopDomain = "some-shop-domain";
     private const string AccessToken = "some-access-token";
 
-    private readonly OrderServiceFactory _factory = new();
+    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
+    private readonly OrderServiceFactory _sut;
+
+    public OrderServiceFactoryTest()
+    {
+        _sut = new OrderServiceFactory(_dependencyContainer);
+    }
 
     [Fact]
     public void Create_ReturnsTheService()
     {
         // Act
-        var service = _factory.Create(ShopDomain, AccessToken);
+        var service = _sut.Create(ShopDomain, AccessToken);
 
         // Assert
         service.Should().NotBeNull();
@@ -33,7 +41,7 @@ public class OrderServiceFactoryTest
         var credentials = new ShopifyApiCredentials(ShopDomain, AccessToken);
 
         // Act
-        var service = _factory.Create(credentials);
+        var service = _sut.Create(credentials);
 
         // Assert
         service.Should().NotBeNull();
