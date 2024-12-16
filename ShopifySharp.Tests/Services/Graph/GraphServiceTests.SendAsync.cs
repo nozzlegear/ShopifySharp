@@ -78,15 +78,15 @@ public class GraphServiceSendAsyncTests
 
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
     private readonly IHttpContentSerializer _httpContentSerializer = A.Fake<IHttpContentSerializer>(x => x.Wrapping(new GraphHttpContentSerializer(Serializer.GraphSerializerOptions)));
-    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
+    private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
     private readonly GraphService _sut;
 
     public GraphServiceSendAsyncTests()
     {
-        A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>())
+        A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
           .Returns(_httpContentSerializer);
 
-        _sut = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken, null, _dependencyContainer);
+        _sut = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken, null, _serviceProvider);
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 

@@ -2,29 +2,46 @@
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IScriptTagServiceFactory : IServiceFactory<IScriptTagService>;
 
-public class ScriptTagServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IScriptTagServiceFactory
+public class ScriptTagServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IScriptTagService>
 {
-    /// <inheritDoc />
-    public virtual IScriptTagService Create(string shopDomain, string accessToken)
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public ScriptTagServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(null)
     {
-        IScriptTagService service = shopifyDomainUtility is null ? new ScriptTagService(shopDomain, accessToken) : new ScriptTagService(shopDomain, accessToken, shopifyDomainUtility);
-
-        if (requestExecutionPolicy is not null)
-        {
-            service.SetExecutionPolicy(requestExecutionPolicy);
-        }
-
-        return service;
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
-    public virtual IScriptTagService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
+    public virtual IScriptTagService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IScriptTagService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        IScriptTagService service = shopifyDomainUtility is null ? new ScriptTagService(credentials.ShopDomain, credentials.AccessToken) : new ScriptTagService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+
+        if (requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(requestExecutionPolicy);
+
+        return service;
+    }
 }

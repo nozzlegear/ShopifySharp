@@ -2,29 +2,46 @@
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IPageServiceFactory : IServiceFactory<IPageService>;
 
-public class PageServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IPageServiceFactory
+public class PageServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IPageService>
 {
-    /// <inheritDoc />
-    public virtual IPageService Create(string shopDomain, string accessToken)
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public PageServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(null)
     {
-        IPageService service = shopifyDomainUtility is null ? new PageService(shopDomain, accessToken) : new PageService(shopDomain, accessToken, shopifyDomainUtility);
-
-        if (requestExecutionPolicy is not null)
-        {
-            service.SetExecutionPolicy(requestExecutionPolicy);
-        }
-
-        return service;
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
-    public virtual IPageService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
+    public virtual IPageService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IPageService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        IPageService service = shopifyDomainUtility is null ? new PageService(credentials.ShopDomain, credentials.AccessToken) : new PageService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+
+        if (requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(requestExecutionPolicy);
+
+        return service;
+    }
 }

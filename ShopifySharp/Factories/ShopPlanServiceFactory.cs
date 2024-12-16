@@ -2,29 +2,45 @@
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IShopPlanServiceFactory : IServiceFactory<IShopPlanService>;
 
-public class ShopPlanServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IShopPlanServiceFactory
+public class ShopPlanServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IShopPlanService>
 {
-    /// <inheritDoc />
-    public virtual IShopPlanService Create(string shopDomain, string accessToken)
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public ShopPlanServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(null)
     {
-        IShopPlanService service = shopifyDomainUtility is null ? new ShopPlanService(shopDomain, accessToken, dependencyContainer: null) : new ShopPlanService(shopDomain, accessToken, shopifyDomainUtility);
-
-        if (requestExecutionPolicy is not null)
-        {
-            service.SetExecutionPolicy(requestExecutionPolicy);
-        }
-
-        return service;
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
-    public virtual IShopPlanService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
+    public virtual IShopPlanService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IShopPlanService Create(ShopifyApiCredentials credentials)
+    {
+        IShopPlanService service = new ShopPlanService(credentials, serviceProvider);
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+
+        if (requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(requestExecutionPolicy);
+
+        return service;
+    }
 }

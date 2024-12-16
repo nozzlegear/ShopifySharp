@@ -14,14 +14,14 @@ public class ShopPlanService : GraphService, IShopPlanService
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public ShopPlanService(string shopDomain, string accessToken, IDependencyContainer? dependencyContainer) : base(shopDomain, accessToken, null, dependencyContainer)
+    public ShopPlanService(string shopDomain, string accessToken, IServiceProvider? serviceProvider) : base(shopDomain, accessToken, null, serviceProvider)
     {
-        _jsonSerializerOptions = InitializeDependencies(dependencyContainer);
+        _jsonSerializerOptions = InitializeDependencies(serviceProvider);
     }
 
-    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IDependencyContainer? dependencyContainer) : base(shopifyApiCredentials, null, dependencyContainer)
+    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider? serviceProvider) : base(shopifyApiCredentials, null, serviceProvider)
     {
-        _jsonSerializerOptions = InitializeDependencies(dependencyContainer);
+        _jsonSerializerOptions = InitializeDependencies(serviceProvider);
     }
 
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
@@ -30,10 +30,10 @@ public class ShopPlanService : GraphService, IShopPlanService
         _jsonSerializerOptions = InitializeDependencies(null);
     }
 
-    private static JsonSerializerOptions InitializeDependencies(IDependencyContainer? dependencyContainer)
+    private static JsonSerializerOptions InitializeDependencies(IServiceProvider? serviceProvider)
     {
-        var jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(
-            dependencyContainer,
+        var jsonSerializerOptions = InternalServiceResolver.GetServiceOrDefault(
+            serviceProvider,
             () => Serializer.GraphSerializerOptions
         );
         return jsonSerializerOptions;

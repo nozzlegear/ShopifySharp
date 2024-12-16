@@ -32,22 +32,22 @@ public class GraphService : ShopifyService, IGraphService
     public GraphService(
         ShopifyApiCredentials shopifyApiCredentials,
         string? apiVersion,
-        IDependencyContainer? dependencyContainer
-    ) : base(shopifyApiCredentials, dependencyContainer)
+        IServiceProvider? serviceProvider
+    ) : base(shopifyApiCredentials, serviceProvider)
     {
         _apiVersion = apiVersion;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(dependencyContainer);
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(serviceProvider);
     }
 
     public GraphService(
         string myShopifyUrl,
         string shopAccessToken,
         string? apiVersion = null,
-        IDependencyContainer? dependencyContainer = null
+        IServiceProvider? serviceProvider = null
     ) : base(myShopifyUrl, shopAccessToken, null)
     {
         _apiVersion = apiVersion;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(dependencyContainer);
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(serviceProvider);
     }
 
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
@@ -60,14 +60,14 @@ public class GraphService : ShopifyService, IGraphService
         (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
     }
 
-    private static (JsonSerializerOptions, IHttpContentSerializer) InitializeDependencies(IDependencyContainer? dependencyContainer)
+    private static (JsonSerializerOptions, IHttpContentSerializer) InitializeDependencies(IServiceProvider? serviceProvider)
     {
-        var jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(
-            dependencyContainer,
+        var jsonSerializerOptions = InternalServiceResolver.GetServiceOrDefault(
+            serviceProvider,
             () => Serializer.GraphSerializerOptions
         );
-        var httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(
-            dependencyContainer,
+        var httpContentSerializer = InternalServiceResolver.GetServiceOrDefault<IHttpContentSerializer>(
+            serviceProvider,
             () => new GraphHttpContentSerializer(jsonSerializerOptions)
         );
         return (jsonSerializerOptions, httpContentSerializer);

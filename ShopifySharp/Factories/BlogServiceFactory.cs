@@ -2,29 +2,46 @@
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IBlogServiceFactory : IServiceFactory<IBlogService>;
 
-public class BlogServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IBlogServiceFactory
+public class BlogServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IBlogService>
 {
-    /// <inheritDoc />
-    public virtual IBlogService Create(string shopDomain, string accessToken)
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public BlogServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(null)
     {
-        IBlogService service = shopifyDomainUtility is null ? new BlogService(shopDomain, accessToken) : new BlogService(shopDomain, accessToken, shopifyDomainUtility);
-
-        if (requestExecutionPolicy is not null)
-        {
-            service.SetExecutionPolicy(requestExecutionPolicy);
-        }
-
-        return service;
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
-    public virtual IBlogService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
+    public virtual IBlogService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IBlogService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        IBlogService service = shopifyDomainUtility is null ? new BlogService(credentials.ShopDomain, credentials.AccessToken) : new BlogService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+
+        if (requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(requestExecutionPolicy);
+
+        return service;
+    }
 }
