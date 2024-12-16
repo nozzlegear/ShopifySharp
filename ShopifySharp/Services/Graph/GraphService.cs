@@ -87,6 +87,14 @@ public class GraphService : ShopifyService, IGraphService
         };
     }
 
+    // TODO: is this needed with PostAsync<GraphResult<T?>>
+    // public virtual async Task<GraphResult<object>> PostAsync(GraphRequest request, Type resultType, CancellationToken cancellationToken = default)
+    // {
+    //     var elt = await SendAsync(request, cancellationToken);
+    //     var ptyElt = elt.Json.RootElement.EnumerateObject().Single().Value;
+    //     return GraphQL.Serializer.Deserialize(ptyElt.GetRawText(), resultType);
+    // }
+
     public virtual async Task<GraphResult> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
         return await SendAsync(graphRequest, cancellationToken);
@@ -207,18 +215,6 @@ public class GraphService : ShopifyService, IGraphService
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
         return data.EnumerateObject().Single().Value.Deserialize<TResult>();
-    }
-
-    public virtual Task<object> PostAsync(string graphqlQuery, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-    {
-        return PostAsync(new GraphRequest { query = graphqlQuery }, resultType, graphqlQueryCost, cancellationToken);
-    }
-
-    public virtual async Task<object> PostAsync(GraphRequest request, Type resultType, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
-    {
-        var elt = await this.SendAsync(request, graphqlQueryCost, cancellationToken);
-        var ptyElt = elt.EnumerateObject().Single().Value;
-        return GraphQL.Serializer.Deserialize(ptyElt.GetRawText(), resultType);
     }
 #endif
 
