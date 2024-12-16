@@ -1,4 +1,3 @@
-
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
@@ -12,13 +11,20 @@ namespace ShopifySharp.Factories;
 
 public interface ICustomCollectionServiceFactory : IServiceFactory<ICustomCollectionService>;
 
-public class CustomCollectionServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ICustomCollectionService>
+public class CustomCollectionServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<ICustomCollectionService>
 {
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public CustomCollectionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
+        : this(null)
     {
-
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
@@ -28,14 +34,13 @@ public class CustomCollectionServiceFactory(IDependencyContainer? dependencyCont
     /// <inheritDoc />
     public virtual ICustomCollectionService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
         ICustomCollectionService service = shopifyDomainUtility is null ? new CustomCollectionService(credentials.ShopDomain, credentials.AccessToken) : new CustomCollectionService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
-        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
 
         if (requestExecutionPolicy is not null)
-        {
             service.SetExecutionPolicy(requestExecutionPolicy);
-        }
 
         return service;
     }

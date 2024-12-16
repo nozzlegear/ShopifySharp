@@ -1,4 +1,3 @@
-
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
@@ -12,13 +11,20 @@ namespace ShopifySharp.Factories;
 
 public interface ITenderTransactionServiceFactory : IServiceFactory<ITenderTransactionService>;
 
-public class TenderTransactionServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<ITenderTransactionService>
+public class TenderTransactionServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<ITenderTransactionService>
 {
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public TenderTransactionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
+        : this(null)
     {
-
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
@@ -28,14 +34,13 @@ public class TenderTransactionServiceFactory(IDependencyContainer? dependencyCon
     /// <inheritDoc />
     public virtual ITenderTransactionService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = dependencyContainer?.TryGetService<IShopifyDomainUtility>();
+        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
         ITenderTransactionService service = shopifyDomainUtility is null ? new TenderTransactionService(credentials.ShopDomain, credentials.AccessToken) : new TenderTransactionService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
-        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
 
         if (requestExecutionPolicy is not null)
-        {
             service.SetExecutionPolicy(requestExecutionPolicy);
-        }
 
         return service;
     }

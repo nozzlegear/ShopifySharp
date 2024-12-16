@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Text.Json;
 using FakeItEasy;
 using FluentAssertions;
@@ -22,7 +23,7 @@ public class GraphServiceConstructorTests
     private readonly JsonSerializerOptions _expectedJsonSerializerOptions = new() { AllowTrailingCommas = true, PropertyNameCaseInsensitive = true };
     private readonly IHttpContentSerializer _expectedHttpContentSerializer = A.Fake<IHttpContentSerializer>();
     private readonly IShopifyDomainUtility _shopifyDomainUtility = A.Fake<IShopifyDomainUtility>();
-    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
+    private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
 
     #region Constructor with ShopifyApiCredentials
 
@@ -31,10 +32,10 @@ public class GraphServiceConstructorTests
     {
         // Setup
         string? apiVersion = null;
-        IDependencyContainer? dependencyContainer = null;
+        IServiceProvider? serviceProvider = null;
 
         // Act
-        var sut = new GraphService(_credentials, apiVersion, dependencyContainer);
+        var sut = new GraphService(_credentials, apiVersion, serviceProvider);
 
         // Assert
         sut.APIVersion.Should().NotBeNullOrEmpty();
@@ -61,10 +62,10 @@ public class GraphServiceConstructorTests
     {
         // Setup
         const string expectedApiVersion = "some-api-version";
-        IDependencyContainer? dependencyContainer = null;
+        IServiceProvider? serviceProvider = null;
 
         // Act
-        var sut = new GraphService(_credentials, expectedApiVersion, dependencyContainer);
+        var sut = new GraphService(_credentials, expectedApiVersion, serviceProvider);
 
         // Assert
         sut.APIVersion.Should().Be(expectedApiVersion);
@@ -75,14 +76,14 @@ public class GraphServiceConstructorTests
     {
         // Setup
         string? apiVersion = null;
-        var callToJsonSerializerOptions = A.CallTo(() => _dependencyContainer.TryGetService<JsonSerializerOptions>());
-        var callToHttpContentSerializer = A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>());
+        var callToJsonSerializerOptions = A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)));
+        var callToHttpContentSerializer = A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)));
 
         callToJsonSerializerOptions.Returns(_expectedJsonSerializerOptions);
         callToHttpContentSerializer.Returns(_expectedHttpContentSerializer);
 
         // Act
-        var sut = new GraphService(_credentials, apiVersion, _dependencyContainer);
+        var sut = new GraphService(_credentials, apiVersion, _serviceProvider);
 
         // Assert
         sut.APIVersion.Should().NotBeNullOrEmpty();
@@ -116,10 +117,10 @@ public class GraphServiceConstructorTests
     {
         // Setup
         string? apiVersion = null;
-        IDependencyContainer? dependencyContainer = null;
+        IServiceProvider? serviceProvider = null;
 
         // Act
-        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion, dependencyContainer);
+        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion, serviceProvider);
 
         // Assert
         sut.APIVersion.Should().NotBeNullOrEmpty();
@@ -146,10 +147,10 @@ public class GraphServiceConstructorTests
     {
         // Setup
         const string expectedApiVersion = "some-api-version";
-        IDependencyContainer? dependencyContainer = null;
+        IServiceProvider? serviceProvider = null;
 
         // Act
-        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, expectedApiVersion, dependencyContainer);
+        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, expectedApiVersion, serviceProvider);
 
         // Assert
         sut.APIVersion.Should().Be(expectedApiVersion);
@@ -160,14 +161,14 @@ public class GraphServiceConstructorTests
     {
         // Setup
         string? apiVersion = null;
-        var callToJsonSerializerOptions = A.CallTo(() => _dependencyContainer.TryGetService<JsonSerializerOptions>());
-        var callToHttpContentSerializer = A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>());
+        var callToJsonSerializerOptions = A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)));
+        var callToHttpContentSerializer = A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)));
 
         callToJsonSerializerOptions.Returns(_expectedJsonSerializerOptions);
         callToHttpContentSerializer.Returns(_expectedHttpContentSerializer);
 
         // Act
-        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion, _dependencyContainer);
+        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion, _serviceProvider);
 
         // Assert
         sut.APIVersion.Should().NotBeNullOrEmpty();

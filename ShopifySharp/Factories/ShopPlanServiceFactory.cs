@@ -1,4 +1,3 @@
-
 #nullable enable
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
@@ -12,13 +11,20 @@ namespace ShopifySharp.Factories;
 
 public interface IShopPlanServiceFactory : IServiceFactory<IShopPlanService>;
 
-public class ShopPlanServiceFactory(IDependencyContainer? dependencyContainer) : IServiceFactory<IShopPlanService>
+public class ShopPlanServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IShopPlanService>
 {
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public ShopPlanServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(new InternalDependencyContainer(requestExecutionPolicy, shopifyDomainUtility))
+        : this(null)
     {
-
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
@@ -28,13 +34,12 @@ public class ShopPlanServiceFactory(IDependencyContainer? dependencyContainer) :
     /// <inheritDoc />
     public virtual IShopPlanService Create(ShopifyApiCredentials credentials)
     {
-        IShopPlanService service = new ShopPlanService(credentials, dependencyContainer);
-        var requestExecutionPolicy = dependencyContainer?.TryGetService<IRequestExecutionPolicy>();
+        IShopPlanService service = new ShopPlanService(credentials, serviceProvider);
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
 
         if (requestExecutionPolicy is not null)
-        {
             service.SetExecutionPolicy(requestExecutionPolicy);
-        }
 
         return service;
     }
