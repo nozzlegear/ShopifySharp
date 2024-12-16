@@ -45,7 +45,7 @@ public class ShopPlanServiceTests
 
     public ShopPlanServiceTests()
     {
-        _sut = new ShopPlanService(Utils.MyShopifyUrl, Utils.AccessToken, dependencyContainer: null);
+        _sut = new ShopPlanService(Utils.MyShopifyUrl, Utils.AccessToken, serviceProvider: null);
         _sut.SetExecutionPolicy(_policy);
 
         // Make the service's execution policy short circuit and actual HTTP calls

@@ -46,7 +46,7 @@ public class GraphServiceTests
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = Serializer.GraphSerializerOptions;
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy()));
-    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
+    private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
     private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly GraphService _sut;
 
@@ -55,15 +55,15 @@ public class GraphServiceTests
         _httpContentSerializer = A.Fake<IHttpContentSerializer>(x =>
             x.Wrapping(new GraphHttpContentSerializer(_jsonSerializerOptions)));
 
-        A.CallTo(() => _dependencyContainer.TryGetService<JsonSerializerOptions>())
+        A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)))
             .Returns(_jsonSerializerOptions);
-        A.CallTo(() => _dependencyContainer.TryGetService<IHttpContentSerializer>())
+        A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
             .Returns(_httpContentSerializer);
 
         _sut = new GraphService(Utils.MyShopifyUrl,
             Utils.AccessToken,
             null,
-            _dependencyContainer);
+            _serviceProvider);
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 

@@ -1,10 +1,10 @@
 #nullable enable
+using System;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Factories;
-using ShopifySharp.Infrastructure;
 using Xunit;
 
 namespace ShopifySharp.Tests.Factories;
@@ -16,12 +16,12 @@ public class PartnerServiceFactoryTest
     private const long OrganizationId = 123L;
     private const string AccessToken = "some-access-token";
 
-    private readonly IDependencyContainer _dependencyContainer = A.Fake<IDependencyContainer>();
+    private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
     private readonly PartnerServiceFactory _sut;
 
     public PartnerServiceFactoryTest()
     {
-        _sut = new PartnerServiceFactory(_dependencyContainer);
+        _sut = new PartnerServiceFactory(_serviceProvider);
     }
 
     [Fact]
