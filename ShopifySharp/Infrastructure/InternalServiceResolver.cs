@@ -11,9 +11,9 @@ internal static class InternalServiceResolver
         return service as TService ?? null;
     }
 
-    public static TService GetServiceOrDefault<TService>(IServiceProvider? serviceProvider, Func<TService> createDefaultService)
+    public static TService GetServiceOrDefault<TService>(IServiceProvider? serviceProvider, Func<TService> createDefaultService) where TService : class
     {
         var service = serviceProvider?.GetService(typeof(TService));
-        return service is not null ? (TService)service : createDefaultService.Invoke();
+        return service as TService ?? createDefaultService.Invoke();
     }
 }
