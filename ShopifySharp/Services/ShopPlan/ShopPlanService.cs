@@ -12,32 +12,11 @@ namespace ShopifySharp;
 /// A service for getting the shop's current Shopify subscription plan. This is a convenience wrapper around the Shopify GraphQL API.
 public class ShopPlanService : GraphService, IShopPlanService
 {
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly JsonSerializerOptions _jsonSerializerOptions = Serializer.GraphSerializerOptions;
 
-    public ShopPlanService(string shopDomain, string accessToken, IServiceProvider? serviceProvider) : base(shopDomain, accessToken, null, serviceProvider)
-    {
-        _jsonSerializerOptions = InitializeDependencies(serviceProvider);
-    }
+    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, null, shopifyDomainUtility) { }
 
-    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider? serviceProvider) : base(shopifyApiCredentials, null, serviceProvider)
-    {
-        _jsonSerializerOptions = InitializeDependencies(serviceProvider);
-    }
-
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    internal ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility)
-    {
-        _jsonSerializerOptions = InitializeDependencies(null);
-    }
-
-    private static JsonSerializerOptions InitializeDependencies(IServiceProvider? serviceProvider)
-    {
-        var jsonSerializerOptions = InternalServiceResolver.GetServiceOrDefault(
-            serviceProvider,
-            () => Serializer.GraphSerializerOptions
-        );
-        return jsonSerializerOptions;
-    }
+    public ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility? shopifyDomainUtility = null) : this(new ShopifyApiCredentials(shopDomain, accessToken), shopifyDomainUtility) { }
 
     /// <inheritdoc />
     public virtual async Task<ShopPlan> GetShopPlanAsync(CancellationToken cancellationToken = default)

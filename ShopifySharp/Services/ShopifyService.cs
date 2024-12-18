@@ -32,9 +32,8 @@ public abstract class ShopifyService : IShopifyService
     private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
     private IRequestExecutionPolicy _ExecutionPolicy;
     private HttpClient _Client;
-    private readonly IServiceProvider? _serviceProvider;
 
-    protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility? domainUtility)
+    protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility? domainUtility = null)
     {
         domainUtility ??= new ShopifyDomainUtility();
         _ShopUri = domainUtility.BuildShopDomainUri(shopDomain);
@@ -43,31 +42,30 @@ public abstract class ShopifyService : IShopifyService
         _ExecutionPolicy = _GlobalExecutionPolicy;
     }
 
-    /// <summary>
-    /// Creates a new instance of the service using a Shopify shop domain and access token.
-    /// </summary>
-    /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-    /// <param name="shopAccessToken">An API access token for the shop.</param>
-    protected ShopifyService(string myShopifyUrl, string shopAccessToken)
+    protected ShopifyService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? domainUtility)
     {
-        var domainUtility = new ShopifyDomainUtility();
-        _ShopUri = domainUtility.BuildShopDomainUri(myShopifyUrl);
-        _AccessToken = shopAccessToken;
+        domainUtility ??= new ShopifyDomainUtility();
+        _ShopUri = domainUtility.BuildShopDomainUri(shopifyApiCredentials.ShopDomain);
+        _AccessToken = shopifyApiCredentials.AccessToken;
         _Client = _HttpClientFactory.CreateClient();
         _ExecutionPolicy = _GlobalExecutionPolicy;
     }
 
-    /// <summary>
-    /// Creates a new instance of the service using the Shopify shop domain and access token in the <paramref name="credentials"/>.
-    /// </summary>
-    protected ShopifyService(ShopifyApiCredentials credentials, IServiceProvider? serviceProvider)
+    /// <remarks>
+    /// Internal-only constructor for now; the plan is to standardize all constructors into three forms:
+    /// 1. (string shopDomain, string accessToken, IShopifyDomainUtility? shopifyDomainUtility)
+    /// 2. (ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility)
+    /// 3. (ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
+    /// #1 and #2 are intended to be constructed directly, whereas #3 is intended to be constructed by Dependency Injection.
+    internal ShopifyService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
     {
         var domainUtility = InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(serviceProvider, () => new ShopifyDomainUtility());
-        _ShopUri = domainUtility.BuildShopDomainUri(credentials.ShopDomain);
-        _AccessToken = credentials.AccessToken;
+        _ShopUri = domainUtility.BuildShopDomainUri(shopifyApiCredentials.ShopDomain);
+        _AccessToken = shopifyApiCredentials.AccessToken;
+        // TODO: get the client factory from the service provider
         _Client = _HttpClientFactory.CreateClient();
+        // TODO: get the execution policy from the service provider
         _ExecutionPolicy = _GlobalExecutionPolicy;
-        _serviceProvider = serviceProvider;
     }
 
 #nullable disable

@@ -25,16 +25,31 @@ public interface IPartnerServiceFactory
     /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
+<# } else { #>
+public interface I<#= TypeName #>Factory : IServiceFactory<I<#= TypeName #>>;
+<# } #>
 
-public class <#= TypeName #>Factory(IServiceProvider serviceProvider) : IPartnerServiceFactory
+public class <#= TypeName #>Factory : I<#= TypeName #>Factory
 {
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy,
-        IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(new InternalServiceProvider(requestExecutionPolicy, shopifyDomainUtility))
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
+
+    // ReSharper disable ConvertToPrimaryConstructor
+    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
+        _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
     }
 
+    public <#= TypeName #>Factory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
+    }
+
+<# if (TypeName == "PartnerService") { #>
     /// <inheritDoc />
     public virtual I<#= TypeName #> Create(long organizationId, string accessToken) =>
         Create(new ShopifyPartnerApiCredentials(organizationId, accessToken));
@@ -42,29 +57,7 @@ public class <#= TypeName #>Factory(IServiceProvider serviceProvider) : IPartner
     /// <inheritDoc />
     public virtual I<#= TypeName #> Create(ShopifyPartnerApiCredentials credentials)
     {
-        var shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        I<#= TypeName #> service = shopifyDomainUtility is null ? new <#= TypeName #>(credentials.PartnerOrganizationId, credentials.AccessToken) : new <#= TypeName #>(credentials.PartnerOrganizationId, credentials.AccessToken, shopifyDomainUtility);
-
-        var requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
-
-        return service;
-    }
-}
 <# } else { #>
-public interface I<#= TypeName #>Factory : IServiceFactory<I<#= TypeName #>>;
-
-public class <#= TypeName #>Factory(IServiceProvider serviceProvider) : I<#= TypeName #>Factory
-{
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy,
-        IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(new InternalServiceProvider(requestExecutionPolicy, shopifyDomainUtility))
-    {
-    }
-
     /// <inheritDoc />
     public virtual I<#= TypeName #> Create(string shopDomain, string accessToken) =>
         Create(new ShopifyApiCredentials(shopDomain, accessToken));
@@ -72,21 +65,16 @@ public class <#= TypeName #>Factory(IServiceProvider serviceProvider) : I<#= Typ
     /// <inheritDoc />
     public virtual I<#= TypeName #> Create(ShopifyApiCredentials credentials)
     {
+<# } #>
 <# if (TypeName == "GraphService") { #>
-        I<#= TypeName #> service = new <#= TypeName #>(credentials, null, serviceProvider);
-<# } else if (TypeName == "ShopPlanService") { #>
-        I<#= TypeName #> service = new <#= TypeName #>(credentials, serviceProvider);
+        I<#= TypeName #> service = new <#= TypeName #>(credentials, null, _shopifyDomainUtility);
 <# } else { #>
-        var shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        I<#= TypeName #> service = shopifyDomainUtility is null ? new <#= TypeName #>(credentials.ShopDomain, credentials.AccessToken) : new <#= TypeName #>(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        I<#= TypeName #> service = new <#= TypeName #>(credentials, _shopifyDomainUtility);
 <# } #>
 
-        var requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
 
         return service;
     }
 }
-<# } #>
