@@ -26,20 +26,13 @@ public interface IPartnerServiceFactory
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
-public class <#= TypeName #>Factory(IServiceProvider? serviceProvider) : IPartnerServiceFactory
+public class <#= TypeName #>Factory(IServiceProvider serviceProvider) : IPartnerServiceFactory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
-    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
-
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy,
+        IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalServiceProvider(requestExecutionPolicy, shopifyDomainUtility))
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
-        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
@@ -49,10 +42,10 @@ public class <#= TypeName #>Factory(IServiceProvider? serviceProvider) : IPartne
     /// <inheritDoc />
     public virtual I<#= TypeName #> Create(ShopifyPartnerApiCredentials credentials)
     {
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        var shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
         I<#= TypeName #> service = shopifyDomainUtility is null ? new <#= TypeName #>(credentials.PartnerOrganizationId, credentials.AccessToken) : new <#= TypeName #>(credentials.PartnerOrganizationId, credentials.AccessToken, shopifyDomainUtility);
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        var requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
 
         if (requestExecutionPolicy is not null)
             service.SetExecutionPolicy(requestExecutionPolicy);
@@ -63,20 +56,13 @@ public class <#= TypeName #>Factory(IServiceProvider? serviceProvider) : IPartne
 <# } else { #>
 public interface I<#= TypeName #>Factory : IServiceFactory<I<#= TypeName #>>;
 
-public class <#= TypeName #>Factory(IServiceProvider? serviceProvider) : IServiceFactory<I<#= TypeName #>>
+public class <#= TypeName #>Factory(IServiceProvider serviceProvider) : I<#= TypeName #>Factory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
-    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
-
     [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy,
+        IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new InternalServiceProvider(requestExecutionPolicy, shopifyDomainUtility))
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
-        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
@@ -91,11 +77,11 @@ public class <#= TypeName #>Factory(IServiceProvider? serviceProvider) : IServic
 <# } else if (TypeName == "ShopPlanService") { #>
         I<#= TypeName #> service = new <#= TypeName #>(credentials, serviceProvider);
 <# } else { #>
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        var shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
         I<#= TypeName #> service = shopifyDomainUtility is null ? new <#= TypeName #>(credentials.ShopDomain, credentials.AccessToken) : new <#= TypeName #>(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
 <# } #>
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        var requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
 
         if (requestExecutionPolicy is not null)
             service.SetExecutionPolicy(requestExecutionPolicy);
