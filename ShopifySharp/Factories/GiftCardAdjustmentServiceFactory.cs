@@ -11,20 +11,24 @@ namespace ShopifySharp.Factories;
 
 public interface IGiftCardAdjustmentServiceFactory : IServiceFactory<IGiftCardAdjustmentService>;
 
-public class GiftCardAdjustmentServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IGiftCardAdjustmentService>
+public class GiftCardAdjustmentServiceFactory : IGiftCardAdjustmentServiceFactory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
 
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    // ReSharper disable ConvertToPrimaryConstructor
+    public GiftCardAdjustmentServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
         _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
+
+    public GiftCardAdjustmentServiceFactory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritDoc />
@@ -34,13 +38,10 @@ public class GiftCardAdjustmentServiceFactory(IServiceProvider? serviceProvider)
     /// <inheritDoc />
     public virtual IGiftCardAdjustmentService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        IGiftCardAdjustmentService service = shopifyDomainUtility is null ? new GiftCardAdjustmentService(credentials.ShopDomain, credentials.AccessToken) : new GiftCardAdjustmentService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        IGiftCardAdjustmentService service = new GiftCardAdjustmentService(credentials, _shopifyDomainUtility);
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
 
         return service;
     }

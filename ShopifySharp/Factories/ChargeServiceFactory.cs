@@ -11,20 +11,24 @@ namespace ShopifySharp.Factories;
 
 public interface IChargeServiceFactory : IServiceFactory<IChargeService>;
 
-public class ChargeServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IChargeService>
+public class ChargeServiceFactory : IChargeServiceFactory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
 
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public ChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    // ReSharper disable ConvertToPrimaryConstructor
+    public ChargeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
         _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
+
+    public ChargeServiceFactory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritDoc />
@@ -34,13 +38,10 @@ public class ChargeServiceFactory(IServiceProvider? serviceProvider) : IServiceF
     /// <inheritDoc />
     public virtual IChargeService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        IChargeService service = shopifyDomainUtility is null ? new ChargeService(credentials.ShopDomain, credentials.AccessToken) : new ChargeService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        IChargeService service = new ChargeService(credentials, _shopifyDomainUtility);
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
 
         return service;
     }

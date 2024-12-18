@@ -11,20 +11,24 @@ namespace ShopifySharp.Factories;
 
 public interface ILocationServiceFactory : IServiceFactory<ILocationService>;
 
-public class LocationServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<ILocationService>
+public class LocationServiceFactory : ILocationServiceFactory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
 
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public LocationServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    // ReSharper disable ConvertToPrimaryConstructor
+    public LocationServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
         _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
+
+    public LocationServiceFactory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritDoc />
@@ -34,13 +38,10 @@ public class LocationServiceFactory(IServiceProvider? serviceProvider) : IServic
     /// <inheritDoc />
     public virtual ILocationService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        ILocationService service = shopifyDomainUtility is null ? new LocationService(credentials.ShopDomain, credentials.AccessToken) : new LocationService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        ILocationService service = new LocationService(credentials, _shopifyDomainUtility);
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
 
         return service;
     }

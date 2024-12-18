@@ -11,20 +11,24 @@ namespace ShopifySharp.Factories;
 
 public interface IInventoryLevelServiceFactory : IServiceFactory<IInventoryLevelService>;
 
-public class InventoryLevelServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IInventoryLevelService>
+public class InventoryLevelServiceFactory : IInventoryLevelServiceFactory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
 
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public InventoryLevelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    // ReSharper disable ConvertToPrimaryConstructor
+    public InventoryLevelServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
         _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
+
+    public InventoryLevelServiceFactory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritDoc />
@@ -34,13 +38,10 @@ public class InventoryLevelServiceFactory(IServiceProvider? serviceProvider) : I
     /// <inheritDoc />
     public virtual IInventoryLevelService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        IInventoryLevelService service = shopifyDomainUtility is null ? new InventoryLevelService(credentials.ShopDomain, credentials.AccessToken) : new InventoryLevelService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        IInventoryLevelService service = new InventoryLevelService(credentials, _shopifyDomainUtility);
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
 
         return service;
     }

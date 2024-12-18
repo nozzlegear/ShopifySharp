@@ -11,20 +11,24 @@ namespace ShopifySharp.Factories;
 
 public interface IProductServiceFactory : IServiceFactory<IProductService>;
 
-public class ProductServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IProductService>
+public class ProductServiceFactory : IProductServiceFactory
 {
-    [Obsolete]
-    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
-
-    [Obsolete]
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
 
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
-    public ProductServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
-        : this(null)
+    // ReSharper disable ConvertToPrimaryConstructor
+    public ProductServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
-        _requestExecutionPolicy = requestExecutionPolicy;
         _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
+
+    public ProductServiceFactory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritDoc />
@@ -34,13 +38,10 @@ public class ProductServiceFactory(IServiceProvider? serviceProvider) : IService
     /// <inheritDoc />
     public virtual IProductService Create(ShopifyApiCredentials credentials)
     {
-        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        IProductService service = shopifyDomainUtility is null ? new ProductService(credentials.ShopDomain, credentials.AccessToken) : new ProductService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+        IProductService service = new ProductService(credentials, _shopifyDomainUtility);
 
-        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
-
-        if (requestExecutionPolicy is not null)
-            service.SetExecutionPolicy(requestExecutionPolicy);
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
 
         return service;
     }
