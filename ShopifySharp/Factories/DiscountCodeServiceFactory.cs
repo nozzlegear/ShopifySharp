@@ -2,29 +2,46 @@
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface IDiscountCodeServiceFactory : IServiceFactory<IDiscountCodeService>;
 
-public class DiscountCodeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : IDiscountCodeServiceFactory
+public class DiscountCodeServiceFactory(IServiceProvider? serviceProvider) : IServiceFactory<IDiscountCodeService>
 {
-    /// <inheritDoc />
-    public virtual IDiscountCodeService Create(string shopDomain, string accessToken)
+    [Obsolete]
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+
+    [Obsolete]
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public DiscountCodeServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(null)
     {
-        IDiscountCodeService service = shopifyDomainUtility is null ? new DiscountCodeService(shopDomain, accessToken) : new DiscountCodeService(shopDomain, accessToken, shopifyDomainUtility);
-
-        if (requestExecutionPolicy is not null)
-        {
-            service.SetExecutionPolicy(requestExecutionPolicy);
-        }
-
-        return service;
+        _requestExecutionPolicy = requestExecutionPolicy;
+        _shopifyDomainUtility = shopifyDomainUtility;
     }
 
     /// <inheritDoc />
-    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
+    public virtual IDiscountCodeService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual IDiscountCodeService Create(ShopifyApiCredentials credentials)
+    {
+        var shopifyDomainUtility = _shopifyDomainUtility ?? InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        IDiscountCodeService service = shopifyDomainUtility is null ? new DiscountCodeService(credentials.ShopDomain, credentials.AccessToken) : new DiscountCodeService(credentials.ShopDomain, credentials.AccessToken, shopifyDomainUtility);
+
+        var requestExecutionPolicy = _requestExecutionPolicy ?? InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+
+        if (requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(requestExecutionPolicy);
+
+        return service;
+    }
 }

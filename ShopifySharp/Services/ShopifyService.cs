@@ -1,4 +1,4 @@
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +32,11 @@ public abstract class ShopifyService : IShopifyService
     private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
     private IRequestExecutionPolicy _ExecutionPolicy;
     private HttpClient _Client;
+    private readonly IServiceProvider? _serviceProvider;
 
-    protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility domainUtility)
+    protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility? domainUtility)
     {
+        domainUtility ??= new ShopifyDomainUtility();
         _ShopUri = domainUtility.BuildShopDomainUri(shopDomain);
         _AccessToken = accessToken;
         _Client = _HttpClientFactory.CreateClient();
@@ -58,13 +60,14 @@ public abstract class ShopifyService : IShopifyService
     /// <summary>
     /// Creates a new instance of the service using the Shopify shop domain and access token in the <paramref name="credentials"/>.
     /// </summary>
-    protected ShopifyService(ShopifyApiCredentials credentials)
+    protected ShopifyService(ShopifyApiCredentials credentials, IServiceProvider? serviceProvider)
     {
-        var domainUtility = new ShopifyDomainUtility();
+        var domainUtility = InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(serviceProvider, () => new ShopifyDomainUtility());
         _ShopUri = domainUtility.BuildShopDomainUri(credentials.ShopDomain);
         _AccessToken = credentials.AccessToken;
         _Client = _HttpClientFactory.CreateClient();
         _ExecutionPolicy = _GlobalExecutionPolicy;
+        _serviceProvider = serviceProvider;
     }
 
 #nullable disable
@@ -165,6 +168,55 @@ public abstract class ShopifyService : IShopifyService
         return linkHeaderValues == null ? null : string.Join(", ", linkHeaderValues);
     }
 
+    /// <summary>
+    /// Executes a request
+    /// </summary>
+    /// <param name="uri"></param>
+    /// <param name="method"></param>
+    /// <param name="content"></param>
+    /// <param name="headers"></param>
+    /// <param name="graphqlQueryCost"></param>
+    /// <param name="cancellationToken"></param>
+    /// <remarks>
+    /// This method is explicitly internal rather than protected because I'm planning to replace all of the `ExecuteXYZ`
+    /// methods with an Http pipeline (see https://github.com/nozzlegear/shopifysharp/issues/1001)
+    /// </remarks>
+    internal async Task<RequestResult<string>> ExecuteRequestCoreAsync(
+        RequestUri uri,
+        HttpMethod method,
+        HttpContent content,
+        Dictionary<string, string> headers,
+        int? graphqlQueryCost,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers);
+        var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
+        {
+            using var response = await _Client.SendAsync(requestMessage, cancellationToken);
+
+            #if NETSTANDARD2_0
+            var rawResult = await response.Content.ReadAsStringAsync();
+            #else
+            var rawResult = await response.Content.ReadAsStringAsync(cancellationToken);
+            #endif
+
+            //Check for and throw exception when necessary.
+            CheckResponseExceptions(await baseRequestMessage.GetRequestInfo(), response, rawResult);
+
+            return new RequestResult<string>(
+                await baseRequestMessage.GetRequestInfo(),
+                response.Headers,
+                rawResult,
+                rawResult,
+                ReadLinkHeader(response.Headers),
+                response.StatusCode
+            );
+        }, cancellationToken, graphqlQueryCost);
+
+        return policyResult;
+    }
+
     protected async Task<RequestResult<T>> ExecuteRequestCoreAsync<T>(
         RequestUri uri,
         HttpMethod method,
@@ -176,31 +228,16 @@ public abstract class ShopifyService : IShopifyService
         DateParseHandling? dateParseHandlingOverride = null
     )
     {
-        using var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers);
-        var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
-        {
-            using var response = await _Client.SendAsync(requestMessage, cancellationToken);
-
-#if NETSTANDARD2_0
-                var rawResult = await response.Content.ReadAsStringAsync();
-#else
-            var rawResult = await response.Content.ReadAsStringAsync(cancellationToken);
-#endif
-
-            //Check for and throw exception when necessary.
-            CheckResponseExceptions(await baseRequestMessage.GetRequestInfo(), response, rawResult);
-
-            var result = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(rawResult, rootElement, dateParseHandlingOverride);
-
-            return new RequestResult<T>(await baseRequestMessage.GetRequestInfo(),
-                response.Headers,
-                result,
-                rawResult,
-                ReadLinkHeader(response.Headers),
-                response.StatusCode);
-        }, cancellationToken, graphqlQueryCost);
-
-        return policyResult;
+        var result = await ExecuteRequestCoreAsync(
+            uri,
+            method,
+            content,
+            headers,
+            graphqlQueryCost,
+            cancellationToken
+        );
+        var data = method == HttpMethod.Delete ? default : Serializer.Deserialize<T>(result.RawResult, rootElement);
+        return result.Transform(data);
     }
 
     /// <summary>
