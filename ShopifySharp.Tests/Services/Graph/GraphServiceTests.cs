@@ -64,7 +64,7 @@ public class GraphServiceTests
         A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
             .Returns(_httpContentSerializer);
 
-        _sut = new GraphService(_credentials, null, _serviceProvider);
+        _sut = new GraphService(_credentials, _serviceProvider);
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 

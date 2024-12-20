@@ -26,17 +26,17 @@ public class GraphServiceConstructorTests
     private readonly IShopifyDomainUtility _shopifyDomainUtility = A.Fake<IShopifyDomainUtility>();
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
 
-    #region Constructor with ShopifyApiCredentials
+    #region Constructor with ShopifyApiCredentials and ShopifyDomainUtility
 
     [Fact]
-    public void ConstructorWithShopifyApiCredentials_WhenOptionalParametersAreNull_ShouldUseDefaults()
+    public void ConstructorWithShopifyApiCredentialsAndShopifyDomainUtility_WhenOptionalParametersAreNull_ShouldUseDefaults()
     {
         // Setup
         string? apiVersion = null;
-        IServiceProvider? serviceProvider = null;
+        IShopifyDomainUtility? shopifyDomainUtility = null;
 
         // Act
-        var sut = new GraphService(_credentials, apiVersion, serviceProvider);
+        var sut = new GraphService(_credentials, apiVersion, shopifyDomainUtility);
 
         // Assert
         sut.APIVersion.Should().NotBeNullOrEmpty();
@@ -59,69 +59,78 @@ public class GraphServiceConstructorTests
     }
 
     [Fact]
-    public void ConstructorWithShopifyApiCredentials_WhenApiVersionIsNotNull_ShouldUseApiVersion()
+    public void ConstructorWithShopifyApiCredentialsAndShopifyDomainUtility_WhenApiVersionIsNotNull_ShouldUseApiVersion()
     {
         // Setup
         const string expectedApiVersion = "some-api-version";
-        IServiceProvider? serviceProvider = null;
+        IShopifyDomainUtility? shopifyDomainUtility = null;
 
         // Act
-        var sut = new GraphService(_credentials, expectedApiVersion, serviceProvider);
+        var sut = new GraphService(_credentials, expectedApiVersion, shopifyDomainUtility);
 
         // Assert
         sut.APIVersion.Should().Be(expectedApiVersion);
     }
 
-    [Fact]
-    public void ConstructorWithShopifyApiCredentials_WhenDependencyContainerIsNotNull_ShouldUseDependenciesFromContainer()
-    {
-        // Setup
-        string? apiVersion = null;
-        var callToJsonSerializerOptions = A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)));
-        var callToHttpContentSerializer = A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)));
+    #endregion
 
-        callToJsonSerializerOptions.Returns(_expectedJsonSerializerOptions);
-        callToHttpContentSerializer.Returns(_expectedHttpContentSerializer);
+    #region Constructor with IServiceProvider
 
-        // Act
-        var sut = new GraphService(_credentials, apiVersion, _serviceProvider);
+    // [Fact]
+    // public void ConstructorWithServiceProvider_WhenProviderDoesNotHaveRequiredDependency_ShouldUseDefault()
+    // {
+    //
+    // }
 
-        // Assert
-        sut.APIVersion.Should().NotBeNullOrEmpty();
-
-        sut.Should()
-            .HavePrivateMember(ExpectedJsonSerializerFieldName)
-            .And
-            .BeOfType<JsonSerializerOptions>()
-            .Which
-            .Should()
-            .BeSameAs(_expectedJsonSerializerOptions);
-
-        sut.Should()
-            .HavePrivateMember(ExpectedHttpContentSerializerFieldName)
-            .And
-            .BeOfType<IHttpContentSerializer>()
-            .Which
-            .Should()
-            .BeSameAs(_expectedHttpContentSerializer);
-
-        callToHttpContentSerializer.MustHaveHappenedOnceExactly();
-        callToJsonSerializerOptions.MustHaveHappenedOnceExactly();
-    }
+    // [Fact]
+    // public void ConstructorWithServiceProvider_WhenProviderHasDependencies_ShouldUseDependenciesFromServiceProvider()
+    // {
+    //     // Setup
+    //     string? apiVersion = null;
+    //     var callToJsonSerializerOptions = A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)));
+    //     var callToHttpContentSerializer = A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)));
+    //
+    //     callToJsonSerializerOptions.Returns(_expectedJsonSerializerOptions);
+    //     callToHttpContentSerializer.Returns(_expectedHttpContentSerializer);
+    //
+    //     // Act
+    //     var sut = new GraphService(_credentials, apiVersion, _serviceProvider);
+    //
+    //     // Assert
+    //     sut.APIVersion.Should().NotBeNullOrEmpty();
+    //
+    //     sut.Should()
+    //         .HavePrivateMember(ExpectedJsonSerializerFieldName)
+    //         .And
+    //         .BeOfType<JsonSerializerOptions>()
+    //         .Which
+    //         .Should()
+    //         .BeSameAs(_expectedJsonSerializerOptions);
+    //
+    //     sut.Should()
+    //         .HavePrivateMember(ExpectedHttpContentSerializerFieldName)
+    //         .And
+    //         .BeOfType<IHttpContentSerializer>()
+    //         .Which
+    //         .Should()
+    //         .BeSameAs(_expectedHttpContentSerializer);
+    //
+    //     callToHttpContentSerializer.MustHaveHappenedOnceExactly();
+    //     callToJsonSerializerOptions.MustHaveHappenedOnceExactly();
+    // }
 
     #endregion
 
-    #region Constructor with string credentials
+    #region Constructor with string credentials and API version
 
     [Fact]
-    public void ConstructorWithStringCredentials_WhenOptionalParametersAreNull_ShouldUseDefaults()
+    public void ConstructorWithStringCredentialsAndApiVersion_WhenOptionalParametersAreNull_ShouldUseDefaults()
     {
         // Setup
         string? apiVersion = null;
-        IServiceProvider? serviceProvider = null;
 
         // Act
-        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion, serviceProvider);
+        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion);
 
         // Assert
         sut.APIVersion.Should().NotBeNullOrEmpty();
@@ -144,72 +153,35 @@ public class GraphServiceConstructorTests
     }
 
     [Fact]
-    public void ConstructorWithStringCredentials_WhenApiVersionIsNotNull_ShouldUseApiVersion()
+    public void ConstructorWithStringCredentialsAndApiVersion_WhenApiVersionIsNotNull_ShouldUseApiVersion()
     {
         // Setup
         const string expectedApiVersion = "some-api-version";
-        IServiceProvider? serviceProvider = null;
 
         // Act
-        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, expectedApiVersion, serviceProvider);
+        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, expectedApiVersion);
 
         // Assert
         sut.APIVersion.Should().Be(expectedApiVersion);
     }
 
-    [Fact]
-    public void ConstructorWithStringCredentials_WhenDependencyContainerIsNotNull_ShouldUseDependenciesFromContainer()
-    {
-        // Setup
-        string? apiVersion = null;
-        var callToJsonSerializerOptions = A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)));
-        var callToHttpContentSerializer = A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)));
-
-        callToJsonSerializerOptions.Returns(_expectedJsonSerializerOptions);
-        callToHttpContentSerializer.Returns(_expectedHttpContentSerializer);
-
-        // Act
-        var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, apiVersion, _serviceProvider);
-
-        // Assert
-        sut.APIVersion.Should().NotBeNullOrEmpty();
-
-        sut.Should()
-            .HavePrivateMember(ExpectedJsonSerializerFieldName)
-            .And
-            .BeOfType<JsonSerializerOptions>()
-            .Which
-            .Should()
-            .BeSameAs(_expectedJsonSerializerOptions);
-
-        sut.Should()
-            .HavePrivateMember(ExpectedHttpContentSerializerFieldName)
-            .And
-            .BeOfType<IHttpContentSerializer>()
-            .Which
-            .Should()
-            .BeSameAs(_expectedHttpContentSerializer);
-
-        callToHttpContentSerializer.MustHaveHappenedOnceExactly();
-        callToJsonSerializerOptions.MustHaveHappenedOnceExactly();
-    }
-
     #endregion
 
-    #region Constructor with ShopifyDomainUtility
+    #region Constructor with string credentials and ShopifyDomainUtility
 
     [Fact]
-    public void ConstructorWithShopifyDomainUtility_WhenShopifyDomainUtilityIsNull_ShouldNotThrow()
+    public void ConstructorWithStringCredentialsAndShopifyDomainUtility_WhenShopifyDomainUtilityIsNull_ShouldNotThrow()
     {
         // Act
-        var act = () => new GraphService(_credentials.ShopDomain, _credentials.AccessToken, null!);
+        IShopifyDomainUtility? shopifyDomainUtility = null;
+        var act = () => new GraphService(_credentials.ShopDomain, _credentials.AccessToken, shopifyDomainUtility!);
 
         // Assert
         act.Should().NotThrow();
     }
 
     [Fact]
-    public void ConstructorWithShopifyDomainUtility_ShouldUseDefaultDependencies()
+    public void ConstructorWithStringCredentialsAndShopifyDomainUtility_ShouldUseDefaultDependencies()
     {
         // Act
         var sut = new GraphService(_credentials.ShopDomain, _credentials.AccessToken, _shopifyDomainUtility);

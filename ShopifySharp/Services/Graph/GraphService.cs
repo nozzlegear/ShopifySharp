@@ -29,14 +29,10 @@ public class GraphService : ShopifyService, IGraphService
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
 
-    public GraphService(
-        ShopifyApiCredentials shopifyApiCredentials,
-        string? apiVersion,
-        // TODO: remove this parameter and adjust tests before merge
-        IServiceProvider? serviceProvider
-    ) : base(shopifyApiCredentials, serviceProvider)
+    internal GraphService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
+        : base(shopifyApiCredentials, serviceProvider)
     {
-        _apiVersion = apiVersion;
+        _apiVersion = null;
         (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(serviceProvider);
     }
 
@@ -53,13 +49,11 @@ public class GraphService : ShopifyService, IGraphService
     public GraphService(
         string myShopifyUrl,
         string shopAccessToken,
-        string? apiVersion = null,
-        // TODO: remove this parameter and adjust tests before merge
-        IServiceProvider? serviceProvider = null
-    ) : base(myShopifyUrl, shopAccessToken, null)
+        string? apiVersion = null
+    ) : base(myShopifyUrl, shopAccessToken)
     {
         _apiVersion = apiVersion;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(serviceProvider);
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
     }
 
     public GraphService(
@@ -68,6 +62,7 @@ public class GraphService : ShopifyService, IGraphService
         IShopifyDomainUtility shopifyDomainUtility
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
+        _apiVersion = null;
         (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
     }
 

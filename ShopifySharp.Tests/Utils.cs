@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp.Tests;
 
@@ -63,7 +64,11 @@ public static class Utils
 
     public static string MyShopifyUrl => Get("MY_SHOPIFY_URL");
 
+    public static ShopifyApiCredentials Credentials => new(MyShopifyUrl, AccessToken);
+
     public static long OrganizationId => long.Parse(Get("ORG_ID"));
 
     public static string OrganizationToken => Get("ORG_TOKEN");
+
+    public static ShopifyPartnerApiCredentials PartnerCredentials  => new(OrganizationId, OrganizationToken);
 }
