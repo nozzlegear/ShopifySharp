@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using ShopifySharp.Utilities;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp;
 
@@ -29,7 +30,12 @@ public class PartnerService : ShopifyService, IPartnerService
         _apiVersion = apiVersion;
     }
 
-    public PartnerService(long organizationId, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base("partners.shopify.com", accessToken, shopifyDomainUtility)
+    public PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken, shopifyDomainUtility)
+    {
+        _organizationId = shopifyPartnerApiCredentials.PartnerOrganizationId;
+    }
+
+    public PartnerService(long organizationId, string accessToken, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", accessToken, shopifyDomainUtility)
     {
         _organizationId = organizationId;
     }

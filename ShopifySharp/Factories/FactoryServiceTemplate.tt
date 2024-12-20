@@ -67,13 +67,9 @@ public class <#= TypeName #>Factory : I<#= TypeName #>Factory
     {
 <# } #>
 <# if (TypeName == "GraphService") { #>
-        I<#= TypeName #> service = new <#= TypeName #>(credentials, null, serviceProvider);
-<# } else if (TypeName == "ShopPlanService") { #>
-        I<#= TypeName #> service = new <#= TypeName #>(credentials, serviceProvider);
+        I<#= TypeName #> service = new <#= TypeName #>(credentials, null, _shopifyDomainUtility);
 <# } else { #>
-        I<#= TypeName #> service = _shopifyDomainUtility is null
-            ? new <#= TypeName #>(credentials)
-            : new <#= TypeName #>(credentials, _shopifyDomainUtility);
+        I<#= TypeName #> service = new <#= TypeName #>(credentials, _shopifyDomainUtility);
 <# } #>
 
         if (_requestExecutionPolicy is not null)

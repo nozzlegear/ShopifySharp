@@ -33,6 +33,7 @@ public class GraphService : ShopifyService, IGraphService
     public GraphService(
         ShopifyApiCredentials shopifyApiCredentials,
         string? apiVersion,
+        // TODO: remove this parameter and adjust tests before merge
         IServiceProvider? serviceProvider
     ) : base(shopifyApiCredentials, serviceProvider)
     {
@@ -41,9 +42,20 @@ public class GraphService : ShopifyService, IGraphService
     }
 
     public GraphService(
+        ShopifyApiCredentials shopifyApiCredentials,
+        string? apiVersion = null,
+        IShopifyDomainUtility? shopifyDomainUtility = null
+    ) : base(shopifyApiCredentials, shopifyDomainUtility)
+    {
+        _apiVersion = apiVersion;
+        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
+    }
+
+    public GraphService(
         string myShopifyUrl,
         string shopAccessToken,
         string? apiVersion = null,
+        // TODO: remove this parameter and adjust tests before merge
         IServiceProvider? serviceProvider = null
     ) : base(myShopifyUrl, shopAccessToken, null)
     {
@@ -51,7 +63,6 @@ public class GraphService : ShopifyService, IGraphService
         (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(serviceProvider);
     }
 
-    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
     public GraphService(
         string myShopifyUrl,
         string shopAccessToken,
