@@ -86,7 +86,7 @@ public class GraphServiceSendAsyncTests
         A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
           .Returns(_httpContentSerializer);
 
-        _sut = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken, null, _serviceProvider);
+        _sut = new GraphService(Utils.Credentials, _serviceProvider);
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 
