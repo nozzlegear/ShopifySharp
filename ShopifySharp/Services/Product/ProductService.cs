@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Utilities;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp;
 
@@ -20,11 +21,14 @@ public class ProductService : ShopifyService, IProductService
     /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
     /// <param name="shopAccessToken">An API access token for the shop.</param>
     public ProductService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+    #nullable enable
+    internal ProductService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    #nullable restore
     internal ProductService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
- 
+
     public virtual async Task<int> CountAsync(ProductCountFilter filter = null, CancellationToken cancellationToken = default) =>
         await ExecuteGetAsync<int>("products/count.json", "count", filter, cancellationToken);
-        
+
     public virtual async Task<ListResult<Product>> ListAsync(ListFilter<Product> filter, bool includePresentmentPrices = false, CancellationToken cancellationToken = default) =>
         await ExecuteGetListAsync("products.json", "products", filter, cancellationToken, GetHeaders(includePresentmentPrices));
 

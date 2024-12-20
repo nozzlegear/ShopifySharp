@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Utilities;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp;
 
@@ -19,6 +20,9 @@ public class RefundService : ShopifyService, IRefundService
     /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
     /// <param name="shopAccessToken">An API access token for the shop.</param>
     public RefundService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+    #nullable enable
+    internal RefundService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    #nullable restore
     internal RefundService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  
     /// <inheritdoc />

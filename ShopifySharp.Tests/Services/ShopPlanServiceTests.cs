@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
-using NSubstitute;
-using ShopifySharp.Infrastructure;
+using ShopifySharp.Credentials;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services;
@@ -45,10 +44,11 @@ public class ShopPlanServiceTests
 
     public ShopPlanServiceTests()
     {
-        _sut = new ShopPlanService(Utils.MyShopifyUrl, Utils.AccessToken, serviceProvider: null);
+        var credentials = new ShopifyApiCredentials(Utils.MyShopifyUrl, Utils.AccessToken);
+        _sut = new ShopPlanService(credentials);
         _sut.SetExecutionPolicy(_policy);
 
-        // Make the service's execution policy short circuit and actual HTTP calls
+        // Make the service's execution policy short circuit any actual HTTP calls
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
             .Returns(MakeRequestResult(ExpectedShopPlanJson));

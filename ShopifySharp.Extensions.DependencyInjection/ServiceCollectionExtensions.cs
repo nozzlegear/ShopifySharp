@@ -5,6 +5,7 @@ using ShopifySharp.Factories;
 using ShopifySharp.Utilities;
 using System.Reflection;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -94,10 +95,9 @@ public static class ServiceCollectionExtensions
         var assembly = Assembly.GetAssembly(typeof(IServiceFactory<>));
 
         var factoryTypes = assembly!.GetTypes()
-            .Where(t => !t.IsAbstract && !t.IsInterface)
+            .Where(t => t is { IsAbstract: false, IsInterface: false })
             .Where(t => t.GetInterfaces().Any(i =>
-                i.IsGenericType &&
-                i.GetGenericTypeDefinition() == typeof(IServiceFactory<>)));
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IServiceFactory<>)));
 
         foreach (var type in factoryTypes)
         {
@@ -105,10 +105,16 @@ public static class ServiceCollectionExtensions
                 .GetInterfaces()
                 .FirstOrDefault(i => !i.IsGenericType);
 
-            if(serviceType != null)
-            {
-                services.TryAdd(new ServiceDescriptor(serviceType, type, lifetime));
-            }
+            if (serviceType is null)
+                continue;
+
+            // If the factory has a constructor that takes an IServiceProvider, use that one to construct it
+            var ctor = type.GetConstructors()
+                .FirstOrDefault(c => c.GetParameters().Any(p => p.ParameterType == typeof(IServiceProvider)));
+
+            services.TryAdd(ctor is not null
+                ? new ServiceDescriptor(serviceType, sp => ctor.Invoke([sp]), lifetime)
+                : new ServiceDescriptor(serviceType, type, lifetime));
         }
 
         services.TryAdd(new ServiceDescriptor(typeof(IPartnerServiceFactory), typeof(PartnerServiceFactory), lifetime));

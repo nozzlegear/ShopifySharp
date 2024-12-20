@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Utilities;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp;
 
@@ -18,6 +19,9 @@ public class GiftCardAdjustmentService : ShopifyService, IGiftCardAdjustmentServ
     /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
     /// <param name="shopAccessToken">An API access token for the shop.</param>
     public GiftCardAdjustmentService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+    #nullable enable
+    internal GiftCardAdjustmentService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    #nullable restore
     internal GiftCardAdjustmentService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  
     public virtual async Task<IEnumerable<GiftCardAdjustment>> ListAsync(long giftCardId, CancellationToken cancellationToken = default) =>
