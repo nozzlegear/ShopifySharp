@@ -57,6 +57,7 @@ public abstract class ShopifyService : IShopifyService
     /// 2. (ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility)
     /// 3. (ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
     /// #1 and #2 are intended to be constructed directly, whereas #3 is intended to be constructed by Dependency Injection.
+    /// </remarks>
     internal ShopifyService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
     {
         var domainUtility = InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(serviceProvider, () => new ShopifyDomainUtility());
