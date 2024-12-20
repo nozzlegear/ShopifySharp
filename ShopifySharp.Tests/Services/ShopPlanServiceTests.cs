@@ -1,6 +1,10 @@
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
+using ShopifySharp.Credentials;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services;
@@ -9,13 +13,65 @@ namespace ShopifySharp.Tests.Services;
 [TestSubject(typeof(ShopPlanService))]
 public class ShopPlanServiceTests
 {
-    ShopPlanService service = new(Utils.MyShopifyUrl, Utils.AccessToken);
+    private const string ExpectedShopPlanJson =
+    """
+    {
+      "data" : {
+        "shop" : {
+          "plan" : {
+            "displayName" : "Development",
+            "partnerDevelopment" : true,
+            "shopifyPlus" : false
+          }
+        }
+      },
+      "extensions" : {
+        "cost" : {
+          "requestedQueryCost" : 2,
+          "actualQueryCost" : 2,
+          "throttleStatus" : {
+            "maximumAvailable" : 2000.0,
+            "currentlyAvailable" : 1998,
+            "restoreRate" : 100.0
+          }
+        }
+      }
+    }
+    """;
+
+    private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>();
+    private readonly ShopPlanService _sut;
+
+    public ShopPlanServiceTests()
+    {
+        var credentials = new ShopifyApiCredentials(Utils.MyShopifyUrl, Utils.AccessToken);
+        _sut = new ShopPlanService(credentials);
+        _sut.SetExecutionPolicy(_policy);
+
+        // Make the service's execution policy short circuit any actual HTTP calls
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(MakeRequestResult(ExpectedShopPlanJson));
+    }
+
+    private static RequestResult<string> MakeRequestResult(string responseJson)
+    {
+        var response = new HttpResponseMessage(HttpStatusCode.OK);
+        return new RequestResult<string>(
+            "some-request-info",
+            response.Headers,
+            responseJson,
+            responseJson,
+            "some-raw-link-header-value",
+            HttpStatusCode.OK
+        );
+    }
 
     [Fact]
     public async Task GetShopPlanAsync_ShouldGetThePlanAsync()
     {
         // Act
-        var result = await service.GetShopPlanAsync();
+        var result = await _sut.GetShopPlanAsync();
 
         // Assert
         result.Should().NotBeNull();
@@ -28,7 +84,7 @@ public class ShopPlanServiceTests
     public async Task IsPartnerDevelopmentPlanAsync_ShouldCheckIfTheShopIsOnADevPlan()
     {
         // Act
-        var result = await service.IsPartnerDevelopmentShopAsync();
+        var result = await _sut.IsPartnerDevelopmentShopAsync();
 
         // Assert
         result.Should().BeTrue();

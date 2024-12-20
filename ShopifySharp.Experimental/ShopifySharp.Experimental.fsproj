@@ -4,6 +4,7 @@
     <AssemblyName>ShopifySharp.Experimental</AssemblyName>
     <RootNamespace>ShopifySharp.Experimental</RootNamespace>
     <VersionPrefix>5.14.2</VersionPrefix>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Description>A package containing enhancements, experiments and extensions which have not yet (or may never) make it into the ShopifySharp package. This experimental package does not promise to be stable or adhere to SemVer, it may break between builds. Use at your own risk!</Description>
@@ -33,5 +34,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" />
   </ItemGroup>
 </Project>

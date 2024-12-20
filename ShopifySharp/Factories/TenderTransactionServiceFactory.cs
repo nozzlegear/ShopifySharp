@@ -2,29 +2,47 @@
 // Notice:
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
+using System;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
 public interface ITenderTransactionServiceFactory : IServiceFactory<ITenderTransactionService>;
 
-public class TenderTransactionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy = null, IShopifyDomainUtility? shopifyDomainUtility = null) : ITenderTransactionServiceFactory
+public class TenderTransactionServiceFactory : ITenderTransactionServiceFactory
 {
-    /// <inheritDoc />
-    public virtual ITenderTransactionService Create(string shopDomain, string accessToken)
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
+
+    // ReSharper disable ConvertToPrimaryConstructor
+    public TenderTransactionServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
     {
-        ITenderTransactionService service = shopifyDomainUtility is null ? new TenderTransactionService(shopDomain, accessToken) : new TenderTransactionService(shopDomain, accessToken, shopifyDomainUtility);
+        _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
 
-        if (requestExecutionPolicy is not null)
-        {
-            service.SetExecutionPolicy(requestExecutionPolicy);
-        }
-
-        return service;
+    public TenderTransactionServiceFactory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritDoc />
-    public virtual ITenderTransactionService Create(ShopifyApiCredentials credentials) =>
-        Create(credentials.ShopDomain, credentials.AccessToken);
+    public virtual ITenderTransactionService Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual ITenderTransactionService Create(ShopifyApiCredentials credentials)
+    {
+        ITenderTransactionService service = new TenderTransactionService(credentials, _shopifyDomainUtility);
+
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
+
+        return service;
+    }
 }

@@ -1,0 +1,80 @@
+<#@ template language="C#" #>
+<#@ output extension=".cs" #>
+<#@ parameter name="TypeName" type="System.String" #>
+<# if (string.IsNullOrWhiteSpace(TypeName)) throw new ArgumentNullException(nameof(TypeName), $"Empty {TypeName}."); #>
+#nullable enable
+// Notice:
+// This class is auto-generated from a template. Please do not edit it or change it directly.
+
+using System;
+using ShopifySharp.Credentials;
+using ShopifySharp.Utilities;
+using ShopifySharp.Infrastructure;
+
+namespace ShopifySharp.Factories;
+
+<# if (TypeName == "PartnerService") { #>
+public interface IPartnerServiceFactory
+{
+    /// Creates a new instance of the <see cref="IPartnerService" /> with the given credentials.
+    /// <param name="partnerOrganizationId">Your Shopify Partner organization ID. This can be found on your Shopify Partner account setti ngs page.</param>
+    /// <param name="accessToken">An API access token for the shop.</param>
+    IPartnerService Create(long partnerOrganizationId, string accessToken);
+
+    /// Creates a new instance of the <see cref="IPartnerService" /> with the given credentials.
+    /// <param name="credentials">Credentials for authenticating with the Shopify API.</param>
+    IPartnerService Create(ShopifyPartnerApiCredentials credentials);
+}
+<# } else { #>
+public interface I<#= TypeName #>Factory : IServiceFactory<I<#= TypeName #>>;
+<# } #>
+
+public class <#= TypeName #>Factory : I<#= TypeName #>Factory
+{
+    private readonly IShopifyDomainUtility? _shopifyDomainUtility;
+    private readonly IRequestExecutionPolicy? _requestExecutionPolicy;
+    private readonly IServiceProvider? _serviceProvider;
+
+    // ReSharper disable ConvertToPrimaryConstructor
+    public <#= TypeName #>Factory(IRequestExecutionPolicy? requestExecutionPolicy, IShopifyDomainUtility? shopifyDomainUtility = null)
+    {
+        _shopifyDomainUtility = shopifyDomainUtility;
+        _requestExecutionPolicy = requestExecutionPolicy;
+    }
+
+    public <#= TypeName #>Factory(IServiceProvider serviceProvider)
+    {
+        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
+        _serviceProvider = serviceProvider;
+    }
+
+<# if (TypeName == "PartnerService") { #>
+    /// <inheritDoc />
+    public virtual I<#= TypeName #> Create(long organizationId, string accessToken) =>
+        Create(new ShopifyPartnerApiCredentials(organizationId, accessToken));
+
+    /// <inheritDoc />
+    public virtual I<#= TypeName #> Create(ShopifyPartnerApiCredentials credentials)
+    {
+<# } else { #>
+    /// <inheritDoc />
+    public virtual I<#= TypeName #> Create(string shopDomain, string accessToken) =>
+        Create(new ShopifyApiCredentials(shopDomain, accessToken));
+
+    /// <inheritDoc />
+    public virtual I<#= TypeName #> Create(ShopifyApiCredentials credentials)
+    {
+<# } #>
+<# if (TypeName == "GraphService") { #>
+        I<#= TypeName #> service = new <#= TypeName #>(credentials, null, _shopifyDomainUtility);
+<# } else { #>
+        I<#= TypeName #> service = new <#= TypeName #>(credentials, _shopifyDomainUtility);
+<# } #>
+
+        if (_requestExecutionPolicy is not null)
+            service.SetExecutionPolicy(_requestExecutionPolicy);
+
+        return service;
+    }
+}

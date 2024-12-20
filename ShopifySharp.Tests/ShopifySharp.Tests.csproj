@@ -5,14 +5,15 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotenvfile" />
+    <PackageReference Include="FakeItEasy" />
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="fsharp.core" />
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="xunit" />
+    <PackageReference Include="Xunit.Combinatorial" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

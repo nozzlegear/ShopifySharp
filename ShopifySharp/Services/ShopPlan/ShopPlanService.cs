@@ -1,5 +1,10 @@
+#nullable enable
+using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp;
@@ -7,18 +12,16 @@ namespace ShopifySharp;
 /// A service for getting the shop's current Shopify subscription plan. This is a convenience wrapper around the Shopify GraphQL API.
 public class ShopPlanService : GraphService, IShopPlanService
 {
-    public ShopPlanService(string shopDomain, string accessToken) : base(shopDomain, accessToken)
-    {
-    }
+    private readonly JsonSerializerOptions _jsonSerializerOptions = Serializer.GraphSerializerOptions;
 
-    internal ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) 
-    {
-    }
+    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, null, shopifyDomainUtility) { }
+
+    public ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility? shopifyDomainUtility = null) : this(new ShopifyApiCredentials(shopDomain, accessToken), shopifyDomainUtility) { }
 
     /// <inheritdoc />
     public virtual async Task<ShopPlan> GetShopPlanAsync(CancellationToken cancellationToken = default)
     {
-        var query = """
+        const string query = """
             query {
                 shop {
                     plan {
@@ -31,9 +34,19 @@ public class ShopPlanService : GraphService, IShopPlanService
                 }
             }
         """;
-        var result = await this.PostAsync(query, 1, cancellationToken);
+        var result = await PostAsync(new GraphRequest
+        {
+            Query = query,
+            EstimatedQueryCost = 1,
+            UserErrorHandling = GraphRequestUserErrorHandling.Throw
+        }, cancellationToken);
 
-        return result.SelectToken("shop.plan").ToObject<ShopPlan>();
+        return result.Json
+            .RootElement
+            .GetProperty("data")
+            .GetProperty("shop")
+            .GetProperty("plan")
+            .Deserialize<ShopPlan>(_jsonSerializerOptions)!;
     }
 
     /// <inheritdoc />
