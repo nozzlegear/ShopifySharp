@@ -19,26 +19,32 @@ namespace ShopifySharp;
 /// </summary>
 public class PartnerService : ShopifyService, IPartnerService
 {
+    #nullable enable
+
     private readonly long _organizationId;
-    private readonly string _apiVersion;
+    private readonly string? _apiVersion;
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
 
-    public PartnerService(long organizationId, string accessToken, string apiVersion = null) : base("partners.shopify.com", accessToken)
+    public PartnerService(long organizationId, string accessToken, string? apiVersion = null) : base("partners.shopify.com", accessToken)
     {
         _organizationId = organizationId;
         _apiVersion = apiVersion;
     }
 
-    public PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken, shopifyDomainUtility)
-    {
-        _organizationId = shopifyPartnerApiCredentials.PartnerOrganizationId;
-    }
-
     public PartnerService(long organizationId, string accessToken, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", accessToken, shopifyDomainUtility)
     {
         _organizationId = organizationId;
+        _apiVersion = null;
     }
+
+    public PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken, shopifyDomainUtility)
+    {
+        _organizationId = shopifyPartnerApiCredentials.PartnerOrganizationId;
+        _apiVersion = null;
+    }
+
+    #nullable disable
 
     /// <inheritdoc />
     public virtual async Task<JToken> PostAsync(string body, CancellationToken cancellationToken = default)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ShopifySharp.Entities.SalesChannel;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
+using ShopifySharp.Credentials;
 
 namespace ShopifySharp;
 
@@ -15,6 +16,9 @@ namespace ShopifySharp;
 public class CheckoutSalesChannelService: ShopifyService, ICheckoutSalesChannelService
 {
     public CheckoutSalesChannelService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
+    #nullable enable
+    internal CheckoutSalesChannelService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    #nullable restore
     internal CheckoutSalesChannelService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  
     /// <inheritdoc />

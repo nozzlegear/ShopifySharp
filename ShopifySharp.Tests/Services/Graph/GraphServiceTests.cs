@@ -7,6 +7,7 @@ using FakeItEasy;
 using FluentAssertions;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Credentials;
 using ShopifySharp.Tests.TestClasses;
 using Xunit;
 
@@ -44,10 +45,13 @@ public class GraphListOrdersResult
 [Trait("Category", "Graph")]
 public class GraphServiceTests
 {
+    private readonly ShopifyApiCredentials _credentials = new("some-shopify-domain", "some-access-token");
+
     private readonly JsonSerializerOptions _jsonSerializerOptions = Serializer.GraphSerializerOptions;
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy()));
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
     private readonly IHttpContentSerializer _httpContentSerializer;
+
     private readonly GraphService _sut;
 
     public GraphServiceTests()
@@ -60,10 +64,7 @@ public class GraphServiceTests
         A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
             .Returns(_httpContentSerializer);
 
-        _sut = new GraphService(Utils.MyShopifyUrl,
-            Utils.AccessToken,
-            null,
-            _serviceProvider);
+        _sut = new GraphService(_credentials, null, _serviceProvider);
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 

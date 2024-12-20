@@ -12,8 +12,8 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
-using Xunit;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using Xunit;
 using Serializer = ShopifySharp.Infrastructure.Serializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
