@@ -6,6 +6,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Tests.Extensions;
 using ShopifySharp.Utilities;
 using Xunit;
