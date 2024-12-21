@@ -51,20 +51,7 @@ public class ShopPlanServiceTests
         // Make the service's execution policy short circuit any actual HTTP calls
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
-            .Returns(MakeRequestResult(ExpectedShopPlanJson));
-    }
-
-    private static RequestResult<string> MakeRequestResult(string responseJson)
-    {
-        var response = new HttpResponseMessage(HttpStatusCode.OK);
-        return new RequestResult<string>(
-            "some-request-info",
-            response.Headers,
-            responseJson,
-            responseJson,
-            "some-raw-link-header-value",
-            HttpStatusCode.OK
-        );
+            .Returns(Utils.MakeRequestResult(ExpectedShopPlanJson));
     }
 
     [Fact]

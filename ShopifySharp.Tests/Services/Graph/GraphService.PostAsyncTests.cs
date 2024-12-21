@@ -2,14 +2,11 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
-using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using ShopifySharp.Tests.TestClasses;
 using Xunit;
 using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
@@ -84,35 +81,13 @@ public class GraphServicePostAsyncTests
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 
-    public static IRequestExecutionPolicy[] GetTestPolicies()
-    {
-        return
-        [
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new DefaultRequestExecutionPolicy())),
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new RetryExecutionPolicy())),
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy())),
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new ExponentialRetryPolicy(ExponentialRetryPolicyOptions.Default())))
-        ];
-    }
-
-    private static RequestResult<string> MakeRequestResult(string responseJson)
-    {
-        var response = new HttpResponseMessage(HttpStatusCode.OK);
-        return new RequestResult<string>(
-            "some-request-info",
-            response.Headers,
-            responseJson,
-            responseJson,
-            "some-raw-link-header-value",
-            HttpStatusCode.OK
-        );
-    }
+    public static IRequestExecutionPolicy[] MakeFakedExecutionPoliciesList() => Utils.MakeFakedExecutionPoliciesList();
 
     [Fact]
     public async Task PostAsync_DeprecatedMethod_ShouldDeserializeDateStringsProperly()
     {
         // Setup
-        var response = MakeRequestResult(ResponseJson);
+        var response = Utils.MakeRequestResult(ResponseJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -193,7 +168,7 @@ public class GraphServicePostAsyncTests
     public async Task PostAsync_DeprecatedMethodWithJTokenParameter_ShouldDeserializeDateStringsProperly()
     {
         // Setup
-        var response = MakeRequestResult(ResponseJson);
+        var response = Utils.MakeRequestResult(ResponseJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -209,12 +184,12 @@ public class GraphServicePostAsyncTests
     [Theory(DisplayName = "PostAsync (deprecated methods), when using each policy, should deserialize the response to a JToken")]
     [CombinatorialData]
     public async Task PostAsync_DeprecatedMethods_WhenUsingEachPolicy_ShouldDeserializeResponseToExpectedResult(
-        [CombinatorialMemberData(nameof(GetTestPolicies), null)] IRequestExecutionPolicy policy,
+        [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)] IRequestExecutionPolicy policy,
         bool withVariables
     )
     {
         // Setup
-        var response = MakeRequestResult(ResponseJson);
+        var response = Utils.MakeRequestResult(ResponseJson);
 
         _sut.SetExecutionPolicy(policy);
         A.CallTo(policy)
@@ -250,7 +225,7 @@ public class GraphServicePostAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(responseJson);
+        var response = Utils.MakeRequestResult(responseJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
