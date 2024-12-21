@@ -1,5 +1,3 @@
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
@@ -27,20 +25,6 @@ public class GraphServiceErrorHandlingTests
         _sut.SetExecutionPolicy(_policy);
     }
 
-    private static RequestResult<string> MakeRequestResult(string responseJson)
-    {
-        var response = new HttpResponseMessage(HttpStatusCode.OK);
-        var result = new RequestResult<string>(
-            "some-request-info",
-            response.Headers,
-            responseJson,
-            responseJson,
-            "some-raw-link-header-value",
-            HttpStatusCode.OK
-        );
-        return result;
-    }
-
     [Theory]
     [CombinatorialData]
     public async Task WhenNoUserErrorsAreReturned_ShouldNotThrow(
@@ -64,7 +48,7 @@ public class GraphServiceErrorHandlingTests
                 }
               }
               """;
-        var response = MakeRequestResult(responseJson);
+        var response = Utils.MakeRequestResult(responseJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -125,7 +109,7 @@ public class GraphServiceErrorHandlingTests
               }
             }
             """;
-        var response = MakeRequestResult(userErrorsJson);
+        var response = Utils.MakeRequestResult(userErrorsJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -190,7 +174,7 @@ public class GraphServiceErrorHandlingTests
               }
             }
             """;
-        var response = MakeRequestResult(userErrorsJson);
+        var response = Utils.MakeRequestResult(userErrorsJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -233,7 +217,7 @@ public class GraphServiceErrorHandlingTests
               }
             }
             """;
-        var response = MakeRequestResult(userErrorsJson);
+        var response = Utils.MakeRequestResult(userErrorsJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -282,7 +266,7 @@ public class GraphServiceErrorHandlingTests
                 }
               }
               """;
-        var response = MakeRequestResult(responseJson);
+        var response = Utils.MakeRequestResult(responseJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -336,7 +320,7 @@ public class GraphServiceErrorHandlingTests
                 }
               }
               """;
-        var response = MakeRequestResult(responseJson);
+        var response = Utils.MakeRequestResult(responseJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -385,7 +369,7 @@ public class GraphServiceErrorHandlingTests
                 }
               }
               """;
-        var response = MakeRequestResult(responseJson);
+        var response = Utils.MakeRequestResult(responseJson);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()

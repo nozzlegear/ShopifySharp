@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,16 +17,16 @@ namespace ShopifySharp.Tests.Services.Graph;
 [Serializable]
 public class GraphOrderEdge
 {
-    public string Cursor { get; set; }
-    public GraphOrder Node { get; set; }
+    public string Cursor { get; set; } = null!;
+    public GraphOrder Node { get; set; } = null!;
 }
 
 [Serializable]
 public class GraphOrder
 {
-    public string Id { get; set; }
-    public string Name { get; set; }
-    public IEnumerable<string> Tags { get; set; }
+    public string Id { get; set; } = null!;
+    public string Name { get; set; } = null!;
+    public IEnumerable<string> Tags { get; set; } = [];
 }
 
 [Serializable]
@@ -38,8 +39,8 @@ public class GraphPageInfo
 [Serializable]
 public class GraphListOrdersResult
 {
-    public GraphPageInfo PageInfo { get; set; }
-    public Collection<GraphOrderEdge> Edges { get; set; }
+    public GraphPageInfo PageInfo { get; set; } = null!;
+    public Collection<GraphOrderEdge> Edges { get; set; } = [];
 }
 
 [Trait("Category", "Graph")]
@@ -90,5 +91,4 @@ public class GraphServiceTests
         // Assert
         await act.Should().ThrowAsync<TestException>();
     }
-
 }

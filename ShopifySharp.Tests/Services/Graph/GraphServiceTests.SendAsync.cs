@@ -4,14 +4,11 @@
 using ShopifySharp.GraphQL;
 #endif
 using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
-using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using Xunit;
 using Serializer = ShopifySharp.Infrastructure.Serializer;
@@ -21,61 +18,6 @@ namespace ShopifySharp.Tests.Services.Graph;
 [Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceSendAsyncTests
 {
-    private const string Query =
-        """
-        {
-          orders(first:10)
-          {
-            nodes
-            {
-              id
-              createdAt
-              name
-              phone
-              lineItems(first: 10)
-              {
-                nodes
-                {
-                  title
-                  quantity
-                }
-              }
-            }
-          }
-        }
-        """;
-
-    private const string QueryWithVariables =
-        """
-        query ($firstOrders: Int!, $firstLineItems: Int!)
-        {
-          orders(first: $firstOrders)
-          {
-            nodes
-            {
-              id
-              createdAt
-              name
-              phone
-              lineItems(first: $firstLineItems)
-              {
-                nodes
-                {
-                  title
-                  quantity
-                }
-              }
-            }
-          }
-        }
-        """;
-
-    private static readonly object QueryVariables = new
-    {
-        firstOrders = 10,
-        firstLineItems = 20
-    };
-
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
     private readonly IHttpContentSerializer _httpContentSerializer = A.Fake<IHttpContentSerializer>(x => x.Wrapping(new GraphHttpContentSerializer(Serializer.GraphSerializerOptions)));
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
@@ -90,49 +32,14 @@ public class GraphServiceSendAsyncTests
         _sut.SetExecutionPolicy(_executionPolicy);
     }
 
-    public static IRequestExecutionPolicy[] GetOrdersTestPolicies()
-    {
-        return
-        [
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new DefaultRequestExecutionPolicy())),
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new RetryExecutionPolicy())),
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy())),
-            A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new ExponentialRetryPolicy(ExponentialRetryPolicyOptions.Default())))
-        ];
-    }
-
-    private static RequestResult<string> MakeRequestResult(string responseJson)
-    {
-        var response = new HttpResponseMessage(HttpStatusCode.OK);
-        return new RequestResult<string>(
-            "some-request-info",
-            response.Headers,
-            responseJson,
-            responseJson,
-            "some-raw-link-header-value",
-            HttpStatusCode.OK
-        );
-    }
-
-    private static GraphRequest MakeGraphRequest(Action<GraphRequest>? customize = null)
-    {
-        var graphRequestForVariables = new GraphRequest
-        {
-            query = QueryWithVariables,
-            variables = QueryVariables,
-            EstimatedQueryCost = 7,
-            UserErrorHandling = GraphRequestUserErrorHandling.Throw,
-        };
-        customize?.Invoke(graphRequestForVariables);
-        return graphRequestForVariables;
-    }
+    public static IRequestExecutionPolicy[] MakeFakedExecutionPoliciesList() => Utils.MakeFakedExecutionPoliciesList();
 
     #if NET6_0_OR_GREATER
 
     [Theory(DisplayName = "Deprecated SendAsync<TResult> should succeed")]
     [CombinatorialData]
     public async Task SendAsync_T_DeprecatedMethod_ShouldSucceed(
-        [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy,
+        [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList))] IRequestExecutionPolicy policy,
         bool withVariables
     )
     {
@@ -169,7 +76,7 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
 
         _sut.SetExecutionPolicy(policy);
         A.CallTo(policy)
@@ -180,9 +87,9 @@ public class GraphServiceSendAsyncTests
         OrderConnection result;
 
         if (withVariables)
-          result = await _sut.SendAsync<OrderConnection>(Query);
+          result = await _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.Query);
         else
-          result = await _sut.SendAsync<OrderConnection>(MakeGraphRequest());
+          result = await _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.MakeGraphRequest());
 
         // Assert
         result.nodes
@@ -213,14 +120,14 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
             .Returns(response);
 
         // Act
-        var act = () => _sut.SendAsync<OrderConnection>(Query);
+        var act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.Query);
 
         // Assert
         await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
@@ -243,8 +150,8 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
-        var request = MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
+        var response = Utils.MakeRequestResult(expectedJson);
+        var request = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -278,7 +185,7 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -288,9 +195,9 @@ public class GraphServiceSendAsyncTests
         Func<Task<OrderConnection>> act;
 
         if (withVariables)
-          act = () => _sut.SendAsync<OrderConnection>(Query);
+          act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.Query);
         else
-          act = () => _sut.SendAsync<OrderConnection>(MakeGraphRequest());
+          act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.MakeGraphRequest());
 
         // Assert
         await act.Should()
@@ -309,7 +216,7 @@ public class GraphServiceSendAsyncTests
             "data" : { }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -319,9 +226,9 @@ public class GraphServiceSendAsyncTests
         Func<Task<OrderConnection>> act;
 
         if (withVariables)
-          act = () => _sut.SendAsync<OrderConnection>(Query);
+          act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.Query);
         else
-          act = () => _sut.SendAsync<OrderConnection>(MakeGraphRequest());
+          act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.MakeGraphRequest());
 
         // Assert
         await act.Should()
@@ -340,7 +247,7 @@ public class GraphServiceSendAsyncTests
             "foo": { }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
 
         A.CallTo(_executionPolicy)
             .WithReturnType<Task<RequestResult<string>>>()
@@ -350,9 +257,9 @@ public class GraphServiceSendAsyncTests
         Func<Task<OrderConnection>> act;
 
         if (withVariables)
-          act = () => _sut.SendAsync<OrderConnection>(Query);
+          act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.Query);
         else
-          act = () => _sut.SendAsync<OrderConnection>(MakeGraphRequest());
+          act = () => _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.MakeGraphRequest());
 
         // Assert
         await act.Should()
@@ -368,7 +275,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should succeed")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_ShouldSucceed(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
+      [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)] IRequestExecutionPolicy policy
     )
     {
         // Setup
@@ -385,7 +292,7 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
 
         _sut.SetExecutionPolicy(policy);
         A.CallTo(policy)
@@ -393,7 +300,7 @@ public class GraphServiceSendAsyncTests
             .Returns(response);
 
         // Act
-        var act = () => _sut.SendAsync(Query);
+        var act = () => _sut.SendAsync(GraphServiceTestUtils.Query);
 
         // Assert
         await act.Should().NotThrowAsync();
@@ -406,7 +313,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should throw when there is no root \"data\" property")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_WhenThereIsNoRootDataProperty_ShouldThrow(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)]
+      [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)]
       IRequestExecutionPolicy policy
     )
     {
@@ -417,14 +324,14 @@ public class GraphServiceSendAsyncTests
             "foo": { }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
         var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
 
         _sut.SetExecutionPolicy(policy);
         policyCall.Returns(response);
 
         // Act
-        var act = () => _sut.SendAsync(Query);
+        var act = () => _sut.SendAsync(GraphServiceTestUtils.Query);
 
         // Assert
         await act.Should()
@@ -438,7 +345,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should not throw when the root \"data\" property contains user errors")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_WhenTheRootDataPropertyContainsUserErrors_ShouldNotThrow(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
+      [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)] IRequestExecutionPolicy policy
     )
     {
         // Setup
@@ -452,14 +359,14 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
         var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
 
         _sut.SetExecutionPolicy(policy);
         policyCall.Returns(response);
 
         // Act
-        var act = () => _sut.SendAsync(Query);
+        var act = () => _sut.SendAsync(GraphServiceTestUtils.Query);
 
         // Assert
         await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
@@ -472,7 +379,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest request) should succeed")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_ShouldSucceed(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
+      [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)] IRequestExecutionPolicy policy
     )
     {
         // Setup
@@ -489,8 +396,8 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var graphRequest = MakeGraphRequest();
-        var response = MakeRequestResult(expectedJson);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+        var response = Utils.MakeRequestResult(expectedJson);
 
         _sut.SetExecutionPolicy(policy);
         A.CallTo(policy)
@@ -511,7 +418,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest request) should prefer to use the graphqlQueryCost from parameters over the one from the GraphRequest")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_ShouldPreferGraphQueryCostFromParameters(
-        [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy
+        [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList))] IRequestExecutionPolicy policy
     )
     {
         // Setup
@@ -528,10 +435,10 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
+        var response = Utils.MakeRequestResult(expectedJson);
         const int expectedGraphRequestCost = 7;
         const int expectedGraphParameterCost = 11;
-        var graphRequest = MakeGraphRequest(x =>
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x =>
         {
             x.EstimatedQueryCost = expectedGraphRequestCost;
         });
@@ -556,7 +463,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest request) should throw when there is no root \"data\" property")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_WhenThereIsNoRootDataProperty_ShouldThrow(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)]
+      [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)]
       IRequestExecutionPolicy policy
     )
     {
@@ -567,8 +474,8 @@ public class GraphServiceSendAsyncTests
             "foo": { }
           }
           """;
-        var graphRequest = MakeGraphRequest();
-        var response = MakeRequestResult(expectedJson);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+        var response = Utils.MakeRequestResult(expectedJson);
         var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
 
         _sut.SetExecutionPolicy(policy);
@@ -589,7 +496,7 @@ public class GraphServiceSendAsyncTests
     [Theory(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest request) should throw when the root \"data\" property contains user errors and the GraphRequest is configured to throw")]
     [CombinatorialData]
     public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_WhenTheRootDataPropertyContainsUserErrorsAndTheGraphRequestIsConfiguredToThrow_ShouldThrow(
-      [CombinatorialMemberData(nameof(GetOrdersTestPolicies), null)] IRequestExecutionPolicy policy,
+      [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)] IRequestExecutionPolicy policy,
       GraphRequestUserErrorHandling userErrorHandling
     )
     {
@@ -604,8 +511,8 @@ public class GraphServiceSendAsyncTests
             }
           }
           """;
-        var response = MakeRequestResult(expectedJson);
-        var graphRequest = MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
+        var response = Utils.MakeRequestResult(expectedJson);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
         var policyCall = A.CallTo(policy).WithReturnType<Task<RequestResult<string>>>();
 
         _sut.SetExecutionPolicy(policy);
