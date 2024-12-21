@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿#nullable enable
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -22,7 +23,6 @@ public class GraphService : ShopifyService, IGraphService
 {
     private const string DataPropertyName = "data";
 
-    #nullable enable
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly string? _apiVersion;
@@ -316,7 +316,6 @@ public class GraphService : ShopifyService, IGraphService
             ? extensions.Deserialize<GraphExtensions>(_jsonSerializerOptions)
             : null;
     }
-    #nullable disable
 
     /// <summary>
     /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
