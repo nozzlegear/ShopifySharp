@@ -260,7 +260,7 @@ public class GraphService : ShopifyService, IGraphService
     }
 
     #nullable enable
-    private bool TryParseUserErrors(JsonProperty jsonProperty, out ICollection<GraphUserError> userErrors)
+    private bool TryParseUserErrors(JsonProperty jsonProperty, string? requestId, out ICollection<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
         userErrors = [];
@@ -271,7 +271,8 @@ public class GraphService : ShopifyService, IGraphService
         if (userErrorsProperty.ValueKind != JsonValueKind.Array)
             throw new ShopifyJsonParseException(
                 $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueKind.Array} but got {userErrorsProperty.ValueKind}",
-                userErrorsPropertyName);
+                jsonPropertyName: userErrorsPropertyName,
+                requestId: requestId);
 
         if (userErrorsProperty.GetArrayLength() == 0)
             return false;
@@ -301,7 +302,7 @@ public class GraphService : ShopifyService, IGraphService
             if (jsonProperty.Value.ValueKind != JsonValueKind.Object)
                 continue;
 
-            if (!TryParseUserErrors(jsonProperty, out var userErrors))
+            if (!TryParseUserErrors(jsonProperty, requestId, out var userErrors))
                 continue;
 
             throw new ShopifyGraphUserErrorsException(userErrors, requestId);
