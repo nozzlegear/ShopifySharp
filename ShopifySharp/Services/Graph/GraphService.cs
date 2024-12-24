@@ -341,11 +341,17 @@ public class GraphService : ShopifyService, IGraphService
         if (!jsonDocument.RootElement.TryGetProperty(extensionsPropertyName, out var extensions))
             return null;
 
+        if (extensions.ValueKind is JsonValueKind.Null)
+            return null;
+
         if (extensions.ValueKind is not JsonValueKind.Object)
             throw new ShopifyJsonParseException(
                 $"The JSON response from Shopify contains an invalid '{extensionsPropertyName}' property of type '{extensions.ValueKind}', but a property of type '{JsonValueKind.Object}' is required.",
                 extensionsPropertyPath,
                 requestId);
+
+        if (extensions.GetPropertyCount() == 0)
+            return null;
 
         try
         {
