@@ -11,7 +11,7 @@ public class ShopifyGraphUserErrorsException(
     ICollection<GraphUserError> graphUserErrors,
     string? requestId = null,
     // GraphRequestCostExtension? requestCost = null,
-    ShopifyException? innerException = null)
+    Exception? innerException = null)
     : ShopifyException(FormatMessage(graphUserErrors), innerException)
 {
     public ICollection<GraphUserError> GraphUserErrors { get; } = graphUserErrors;
