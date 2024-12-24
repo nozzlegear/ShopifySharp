@@ -5,7 +5,6 @@ using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
-
 [Trait("Category", "GraphRequest"), TestSubject(typeof(GraphRequest))]
 public class GraphRequestTests
 {

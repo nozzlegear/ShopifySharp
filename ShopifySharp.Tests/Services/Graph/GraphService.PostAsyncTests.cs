@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Tests.TestClasses;
@@ -13,7 +14,7 @@ using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
-[Trait("Category", "DateTime"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
+[Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServicePostAsyncTests
 {
     private static readonly DateTimeOffset ExpectedDate = DateTimeOffset.Parse(ExpectedDateStr);
