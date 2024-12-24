@@ -3,7 +3,7 @@ using System;
 namespace ShopifySharp;
 
 [Serializable]
-public class GraphRequestCostExtension
+public record GraphRequestCostExtension
 {
     public int RequestedQueryCost { get; set; }
 

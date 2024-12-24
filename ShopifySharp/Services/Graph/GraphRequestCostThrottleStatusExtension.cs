@@ -1,6 +1,6 @@
 namespace ShopifySharp;
 
-public class GraphRequestCostThrottleStatusExtension
+public record GraphRequestCostThrottleStatusExtension
 {
     public double RestoreRate { get; set; }
 

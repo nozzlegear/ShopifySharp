@@ -5,7 +5,7 @@ using System;
 namespace ShopifySharp.Graph;
 
 [Serializable]
-public class GraphExtensions
+public record GraphExtensions
 {
     #if NET60_OR_GREATER
     public required GraphRequestCostExtension Cost { get; set; }
