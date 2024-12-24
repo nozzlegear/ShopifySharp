@@ -306,7 +306,7 @@ public class GraphService : ShopifyService, IGraphService
     /// Throws a <see cref="ShopifyGraphUserErrorsException" /> if any <c>userErrors</c> collection is not empty.
     /// </summary>
     /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>userErrors</c> collection is detected.</exception>
-    private void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
+    protected void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
     {
         if (!jsonDocument.RootElement.TryGetProperty(DataPropertyName, out var dataElement))
             throw new ShopifyJsonParseException(
@@ -333,7 +333,7 @@ public class GraphService : ShopifyService, IGraphService
         }
     }
 
-    private GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument, string? requestId)
+    protected GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument, string? requestId)
     {
         const string extensionsPropertyName = "extensions";
         const string extensionsPropertyPath = $"$.{extensionsPropertyName}";
