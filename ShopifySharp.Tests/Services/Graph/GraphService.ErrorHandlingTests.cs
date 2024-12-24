@@ -11,6 +11,7 @@ namespace ShopifySharp.Tests.Services.Graph;
 public class GraphServiceErrorHandlingTests
 {
     private const string UserErrorsPropertyName = "userErrors";
+    private static string _userErrorsPropertyPath = $"$.{UserErrorsPropertyName}";
 
     private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>(x => x.Strict());
 
@@ -236,7 +237,7 @@ public class GraphServiceErrorHandlingTests
             var exn = await act.Should()
                 .ThrowAsync<ShopifyJsonParseException>();
 
-            exn.Which.JsonPropertyName.Should().Be(UserErrorsPropertyName);
+            exn.Which.JsonPropertyName.Should().Be(_userErrorsPropertyPath);
         }
         else
         {
