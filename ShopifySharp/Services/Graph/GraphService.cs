@@ -243,7 +243,8 @@ public class GraphService : ShopifyService, IGraphService
 
         return new GraphResult
         {
-            Json = jsonDocument
+            Json = jsonDocument,
+            RequestId = requestId
         };
     }
 
