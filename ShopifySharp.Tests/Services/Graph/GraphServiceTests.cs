@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
+using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Credentials;
@@ -43,7 +44,7 @@ public class GraphListOrdersResult
     public Collection<GraphOrderEdge> Edges { get; set; } = [];
 }
 
-[Trait("Category", "Graph")]
+[Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceTests
 {
     private readonly ShopifyApiCredentials _credentials = new("some-shopify-domain", "some-access-token");
