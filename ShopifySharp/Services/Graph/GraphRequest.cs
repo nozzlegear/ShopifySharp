@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShopifySharp;
 
@@ -12,6 +13,7 @@ public class GraphRequest
     [Obsolete("This property is deprecated, use " + nameof(Query) + " instead.")]
     public string? query
     {
+        [ExcludeFromCodeCoverage]
         get => _query;
         set => _query = value;
     }
@@ -19,6 +21,7 @@ public class GraphRequest
     [Obsolete("This property is deprecated, use " + nameof(Variables) + " instead.")]
     public object? variables
     {
+        [ExcludeFromCodeCoverage]
         get => _variables;
         set => _variables = value as IDictionary<string, object> ?? value?.ToDictionary();
     }
