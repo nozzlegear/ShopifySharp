@@ -252,7 +252,7 @@ public class GraphService : ShopifyService, IGraphService
     /// </summary>
     /// <param name="graphRequest"></param>
     /// <param name="cancellationToken"></param>
-    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp.")]
+    [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp."), ExcludeFromCodeCoverage]
     protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
     {
         using var graphResult = await SendAsync(graphRequest, cancellationToken);
