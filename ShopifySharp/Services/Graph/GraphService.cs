@@ -13,6 +13,7 @@ using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Graph;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using JsonException = System.Text.Json.JsonException;
 
 namespace ShopifySharp;
 
@@ -83,7 +84,7 @@ public class GraphService : ShopifyService, IGraphService
     {
         using var response = await SendAsync(graphRequest, cancellationToken);
         var data = response.Json.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
-        var extensions = ParseGraphExtensions(response.Json);
+        var extensions = ParseGraphExtensions(response.Json, response.RequestId);
 
         return new GraphResult<T?>
         {
@@ -231,12 +232,26 @@ public class GraphService : ShopifyService, IGraphService
     /// <param name="cancellationToken"></param>
     protected async Task<GraphResult> SendAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
+        const string rootPath = "$.";
         var requestUri = BuildRequestUri("graphql.json");
         using var requestContent = _httpContentSerializer.SerializeGraphRequest(requestUri, graphRequest);
         var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
 
         var requestId = ParseRequestIdResponseHeader(result.ResponseHeaders);
-        var jsonDocument = JsonDocument.Parse(result.RawResult);
+        JsonDocument jsonDocument;
+
+        try
+        {
+            jsonDocument = JsonDocument.Parse(result.RawResult);
+        }
+        catch (JsonException ex)
+        {
+            throw new ShopifyJsonParseException(
+                "Failed to parse Shopify's response into a JsonDocument, please check the inner exception.",
+                jsonPropertyName: ex.Path ?? rootPath,
+                requestId: requestId,
+                innerException: ex);
+        }
 
         if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
             ThrowIfResponseContainsErrors(jsonDocument, requestId);
@@ -264,6 +279,7 @@ public class GraphService : ShopifyService, IGraphService
     private bool TryParseUserErrors(JsonProperty jsonProperty, string? requestId, out ICollection<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
+        const string userErrorsPropertyPath = $"$.{userErrorsPropertyName}";
         userErrors = [];
 
         if (!jsonProperty.Value.TryGetProperty(userErrorsPropertyName, out var userErrorsProperty))
@@ -272,7 +288,7 @@ public class GraphService : ShopifyService, IGraphService
         if (userErrorsProperty.ValueKind != JsonValueKind.Array)
             throw new ShopifyJsonParseException(
                 $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueKind.Array} but got {userErrorsProperty.ValueKind}",
-                jsonPropertyName: userErrorsPropertyName,
+                jsonPropertyName: userErrorsPropertyPath,
                 requestId: requestId);
 
         if (userErrorsProperty.GetArrayLength() == 0)
@@ -286,9 +302,10 @@ public class GraphService : ShopifyService, IGraphService
     }
 
     /// <summary>
-    /// Since Graph API Errors come back with error code 200, checking for them in a way similar to the REST API doesn't work well without potentially throwing unnecessary errors.
+    /// Inspects each child property of the JsonDocument's <c>data</c> node for <c>userErrors</c>.
+    /// Throws a <see cref="ShopifyGraphUserErrorsException" /> if any <c>userErrors</c> collection is not empty.
     /// </summary>
-    /// <exception cref="ShopifyHttpException">Thrown if <paramref name="jsonDocument"/> contains any <c>userErrors</c> entries.</exception>
+    /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>userErrors</c> collection is detected.</exception>
     private void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
     {
         if (!jsonDocument.RootElement.TryGetProperty(DataPropertyName, out var dataElement))
@@ -298,9 +315,15 @@ public class GraphService : ShopifyService, IGraphService
                 requestId
             );
 
+        if (dataElement.ValueKind is not JsonValueKind.Object)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify contains an invalid '{DataPropertyName}' property of type '{dataElement.ValueKind}', but a property of type '{JsonValueKind.Object}' is required.",
+                DataPropertyName,
+                requestId);
+
         foreach (var jsonProperty in dataElement.EnumerateObject())
         {
-            if (jsonProperty.Value.ValueKind != JsonValueKind.Object)
+            if (jsonProperty.Value.ValueKind is not JsonValueKind.Object)
                 continue;
 
             if (!TryParseUserErrors(jsonProperty, requestId, out var userErrors))
@@ -310,13 +333,32 @@ public class GraphService : ShopifyService, IGraphService
         }
     }
 
-    protected GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument)
+    private GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument, string? requestId)
     {
-        const string propertyName = "extensions";
+        const string extensionsPropertyName = "extensions";
+        const string extensionsPropertyPath = $"$.{extensionsPropertyName}";
 
-        return jsonDocument.RootElement.TryGetProperty(propertyName, out var extensions)
-            ? extensions.Deserialize<GraphExtensions>(_jsonSerializerOptions)
-            : null;
+        if (!jsonDocument.RootElement.TryGetProperty(extensionsPropertyName, out var extensions))
+            return null;
+
+        if (extensions.ValueKind is not JsonValueKind.Object)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify contains an invalid '{extensionsPropertyName}' property of type '{extensions.ValueKind}', but a property of type '{JsonValueKind.Object}' is required.",
+                extensionsPropertyPath,
+                requestId);
+
+        try
+        {
+            return extensions.Deserialize<GraphExtensions>(_jsonSerializerOptions);
+        }
+        catch (JsonException exn)
+        {
+            throw new ShopifyJsonParseException(
+                $"Failed to parse the '{extensionsPropertyName}' property into a {nameof(GraphExtensions)} object, please check the inner exception.",
+                exn.Path ?? extensionsPropertyPath,
+                requestId,
+                exn);
+        }
     }
 
     /// <summary>
