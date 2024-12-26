@@ -107,8 +107,6 @@ public class GraphService : ShopifyService, IGraphService
         return await SendAsync(graphRequest, cancellationToken);
     }
 
-    #nullable disable
-
     /// <summary>
     /// Sends a Graph request with variables to Shopify's Graph API.
     /// </summary>
@@ -147,7 +145,6 @@ public class GraphService : ShopifyService, IGraphService
         };
     }
 
-    #nullable enable
     private bool TryParseUserErrors(JsonProperty jsonProperty, string? requestId, out ICollection<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
@@ -240,6 +237,7 @@ public class GraphService : ShopifyService, IGraphService
     }
 
     #region Deprecated methods
+    #nullable disable
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
