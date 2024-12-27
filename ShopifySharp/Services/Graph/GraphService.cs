@@ -94,13 +94,26 @@ public class GraphService : ShopifyService, IGraphService
         };
     }
 
-    // TODO: is this needed with PostAsync<GraphResult<T?>>
-    // public virtual async Task<GraphResult<object>> PostAsync(GraphRequest request, Type resultType, CancellationToken cancellationToken = default)
-    // {
-    //     var elt = await SendAsync(request, cancellationToken);
-    //     var ptyElt = elt.Json.RootElement.EnumerateObject().Single().Value;
-    //     return GraphQL.Serializer.Deserialize(ptyElt.GetRawText(), resultType);
-    // }
+    public virtual async Task<GraphResult<object>> PostAsync(GraphRequest graphRequest, Type resultType, CancellationToken cancellationToken = default)
+    {
+        using var response = await SendAsync(graphRequest, cancellationToken);
+        var data = GetJsonDataElementOrThrow(response.Json, response.RequestId).Deserialize(resultType, _jsonSerializerOptions);
+
+        if (data is null)
+        {
+            throw new ShopifyJsonParseException(
+                $"Failed to deserialize the '{DataPropertyName}' property into a {resultType.FullName}. The serializer returned null instead.",
+                DataPropertyName,
+                response.RequestId);
+        }
+
+        return new GraphResult<object>
+        {
+            Data = data,
+            Extensions = ParseGraphExtensions(response.Json, response.RequestId),
+            RequestId = response.RequestId,
+        };
+    }
 
     public virtual async Task<GraphResult> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
@@ -171,11 +184,13 @@ public class GraphService : ShopifyService, IGraphService
     }
 
     /// <summary>
-    /// Inspects each child property of the JsonDocument's <c>data</c> node for <c>userErrors</c>.
-    /// Throws a <see cref="ShopifyGraphUserErrorsException" /> if any <c>userErrors</c> collection is not empty.
+    /// Gets the <paramref name="jsonDocument"/>'s <c>data</c> node. Throws a <see cref="ShopifyJsonParseException"/>
+    /// if the element can't be found, or if it's an invalid or unexpected type.
     /// </summary>
-    /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>userErrors</c> collection is detected.</exception>
-    protected void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
+    /// <param name="jsonDocument">The json document returned by a request to Shopify's GraphQL API.</param>
+    /// <param name="requestId">The API's request ID. This will be passed to the exception when thrown.</param>
+    /// <exception cref="ShopifyJsonParseException">Thrown if the <c>data</c> element doesn't exist.</exception>
+    private static JsonElement GetJsonDataElementOrThrow(JsonDocument jsonDocument, string? requestId)
     {
         if (!jsonDocument.RootElement.TryGetProperty(DataPropertyName, out var dataElement))
             throw new ShopifyJsonParseException(
@@ -189,6 +204,18 @@ public class GraphService : ShopifyService, IGraphService
                 $"The JSON response from Shopify contains an invalid '{DataPropertyName}' property of type '{dataElement.ValueKind}', but a property of type '{JsonValueKind.Object}' is required.",
                 DataPropertyName,
                 requestId);
+
+        return dataElement;
+    }
+
+    /// <summary>
+    /// Inspects each child property of the JsonDocument's <c>data</c> node for <c>userErrors</c>.
+    /// Throws a <see cref="ShopifyGraphUserErrorsException" /> if any <c>userErrors</c> collection is not empty.
+    /// </summary>
+    /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>userErrors</c> collection is detected.</exception>
+    protected void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
+    {
+        var dataElement = GetJsonDataElementOrThrow(jsonDocument, requestId);
 
         foreach (var jsonProperty in dataElement.EnumerateObject())
         {
