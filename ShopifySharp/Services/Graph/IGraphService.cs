@@ -25,7 +25,7 @@ public interface IGraphService : IShopifyService
     /// A <see cref="GraphResult{T}"/> of type <typeparamref name="T"/>. The <see cref="GraphResult{T}.Data"/> value
     /// will be scoped to the <c>data</c> property of the graph response.
     /// </returns>
-    Task<GraphResult<T?>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default);
+    Task<GraphResult<T>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Executes the GraphQL API call using the query and variables described in <paramref name="graphRequest" />. This

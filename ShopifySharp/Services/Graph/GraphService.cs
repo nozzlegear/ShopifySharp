@@ -85,14 +85,14 @@ public class GraphService : ShopifyService, IGraphService
         JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
     }
 
-    public virtual async Task<GraphResult<T?>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    public virtual async Task<GraphResult<T>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        var returnType = typeof(T?);
+        var returnType = typeof(T);
         var result = await PostAsync(graphRequest, returnType, cancellationToken);
 
-        return new GraphResult<T?>
+        return new GraphResult<T>
         {
-            Data = result.Data,
+            Data = (T) result.Data,
             Extensions = result.Extensions,
             RequestId = result.RequestId,
         };

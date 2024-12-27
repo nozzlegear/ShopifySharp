@@ -208,6 +208,32 @@ public class GraphServicePostAsyncTests
             .Should().BeEquivalentTo(expectedResult);
     }
 
+    [Fact(DisplayName = "PostAsync<T>(GraphRequest graphRequest) should throw if the data deserializes into null")]
+    public async Task PostAsync_T_WithGraphRequestParameter_WhenTheDataDeserializesIntoNull_ShouldThrow()
+    {
+        // Setup
+        const string responseJson =
+            //lang=json
+            """
+            { "data": null }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act= async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+
+        // Assert
+        await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>()
+            .WithMessage($"Failed to deserialize the 'Data' property into a {typeof(TestGraphOperation).FullName}. The serializer returned null instead.")
+            .Where(x => x.RequestId == expectedRequestId);
+    }
+
     [Fact(DisplayName = "PostAsync<T>(GraphRequest graphRequest) should deserialize the graph extensions object along with the data object")]
     public async Task PostAsync_T_WithGraphRequestParameter_ShouldDeserializeTheGraphExtensionsObjectAlongWithTheDataObject()
     {
