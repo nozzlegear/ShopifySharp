@@ -2,9 +2,12 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
+using FakeItEasy.Configuration;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
@@ -13,6 +16,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Tests.TestClasses;
+using ShopifySharp.Tests.Utilities;
 using Xunit;
 using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
 
@@ -79,6 +83,7 @@ public class GraphServicePostAsyncTests
 
     private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>();
     private readonly IJsonSerializer _jsonSerializer = A.Fake<IJsonSerializer>(x => x.Wrapping(new SystemJsonSerializer(Serializer.GraphSerializerOptions)));
+
     private readonly GraphService _sut;
 
     public GraphServicePostAsyncTests()
@@ -90,6 +95,14 @@ public class GraphServicePostAsyncTests
 
         _sut = new GraphService(Utils.Credentials, sp);
         _sut.SetExecutionPolicy(_policy);
+    }
+
+    private IReturnValueArgumentValidationConfiguration<ValueTask<object?>> ConfigureDeserializeObjectAsyncCall(Type returnTypeParameter, Option<object?> deserializedReturnValue)
+    {
+        var call = A.CallTo(() => _jsonSerializer.DeserializeObjectAsync(A<Stream>._, returnTypeParameter, A<CancellationToken>._));
+        if (deserializedReturnValue.IsSome)
+            call.Returns(new ValueTask<object?>(deserializedReturnValue.Value));
+        return call;
     }
 
     public static IRequestExecutionPolicy[] MakeFakedExecutionPoliciesList() => Utils.MakeFakedExecutionPoliciesList();
@@ -568,22 +581,18 @@ public class GraphServicePostAsyncTests
             .WithMessage($"mismatched type exception blah blah")
             .Where(x => x.RequestId == expectedRequestId)
             .WithInnerException(typeof(JsonException));
-
     }
 
     [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw if the data deserializes into null")]
     public async Task PostAsync_WithReturnTypeParameter_WhenTheDataDeserializesIntoNull_ShouldThrow()
     {
         // Setup
-        const string responseJson =
-            //lang=json
-            """
-            { "data": {"foo": "bar"} }
-            """;
+        //lang=json
+        const string responseJson = """{ "data": {"foo": "bar"} }""";
         const string expectedRequestId = "some-expected-request-id";
-        // Use a mismatched result type, which is one of the few scenarios that will cause the System.Text.Json
-        // Deserialize method to return null
         var expectedReturnType = typeof(Dictionary<int, int>);
+        // Deserialize the json to null
+        var expectedDeserializationCall = ConfigureDeserializeObjectAsyncCall(expectedReturnType, Option<object?>.Some(null));
         var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
 
         A.CallTo(_policy)
@@ -598,6 +607,7 @@ public class GraphServicePostAsyncTests
             .ThrowAsync<ShopifyJsonParseException>()
             .WithMessage($"Failed to deserialize the 'data' property into a {expectedReturnType.FullName}. The serializer returned null instead.")
             .Where(x => x.RequestId == expectedRequestId);
+        expectedDeserializationCall.MustHaveHappened();
     }
 
     [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should deserialize the graph extensions object along with the data object")]
