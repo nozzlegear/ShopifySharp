@@ -392,6 +392,374 @@ public class GraphServicePostAsyncTests
     #endregion
 >>>>>>> 8537dcab (Add tests for GraphService.PostAsync<T>(GraphRequest graphRequest))
 
+    #region PostAsync(GraphRequest graphRequest, Type returnType)
+
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should deserialize the data object to the desired type")]
+    public async Task PostAsync_WithReturnTypeParameter_ShouldDeserializeTheDataObjectToTheDesiredType()
+    {
+        // Setup
+        const string expectedFooPropertyValue = "some-expected-property-value1";
+        const string expectedBarPropertyValue = "some-expected-property-value2";
+        const string expectedBatPropertyValue = "some-expected-property-name4";
+        DateTimeOffset? expectedQuxDatePropertyValue = null;
+        const string responseJson =
+            $$"""
+              {
+                  "data": {
+                      "fooOperation": {
+                          "foo": "{{expectedFooPropertyValue}}",
+                          "bar": "{{expectedBarPropertyValue}}",
+                          "baz": {
+                              "bat": "{{expectedBatPropertyValue}}",
+                              "qux": null
+                          }
+                      }
+                  }
+              }
+              """;
+        const string expectedRequestId = "some-expected-request-id";
+        var expectedReturnType = typeof(TestGraphOperation);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+        var expectedResult = new TestGraphOperation
+        {
+            FooOperation = new TestGraphOperationData
+            {
+                Foo = expectedFooPropertyValue,
+                Bar = expectedBarPropertyValue,
+                Baz = new TestGraphOperationChildData
+                {
+                    Bat = expectedBatPropertyValue,
+                    Qux = expectedQuxDatePropertyValue
+                }
+            }
+        };
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        await act.Should()
+            .NotThrowAsync();
+
+        var result = await act();
+        result.Data.Should().NotBeNull().And.BeEquivalentTo(expectedResult);
+        result.Data.Should().BeOfType(expectedReturnType).And.BeAssignableTo(expectedReturnType);
+        result.RequestId.Should().Be(expectedRequestId);
+    }
+
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should deserialize date strings properly")]
+    public async Task PostAsync_WithReturnTypeParameter_ShouldDeserializeDateStringsProperly()
+    {
+        // Setup
+        const string expectedFooPropertyValue = "some-expected-property-value1";
+        const string expectedBarPropertyValue = "some-expected-property-value2";
+        const string expectedBatPropertyValue = "some-expected-property-name4";
+        DateTimeOffset? expectedQuxDatePropertyValue = ExpectedDate;
+        const string responseJson =
+            $$"""
+              {
+                  "data": {
+                      "fooOperation": {
+                          "foo": "{{expectedFooPropertyValue}}",
+                          "bar": "{{expectedBarPropertyValue}}",
+                          "baz": {
+                              "bat": "{{expectedBatPropertyValue}}",
+                              "qux": "{{ExpectedDateStr}}"
+                          }
+                      }
+                  }
+              }
+              """;
+        const string expectedRequestId = "some-expected-request-id";
+        var expectedReturnType = typeof(TestGraphOperation);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+        var expectedResult = new TestGraphOperation
+        {
+            FooOperation = new TestGraphOperationData
+            {
+                Foo = expectedFooPropertyValue,
+                Bar = expectedBarPropertyValue,
+                Baz = new TestGraphOperationChildData
+                {
+                    Bat = expectedBatPropertyValue,
+                    Qux = expectedQuxDatePropertyValue
+                }
+            }
+        };
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        await act.Should()
+            .NotThrowAsync();
+
+        var result = await act();
+        result.Data.Should().NotBeNull();
+        result.Data.Should().BeOfType(expectedReturnType).And.BeAssignableTo(expectedReturnType);
+        result.Data.Should().BeEquivalentTo(expectedResult);
+    }
+
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw a ShopifyJsonParseException with a wrapped JsonParseException when the deserializer throws")]
+    public async Task PostAsync_WithReturnTypeParameter_WhenTheDeserializerThrowsAJsonParseException_ShouldWrapAndThrowAShopifyJsonParseException()
+    {
+        // Setup
+        const string responseJson =
+            //lang=json
+            """
+            { "data": {"foo": "bar"} }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        // Use a mismatched result type to make the deserializer throw
+        var expectedReturnType = typeof(Dictionary<int, int>);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>()
+            .WithMessage($"mismatched type exception blah blah")
+            .Where(x => x.RequestId == expectedRequestId)
+            .WithInnerException(typeof(JsonException));
+
+    }
+
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw if the data deserializes into null")]
+    public async Task PostAsync_WithReturnTypeParameter_WhenTheDataDeserializesIntoNull_ShouldThrow()
+    {
+        // Setup
+        const string responseJson =
+            //lang=json
+            """
+            { "data": {"foo": "bar"} }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        // Use a mismatched result type, which is one of the few scenarios that will cause the System.Text.Json
+        // Deserialize method to return null
+        var expectedReturnType = typeof(Dictionary<int, int>);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>()
+            .WithMessage($"Failed to deserialize the 'data' property into a {expectedReturnType.FullName}. The serializer returned null instead.")
+            .Where(x => x.RequestId == expectedRequestId);
+    }
+
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should deserialize the graph extensions object along with the data object")]
+    public async Task PostAsync_WithReturnTypeParameter_ShouldDeserializeTheGraphExtensionsObjectAlongWithTheDataObject()
+    {
+        // Setup
+        const int expectedRequestedQueryCost = 3;
+        const int expectedActualQueryCost = 3;
+        const double expectedMaximumAvailable = 2000.0;
+        const double expectedCurrentlyAvailable = 1997;
+        const double expectedRestoreRate = 100.0;
+        var responseJson =
+            //lang=json
+            $$"""
+              {
+                  "data": {
+                      "fooOperation": {
+                          "foo": "some-expected-property-value1",
+                          "bar": "some-expected-property-value2",
+                          "baz": {
+                              "bat": "some-expected-property-name4",
+                              "qux": null
+                          }
+                      }
+                  },
+                  "extensions": {
+                      "cost": {
+                          "requestedQueryCost": {{expectedRequestedQueryCost}},
+                          "actualQueryCost": {{expectedActualQueryCost}},
+                          "throttleStatus": {
+                              "maximumAvailable": {{expectedMaximumAvailable}},
+                              "currentlyAvailable": {{expectedCurrentlyAvailable}},
+                              "restoreRate": {{expectedRestoreRate}}
+                          }
+                      }
+                  }
+              }
+              """;
+        const string expectedRequestId = "some-expected-request-id";
+        var expectedReturnType = typeof(TestGraphOperation);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+        var expectedExtensions = new GraphExtensions
+        {
+            Cost = new GraphRequestCostExtension
+            {
+                ActualQueryCost = expectedActualQueryCost,
+                RequestedQueryCost = expectedRequestedQueryCost,
+                ThrottleStatus = new GraphRequestCostThrottleStatusExtension
+                {
+                    RestoreRate = expectedRestoreRate,
+                    CurrentlyAvailable = expectedCurrentlyAvailable,
+                    MaximumAvailable = expectedMaximumAvailable
+                }
+            }
+        };
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        await act.Should()
+            .NotThrowAsync();
+
+        var result = await act();
+        result.Data.Should().NotBeNull();
+        result.Data.Should().BeOfType(expectedReturnType).And.BeAssignableTo(expectedReturnType);
+        result.Extensions.Should().NotBeNull().And.BeEquivalentTo(expectedExtensions);
+    }
+
+    [Theory(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw when the root \"data\" property contains user errors and the GraphRequest is configured to throw")]
+    [CombinatorialData]
+    public async Task PostAsync_WithReturnTypeParameter_WhenTheRootDataPropertyContainsUserErrorsAndTheGraphRequestIsConfiguredToThrow_ShouldThrow(
+        GraphRequestUserErrorHandling userErrorHandling
+    )
+    {
+        // Setup
+        const string expectedFooPropertyValue = "some-expected-property-value1";
+        const string expectedBarPropertyValue = "some-expected-property-value2";
+        const string expectedBatPropertyValue = "some-expected-property-name4";
+        const string responseJson =
+            $$"""
+              {
+                  "data": {
+                      "fooOperation": {
+                          "foo": "{{expectedFooPropertyValue}}",
+                          "bar": "{{expectedBarPropertyValue}}",
+                          "baz": {
+                              "bat": "{{expectedBatPropertyValue}}",
+                              "qux": null
+                          },
+                          "userErrors": [{ "code": "foo", "message": "bar" }]
+                      }
+                  }
+              }
+              """;
+        var expectedReturnType = typeof(TestGraphOperation);
+        const string expectedRequestId = "some-expected-request-id";
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = userErrorHandling);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+            await act.Should()
+                .ThrowAsync<ShopifyGraphUserErrorsException>()
+                .Where(x => x.RequestId == expectedRequestId);
+        else
+            await act.Should().NotThrowAsync();
+    }
+
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw a ShopifyJsonParseException when given invalid JSON")]
+    public async Task PostAsync_WithReturnTypeParameter_WhenGivenInvalidJson_ShouldThrowAShopifyJsonParseException()
+    {
+        const string responseJson =
+              """
+              { 
+                  "data": { 
+                        "fooOperation": { 
+                            "foo": this is an invalid json string 
+                        } 
+                  } 
+              }
+              """;
+        const string expectedRequestId = "some-expected-request-id";
+        var expectedReturnType = typeof(TestGraphOperation);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>();
+        exn.Which
+            .RequestId.Should().Be(expectedRequestId);
+        // The JsonPropertyName will be "$." which represents the root, because the underlying JsonException's path is null (the parse
+        // exception occurs early in the parsing process, before the path is set up).
+        exn.Which
+            .JsonPropertyName.Should().Be("$.");
+        exn.WithInnerException(typeof(JsonException))
+            .Which.As<JsonException>()
+            .Path.Should().BeNull(exn.Which.JsonPropertyName);
+    }
+
+    [Theory(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw a ShopifyJsonParseException when the data object is null, missing or does not match the expected primitive type")]
+    [InlineData(""" "data": null """, JsonValueKind.Null)]
+    [InlineData(""" "data": true """, JsonValueKind.True)]
+    [InlineData(""" "data": false """, JsonValueKind.False)]
+    [InlineData(""" "data": "some string" """, JsonValueKind.String)]
+    [InlineData(""" "data": 123 """, JsonValueKind.Number)]
+    [InlineData(""" "data": ["an array"] """, JsonValueKind.Array)]
+    [InlineData("", JsonValueKind.Undefined)]
+    public async Task PostAsync_WithReturnTypeParameter_WhenTheDataObjectIsNullOrMissingOrDoesNotMatchTheExpectedPrimitiveType_ShouldThrowAShopifyJsonParseException(
+        string dataJson,
+        JsonValueKind jsonValueKind
+    )
+    {
+        var responseJson = $$""" { {{dataJson}} } """;
+        const string expectedRequestId = "some-expected-request-id";
+        var expectedReturnType = typeof(TestGraphOperation);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>()
+            .WithMessage(jsonValueKind == JsonValueKind.Undefined
+                ? "The JSON response from Shopify does not contain the expected 'data' property."
+                : $"The JSON response from Shopify contains an invalid 'data' property of type '{jsonValueKind}', but a property of type 'Object' is required.");
+        exn.And.JsonPropertyName.Should().Be("data");
+        exn.And.RequestId.Should().Be(expectedRequestId);
+        exn.And.InnerException.Should().BeNull();
+    }
+
+    #endregion
+
     [Fact]
     public async Task PostAsync_DeprecatedMethod_ShouldDeserializeDateStringsProperly()
     {
@@ -416,7 +784,7 @@ public class GraphServicePostAsyncTests
         JToken? input = null;
 
         // Act
-        var act = () => _sut.PostAsync(input);
+        var act = () => _sut.PostAsync(input!);
 
         // Assert
         await act.Should()
