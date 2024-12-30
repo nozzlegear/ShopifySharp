@@ -4,12 +4,16 @@
 using ShopifySharp.GraphQL;
 #endif
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.Tests.TestClasses;
 using Xunit;
 using Serializer = ShopifySharp.Infrastructure.Serializer;
 
@@ -20,6 +24,7 @@ public class GraphServiceSendAsyncTests
 {
     private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
     private readonly IHttpContentSerializer _httpContentSerializer = A.Fake<IHttpContentSerializer>(x => x.Wrapping(new GraphHttpContentSerializer(Serializer.GraphSerializerOptions)));
+    private readonly IJsonSerializer _jsonSerializer = A.Fake<IJsonSerializer>(x => x.Wrapping(new SystemJsonSerializer(Serializer.GraphSerializerOptions)));
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
     private readonly GraphService _sut;
 
@@ -27,6 +32,8 @@ public class GraphServiceSendAsyncTests
     {
         A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
           .Returns(_httpContentSerializer);
+        A.CallTo(() => _serviceProvider.GetService(typeof(IJsonSerializer)))
+          .Returns(_jsonSerializer);
 
         _sut = new GraphService(Utils.Credentials, _serviceProvider);
         _sut.SetExecutionPolicy(_executionPolicy);
@@ -372,6 +379,34 @@ public class GraphServiceSendAsyncTests
         await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
     }
 
+    [Fact(DisplayName = "Deprecated SendAsync<JsonElement>(string graphqlQuery) should throw when the GraphResult.Json element is not of type SystemTextJson")]
+    public async Task SendAsync_DeprecatedMethod_WithStringParameterReturningJsonElement_WhenTheGraphResultJsonElementIsNotOfTypeSystemTextJson_ShouldThrow()
+    {
+        // Setup
+        const string expectedJson =
+          //lang=json
+          """ { "data" : { "orders" : { "nodes": [] }, "customers": { "nodes": [] } } } """;
+        var response = Utils.MakeRequestResult(expectedJson);
+        var fakeElement = A.Fake<IJsonElement>(x => x.Wrapping(new SystemJsonElement(JsonDocument.Parse(expectedJson))));
+
+        _sut.SetExecutionPolicy(_executionPolicy);
+        A.CallTo(_executionPolicy).WithReturnType<Task<RequestResult<string>>>()
+          .Returns(response);
+        A.CallTo(() => _jsonSerializer.Parse(expectedJson))
+          .Returns(fakeElement);
+        // Returning anything other than a JsonElement should make the method under test throw an exception
+        A.CallTo(() => fakeElement.GetRawObject())
+          .Returns(new {});
+
+        // Act
+        var act = () => _sut.SendAsync(GraphServiceTestUtils.Query);
+
+        // Assert
+        await act.Should()
+          .ThrowAsync<ShopifyException>()
+          .WithMessage($"This method is only supported with a serializer that will return a JsonElement. Current serializer is *");
+    }
+
     #endregion
 
     #region [Deprecated] Task<JsonElement> SendAsync(GraphRequest request)
@@ -526,6 +561,34 @@ public class GraphServiceSendAsyncTests
             await act.Should().ThrowAsync<ShopifyGraphUserErrorsException>();
         else
             await act.Should().NotThrowAsync();
+    }
+
+    [Fact(DisplayName = "Deprecated SendAsync<JsonElement>(GraphRequest graphRequest) should throw when the GraphResult.Json element is not of type SystemTextJson")]
+    public async Task SendAsync_DeprecatedMethod_WithGraphRequestParameterReturningJsonElement_WhenTheGraphResultJsonElementIsNotOfTypeSystemTextJson_ShouldThrow()
+    {
+        // Setup
+        const string expectedJson =
+          //lang=json
+          """ { "data" : { "orders" : { "nodes": [] }, "customers": { "nodes": [] } } } """;
+        var response = Utils.MakeRequestResult(expectedJson);
+        var fakeElement = A.Fake<IJsonElement>(x => x.Wrapping(new SystemJsonElement(JsonDocument.Parse(expectedJson))));
+
+        _sut.SetExecutionPolicy(_executionPolicy);
+        A.CallTo(_executionPolicy).WithReturnType<Task<RequestResult<string>>>()
+          .Returns(response);
+        A.CallTo(() => _jsonSerializer.Parse(expectedJson))
+          .Returns(fakeElement);
+        // Returning anything other than a JsonElement should make the method under test throw an exception
+        A.CallTo(() => fakeElement.GetRawObject())
+          .Returns(new {});
+
+        // Act
+        var act = () => _sut.SendAsync(GraphServiceTestUtils.MakeGraphRequest());
+
+        // Assert
+        await act.Should()
+          .ThrowAsync<ShopifyException>()
+          .WithMessage($"This method is only supported with a serializer that will return a JsonElement. Current serializer is *");
     }
 
     #endregion
