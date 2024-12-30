@@ -94,6 +94,32 @@ public class ShopifyGraphUserErrorsExceptionTests
 
     [Theory]
     [CombinatorialData]
+    public void WhenUserErrorsListIsNotEmpty_AndTheFirstErrorHasANonEmptyMessage_AndTheFirstErrorHasAnEmptyCode_ItShouldCreateAnExceptionMessageFromTheFirstMessage(
+        [CombinatorialValues(null, "")] string? expectedCodeValue
+    )
+    {
+        // Setup
+        const string expectedRequestId = "some-request-id";
+        const string expectedMessage = "some-expected-message";
+        string[] expectedFields = ["some-field"];
+        var userErrors = CreateErrors(x =>
+        {
+            x.Code = expectedCodeValue;
+            x.Message = expectedMessage;
+            x.Field = expectedFields;
+        });
+
+        // Act
+        var exn = new ShopifyGraphUserErrorsException(userErrors, expectedRequestId);
+
+        // Assert
+        exn.Message.Should().Be(expectedMessage, "the exception should use the first error's message value as the exception message");
+        exn.RequestId.Should().Be(expectedRequestId);
+        exn.GraphUserErrors.Should().Satisfy(x => x.Message == expectedMessage && x.Code == expectedCodeValue && x.Field == expectedFields);
+    }
+
+    [Theory]
+    [CombinatorialData]
     public void WhenUserErrorsListIsNotEmpty_AndTheFirstErrorHasAnEmptyMessage_AndTheFirstErrorHasAnEmptyCode_ItShouldUseAGenericExceptionMessage(
         [CombinatorialValues(null, "")] string? expectedMessageValue,
         [CombinatorialValues(null, "")] string? expectedCodeValue
