@@ -152,8 +152,16 @@ public class GraphService : ShopifyService, IGraphService
                 innerException: ex);
         }
 
-        if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
-            ThrowIfResponseContainsErrors(jsonDocument, requestId);
+        try
+        {
+            if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
+                ThrowIfResponseContainsErrors(jsonDocument, requestId);
+        }
+        catch
+        {
+            jsonDocument.Dispose();
+            throw;
+        }
 
         return new GraphResult
         {
