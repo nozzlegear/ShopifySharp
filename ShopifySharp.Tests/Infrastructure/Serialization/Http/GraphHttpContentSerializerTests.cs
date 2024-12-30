@@ -6,6 +6,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Services.Graph;
 using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure.Serialization.Http;

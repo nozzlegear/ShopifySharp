@@ -10,10 +10,10 @@ using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
-using ShopifySharp.Graph;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.Services.Graph;
 using JsonException = System.Text.Json.JsonException;
 
 // ReSharper disable once CheckNamespace

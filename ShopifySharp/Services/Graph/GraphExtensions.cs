@@ -2,7 +2,7 @@
 
 using System;
 
-namespace ShopifySharp.Graph;
+namespace ShopifySharp.Services.Graph;
 
 [Serializable]
 public record GraphExtensions

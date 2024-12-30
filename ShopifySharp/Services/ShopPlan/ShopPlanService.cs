@@ -6,6 +6,7 @@ using System.Threading;
 using ShopifySharp.Credentials;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.Services.Graph;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp;

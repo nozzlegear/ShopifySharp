@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using ShopifySharp.Graph;
+using ShopifySharp.Services.Graph;
 
 namespace ShopifySharp;
 

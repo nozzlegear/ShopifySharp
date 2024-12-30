@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using ShopifySharp.Services.Graph;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
