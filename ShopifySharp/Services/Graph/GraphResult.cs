@@ -1,10 +1,9 @@
 #nullable enable
 
 using System;
-using System.Text.Json;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
-namespace ShopifySharp.Graph;
+namespace ShopifySharp.Services.Graph;
 
 public class GraphResult<T>
 {

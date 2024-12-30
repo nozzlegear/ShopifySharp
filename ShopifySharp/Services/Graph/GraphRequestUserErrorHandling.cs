@@ -1,4 +1,4 @@
-namespace ShopifySharp;
+namespace ShopifySharp.Services.Graph;
 
 public enum GraphRequestUserErrorHandling
 {

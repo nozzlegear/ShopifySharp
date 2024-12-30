@@ -1,10 +1,9 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
-namespace ShopifySharp.Graph;
+namespace ShopifySharp.Services.Graph;
 
 [Serializable]
 public record GraphUserError

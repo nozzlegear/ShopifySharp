@@ -5,9 +5,9 @@ using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Credentials;
-using ShopifySharp.Graph;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.Services.Graph;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;

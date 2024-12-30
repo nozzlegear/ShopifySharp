@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
-using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.Tests.TestClasses;
+using ShopifySharp.Services.Graph;
 using Xunit;
 using Serializer = ShopifySharp.Infrastructure.Serializer;
 

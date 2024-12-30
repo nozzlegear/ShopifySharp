@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ShopifySharp.Services.Graph;
 
 namespace ShopifySharp;
 
+// TODO: move this to ShopifySharp.Services.Graph namespace
 public class GraphRequest
 {
     private string? _query { get; set; }
@@ -56,4 +58,3 @@ public class GraphRequest
     /// </summary>
     public GraphRequestUserErrorHandling UserErrorHandling { get; set; } = GraphRequestUserErrorHandling.Throw;
 }
-

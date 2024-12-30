@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using JetBrains.Annotations;
-using ShopifySharp.Graph;
+using ShopifySharp.Services.Graph;
 using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure;

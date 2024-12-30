@@ -1,6 +1,6 @@
 using System;
 
-namespace ShopifySharp;
+namespace ShopifySharp.Services.Graph;
 
 [Serializable]
 public record GraphRequestCostExtension
