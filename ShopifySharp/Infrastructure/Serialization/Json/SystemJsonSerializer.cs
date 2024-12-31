@@ -31,8 +31,13 @@ internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerial
     public string Serialize<T>(T item) =>
         JsonSerializer.Serialize(item, options);
 
-    public ValueTask SerializeAsync<T>(Stream target, T item, CancellationToken cancellationToken = default) =>
-        new(JsonSerializer.SerializeAsync(target, item, options, cancellationToken));
+    public async ValueTask SerializeAsync<T>(Stream target, T item, CancellationToken cancellationToken = default)
+    {
+        await JsonSerializer.SerializeAsync(target, item, options, cancellationToken);
+        // Reset the stream position to 0 so it can be read
+        if (target.CanSeek)
+            target.Position = 0;
+    }
 
     public object? Deserialize(IJsonNode jsonNode, Type type) => Guard(jsonNode)
         .GetRawObject()
