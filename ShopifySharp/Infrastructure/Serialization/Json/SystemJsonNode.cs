@@ -18,7 +18,6 @@ internal class SystemJsonNode(JsonElement element, JsonDocument? document = null
 
     public JsonNodeValueKind ValueKind { get; } = element.ValueKind switch
     {
-        JsonValueKind.Undefined => JsonNodeValueKind.Undefined,
         JsonValueKind.Object => JsonNodeValueKind.Object,
         JsonValueKind.Array => JsonNodeValueKind.Array,
         JsonValueKind.String => JsonNodeValueKind.String,
@@ -26,7 +25,7 @@ internal class SystemJsonNode(JsonElement element, JsonDocument? document = null
         JsonValueKind.True => JsonNodeValueKind.True,
         JsonValueKind.False => JsonNodeValueKind.False,
         JsonValueKind.Null => JsonNodeValueKind.Null,
-        _ => throw new ArgumentOutOfRangeException(nameof(element.ValueKind), element.ValueKind, $"Unknown ValueKind '{element.ValueKind}'.")
+        _ => JsonNodeValueKind.Undefined
     };
 
     public bool TryGetProperty(string propertyName, out IJsonNode node)
