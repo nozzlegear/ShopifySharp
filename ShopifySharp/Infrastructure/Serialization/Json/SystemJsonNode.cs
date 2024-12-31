@@ -1,6 +1,5 @@
 #nullable enable
 using System;
-using System.IO;
 using System.Text.Json;
 
 namespace ShopifySharp.Infrastructure.Serialization.Json;
@@ -42,9 +41,6 @@ internal class SystemJsonNode(JsonElement element, JsonDocument? document = null
 
     public IJsonNodeObjectEnumerator EnumerateObject() =>
         new SystemJsonNodeObjectEnumerator(element.EnumerateObject());
-
-    public IJsonNodeArrayEnumerator EnumerateArray() =>
-        new SystemJsonNodeArrayEnumerator(element.EnumerateArray());
 
     public string GetRawText() =>
         element.GetRawText();

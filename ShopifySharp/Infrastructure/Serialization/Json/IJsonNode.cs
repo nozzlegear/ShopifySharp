@@ -14,8 +14,6 @@ public interface IJsonNode : IDisposable
 
     IJsonNodeObjectEnumerator EnumerateObject();
 
-    IJsonNodeArrayEnumerator EnumerateArray();
-
     string GetRawText();
 
     int GetArrayLength();
