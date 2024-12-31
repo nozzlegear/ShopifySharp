@@ -13,7 +13,7 @@ internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerial
     private static SystemJsonElement Guard(IJsonElement element) =>
         element as SystemJsonElement ?? throw new ArgumentException($"Expected a {nameof(SystemJsonElement)} but got {element.GetType().FullName}.", nameof(element));
 
-    private static Stream ToStream(IJsonElement value)
+    private static MemoryStream ToStream(IJsonElement value)
     {
         var element = Guard(value).GetRawObject();
         var memoryStream = new MemoryStream();
