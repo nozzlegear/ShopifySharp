@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using FakeItEasy;
+using FluentAssertions;
 using Newtonsoft.Json.Linq;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Tests.TestClasses;
 using Xunit;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
@@ -38,13 +44,47 @@ public class GraphListOrdersResult
 }
 
 [Trait("Category", "Graph")]
-public partial class GraphServiceTests
+public class GraphServiceTests
 {
-    private readonly GraphService _sut = new(Utils.MyShopifyUrl, Utils.AccessToken);
+    private readonly JsonSerializerOptions _serializerSettings = new();
+    private readonly IRequestExecutionPolicy _executionPolicy = A.Fake<IRequestExecutionPolicy>();
+    private readonly IHttpContentSerializer _httpContentSerializer;
+    private readonly GraphService _sut;
 
     public GraphServiceTests()
     {
-        _sut.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        _httpContentSerializer = A.Fake<IHttpContentSerializer>(x =>
+            x.Wrapping(new GraphHttpContentSerializer(_serializerSettings)));
+        _sut = new GraphService(Utils.MyShopifyUrl,
+            Utils.AccessToken,
+            null,
+            _httpContentSerializer,
+            null,
+            _serializerSettings);
+        _sut.SetExecutionPolicy(_executionPolicy);
+    }
+
+    [Fact]
+    public async Task WhenSendingGraphRequest_ShouldUseHttpContentSerializer()
+    {
+        // Setup
+        var request = new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            Variables = new Dictionary<string, object>
+            {
+                { "foo", "bar" }
+            }
+        };
+
+        A.CallTo(() => _httpContentSerializer.SerializeGraphRequest(A<RequestUri>._, request))
+            .Throws<TestException>();
+
+        // Act
+        var act = () => _sut.PostAsync(request);
+
+        // Assert
+        await act.Should().ThrowAsync<TestException>();
     }
 
     [Fact(DisplayName = "Lists orders using the GraphService")]
@@ -74,7 +114,7 @@ public partial class GraphServiceTests
         };
         // Serialize the GraphQL query and the variables into a JToken. Must use a JToken for now, or else the service
         // will assume we are using a GraphQL string and send with the wrong content type.
-        var serializerSettings = ShopifySharp.Infrastructure.Serializer.CreateNewtonsoftSettings();
+        var serializerSettings = Serializer.CreateNewtonsoftSettings();
         var serializer = JsonSerializer.Create(serializerSettings);
         var requestBody =  JToken.FromObject(new
         {
