@@ -20,8 +20,9 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Adds a <see cref="IRequestExecutionPolicy"/> to your Dependency Injection container. ShopifySharp service factories
     /// managed by your container will use this policy when creating ShopifySharp services.
-    /// <p>Note: Policies are not true middleware, ShopifySharp services can only use one policy at this time.</p>2
+    /// <p>Note: Policies are not true middleware, ShopifySharp services can only use one policy at this time.</p>
     /// </summary>
+    /// <param name="services">The service collection (DI container) to which the retry policy will be added.</param>
     /// <param name="lifetime">The lifetime of <see cref="IRequestExecutionPolicy"/>.</param>
     /// <typeparam name="T">A class that implements ShopifySharp's <see cref="IRequestExecutionPolicy"/> interface.</typeparam>
     public static IServiceCollection AddShopifySharpRequestExecutionPolicy<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
@@ -44,6 +45,7 @@ public static class ServiceCollectionExtensions
     /// <item><see cref="IShopifyDomainUtility"/></item>
     /// <item><see cref="IShopifyRequestValidationUtility"/></item>
     /// </list>
+    /// <param name="services">The service collection (DI container) to which the utilities will be added.</param>
     /// <param name="configure">An optional configuration action for configuring the utilities.</param>
     /// <param name="lifetime">The lifetime of the ShopifySharp's utilities.</param>
     /// </summary>
@@ -54,7 +56,7 @@ public static class ServiceCollectionExtensions
 
         if(options.OauthUtility != null)
         {
-            services.Add(new ServiceDescriptor(typeof(IShopifyOauthUtility), f => options.OauthUtility, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IShopifyOauthUtility), _ => options.OauthUtility, lifetime));
         }
         else
         {
@@ -63,7 +65,7 @@ public static class ServiceCollectionExtensions
 
         if(options.DomainUtility != null)
         {
-            services.Add(new ServiceDescriptor(typeof(IShopifyDomainUtility), f => options.DomainUtility, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IShopifyDomainUtility), _ => options.DomainUtility, lifetime));
         }
         else
         {
@@ -72,7 +74,7 @@ public static class ServiceCollectionExtensions
 
         if(options.RequestValidationUtility != null)
         {
-            services.Add(new ServiceDescriptor(typeof(IShopifyRequestValidationUtility), f => options.RequestValidationUtility, lifetime));
+            services.Add(new ServiceDescriptor(typeof(IShopifyRequestValidationUtility), _ => options.RequestValidationUtility, lifetime));
         }
         else
         {
@@ -86,6 +88,7 @@ public static class ServiceCollectionExtensions
     /// Adds ShopifySharp's service factories to your Dependency Injection container. If you've added an <see cref="IRequestExecutionPolicy"/>,
     /// the service factories will use it when creating ShopifySharp services.
     /// </summary>
+    /// <param name="services">The service collection (DI container) to which the utilities will be added.</param>
     /// <param name="lifetime">The lifetime of ShopifySharp's service factories.</param>
     public static IServiceCollection AddShopifySharpServiceFactories(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
@@ -98,9 +101,9 @@ public static class ServiceCollectionExtensions
 
         foreach (var type in factoryTypes)
         {
-            var serviceType = type.GetInterfaces()
-                .Where(i => !i.IsGenericType)
-                .FirstOrDefault();
+            var serviceType = type
+                .GetInterfaces()
+                .FirstOrDefault(i => !i.IsGenericType);
 
             if (serviceType is null)
                 continue;
@@ -128,7 +131,7 @@ public static class ServiceCollectionExtensions
     /// <item><see cref="AddShopifySharpServiceFactories"/></item>
     /// </list>
     /// </summary>
-    /// <param name="services"></param>
+    /// <param name="services">The service collection (DI container) to which the services will be added.</param>
     /// <param name="lifetime">The lifetime of all ShopifySharp's Dependency Injection services</param>
     /// <typeparam name="T"></typeparam>
     public static IServiceCollection AddShopifySharp<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
