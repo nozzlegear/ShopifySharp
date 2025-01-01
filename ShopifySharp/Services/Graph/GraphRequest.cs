@@ -20,7 +20,7 @@ public class GraphRequest
     public object? variables
     {
         get => _variables;
-        set => _variables = value?.ToDictionary();
+        set => _variables = value as IDictionary<string, object> ?? value?.ToDictionary();
     }
 
 #if NET60_OR_GREATER
