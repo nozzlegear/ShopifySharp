@@ -10,6 +10,8 @@ using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Graph;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Tests.TestClasses;
 using Xunit;
 using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
@@ -76,11 +78,17 @@ public class GraphServicePostAsyncTests
           """;
 
     private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>();
+    private readonly IJsonSerializer _jsonSerializer = A.Fake<IJsonSerializer>(x => x.Wrapping(new SystemJsonSerializer(Serializer.GraphSerializerOptions)));
     private readonly GraphService _sut;
 
     public GraphServicePostAsyncTests()
     {
-        _sut = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+        var sp = A.Fake<IServiceProvider>();
+
+        A.CallTo(() => sp.GetService(typeof(IJsonSerializer)))
+            .Returns(_jsonSerializer);
+
+        _sut = new GraphService(Utils.Credentials, sp);
         _sut.SetExecutionPolicy(_policy);
     }
 
@@ -390,7 +398,6 @@ public class GraphServicePostAsyncTests
     }
 
     #endregion
->>>>>>> 8537dcab (Add tests for GraphService.PostAsync<T>(GraphRequest graphRequest))
 
     #region PostAsync(GraphRequest graphRequest, Type returnType)
 

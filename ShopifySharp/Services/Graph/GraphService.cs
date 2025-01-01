@@ -12,7 +12,10 @@ using Newtonsoft.Json;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Graph;
+using ShopifySharp.Extensions;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using JsonException = System.Text.Json.JsonException;
 
 namespace ShopifySharp;
@@ -24,8 +27,8 @@ public class GraphService : ShopifyService, IGraphService
 {
     private const string DataPropertyName = "data";
 
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly IHttpContentSerializer _httpContentSerializer;
+    private readonly IJsonSerializer _jsonSerializer;
     private readonly string? _apiVersion;
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
@@ -34,7 +37,7 @@ public class GraphService : ShopifyService, IGraphService
         : base(shopifyApiCredentials, serviceProvider)
     {
         _apiVersion = null;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(serviceProvider);
+        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(serviceProvider);
     }
 
     public GraphService(
@@ -44,7 +47,7 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(shopifyApiCredentials, shopifyDomainUtility)
     {
         _apiVersion = apiVersion;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
+        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
     public GraphService(
@@ -54,7 +57,7 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(myShopifyUrl, shopAccessToken)
     {
         _apiVersion = apiVersion;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
+        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
     public GraphService(
@@ -64,40 +67,43 @@ public class GraphService : ShopifyService, IGraphService
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
         _apiVersion = null;
-        (_jsonSerializerOptions, _httpContentSerializer) = InitializeDependencies(null);
+        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
-    private static (JsonSerializerOptions, IHttpContentSerializer) InitializeDependencies(IServiceProvider? serviceProvider)
+    private static (IHttpContentSerializer, IJsonSerializer) InitializeDependencies(IServiceProvider? serviceProvider)
     {
-        var jsonSerializerOptions = InternalServiceResolver.GetServiceOrDefault(
-            serviceProvider,
-            () => Serializer.GraphSerializerOptions
-        );
         var httpContentSerializer = InternalServiceResolver.GetServiceOrDefault<IHttpContentSerializer>(
             serviceProvider,
-            () => new GraphHttpContentSerializer(jsonSerializerOptions)
+            () => new GraphHttpContentSerializer(GetJsonSerializerOptions())
         );
-        return (jsonSerializerOptions, httpContentSerializer);
+        var jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
+            serviceProvider,
+            () => new SystemJsonSerializer(GetJsonSerializerOptions()));
+
+        return (httpContentSerializer, jsonSerializer);
+
+        JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
     }
 
     public virtual async Task<GraphResult<T?>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        using var response = await SendAsync(graphRequest, cancellationToken);
-        var data = response.Json.RootElement.GetProperty(DataPropertyName).Deserialize<T>(_jsonSerializerOptions);
-        var extensions = ParseGraphExtensions(response.Json, response.RequestId);
+        var returnType = typeof(T?);
+        var result = await PostAsync(graphRequest, returnType, cancellationToken);
 
         return new GraphResult<T?>
         {
-            Data = data,
-            Extensions = extensions,
-            RequestId = response.RequestId,
+            Data = result.Data,
+            Extensions = result.Extensions,
+            RequestId = result.RequestId,
         };
     }
 
     public virtual async Task<GraphResult<object>> PostAsync(GraphRequest graphRequest, Type resultType, CancellationToken cancellationToken = default)
     {
         using var response = await SendAsync(graphRequest, cancellationToken);
-        var data = GetJsonDataElementOrThrow(response.Json, response.RequestId).Deserialize(resultType, _jsonSerializerOptions);
+        var dataElement = GetJsonDataElementOrThrow(response.Json, response.RequestId);
+        using var stream = dataElement.ToStream();
+        var data = await _jsonSerializer.DeserializeAsync(stream, resultType, cancellationToken);
 
         if (data is null)
         {
@@ -176,9 +182,8 @@ public class GraphService : ShopifyService, IGraphService
         if (userErrorsProperty.GetArrayLength() == 0)
             return false;
 
-        userErrors = userErrorsProperty
-            .Deserialize<ICollection<GraphUserError>>(_jsonSerializerOptions)?
-            .ToList() ?? [];
+        userErrors = _jsonSerializer.Deserialize<ICollection<GraphUserError>>(userErrorsProperty.GetRawText())
+            ?.ToList() ?? [];
 
         return userErrors.Count > 0;
     }
@@ -251,7 +256,7 @@ public class GraphService : ShopifyService, IGraphService
 
         try
         {
-            return extensions.Deserialize<GraphExtensions>(_jsonSerializerOptions);
+            return _jsonSerializer.Deserialize<GraphExtensions>(extensions.GetRawText());
         }
         catch (JsonException exn)
         {
@@ -391,7 +396,8 @@ public class GraphService : ShopifyService, IGraphService
     protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
     {
         using var graphResult = await SendAsync(graphRequest, cancellationToken);
-        return graphResult.Json.Deserialize<T>(_jsonSerializerOptions);
+        using var stream = graphResult.Json.RootElement.ToStream();
+        return await _jsonSerializer.DeserializeAsync<T>(stream, cancellationToken);
     }
 
     /// <summary>
