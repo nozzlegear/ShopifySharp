@@ -32,6 +32,7 @@ public abstract class ShopifyService : IShopifyService
     private static IHttpClientFactory _HttpClientFactory = new InternalHttpClientFactory();
     private IRequestExecutionPolicy _ExecutionPolicy;
     private HttpClient _Client;
+    private IDependencyContainer? _dependencyContainer;
 
     protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility? domainUtility)
     {
@@ -59,13 +60,14 @@ public abstract class ShopifyService : IShopifyService
     /// <summary>
     /// Creates a new instance of the service using the Shopify shop domain and access token in the <paramref name="credentials"/>.
     /// </summary>
-    protected ShopifyService(ShopifyApiCredentials credentials)
+    protected ShopifyService(ShopifyApiCredentials credentials, IDependencyContainer? dependencyContainer)
     {
-        var domainUtility = new ShopifyDomainUtility();
+        var domainUtility = InternalDependencyContainerConsolidation.GetServiceOrDefault<IShopifyDomainUtility, ShopifyDomainUtility>(dependencyContainer);
         _ShopUri = domainUtility.BuildShopDomainUri(credentials.ShopDomain);
         _AccessToken = credentials.AccessToken;
         _Client = _HttpClientFactory.CreateClient();
         _ExecutionPolicy = _GlobalExecutionPolicy;
+        _dependencyContainer = dependencyContainer;
     }
 
 #nullable disable

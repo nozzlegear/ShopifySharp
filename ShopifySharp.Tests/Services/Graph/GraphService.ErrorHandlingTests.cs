@@ -23,7 +23,7 @@ public class GraphServiceErrorHandlingTests
         const string shopAccessToken = "some-shop-access-token";
         const string myShopifyUrl = "https://example.com";
 
-        _sut = new GraphService(myShopifyUrl, shopAccessToken);
+        _sut = new GraphService(myShopifyUrl, shopAccessToken, null, null);
         _sut.SetExecutionPolicy(_policy);
     }
 
