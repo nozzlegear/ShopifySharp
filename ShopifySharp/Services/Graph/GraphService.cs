@@ -23,38 +23,62 @@ public class GraphService : ShopifyService, IGraphService
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
 
-    /// <summary>
-    /// Creates a new instance of <see cref="GraphService" />.
-    /// </summary>
-    /// <param name="myShopifyUrl">The shop's *.myshopify.com URL.</param>
-    /// <param name="shopAccessToken">An API access token for the shop.</param>
-    public GraphService(string myShopifyUrl, string shopAccessToken, string apiVersion = null) : base(myShopifyUrl, shopAccessToken) 
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        string apiVersion = null
+    ) : base(myShopifyUrl, shopAccessToken)
     {
         _apiVersion = apiVersion;
     }
 
-    public GraphService(string myShopifyUrl, string shopAccessToken, IShopifyDomainUtility shopifyDomainUtility) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        IShopifyDomainUtility shopifyDomainUtility
+    ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
 
     }
 
+    public virtual async Task<T> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    {
+        var json = JsonSerializer.Serialize(new Dictionary<string, object>
+        {
+            {"query", graphRequest.Query},
+            {"variables", graphRequest.Variables},
+        });
+        var res = await PostAsync<JsonDocument>(json, "application/json", graphRequest.EstimatedQueryCost, cancellationToken);
+        // TODO: if we always scope down to "data" here, is it possible to get things like "extensions"?
+        return res.RootElement.GetProperty("data").Deserialize<T>();
+    }
+
+    public virtual async Task<JsonDocument> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<JsonDocument>(graphRequest, cancellationToken);
+    }
+
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(JToken body, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
         var res = await PostAsync<JToken>(body.ToString(Formatting.None), "application/json", graphqlQueryCost, cancellationToken);
         return res["data"];
     }
 
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JToken> PostAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
         var res = await PostAsync<JToken>(graphqlQuery, "application/graphql", graphqlQueryCost, cancellationToken);
         return res["data"];
     }
 
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
-        return SendAsync(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
+        return SendAsync(new GraphRequest { Query = graphqlQuery }, graphqlQueryCost, cancellationToken);
     }
 
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
         var body = System.Text.Json.JsonSerializer.Serialize(request);
@@ -63,10 +87,11 @@ public class GraphService : ShopifyService, IGraphService
     }
 
 #if NET6_0_OR_GREATER
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual Task<TResult> SendAsync<TResult>(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
-        return SendAsync<TResult>(new GraphRequest { query = graphqlQuery }, graphqlQueryCost, cancellationToken);
+        return SendAsync<TResult>(new GraphRequest { Query = graphqlQuery }, graphqlQueryCost, cancellationToken);
     }
 
     /// <summary>
@@ -77,6 +102,7 @@ public class GraphService : ShopifyService, IGraphService
     /// <param name="request"></param>
     /// <param name="graphqlQueryCost"></param>
     /// <param name="cancellationToken"></param>
+    [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
     public virtual async Task<TResult> SendAsync<TResult>(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
         where TResult : class
     {
@@ -99,12 +125,8 @@ public class GraphService : ShopifyService, IGraphService
     private async Task<T> PostAsync<T>(string body, string mediaType, int? graphqlQueryCost, CancellationToken cancellationToken)
     {
         var req = BuildRequestUri("graphql.json");
-
         var content = new StringContent(body, Encoding.UTF8, mediaType);
-
-        var res = await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken);
-
-        return res;
+        return await SendAsync<T>(req, content, graphqlQueryCost, cancellationToken);
     }
 
     /// <summary>
@@ -151,3 +173,4 @@ public class GraphService : ShopifyService, IGraphService
         }
     }
 }
+
