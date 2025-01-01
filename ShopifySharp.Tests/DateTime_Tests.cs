@@ -25,7 +25,7 @@ public class DateTime_Tests : IClassFixture<Order_Tests_Fixture>
         var order = await this.OrderTestsFixture.Service.GetAsync(orderId);
         Assert.NotNull(order.UpdatedAt);
 
-        var graphService = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken);
+        var graphService = new GraphService(Utils.MyShopifyUrl, Utils.AccessToken, null, null);
         graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         var graphQlOrder = await graphService.PostAsync(
             @"

@@ -35,7 +35,7 @@ public class GenerateGraphQlSchemaTest
         };
         string csharpCode = await new GraphQLTypeGenerator().GenerateTypesAsync("ShopifySharp.GraphQL", scalarNameToTypeName, async query =>
         {
-            var res = await new GraphService(Utils.MyShopifyUrl, Utils.AccessToken).PostAsync(query);
+            var res = await new GraphService(Utils.MyShopifyUrl, Utils.AccessToken, null, null).PostAsync(query);
             var doc = JsonDocument.Parse(res.ToString());
             return doc;
         });

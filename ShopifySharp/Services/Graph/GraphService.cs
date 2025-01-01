@@ -7,7 +7,7 @@ using System.Threading;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
-using ShopifySharp.Infrastructure;
+using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Graph;
 using ShopifySharp.Infrastructure.Serialization.Http;
@@ -25,41 +25,40 @@ public class GraphService : ShopifyService, IGraphService
 
     public override string APIVersion => _apiVersion ?? base.APIVersion;
 
-    public GraphService(
-        string myShopifyUrl,
-        string shopAccessToken,
-        string apiVersion = null,
-        JsonSerializerOptions jsonSerializerOptions = null
-    ) : base(myShopifyUrl, shopAccessToken)
-    {
-        _apiVersion = apiVersion;
-        _jsonSerializerOptions = jsonSerializerOptions ?? Serializer.SerializerDefaults;
-    }
-
-    public GraphService(
-        string myShopifyUrl,
-        string shopAccessToken,
-        IShopifyDomainUtility shopifyDomainUtility,
-        JsonSerializerOptions jsonSerializerOptions = null
-    ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
-    {
-        _jsonSerializerOptions = jsonSerializerOptions ?? Serializer.SerializerDefaults;
-    }
-
     #nullable enable
     public GraphService(
-        string myShopifyUrl,
-        string shopAccessToken,
+        ShopifyApiCredentials shopifyApiCredentials,
         string? apiVersion,
-        IHttpContentSerializer? httpContentSerializer,
-        IShopifyDomainUtility? shopifyDomainUtility,
-        JsonSerializerOptions? jsonSerializerOptions
-    ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+        IDependencyContainer? dependencyContainer
+    ) : base(shopifyApiCredentials, dependencyContainer)
     {
         _apiVersion = apiVersion;
-        _jsonSerializerOptions = jsonSerializerOptions ?? Serializer.SerializerDefaults;
-        _httpContentSerializer = httpContentSerializer;
+        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, Serializer.SerializerDefaults);
+        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, new GraphHttpContentSerializer(_jsonSerializerOptions));
     }
+
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        string? apiVersion = null,
+        IDependencyContainer? dependencyContainer = null
+    ) : base(myShopifyUrl, shopAccessToken, null)
+    {
+        _apiVersion = apiVersion;
+        _jsonSerializerOptions = InternalDependencyContainerConsolidation.GetServiceOrDefault(dependencyContainer, Serializer.SerializerDefaults);
+        _httpContentSerializer = InternalDependencyContainerConsolidation.GetServiceOrDefault<IHttpContentSerializer>(dependencyContainer, new GraphHttpContentSerializer(_jsonSerializerOptions));
+    }
+
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    public GraphService(
+        string myShopifyUrl,
+        string shopAccessToken,
+        IShopifyDomainUtility shopifyDomainUtility
+    ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
+    {
+        throw new NotImplementedException();
+    }
+
     #nullable disable
 
     public virtual async Task<T> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)

@@ -14,7 +14,7 @@ public class ShopPlanServiceFactory(IRequestExecutionPolicy? requestExecutionPol
     /// <inheritDoc />
     public virtual IShopPlanService Create(string shopDomain, string accessToken)
     {
-        IShopPlanService service = shopifyDomainUtility is null ? new ShopPlanService(shopDomain, accessToken) : new ShopPlanService(shopDomain, accessToken, shopifyDomainUtility);
+        IShopPlanService service = shopifyDomainUtility is null ? new ShopPlanService(shopDomain, accessToken, dependencyContainer: null) : new ShopPlanService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {

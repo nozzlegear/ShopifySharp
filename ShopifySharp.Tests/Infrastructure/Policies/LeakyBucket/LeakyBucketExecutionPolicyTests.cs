@@ -36,7 +36,7 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
     };
 
     private readonly BlogService _blogService = new(Utils.MyShopifyUrl, Utils.AccessToken);
-    private readonly GraphService _graphService = new(Utils.MyShopifyUrl, Utils.AccessToken);
+    private readonly GraphService _graphService = new(Utils.MyShopifyUrl, Utils.AccessToken, null, null);
 
     [Fact]
     public async Task NonFullLeakyBucketBreachShouldNotAttemptRetry()

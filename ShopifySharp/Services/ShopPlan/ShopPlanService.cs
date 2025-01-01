@@ -1,5 +1,8 @@
+#nullable enable
+using System;
 using System.Threading.Tasks;
 using System.Threading;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp;
@@ -7,11 +10,12 @@ namespace ShopifySharp;
 /// A service for getting the shop's current Shopify subscription plan. This is a convenience wrapper around the Shopify GraphQL API.
 public class ShopPlanService : GraphService, IShopPlanService
 {
-    public ShopPlanService(string shopDomain, string accessToken) : base(shopDomain, accessToken)
+    public ShopPlanService(string shopDomain, string accessToken, IDependencyContainer? dependencyContainer) : base(shopDomain, accessToken, null, dependencyContainer)
     {
     }
 
-    internal ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) 
+    [Obsolete("This constructor is deprecated and will be removed in a future version of ShopifySharp.")]
+    internal ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility)
     {
     }
 

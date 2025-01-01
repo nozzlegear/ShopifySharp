@@ -14,7 +14,7 @@ public class GraphServiceFactory(IRequestExecutionPolicy? requestExecutionPolicy
     /// <inheritDoc />
     public virtual IGraphService Create(string shopDomain, string accessToken)
     {
-        IGraphService service = shopifyDomainUtility is null ? new GraphService(shopDomain, accessToken) : new GraphService(shopDomain, accessToken, shopifyDomainUtility);
+        IGraphService service = shopifyDomainUtility is null ? new GraphService(shopDomain, accessToken, null, null) : new GraphService(shopDomain, accessToken, shopifyDomainUtility);
 
         if (requestExecutionPolicy is not null)
         {
