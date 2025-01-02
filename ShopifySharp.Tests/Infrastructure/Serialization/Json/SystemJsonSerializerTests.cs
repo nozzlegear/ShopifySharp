@@ -37,7 +37,7 @@ public class SystemJsonSerializerTests
 
         // Assert
         node.Should().NotBeNull();
-        node.Should().BeOfType<SystemJsonNode>();
+        node.Should().BeOfType<SystemJsonElement>();
         node.GetProperty("foo").Should().NotBeNull();
     }
 
@@ -156,10 +156,10 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var deserializedObject = _sut.Deserialize(node, typeof(SystemJsonTestObject));
+        var deserializedObject = _sut.Deserialize(element, typeof(SystemJsonTestObject));
 
         // Assert
         deserializedObject.Should()
@@ -182,10 +182,10 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var act = () => _sut.Deserialize(node, type);
+        var act = () => _sut.Deserialize(element, type);
 
         // Assert
         if (shouldThrow)
@@ -210,7 +210,7 @@ public class SystemJsonSerializerTests
     public void Deserialize_WhenTheNodeIsNotASystemTextJsonNode_ShouldThrow()
     {
         // Setup
-        var fakeNode = A.Fake<IJsonNode>();
+        var fakeNode = A.Fake<IJsonElement>();
 
         // Act
         var act = () => _sut.Deserialize(fakeNode, typeof(SystemJsonTestObject));
@@ -218,11 +218,11 @@ public class SystemJsonSerializerTests
         // Assert
         act.Should()
             .Throw<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonNode)} but got *. (Parameter 'node')")
+            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')")
             .And
             .ParamName
             .Should()
-            .Be("node");
+            .Be("element");
     }
 
     #endregion
@@ -234,10 +234,10 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var deserializedObject = _sut.Deserialize<SystemJsonTestObject>(node);
+        var deserializedObject = _sut.Deserialize<SystemJsonTestObject>(element);
 
         // Assert
         deserializedObject.Should()
@@ -260,17 +260,17 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
         Func<object?> act = type switch
         {
-            GenericTargetType.Int => () => _sut.Deserialize<int>(node),
-            GenericTargetType.Bool => () => _sut.Deserialize<bool>(node),
-            GenericTargetType.String => () => _sut.Deserialize<string>(node),
-            GenericTargetType.StringArray => () => _sut.Deserialize<string[]>(node),
-            GenericTargetType.Object => () => _sut.Deserialize<object>(node),
-            GenericTargetType.Product => () => _sut.Deserialize<Product>(node),
+            GenericTargetType.Int => () => _sut.Deserialize<int>(element),
+            GenericTargetType.Bool => () => _sut.Deserialize<bool>(element),
+            GenericTargetType.String => () => _sut.Deserialize<string>(element),
+            GenericTargetType.StringArray => () => _sut.Deserialize<string[]>(element),
+            GenericTargetType.Object => () => _sut.Deserialize<object>(element),
+            GenericTargetType.Product => () => _sut.Deserialize<Product>(element),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
@@ -297,7 +297,7 @@ public class SystemJsonSerializerTests
     public void Deserialize_T_WhenTheNodeIsNotASystemTextJsonNode_ShouldThrow()
     {
         // Setup
-        var fakeNode = A.Fake<IJsonNode>();
+        var fakeNode = A.Fake<IJsonElement>();
 
         // Act
         var act = () => _sut.Deserialize<SystemJsonTestObject>(fakeNode);
@@ -305,11 +305,11 @@ public class SystemJsonSerializerTests
         // Assert
         act.Should()
             .Throw<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonNode)} but got *. (Parameter 'node')")
+            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')")
             .And
             .ParamName
             .Should()
-            .Be("node");
+            .Be("element");
     }
 
     #endregion
@@ -321,10 +321,10 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var deserializedObject = await _sut.DeserializeAsync(node, typeof(SystemJsonTestObject));
+        var deserializedObject = await _sut.DeserializeAsync(element, typeof(SystemJsonTestObject));
 
         // Assert
         deserializedObject.Should()
@@ -347,10 +347,10 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var act = async () => await _sut.DeserializeAsync(node, type);
+        var act = async () => await _sut.DeserializeAsync(element, type);
 
         // Assert
         if (shouldThrow)
@@ -371,7 +371,7 @@ public class SystemJsonSerializerTests
     public async Task DeserializeAsync_WhenTheNodeIsNotASystemTextJsonNode_ShouldThrow()
     {
         // Setup
-        var fakeNode = A.Fake<IJsonNode>();
+        var fakeNode = A.Fake<IJsonElement>();
 
         // Act
         var act = async () => await _sut.DeserializeAsync(fakeNode, typeof(SystemJsonTestObject));
@@ -379,8 +379,8 @@ public class SystemJsonSerializerTests
         // Assert
         var exn = await act.Should()
             .ThrowAsync<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonNode)} but got *. (Parameter 'node')");
-        exn.And.ParamName.Should().Be("node");
+            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')");
+        exn.And.ParamName.Should().Be("element");
     }
 
     #endregion
@@ -392,10 +392,10 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var deserializedObject = await _sut.DeserializeAsync<SystemJsonTestObject>(node);
+        var deserializedObject = await _sut.DeserializeAsync<SystemJsonTestObject>(element);
 
         // Assert
         deserializedObject.Should()
@@ -418,17 +418,17 @@ public class SystemJsonSerializerTests
     {
         // Setup
         const string expectedFooValue = "some-expected-foo-value";
-        IJsonNode node = new SystemJsonNode(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
+        IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
         Func<Task<object?>> act = type switch
         {
-            GenericTargetType.Int => async () => await _sut.DeserializeAsync<int>(node),
-            GenericTargetType.Bool => async () => await _sut.DeserializeAsync<bool>(node),
-            GenericTargetType.String => async () => await _sut.DeserializeAsync<string>(node),
-            GenericTargetType.StringArray => async () => await _sut.DeserializeAsync<string[]>(node),
-            GenericTargetType.Object => async () => await _sut.DeserializeAsync<object>(node),
-            GenericTargetType.Product => async () => await _sut.DeserializeAsync<Product>(node),
+            GenericTargetType.Int => async () => await _sut.DeserializeAsync<int>(element),
+            GenericTargetType.Bool => async () => await _sut.DeserializeAsync<bool>(element),
+            GenericTargetType.String => async () => await _sut.DeserializeAsync<string>(element),
+            GenericTargetType.StringArray => async () => await _sut.DeserializeAsync<string[]>(element),
+            GenericTargetType.Object => async () => await _sut.DeserializeAsync<object>(element),
+            GenericTargetType.Product => async () => await _sut.DeserializeAsync<Product>(element),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
@@ -451,7 +451,7 @@ public class SystemJsonSerializerTests
     public async Task DeserializeAsync_T_WhenTheNodeIsNotASystemTextJsonNode_ShouldThrow()
     {
         // Setup
-        var fakeNode = A.Fake<IJsonNode>();
+        var fakeNode = A.Fake<IJsonElement>();
 
         // Act
         var act = async () => await _sut.DeserializeAsync<SystemJsonTestObject>(fakeNode);
@@ -459,15 +459,15 @@ public class SystemJsonSerializerTests
         // Assert
         var exn = await act.Should()
             .ThrowAsync<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonNode)} but got *. (Parameter 'node')");
-        exn.And.ParamName.Should().Be("node");
+            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')");
+        exn.And.ParamName.Should().Be("element");
     }
 
     #endregion
 
     private class SystemJsonTestObject
     {
-        public string Foo { get; set; }
+        public string Foo { get; set; } = null!;
         public string? Bar { get; set; }
     }
 
