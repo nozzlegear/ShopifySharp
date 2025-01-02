@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Tests.Extensions;
 using ShopifySharp.Utilities;
 using Xunit;
@@ -17,12 +18,10 @@ namespace ShopifySharp.Tests.Services.Graph;
 [Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceConstructorTests
 {
-    private const string ExpectedJsonSerializerFieldName = "_jsonSerializerOptions";
+    private const string ExpectedJsonSerializerFieldName = "_jsonSerializer";
     private const string ExpectedHttpContentSerializerFieldName = "_httpContentSerializer";
 
     private readonly ShopifyApiCredentials _credentials = new(Utils.MyShopifyUrl, Utils.AccessToken);
-    private readonly JsonSerializerOptions _expectedJsonSerializerOptions = new() { AllowTrailingCommas = true, PropertyNameCaseInsensitive = true };
-    private readonly IHttpContentSerializer _expectedHttpContentSerializer = A.Fake<IHttpContentSerializer>();
     private readonly IShopifyDomainUtility _shopifyDomainUtility = A.Fake<IShopifyDomainUtility>();
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
 
@@ -44,7 +43,7 @@ public class GraphServiceConstructorTests
         sut.Should()
             .HavePrivateMember(ExpectedJsonSerializerFieldName)
             .And
-            .BeOfType<JsonSerializerOptions>()
+            .BeOfType<IJsonSerializer>()
             .Which
             .Should()
             .NotBeNull();
@@ -81,7 +80,7 @@ public class GraphServiceConstructorTests
     // {
     //
     // }
-
+    //
     // [Fact]
     // public void ConstructorWithServiceProvider_WhenProviderHasDependencies_ShouldUseDependenciesFromServiceProvider()
     // {
@@ -138,7 +137,7 @@ public class GraphServiceConstructorTests
         sut.Should()
             .HavePrivateMember(ExpectedJsonSerializerFieldName)
             .And
-            .BeOfType<JsonSerializerOptions>()
+            .BeOfType<IJsonSerializer>()
             .Which
             .Should()
             .NotBeNull();
@@ -192,7 +191,7 @@ public class GraphServiceConstructorTests
         sut.Should()
             .HavePrivateMember(ExpectedJsonSerializerFieldName)
             .And
-            .BeOfType<JsonSerializerOptions>()
+            .BeOfType<IJsonSerializer>()
             .Which
             .Should()
             .NotBeNull();

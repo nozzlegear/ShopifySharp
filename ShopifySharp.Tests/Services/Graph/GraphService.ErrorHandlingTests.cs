@@ -1,8 +1,10 @@
+using System.Text.Json;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Graph;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;
@@ -67,18 +69,24 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        result.Json.RootElement
+        result.Json
             .GetProperty(dataPropertyName)
             .GetProperty(expectedPropertyName1)
+            .GetRawObject()
+            .Should()
+            .BeOfType<JsonElement>()
+            .Which
             .GetInt32()
             .Should()
             .Be(expectedPropertyValue);
-
-        var operation = result.Json.RootElement
+        result.Json
             .GetProperty(dataPropertyName)
-            .GetProperty(operationPropertyName);
-        operation.Should().NotBeNull();
-        operation.GetProperty(expectedPropertyName2)
+            .GetProperty(operationPropertyName)
+            .GetRawObject()
+            .Should()
+            .BeOfType<JsonElement>()
+            .Which
+            .GetProperty(expectedPropertyName2)
             .GetInt32()
             .Should()
             .Be(expectedPropertyValue);
@@ -285,11 +293,18 @@ public class GraphServiceErrorHandlingTests
             .NotThrowAsync();
 
         var result = await act();
-        var operation = result.Json.RootElement
+        var operation = result.Json
             .GetProperty(dataPropertyName)
             .GetProperty(operationPropertyName);
 
-        operation.Should().NotBeNull();
+        operation.Should()
+            .NotBeNull()
+            .And
+            .BeOfType<SystemJsonElement>()
+            .Which
+            .GetRawObject()
+            .Should()
+            .BeOfType<JsonElement>();
     }
 
     [Theory]

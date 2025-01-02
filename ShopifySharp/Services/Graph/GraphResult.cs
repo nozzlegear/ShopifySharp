@@ -2,6 +2,7 @@
 
 using System;
 using System.Text.Json;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 namespace ShopifySharp.Graph;
 
@@ -20,16 +21,20 @@ public class GraphResult<T>
 
 public class GraphResult : IDisposable
 {
+    private bool Disposed { get; set; }
+
     #if NET8_0_OR_GREATER
-    public required JsonDocument Json { get; set; }
+    public required IJsonElement Json { get; set; }
     #else
-    public JsonDocument Json { get; set; } = default!;
+    public IJsonElement Json { get; set; } = null!;
     #endif
 
     public string? RequestId { get; set; }
 
     public void Dispose()
     {
+        if (Disposed) return;
+        Disposed = true;
         Json.Dispose();
     }
 }

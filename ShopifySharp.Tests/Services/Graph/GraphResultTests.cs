@@ -1,9 +1,9 @@
 // ReSharper disable AccessToDisposedClosure
-using System;
-using System.Text.Json;
+using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Graph;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;
@@ -12,19 +12,39 @@ namespace ShopifySharp.Tests.Services.Graph;
 public class GraphResultTests
 {
     [Fact]
-    public void GraphResult_WhenDisposed_ShouldDisposeJsonDocument()
+    public void GraphResult_ShouldDisposeJsonNode()
     {
         // Setup
+        var node = A.Fake<IJsonElement>();
         var sut = new GraphResult
         {
-            Json = JsonDocument.Parse("{ }")
+            Json = node
         };
-        var readJson = () => sut.Json.RootElement.GetArrayLength();
 
         // Act
         sut.Dispose();
 
         // Assert
-        readJson.Should().Throw<ObjectDisposedException>();
+        A.CallTo(() => node.Dispose()).MustHaveHappened();
+    }
+
+    [Fact]
+    public void GraphResult_WhenTheNodeIsAlreadyDisposed_ShouldNotThrow()
+    {
+        // Setup
+        var node = A.Fake<IJsonElement>();
+        var sut = new GraphResult
+        {
+            Json = node
+        };
+
+        // Act
+        var act = () => sut.Dispose();
+
+        // Assert
+        act.Should().NotThrow();
+        act.Should().NotThrow();
+
+        A.CallTo(() => node.Dispose()).MustHaveHappenedOnceExactly();
     }
 }

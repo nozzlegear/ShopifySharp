@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 using Newtonsoft.Json;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Graph;
-using ShopifySharp.Extensions;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Infrastructure.Serialization.Json;
@@ -83,7 +81,7 @@ public class GraphService : ShopifyService, IGraphService
 
         return (httpContentSerializer, jsonSerializer);
 
-        JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
+        System.Text.Json.JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
     }
 
     public virtual async Task<GraphResult<T>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
@@ -103,12 +101,7 @@ public class GraphService : ShopifyService, IGraphService
     {
         using var response = await SendAsync(graphRequest, cancellationToken);
         var dataElement = GetJsonDataElementOrThrow(response.Json, response.RequestId);
-        #if NETSTANDARD2_1_OR_GREATER
-        await using var stream = dataElement.ToStream();
-        #else
-        using var stream = dataElement.ToStream();
-        #endif
-        var data = await _jsonSerializer.DeserializeObjectAsync(stream, resultType, cancellationToken);
+        var data = await _jsonSerializer.DeserializeAsync(dataElement, resultType, cancellationToken);
 
         if (data is null)
         {
@@ -144,16 +137,16 @@ public class GraphService : ShopifyService, IGraphService
         var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
 
         var requestId = ParseRequestIdResponseHeader(result.ResponseHeaders);
-        JsonDocument jsonDocument;
+        IJsonElement jsonDocument;
 
         try
         {
-            jsonDocument = JsonDocument.Parse(result.RawResult);
+            jsonDocument = _jsonSerializer.Parse(result.RawResult);
         }
         catch (JsonException ex)
         {
             throw new ShopifyJsonParseException(
-                "Failed to parse Shopify's response into a JsonDocument, please check the inner exception.",
+                "Failed to parse Shopify's response into a JSON document, please check the inner exception.",
                 jsonPropertyName: ex.Path ?? rootPath,
                 requestId: requestId,
                 innerException: ex);
@@ -169,25 +162,25 @@ public class GraphService : ShopifyService, IGraphService
         };
     }
 
-    private bool TryParseUserErrors(JsonProperty jsonProperty, string? requestId, out ICollection<GraphUserError> userErrors)
+    private bool TryParseUserErrors(IJsonElement jsonProperty, string? requestId, out ICollection<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
         const string userErrorsPropertyPath = $"$.{userErrorsPropertyName}";
         userErrors = [];
 
-        if (!jsonProperty.Value.TryGetProperty(userErrorsPropertyName, out var userErrorsProperty))
+        if (!jsonProperty.TryGetProperty(userErrorsPropertyName, out var userErrorsProperty))
             return false;
 
-        if (userErrorsProperty.ValueKind != JsonValueKind.Array)
+        if (userErrorsProperty.ValueType != JsonValueType.Array)
             throw new ShopifyJsonParseException(
-                $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueKind.Array} but got {userErrorsProperty.ValueKind}",
+                $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueType.Array} but got {userErrorsProperty.ValueType}",
                 jsonPropertyName: userErrorsPropertyPath,
                 requestId: requestId);
 
         if (userErrorsProperty.GetArrayLength() == 0)
             return false;
 
-        userErrors = _jsonSerializer.Deserialize<ICollection<GraphUserError>>(userErrorsProperty.GetRawText())
+        userErrors = _jsonSerializer.Deserialize<ICollection<GraphUserError>>(userErrorsProperty)
             ?.ToList() ?? [];
 
         return userErrors.Count > 0;
@@ -200,18 +193,18 @@ public class GraphService : ShopifyService, IGraphService
     /// <param name="jsonDocument">The json document returned by a request to Shopify's GraphQL API.</param>
     /// <param name="requestId">The API's request ID. This will be passed to the exception when thrown.</param>
     /// <exception cref="ShopifyJsonParseException">Thrown if the <c>data</c> element doesn't exist.</exception>
-    private static JsonElement GetJsonDataElementOrThrow(JsonDocument jsonDocument, string? requestId)
+    private static IJsonElement GetJsonDataElementOrThrow(IJsonElement jsonDocument, string? requestId)
     {
-        if (!jsonDocument.RootElement.TryGetProperty(DataPropertyName, out var dataElement))
+        if (!jsonDocument.TryGetProperty(DataPropertyName, out var dataElement))
             throw new ShopifyJsonParseException(
                 $"The JSON response from Shopify does not contain the expected '{DataPropertyName}' property.",
                 DataPropertyName,
                 requestId
             );
 
-        if (dataElement.ValueKind is not JsonValueKind.Object)
+        if (dataElement.ValueType is not JsonValueType.Object)
             throw new ShopifyJsonParseException(
-                $"The JSON response from Shopify contains an invalid '{DataPropertyName}' property of type '{dataElement.ValueKind}', but a property of type '{JsonValueKind.Object}' is required.",
+                $"The JSON response from Shopify contains an invalid '{DataPropertyName}' property of type '{dataElement.ValueType}', but a property of type '{JsonValueType.Object}' is required.",
                 DataPropertyName,
                 requestId);
 
@@ -223,13 +216,13 @@ public class GraphService : ShopifyService, IGraphService
     /// Throws a <see cref="ShopifyGraphUserErrorsException" /> if any <c>userErrors</c> collection is not empty.
     /// </summary>
     /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>userErrors</c> collection is detected.</exception>
-    protected void ThrowIfResponseContainsErrors(JsonDocument jsonDocument, string? requestId)
+    protected void ThrowIfResponseContainsErrors(IJsonElement jsonDocument, string? requestId)
     {
         var dataElement = GetJsonDataElementOrThrow(jsonDocument, requestId);
 
         foreach (var jsonProperty in dataElement.EnumerateObject())
         {
-            if (jsonProperty.Value.ValueKind is not JsonValueKind.Object)
+            if (jsonProperty.ValueType is not JsonValueType.Object)
                 continue;
 
             if (!TryParseUserErrors(jsonProperty, requestId, out var userErrors))
@@ -240,22 +233,22 @@ public class GraphService : ShopifyService, IGraphService
     }
 
     protected async ValueTask<GraphExtensions?> ParseGraphExtensionsAsync(
-        JsonDocument jsonDocument,
+        IJsonElement jsonElement,
         string? requestId,
         CancellationToken cancellationToken = default)
     {
         const string extensionsPropertyName = "extensions";
         const string extensionsPropertyPath = $"$.{extensionsPropertyName}";
 
-        if (!jsonDocument.RootElement.TryGetProperty(extensionsPropertyName, out var extensions))
+        if (!jsonElement.TryGetProperty(extensionsPropertyName, out var extensions))
             return null;
 
-        if (extensions.ValueKind is JsonValueKind.Null)
+        if (extensions.ValueType is JsonValueType.Null)
             return null;
 
-        if (extensions.ValueKind is not JsonValueKind.Object)
+        if (extensions.ValueType is not JsonValueType.Object)
             throw new ShopifyJsonParseException(
-                $"The JSON response from Shopify contains an invalid '{extensionsPropertyName}' property of type '{extensions.ValueKind}', but a property of type '{JsonValueKind.Object}' is required.",
+                $"The JSON response from Shopify contains an invalid '{extensionsPropertyName}' property of type '{extensions.ValueType}', but a property of type '{JsonValueType.Object}' is required.",
                 extensionsPropertyPath,
                 requestId);
 
@@ -264,7 +257,7 @@ public class GraphService : ShopifyService, IGraphService
 
         try
         {
-            return await _jsonSerializer.DeserializeAsync<GraphExtensions>(extensions.ToStream(), cancellationToken);
+            return await _jsonSerializer.DeserializeAsync<GraphExtensions>(extensions, cancellationToken);
         }
         catch (JsonException exn)
         {
@@ -299,7 +292,7 @@ public class GraphService : ShopifyService, IGraphService
         }, cancellationToken);
 
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
-        return Serializer.Deserialize<JToken>(response.Json.RootElement.GetProperty(DataPropertyName).GetRawText(),
+        return Serializer.Deserialize<JToken>(response.Json.GetProperty(DataPropertyName).GetRawText(),
             null,
             DateParseHandling.None);
     }
@@ -315,14 +308,13 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw,
         }, cancellationToken);
         // This is extremely inefficient, but since the method is deprecated and will be removed, we're taking a shortcut
-        var thing = response.Json.RootElement.GetProperty(DataPropertyName);
-        return Serializer.Deserialize<JToken>(thing.GetRawText(),
+        return Serializer.Deserialize<JToken>(response.Json.GetProperty(DataPropertyName).GetRawText(),
             null,
             DateParseHandling.None);
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
-    public virtual async Task<JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    public virtual async Task<System.Text.Json.JsonElement> SendAsync(string graphqlQuery, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
         using var response = await SendAsync(new GraphRequest
         {
@@ -332,11 +324,15 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw,
         }, cancellationToken);
 
-        return response.Json.RootElement.GetProperty(DataPropertyName).Clone();
+        if (response.Json.GetRawObject() is not System.Text.Json.JsonElement jsonElement)
+            throw new ShopifyException($"This method is only supported with a serializer that will return a {nameof(System.Text.Json.JsonElement)}. Current serializer is {_jsonSerializer.GetType().FullName}.");
+
+        // Clone the returned element so the response can be disposed
+        return jsonElement.GetProperty(DataPropertyName).Clone();
     }
 
     [Obsolete("This method is deprecated and will be removed in a future version of ShopifySharp.")]
-    public virtual async Task<JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
+    public virtual async Task<System.Text.Json.JsonElement> SendAsync(GraphRequest request, int? graphqlQueryCost = null, CancellationToken cancellationToken = default)
     {
         using var response = await SendAsync(new GraphRequest
         {
@@ -346,7 +342,11 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = request.UserErrorHandling
         }, cancellationToken);
 
-        return response.Json.RootElement.GetProperty(DataPropertyName).Clone();
+        if (response.Json.GetRawObject() is not System.Text.Json.JsonElement jsonElement)
+            throw new ShopifyException($"This method is only supported with a serializer that will return a {nameof(System.Text.Json.JsonElement)}. Current serializer is {_jsonSerializer.GetType().FullName}.");
+
+        // Clone the returned element so the response can be disposed
+        return jsonElement.GetProperty(DataPropertyName).Clone();
     }
 
 #if NET6_0_OR_GREATER
@@ -362,10 +362,12 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        var data = result.Json.RootElement.GetProperty(DataPropertyName);
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
-        return data.EnumerateObject().Single().Value.Deserialize<TResult>();
+        return _jsonSerializer.Deserialize<TResult>(result.Json
+            .GetProperty(DataPropertyName)
+            .EnumerateObject()
+            .Single());
     }
 
     /// <summary>
@@ -388,10 +390,12 @@ public class GraphService : ShopifyService, IGraphService
             UserErrorHandling = request.UserErrorHandling
         }, cancellationToken);
 
-        var data = result.Json.RootElement.GetProperty(DataPropertyName);
         // This obsolete method relies specifically on this behavior of enumerating the object and selecting the first value.
         // It is expected that the method will throw if more than one property is found in the json object.
-        return data.EnumerateObject().Single().Value.Deserialize<TResult>();
+        return _jsonSerializer.Deserialize<TResult>(result.Json
+            .GetProperty(DataPropertyName)
+            .EnumerateObject()
+            .Single());
     }
 #endif
 
@@ -404,8 +408,7 @@ public class GraphService : ShopifyService, IGraphService
     protected virtual async Task<T> SendAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default) where T: class
     {
         using var graphResult = await SendAsync(graphRequest, cancellationToken);
-        using var stream = graphResult.Json.RootElement.ToStream();
-        return await _jsonSerializer.DeserializeAsync<T>(stream, cancellationToken);
+        return await _jsonSerializer.DeserializeAsync<T>(graphResult.Json, cancellationToken);
     }
 
     /// <summary>
@@ -416,7 +419,7 @@ public class GraphService : ShopifyService, IGraphService
     [Obsolete("This method is obsolete and will be removed in a future version of ShopifySharp."), ExcludeFromCodeCoverage]
     protected virtual void CheckForErrors<T>(RequestResult<T> requestResult)
     {
-        var jsonDocument = JsonDocument.Parse(requestResult.RawResult);
+        var jsonDocument = _jsonSerializer.Parse(requestResult.RawResult);
 
         ThrowIfResponseContainsErrors(jsonDocument, ParseRequestIdResponseHeader(requestResult.ResponseHeaders));
     }
