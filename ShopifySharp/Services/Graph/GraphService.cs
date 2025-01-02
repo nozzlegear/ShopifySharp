@@ -18,6 +18,7 @@ using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using JsonException = System.Text.Json.JsonException;
 
+// ReSharper disable once CheckNamespace
 namespace ShopifySharp;
 
 /// <summary>
@@ -102,8 +103,12 @@ public class GraphService : ShopifyService, IGraphService
     {
         using var response = await SendAsync(graphRequest, cancellationToken);
         var dataElement = GetJsonDataElementOrThrow(response.Json, response.RequestId);
+        #if NETSTANDARD2_1_OR_GREATER
+        await using var stream = dataElement.ToStream();
+        #else
         using var stream = dataElement.ToStream();
-        var data = await _jsonSerializer.DeserializeAsync(stream, resultType, cancellationToken);
+        #endif
+        var data = await _jsonSerializer.DeserializeObjectAsync(stream, resultType, cancellationToken);
 
         if (data is null)
         {
@@ -116,7 +121,7 @@ public class GraphService : ShopifyService, IGraphService
         return new GraphResult<object>
         {
             Data = data,
-            Extensions = ParseGraphExtensions(response.Json, response.RequestId),
+            Extensions = await ParseGraphExtensionsAsync(response.Json, response.RequestId, cancellationToken),
             RequestId = response.RequestId,
         };
     }
@@ -234,7 +239,10 @@ public class GraphService : ShopifyService, IGraphService
         }
     }
 
-    protected GraphExtensions? ParseGraphExtensions(JsonDocument jsonDocument, string? requestId)
+    protected async ValueTask<GraphExtensions?> ParseGraphExtensionsAsync(
+        JsonDocument jsonDocument,
+        string? requestId,
+        CancellationToken cancellationToken = default)
     {
         const string extensionsPropertyName = "extensions";
         const string extensionsPropertyPath = $"$.{extensionsPropertyName}";
@@ -256,7 +264,7 @@ public class GraphService : ShopifyService, IGraphService
 
         try
         {
-            return _jsonSerializer.Deserialize<GraphExtensions>(extensions.GetRawText());
+            return await _jsonSerializer.DeserializeAsync<GraphExtensions>(extensions.ToStream(), cancellationToken);
         }
         catch (JsonException exn)
         {
