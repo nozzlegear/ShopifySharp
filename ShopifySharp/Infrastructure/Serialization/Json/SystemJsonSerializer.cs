@@ -7,8 +7,27 @@ using System.Threading.Tasks;
 
 namespace ShopifySharp.Infrastructure.Serialization.Json;
 
+// TODO: make this public
 internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerializer
 {
+    private static SystemJsonNode Guard(IJsonNode node) =>
+        node as SystemJsonNode ?? throw new ArgumentException($"Expected a {nameof(SystemJsonNode)} but got {node.GetType().FullName}.", nameof(node));
+
+    private static Stream ToStream(IJsonNode node)
+    {
+        var element = Guard(node).GetRawObject();
+        var memoryStream = new MemoryStream();
+        using (var writer = new Utf8JsonWriter(memoryStream))
+        {
+            element.WriteTo(writer);
+        }
+        memoryStream.Position = 0;
+        return memoryStream;
+    }
+
+    public IJsonNode Parse(string json) =>
+        new SystemJsonNode(JsonDocument.Parse(json));
+
     public string Serialize<T>(T item) =>
         JsonSerializer.Serialize(item, options);
 
