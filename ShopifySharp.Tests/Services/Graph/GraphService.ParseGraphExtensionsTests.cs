@@ -1,5 +1,6 @@
 #nullable enable
 using System.Text.Json;
+using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Credentials;
@@ -14,8 +15,8 @@ public class GraphServiceParseGraphExtensionsTests
     private class GraphServiceWithExposedExtensionsParserFunction(ShopifyApiCredentials credentials)
         : GraphService(credentials, apiVersion: null, shopifyDomainUtility: null)
     {
-        public GraphExtensions? ParseGraphExtensions(string jsonReturnedFromRequestToShopify, string? requestIdFromHeaders) =>
-            base.ParseGraphExtensions(JsonDocument.Parse(jsonReturnedFromRequestToShopify), requestIdFromHeaders);
+        public ValueTask<GraphExtensions?> ParseGraphExtensionsAsync(string jsonReturnedFromRequestToShopify, string? requestIdFromHeaders) =>
+            base.ParseGraphExtensionsAsync(JsonDocument.Parse(jsonReturnedFromRequestToShopify), requestIdFromHeaders);
     }
 
     private readonly GraphServiceWithExposedExtensionsParserFunction _sut = new(Utils.Credentials);
@@ -37,7 +38,7 @@ public class GraphServiceParseGraphExtensionsTests
     ];
 
     [Fact]
-    public void ParseGraphExtensions_ShouldDeserializeTheGraphExtensions()
+    public async Task ParseGraphExtensionsAsync_ShouldDeserializeTheGraphExtensions()
     {
         // Setup
         const int expectedRequestedQueryCost = 3;
@@ -79,25 +80,25 @@ public class GraphServiceParseGraphExtensionsTests
         };
 
         // Act
-        var extensions = _sut.ParseGraphExtensions(responseJson, "some-request-id-from-headers");
+        var extensions = await _sut.ParseGraphExtensionsAsync(responseJson, "some-request-id-from-headers");
 
         // Assert
-        extensions.Should().BeEquivalentTo(expectedExtensions);
+        extensions.Should().NotBeNull().And.Be(expectedExtensions);
     }
 
     [Theory]
     [CombinatorialData]
-    public void ParseGraphExtensions_WhenTheJsonDoesNotContainExtensions_ShouldReturnNull([CombinatorialMemberData(nameof(GetJsonForNullExtensionsPropertyTest))] string json)
+    public async Task ParseGraphExtensionsAsync_WhenTheJsonDoesNotContainExtensions_ShouldReturnNull([CombinatorialMemberData(nameof(GetJsonForNullExtensionsPropertyTest))] string json)
     {
         // Act
-        var extensions = _sut.ParseGraphExtensions(json, "some-request-id-from-headers");
+        var extensions = await _sut.ParseGraphExtensionsAsync(json, "some-request-id-from-headers");
 
         // Assert
         extensions.Should().BeNull();
     }
 
     [Fact]
-    public void ParseGraphExtensions_WhenGivenInvalidJson_ShouldThrowAShopifyJsonParseException()
+    public async Task ParseGraphExtensionsAsync_WhenGivenInvalidJson_ShouldThrowAShopifyJsonParseException()
     {
         const string responseJson =
             """
@@ -117,11 +118,11 @@ public class GraphServiceParseGraphExtensionsTests
         const string expectedRequestId = "some-expected-request-id";
 
         // Act
-        var act = () => _sut.ParseGraphExtensions(responseJson, expectedRequestId);
+        var act = async () => await _sut.ParseGraphExtensionsAsync(responseJson, expectedRequestId);
 
         // Assert
-        var exn = act.Should()
-            .Throw<ShopifyJsonParseException>();
+        var exn = await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>();
         var innerExn = exn.WithInnerException(typeof(JsonException))
             .And.As<JsonException>();
 
@@ -132,7 +133,7 @@ public class GraphServiceParseGraphExtensionsTests
 
     [Theory]
     [CombinatorialData]
-    public void ParseGraphExtensions_WhenTheExtensionsObjectDoesNotMatchTheExpectedPrimitiveType_ShouldThrowAShopifyJsonParseException(
+    public async Task ParseGraphExtensionsAsync_WhenTheExtensionsObjectDoesNotMatchTheExpectedPrimitiveType_ShouldThrowAShopifyJsonParseException(
         [CombinatorialMemberData(nameof(GetJsonForInvalidTypeExtensionsPropertyTest))] (string Json, JsonValueKind JsonKind) theoryData
     )
     {
@@ -140,11 +141,11 @@ public class GraphServiceParseGraphExtensionsTests
         var (json, jsonValueKind) = theoryData;
 
         // Act
-        var act = () => _sut.ParseGraphExtensions(json, expectedRequestId);
+        var act = async () => await _sut.ParseGraphExtensionsAsync(json, expectedRequestId);
 
         // Assert
-        var exn = act.Should()
-            .Throw<ShopifyJsonParseException>()
+        var exn = await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>()
             .WithMessage($"The JSON response from Shopify contains an invalid 'extensions' property of type '{jsonValueKind}', but a property of type 'Object' is required.");
         exn.And.JsonPropertyName.Should().Be("$.extensions");
         exn.And.RequestId.Should().Be(expectedRequestId);
