@@ -9,17 +9,17 @@ namespace ShopifySharp.Infrastructure.Serialization.Json;
 // TODO: make this public
 internal interface IJsonSerializer
 {
-    IJsonNode Parse(string value);
+    IJsonElement Parse(string value);
 
     string Serialize<T>(T item);
 
     ValueTask SerializeAsync<T>(Stream target, T item, CancellationToken cancellationToken = default);
 
-    object? Deserialize(IJsonNode jsonNode, Type type);
+    object? Deserialize(IJsonElement jsonElement, Type type);
 
-    T? Deserialize<T>(IJsonNode jsonNode);
+    T? Deserialize<T>(IJsonElement jsonElement);
 
-    ValueTask<object?> DeserializeAsync(IJsonNode jsonNode, Type type, CancellationToken cancellationToken = default);
+    ValueTask<object?> DeserializeAsync(IJsonElement jsonElement, Type type, CancellationToken cancellationToken = default);
 
-    ValueTask<T?> DeserializeAsync<T>(IJsonNode jsonNode, CancellationToken cancellationToken = default);
+    ValueTask<T?> DeserializeAsync<T>(IJsonElement jsonElement, CancellationToken cancellationToken = default);
 }

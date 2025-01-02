@@ -10,12 +10,12 @@ namespace ShopifySharp.Infrastructure.Serialization.Json;
 // TODO: make this public
 internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerializer
 {
-    private static SystemJsonNode Guard(IJsonNode node) =>
-        node as SystemJsonNode ?? throw new ArgumentException($"Expected a {nameof(SystemJsonNode)} but got {node.GetType().FullName}.", nameof(node));
+    private static SystemJsonElement Guard(IJsonElement element) =>
+        element as SystemJsonElement ?? throw new ArgumentException($"Expected a {nameof(SystemJsonElement)} but got {element.GetType().FullName}.", nameof(element));
 
-    private static Stream ToStream(IJsonNode node)
+    private static Stream ToStream(IJsonElement value)
     {
-        var element = Guard(node).GetRawObject();
+        var element = Guard(value).GetRawObject();
         var memoryStream = new MemoryStream();
         using (var writer = new Utf8JsonWriter(memoryStream))
         {
@@ -25,8 +25,8 @@ internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerial
         return memoryStream;
     }
 
-    public IJsonNode Parse(string json) =>
-        new SystemJsonNode(JsonDocument.Parse(json));
+    public IJsonElement Parse(string json) =>
+        new SystemJsonElement(JsonDocument.Parse(json));
 
     public string Serialize<T>(T item) =>
         JsonSerializer.Serialize(item, options);
@@ -39,23 +39,23 @@ internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerial
             target.Position = 0;
     }
 
-    public object? Deserialize(IJsonNode jsonNode, Type type) => Guard(jsonNode)
+    public object? Deserialize(IJsonElement jsonElement, Type type) => Guard(jsonElement)
         .GetRawObject()
         .Deserialize(type, options);
 
-    public T? Deserialize<T>(IJsonNode jsonNode) => Guard(jsonNode)
+    public T? Deserialize<T>(IJsonElement jsonElement) => Guard(jsonElement)
         .GetRawObject()
         .Deserialize<T>(options);
 
-    public ValueTask<object?> DeserializeAsync(IJsonNode jsonNode, Type type, CancellationToken cancellationToken = default)
+    public ValueTask<object?> DeserializeAsync(IJsonElement jsonElement, Type type, CancellationToken cancellationToken = default)
     {
-        using var stream = ToStream(jsonNode);
+        using var stream = ToStream(jsonElement);
         return JsonSerializer.DeserializeAsync(stream, type, options, cancellationToken);
     }
 
-    public ValueTask<T?> DeserializeAsync<T>(IJsonNode jsonNode, CancellationToken cancellationToken = default)
+    public ValueTask<T?> DeserializeAsync<T>(IJsonElement jsonElement, CancellationToken cancellationToken = default)
     {
-        using var stream = ToStream(jsonNode);
+        using var stream = ToStream(jsonElement);
         return JsonSerializer.DeserializeAsync<T>(stream, options, cancellationToken);
     }
 }

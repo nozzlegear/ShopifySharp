@@ -1,8 +1,8 @@
 namespace ShopifySharp.Infrastructure.Serialization.Json;
 
-public enum JsonNodeValueKind
+public enum JsonValueType
 {
-    /// <summary>There is no value (as distinct from <see cref="F:ShopifySharp.Infrastructure.Serialization.Json.JsonNodeValueKind.Null" />).</summary>
+    /// <summary>There is no value (as distinct from <see cref="F:ShopifySharp.Infrastructure.Serialization.Json.JsonValueType.Null" />).</summary>
     Undefined,
     /// <summary>A JSON object.</summary>
     Object,

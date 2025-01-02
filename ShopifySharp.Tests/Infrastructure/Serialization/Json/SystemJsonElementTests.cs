@@ -8,8 +8,8 @@ using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure.Serialization.Json;
 
-[Trait("Category", "Serialization"), TestSubject(typeof(SystemJsonNode))]
-public class SystemJsonNodeTests
+[Trait("Category", "Serialization"), TestSubject(typeof(SystemJsonElement))]
+public class SystemJsonElementTests
 {
     #region Constructor
 
@@ -21,7 +21,7 @@ public class SystemJsonNodeTests
         var doc = JsonDocument.Parse(json);
 
         // Act
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Assert
         node.GetRawObject().ValueKind.Should().Be(JsonValueKind.Object);
@@ -42,10 +42,10 @@ public class SystemJsonNodeTests
         var doc = JsonDocument.Parse("[1,2,3]");
 
         // Act
-        var node = new SystemJsonNode(doc.RootElement, doc);
+        var node = new SystemJsonElement(doc.RootElement, doc);
 
         // Assert
-        node.ValueKind.Should().Be(JsonNodeValueKind.Array);
+        node.ValueType.Should().Be(JsonValueType.Array);
         node.GetArrayLength().Should().Be(3);
     }
 
@@ -59,7 +59,7 @@ public class SystemJsonNodeTests
         // Setup
         const string expectedValue = "bar";
         var doc = JsonDocument.Parse($$"""{"foo":"{{expectedValue}}"}""");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         var result = node.GetRawObject();
@@ -70,20 +70,40 @@ public class SystemJsonNodeTests
 
     #endregion
 
-    #region JsonNodeValueKind ValueKind { get }
+    #region JsonValueType ValueType { get }
+
+    [Theory]
+    [InlineData(" null ", JsonValueType.Null)]
+    [InlineData(" true ", JsonValueType.True)]
+    [InlineData(" false ", JsonValueType.False)]
+    [InlineData(""" "some string" """, JsonValueType.String)]
+    [InlineData(" 123 ", JsonValueType.Number)]
+    [InlineData(""" ["an array"] """, JsonValueType.Array)]
+    [InlineData(""" {"foo":"bar"} """, JsonValueType.Object)]
+    public void ValueType_ShouldBeAssignedAccordingToElementValueKind(string json, JsonValueType jsonValueType)
+    {
+        // Setup
+        var doc = JsonDocument.Parse(json);
+
+        // Act
+        var node = new SystemJsonElement(doc);
+
+        // Assert
+        node.ValueType.Should().Be(jsonValueType);
+    }
 
     [Fact]
-    public void ValueKind_WhenElementValueKindIsUndefined_ShouldUseJsonNodeValueKindUndefined()
+    public void ValueKind_WhenElementValueKindIsUndefined_ShouldUseJsonValueTypeUndefined()
     {
         // Setup
         // The only way to get a JsonElement with a value of Undefined is to use default
         JsonElement element = default;
 
         // Act
-        var node = new SystemJsonNode(element);
+        var node = new SystemJsonElement(element);
 
         // Assert
-        node.ValueKind.Should().Be(JsonNodeValueKind.Undefined);
+        node.ValueType.Should().Be(JsonValueType.Undefined);
     }
 
     #endregion
@@ -95,14 +115,14 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("{\"num\":123}");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         var result = node.TryGetProperty("num", out var child);
 
         // Assert
         result.Should().BeTrue();
-        child.ValueKind.Should().Be(JsonNodeValueKind.Number);
+        child.ValueType.Should().Be(JsonValueType.Number);
         child.GetRawObject().Should().BeOfType<JsonElement>().Which.GetInt32().Should().Be(123);
     }
 
@@ -115,7 +135,7 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("""{"foo":"bar"}""");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // ACt
         var result = node.TryGetProperty("x", out var child);
@@ -130,7 +150,7 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("{}");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         var act = () => node.GetProperty("some-property-name");
@@ -148,18 +168,18 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("""{"a":1,"b":true,"c":"foo"}""");
-        var node = new SystemJsonNode(doc);
-        var props = new List<JsonNodeValueKind>();
+        var node = new SystemJsonElement(doc);
+        var props = new List<JsonValueType>();
 
         // Act
         var enumerator = node.EnumerateObject();
         foreach (var x in enumerator)
         {
-            props.Add(x.ValueKind);
+            props.Add(x.ValueType);
         }
 
         // Assert
-        props.Should().ContainInOrder(JsonNodeValueKind.Number, JsonNodeValueKind.True, JsonNodeValueKind.String);
+        props.Should().ContainInOrder(JsonValueType.Number, JsonValueType.True, JsonValueType.String);
     }
 
     #endregion
@@ -172,7 +192,7 @@ public class SystemJsonNodeTests
         // Setup
         const string json = """{"foo":"bar"}""";
         var doc = JsonDocument.Parse(json);
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         var rawText = node.GetRawText();
@@ -192,7 +212,7 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse(json);
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         var arrayLength = node.GetArrayLength();
@@ -210,7 +230,7 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("""{"foo":"bar","bat":"baz"}""");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         var propertyCount = node.GetPropertyCount();
@@ -228,7 +248,7 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("{}");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         node.Dispose();
@@ -247,7 +267,7 @@ public class SystemJsonNodeTests
     {
         // Setup
         var doc = JsonDocument.Parse("{}");
-        var node = new SystemJsonNode(doc);
+        var node = new SystemJsonElement(doc);
 
         // Act
         node.Dispose();
