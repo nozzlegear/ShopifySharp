@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using ShopifySharp.Credentials;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp;
@@ -12,11 +13,36 @@ namespace ShopifySharp;
 /// A service for getting the shop's current Shopify subscription plan. This is a convenience wrapper around the Shopify GraphQL API.
 public class ShopPlanService : GraphService, IShopPlanService
 {
-    private readonly JsonSerializerOptions _jsonSerializerOptions = Serializer.GraphSerializerOptions;
+    private readonly IJsonSerializer _jsonSerializer;
 
-    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, null, shopifyDomainUtility) { }
+    internal ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
+        : base(shopifyApiCredentials, serviceProvider)
+    {
+        _jsonSerializer = InitializeDependencies(serviceProvider);
+    }
 
-    public ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility? shopifyDomainUtility = null) : this(new ShopifyApiCredentials(shopDomain, accessToken), shopifyDomainUtility) { }
+    public ShopPlanService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : base(shopifyApiCredentials, null, shopifyDomainUtility)
+    {
+        _jsonSerializer = InitializeDependencies(null);
+    }
+
+    public ShopPlanService(string shopDomain, string accessToken, IShopifyDomainUtility? shopifyDomainUtility = null)
+        : this(new ShopifyApiCredentials(shopDomain, accessToken), shopifyDomainUtility)
+    {
+        _jsonSerializer = InitializeDependencies(null);
+    }
+
+    private static IJsonSerializer InitializeDependencies(IServiceProvider? serviceProvider)
+    {
+        var jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
+            serviceProvider,
+            () => new SystemJsonSerializer(GetJsonSerializerOptions()));
+
+        return jsonSerializer;
+
+        JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
+    }
 
     /// <inheritdoc />
     public virtual async Task<ShopPlan> GetShopPlanAsync(CancellationToken cancellationToken = default)
@@ -41,12 +67,10 @@ public class ShopPlanService : GraphService, IShopPlanService
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         }, cancellationToken);
 
-        return result.Json
-            .RootElement
+        return _jsonSerializer.Deserialize<ShopPlan>(result.Json
             .GetProperty("data")
             .GetProperty("shop")
-            .GetProperty("plan")
-            .Deserialize<ShopPlan>(_jsonSerializerOptions)!;
+            .GetProperty("plan"))!;
     }
 
     /// <inheritdoc />

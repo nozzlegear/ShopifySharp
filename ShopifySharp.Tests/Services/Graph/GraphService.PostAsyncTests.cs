@@ -2,7 +2,6 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +12,6 @@ using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Graph;
 using ShopifySharp.Infrastructure;
-using ShopifySharp.Infrastructure.Serialization;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Tests.Utilities;
@@ -99,7 +97,7 @@ public class GraphServicePostAsyncTests
 
     private IReturnValueArgumentValidationConfiguration<ValueTask<object?>> ConfigureDeserializeObjectAsyncCall(Type returnTypeParameter, Option<object?> deserializedReturnValue)
     {
-        var call = A.CallTo(() => _jsonSerializer.DeserializeObjectAsync(A<Stream>._, returnTypeParameter, A<CancellationToken>._));
+        var call = A.CallTo(() => _jsonSerializer.DeserializeAsync(A<IJsonElement>._, returnTypeParameter, A<CancellationToken>._));
         if (deserializedReturnValue.IsSome)
             call.Returns(new ValueTask<object?>(deserializedReturnValue.Value));
         return call;
@@ -231,11 +229,14 @@ public class GraphServicePostAsyncTests
             { "data": null }
             """;
         const string expectedRequestId = "some-expected-request-id";
+        var expectedInnerException = new JsonException("some-json-parse-exception");
         var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow);
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+        A.CallTo(() => _jsonSerializer.Parse(responseJson))
+            .Throws(expectedInnerException);
 
         // Act
         var act= async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
@@ -243,8 +244,9 @@ public class GraphServicePostAsyncTests
         // Assert
         await act.Should()
             .ThrowAsync<ShopifyJsonParseException>()
-            .WithMessage($"Failed to deserialize the 'Data' property into a {typeof(TestGraphOperation).FullName}. The serializer returned null instead.")
-            .Where(x => x.RequestId == expectedRequestId);
+            .WithMessage("Failed to parse Shopify's response into a JSON document, please check the inner exception.")
+            .Where(x => x.RequestId == expectedRequestId)
+            .WithInnerException(typeof(JsonException));
     }
 
     [Fact(DisplayName = "PostAsync<T>(GraphRequest graphRequest) should deserialize the graph extensions object along with the data object")]
@@ -564,13 +566,15 @@ public class GraphServicePostAsyncTests
             { "data": {"foo": "bar"} }
             """;
         const string expectedRequestId = "some-expected-request-id";
-        // Use a mismatched result type to make the deserializer throw
         var expectedReturnType = typeof(Dictionary<int, int>);
+        var expectedInnerException = new JsonException("some-json-parse-exception");
         var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
 
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+        A.CallTo(() => _jsonSerializer.Parse(responseJson))
+            .Throws(expectedInnerException);
 
         // Act
         var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType);
@@ -578,7 +582,7 @@ public class GraphServicePostAsyncTests
         // Assert
         await act.Should()
             .ThrowAsync<ShopifyJsonParseException>()
-            .WithMessage($"mismatched type exception blah blah")
+            .WithMessage("Failed to parse Shopify's response into a JSON document, please check the inner exception.")
             .Where(x => x.RequestId == expectedRequestId)
             .WithInnerException(typeof(JsonException));
     }

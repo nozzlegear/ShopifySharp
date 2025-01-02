@@ -1,10 +1,13 @@
 #nullable enable
 using System.Text.Json;
 using System.Threading.Tasks;
+using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Graph;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using Xunit;
 
 namespace ShopifySharp.Tests.Services.Graph;
@@ -12,14 +15,20 @@ namespace ShopifySharp.Tests.Services.Graph;
 [Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceParseGraphExtensionsTests
 {
-    private class GraphServiceWithExposedExtensionsParserFunction(ShopifyApiCredentials credentials)
+    private class GraphServiceWithExposedExtensionsParserFunction(ShopifyApiCredentials credentials, IJsonSerializer jsonSerializer)
         : GraphService(credentials, apiVersion: null, shopifyDomainUtility: null)
     {
         public ValueTask<GraphExtensions?> ParseGraphExtensionsAsync(string jsonReturnedFromRequestToShopify, string? requestIdFromHeaders) =>
-            base.ParseGraphExtensionsAsync(JsonDocument.Parse(jsonReturnedFromRequestToShopify), requestIdFromHeaders);
+            base.ParseGraphExtensionsAsync(jsonSerializer.Parse(jsonReturnedFromRequestToShopify), requestIdFromHeaders);
     }
 
-    private readonly GraphServiceWithExposedExtensionsParserFunction _sut = new(Utils.Credentials);
+    private readonly IJsonSerializer _jsonSerializer = A.Fake<IJsonSerializer>(x => x.Wrapping(new SystemJsonSerializer(Serializer.GraphSerializerOptions)));
+    private readonly GraphServiceWithExposedExtensionsParserFunction _sut;
+
+    public GraphServiceParseGraphExtensionsTests()
+    {
+        _sut = new GraphServiceWithExposedExtensionsParserFunction(Utils.Credentials, _jsonSerializer);
+    }
 
     public static string[] GetJsonForNullExtensionsPropertyTest() =>
     [
