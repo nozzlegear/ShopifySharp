@@ -10,9 +10,11 @@ namespace ShopifySharp.Graph;
 public class GraphUserError
 {
     /// The path to the input field that caused the error.
-    [JsonProperty("field"), JsonPropertyName("field")]
-    public IEnumerable<string>? Field { get; set; }
+    [JsonPropertyName("field")]
+    public IEnumerable<string> Field { get; set; } = [];
     /// The error message.
-    [JsonProperty("message"), JsonPropertyName("message")]
-    public string? Message { get; set; }
+    [JsonPropertyName("message")]
+    public string Message { get; set; } = string.Empty;
+    [JsonPropertyName("code")]
+    public string? Code { get; set; }
 }
