@@ -199,7 +199,7 @@ public class GraphService : ShopifyService, IGraphService
             return false;
 
         userErrors = userErrorsEl
-            .Deserialize<ICollection<GraphUserError>>()
+            .Deserialize<ICollection<GraphUserError>>(_jsonSerializerOptions)
             .ToList();
 
         return true;
