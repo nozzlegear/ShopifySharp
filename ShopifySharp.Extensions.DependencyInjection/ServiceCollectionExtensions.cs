@@ -117,7 +117,7 @@ public static class ServiceCollectionExtensions
                 : new ServiceDescriptor(serviceType, type, lifetime));
         }
 
-        services.TryAdd(new ServiceDescriptor(typeof(IPartnerServiceFactory), typeof(PartnerServiceFactory), lifetime));
+        services.TryAdd(new ServiceDescriptor(typeof(IPartnerServiceFactory), (sp) => new PartnerServiceFactory(sp), lifetime));
 
         return services;
     }
