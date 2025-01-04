@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -13,6 +14,7 @@ namespace ShopifySharp;
 /// <summary>
 /// A service for manipulating Shopify products.
 /// </summary>
+[Obsolete("Shopify has deprecated the REST API for products. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage products via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public class ProductService : ShopifyService, IProductService
 {
     /// <summary>
