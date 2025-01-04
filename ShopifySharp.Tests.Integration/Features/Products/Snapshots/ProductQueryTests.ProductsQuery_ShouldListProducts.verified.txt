@@ -1,0 +1,228 @@
+﻿{
+  data: {
+    products: {
+      pageInfo: {
+        startCursor: eyJsYXN0X2lkIjoxNTkwNjQyMzExMjcxLCJsYXN0X3ZhbHVlIjoiMTU5MDY0MjMxMTI3MSJ9,
+        endCursor: eyJsYXN0X2lkIjoxNTkwNjQyNDA5NTc1LCJsYXN0X3ZhbHVlIjoiMTU5MDY0MjQwOTU3NSJ9,
+        hasNextPage: true,
+        hasPreviousPage: false
+      },
+      nodes: [
+        {
+          id: gid://shopify/Product/1590642311271,
+          title: Jackson,
+          handle: jackson-3,
+          description: NOTE:Â Sizes XL-4XL are running one to two sizes small, d...,
+          legacyResourceId: 1590642311271,
+          publishedAt: null,
+          status: ACTIVE,
+          variants: {
+            pageInfo: {
+              startCursor: eyJsYXN0X2lkIjoxNTg0MzczODg0NTI4NywibGFzdF92YWx1ZSI6IjEifQ==,
+              endCursor: eyJsYXN0X2lkIjoxNTg0MzczODg0NTI4NywibGFzdF92YWx1ZSI6IjEifQ==,
+              hasNextPage: false,
+              hasPreviousPage: false
+            },
+            nodes: [
+              {
+                id: gid://shopify/ProductVariant/15843738845287,
+                availableForSale: false,
+                displayName: Jackson - XS / Dark Wash / $57,
+                sku: 159-246-01-1131,
+                inventoryQuantity: 0,
+                legacyResourceId: 15843738845287,
+                selectedOptions: [
+                  {
+                    name: Size,
+                    value: XS,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493756510311
+                    }
+                  },
+                  {
+                    name: Color,
+                    value: Dark Wash,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493756543079
+                    }
+                  },
+                  {
+                    name: Suggested Retail,
+                    value: $57,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493756575847
+                    }
+                  }
+                ],
+                image: null
+              }
+            ]
+          }
+        },
+        {
+          id: gid://shopify/Product/1590642344039,
+          title: Jackson,
+          handle: jackson-2,
+          description: NOTE:Â Sizes XL-4XL are running one to two sizes small, d...,
+          legacyResourceId: 1590642344039,
+          publishedAt: null,
+          status: ACTIVE,
+          variants: {
+            pageInfo: {
+              startCursor: eyJsYXN0X2lkIjoxNTg0MzczODkxMDgyMywibGFzdF92YWx1ZSI6IjEifQ==,
+              endCursor: eyJsYXN0X2lkIjoxNTg0MzczODk0MzU5MSwibGFzdF92YWx1ZSI6IjIifQ==,
+              hasNextPage: true,
+              hasPreviousPage: false
+            },
+            nodes: [
+              {
+                id: gid://shopify/ProductVariant/15843738910823,
+                availableForSale: false,
+                displayName: Jackson - XS / Light Wash / $57,
+                sku: 159-247-01-1131,
+                inventoryQuantity: 0,
+                legacyResourceId: 15843738910823,
+                selectedOptions: [
+                  {
+                    name: Size,
+                    value: XS,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493759197287
+                    }
+                  },
+                  {
+                    name: Color,
+                    value: Light Wash,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493759361127
+                    }
+                  },
+                  {
+                    name: Suggested Retail,
+                    value: $57,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493759393895
+                    }
+                  }
+                ],
+                image: null
+              },
+              {
+                id: gid://shopify/ProductVariant/15843738943591,
+                availableForSale: false,
+                displayName: Jackson - S / Light Wash / $57,
+                sku: 159-247-02-1131,
+                inventoryQuantity: 0,
+                legacyResourceId: 15843738943591,
+                selectedOptions: [
+                  {
+                    name: Size,
+                    value: S,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493759230055
+                    }
+                  },
+                  {
+                    name: Color,
+                    value: Light Wash,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493759361127
+                    }
+                  },
+                  {
+                    name: Suggested Retail,
+                    value: $57,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493759393895
+                    }
+                  }
+                ],
+                image: null
+              }
+            ]
+          }
+        },
+        {
+          id: gid://shopify/Product/1590642409575,
+          title: Jackson,
+          handle: jackson,
+          description: NOTE: Sizes XL-4XL are running one to two sizes small, de...,
+          legacyResourceId: 1590642409575,
+          publishedAt: null,
+          status: ACTIVE,
+          variants: {
+            pageInfo: {
+              startCursor: eyJsYXN0X2lkIjoxNTg0MzczOTA3NDY2MywibGFzdF92YWx1ZSI6IjEifQ==,
+              endCursor: eyJsYXN0X2lkIjoxNTg0MzczOTEwNzQzMSwibGFzdF92YWx1ZSI6IjIifQ==,
+              hasNextPage: true,
+              hasPreviousPage: false
+            },
+            nodes: [
+              {
+                id: gid://shopify/ProductVariant/15843739074663,
+                availableForSale: true,
+                displayName: Jackson - XS / White,
+                sku: 159-001-01-1131,
+                inventoryQuantity: 3,
+                legacyResourceId: 15843739074663,
+                selectedOptions: [
+                  {
+                    name: Size,
+                    value: XS,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493761327207
+                    }
+                  },
+                  {
+                    name: Color,
+                    value: White,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493761589351
+                    }
+                  }
+                ],
+                image: null
+              },
+              {
+                id: gid://shopify/ProductVariant/15843739107431,
+                availableForSale: false,
+                displayName: Jackson - S / White,
+                sku: 159-001-02-1131,
+                inventoryQuantity: 0,
+                legacyResourceId: 15843739107431,
+                selectedOptions: [
+                  {
+                    name: Size,
+                    value: S,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493761359975
+                    }
+                  },
+                  {
+                    name: Color,
+                    value: White,
+                    details: {
+                      id: gid://shopify/ProductOptionValue/1493761589351
+                    }
+                  }
+                ],
+                image: null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  extensions: {
+    cost: {
+      requestedQueryCost: 16,
+      actualQueryCost: 16,
+      throttleStatus: {
+        maximumAvailable: 2000.0,
+        currentlyAvailable: 1984,
+        restoreRate: 100.0
+      }
+    }
+  }
+}

@@ -28,6 +28,34 @@ public class GraphServiceErrorHandlingTests
         _sut.SetExecutionPolicy(_policy);
     }
 
+    [Fact]
+    public async Task WhenQueryOrMutationErrorsAreReturned_ShouldThrow()
+    {
+        // This type of error is returned when something is wrong with the way the query/mutation is structured, e.g.
+        // an enum value was used that doesn't exist. As the name 'userErrors' implies, this kind of error message isn't
+        // intended for end users of Shopify applications, but rather for the developers.
+        const string errorsJson =
+            """
+            {
+              "errors" : [ {
+                "message" : "Argument 'context' on Field 'publishedInContext' has an invalid value (WEB). Expected type 'ContextualPublicationContext!'.",
+                "locations" : [ {
+                  "line" : 16,
+                  "column" : 13
+                } ],
+                "path" : [ "query getProducts", "products", "nodes", "publishedInContext", "context" ],
+                "extensions" : {
+                  "code" : "argumentLiteralsIncompatible",
+                  "typeName" : "Field",
+                  "argumentName" : "context"
+                }
+              } ]
+            }
+            """;
+        Assert.Fail("test not yet implemented");
+    }
+
+
     [Theory]
     [CombinatorialData]
     public async Task WhenNoUserErrorsAreReturned_ShouldNotThrow(

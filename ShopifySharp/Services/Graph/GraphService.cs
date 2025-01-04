@@ -154,6 +154,7 @@ public class GraphService : ShopifyService, IGraphService
 
         try
         {
+            // TODO: throw if response contains a top-layer "errors" property, regardless of the UserErrorHandling setting. This property indicates an error with the query/mutation itself, rather than the data.
             if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
                 ThrowIfResponseContainsErrors(jsonDocument, requestId);
         }
