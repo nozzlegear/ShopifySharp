@@ -9,8 +9,10 @@ using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
+[Obsolete("Shopify has deprecated the REST API for products. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage products via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductServiceFactory : IServiceFactory<IProductService>;
 
+[Obsolete("Shopify has deprecated the REST API for products. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage products via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public class ProductServiceFactory : IProductServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
