@@ -9,7 +9,7 @@ public record GraphRequestCostExtension
 
     public int ActualQueryCost { get; set; }
 
-    #if NET60_OR_GREATER
+    #if NET8_0_OR_GREATER
     public required GraphRequestCostThrottleStatusExtension ThrottleStatus { get; set; }
     #else
     public GraphRequestCostThrottleStatusExtension ThrottleStatus { get; set; }
