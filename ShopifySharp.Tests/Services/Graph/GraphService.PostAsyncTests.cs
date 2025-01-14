@@ -244,7 +244,7 @@ public class GraphServicePostAsyncTests
         // Assert
         await act.Should()
             .ThrowAsync<ShopifyJsonParseException>()
-            .WithMessage("Failed to parse Shopify's response into a JSON document, please check the inner exception.")
+            .WithMessage("Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.")
             .Where(x => x.RequestId == expectedRequestId)
             .WithInnerException(typeof(JsonException));
     }
@@ -582,7 +582,7 @@ public class GraphServicePostAsyncTests
         // Assert
         await act.Should()
             .ThrowAsync<ShopifyJsonParseException>()
-            .WithMessage("Failed to parse Shopify's response into a JSON document, please check the inner exception.")
+            .WithMessage("Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.")
             .Where(x => x.RequestId == expectedRequestId)
             .WithInnerException(typeof(JsonException));
     }
