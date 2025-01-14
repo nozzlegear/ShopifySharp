@@ -28,7 +28,7 @@ public class GraphRequest
         set => _variables = value as IDictionary<string, object> ?? value?.ToDictionary();
     }
 
-#if NET60_OR_GREATER
+#if NET8_0_OR_GREATER
     public required string Query
     {
         get => _query ?? "";

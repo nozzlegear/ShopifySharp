@@ -7,7 +7,7 @@ namespace ShopifySharp.Services.Graph;
 [Serializable]
 public record GraphExtensions
 {
-    #if NET60_OR_GREATER
+    #if NET8_0_OR_GREATER
     public required GraphRequestCostExtension Cost { get; set; }
     #else
     public GraphRequestCostExtension Cost { get; set; } = default!;
