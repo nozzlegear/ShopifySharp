@@ -28,19 +28,11 @@ public class GraphRequest
         set => _variables = value as IDictionary<string, object> ?? value?.ToDictionary();
     }
 
-#if NET8_0_OR_GREATER
-    public required string Query
-    {
-        get => _query ?? "";
-        set => _query = value;
-    }
-#else
     public string Query
     {
         get => _query ?? "";
         set => _query = value;
     }
-#endif
 
     public IDictionary<string, object>? Variables
     {
