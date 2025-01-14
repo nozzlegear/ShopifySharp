@@ -101,7 +101,21 @@ public class GraphService : ShopifyService, IGraphService
     {
         using var response = await SendAsync(graphRequest, cancellationToken);
         var dataElement = GetJsonDataElementOrThrow(response.Json, response.RequestId);
-        var data = await _jsonSerializer.DeserializeAsync(dataElement, resultType, cancellationToken);
+        object? data;
+
+        try
+        {
+            // TODO: add a test for this
+            data = await _jsonSerializer.DeserializeAsync(dataElement, resultType, cancellationToken);
+        }
+        catch (Exception exn)
+        {
+            throw new ShopifyJsonParseException(
+                $"The json serializer threw a {exn.GetType().FullName} exception when deserializing the '{DataPropertyName}' property into a {resultType.FullName}. Check the inner exception for more details.",
+                DataPropertyName,
+                response.RequestId,
+                exn);
+        }
 
         if (data is null)
         {
@@ -143,11 +157,11 @@ public class GraphService : ShopifyService, IGraphService
         {
             jsonDocument = _jsonSerializer.Parse(result.RawResult);
         }
-        catch (JsonException ex)
+        catch (Exception ex)
         {
             throw new ShopifyJsonParseException(
-                "Failed to parse Shopify's response into a JSON document, please check the inner exception.",
-                jsonPropertyName: ex.Path ?? rootPath,
+                "Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.",
+                jsonPropertyName: (ex is JsonException jxn ? jxn.Path : null) ?? rootPath,
                 requestId: requestId,
                 innerException: ex);
         }
@@ -181,7 +195,7 @@ public class GraphService : ShopifyService, IGraphService
 
         if (userErrorsProperty.ValueType != JsonValueType.Array)
             throw new ShopifyJsonParseException(
-                $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueType.Array} but got {userErrorsProperty.ValueType}",
+                $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueType.Array} but got {userErrorsProperty.ValueType}.",
                 jsonPropertyName: userErrorsPropertyPath,
                 requestId: requestId);
 
@@ -240,6 +254,31 @@ public class GraphService : ShopifyService, IGraphService
         }
     }
 
+    /// <summary>
+    /// Inspects the json element for an <c>errors</c> property. Throws a <see cref="ShopifyGraphErrorsException"/> if the property
+    /// is found and it is not empty.
+    /// </summary>
+    /// <exception cref="ShopifyGraphErrorsException">Thrown when a non-empty <c>errors</c> property is detected.</exception>
+    protected void ThrowIfResponseContainsGraphRequestErrors(IJsonElement jsonElement, string? requestId)
+    {
+        const string propertyName = "errors";
+        const string propertyPath = $"$.{propertyName}";
+
+        if (!jsonElement.TryGetProperty(propertyName, out var jsonProperty))
+            return;
+
+        if (jsonProperty.ValueType != JsonValueType.Array)
+            throw new ShopifyJsonParseException(
+                $"Failed to parse {propertyName} property, expected {JsonValueType.Array} but got {jsonProperty.ValueType}.",
+                jsonPropertyName: propertyPath,
+                requestId: requestId);
+
+        if (jsonProperty.GetArrayLength() == 0)
+            return;
+
+        throw new ShopifyGraphErrorsException(_jsonSerializer.Deserialize<IReadOnlyList<GraphError>>(jsonProperty) ?? [], requestId);
+    }
+
     protected async ValueTask<GraphExtensions?> ParseGraphExtensionsAsync(
         IJsonElement jsonElement,
         string? requestId,
@@ -267,11 +306,11 @@ public class GraphService : ShopifyService, IGraphService
         {
             return await _jsonSerializer.DeserializeAsync<GraphExtensions>(extensions, cancellationToken);
         }
-        catch (JsonException exn)
+        catch (Exception exn)
         {
             throw new ShopifyJsonParseException(
-                $"Failed to parse the '{extensionsPropertyName}' property into a {nameof(GraphExtensions)} object, please check the inner exception.",
-                exn.Path ?? extensionsPropertyPath,
+                $"Failed to parse the '{extensionsPropertyName}' property into a {nameof(GraphExtensions)} object. Check the inner exception for more details.",
+                jsonPropertyName: (exn is JsonException jxn ? jxn.Path : null) ?? extensionsPropertyPath,
                 requestId,
                 exn);
         }
