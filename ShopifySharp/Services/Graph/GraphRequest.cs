@@ -28,6 +28,9 @@ public class GraphRequest
         set => _variables = value as IDictionary<string, object> ?? value?.ToDictionary();
     }
 
+    #if NET8_0_OR_GREATER
+    [StringSyntax("graphql")]
+    #endif
     public string Query
     {
         get => _query ?? "";
