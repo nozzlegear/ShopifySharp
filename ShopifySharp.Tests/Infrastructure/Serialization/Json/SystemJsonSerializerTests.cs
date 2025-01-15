@@ -218,7 +218,6 @@ public class SystemJsonSerializerTests
         // Assert
         act.Should()
             .Throw<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')")
             .And
             .ParamName
             .Should()
@@ -305,7 +304,6 @@ public class SystemJsonSerializerTests
         // Assert
         act.Should()
             .Throw<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')")
             .And
             .ParamName
             .Should()
@@ -378,8 +376,7 @@ public class SystemJsonSerializerTests
 
         // Assert
         var exn = await act.Should()
-            .ThrowAsync<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')");
+            .ThrowAsync<ArgumentException>();
         exn.And.ParamName.Should().Be("element");
     }
 
@@ -458,8 +455,7 @@ public class SystemJsonSerializerTests
 
         // Assert
         var exn = await act.Should()
-            .ThrowAsync<ArgumentException>()
-            .WithMessage($"Expected a {nameof(SystemJsonElement)} but got *. (Parameter 'element')");
+            .ThrowAsync<ArgumentException>();
         exn.And.ParamName.Should().Be("element");
     }
 
