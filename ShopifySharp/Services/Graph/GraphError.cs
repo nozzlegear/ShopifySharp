@@ -1,4 +1,6 @@
 #nullable enable
+using System.Collections.Generic;
+
 namespace ShopifySharp.Services.Graph;
 
 public record GraphError
@@ -8,6 +10,8 @@ public record GraphError
     #else
     public string Message { get; set; } = null!;
     #endif
+
+    public IReadOnlyList<string>? Path { get; set; }
 
     public GraphErrorExtensions? Extensions { get; set; }
 }
