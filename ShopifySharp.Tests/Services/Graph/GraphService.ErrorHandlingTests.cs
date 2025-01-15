@@ -14,6 +14,8 @@ public class GraphServiceErrorHandlingTests
 {
     private const string UserErrorsPropertyName = "userErrors";
     private const string UserErrorsPropertyPath = $"$.{UserErrorsPropertyName}";
+    private const string ErrorsPropertyName = "errors";
+    private const string ErrorsPropertyPath = $"$.{ErrorsPropertyName}";
 
     private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>(x => x.Strict());
 
@@ -50,7 +52,7 @@ public class GraphServiceErrorHandlingTests
             // lang=json
             $$"""
             {
-              "errors" : [ {
+              "{{ErrorsPropertyName}}" : [ {
                 "message" : "{{expectedMessage}}",
                 "locations" : [ {
                   "line" : 16,
@@ -97,6 +99,134 @@ public class GraphServiceErrorHandlingTests
                 ArgumentName = expectedArgumentName,
             });
         });
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndTheArrayIsEmptyWithZeroErrors_ShouldNotThrow(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string responseJson =
+            // lang=json
+            $$"""
+            {
+              "{{ErrorsPropertyName}}" : [],
+              "data": {
+                "foo": "bar"
+              }
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        await act.Should()
+            .NotThrowAsync();
+
+        var result = await act();
+        result.Json
+            .GetProperty(ErrorsPropertyName)
+            .GetArrayLength()
+            .Should()
+            .Be(0);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndErrorsPropertyIsNotAnArrayType_ShouldThrow(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string responseJson =
+            // lang=json
+            """
+            {
+              "errors" : "some-errors-value",
+              "data": {
+                "foo": "bar"
+              }
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should().ThrowAsync<ShopifyJsonParseException>()
+            .WithMessage("Failed to parse errors property, expected Array but got String.");
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.JsonPropertyName.Should().Be(ErrorsPropertyPath);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndTheJsonIsMalformed_ShouldThrowRegardlessOfUserErrorHandling(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string responseJson =
+            // lang=json
+            """
+            {
+              "errors" : [ {
+                "message" : "some-message",
+                "locations" : [ {
+                  "line" : 16,
+                  "column" : 13
+                } ],
+                "path" : [[[["some", "malformed", "string", "array"]]]],
+                "extensions" : {
+                  "code" : "some-code",
+                  "typeName" : "some-type-name",
+                  "argumentName" : "some-argument-name"
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyJsonParseException>()
+            .WithMessage("An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.");
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeOfType<JsonException>();
+        exn.Which.JsonPropertyName.Should().NotBeNullOrEmpty();
     }
 
     [Theory]
