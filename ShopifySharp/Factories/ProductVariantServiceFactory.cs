@@ -9,8 +9,10 @@ using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
+[Obsolete("Shopify has deprecated the REST API for product variants. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product variants via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductVariantServiceFactory : IServiceFactory<IProductVariantService>;
 
+[Obsolete("Shopify has deprecated the REST API for product variants. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product variants via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public class ProductVariantServiceFactory : IProductVariantServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;

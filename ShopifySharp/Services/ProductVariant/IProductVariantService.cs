@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
@@ -5,6 +6,7 @@ using ShopifySharp.Lists;
 
 namespace ShopifySharp;
 
+[Obsolete("Shopify has deprecated the REST API for product variants. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product variants via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductVariantService : IShopifyService
 {
     /// <summary>
