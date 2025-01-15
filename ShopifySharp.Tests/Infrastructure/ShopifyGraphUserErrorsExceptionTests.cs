@@ -11,9 +11,9 @@ namespace ShopifySharp.Tests.Infrastructure;
 [Trait("Category", "Infrastructure"), TestSubject(typeof(ShopifyGraphUserErrorsException))]
 public class ShopifyGraphUserErrorsExceptionTests
 {
-    private const string GenericExceptionMessage = "GraphQL operation returned one or more errors.";
+    private const string GenericExceptionMessage = "GraphQL operation returned one or more user errors.";
 
-    private static ICollection<GraphUserError> CreateErrors(Action<GraphUserError>? customize = null)
+    private static IReadOnlyList<GraphUserError> CreateErrors(Action<GraphUserError>? customize = null)
     {
         var list = new List<GraphUserError>();
         var userError = new GraphUserError

@@ -141,8 +141,9 @@ public class GraphService : ShopifyService, IGraphService
     /// <summary>
     /// Sends a Graph request with variables to Shopify's Graph API.
     /// </summary>
-    /// <param name="graphRequest"></param>
-    /// <param name="cancellationToken"></param>
+    /// <exception cref="ShopifyGraphErrorsException">Thrown when a non-empty <c>errors</c> collection is detected at the top level.</exception>
+    /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>errors</c> collection is detected on any of the <c>data</c> properties.</exception>
+    /// <exception cref="ShopifyJsonParseException">Thrown when the json serializer fails to parse data while checking for errors, or while parsing the json document itself.</exception>
     protected async Task<GraphResult> SendAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
         const string rootPath = "$.";
@@ -168,8 +169,11 @@ public class GraphService : ShopifyService, IGraphService
 
         try
         {
+            // TODO: make sure this doesn't override ShopifyRateLimitException throws
+            ThrowIfResponseContainsGraphRequestErrors(jsonDocument, requestId);
+
             if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
-                ThrowIfResponseContainsErrors(jsonDocument, requestId);
+                ThrowIfResponseContainsGraphUserErrors(jsonDocument, requestId);
         }
         catch
         {
@@ -184,7 +188,7 @@ public class GraphService : ShopifyService, IGraphService
         };
     }
 
-    private bool TryParseUserErrors(IJsonElement jsonProperty, string? requestId, out ICollection<GraphUserError> userErrors)
+    private bool TryParseUserErrors(IJsonElement jsonProperty, string? requestId, out IReadOnlyList<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
         const string userErrorsPropertyPath = $"$.{userErrorsPropertyName}";
@@ -202,8 +206,7 @@ public class GraphService : ShopifyService, IGraphService
         if (userErrorsProperty.GetArrayLength() == 0)
             return false;
 
-        userErrors = _jsonSerializer.Deserialize<ICollection<GraphUserError>>(userErrorsProperty)
-            ?.ToList() ?? [];
+        userErrors = _jsonSerializer.Deserialize<IReadOnlyList<GraphUserError>>(userErrorsProperty) ?? [];
 
         return userErrors.Count > 0;
     }
@@ -238,7 +241,7 @@ public class GraphService : ShopifyService, IGraphService
     /// Throws a <see cref="ShopifyGraphUserErrorsException" /> if any <c>userErrors</c> collection is not empty.
     /// </summary>
     /// <exception cref="ShopifyGraphUserErrorsException">Thrown when a non-empty <c>userErrors</c> collection is detected.</exception>
-    protected void ThrowIfResponseContainsErrors(IJsonElement jsonDocument, string? requestId)
+    protected void ThrowIfResponseContainsGraphUserErrors(IJsonElement jsonDocument, string? requestId)
     {
         var dataElement = GetJsonDataElementOrThrow(jsonDocument, requestId);
 
@@ -468,7 +471,7 @@ public class GraphService : ShopifyService, IGraphService
     {
         var jsonDocument = _jsonSerializer.Parse(requestResult.RawResult);
 
-        ThrowIfResponseContainsErrors(jsonDocument, ParseRequestIdResponseHeader(requestResult.ResponseHeaders));
+        ThrowIfResponseContainsGraphUserErrors(jsonDocument, ParseRequestIdResponseHeader(requestResult.ResponseHeaders));
     }
 
     #endregion
