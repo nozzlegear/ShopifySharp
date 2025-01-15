@@ -214,14 +214,18 @@ ModelManifest.xml
 # Ignore private configuration files
 *.private.config
 */env.yml
+appsettings.local.json
 
 # Ignore IDE settings
 .ionide
 .idea
 .vim
- 
+
 # Ignore signing keys
 *.snk
 
 # Ignore nvim mergetool files
 *.orig
+
+# Ignore Verify's received.* files
+*.received.*

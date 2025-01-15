@@ -1,0 +1,35 @@
+﻿{
+  Description: some-expected-description-html,
+  Id: {Scrubbed},
+  HasOnlyDefaultVariant: true,
+  Title: some-expected-title,
+  Status: DRAFT,
+  Options: [
+    {
+      Name: Title,
+      Id: {Scrubbed},
+      Values: [
+        Default Title
+      ]
+    }
+  ],
+  VariantsCount: {
+    Count: 1
+  },
+  Variants: {
+    Nodes: [
+      {
+        Id: {Scrubbed},
+        DisplayName: some-expected-title - Default Title,
+        Title: Default Title,
+        SelectedOptions: [
+          {
+            Name: Title,
+            Value: Default Title
+          }
+        ]
+      }
+    ]
+  },
+  Vendor: some-expected-vendor
+}

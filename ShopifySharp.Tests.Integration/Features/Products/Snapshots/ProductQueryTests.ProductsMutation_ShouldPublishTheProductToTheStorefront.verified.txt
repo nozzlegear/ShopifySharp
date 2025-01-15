@@ -1,0 +1,15 @@
+﻿{
+  ProductStatusUpdateResult: {
+    Product: {
+      Id: {Scrubbed},
+      Title: some-title
+    }
+  },
+  PublicationResult: {
+    Product: {
+      PublishedOnPublication: true,
+      Id: {Scrubbed},
+      Title: some-title
+    }
+  }
+}

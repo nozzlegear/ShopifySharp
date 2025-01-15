@@ -4,12 +4,15 @@ echo "Using $(fish --version)"
 
 set experimentalTestProject "ShopifySharp.Experimental.Tests/ShopifySharp.Experimental.Tests.fsproj"
 set diTestProject "ShopifySharp.Extensions.DependencyInjection.Tests/ShopifySharp.Extensions.DependencyInjection.Tests.csproj"
+set integrationTestProject "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
+
+set netNine "net9.0"
 
 # Load utility functions
 set utilsFilePath (dirname (status --current-filename))"/utils.fish"
 source "$utilsFilePath"
 
-# Build and run the the tests for the experimental and DI projects all at once
+# Build and run the the tests for the experimental, DI and integration projects all at once
 echo "Testing experimental project."
 buildProject "$experimentalTestProject"; or exit 1;
 executeTests \
@@ -25,6 +28,14 @@ executeTests \
     "$netCoreApp" \
     "$diTestProject"
 success "DI tests succeeded."
+
+echo "Testing integration project."
+buildProject "$integrationTestProject"; or exit 1;
+executeTests \
+    "ShopifySharp.Integration.Tests" \
+    "$netNine" \
+    "$integrationTestProject"
+success "Integration tests succeeded."
 
 # Build the test project once, then let all individual test runs skip build.
 echo "Building test project."
