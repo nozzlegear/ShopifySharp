@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using ShopifySharp.Lists;
 using System.Threading.Tasks;
@@ -5,6 +6,7 @@ using System.Threading;
 
 namespace ShopifySharp;
 
+[Obsolete("Shopify has deprecated the REST API for product images. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product images via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductImageService : IShopifyService
 {
     /// <summary>
