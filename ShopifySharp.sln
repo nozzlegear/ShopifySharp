@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{1D5F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopifySharp.Extensions.DependencyInjection.Tests", "ShopifySharp.Extensions.DependencyInjection.Tests\ShopifySharp.Extensions.DependencyInjection.Tests.csproj", "{08A8C056-E0E6-4685-BE40-134C6647A01A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopifySharp.Tests.Integration", "ShopifySharp.Tests.Integration\ShopifySharp.Tests.Integration.csproj", "{C549D1FC-C4F4-4974-BFD9-02677B669325}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{08A8C056-E0E6-4685-BE40-134C6647A01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08A8C056-E0E6-4685-BE40-134C6647A01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08A8C056-E0E6-4685-BE40-134C6647A01A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C549D1FC-C4F4-4974-BFD9-02677B669325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C549D1FC-C4F4-4974-BFD9-02677B669325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C549D1FC-C4F4-4974-BFD9-02677B669325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C549D1FC-C4F4-4974-BFD9-02677B669325}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,3 @@
+namespace ShopifySharp.Tests.Integration.Features.Products.Models;
+
+public record DeletedProductOptionsContainer(DeletedProductOptionsProduct Product);

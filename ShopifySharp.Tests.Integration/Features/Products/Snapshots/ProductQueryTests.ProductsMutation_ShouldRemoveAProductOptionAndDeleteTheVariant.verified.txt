@@ -1,0 +1,28 @@
+﻿{
+  Result: {
+    Product: {
+      Id: {Scrubbed},
+      Options: [
+        {
+          Name: some-expected-option-name2,
+          Id: {Scrubbed},
+          Values: [
+            some-expected-option-value3
+          ],
+          OptionValues: [
+            {
+              Id: {Scrubbed},
+              Name: some-expected-option-value3,
+              HasVariants: true
+            },
+            {
+              Id: {Scrubbed},
+              Name: some-expected-option-value4,
+              HasVariants: false
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

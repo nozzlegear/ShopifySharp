@@ -1,0 +1,5 @@
+﻿{
+  id: {Scrubbed},
+  legacyResourceId: {Scrubbed},
+  title: some-expected-new-title
+}
