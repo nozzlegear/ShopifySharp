@@ -769,6 +769,47 @@ public class GraphServicePostAsyncTests
             .Path.Should().BeNull(exn.Which.JsonPropertyName);
     }
 
+    [Fact(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw a ShopifyJsonParseException when the json serializer throws an exception during final deserialization to the desired return type")]
+    public async Task PostAsync_WithReturnTypeParameter_WhenTheJsonSerializerThrowsAnExceptionDuringFinalDeserializationToTheDesiredReturnType_ShouldThrowAShopifyJsonParseException()
+    {
+        // Setup
+        const string responseJson =
+            """
+            {
+                "data": {
+                    "fooOperation": {
+                        "foo": "some-foo",
+                        "bar": "some-bar",
+                        "baz": {
+                            "bat": "some-bat",
+                            "qux": null
+                        }
+                    }
+                }
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var expectedReturnType = typeof(TestGraphOperation);
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
+
+        var expectedDeserializeCall = A.CallTo(() =>
+            _jsonSerializer.DeserializeAsync(A<IJsonElement>._, expectedReturnType, CancellationToken.None));
+        expectedDeserializeCall.Throws<TestException>();
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+
+        // Assert
+        await act.Should().ThrowAsync<ShopifyJsonParseException>()
+                .Where(x => x.RequestId == expectedRequestId)
+               .WithInnerExceptionExactly(typeof(TestException));
+        expectedDeserializeCall.MustHaveHappenedOnceExactly();
+    }
+
     [Theory(DisplayName = "PostAsync(GraphRequest graphRequest, Type returnType) should throw a ShopifyJsonParseException when the data object is null, missing or does not match the expected primitive type")]
     [InlineData(""" "data": null """, JsonValueKind.Null)]
     [InlineData(""" "data": true """, JsonValueKind.True)]
