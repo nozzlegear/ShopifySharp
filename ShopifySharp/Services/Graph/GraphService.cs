@@ -175,6 +175,15 @@ public class GraphService : ShopifyService, IGraphService
             if (graphRequest.UserErrorHandling == GraphRequestUserErrorHandling.Throw)
                 ThrowIfResponseContainsGraphUserErrors(jsonDocument, requestId);
         }
+        catch (Exception exn) when (exn is not ShopifyException)
+        {
+            jsonDocument.Dispose();
+            throw new ShopifyJsonParseException(
+                "An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.",
+                jsonPropertyName: (exn is JsonException jxn ? jxn.Path : null) ?? rootPath,
+                requestId: requestId,
+                innerException: exn);
+        }
         catch
         {
             jsonDocument.Dispose();
