@@ -105,7 +105,6 @@ public class GraphService : ShopifyService, IGraphService
 
         try
         {
-            // TODO: add a test for this
             data = await _jsonSerializer.DeserializeAsync(dataElement, resultType, cancellationToken);
         }
         catch (Exception exn)
