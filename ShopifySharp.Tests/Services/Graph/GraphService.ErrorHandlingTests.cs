@@ -30,6 +30,77 @@ public class GraphServiceErrorHandlingTests
 
     [Theory]
     [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_ShouldThrowRegardlessOfUserErrorHandling(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        // This type of error is returned when something is wrong with the way the query/mutation is structured, e.g.
+        // an enum value was used that doesn't exist. As the name 'userErrors' implies, this kind of error message isn't
+        // intended for end users of Shopify applications, but rather for the developers.
+        const string expectedMessage = "some-expected-message";
+        const string expectedCode = "some-expected-code";
+        const string expectedTypeName = "some-expected-type-name";
+        const string expectedArgumentName = "some-expected-argument-name";
+
+        string[] expectedPath = ["query some-query", "some-expected-path1", "some-expected-path2", "some-expected-path3" ];
+        var expectedPathString = JsonSerializer.Serialize(expectedPath);
+        // var expectedPathString = string.Join("\", \"", expectedPath);
+
+        var responseJson =
+            // lang=json
+            $$"""
+            {
+              "errors" : [ {
+                "message" : "{{expectedMessage}}",
+                "locations" : [ {
+                  "line" : 16,
+                  "column" : 13
+                } ],
+                "path" : {{expectedPathString}},
+                "extensions" : {
+                  "code" : "{{expectedCode}}",
+                  "typeName" : "{{expectedTypeName}}",
+                  "argumentName" : "{{expectedArgumentName}}"
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyGraphErrorsException>()
+            .WithMessage($"{expectedCode}: {expectedMessage}");
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeNull();
+        exn.Which.GraphErrors.Should().SatisfyRespectively(graphError =>
+        {
+            graphError.Message.Should().Be(expectedMessage);
+            graphError.Path.Should().ContainInOrder(expectedPath);
+            graphError.Extensions.Should().BeEquivalentTo(new GraphErrorExtensions
+            {
+                Code = expectedCode,
+                TypeName = expectedTypeName,
+                ArgumentName = expectedArgumentName,
+            });
+        });
+    }
+
+    [Theory]
+    [CombinatorialData]
     public async Task WhenNoUserErrorsAreReturned_ShouldNotThrow(
         GraphRequestUserErrorHandling graphRequestUserErrorHandling
     )
