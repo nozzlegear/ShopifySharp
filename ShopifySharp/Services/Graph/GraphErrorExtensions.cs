@@ -1,3 +1,4 @@
+#nullable enable
 namespace ShopifySharp.Services.Graph;
 
 public record GraphErrorExtensions
@@ -13,4 +14,8 @@ public record GraphErrorExtensions
     public double? MaxCost { get; set; }
 
     public string? Documentation { get; set; }
+
+    public string? TypeName { get; set; }
+
+    public string? ArgumentName { get; set; }
 }
