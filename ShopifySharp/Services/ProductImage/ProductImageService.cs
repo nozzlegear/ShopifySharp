@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -12,6 +13,7 @@ namespace ShopifySharp;
 /// <summary>
 /// A service for manipulating Shopify ProductImages.
 /// </summary>
+[Obsolete("Shopify has deprecated the REST API for product images. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product images via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public class ProductImageService : ShopifyService, IProductImageService
 {
     /// <summary>
