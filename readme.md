@@ -4,7 +4,11 @@
 [![Build status](https://github.com/nozzlegear/ShopifySharp/actions/workflows/build-and-test.yml/badge.svg?branch=master)](https://github.com/nozzlegear/ShopifySharp/actions/workflows/build-and-test.yml)
 [![license](https://img.shields.io/github/license/nozzlegear/shopifysharp.svg?maxAge=3600)](https://github.com/nozzlegear/shopifysharp/blob/master/LICENSE)
 
-ShopifySharp is a .NET library that enables you to authenticate and make API calls to Shopify. It's great for building custom Shopify Apps using C# and .NET. You can quickly and easily get up and running with Shopify using this library.
+ShopifySharp is a .NET library that helps developers build custom Shopify apps using C#, .NET and GraphQL. It also handles the tricky parts of authentication and validation for you, so you can quickly get up and running with Shopify using this library.
+
+### Migrating to GraphQL using ShopifySharp's GraphService
+
+Already using ShopifySharp and wondering how to migrate from Shopify's REST API to their GraphQL API? [Head over to the wiki page](https://github.com/nozzlegear/shopifysharp/wiki/graphql) where we've got a dedicated page using ShopifySharp's GraphService to send queries and mutations to Shopify.
 
 # The Shopify Development Handbook
 
@@ -14,8 +18,9 @@ Building an app or integration for the Shopify store is hard work. There are a t
 
 You're going to be asking yourself all of these questions when you try to build an app for the Shopify store:
 
+-   What on earth is GraphQL and how do I use it with .NET?
 -   How can I charge my users when they use my app?
--   What in the world is an embedded app?
+-   What is an embedded app?
 -   How should I be using Shopify's redirect URLs?
 -   When should I be using a proxy page?
 -   Am I dealing with webhooks the right way?
@@ -65,7 +70,7 @@ Check the [package's documentation](./ShopifySharp.Extensions.DependencyInjectio
 
 # A work-in-progress
 
-I first started working on ShopifySharp because .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps, which didn't exist several years ago. My goal is to eventually reach 100% compatibility with the Shopify REST API, but, with that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
+I first started working on ShopifySharp because .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps, which didn't exist several years ago. My goal is to eventually reach 100% compatibility with the Shopify API, but, with that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
 
 # Documentation
 
