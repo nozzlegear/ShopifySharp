@@ -15,6 +15,7 @@ public class GraphResult<T>
     public T Data { get; set; } = default!;
     #endif
 
+    /// The X-Request-Id header returned by Shopify. This can be used when working with the Shopify support team to identify the failed request.
     public string? RequestId { get; set; }
 }
 
@@ -28,6 +29,7 @@ public class GraphResult : IDisposable
     public IJsonElement Json { get; set; } = null!;
     #endif
 
+    /// The X-Request-Id header returned by Shopify. This can be used when working with the Shopify support team to identify the failed request.
     public string? RequestId { get; set; }
 
     public void Dispose()
