@@ -190,6 +190,7 @@ public abstract class ShopifyService : IShopifyService
     )
     {
         using var baseRequestMessage = PrepareRequestMessage(uri, method, content, headers);
+        var requestInfo = await baseRequestMessage.GetRequestInfo();
         var policyResult = await _ExecutionPolicy.Run(baseRequestMessage, async (requestMessage) =>
         {
             using var response = await _Client.SendAsync(requestMessage, cancellationToken);
@@ -201,10 +202,10 @@ public abstract class ShopifyService : IShopifyService
             #endif
 
             //Check for and throw exception when necessary.
-            CheckResponseExceptions(await baseRequestMessage.GetRequestInfo(), response, rawResult);
+            CheckResponseExceptions(requestInfo, response, rawResult);
 
             return new RequestResult<string>(
-                await baseRequestMessage.GetRequestInfo(),
+                requestInfo,
                 response.Headers,
                 rawResult,
                 rawResult,
