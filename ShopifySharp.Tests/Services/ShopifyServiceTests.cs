@@ -94,7 +94,8 @@ public class ShopifyServiceTests
 
         callToPolicy.MustHaveHappenedOnceExactly();
         callToHandler.MustHaveHappenedOnceExactly();
-        callToDisposeContent.MustHaveHappenedOnceExactly();
+        // Dispose may be called more than once depending on the framework (DNF, .Net, Mono, etc.)
+        callToDisposeContent.MustHaveHappenedOnceOrMore();
     }
 
     #endregion
