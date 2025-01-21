@@ -114,6 +114,20 @@ jobs:
     - name: Checkout branch
       uses: actions/checkout@v4
 
+    - name: Create ShopifySharp.Tests.Integration/appsettings.local.json
+      run: |
+        cat <<EOF > ShopifySharp.Tests.Integration/appsettings.local.json
+        {
+          "ShopifySharp": {
+            "Credentials": {
+              "ShopDomain": "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}",
+              "AccessToken": "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}",
+              "ApiKey": "${{ secrets.SHOPIFYSHARP_API_KEY }}"
+            }
+          }
+        }
+        EOF
+
     - name: Execute unit test script
       run: fish .github/scripts/test.fish
       shell: bash
