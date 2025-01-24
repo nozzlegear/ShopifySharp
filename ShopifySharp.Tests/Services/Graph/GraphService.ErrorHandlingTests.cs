@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FakeItEasy;
@@ -46,7 +47,6 @@ public class GraphServiceErrorHandlingTests
 
         string[] expectedPath = ["query some-query", "some-expected-path1", "some-expected-path2", "some-expected-path3" ];
         var expectedPathString = JsonSerializer.Serialize(expectedPath);
-        // var expectedPathString = string.Join("\", \"", expectedPath);
 
         var responseJson =
             // lang=json
@@ -97,6 +97,79 @@ public class GraphServiceErrorHandlingTests
                 Code = expectedCode,
                 TypeName = expectedTypeName,
                 ArgumentName = expectedArgumentName,
+            });
+        });
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndTheyMatchTheExtensionsHaveAValuePropAndAProblemsProp_ShouldThrowRegardlessOfUserErrorHandling(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string expectedMessage = "some-expected-message";
+        const string expectedProblemPath = "some-expected-path";
+        const string expectedProblemExplanation = "some-expected-explanation";
+        const string expectedProblemMessage = "some-expected-problem-message";
+        const string expectedValueKey = "some-expected-value-key";
+        const string expectedValueValue = "some-expected-value-value";
+
+        const string responseJson =
+            // lang=json
+            $$"""
+            {
+              "{{ErrorsPropertyName}}" : [ {
+                "message" : "{{expectedMessage}}",
+                "locations" : [ {
+                  "line" : 7,
+                  "column" : 2
+                } ],
+                "extensions" : {
+                  "value": {
+                    "{{expectedValueKey}}": "{{expectedValueValue}}"
+                  },
+                  "problems": [{
+                    "path" : [ "{{expectedProblemPath}}" ],
+                    "explanation" : "{{expectedProblemExplanation}}",
+                    "message" : "{{expectedProblemMessage}}"
+                  }]
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyGraphErrorsException>()
+            .WithMessage($"{expectedMessage}");
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeNull();
+        exn.Which.GraphErrors.Should().SatisfyRespectively(graphError =>
+        {
+            graphError.Message.Should().Be(expectedMessage);
+            graphError.Path.Should().BeNullOrEmpty();
+            graphError.Extensions.Should().BeEquivalentTo(new GraphErrorExtensions
+            {
+                Value = new Dictionary<string, object>{ {expectedValueKey, expectedValueValue} },
+                Problems = [new GraphErrorExtensionsProblem
+                {
+                    Explanation = expectedProblemExplanation,
+                    Message = expectedProblemMessage,
+                    Path = [expectedProblemPath]
+                }]
             });
         });
     }
