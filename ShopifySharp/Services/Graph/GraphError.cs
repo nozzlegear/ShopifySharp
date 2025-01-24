@@ -5,11 +5,8 @@ namespace ShopifySharp.Services.Graph;
 
 public record GraphError
 {
-    #if NET8_0_OR_GREATER
-    public required string Message { get; set; }
-    #else
-    public string Message { get; set; } = null!;
-    #endif
+    // TODO: make this nullable
+    public string Message { get; set; } = string.Empty;
 
     public IReadOnlyList<string>? Path { get; set; }
 
