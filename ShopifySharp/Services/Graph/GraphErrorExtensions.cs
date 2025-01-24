@@ -19,4 +19,7 @@ public record GraphErrorExtensions
     public string? TypeName { get; set; }
 
     public string? ArgumentName { get; set; }
+
+    [JsonConverter(typeof(ObjectDictionaryConverter))]
+    public IReadOnlyDictionary<string, object?>? Value { get; set; }
 }
