@@ -22,4 +22,6 @@ public record GraphErrorExtensions
 
     [JsonConverter(typeof(ObjectDictionaryConverter))]
     public IReadOnlyDictionary<string, object?>? Value { get; set; }
+
+    public IReadOnlyList<GraphErrorExtensionsProblem>? Problems { get; set; }
 }
