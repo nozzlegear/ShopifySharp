@@ -3,6 +3,9 @@ name: Build/Test Pipeline
 on:
   push:
     branches: [ master, setup-github-actions ]
+    paths-ignore:
+      - 'docs/wiki'
+      - '.gitmodules'
   workflow_dispatch:
 
 # Cancel any in-progress build/test runs
