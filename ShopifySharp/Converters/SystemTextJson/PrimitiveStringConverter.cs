@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -8,43 +9,68 @@ namespace ShopifySharp.Converters.SystemTextJson;
 /// <summary>
 /// Deserializes primitive values (integers, longs, booleans) as strings.
 /// </summary>
-public class PrimitiveStringConverter : JsonConverter<string>
+public class PrimitiveStringConverter : JsonConverter<string?>
 {
-    // public override bool HandleNull => false;
-
-    public override string Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         return reader.TokenType switch
         {
             JsonTokenType.String => reader.GetString(),
             JsonTokenType.Number => reader.GetInt64().ToString(),
             JsonTokenType.True or JsonTokenType.False => reader.GetBoolean().ToString(),
+            JsonTokenType.Null => null,
             _ => throw new JsonException($"Unexpected token {reader.TokenType} when parsing a string.")
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, string? value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        if (value is null)
+            writer.WriteNullValue();
+        else
+            writer.WriteStringValue(value);
     }
 }
 
 public class PrimitiveStringListConverter<TCollection>(JsonSerializerOptions options) : JsonConverter<TCollection>
     where TCollection : IEnumerable<string>
 {
-    private PrimitiveStringConverter GetPrimitiveStringConverter(JsonSerializerOptions options) =>
-        (PrimitiveStringConverter)options.GetConverter(typeof(PrimitiveStringConverter));
+    private readonly PrimitiveStringConverter _primitiveStringConverter =
+        options.GetConverter(typeof(PrimitiveStringConverter)) as PrimitiveStringConverter ?? new PrimitiveStringConverter();
 
     public override TCollection Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var converter = GetPrimitiveStringConverter(options);
-        throw new NotImplementedException();
+        var list = new List<string>();
+
+        if (reader.TokenType != JsonTokenType.StartArray)
+            throw new JsonException($"Unexpected token {reader.TokenType} when parsing a string list/array/enumerable.");
+
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndArray)
+                break;
+
+            // Use the PrimitiveStringConverter to read the token
+            var value = _primitiveStringConverter.Read(ref reader, typeof(string), options);
+            if (value is not null)
+                list.Add(value);
+        }
+
+        if (typeToConvert == typeof(IEnumerable<string>))
+            return (TCollection)(IEnumerable<string>)list;
+
+        if (typeToConvert == typeof(IReadOnlyList<string>))
+            return (TCollection)(IReadOnlyList<string>)list.AsReadOnly();
+
+        throw new ArgumentException($"Unexpected conversion type \"{typeToConvert.FullName}\".", nameof(typeToConvert));
     }
 
     public override void Write(Utf8JsonWriter writer, TCollection value, JsonSerializerOptions options)
     {
-        var converter = GetPrimitiveStringConverter(options);
-        throw new NotImplementedException();
+        writer.WriteStartArray();
+        foreach (var item in value)
+            _primitiveStringConverter.Write(writer, item, options);
+        writer.WriteEndArray();
     }
 }
 
@@ -57,11 +83,17 @@ public class PrimitiveStringConverterFactory : JsonConverterFactory
                || typeof(IReadOnlyList<string>).IsAssignableFrom(typeToConvert);
     }
 
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        if (typeof(string) == typeToConvert)
+        if (typeToConvert == typeof(string))
             return new PrimitiveStringConverter();
 
-        throw new NotImplementedException();
+        if (typeof(IEnumerable<string>).IsAssignableFrom(typeToConvert))
+            return (JsonConverter)Activator.CreateInstance(
+                typeof(PrimitiveStringListConverter<>).MakeGenericType(typeToConvert),
+                options
+            )!;
+
+        return null;
     }
 }
