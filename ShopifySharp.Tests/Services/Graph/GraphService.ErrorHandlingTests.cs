@@ -254,6 +254,54 @@ public class GraphServiceErrorHandlingTests
 
     [Theory]
     [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndThePathContainsStringsAndIntegersAndUnhandledAdditionalTypes_ShouldThrow(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string responseJson =
+            """
+            {
+              "errors" : [ {
+                "message" : "some-message",
+                "locations" : [ {
+                  "line" : 16,
+                  "column" : 13
+                } ],
+                "path" : ["some", 1, "value", true, false, {"foo": "bar"}, ["some", "value"], null],
+                "extensions" : {
+                  "code" : "some-code",
+                  "typeName" : "some-type-name",
+                  "argumentName" : "some-argument-name"
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyJsonParseException>()
+            .WithMessage("An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.");
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeOfType<JsonException>();
+        exn.Which.JsonPropertyName.Should().Be("$[0].path[1]");
+    }
+
+    [Theory]
+    [CombinatorialData]
     public async Task WhenQueryOrMutationErrorsAreReturned_AndTheArrayIsEmptyWithZeroErrors_ShouldNotThrow(
         GraphRequestUserErrorHandling userErrorHandling)
     {
@@ -372,10 +420,10 @@ public class GraphServiceErrorHandlingTests
         // Assert
         var exn = await act.Should()
             .ThrowExactlyAsync<ShopifyJsonParseException>()
-            .WithMessage("An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.");
+            .WithMessage("Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.");
 
         exn.Which.RequestId.Should().Be(expectedRequestId);
-        exn.Which.InnerException.Should().BeOfType<JsonException>();
+        exn.Which.InnerException.Should().BeAssignableTo<JsonException>();
         exn.Which.JsonPropertyName.Should().NotBeNullOrEmpty();
     }
 
