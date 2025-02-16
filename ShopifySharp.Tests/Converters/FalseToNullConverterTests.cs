@@ -1,19 +1,17 @@
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Converters;
 using ShopifySharp.Infrastructure;
 using Xunit;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Converters;
 
-[Trait("Category", "FalseToNullConverter"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
-public class FalseToNullConverter_Tests
+[Trait("Category", "Converters")]
+[Trait("Category", "NewtonsoftJson")]
+[TestSubject(typeof(FalseToNullConverter))]
+public class FalseToNullConverterTests
 {
-    public FalseToNullConverter_Tests()
-    {
-
-    }
-
     [Fact]
     public void SerializeChargeTest()
     {

@@ -1,12 +1,16 @@
-using Newtonsoft.Json;
-using ShopifySharp.Infrastructure;
 using System;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
+using ShopifySharp.Converters;
+using ShopifySharp.Infrastructure;
 using Xunit;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Converters;
 
-[Trait("Category", "InvalidDateToNullConverter"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
-public class InvalidDateToNullConverter_Tests
+[Trait("Category", "Converters")]
+[Trait("Category", "NewtonsoftJson")]
+[TestSubject(typeof(InvalidDateConverter))]
+public class InvalidDateConverterTests
 {
     [Fact]
     public void SerializeRoundtripValidDates()
