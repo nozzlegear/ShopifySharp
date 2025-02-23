@@ -1,8 +1,9 @@
 using System;
+using FakeItEasy;
+using FluentAssertions;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using ShopifySharp.Converters;
-using ShopifySharp.Infrastructure;
 using Xunit;
 
 namespace ShopifySharp.Tests.Converters;
@@ -12,42 +13,101 @@ namespace ShopifySharp.Tests.Converters;
 [TestSubject(typeof(InvalidDateConverter))]
 public class InvalidDateConverterTests
 {
-    [Fact]
-    public void SerializeRoundtripValidDates()
-    {
-        DateTime validNow = DateTime.Now;
-        DateTimeOffset validNowOffset = DateTimeOffset.Now;
+    private readonly JsonSerializer _serializer = new();
+    private readonly JsonTextReader _jsonReader = A.Fake<JsonTextReader>(x => x.Strict());
 
-        string serializedJson = Serializer.Serialize(new TestObject
-        {
-            DateTime = validNow,
-            DateTimeOffset = validNowOffset
-        });
-        var deserialized = Serializer.Deserialize<TestObject>(serializedJson);
+    private readonly InvalidDateConverter _sut = new();
 
-        Assert.Equal(validNow, deserialized.DateTime);
-        Assert.Equal(validNowOffset, deserialized.DateTimeOffset);
-    }
+    #region ReadJson
 
     [Fact]
-    public void SerializeRoundtripInvalidDates()
+    public void ReadJson_WhenReadingMalformedDate_ShouldReturnNull()
     {
-        string strInvalidISODate = "\"0000-12-31T18:09:24+01:00\"";
-        string serializedJson = JsonConvert.SerializeObject(new TestObject()
-        {
-            DateTime = null,
-            DateTimeOffset = null,
-        }).Replace("null", strInvalidISODate);
+        // Setup
+        const string json = "0000-12-31T18:09:24-05:50";
 
-        var deserialized = Serializer.Deserialize<TestObject>(serializedJson);
+        A.CallTo(() => _jsonReader.Value).Returns(json);
+        A.CallTo(() => _jsonReader.TokenType).Returns(JsonToken.String);
 
-        Assert.Null(deserialized.DateTime);
-        Assert.Null(deserialized.DateTimeOffset);
+        // Act
+        var result = _sut.ReadJson(_jsonReader, typeof(DateTime?), null, _serializer);
+
+        // Assert
+        result.Should().BeNull();
     }
 
-    class TestObject
+    [Fact]
+    public void ReadJson_WhenReadingValidDate_ShouldReturnParsedDate()
     {
-        public DateTime? DateTime { get; set; }
-        public DateTimeOffset? DateTimeOffset { get; set; }
+        // Setup
+        const string json = "2021-05-01T12:00:00Z";
+
+        A.CallTo(() => _jsonReader.Value).Returns(json);
+        A.CallTo(() => _jsonReader.TokenType).Returns(JsonToken.String);
+
+        // Act
+        var result = _sut.ReadJson(_jsonReader, typeof(DateTime?), null, _serializer);
+
+        // Assert
+        result.Should().NotBeNull()
+            .And.BeOfType<DateTime>()
+            // The ISO date "2021-05-01T12:00:00Z" is parsed as UTC.
+            .Which.Should().Be(new DateTime(2021, 5, 1, 12, 0, 0, DateTimeKind.Utc));
     }
+
+    [Fact]
+    public void ReadJson_WhenReadingNull_ShouldReturnNull()
+    {
+        // Setup
+        const string json = "null";
+
+        A.CallTo(() => _jsonReader.Value).Returns(json);
+        A.CallTo(() => _jsonReader.TokenType).Returns(JsonToken.Null);
+
+        // Act
+        var result = _sut.ReadJson(_jsonReader, typeof(DateTime?), null, _serializer);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    #endregion
+
+    #region Deserialization tests using a model
+
+    public class TestModel
+    {
+        [JsonConverter(typeof(InvalidDateConverter))]
+        public DateTime? Date { get; set; }
+    }
+
+    [Fact]
+    public void Deserialization_WhenGivenADateThatIsMalformed_ShouldOutputNull()
+    {
+        // Setup
+        const string json = "{ \"Date\": \"0000-12-31T18:09:24-05:50\" }";
+
+        // Act
+        var model = JsonConvert.DeserializeObject<TestModel>(json);
+
+        // Assert
+        model.Should().NotBeNull();
+        model.Date.Should().BeNull();
+    }
+
+    [Fact]
+    public void Deserialization_WhenGivenAValidDate_ShouldOutputDate()
+    {
+        // Setup
+        const string json = "{ \"Date\": \"2021-05-01T12:00:00Z\" }";
+
+        // Act
+        var model = JsonConvert.DeserializeObject<TestModel>(json);
+
+        // Assert
+        model.Should().NotBeNull();
+        model.Date.Should().Be(new DateTime(2021, 5, 1, 12, 0, 0, DateTimeKind.Utc));
+    }
+
+    #endregion
 }
