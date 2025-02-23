@@ -8,65 +8,33 @@ namespace ShopifySharp.Converters;
 /// </summary>
 public class FalseToNullConverter : JsonConverter
 {
+    public override bool CanConvert(Type objectType)
+    {
+        return (objectType == typeof(string) || objectType == typeof(bool) || objectType == typeof(bool?));
+    }
+
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
     {
-        if(reader.Value?.ToString() == null || reader.Value?.ToString() == "")
-        {
+        if (reader.Value is null || reader.Value?.ToString() == "")
             return false;
-        }
-        else
-        {
-            bool output = false;
 
-            if (bool.TryParse(reader.Value.ToString(), out output))
-            {
-                return output;
-            }
-            else
-            {
-                throw new JsonReaderException($"Cannot convert given JSON value with {nameof(FalseToNullConverter)}.");
-            }
-        }
+        if (reader.Value is not null && bool.TryParse(reader.Value.ToString(), out var output))
+            return output;
+
+        throw new JsonReaderException("Unable to convert JSON value.");
     }
 
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
     {
-        if (value == null)
+        if (value is null)
         {
             writer.WriteNull();
+            return;
         }
-        else
-        {
-            bool boolean = bool.Parse(value.ToString());
 
-            if(boolean == false)
-            {
-                writer.WriteNull();
-            }
-            else
-            {
-                writer.WriteValue(true);
-            }
-        }
-    }
-
-    public override bool CanConvert(Type objectType)
-    {
-        if(objectType == typeof(string))
-        {
-            return true;
-        }
-        else if(objectType == typeof(bool))
-        {
-            return true;
-        }
-        else if(objectType == typeof(Nullable))
-        {
-            return true;
-        }
+        if (parsedBool == false)
+            writer.WriteNull();
         else
-        {
-            return false;
-        }
+            writer.WriteValue(true);
     }
 }
