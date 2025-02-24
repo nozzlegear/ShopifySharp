@@ -32,6 +32,9 @@ public class FalseToNullConverter : JsonConverter
             return;
         }
 
+        if (!bool.TryParse(value.ToString(), out var parsedBool))
+            throw new JsonWriterException("Unable to convert JSON value.");
+
         if (parsedBool == false)
             writer.WriteNull();
         else
