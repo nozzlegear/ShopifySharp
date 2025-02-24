@@ -176,6 +176,212 @@ public class GraphServiceErrorHandlingTests
 
     [Theory]
     [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndTheErrorsPathPropertyContainsBothStringsAndIntegers_ShouldConvertTheIntegersToStringsAndThrow(
+        GraphRequestUserErrorHandling userErrorHandling
+    )
+    {
+        // Setup
+        const string expectedMessage = "some-expected-message";
+        const string expectedProblemExplanation = "some-expected-explanation";
+        const string expectedProblemMessage = "some-expected-problem-message";
+        const string expectedValueKey = "some-expected-value-key";
+        const string expectedValueValue = "some-expected-value-value";
+
+        // This kind of path shows up when the problem occurs in an array, e.g. "foo[0].bar[1]"
+        const string expectedProblemPath1 = "some-expected-path1";
+        const int expectedProblemPath2 = 0;
+        const string expectedProblemPath3 = "some-expected-problem-path3";
+        const int expectedProblemPath4 = 1;
+
+        var responseJson =
+            // lang=json
+            $$"""
+            {
+              "{{ErrorsPropertyName}}" : [ {
+                "message" : "{{expectedMessage}}",
+                "locations" : [ {
+                  "line" : 7,
+                  "column" : 2
+                } ],
+                "path" : [ "{{expectedProblemPath1}}", {{expectedProblemPath2}} ],
+                "extensions" : {
+                  "value": {
+                    "{{expectedValueKey}}": "{{expectedValueValue}}"
+                  },
+                  "problems": [{
+                    "path" : [ "{{expectedProblemPath3}}", {{expectedProblemPath4}} ],
+                    "explanation" : "{{expectedProblemExplanation}}",
+                    "message" : "{{expectedProblemMessage}}"
+                  }]
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyGraphErrorsException>()
+            .WithMessage(expectedMessage);
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeNull();
+        exn.Which.GraphErrors.Should().SatisfyRespectively(graphError =>
+        {
+            graphError.Message.Should().Be(expectedMessage);
+            graphError.Path.Should().BeEquivalentTo([expectedProblemPath1, expectedProblemPath2.ToString()]);
+            graphError.Extensions.Should().BeEquivalentTo(new GraphErrorExtensions
+            {
+                Value = new Dictionary<string, object>{ {expectedValueKey, expectedValueValue} },
+                Problems = [new GraphErrorExtensionsProblem
+                {
+                    Explanation = expectedProblemExplanation,
+                    Message = expectedProblemMessage,
+                    Path = [expectedProblemPath3, expectedProblemPath4.ToString()]
+                }]
+            });
+        });
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndTheExtensionsPathContainsBothStringsAndIntegers_ShouldConvertTheIntegersToStringsAndThrow(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string expectedMessage = "some-expected-message";
+        const string expectedProblemExplanation = "some-expected-explanation";
+        const string expectedProblemMessage = "some-expected-problem-message";
+        const string expectedValueKey = "some-expected-value-key";
+        const string expectedValueValue = "some-expected-value-value";
+
+        // This kind of path shows up when the problem occurs in an array, e.g. "foo[0].bar[1]"
+        const string expectedProblemPath1 = "some-expected-path1";
+        const int expectedProblemPath2 = 0;
+        const string expectedProblemPath3 = "some-expected-problem-path3";
+        const int expectedProblemPath4 = 1;
+
+        var responseJson =
+            // lang=json
+            $$"""
+            {
+              "{{ErrorsPropertyName}}" : [ {
+                "message" : "{{expectedMessage}}",
+                "locations" : [ {
+                  "line" : 7,
+                  "column" : 2
+                } ],
+                "extensions" : {
+                  "value": {
+                    "{{expectedValueKey}}": "{{expectedValueValue}}"
+                  },
+                  "problems": [{
+                    "path" : [ "{{expectedProblemPath1}}", {{expectedProblemPath2}}, "{{expectedProblemPath3}}", {{expectedProblemPath4}} ],
+                    "explanation" : "{{expectedProblemExplanation}}",
+                    "message" : "{{expectedProblemMessage}}"
+                  }]
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyGraphErrorsException>()
+            .WithMessage($"{expectedMessage}");
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeNull();
+        exn.Which.GraphErrors.Should().SatisfyRespectively(graphError =>
+        {
+            graphError.Message.Should().Be(expectedMessage);
+            graphError.Path.Should().BeNullOrEmpty();
+            graphError.Extensions.Should().BeEquivalentTo(new GraphErrorExtensions
+            {
+                Value = new Dictionary<string, object>{ {expectedValueKey, expectedValueValue} },
+                Problems = [new GraphErrorExtensionsProblem
+                {
+                    Explanation = expectedProblemExplanation,
+                    Message = expectedProblemMessage,
+                    Path = [expectedProblemPath1, expectedProblemPath2.ToString(), expectedProblemPath3, expectedProblemPath4.ToString()]
+                }]
+            });
+        });
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task WhenQueryOrMutationErrorsAreReturned_AndThePathContainsStringsAndIntegersAndUnhandledAdditionalTypes_ShouldThrow(
+        GraphRequestUserErrorHandling userErrorHandling)
+    {
+        // Setup
+        const string responseJson =
+            """
+            {
+              "errors" : [ {
+                "message" : "some-message",
+                "locations" : [ {
+                  "line" : 16,
+                  "column" : 13
+                } ],
+                "path" : ["some", 1, "value", true, false, {"foo": "bar"}, ["some", "value"], null],
+                "extensions" : {
+                  "code" : "some-code",
+                  "typeName" : "some-type-name",
+                  "argumentName" : "some-argument-name"
+                }
+              } ]
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var response = Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.PostAsync(new GraphRequest
+        {
+            Query = "some-graph-request-query",
+            UserErrorHandling = userErrorHandling
+        });
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowExactlyAsync<ShopifyJsonParseException>()
+            .WithMessage("An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.");
+
+        exn.Which.RequestId.Should().Be(expectedRequestId);
+        exn.Which.InnerException.Should().BeOfType<JsonException>();
+        exn.Which.JsonPropertyName.Should().Be("$[0].path");
+    }
+
+    [Theory]
+    [CombinatorialData]
     public async Task WhenQueryOrMutationErrorsAreReturned_AndTheArrayIsEmptyWithZeroErrors_ShouldNotThrow(
         GraphRequestUserErrorHandling userErrorHandling)
     {
@@ -260,7 +466,6 @@ public class GraphServiceErrorHandlingTests
     {
         // Setup
         const string responseJson =
-            // lang=json
             """
             {
               "errors" : [ {
@@ -269,7 +474,7 @@ public class GraphServiceErrorHandlingTests
                   "line" : 16,
                   "column" : 13
                 } ],
-                "path" : [[[["some", "malformed", "string", "array"]]]],
+                "path" : some malformed string array, "malformed", "string", "array"]]]],
                 "extensions" : {
                   "code" : "some-code",
                   "typeName" : "some-type-name",
@@ -295,10 +500,10 @@ public class GraphServiceErrorHandlingTests
         // Assert
         var exn = await act.Should()
             .ThrowExactlyAsync<ShopifyJsonParseException>()
-            .WithMessage("An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.");
+            .WithMessage("Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.");
 
         exn.Which.RequestId.Should().Be(expectedRequestId);
-        exn.Which.InnerException.Should().BeOfType<JsonException>();
+        exn.Which.InnerException.Should().BeAssignableTo<JsonException>();
         exn.Which.JsonPropertyName.Should().NotBeNullOrEmpty();
     }
 
