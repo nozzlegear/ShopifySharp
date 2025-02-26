@@ -27,24 +27,24 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
     public override IReadOnlyDictionary<string, object?> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
-            throw new JsonException("Expected StartObject token");
+            throw new JsonException("Expected StartObject token.");
 
         var result = new Dictionary<string, object?>();
 
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
-                return result;
+                break;
 
             if (reader.TokenType != JsonTokenType.PropertyName)
-                throw new JsonException("Expected PropertyName token");
+                throw new JsonException("Expected PropertyName token.");
 
             var propertyName = reader.GetString();
 
             // Always read even if the property name is null, to ensure we advance the reader past the property value for the next loop
             reader.Read();
 
-            if (propertyName is null)
+            if (propertyName is null or "")
                 continue;
 
             object? value = reader.TokenType switch
@@ -61,7 +61,7 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
             result[propertyName] = value;
         }
 
-        throw new JsonException("Expected EndObject token");
+        return result;
     }
 
     public override void Write(Utf8JsonWriter writer, IReadOnlyDictionary<string, object?> value, JsonSerializerOptions options)
