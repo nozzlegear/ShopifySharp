@@ -26,10 +26,10 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
 {
     public override IReadOnlyDictionary<string, object?> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var result = new Dictionary<string, object?>();
-
         if (reader.TokenType != JsonTokenType.StartObject)
             throw new JsonException("Expected StartObject token");
+
+        var result = new Dictionary<string, object?>();
 
         while (reader.Read())
         {
@@ -54,6 +54,7 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
                 JsonTokenType.True => true,
                 JsonTokenType.False => false,
                 JsonTokenType.Null => null,
+                JsonTokenType.StartObject => Read(ref reader, typeToConvert, options),
                 _ => new SystemJsonElement(JsonDocument.ParseValue(ref reader).RootElement.Clone())
             };
 
