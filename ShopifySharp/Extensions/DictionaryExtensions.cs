@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ShopifySharp;
 
@@ -10,5 +11,10 @@ internal static class DictionaryExtensions
         {
             dictionary.Add(kvp.Key, kvp.Value);
         }
+    }
+
+    public static IReadOnlyDictionary<string, T> ToReadOnlyDictionary<T>(this IDictionary<string, T> dictionary)
+    {
+        return new ReadOnlyDictionary<string, T>(dictionary);
     }
 }

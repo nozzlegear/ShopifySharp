@@ -20,7 +20,7 @@ public record GraphErrorExtensions
 
     public string? ArgumentName { get; set; }
 
-    [JsonConverter(typeof(ObjectDictionaryConverter))]
+    [JsonConverter(typeof(GraphErrorExtensionsValueConverter))]
     public IReadOnlyDictionary<string, object?>? Value { get; set; }
 
     public IReadOnlyList<GraphErrorExtensionsProblem>? Problems { get; set; }
