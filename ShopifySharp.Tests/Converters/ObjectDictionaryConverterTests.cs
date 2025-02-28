@@ -231,9 +231,21 @@ public class ObjectDictionaryConverterTests
     #region Write
 
     [Fact]
-    public void Write_ShouldWriteValueToJson()
+    public void Write_ShouldThrow()
     {
-        Assert.Fail("Test not yet implemented");
+        // Setup
+        IReadOnlyDictionary<string, object?> value = new Dictionary<string, object?>() { { "some-key1", "some-value1" } };
+
+        // Setup
+        var act = () =>
+        {
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream);
+            _sut.Write(writer, value, _options);
+        };
+
+        // Assert
+        act.Should().Throw<NotSupportedException>();
     }
 
     #endregion
@@ -291,9 +303,16 @@ public class ObjectDictionaryConverterTests
     }
 
     [Fact]
-    public void Serialize_ShouldSerializeModelToJson()
+    public void Serialize_ShouldThrow()
     {
-        Assert.Fail("Test not yet implemented");
+        // Setup
+        var value = new TestModel { Value = new Dictionary<string, object?>() };
+
+        // Act
+        var act = () => JsonSerializer.Serialize(value, _options);
+
+        // Assert
+        act.Should().Throw<NotSupportedException>();
     }
 
     #endregion
