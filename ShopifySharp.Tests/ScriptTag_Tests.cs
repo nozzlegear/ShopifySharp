@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -83,19 +84,20 @@ public class ScriptTag_Tests : IClassFixture<ScriptTag_Tests_Fixture>
     [Fact]
     public async Task Updates_ScriptTags()
     {
-        string newValue = "all";
+        // Setup
+        var updatedSrc = ScriptTagTestsFixture.Src + "?ms=" + DateTime.UtcNow.Millisecond;
         var created = await Fixture.Create();
-        long id = created.Id.Value;
-
-        created.DisplayScope = newValue;
+        var id = created.Id!.Value;
+        created.Src = updatedSrc;
         created.Id = null;
 
+        // Act
         var updated = await Fixture.Service.UpdateAsync(id, created);
-
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
 
-        Assert.Equal(newValue, updated.DisplayScope);
+        // Assert
+        updated.Src.Should().Be(updatedSrc);
     }
 }
 
