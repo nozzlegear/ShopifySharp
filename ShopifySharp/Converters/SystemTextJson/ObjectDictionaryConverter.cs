@@ -66,6 +66,6 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
 
     public override void Write(Utf8JsonWriter writer, IReadOnlyDictionary<string, object?> value, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }
