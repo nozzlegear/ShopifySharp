@@ -1,0 +1,177 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Xunit;
+using Xunit.Abstractions;
+
+namespace ShopifySharp.Tests;
+
+[Trait("Category", "Asset")]
+public class AssetTests : IClassFixture<AssetTestsFixture>
+{
+    private AssetTestsFixture Fixture { get; }
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public AssetTests(AssetTestsFixture fixture, ITestOutputHelper testOutputHelper)
+    {
+        this.Fixture = fixture;
+        _testOutputHelper = testOutputHelper;
+    }
+
+    [Fact]
+    public async Task Creates_Assets()
+    {
+        string key = "templates/test.liquid";
+        var created = await Fixture.Create(key);
+
+        Assert.NotNull(created);
+        Assert.Equal(key, created.Key);
+        Assert.Equal(Fixture.ThemeId, created.ThemeId);
+
+        // Value is not returned when creating or updating. Must get the asset to check it.
+        var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+
+        Assert.Equal(Fixture.AssetValue, asset.Value);
+    }
+
+    [Fact]
+    public async Task Updates_Assets()
+    {
+        var key = "snippets/update-test.liquid";
+        var newValue = "<h1>Hello, world! I've been updated!</h1>";
+        var created = await Fixture.Create(key);
+        created.Value = newValue;
+
+        await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, created);
+        // In 2024-07, there seems to be a small delay between when an asset is updated and when the new value is available
+        await Task.Delay(TimeSpan.FromSeconds(2));
+
+        // Value is not returned when creating or updating. Must get the asset to check it.
+        var updated = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+
+        Assert.Equal(newValue, updated.Value);
+    }
+
+    [Fact]
+    public async Task Gets_Assets()
+    {
+        string key = Fixture.Created.First().Key;
+        var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+
+        Assert.NotNull(asset);
+        Assert.Equal(asset.Key, key);
+        Assert.Equal(asset.ThemeId, Fixture.ThemeId);
+    }
+
+    [Fact]
+    public async Task Copies_Assets()
+    {
+        string key = "templates/copy-test.liquid";
+        var original = await Fixture.Create("templates/copy-original-test.liquid");
+        var asset = await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, new Asset()
+        {
+            Key = key,
+            SourceKey = original.Key,
+        });
+
+        Assert.NotNull(asset);
+        Assert.Equal(asset.Key, key);
+        Assert.Equal(asset.Value, original.Value);
+        Assert.Equal(asset.ContentType, original.ContentType);
+        Assert.Equal(asset.ThemeId, Fixture.ThemeId);
+    }
+
+    [Fact]
+    public async Task Lists_Assets()
+    {
+        var list = await Fixture.Service.ListAsync(Fixture.ThemeId);
+
+        Assert.True(list.Count() > 0);
+    }
+
+    [Fact]
+    public async Task Deletes_Assets()
+    {
+        bool threw = false;
+        string key = "templates/delete-test.liquid";
+        var created = await Fixture.Create(key, true);
+
+        try
+        {
+            await Fixture.Service.DeleteAsync(Fixture.ThemeId, key);
+        }
+        catch (ShopifyException ex)
+        {
+            _testOutputHelper.WriteLine($"{nameof(Deletes_Assets)} threw exception. {ex.Message}");
+
+            threw = true;
+        }
+
+        Assert.False(threw);
+    }
+}
+
+public class AssetTestsFixture : IAsyncLifetime
+{
+    public AssetService Service { get; } = new AssetService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public ThemeService ThemeService { get; } = new ThemeService(Utils.MyShopifyUrl, Utils.AccessToken);
+
+    public List<Asset> Created { get; } = new List<Asset>();
+
+    public string AssetValue => "<h1>Hello world!</h1>";
+
+    public long ThemeId { get; set; }
+
+    public async Task InitializeAsync()
+    {
+        var policy = new LeakyBucketExecutionPolicy();
+
+        Service.SetExecutionPolicy(policy);
+        ThemeService.SetExecutionPolicy(policy);
+
+        var themes = await ThemeService.ListAsync();
+
+        ThemeId = themes.First().Id.Value;
+    }
+
+    public async Task DisposeAsync()
+    {
+        foreach (var asset in Created)
+        {
+            try
+            {
+                await Service.DeleteAsync(ThemeId, asset.Key);
+            }
+            catch (ShopifyHttpException ex)
+            {
+                if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                {
+                    Console.WriteLine($"Failed to delete created Asset with key {asset.Key}. {ex.Message}");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Convenience function for running tests. Creates the object and automatically adds it to the queue for deleting after tests finish.
+    /// </summary>
+    public async Task<Asset> Create(string key, bool skipAddToCreatedList = false)
+    {
+        var asset = await Service.CreateOrUpdateAsync(ThemeId, new Asset()
+        {
+            ContentType = "text/x-liquid",
+            Value = AssetValue,
+            Key = key
+        });
+
+        if (!skipAddToCreatedList)
+        {
+            Created.Add(asset);
+        }
+
+        return asset;
+    }
+}

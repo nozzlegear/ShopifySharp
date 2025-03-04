@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 using ShopifySharp.Converters.SystemTextJson;
 using Xunit;
 
