@@ -224,7 +224,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             code,
         });
 
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient(nameof(ShopifyOauthUtility));
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
         using var response = await client.SendAsync(request, CancellationToken.None);
         var rawDataString = await response.Content.ReadAsStringAsync();
@@ -301,7 +301,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             access_token = existingStoreAccessToken
         });
 
-        var client = _httpClientFactory.CreateClient();
+        var client = _httpClientFactory.CreateClient(nameof(ShopifyOauthUtility));
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
         using var response = await client.SendAsync(request);
         var rawDataString = await response.Content.ReadAsStringAsync();
