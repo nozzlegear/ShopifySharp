@@ -40,6 +40,17 @@ public static class Serializer
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
+    internal static readonly JsonSerializerOptions RestSerializerOptions = new()
+    {
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        Converters =
+        {
+            new JsonStringEnumConverter()
+        },
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
     public static string Serialize(object data) => JsonConvert.SerializeObject(data, CreateNewtonsoftSettings());
 
     public static T Deserialize<T>(string json, string rootElementPath = null, DateParseHandling? dateParseHandlingOverride = null)
