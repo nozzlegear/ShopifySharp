@@ -32,5 +32,8 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     /// Indicates whether the authorization result was obtained using Shopify's
     /// "online access" (per-user) OAuth flow.
     /// </summary>
+    #if NET6_0_OR_GREATER
+    [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(OnlineAccess))]
+    #endif
     public bool IsOnlineAccess => OnlineAccess != null;
 }
