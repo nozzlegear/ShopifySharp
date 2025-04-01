@@ -232,7 +232,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         ShopifyService.CheckResponseExceptions(await request.GetRequestInfo(), response, rawDataString);
 
         var json = JToken.Parse(rawDataString);
-        var scopes = json.Value<string>(ScopePropertyName)?.Split(',');
+        var scopes = json.Value<string>(ScopePropertyName)?.Trim().Split(',');
         var accessToken = json.Value<string>(AccessTokenPropertyName);
 
         if (string.IsNullOrEmpty(accessToken))
@@ -263,7 +263,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             };
         }
 
-        return new AuthorizationResult(accessToken!, scopes)
+        return new AuthorizationResult(accessToken!, scopes?.Where(str => !string.IsNullOrWhiteSpace(str)).ToArray())
         {
             OnlineAccess = onlineAccessInfo
         };
