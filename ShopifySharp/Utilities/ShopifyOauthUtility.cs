@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using ShopifySharp.Entities;
 using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 namespace ShopifySharp.Utilities;
 
@@ -115,11 +116,13 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IShopifyDomainUtility _domainUtility;
+    private readonly IJsonSerializer _jsonSerializer;
 
     public ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null)
     {
         _httpClientFactory = new InternalHttpClientFactory();
         _domainUtility = domainUtility ?? new ShopifyDomainUtility();
+        _jsonSerializer = new SystemJsonSerializer(Serializer.RestSerializerOptions);
     }
 
     internal ShopifyOauthUtility(IServiceProvider serviceProvider)
@@ -128,6 +131,8 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             serviceProvider, () => new InternalHttpClientFactory());
         _domainUtility = InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(
             serviceProvider, () => new ShopifyDomainUtility());
+        _jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
+            serviceProvider, () => new SystemJsonSerializer(Serializer.RestSerializerOptions));
     }
 
     /// <inheritdoc />
@@ -217,13 +222,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         {
             Path = "admin/oauth/access_token"
         };
-        var content = new JsonContent(new
-        {
-            client_id = clientId,
-            client_secret = clientSecret,
-            code,
-        });
-
+        var content = new JsonContent(new { client_id = clientId, client_secret = clientSecret, code });
         var client = _httpClientFactory.CreateClient(nameof(ShopifyOauthUtility));
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
         using var response = await client.SendAsync(request, CancellationToken.None);
@@ -231,42 +230,85 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 
         ShopifyService.CheckResponseExceptions(await request.GetRequestInfo(), response, rawDataString);
 
-        var json = JToken.Parse(rawDataString);
-        var scopes = json.Value<string>(ScopePropertyName)?.Trim().Split(',');
-        var accessToken = json.Value<string>(AccessTokenPropertyName);
-
-        if (string.IsNullOrEmpty(accessToken))
-            throw new ShopifyJsonParseException(
-                $"The JSON response from Shopify does not contain a valid '{AccessTokenPropertyName}' property.",
-                AccessTokenPropertyName
-            );
+        var json = _jsonSerializer.Parse(rawDataString);
+        var accessToken = await ReadAccessTokenAsync(json);
 
         OnlineAccessInfo? onlineAccessInfo = null;
 
-        var user = json.Value<JToken>(AssociatedUserPropertyName);
-
-        if (user is { HasValues: true })
+        if (json.TryGetProperty(AssociatedUserPropertyName, out var user) && user.ValueType != JsonValueType.Null)
         {
-            var expiresIn = json.Value<JToken>(ExpiresInPropertyName);
-
-            if (expiresIn is null or { HasValues: false })
+            if (user.ValueType != JsonValueType.Object)
                 throw new ShopifyJsonParseException(
-                    "The JSON response from Shopify does not contain a valid 'expires_in' property. The property was null or missing.",
-                    ExpiresInPropertyName
+                    $"The JSON response from Shopify does not contain a valid '{AssociatedUserPropertyName}' property. The property type was {user.ValueType}, which is invalid.",
+                    AssociatedUserPropertyName
                 );
+
+            var expiresInElem = GetRequiredProperty(json, ExpiresInPropertyName, JsonValueType.Number);
+            var expiresInSec = await _jsonSerializer.DeserializeAsync<int>(expiresInElem);
+            var userScopes = await ReadScopesToArrayAsync(json, AssociatedUserScopePropertyName);
+            var associatedUser = await _jsonSerializer.DeserializeAsync<AssociatedUser>(user);
 
             onlineAccessInfo = new OnlineAccessInfo
             {
-                ExpiresIn = TimeSpan.FromSeconds(expiresIn.Value<int>()),
-                AssociatedUserScopes = json.Value<string>(AssociatedUserScopePropertyName)?.Split(',') ?? [],
-                AssociatedUser = user.Value<AssociatedUser>()!,
+                ExpiresIn = TimeSpan.FromSeconds(expiresInSec),
+                AssociatedUserScopes = userScopes,
+                AssociatedUser = associatedUser!
             };
         }
 
-        return new AuthorizationResult(accessToken!, scopes?.Where(str => !string.IsNullOrWhiteSpace(str)).ToArray())
+        var scopes = await ReadScopesToArrayAsync(json, ScopePropertyName);
+        return new AuthorizationResult(accessToken, scopes)
         {
             OnlineAccess = onlineAccessInfo
         };
+    }
+
+    private static IJsonElement GetRequiredProperty(IJsonElement json, string propertyName, JsonValueType expectedType)
+    {
+        if (!json.TryGetProperty(propertyName, out var property) || property.ValueType == JsonValueType.Null)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{propertyName}' property. The property was null or missing.",
+                propertyName
+            );
+        if (property.ValueType != expectedType)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{propertyName}' property. The property type was {property.ValueType}, which is invalid.",
+                propertyName
+            );
+        return property;
+    }
+
+    private async ValueTask<string> ReadAccessTokenAsync(IJsonElement json)
+    {
+        var accessTokenStr = await _jsonSerializer.DeserializeAsync<string>(GetRequiredProperty(json, AccessTokenPropertyName, JsonValueType.String));
+
+        if (accessTokenStr is null || string.IsNullOrWhiteSpace(accessTokenStr))
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{AccessTokenPropertyName}' property. The property was null or empty.",
+                AccessTokenPropertyName
+            );
+
+        return accessTokenStr;
+    }
+
+    private async ValueTask<string[]> ReadScopesToArrayAsync(IJsonElement json, string propertyName)
+    {
+        if (!json.TryGetProperty(propertyName, out var scopesElement) || scopesElement.ValueType == JsonValueType.Null)
+            return [];
+
+        if (scopesElement.ValueType != JsonValueType.String)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{propertyName}' property. The property type was {scopesElement.ValueType}, which is invalid.",
+                propertyName
+            );
+
+        var value = await _jsonSerializer.DeserializeAsync<string>(scopesElement);
+        return value?
+            .Trim()
+            .Split(',')
+            .Select(s => s.Trim())
+            .Where(s => s.Length > 0)
+            .ToArray() ?? [];
     }
 
     #if NET8_0_OR_GREATER
@@ -317,7 +359,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
                 AccessTokenPropertyName
             );
 
-        return new AuthorizationResult(accessToken!, json.Value<string>(ScopePropertyName)?.Split(','));
+        return new AuthorizationResult(accessToken, json.Value<string>(ScopePropertyName)?.Split(','));
     }
 
     #if NET8_0_OR_GREATER
