@@ -257,7 +257,33 @@ public class ShopifyOauthUtilityTests
         await refresh.Should().ThrowAsync<HttpRequestException>();
         await send.Should().NotThrowAsync<ObjectDisposedException>();
     }
-    #endif
+
+    [Fact(DisplayName = "AuthorizeAsync(AuthorizeOptions) should call the base AuthorizeAsync(string, string, string, string) method")]
+    public async Task AuthorizeAsync_WithAuthorizeOptionsParameters_ShouldCallBaseAuthorizeAsyncMethodAndPassOptionsToMethod()
+    {
+        // Setup
+        const string expectedDomain = "authorize-options-domain-test";
+        var authorizeOptions = new AuthorizeOptions
+        {
+            Code = "some-code",
+            ShopDomain = expectedDomain,
+            ClientId = "some-client-id",
+            ClientSecret = "some-client-secret"
+        };
+        //lang=json
+
+        var callToDomainUtil = A.CallTo(() => _shopifyDomainUtility.BuildShopDomainUri(expectedDomain));
+        callToDomainUtil.Throws<TestException>();
+
+        // Act
+        var act = async () => await _sut.AuthorizeAsync(authorizeOptions);
+
+        // Assert
+        await act.Should().ThrowAsync<TestException>();
+        callToDomainUtil.MustHaveHappenedOnceExactly();
+    }
+
+#endif
 
     [Fact]
     public async Task AuthorizeAsync_WhenAnErrorIsReturned_ShouldThrow()
