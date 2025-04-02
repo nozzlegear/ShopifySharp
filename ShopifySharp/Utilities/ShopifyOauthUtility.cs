@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -120,19 +121,27 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 
     public ShopifyOauthUtility(IShopifyDomainUtility? domainUtility = null)
     {
-        _httpClientFactory = new InternalHttpClientFactory();
-        _domainUtility = domainUtility ?? new ShopifyDomainUtility();
-        _jsonSerializer = new SystemJsonSerializer(Serializer.RestSerializerOptions);
+        (_domainUtility, _httpClientFactory, _jsonSerializer) = InitializeDependencies(null, domainUtility);
     }
 
     internal ShopifyOauthUtility(IServiceProvider serviceProvider)
     {
-        _httpClientFactory = InternalServiceResolver.GetServiceOrDefault<IHttpClientFactory>(
+        (_domainUtility, _httpClientFactory, _jsonSerializer) = InitializeDependencies(serviceProvider, null);
+    }
+
+    private static (IShopifyDomainUtility, IHttpClientFactory, IJsonSerializer) InitializeDependencies(IServiceProvider? serviceProvider, IShopifyDomainUtility? shopifyDomainUtility)
+    {
+        var domainUtility = InternalServiceResolver.GetServiceOrDefault(
+            serviceProvider, () => shopifyDomainUtility ?? new ShopifyDomainUtility());
+        var httpClientFactory = InternalServiceResolver.GetServiceOrDefault<IHttpClientFactory>(
             serviceProvider, () => new InternalHttpClientFactory());
-        _domainUtility = InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(
-            serviceProvider, () => new ShopifyDomainUtility());
-        _jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
-            serviceProvider, () => new SystemJsonSerializer(Serializer.RestSerializerOptions));
+        var jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
+            serviceProvider, () => new SystemJsonSerializer(GetJsonSerializerOptions()));
+
+        return (domainUtility, httpClientFactory, jsonSerializer);
+
+        JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(
+            serviceProvider, () => Serializer.RestSerializerOptions);
     }
 
     /// <inheritdoc />
