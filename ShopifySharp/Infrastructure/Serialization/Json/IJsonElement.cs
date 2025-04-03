@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 
 namespace ShopifySharp.Infrastructure.Serialization.Json;
@@ -19,4 +20,12 @@ public interface IJsonElement : IDisposable
     int GetArrayLength();
 
     int GetPropertyCount();
+
+    bool ValueEquals(string? text);
+
+    bool ValueEquals(ReadOnlySpan<byte> utf8Text);
+
+    bool ValueEquals(ReadOnlySpan<char> text);
+
+    bool ValueIsNullOrWhiteSpaceString();
 }

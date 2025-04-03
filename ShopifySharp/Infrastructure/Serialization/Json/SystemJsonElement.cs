@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Text.Json;
 
 namespace ShopifySharp.Infrastructure.Serialization.Json;
@@ -46,6 +47,21 @@ internal class SystemJsonElement(JsonElement element, JsonDocument? document = n
     public int GetArrayLength() => element.GetArrayLength();
 
     public int GetPropertyCount() => element.GetPropertyCount();
+
+    public bool ValueEquals(string? text) => element.ValueEquals(text);
+
+    public bool ValueEquals(ReadOnlySpan<byte> utf8Text) => element.ValueEquals(utf8Text);
+
+    public bool ValueEquals(ReadOnlySpan<char> text) => element.ValueEquals(text);
+
+    public bool ValueIsNullOrWhiteSpaceString()
+    {
+        if (ValueType == JsonValueType.Null)
+            return true;
+        if (ValueType != JsonValueType.String)
+            return false;
+        return ValueEquals(ReadOnlySpan<byte>.Empty) || string.IsNullOrWhiteSpace(element.GetString());
+    }
 
     public void Dispose()
     {
