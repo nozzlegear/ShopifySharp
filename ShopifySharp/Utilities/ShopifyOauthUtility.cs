@@ -218,6 +218,17 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         return builder.Uri;
     }
 
+    #if NET8_0_OR_GREATER
+    /// <inheritdoc />
+    public Task<AuthorizationResult> AuthorizeAsync(AuthorizeOptions options) =>
+        AuthorizeAsync(
+            options.Code,
+            options.ShopDomain,
+            options.ClientId,
+            options.ClientSecret
+        );
+    #endif
+
     /// <inheritdoc />
     public async Task<AuthorizationResult> AuthorizeAsync(
         string code,
@@ -230,20 +241,26 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         {
             Path = "admin/oauth/access_token"
         };
-        var content = new JsonContent(new { client_id = clientId, client_secret = clientSecret, code });
-        var client = _httpClientFactory.CreateClient(nameof(ShopifyOauthUtility));
+        using var content = new JsonContent(new { client_id = clientId, client_secret = clientSecret, code });
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
-        using var response = await client.SendAsync(request, CancellationToken.None);
-        var rawDataString = await response.Content.ReadAsStringAsync();
 
-        ShopifyService.CheckResponseExceptions(await request.GetRequestInfo(), response, rawDataString);
+        return await SendRequestAndParseAuthorizationResultAsync(request);
+    }
 
-        var json = _jsonSerializer.Parse(rawDataString);
-        var accessToken = await ReadAccessTokenAsync(json);
+    private async Task<AuthorizationResult> SendRequestAndParseAuthorizationResultAsync(CloneableRequestMessage requestMessage)
+    {
+        var client = _httpClientFactory.CreateClient(nameof(ShopifyOauthUtility));
+        using var response = await client.SendAsync(requestMessage, CancellationToken.None);
+        var json = await response.Content.ReadAsStringAsync();
+
+        ShopifyService.CheckResponseExceptions(await requestMessage.GetRequestInfo(), response, json);
+
+        var jsonEl = _jsonSerializer.Parse(json);
+        var accessToken = await ReadAccessTokenAsync(jsonEl);
 
         OnlineAccessInfo? onlineAccessInfo = null;
 
-        if (json.TryGetProperty(AssociatedUserPropertyName, out var user) && user.ValueType != JsonValueType.Null)
+        if (jsonEl.TryGetProperty(AssociatedUserPropertyName, out var user) && user.ValueType != JsonValueType.Null)
         {
             if (user.ValueType != JsonValueType.Object)
                 throw new ShopifyJsonParseException(
@@ -251,9 +268,9 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
                     AssociatedUserPropertyName
                 );
 
-            var expiresInElem = GetRequiredProperty(json, ExpiresInPropertyName, JsonValueType.Number);
+            var expiresInElem = GetRequiredProperty(jsonEl, ExpiresInPropertyName, JsonValueType.Number);
             var expiresInSec = await _jsonSerializer.DeserializeAsync<int>(expiresInElem);
-            var userScopes = await ReadScopesToArrayAsync(json, AssociatedUserScopePropertyName);
+            var userScopes = await ReadScopesToArrayAsync(jsonEl, AssociatedUserScopePropertyName);
             var associatedUser = await _jsonSerializer.DeserializeAsync<AssociatedUser>(user);
 
             onlineAccessInfo = new OnlineAccessInfo
@@ -264,7 +281,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             };
         }
 
-        var scopes = await ReadScopesToArrayAsync(json, ScopePropertyName);
+        var scopes = await ReadScopesToArrayAsync(jsonEl, ScopePropertyName);
         return new AuthorizationResult(accessToken, scopes)
         {
             OnlineAccess = onlineAccessInfo
@@ -321,12 +338,13 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 
     #if NET8_0_OR_GREATER
     /// <inheritdoc />
-    public Task<AuthorizationResult> AuthorizeAsync(AuthorizeOptions options) =>
-        AuthorizeAsync(
-            options.Code,
+    public Task<AuthorizationResult> RefreshAccessTokenAsync(RefreshAccessTokenOptions options) =>
+        RefreshAccessTokenAsync(
             options.ShopDomain,
             options.ClientId,
-            options.ClientSecret
+            options.ClientSecret,
+            options.RefreshToken,
+            options.ExistingStoreAccessToken
         );
     #endif
 
@@ -343,37 +361,15 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         {
             Path = "admin/oauth/access_token"
         };
-        var content = new JsonContent(new
+        using var content = new JsonContent(new
         {
             client_id = clientId,
             client_secret = clientSecret,
             refresh_token = refreshToken,
             access_token = existingStoreAccessToken
         });
-
-        var client = _httpClientFactory.CreateClient(nameof(ShopifyOauthUtility));
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
-        using var response = await client.SendAsync(request);
-        var rawDataString = await response.Content.ReadAsStringAsync();
 
-        ShopifyService.CheckResponseExceptions(await request.GetRequestInfo(), response, rawDataString);
-
-        var json = _jsonSerializer.Parse(rawDataString);
-        var accessToken = await ReadAccessTokenAsync(json);
-        var scopes = await ReadScopesToArrayAsync(json, ScopePropertyName);
-
-        return new AuthorizationResult(accessToken, scopes);
+        return await SendRequestAndParseAuthorizationResultAsync(request);
     }
-
-    #if NET8_0_OR_GREATER
-    /// <inheritdoc />
-    public Task<AuthorizationResult> RefreshAccessTokenAsync(RefreshAccessTokenOptions options) =>
-        RefreshAccessTokenAsync(
-            options.ShopDomain,
-            options.ClientId,
-            options.ClientSecret,
-            options.RefreshToken,
-            options.ExistingStoreAccessToken
-        );
-    #endif
 }
