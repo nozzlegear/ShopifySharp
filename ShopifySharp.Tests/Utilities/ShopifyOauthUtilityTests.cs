@@ -825,34 +825,61 @@ public class ShopifyOauthUtilityTests
     }
 
     #if NET8_0_OR_GREATER
-    [Fact]
-    public async Task RefreshAccessTokenAsync_ShouldNotDisposeHttpClient()
+    [Theory]
+    [CombinatorialData]
+    public async Task MethodsUsingHttpClientFactory_ShouldNotDisposeHttpClient(bool targetMethodIsAuthorizeAsync)
     {
         // This is testing the fix for the issue described in #1005 and #1006
 
         // Setup
-        const string shopDomain = "some-shop-domain";
-        var factory = new InternalHttpClientFactory();
-        var client = factory.CreateClient("some-name");
+        const int attempts = 3;
+        const string json =
+            //lang=json
+            """
+            {
+              "access_token": "some-access-token",
+              "scope": ""
+            }
+            """;
+
+        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None));
+        // Create a new HttpResponseMessage, as it'll be disposed on each request
+        callToClient.ReturnsLazily(() => Utils.MakeHttpResponseMessage(json));
 
         // Act
-        var refresh = async () => await _sut.RefreshAccessTokenAsync(new RefreshAccessTokenOptions
+        var act = async () =>
         {
-            ClientId = "some-client-id",
-            ClientSecret = "some-client-secret",
-            ExistingStoreAccessToken = "some-existing-store-access-token",
-            RefreshToken = "some-refresh-token",
-            ShopDomain = shopDomain
-        });
-        var send = async () =>
-        {
-            var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, shopDomain));
-            response.EnsureSuccessStatusCode();
+            for (var i = 0; i < attempts; i++)
+            {
+                if (targetMethodIsAuthorizeAsync)
+                {
+                    await _sut.AuthorizeAsync(new AuthorizeOptions
+                    {
+                        Code = "some-code",
+                        ShopDomain = ShopDomain,
+                        ClientId = ClientId,
+                        ClientSecret = "some-client-secret"
+                    });
+                }
+                else
+                {
+                    await _sut.RefreshAccessTokenAsync(new RefreshAccessTokenOptions
+                    {
+                        ClientId = ShopDomain,
+                        ClientSecret = "some-client-secret",
+                        ExistingStoreAccessToken = "some-existing-store-access-token",
+                        RefreshToken = "some-refresh-token",
+                        ShopDomain = ShopDomain
+                    });
+                }
+            }
         };
 
         // Assert
-        await refresh.Should().ThrowAsync<HttpRequestException>();
-        await send.Should().NotThrowAsync<ObjectDisposedException>();
+        await act.Should().NotThrowAsync();
+
+        callToClient.MustHaveHappened(3, Times.Exactly);
+        A.CallTo(() => _httpClient.Dispose()).MustNotHaveHappened();
     }
     #endif
 
@@ -1025,8 +1052,13 @@ public class ShopifyOauthUtilityTests
 
     #endregion
 
-    public class FakeHttpClient : HttpClient
+    public class FakeHttpClient : HttpClient, IDisposable
     {
+        public new virtual void Dispose()
+        {
+            base.Dispose();
+        }
+
         public override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException("This method should be mocked.");
