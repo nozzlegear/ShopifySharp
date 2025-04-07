@@ -138,7 +138,6 @@ public class ShopifyOauthUtilityTests
             result.Query.Should().NotContain("grant_options[]=");
     }
 
-    #if NET8_0_OR_GREATER
     [Theory]
     [InlineData(null, AuthorizationAccessMode.Offline)]
     [InlineData("some-state", AuthorizationAccessMode.Offline)]
@@ -250,7 +249,6 @@ public class ShopifyOauthUtilityTests
         await act.Should().ThrowAsync<TestException>();
         callToDomainUtil.MustHaveHappenedOnceExactly();
     }
-    #endif
 
     [Fact]
     public async Task AuthorizeAsync_WhenAnErrorIsReturned_ShouldThrow()
@@ -824,7 +822,6 @@ public class ShopifyOauthUtilityTests
             onlineAccess.AssociatedUserScopes.Should().BeEquivalentTo(scopes);
     }
 
-    #if NET8_0_OR_GREATER
     [Theory]
     [CombinatorialData]
     public async Task MethodsUsingHttpClientFactory_ShouldNotDisposeHttpClient(bool targetMethodIsAuthorizeAsync)
@@ -881,7 +878,6 @@ public class ShopifyOauthUtilityTests
         callToClient.MustHaveHappened(3, Times.Exactly);
         A.CallTo(() => _httpClient.Dispose()).MustNotHaveHappened();
     }
-    #endif
 
     #endregion
 
