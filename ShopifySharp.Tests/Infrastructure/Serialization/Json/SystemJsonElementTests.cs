@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -237,6 +238,372 @@ public class SystemJsonElementTests
 
         // Assert
         propertyCount.Should().Be(2);
+    }
+
+    #endregion
+
+    #nullable enable
+
+    #region ValueEquals(string?)
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_StringVariant_WhenTheValuesAreEqual_ShouldReturnTrue(
+        [CombinatorialValues("", " ", "foo")] string jsonValue,
+        [CombinatorialValues("", " ", "foo")] string testValue
+    )
+    {
+        // Setup
+        var jsonStr = $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": {{jsonStr}}
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(testValue);
+
+        // Assert
+        var shouldMatch = jsonValue == testValue;
+        valueEquals.Should().Be(shouldMatch);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_StringVariant_WhenTheJsonValueIsAnEmptyString_BothNullAndEmptyStringsShouldMatch(
+        [CombinatorialValues(null, "")] string? testValue
+    )
+    {
+        // Setup
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": ""
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(testValue);
+
+        // Assert
+        valueEquals.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(null, true)]
+    [InlineData("", false)]
+    public void ValueEquals_StringVariant_WhenTheJsonValueIsNull_OnlyNullValuesShouldMatch(
+        string? testValue,
+        bool shouldMatch
+    )
+    {
+        // Setup
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": null
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(testValue);
+
+        // Assert
+        valueEquals.Should().Be(shouldMatch);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_StringVariant_WhenTheElementIsNotAStringOrNull_ReturnsFalse(
+        [CombinatorialValues("{}", "[]", "123", "[123]", "true", "false")] string? jsonValue,
+        [CombinatorialValues(null, "", "foo")] string? testValue
+    )
+    {
+        // Setup
+        var jsonStr = jsonValue is null ? "null" : $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": {{jsonStr}}
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(testValue);
+
+        // Assert
+        valueEquals.Should().BeFalse();
+    }
+
+    #endregion
+
+    #region ValueEquals(ReadOnlySpan<byte>)
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_ReadOnlySpanBytesVariant_WhenTheValuesAreEqual_ShouldReturnTrue(
+        [CombinatorialValues("", " ", "foo")] string jsonValue,
+        [CombinatorialValues("", " ", "foo")] string testValue
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(testValue));
+        var jsonStr = $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": {{jsonStr}}
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        var shouldMatch = jsonValue == testValue;
+        valueEquals.Should().Be(shouldMatch);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_ReadOnlySpanBytesVariant_WhenTheJsonValueIsAnEmptyString_BothNullAndEmptyStringsShouldMatch(
+        [CombinatorialValues(null, "")] string? testValue
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<byte>(testValue is null ? null : Encoding.UTF8.GetBytes(testValue));
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": ""
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        valueEquals.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(null, true)]
+    [InlineData("", false)]
+    public void ValueEquals_ReadOnlySpanBytesVariant_WhenTheJsonValueIsNull_OnlyNullValuesShouldMatch(
+        string? testValue,
+        bool shouldMatch
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<byte>(testValue is null ? null : Encoding.UTF8.GetBytes(testValue));
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": null
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        valueEquals.Should().Be(shouldMatch);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_ReadOnlySpanBytesVariant_WhenTheElementIsNotAStringOrNull_ReturnsFalse(
+        [CombinatorialValues("{}", "[]", "123", "[123]", "true", "false")] string? jsonValue,
+        [CombinatorialValues(null, "", "foo")] string? testValue
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<byte>(testValue is null ? null : Encoding.UTF8.GetBytes(testValue));
+        var jsonStr = jsonValue is null ? "null" : $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": {{jsonStr}}
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        valueEquals.Should().BeFalse();
+    }
+
+    #endregion
+
+    #region ValueEquals(ReadOnlySpan<char>)
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_ReadOnlySpanCharsVariant_WhenTheValuesAreEqual_ShouldReturnTrue(
+        [CombinatorialValues("", " ", "foo")] string jsonValue,
+        [CombinatorialValues("", " ", "foo")] string testValue
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<char>(testValue.ToCharArray());
+        var jsonStr = $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": {{jsonStr}}
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        var shouldMatch = jsonValue == testValue;
+        valueEquals.Should().Be(shouldMatch);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_ReadOnlySpanCharsVariant_WhenTheJsonValueIsAnEmptyString_BothNullAndEmptyStringsShouldMatch(
+        [CombinatorialValues(null, "")] string? testValue
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<char>(testValue?.ToCharArray());
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": ""
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        valueEquals.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(null, true)]
+    [InlineData("", false)]
+    public void ValueEquals_ReadOnlySpanCharsVariant_WhenTheJsonValueIsNull_OnlyNullValuesShouldMatch(
+        string? testValue,
+        bool shouldMatch
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<char>(testValue?.ToCharArray());
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": null
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        valueEquals.Should().Be(shouldMatch);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public void ValueEquals_ReadOnlySpanCharsVariant_WhenTheElementIsNotAStringOrNull_ReturnsFalse(
+        [CombinatorialValues("{}", "[]", "123", "[123]", "true", "false")] string? jsonValue,
+        [CombinatorialValues(null, "", "foo")] string? testValue
+    )
+    {
+        // Setup
+        var span = new ReadOnlySpan<char>(testValue?.ToCharArray());
+        var jsonStr = jsonValue is null ? "null" : $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+    $$"""
+        {
+          "foo": {{jsonStr}}
+        }
+        """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueEquals(span);
+
+        // Assert
+        valueEquals.Should().BeFalse();
+    }
+
+    #endregion
+
+    #region ValueIsNullOrWhiteSpaceString()
+
+    [Theory]
+    [InlineData(null, true)]
+    [InlineData("", true)]
+    [InlineData(" ", true)]
+    [InlineData("    ", true)]
+    [InlineData("foo", false)]
+    public void ValueIsNullOrWhiteSpaceString_ReturnsExpectedValue(
+        string? jsonValue,
+        bool expectNullOrWhiteSpace
+    )
+    {
+        // Setup
+        var jsonStr = jsonValue is null ? "null" : $"\"{jsonValue}\"";
+        var doc = JsonDocument.Parse(
+        $$"""
+          {
+            "foo": {{jsonStr}}
+          }
+          """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueIsNullOrWhiteSpaceString();
+
+        // Assert
+        valueEquals.Should().Be(expectNullOrWhiteSpace, "the result should be {0}", expectNullOrWhiteSpace);
+    }
+
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("[]")]
+    [InlineData("123")]
+    [InlineData("[1, 2, 3]")]
+    [InlineData("true")]
+    [InlineData("false")]
+    public void ValueIsNullOrWhiteSpaceString_WhenTheElementIsNotAStringOrNull_ReturnsFalse(
+        string? jsonValue
+    )
+    {
+        // Setup
+        var doc = JsonDocument.Parse(
+        $$"""
+          {
+            "foo": {{jsonValue}}
+          }
+          """);
+        var node = new SystemJsonElement(doc).GetProperty("foo");
+
+        // Act
+        var valueEquals = node.ValueIsNullOrWhiteSpaceString();
+
+        // Assert
+        valueEquals.Should().BeFalse("non-null, non-string properties should return false");
     }
 
     #endregion
