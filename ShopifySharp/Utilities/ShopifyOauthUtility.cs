@@ -71,13 +71,11 @@ public interface IShopifyOauthUtility
         string clientSecret
     );
 
-    #if NET8_0_OR_GREATER
     /// <summary>
     /// Authorizes an application installation, generating an access token for the given shop.
     /// </summary>
     /// <param name="options">Options for performing the authorization.</param>
     Task<AuthorizationResult> AuthorizeAsync(AuthorizeOptions options);
-    #endif
 
     /// <summary>
     /// Refreshes an existing store access token using the app's client secret and a refresh token
@@ -96,14 +94,12 @@ public interface IShopifyOauthUtility
         string existingStoreAccessToken
     );
 
-    #if NET8_0_OR_GREATER
     /// <summary>
     /// Refreshes an existing store access token using the app's client secret and a refresh token
     /// For more info on rotating tokens, see https://shopify.dev/apps/auth/oauth/rotate-revoke-client-credentials
     /// </summary>
     /// <param name="options">Options for refreshing the access token.</param>
     Task<AuthorizationResult> RefreshAccessTokenAsync(RefreshAccessTokenOptions options);
-    #endif
 }
 
 public class ShopifyOauthUtility: IShopifyOauthUtility
@@ -218,7 +214,6 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         return builder.Uri;
     }
 
-    #if NET8_0_OR_GREATER
     /// <inheritdoc />
     public Task<AuthorizationResult> AuthorizeAsync(AuthorizeOptions options) =>
         AuthorizeAsync(
@@ -227,7 +222,6 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             options.ClientId,
             options.ClientSecret
         );
-    #endif
 
     /// <inheritdoc />
     public async Task<AuthorizationResult> AuthorizeAsync(
@@ -336,7 +330,6 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             .ToArray() ?? [];
     }
 
-    #if NET8_0_OR_GREATER
     /// <inheritdoc />
     public Task<AuthorizationResult> RefreshAccessTokenAsync(RefreshAccessTokenOptions options) =>
         RefreshAccessTokenAsync(
@@ -346,7 +339,6 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             options.RefreshToken,
             options.ExistingStoreAccessToken
         );
-    #endif
 
     /// <inheritdoc />
     public async Task<AuthorizationResult> RefreshAccessTokenAsync(
