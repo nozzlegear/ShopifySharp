@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using ShopifySharp.Entities;
 using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
@@ -359,16 +358,11 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 
         ShopifyService.CheckResponseExceptions(await request.GetRequestInfo(), response, rawDataString);
 
-        var json = JToken.Parse(rawDataString);
-        var accessToken = json.Value<string>("access_token");
+        var json = _jsonSerializer.Parse(rawDataString);
+        var accessToken = await ReadAccessTokenAsync(json);
+        var scopes = await ReadScopesToArrayAsync(json, ScopePropertyName);
 
-        if (string.IsNullOrEmpty(accessToken))
-            throw new ShopifyJsonParseException(
-                $"The JSON response from Shopify does not contain a valid '{AccessTokenPropertyName}' property.",
-                AccessTokenPropertyName
-            );
-
-        return new AuthorizationResult(accessToken, json.Value<string>(ScopePropertyName)?.Split(','));
+        return new AuthorizationResult(accessToken, scopes);
     }
 
     #if NET8_0_OR_GREATER
