@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using FakeItEasy;
 using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 
 namespace ShopifySharp.Tests;
@@ -93,6 +95,16 @@ public static class Utils
             A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new LeakyBucketExecutionPolicy())),
             A.Fake<IRequestExecutionPolicy>(x => x.Wrapping(new ExponentialRetryPolicy(ExponentialRetryPolicyOptions.Default())))
         ];
+    }
+
+    public static HttpResponseMessage MakeHttpResponseMessage(string responseJson, Action<HttpResponseMessage>? customize = null)
+    {
+        var response = new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(responseJson, Encoding.UTF8, "application/json")
+        };
+        customize?.Invoke(response);
+        return response;
     }
 
     public static RequestResult<string> MakeRequestResult(string responseJson, Action<TestUtilsRequestResult>? customize = null)
