@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -6,108 +7,111 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using ShopifySharp.Filters;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests;
 
 [Trait("Category", "OrderRisk")]
-public class OrderRiskTests : IClassFixture<OrderRiskTestsFixture>
+public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<OrderRiskTestsFixture>
 {
-    private OrderRiskTestsFixture Fixture { get; }
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public OrderRiskTests(OrderRiskTestsFixture fixture, ITestOutputHelper testOutputHelper)
-    {
-        this.Fixture = fixture;
-        _testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public async Task Lists_Risks()
     {
-        await Fixture.Create(Fixture.OrderId);
-        var list = await Fixture.Service.ListAsync(Fixture.OrderId);
+        // Setup
+        var orderId = await fixture.GetOrderIdAsync();
+        await fixture.Create(orderId);
 
-        Assert.True(list.Items.Count() > 0);
+        // Act
+        var list = await fixture.Service.ListAsync(orderId);
+
+        // Assert
+        list.Items.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Deletes_Risks()
     {
-        var created = await Fixture.Create(Fixture.OrderId, true);
-        bool threw = false;
+        // Setup
+        var orderId = await fixture.GetOrderIdAsync();
+        var created = await fixture.Create(orderId, true);
 
-        try
-        {
-            await Fixture.Service.DeleteAsync(Fixture.OrderId, created.Id.Value);
-        }
-        catch (ShopifyException ex)
-        {
-            _testOutputHelper.WriteLine($"{nameof(Deletes_Risks)} failed. {ex.Message}");
+        // Act
+        var act = async () => await fixture.Service.DeleteAsync(orderId, created.Id!.Value);
 
-            threw = true;
-        }
-
-        Assert.False(threw);
+        // Assert
+        await act.Should().NotThrowAsync("the service should delete order risk with id {0}", created.Id);
     }
 
     [Fact]
     public async Task Gets_Risks()
     {
-        var created = await Fixture.Create(Fixture.OrderId);
-        var risk = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
+        // Setup
+        var orderId = await fixture.GetOrderIdAsync();
+        var created = await fixture.Create(orderId);
 
-        Assert.NotNull(risk);
-        Assert.Equal(Fixture.OrderId, risk.OrderId);
-        Assert.Equal(Fixture.Message, risk.Message);
-        Assert.Equal(Fixture.Score, risk.Score);
-        Assert.Equal(Fixture.Recommendation, risk.Recommendation);
-        Assert.Equal(Fixture.Source, risk.Source);
-        Assert.Equal(Fixture.CauseCancel, risk.CauseCancel);
-        Assert.Equal(Fixture.Display, risk.Display);
+        // Act
+        var risk = await fixture.Service.GetAsync(orderId, created.Id!.Value);
+
+        // Assert
+        risk.Should().NotBeNull();
+        risk.OrderId.Should().Be(orderId);
+        risk.Message.Should().Be(fixture.Message);
+        risk.Score.Should().Be(fixture.Score);
+        risk.Recommendation.Should().Be(fixture.Recommendation);
+        risk.Source.Should().Be(fixture.Source);
+        risk.CauseCancel.Should().Be(fixture.CauseCancel);
+        risk.Display.Should().Be(fixture.Display);
     }
 
     [Fact]
     public async Task Creates_Risks()
     {
-        var created = await Fixture.Create(Fixture.OrderId);
+        // Act
+        var orderId = await fixture.GetOrderIdAsync();
+        var created = await fixture.Create(orderId);
 
-        Assert.NotNull(created);
-        Assert.Equal(Fixture.OrderId, created.OrderId);
-        Assert.Equal(Fixture.Message, created.Message);
-        Assert.Equal(Fixture.Score, created.Score);
-        Assert.Equal(Fixture.Recommendation, created.Recommendation);
-        Assert.Equal(Fixture.Source, created.Source);
-        Assert.Equal(Fixture.CauseCancel, created.CauseCancel);
-        Assert.Equal(Fixture.Display, created.Display);
+        // Assert
+        created.Should().NotBeNull();
+        created.OrderId.Should().Be(orderId);
+        created.Message.Should().Be(fixture.Message);
+        created.Score.Should().Be(fixture.Score);
+        created.Recommendation.Should().Be(fixture.Recommendation);
+        created.Source.Should().Be(fixture.Source);
+        created.CauseCancel.Should().Be(fixture.CauseCancel);
+        created.Display.Should().Be(fixture.Display);
     }
 
     [Fact]
     public async Task Updates_Risks()
     {
-        string message = "An updated risk message.";
-        var created = await Fixture.Create(Fixture.OrderId);
-        long id = created.Id.Value;
+        // Setup
+        const string message = "An updated risk message.";
+        var orderId = await fixture.GetOrderIdAsync();
+        var created = await fixture.Create(orderId);
+        var createdId = created.Id!.Value;
 
         created.Message = message;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(Fixture.OrderId, id, created);
+        // Act
+        var updated = await fixture.Service.UpdateAsync(orderId, createdId, created);
 
         // Reset the id so the Fixture can properly delete this object.
-        created.Id = id;
+        created.Id = createdId;
 
-        Assert.Equal(message, updated.Message);
+        // Assert
+        updated.Message.Should().Be(message);
     }
 }
 
 public class OrderRiskTestsFixture : IAsyncLifetime
 {
-    public OrderRiskService Service { get; } = new OrderRiskService(Utils.MyShopifyUrl, Utils.AccessToken);
+#pragma warning disable CS0618 // Type or member is obsolete
+    public OrderRiskService Service { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
+#pragma warning restore CS0618 // Type or member is obsolete
 
-    public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+    private OrderService OrderService { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public List<OrderRisk> Created { get; } = new List<OrderRisk>();
+    private List<OrderRisk> Created { get; } = [];
 
     public string Message => "This looks risky!";
 
@@ -121,22 +125,16 @@ public class OrderRiskTestsFixture : IAsyncLifetime
 
     public bool Display => true;
 
-    public long OrderId { get; set; }
+    private readonly ConcurrentBag<long> _orderIds = [];
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
         Service.SetExecutionPolicy(policy);
         OrderService.SetExecutionPolicy(policy);
 
-        OrderId = (await OrderService.ListAsync(new OrderListFilter()
-        {
-            Limit = 1
-        })).Items.First().Id.Value;
-
-        // Create a risk for count, list, get, etc. tests.
-        await Create(OrderId);
+        return Task.CompletedTask;
     }
 
     public async Task DisposeAsync()
@@ -145,16 +143,35 @@ public class OrderRiskTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(OrderId, obj.Id.Value);
+                await Service.DeleteAsync(obj.OrderId!.Value, obj.Id!.Value);
             }
-            catch (ShopifyHttpException ex)
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode != HttpStatusCode.NotFound)
             {
-                if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                {
-                    Console.WriteLine($"Failed to delete created OrderRisk with id {obj.Id.Value}. {ex.Message}");
-                }
+                Console.WriteLine($"Failed to delete created OrderRisk with id {obj.Id!.Value}. {ex.Message}");
+            }
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode == HttpStatusCode.NotFound)
+            {
+                // Ignore
             }
         }
+    }
+
+    public async Task<long> GetOrderIdAsync()
+    {
+        if (_orderIds.TryPeek(out var orderId))
+            return orderId;
+
+        var orderList = await OrderService.ListAsync(new OrderListFilter()
+        {
+            Limit = 1
+        });
+        var order = orderList.Items.FirstOrDefault();
+
+        if (order is null)
+            throw new NullReferenceException("Could not list orders for OrderRisk test setup.");
+
+        _orderIds.Add(order.Id!.Value);
+        return order.Id.Value;
     }
 
     /// <summary>
@@ -173,9 +190,7 @@ public class OrderRiskTestsFixture : IAsyncLifetime
         });
 
         if (!skipAddToCreatedList)
-        {
             Created.Add(obj);
-        }
 
         return obj;
     }
