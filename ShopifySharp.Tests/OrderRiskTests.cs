@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using ShopifySharp.Filters;
 using Xunit;
 using Xunit.Abstractions;
@@ -24,6 +25,7 @@ public class OrderRiskTests : IClassFixture<OrderRiskTestsFixture>
     [Fact]
     public async Task Lists_Risks()
     {
+        await Fixture.Create(Fixture.OrderId);
         var list = await Fixture.Service.ListAsync(Fixture.OrderId);
 
         Assert.True(list.Items.Count() > 0);
