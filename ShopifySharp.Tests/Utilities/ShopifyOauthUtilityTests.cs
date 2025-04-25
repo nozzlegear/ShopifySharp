@@ -175,7 +175,7 @@ public class ShopifyOauthUtilityTests
             result.Query.Should().NotContain("state=");
 
         if (authorizationAccessMode == AuthorizationAccessMode.Online)
-            result.Query.Should().Contain("grant_options[]=per_user");
+            result.Query.Should().Contain("grant_options[]=per-user");
         else
             result.Query.Should().NotContain("grant_options[]=");
     }

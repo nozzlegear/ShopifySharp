@@ -195,8 +195,8 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 
         if (options.AuthorizationAccessMode == AuthorizationAccessMode.Online)
         {
-            // To use the online access mode, set the grant_options[] value to per_user
-            qs.Add(("grant_options[]", "per_user"));
+            // To use the online access mode, set the grant_options[] value to per-user
+            qs.Add(("grant_options[]", "per-user"));
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (options.Grants?.Any() == true)
