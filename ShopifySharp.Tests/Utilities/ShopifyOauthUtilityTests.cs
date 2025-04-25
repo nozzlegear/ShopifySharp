@@ -63,79 +63,16 @@ public class ShopifyOauthUtilityTests
 
         // Act
         var utility = container.BuildServiceProvider().GetService<ShopifyOauthUtility>()!;
-        var act = () => utility.BuildAuthorizationUrl([ "some-scope" ], ShopDomain, ClientId, RedirectUrl, "some-state", [ "some-grant" ]);
+        var act = () => utility.BuildAuthorizationUrl(new AuthorizationUrlOptions
+        {
+            Scopes = ["some-scope"],
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            RedirectUrl = RedirectUrl
+        });
 
         // Assert
         act.Should().Throw<TestException>();
-    }
-
-    [Theory]
-    [InlineData(null, null)]
-    [InlineData("some-state", null)]
-    [InlineData(null, new [] {"per-user"})]
-    [InlineData("some-state", new [] { "per-user" })]
-    public void BuildAuthorizationUrl_WhenGivenStringScopes_ReturnsTheUrl(string? state, string[]? grants)
-    {
-        // Setup
-        var scopes = new[] { "some-permission-1", "some-permission-2" };
-
-        // Act
-        var result = _sut.BuildAuthorizationUrl(scopes, ShopDomain, ClientId, RedirectUrl, state, grants);
-
-        // Assert
-        result.Host.Should().Be("example.myshopify.com");
-        result.Port.Should().Be(443);
-        result.Scheme.Should().Be(Uri.UriSchemeHttps);
-        result.Fragment.Should().BeEmpty();
-        result.AbsolutePath.Should().Be("/admin/oauth/authorize");
-        result.Query.Should().Contain($"client_id={ClientId}");
-        result.Query.Should().Contain("scope=" + string.Join(",", scopes));
-        result.Query.Should().Contain($"redirect_uri={RedirectUrl}");
-
-        if (state is not null)
-            result.Query.Should().Contain($"state={state}");
-        else
-            result.Query.Should().NotContain("state=");
-
-        if (grants is not null)
-            result.Query.Should().ContainAll(grants.Select(grant => $"grant_options[]={grant}"));
-        else
-            result.Query.Should().NotContain("grant_options[]=");
-    }
-
-    [Theory]
-    [InlineData(null, null)]
-    [InlineData("some-state", null)]
-    [InlineData(null, new [] {"per-user"})]
-    [InlineData("some-state", new [] { "per-user" })]
-    public void BuildAuthorizationUrl_WhenGivenEnumScopes_ReturnsTheUrl(string? state, string[]? grants)
-    {
-        // Setup
-        string[] expectedEnumStrings = ["read_customers", "write_customers"];
-        AuthorizationScope[] scopes = [ AuthorizationScope.ReadCustomers, AuthorizationScope.WriteCustomers ];
-
-        // Act
-        var result = _sut.BuildAuthorizationUrl(scopes, ShopDomain, ClientId, RedirectUrl, state, grants);
-
-        // Assert
-        result.Host.Should().Be("example.myshopify.com");
-        result.Port.Should().Be(443);
-        result.Scheme.Should().Be(Uri.UriSchemeHttps);
-        result.Fragment.Should().BeEmpty();
-        result.AbsolutePath.Should().Be("/admin/oauth/authorize");
-        result.Query.Should().Contain($"client_id={ClientId}");
-        result.Query.Should().Contain("scope=" + string.Join(",", expectedEnumStrings));
-        result.Query.Should().Contain($"redirect_uri={RedirectUrl}");
-
-        if (state is not null)
-            result.Query.Should().Contain($"state={state}");
-        else
-            result.Query.Should().NotContain("state=");
-
-        if (grants is not null)
-            result.Query.Should().ContainAll(grants.Select(grant => $"grant_options[]={grant}"));
-        else
-            result.Query.Should().NotContain("grant_options[]=");
     }
 
     [Theory]
@@ -224,6 +161,84 @@ public class ShopifyOauthUtilityTests
         act.Should().Throw<ArgumentException>()
             .WithMessage("Invalid AuthorizationUrlOptions. Cannot use the obsolete Grants alongside AuthorizationAccessMode.");
     }
+
+    #region Deprecated BuildAuthorizationUrl methods
+
+    [Theory]
+    [InlineData(null, null)]
+    [InlineData("some-state", null)]
+    [InlineData(null, new [] {"per-user"})]
+    [InlineData("some-state", new [] { "per-user" })]
+    public void BuildAuthorizationUrl_WhenGivenStringScopes_ReturnsTheUrl(string? state, string[]? grants)
+    {
+        // Setup
+        var scopes = new[] { "some-permission-1", "some-permission-2" };
+
+        // Act
+#pragma warning disable CS0618 // Type or member is obsolete
+        var result = _sut.BuildAuthorizationUrl(scopes, ShopDomain, ClientId, RedirectUrl, state, grants);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        // Assert
+        result.Host.Should().Be("example.myshopify.com");
+        result.Port.Should().Be(443);
+        result.Scheme.Should().Be(Uri.UriSchemeHttps);
+        result.Fragment.Should().BeEmpty();
+        result.AbsolutePath.Should().Be("/admin/oauth/authorize");
+        result.Query.Should().Contain($"client_id={ClientId}");
+        result.Query.Should().Contain("scope=" + string.Join(",", scopes));
+        result.Query.Should().Contain($"redirect_uri={RedirectUrl}");
+
+        if (state is not null)
+            result.Query.Should().Contain($"state={state}");
+        else
+            result.Query.Should().NotContain("state=");
+
+        if (grants is not null)
+            result.Query.Should().ContainAll(grants.Select(grant => $"grant_options[]={grant}"));
+        else
+            result.Query.Should().NotContain("grant_options[]=");
+    }
+
+    [Theory]
+    [InlineData(null, null)]
+    [InlineData("some-state", null)]
+    [InlineData(null, new [] {"per-user"})]
+    [InlineData("some-state", new [] { "per-user" })]
+    public void BuildAuthorizationUrl_WhenGivenEnumScopes_ReturnsTheUrl(string? state, string[]? grants)
+    {
+        // Setup
+        string[] expectedEnumStrings = ["read_customers", "write_customers"];
+        AuthorizationScope[] scopes = [ AuthorizationScope.ReadCustomers, AuthorizationScope.WriteCustomers ];
+
+        // Act
+#pragma warning disable CS0618 // Type or member is obsolete
+        var result = _sut.BuildAuthorizationUrl(scopes, ShopDomain, ClientId, RedirectUrl, state, grants);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        // Assert
+        result.Host.Should().Be("example.myshopify.com");
+        result.Port.Should().Be(443);
+        result.Scheme.Should().Be(Uri.UriSchemeHttps);
+        result.Fragment.Should().BeEmpty();
+        result.AbsolutePath.Should().Be("/admin/oauth/authorize");
+        result.Query.Should().Contain($"client_id={ClientId}");
+        result.Query.Should().Contain("scope=" + string.Join(",", expectedEnumStrings));
+        result.Query.Should().Contain($"redirect_uri={RedirectUrl}");
+
+        if (state is not null)
+            result.Query.Should().Contain($"state={state}");
+        else
+            result.Query.Should().NotContain("state=");
+
+        if (grants is not null)
+            result.Query.Should().ContainAll(grants.Select(grant => $"grant_options[]={grant}"));
+        else
+            result.Query.Should().NotContain("grant_options[]=");
+    }
+
+
+    #endregion
 
     [Fact(DisplayName = "AuthorizeAsync(AuthorizeOptions) should call the base AuthorizeAsync(string, string, string, string) method")]
     public async Task AuthorizeAsync_WithAuthorizeOptionsParameters_ShouldCallBaseAuthorizeAsyncMethodAndPassOptionsToMethod()

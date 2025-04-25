@@ -42,6 +42,7 @@ public record AuthorizationUrlOptions
     [Obsolete("Deprecated, please use " + nameof(Enums.AuthorizationAccessMode) + " instead.")]
     public IEnumerable<string>? Grants { get; set; }
 
-    /// Sets the access mode. For an "online access token", set to PerUserAccess.
+    /// Sets the access mode for the access token grant. For an "online access token" (alternately referred to as "per user"
+    /// in Shopify's documentation), set to <see cref="AuthorizationAccessMode.Online"/>.
     public AuthorizationAccessMode AuthorizationAccessMode { get; set; } = AuthorizationAccessMode.Offline;
 }
