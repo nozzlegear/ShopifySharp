@@ -24,6 +24,10 @@ public interface IShopifyOauthUtility
     /// <param name="redirectUrl">URL to redirect the user to after integration.</param>
     /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
     /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion.</param>
+    /// <remarks>
+    /// Use the <see cref="BuildAuthorizationUrl(AuthorizationUrlOptions)"/> overload instead.
+    /// </remarks>
+    [Obsolete("Use " + nameof(BuildAuthorizationUrl) + "(" + nameof(AuthorizationUrlOptions) + ") instead. This method will be removed in a future version of ShopifySharp.")]
     Uri BuildAuthorizationUrl(
         IEnumerable<AuthorizationScope> scopes,
         string shopDomain,
@@ -42,6 +46,7 @@ public interface IShopifyOauthUtility
     /// <param name="redirectUrl">URL to redirect the user to after integration.</param>
     /// <param name="state">An optional, random string value provided by your application which is unique for each authorization request. During the OAuth callback phase, your application should check that this value matches the one you provided to this method.</param>
     /// <param name="grants">Requested grant types, which will change the type of access token granted upon OAuth completion.</param>
+    [Obsolete("Use " + nameof(BuildAuthorizationUrl) + "(" + nameof(AuthorizationUrlOptions) + ") instead. This method will be removed in a future version of ShopifySharp.")]
     Uri BuildAuthorizationUrl(
         IEnumerable<string> scopes,
         string shopDomain,
@@ -140,6 +145,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
     }
 
     /// <inheritdoc />
+    [Obsolete("Use " + nameof(BuildAuthorizationUrl) + "(" + nameof(AuthorizationUrlOptions) + ") instead. This method will be removed in a future version of ShopifySharp.")]
     public Uri BuildAuthorizationUrl(
         IEnumerable<AuthorizationScope> scopes,
         string shopDomain,
@@ -160,6 +166,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
     });
 
     /// <inheritdoc />
+    [Obsolete("Use " + nameof(BuildAuthorizationUrl) + "(" + nameof(AuthorizationUrlOptions) + ") instead. This method will be removed in a future version of ShopifySharp.")]
     public Uri BuildAuthorizationUrl(
         IEnumerable<string> scopes,
         string shopDomain,
