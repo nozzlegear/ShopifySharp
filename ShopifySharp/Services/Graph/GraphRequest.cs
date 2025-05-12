@@ -12,22 +12,6 @@ public class GraphRequest
     private string? _query { get; set; }
     private IDictionary<string, object>? _variables { get; set; }
 
-    [Obsolete("This property is deprecated, use " + nameof(Query) + " instead.")]
-    public string? query
-    {
-        [ExcludeFromCodeCoverage]
-        get => _query;
-        set => _query = value;
-    }
-
-    [Obsolete("This property is deprecated, use " + nameof(Variables) + " instead.")]
-    public object? variables
-    {
-        [ExcludeFromCodeCoverage]
-        get => _variables;
-        set => _variables = value as IDictionary<string, object> ?? value?.ToDictionary();
-    }
-
     #if NET8_0_OR_GREATER
     [StringSyntax("graphql")]
     #endif
