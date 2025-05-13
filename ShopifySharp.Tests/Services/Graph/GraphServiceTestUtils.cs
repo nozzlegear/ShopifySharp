@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using ShopifySharp.Services.Graph;
 
 namespace ShopifySharp.Tests.Services.Graph;
@@ -55,20 +56,16 @@ public static class GraphServiceTestUtils
         }
         """;
 
-    public static readonly object QueryVariables = new
-    {
-        firstOrders = 10,
-        firstLineItems = 20
-    };
-
     public static GraphRequest MakeGraphRequest(Action<GraphRequest>? customize = null)
     {
         var graphRequestForVariables = new GraphRequest
         {
             Query = QueryWithVariables,
-#pragma warning disable CS0618 // Type or member is obsolete
-            variables = QueryVariables,
-#pragma warning restore CS0618 // Type or member is obsolete
+            Variables = new Dictionary<string, object>
+            {
+                {"firstOrders", 10},
+                {"firstLineItems", 20},
+            },
             EstimatedQueryCost = 7,
             UserErrorHandling = GraphRequestUserErrorHandling.Throw,
         };
