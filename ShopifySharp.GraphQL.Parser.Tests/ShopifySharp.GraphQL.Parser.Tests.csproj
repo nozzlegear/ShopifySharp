@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector"/>
+        <PackageReference Include="FakeItEasy"/>
+        <PackageReference Include="FluentAssertions"/>
+        <PackageReference Include="JetBrains.Annotations"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="Verify.Xunit"/>
+        <PackageReference Include="xunit"/>
+        <PackageReference Include="Xunit.Combinatorial"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+        <Using Include="FluentAssertions"/>
+        <Using Include="FakeItEasy"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ShopifySharp.GraphQL.Parser\ShopifySharp.GraphQL.Parser.csproj" />
+    </ItemGroup>
+
+</Project>
