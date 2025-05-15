@@ -23,14 +23,12 @@ public class WriterContext: IASTVisitorContext
 
     public async Task WriteLineAsync(string text)
     {
-        await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(new string('\t', _indentations.Value) + text), CancellationToken);
+        await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(new string(' ', _indentations.Value * 4) + text), CancellationToken);
         await WriteEmptyLineAsync();
     }
 
-    public async Task WriteEmptyLineAsync()
-    {
+    public async Task WriteEmptyLineAsync() =>
         await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(Environment.NewLine), CancellationToken);
-    }
 
     public void Indent() => _indentations.Value += 1;
 
