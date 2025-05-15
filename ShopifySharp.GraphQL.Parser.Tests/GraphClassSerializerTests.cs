@@ -30,16 +30,17 @@ public class GraphClassSerializerTests
             """
             public record AppSubscriptionDiscountValueInput
             {
-            /// <summary>
-            /// The monetary value of a discount.
-            /// </summary>
-            [System.Text.Json.JsonProperty("amount")]
-            public decimal Amount { get; set; }
-            /// <summary>
-            /// The percentage value of a discount.
-            /// </summary>
-            [System.Text.Json.JsonProperty("percentage")]
-            public decimal Percentage { get; set; }
+                /// <summary>
+                /// The monetary value of a discount.
+                /// </summary>
+                [System.Text.Json.JsonProperty("amount")]
+                public decimal Amount { get; set; }
+
+                /// <summary>
+                /// The percentage value of a discount.
+                /// </summary>
+                [System.Text.Json.JsonProperty("percentage")]
+                public decimal Percentage { get; set; }
             }
             """
         );
