@@ -71,6 +71,9 @@ public class ShopifyGraphAstVisitorTests
         text.Should().Be(
             //lang=cs
             """
+            /// <summary>
+            /// The input fields to specify the value discounted every billing interval.
+            /// </summary>
             public record AppSubscriptionDiscountValueInput
             {
                 /// <summary>
@@ -265,7 +268,63 @@ public class ShopifyGraphAstVisitorTests
     [Fact]
     public async Task ShouldParseTypesThatHaveInterfaces()
     {
-        Assert.Fail("test not implemented");
+        // Setup
+        const string graphql =
+            //lang=graphql
+            """"
+            interface Node {
+              """A globally-unique ID."""
+              id: ID!
+            }
+          
+            """A Shopify application."""
+            type App implements Node {
+              """A unique application API identifier."""
+              apiKey: String!
+              
+              """A globally-unique ID."""
+              id: ID!
+            }
+            """";
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, _writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        text.Should().Be(
+            //lang=cs
+            """
+            public interface INode
+            {
+                /// <summary>
+                /// A globally-unique ID.
+                /// </summary>
+                [System.Text.Json.JsonProperty("id")]
+                public string Id { get; set; }
+            }
+            /// <summary>
+            /// A Shopify application.
+            /// </summary>
+            public record App: INode
+            {
+                /// <summary>
+                /// A unique application API identifier.
+                /// </summary>
+                [System.Text.Json.JsonProperty("apiKey")]
+                public string ApiKey { get; set; }
+
+                /// <summary>
+                /// A globally-unique ID.
+                /// </summary>
+                [System.Text.Json.JsonProperty("id")]
+                public string Id { get; set; }
+            }
+
+            """
+        );
     }
 
     [Fact]
@@ -277,11 +336,121 @@ public class ShopifyGraphAstVisitorTests
     [Fact]
     public async Task ShouldParseTypeDefinitionsThatReferenceOtherTypes()
     {
-        Assert.Fail("test not implemented");
+        const string graphql =
+            //lang=graphql
+            """"
+            """
+            The permission required to access a Shopify Admin API or Storefront API resource
+            for a shop. Merchants grant access scopes that are requested by applications.
+            """
+            type AccessScope {
+              """
+              A description of the actions that the access scope allows an app to perform.
+              """
+              description: String!
+              """
+              A readable string that represents the access scope. The string usually follows
+              the format `{action}_{resource}`. `{action}` is `read` or `write`, and
+              `{resource}` is the resource that the action can be performed on. `{action}`
+              and `{resource}` are separated by an underscore. For example, `read_orders` or
+              `write_products`.
+              """
+              handle: String!
+            }
+            
+            """
+            A Shopify application.
+            """
+            type AppInstallation {
+              """A unique application API identifier."""
+              apiKey: String!
+              """
+              The optional scopes requested by the app. Lists the optional access scopes the
+              app has declared in its configuration. These scopes are optionally requested
+              by the app after installation.
+              """
+              optionalAccessScopes: [AccessScope!]!
+              """
+              The access scopes requested by the app. Lists the access scopes the app has
+              declared in its configuration. Merchant must grant approval to these scopes
+              for the app to be installed.
+              """
+              requestedAccessScopes: [AccessScope!]!
+            }
+            """";
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, _writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        text.Should().Be(
+            //lang=cs
+            """
+            /// <summary>
+            /// The permission required to access a Shopify Admin API or Storefront API resource
+            /// for a shop. Merchants grant access scopes that are requested by applications.
+            /// </summary>
+            public record AccessScope
+            {
+                /// <summary>
+                /// A description of the actions that the access scope allows an app to perform.
+                /// </summary>
+                [System.Text.Json.JsonProperty("description")]
+                public string Description { get; set; }
+
+                /// <summary>
+                /// A readable string that represents the access scope. The string usually follows
+                /// the format `{action}_{resource}`. `{action}` is `read` or `write`, and
+                /// `{resource}` is the resource that the action can be performed on. `{action}`
+                /// and `{resource}` are separated by an underscore. For example, `read_orders` or
+                /// `write_products`.
+                /// </summary>
+                [System.Text.Json.JsonProperty("handle")]
+                public string Handle { get; set; }
+            }
+            /// <summary>
+            /// A Shopify application.
+            /// </summary>
+            public record AppInstallation
+            {
+                /// <summary>
+                /// A unique application API identifier.
+                /// </summary>
+                [System.Text.Json.JsonProperty("apiKey")]
+                public string ApiKey { get; set; }
+
+                /// <summary>
+                /// The optional scopes requested by the app. Lists the optional access scopes the
+                /// app has declared in its configuration. These scopes are optionally requested
+                /// by the app after installation.
+                /// </summary>
+                [System.Text.Json.JsonProperty("optionalAccessScopes")]
+                public ICollection<AccessScope> OptionalAccessScopes { get; set; }
+
+                /// <summary>
+                /// The access scopes requested by the app. Lists the access scopes the app has
+                /// declared in its configuration. Merchant must grant approval to these scopes
+                /// for the app to be installed.
+                /// </summary>
+                [System.Text.Json.JsonProperty("requestedAccessScopes")]
+                public ICollection<AccessScope> RequestedAccessScopes { get; set; }
+            }
+
+            """
+        );
     }
 
     [Fact]
     public async Task ShouldParseDefinitionsThatHavePropertiesWithParameters()
+    {
+        Assert.Fail("test not implemented");
+    }
+
+    [Fact]
+    public async Task ShouldParseTheDeprecatedDirectiveAndTransformItIntoAnObsoleteAttribute()
     {
         Assert.Fail("test not implemented");
     }
