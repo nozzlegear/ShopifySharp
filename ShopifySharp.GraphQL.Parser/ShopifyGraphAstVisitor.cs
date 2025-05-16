@@ -45,7 +45,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         graphType switch
         {
             GraphQLNamedType graphQlNamedType => MapScalarNameToTypeName(graphQlNamedType.Name.StringValue) ?? graphQlNamedType.Name.StringValue,
-            GraphQLListType graphQlListType => $"[{MapGraphTypeToTypeName(graphQlListType.Type)}]",
+            GraphQLListType graphQlListType => $"ICollection<{MapGraphTypeToTypeName(graphQlListType.Type)}>",
             GraphQLNonNullType graphQlNonNullType => MapGraphTypeToTypeName(graphQlNonNullType.Type),
             _ => throw new ArgumentOutOfRangeException(nameof(graphType))
         };
@@ -170,8 +170,16 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await VisitAsync(objectTypeDefinition.Comments, context).ConfigureAwait(false);
         await VisitAsync(objectTypeDefinition.Description, context).ConfigureAwait(false);
 
-        await context.WriteLineAsync("public record " + MakePascalCase(objectTypeDefinition.Name));
-        await VisitAsync(objectTypeDefinition.Interfaces, context).ConfigureAwait(false);
+        await context.WriteAsync("public record " + MakePascalCase(objectTypeDefinition.Name));
+
+        if (objectTypeDefinition.Interfaces?.Count > 0)
+        {
+            await VisitAsync(objectTypeDefinition.Interfaces, context).ConfigureAwait(false);
+        }
+        else
+        {
+            await context.WriteEmptyLineAsync();
+        }
 
         await context.WriteLineAsync("{");
         context.Indent();
@@ -222,8 +230,16 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await VisitAsync(interfaceTypeDefinition.Comments, context).ConfigureAwait(false);
         await VisitAsync(interfaceTypeDefinition.Description, context).ConfigureAwait(false);
 
-        await context.WriteLineAsync("public interface I" + MakePascalCase(interfaceTypeDefinition.Name));
-        await VisitAsync(interfaceTypeDefinition.Interfaces, context).ConfigureAwait(false);
+        await context.WriteAsync("public interface I" + MakePascalCase(interfaceTypeDefinition.Name));
+
+        if (interfaceTypeDefinition.Interfaces?.Count > 0)
+        {
+            await VisitAsync(interfaceTypeDefinition.Interfaces, context).ConfigureAwait(false);
+        }
+        else
+        {
+            await context.WriteEmptyLineAsync();
+        }
 
         await context.WriteLineAsync("{");
         context.Indent();
@@ -236,5 +252,25 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 
         context.Outdent();
         await context.WriteLineAsync("}");
+    }
+
+    protected override async ValueTask VisitImplementsInterfacesAsync(GraphQLImplementsInterfaces implementsInterfaces, WriterContext context)
+    {
+        await VisitAsync(implementsInterfaces.Comments, context).ConfigureAwait(false);
+
+        for (var i = 0; i < implementsInterfaces.Items.Count; i++)
+        {
+            var interfaceItem = implementsInterfaces.Items[i];
+            var isFirstItem = i == 0;
+            var isLastItem = i + 1 >= implementsInterfaces.Items.Count;
+
+            if (isFirstItem)
+                await context.WriteAsync(": ");
+
+            await context.WriteAsync("I" + MakePascalCase(interfaceItem.Name));
+
+            if (isLastItem)
+                await context.WriteEmptyLineAsync();
+        }
     }
 }

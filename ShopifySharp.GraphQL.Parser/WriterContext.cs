@@ -21,9 +21,12 @@ public class WriterContext: IASTVisitorContext
         CancellationToken = cancellationToken;
     }
 
+    public async Task WriteAsync(string text) =>
+        await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(new string(' ', _indentations.Value * 4) + text), CancellationToken);
+
     public async Task WriteLineAsync(string text)
     {
-        await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(new string(' ', _indentations.Value * 4) + text), CancellationToken);
+        await WriteAsync(text);
         await WriteEmptyLineAsync();
     }
 
