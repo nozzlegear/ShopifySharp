@@ -70,20 +70,6 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await context.WriteLineAsync("/// </summary>");
     }
 
-    protected override async ValueTask VisitArgumentsDefinitionAsync(GraphQLArgumentsDefinition? argumentsDefinition, WriterContext context)
-    {
-        if (argumentsDefinition is null)
-            return;
-
-        foreach (var argument in argumentsDefinition.Items)
-        {
-            await context.WriteLineAsync("argument name: " + argument.Name);
-            await context.WriteLineAsync("argument desc: " + argument.Description?.Value);
-            await context.WriteLineAsync("argument default value: " + argument.DefaultValue?.Kind);
-            await context.WriteLineAsync("argument is child definition: " + argument.IsChildDefinition);
-        }
-    }
-
     protected override async ValueTask VisitInputObjectTypeDefinitionAsync(GraphQLInputObjectTypeDefinition inputObjectTypeDefinition, WriterContext context)
     {
         await VisitAsync(inputObjectTypeDefinition.Comments, context).ConfigureAwait(false);
@@ -221,7 +207,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await WriteJsonPropertyAttributeAsync(fieldDefinition.Name, context);
         await context.WriteLineAsync($$"""public {{fieldType}} {{MakePascalCase(fieldDefinition.Name)}} { get; set; }""");
 
-        await VisitAsync(fieldDefinition.Arguments, context).ConfigureAwait(false);
+        // await VisitAsync(fieldDefinition.Arguments, context).ConfigureAwait(false);
         await VisitAsync(fieldDefinition.Directives, context).ConfigureAwait(false);
     }
 
