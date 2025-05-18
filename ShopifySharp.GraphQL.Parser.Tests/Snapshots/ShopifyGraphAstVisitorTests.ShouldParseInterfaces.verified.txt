@@ -1,0 +1,17 @@
+﻿/// <summary>
+/// The subject line of a comment event.
+/// </summary>
+public interface ICommentEventSubject
+{
+    /// <summary>
+    /// Whether the timeline subject has a timeline comment. If true, then a timeline comment exists.
+    /// </summary>
+    [System.Text.Json.JsonProperty("hasTimelineComment")]
+    public bool HasTimelineComment { get; set; }
+
+    /// <summary>
+    /// A globally-unique ID.
+    /// </summary>
+    [System.Text.Json.JsonProperty("id")]
+    public string Id { get; set; }
+}

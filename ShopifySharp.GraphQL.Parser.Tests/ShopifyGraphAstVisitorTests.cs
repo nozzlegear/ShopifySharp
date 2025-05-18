@@ -3,16 +3,19 @@ using System.Text;
 
 namespace ShopifySharp.GraphQL.Parser.Tests;
 
-public class ShopifyGraphAstVisitorTests
+public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
 {
-    private readonly Pipe _pipe = new Pipe();
+    private readonly VerifySettings _verifySettings;
+
+    private readonly Pipe _pipe = new();
     private readonly WriterContext _writerContext;
     private readonly CancellationToken _cancellationToken = CancellationToken.None;
 
     private readonly ShopifyGraphAstVisitor _sut;
 
-    public ShopifyGraphAstVisitorTests()
+    public ShopifyGraphAstVisitorTests(VerifyFixture verifyFixture)
     {
+        _verifySettings = verifyFixture.Settings;
         _writerContext = new WriterContext(_pipe.Writer, _cancellationToken);
 
         _sut = new ShopifyGraphAstVisitor();
@@ -68,29 +71,7 @@ public class ShopifyGraphAstVisitorTests
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
-        text.Should().Be(
-            //lang=cs
-            """
-            /// <summary>
-            /// The input fields to specify the value discounted every billing interval.
-            /// </summary>
-            public record AppSubscriptionDiscountValueInput
-            {
-                /// <summary>
-                /// The monetary value of a discount.
-                /// </summary>
-                [System.Text.Json.JsonProperty("amount")]
-                public decimal Amount { get; set; }
-
-                /// <summary>
-                /// The percentage value of a discount.
-                /// </summary>
-                [System.Text.Json.JsonProperty("percentage")]
-                public decimal Percentage { get; set; }
-            }
-
-            """
-        );
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
@@ -120,35 +101,7 @@ public class ShopifyGraphAstVisitorTests
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
-        text.Should().Be(
-            //lang=cs
-            """
-            /// <summary>
-            /// Specifies the abandonment type.
-            /// </summary>
-            public enum AbandonmentAbandonmentType
-            {
-                /// <summary>
-                /// The abandonment event is an abandoned browse.
-                /// </summary>
-                [System.Text.Json.JsonProperty("BROWSE")]
-                BROWSE,
-
-                /// <summary>
-                /// The abandonment event is an abandoned cart.
-                /// </summary>
-                [System.Text.Json.JsonProperty("CART")]
-                CART,
-
-                /// <summary>
-                /// The abandonment event is an abandoned checkout.
-                /// </summary>
-                [System.Text.Json.JsonProperty("CHECKOUT")]
-                CHECKOUT
-            }
-
-            """
-        );
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
@@ -184,34 +137,7 @@ public class ShopifyGraphAstVisitorTests
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
-        text.Should().Be(
-            //lang=cs
-            """
-            /// <summary>
-            /// The permission required to access a Shopify Admin API or Storefront API resource
-            /// for a shop. Merchants grant access scopes that are requested by applications.
-            /// </summary>
-            public record AccessScope
-            {
-                /// <summary>
-                /// A description of the actions that the access scope allows an app to perform.
-                /// </summary>
-                [System.Text.Json.JsonProperty("description")]
-                public string Description { get; set; }
-
-                /// <summary>
-                /// A readable string that represents the access scope. The string usually follows
-                /// the format `{action}_{resource}`. `{action}` is `read` or `write`, and
-                /// `{resource}` is the resource that the action can be performed on. `{action}`
-                /// and `{resource}` are separated by an underscore. For example, `read_orders` or
-                /// `write_products`.
-                /// </summary>
-                [System.Text.Json.JsonProperty("handle")]
-                public string Handle { get; set; }
-            }
-
-            """
-        );
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
@@ -240,29 +166,7 @@ public class ShopifyGraphAstVisitorTests
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
-        text.Should().Be(
-            //lang=cs
-            """
-            /// <summary>
-            /// The subject line of a comment event.
-            /// </summary>
-            public interface ICommentEventSubject
-            {
-                /// <summary>
-                /// Whether the timeline subject has a timeline comment. If true, then a timeline comment exists.
-                /// </summary>
-                [System.Text.Json.JsonProperty("hasTimelineComment")]
-                public bool HasTimelineComment { get; set; }
-
-                /// <summary>
-                /// A globally-unique ID.
-                /// </summary>
-                [System.Text.Json.JsonProperty("id")]
-                public string Id { get; set; }
-            }
-
-            """
-        );
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
@@ -294,37 +198,7 @@ public class ShopifyGraphAstVisitorTests
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
-        text.Should().Be(
-            //lang=cs
-            """
-            public interface INode
-            {
-                /// <summary>
-                /// A globally-unique ID.
-                /// </summary>
-                [System.Text.Json.JsonProperty("id")]
-                public string Id { get; set; }
-            }
-            /// <summary>
-            /// A Shopify application.
-            /// </summary>
-            public record App: INode
-            {
-                /// <summary>
-                /// A unique application API identifier.
-                /// </summary>
-                [System.Text.Json.JsonProperty("apiKey")]
-                public string ApiKey { get; set; }
-
-                /// <summary>
-                /// A globally-unique ID.
-                /// </summary>
-                [System.Text.Json.JsonProperty("id")]
-                public string Id { get; set; }
-            }
-
-            """
-        );
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
@@ -386,67 +260,65 @@ public class ShopifyGraphAstVisitorTests
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
-        text.Should().Be(
-            //lang=cs
-            """
-            /// <summary>
-            /// The permission required to access a Shopify Admin API or Storefront API resource
-            /// for a shop. Merchants grant access scopes that are requested by applications.
-            /// </summary>
-            public record AccessScope
-            {
-                /// <summary>
-                /// A description of the actions that the access scope allows an app to perform.
-                /// </summary>
-                [System.Text.Json.JsonProperty("description")]
-                public string Description { get; set; }
-
-                /// <summary>
-                /// A readable string that represents the access scope. The string usually follows
-                /// the format `{action}_{resource}`. `{action}` is `read` or `write`, and
-                /// `{resource}` is the resource that the action can be performed on. `{action}`
-                /// and `{resource}` are separated by an underscore. For example, `read_orders` or
-                /// `write_products`.
-                /// </summary>
-                [System.Text.Json.JsonProperty("handle")]
-                public string Handle { get; set; }
-            }
-            /// <summary>
-            /// A Shopify application.
-            /// </summary>
-            public record AppInstallation
-            {
-                /// <summary>
-                /// A unique application API identifier.
-                /// </summary>
-                [System.Text.Json.JsonProperty("apiKey")]
-                public string ApiKey { get; set; }
-
-                /// <summary>
-                /// The optional scopes requested by the app. Lists the optional access scopes the
-                /// app has declared in its configuration. These scopes are optionally requested
-                /// by the app after installation.
-                /// </summary>
-                [System.Text.Json.JsonProperty("optionalAccessScopes")]
-                public ICollection<AccessScope> OptionalAccessScopes { get; set; }
-
-                /// <summary>
-                /// The access scopes requested by the app. Lists the access scopes the app has
-                /// declared in its configuration. Merchant must grant approval to these scopes
-                /// for the app to be installed.
-                /// </summary>
-                [System.Text.Json.JsonProperty("requestedAccessScopes")]
-                public ICollection<AccessScope> RequestedAccessScopes { get; set; }
-            }
-
-            """
-        );
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
     public async Task ShouldParseDefinitionsThatHavePropertiesWithParameters()
     {
-        Assert.Fail("test not implemented");
+        // Setup
+        const string graphql =
+            """"
+            """
+            Represents information about the metafields associated to the specified resource.
+            """
+            interface HasMetafields {
+              """
+              A [custom field](https://shopify.dev/docs/apps/build/custom-data),
+              including its `namespace` and `key`, that's associated with a Shopify resource
+              for the purposes of adding and storing additional information.
+              """
+              metafield(
+                """The key for the metafield."""
+                key: String!
+            
+                """
+                The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+                """
+                namespace: String
+              ): Metafield
+            }
+            
+            """
+            An example type that has metafields.
+            """
+            type ExampleTypeWithMetafields implements HasMetafields {
+                
+                """
+                A [custom field](https://shopify.dev/docs/apps/build/custom-data),
+                including its `namespace` and `key`, that's associated with a Shopify resource
+                for the purposes of adding and storing additional information.
+                """
+                metafield(
+                  """The key for the metafield."""
+                  key: String!
+                
+                  """
+                  The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+                  """
+                  namespace: String
+                ): Metafield
+            }
+            """";
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, _writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        await Verify(text, _verifySettings);
     }
 
     [Fact]

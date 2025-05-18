@@ -1,0 +1,23 @@
+﻿/// <summary>
+/// Specifies the abandonment type.
+/// </summary>
+public enum AbandonmentAbandonmentType
+{
+    /// <summary>
+    /// The abandonment event is an abandoned browse.
+    /// </summary>
+    [System.Text.Json.JsonProperty("BROWSE")]
+    BROWSE,
+
+    /// <summary>
+    /// The abandonment event is an abandoned cart.
+    /// </summary>
+    [System.Text.Json.JsonProperty("CART")]
+    CART,
+
+    /// <summary>
+    /// The abandonment event is an abandoned checkout.
+    /// </summary>
+    [System.Text.Json.JsonProperty("CHECKOUT")]
+    CHECKOUT
+}

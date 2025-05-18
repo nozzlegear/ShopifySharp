@@ -1,0 +1,26 @@
+﻿/// <summary>
+/// Represents information about the metafields associated to the specified resource.
+/// </summary>
+public interface IHasMetafields
+{
+    /// <summary>
+    /// A [custom field](https://shopify.dev/docs/apps/build/custom-data),
+    /// including its `namespace` and `key`, that's associated with a Shopify resource
+    /// for the purposes of adding and storing additional information.
+    /// </summary>
+    [System.Text.Json.JsonProperty("metafield")]
+    public Metafield Metafield { get; set; }
+}
+/// <summary>
+/// An example type that has metafields.
+/// </summary>
+public record ExampleTypeWithMetafields: IHasMetafields
+{
+    /// <summary>
+    /// A [custom field](https://shopify.dev/docs/apps/build/custom-data),
+    /// including its `namespace` and `key`, that's associated with a Shopify resource
+    /// for the purposes of adding and storing additional information.
+    /// </summary>
+    [System.Text.Json.JsonProperty("metafield")]
+    public Metafield Metafield { get; set; }
+}

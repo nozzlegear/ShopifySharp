@@ -1,0 +1,25 @@
+﻿public interface INode
+{
+    /// <summary>
+    /// A globally-unique ID.
+    /// </summary>
+    [System.Text.Json.JsonProperty("id")]
+    public string Id { get; set; }
+}
+/// <summary>
+/// A Shopify application.
+/// </summary>
+public record App: INode
+{
+    /// <summary>
+    /// A unique application API identifier.
+    /// </summary>
+    [System.Text.Json.JsonProperty("apiKey")]
+    public string ApiKey { get; set; }
+
+    /// <summary>
+    /// A globally-unique ID.
+    /// </summary>
+    [System.Text.Json.JsonProperty("id")]
+    public string Id { get; set; }
+}
