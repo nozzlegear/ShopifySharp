@@ -1,0 +1,72 @@
+﻿/// <summary>
+/// The information about the price that's charged to a shop every plan period.
+/// The concrete type can be `AppRecurringPricing` for recurring billing or `AppUsagePricing` for usage-based billing.
+/// </summary>
+[(JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[(JsonDerivedType(typeof(AppRecurringPricing), typeDiscriminator: "AppRecurringPricing")]
+[(JsonDerivedType(typeof(AppUsagePricing), typeDiscriminator: "AppUsagePricing")]
+public abstract record AppPricingDetails
+{
+    public AppRecurringPricing? AsAppRecurringPricing() => this as AppRecurringPricing;
+    public AppUsagePricing? AsAppUsagePricing() => this as AppUsagePricing;
+}
+/// <summary>
+/// The pricing information about a subscription app.
+/// The object contains an interval (the frequency at which the shop is billed for an app subscription) and
+/// a price (the amount to be charged to the subscribing shop at each interval).
+/// </summary>
+public record AppRecurringPricing
+{
+    /// <summary>
+    /// The discount applied to the subscription for a given number of billing intervals.
+    /// </summary>
+    [System.Text.Json.JsonProperty("discount")]
+    public AppSubscriptionDiscount Discount { get; set; }
+
+    /// <summary>
+    /// The frequency at which the subscribing shop is billed for an app subscription.
+    /// </summary>
+    [System.Text.Json.JsonProperty("interval")]
+    public AppPricingInterval Interval { get; set; }
+
+    /// <summary>
+    /// The amount and currency to be charged to the subscribing shop every billing interval.
+    /// </summary>
+    [System.Text.Json.JsonProperty("price")]
+    public MoneyV2 Price { get; set; }
+}
+/// <summary>
+/// Defines a usage pricing model for the app subscription.
+/// These charges are variable based on how much the merchant uses the app.
+/// </summary>
+public record AppUsagePricing
+{
+    /// <summary>
+    /// The total usage records for interval.
+    /// </summary>
+    [System.Text.Json.JsonProperty("balanceUsed")]
+    public MoneyV2 BalanceUsed { get; set; }
+
+    /// <summary>
+    /// The capped amount prevents the merchant from being charged for any usage over that amount during a billing period.
+    /// This prevents billing from exceeding a maximum threshold over the duration of the billing period.
+    /// For the merchant to continue using the app after exceeding a capped amount,
+    /// they would need to agree to a new usage charge.
+    /// </summary>
+    [System.Text.Json.JsonProperty("cappedAmount")]
+    public MoneyV2 CappedAmount { get; set; }
+
+    /// <summary>
+    /// The frequency with which the app usage records are billed.
+    /// </summary>
+    [System.Text.Json.JsonProperty("interval")]
+    public AppPricingInterval Interval { get; set; }
+
+    /// <summary>
+    /// The terms and conditions for app usage pricing.
+    /// Must be present in order to create usage charges.
+    /// The terms are presented to the merchant when they approve an app's usage charges.
+    /// </summary>
+    [System.Text.Json.JsonProperty("terms")]
+    public string Terms { get; set; }
+}

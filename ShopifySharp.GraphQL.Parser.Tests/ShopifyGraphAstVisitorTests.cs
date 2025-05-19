@@ -204,7 +204,72 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
     [Fact]
     public async Task ShouldParseUnionTypeDefinition()
     {
-        Assert.Fail("test not implemented");
+        const string graphql =
+            """"
+            """
+            The information about the price that's charged to a shop every plan period.
+            The concrete type can be `AppRecurringPricing` for recurring billing or `AppUsagePricing` for usage-based billing.
+            """
+            union AppPricingDetails = AppRecurringPricing | AppUsagePricing
+            
+            """
+            The pricing information about a subscription app.
+            The object contains an interval (the frequency at which the shop is billed for an app subscription) and
+            a price (the amount to be charged to the subscribing shop at each interval).
+            """
+            type AppRecurringPricing {
+              """
+              The discount applied to the subscription for a given number of billing intervals.
+              """
+              discount: AppSubscriptionDiscount
+            
+              """
+              The frequency at which the subscribing shop is billed for an app subscription.
+              """
+              interval: AppPricingInterval!
+            
+              """
+              The amount and currency to be charged to the subscribing shop every billing interval.
+              """
+              price: MoneyV2!
+            }
+            
+            """
+             Defines a usage pricing model for the app subscription.
+             These charges are variable based on how much the merchant uses the app.
+             """
+             type AppUsagePricing {
+               """The total usage records for interval."""
+               balanceUsed: MoneyV2!
+             
+               """
+               The capped amount prevents the merchant from being charged for any usage over that amount during a billing period.
+               This prevents billing from exceeding a maximum threshold over the duration of the billing period.
+               For the merchant to continue using the app after exceeding a capped amount,
+               they would need to agree to a new usage charge.
+               """
+               cappedAmount: MoneyV2!
+             
+               """The frequency with which the app usage records are billed."""
+               interval: AppPricingInterval!
+             
+               """
+               The terms and conditions for app usage pricing.
+               Must be present in order to create usage charges.
+               The terms are presented to the merchant when they approve an app's usage charges.
+               """
+               terms: String!
+             }
+            """";
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, _writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        await Verify(text, _verifySettings);
     }
 
     [Fact]
@@ -324,6 +389,27 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
     [Fact]
     public async Task ShouldParseTheDeprecatedDirectiveAndTransformItIntoAnObsoleteAttribute()
     {
-        Assert.Fail("test not implemented");
+        const string graphql =
+            //lang=graphql
+            """"
+            interface Foo {
+              """The total number of orders placed for the location."""
+              orderCount: Int! @deprecated(reason: "Use `ordersCount` instead.")
+            }
+            
+            type Bar implements Foo {
+              """The total number of orders placed for the location."""
+              orderCount: Int! @deprecated(reason: "Use `ordersCount` instead.")
+            }
+            """";
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, _writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        await Verify(text, _verifySettings);
     }
 }
