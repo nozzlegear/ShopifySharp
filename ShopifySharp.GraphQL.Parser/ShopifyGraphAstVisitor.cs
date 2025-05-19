@@ -35,13 +35,13 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         { "ID", "string" },
     };
 
-    public static string MakePascalCase(GraphQLName name) =>
+    private static string MakePascalCase(GraphQLName name) =>
         char.ToUpper(name.Value.Span[0]) + name.Value.Span[1..].ToString();
 
-    public static string? MapScalarNameToTypeName(string scalarName) =>
+    private static string? MapScalarNameToTypeName(string scalarName) =>
         TypeMap.GetValueOrDefault(scalarName);
 
-    public string MapGraphTypeToTypeName(GraphQLType graphType) =>
+    private string MapGraphTypeToTypeName(GraphQLType graphType) =>
         graphType switch
         {
             GraphQLNamedType graphQlNamedType => MapScalarNameToTypeName(graphQlNamedType.Name.StringValue) ?? graphQlNamedType.Name.StringValue,
@@ -50,7 +50,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
             _ => throw new ArgumentOutOfRangeException(nameof(graphType))
         };
 
-    public async Task WriteJsonPropertyAttributeAsync(GraphQLName propertyName, WriterContext context) =>
+    private async Task WriteJsonPropertyAttributeAsync(GraphQLName propertyName, WriterContext context) =>
         await context.WriteLineAsync($"[System.Text.Json.JsonProperty(\"{propertyName.StringValue}\")]");
 
     protected override async ValueTask VisitDescriptionAsync(GraphQLDescription description, WriterContext context)
@@ -258,5 +258,42 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
             if (isLastItem)
                 await context.WriteEmptyLineAsync();
         }
+    }
+
+    protected override async ValueTask VisitUnionTypeDefinitionAsync(GraphQLUnionTypeDefinition unionTypeDefinition, WriterContext context)
+    {
+        await VisitAsync(unionTypeDefinition.Comments, context).ConfigureAwait(false);
+        await VisitAsync(unionTypeDefinition.Description, context).ConfigureAwait(false);
+
+        await context.WriteLineAsync("""[(JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]""");
+        await using var sb = new StringWriter();
+
+        foreach (var type in unionTypeDefinition.Types?.Items ?? [])
+        {
+            var typeName = MakePascalCase(type.Name);
+
+            await context.WriteLineAsync($"""[(JsonDerivedType(typeof({typeName}), typeDiscriminator: "{type.Name}")]""");
+            // Also write the types to a StringWriter while we're here, to be read again in a moment
+            await sb.WriteLineAsync($"public {typeName}? As{typeName}() => this as {typeName};");
+        }
+
+        await VisitAsync(unionTypeDefinition.Directives, context).ConfigureAwait(false);
+
+        await context.WriteLineAsync("public abstract record " + MakePascalCase(unionTypeDefinition.Name));
+        await context.WriteLineAsync("{");
+        context.Indent();
+
+        using var sr = new StringReader(sb.ToString());
+
+        while (true)
+        {
+            var line = await sr.ReadLineAsync(context.CancellationToken);
+            if (line is null)
+                break;
+            await context.WriteLineAsync(line);
+        }
+
+        context.Outdent();
+        await context.WriteLineAsync("}");
     }
 }
