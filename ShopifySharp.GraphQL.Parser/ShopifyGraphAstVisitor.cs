@@ -1,3 +1,4 @@
+using System.Text;
 using GraphQLParser.AST;
 using GraphQLParser.Visitors;
 
@@ -53,6 +54,28 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
     private async Task WriteJsonPropertyAttributeAsync(GraphQLName propertyName, WriterContext context) =>
         await context.WriteLineAsync($"[System.Text.Json.JsonProperty(\"{propertyName.StringValue}\")]");
 
+    private async Task WriteObsoletePropertyAttributeAsync(GraphQLDirective directive, WriterContext context)
+    {
+        var reason = directive.Arguments?.Items
+            .FirstOrDefault(arg => arg.Name == "reason" && arg.Value.Kind == ASTNodeKind.StringValue);
+        var sb = new StringBuilder();
+
+        sb.Append("[System.Obsolete(");
+        if (reason?.Value is GraphQLStringValue reasonValue)
+            sb.Append($"\"{reasonValue.Value}\"");
+        sb.Append(")]");
+
+        await context.WriteLineAsync(sb.ToString());
+    }
+
+    protected override async ValueTask VisitDirectiveAsync(GraphQLDirective directive, WriterContext context)
+    {
+        await VisitAsync(directive.Comments, context).ConfigureAwait(false);
+
+        if (directive.Name == "deprecated")
+            await WriteObsoletePropertyAttributeAsync(directive, context);
+    }
+
     protected override async ValueTask VisitDescriptionAsync(GraphQLDescription description, WriterContext context)
     {
         var segments = new List<string>();
@@ -74,26 +97,18 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
     {
         await VisitAsync(inputObjectTypeDefinition.Comments, context).ConfigureAwait(false);
         await VisitAsync(inputObjectTypeDefinition.Description, context).ConfigureAwait(false);
+        await VisitAsync(inputObjectTypeDefinition.Directives, context).ConfigureAwait(false);
 
         await context.WriteLineAsync($"public record {inputObjectTypeDefinition.Name}");
         await context.WriteLineAsync("{");
         context.Indent();
-
-        if (inputObjectTypeDefinition.Directives is not null)
-            await VisitDirectivesAsync(inputObjectTypeDefinition.Directives!, context);
-
-        if (inputObjectTypeDefinition.Fields is not null)
-            await VisitInputFieldsDefinitionAsync(inputObjectTypeDefinition.Fields, context);
-
+        await VisitAsync(inputObjectTypeDefinition.Fields, context).ConfigureAwait(false);
         context.Outdent();
         await context.WriteLineAsync("}");
     }
 
-    protected override async ValueTask VisitInputFieldsDefinitionAsync(GraphQLInputFieldsDefinition? inputFieldsDefinition, WriterContext context)
+    protected override async ValueTask VisitInputFieldsDefinitionAsync(GraphQLInputFieldsDefinition inputFieldsDefinition, WriterContext context)
     {
-        if (inputFieldsDefinition is null)
-            return;
-
         for (var i = 0; i < inputFieldsDefinition.Count; i++)
         {
             var isLastItem = i + 1 >= inputFieldsDefinition.Count;
@@ -141,9 +156,9 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 
             await VisitAsync(enumValueDefinition.Comments, context).ConfigureAwait(false);
             await VisitAsync(enumValueDefinition.Description, context).ConfigureAwait(false);
+            await WriteJsonPropertyAttributeAsync(enumValueDefinition.EnumValue.Name, context);
             await VisitAsync(enumValueDefinition.Directives, context).ConfigureAwait(false);
 
-            await WriteJsonPropertyAttributeAsync(enumValueDefinition.EnumValue.Name, context);
             await context.WriteLineAsync(enumValueDefinition.EnumValue.Name.StringValue + (isLastItem ? "" : ","));
 
             if (!isLastItem)
@@ -155,6 +170,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
     {
         await VisitAsync(objectTypeDefinition.Comments, context).ConfigureAwait(false);
         await VisitAsync(objectTypeDefinition.Description, context).ConfigureAwait(false);
+        await VisitAsync(objectTypeDefinition.Directives, context).ConfigureAwait(false);
 
         await context.WriteAsync("public record " + MakePascalCase(objectTypeDefinition.Name));
 
@@ -170,11 +186,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await context.WriteLineAsync("{");
         context.Indent();
 
-        if (objectTypeDefinition.Directives is not null)
-            await VisitAsync(objectTypeDefinition.Directives, context).ConfigureAwait(false);
-
-        if (objectTypeDefinition.Fields is not null)
-            await VisitAsync(objectTypeDefinition.Fields, context).ConfigureAwait(false);
+        await VisitAsync(objectTypeDefinition.Fields, context).ConfigureAwait(false);
 
         context.Outdent();
         await context.WriteLineAsync("}");
@@ -203,18 +215,19 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 
         await VisitAsync(fieldDefinition.Comments, context).ConfigureAwait(false);
         await VisitAsync(fieldDefinition.Description, context).ConfigureAwait(false);
-
         await WriteJsonPropertyAttributeAsync(fieldDefinition.Name, context);
+        await VisitAsync(fieldDefinition.Directives, context).ConfigureAwait(false);
+
         await context.WriteLineAsync($$"""public {{fieldType}} {{MakePascalCase(fieldDefinition.Name)}} { get; set; }""");
 
         // await VisitAsync(fieldDefinition.Arguments, context).ConfigureAwait(false);
-        await VisitAsync(fieldDefinition.Directives, context).ConfigureAwait(false);
     }
 
     protected override async ValueTask VisitInterfaceTypeDefinitionAsync(GraphQLInterfaceTypeDefinition interfaceTypeDefinition, WriterContext context)
     {
         await VisitAsync(interfaceTypeDefinition.Comments, context).ConfigureAwait(false);
         await VisitAsync(interfaceTypeDefinition.Description, context).ConfigureAwait(false);
+        await VisitAsync(interfaceTypeDefinition.Directives, context).ConfigureAwait(false);
 
         await context.WriteAsync("public interface I" + MakePascalCase(interfaceTypeDefinition.Name));
 
@@ -229,13 +242,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 
         await context.WriteLineAsync("{");
         context.Indent();
-
-        if (interfaceTypeDefinition.Directives is not null)
-            await VisitAsync(interfaceTypeDefinition.Directives, context).ConfigureAwait(false);
-
-        if (interfaceTypeDefinition.Fields is not null)
-            await VisitAsync(interfaceTypeDefinition.Fields, context).ConfigureAwait(false);
-
+        await VisitAsync(interfaceTypeDefinition.Fields, context).ConfigureAwait(false);
         context.Outdent();
         await context.WriteLineAsync("}");
     }

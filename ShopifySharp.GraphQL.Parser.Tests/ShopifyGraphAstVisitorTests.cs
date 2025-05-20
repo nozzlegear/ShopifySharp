@@ -389,17 +389,34 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
     [Fact]
     public async Task ShouldParseTheDeprecatedDirectiveAndTransformItIntoAnObsoleteAttribute()
     {
+        // Note: Spec-compliant graphql (which Shopify uses) does not support applying the @deprecated
+        // directive to entire types. It can only be applied to fields and enums values.
+
         const string graphql =
-            //lang=graphql
             """"
             interface Foo {
               """The total number of orders placed for the location."""
               orderCount: Int! @deprecated(reason: "Use `ordersCount` instead.")
             }
-            
+
             type Bar implements Foo {
               """The total number of orders placed for the location."""
               orderCount: Int! @deprecated(reason: "Use `ordersCount` instead.")
+            }
+
+            enum AppPurchaseStatus {
+              """
+              The app purchase has been approved by the merchant and is ready to be
+              activated by the app. App purchases created through the GraphQL Admin API are
+              activated upon approval.
+              """
+              ACCEPTED @deprecated(reason: "As of API version 2021-01, when a merchant accepts an app purchase, the status immediately changes from `pending` to `active`.")
+
+              """
+              The app purchase was approved by the merchant and has been activated by the
+              app. Active app purchases are charged to the merchant and are paid out to the partner.
+              """
+              ACTIVE
             }
             """";
 
