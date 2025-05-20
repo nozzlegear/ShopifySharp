@@ -58,7 +58,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
             input AppSubscriptionDiscountValueInput {
               """The monetary value of a discount."""
               amount: Decimal
-            
+
               """The percentage value of a discount."""
               percentage: Float
             }
@@ -85,10 +85,10 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
             enum AbandonmentAbandonmentType {
               """The abandonment event is an abandoned browse."""
               BROWSE
-            
+
               """The abandonment event is an abandoned cart."""
               CART
-            
+
               """The abandonment event is an abandoned checkout."""
               CHECKOUT
             }
@@ -158,7 +158,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
               id: ID!
             }
             """";
-        
+
         // Act
         var ast = GraphQLParser.Parser.Parse(graphql);
         await _sut.VisitAsync(ast, _writerContext);
@@ -180,12 +180,12 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
               """A globally-unique ID."""
               id: ID!
             }
-          
+
             """A Shopify application."""
             type App implements Node {
               """A unique application API identifier."""
               apiKey: String!
-              
+
               """A globally-unique ID."""
               id: ID!
             }
@@ -211,7 +211,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
             The concrete type can be `AppRecurringPricing` for recurring billing or `AppUsagePricing` for usage-based billing.
             """
             union AppPricingDetails = AppRecurringPricing | AppUsagePricing
-            
+
             """
             The pricing information about a subscription app.
             The object contains an interval (the frequency at which the shop is billed for an app subscription) and
@@ -222,18 +222,18 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
               The discount applied to the subscription for a given number of billing intervals.
               """
               discount: AppSubscriptionDiscount
-            
+
               """
               The frequency at which the subscribing shop is billed for an app subscription.
               """
               interval: AppPricingInterval!
-            
+
               """
               The amount and currency to be charged to the subscribing shop every billing interval.
               """
               price: MoneyV2!
             }
-            
+
             """
              Defines a usage pricing model for the app subscription.
              These charges are variable based on how much the merchant uses the app.
@@ -241,7 +241,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
              type AppUsagePricing {
                """The total usage records for interval."""
                balanceUsed: MoneyV2!
-             
+
                """
                The capped amount prevents the merchant from being charged for any usage over that amount during a billing period.
                This prevents billing from exceeding a maximum threshold over the duration of the billing period.
@@ -249,10 +249,10 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
                they would need to agree to a new usage charge.
                """
                cappedAmount: MoneyV2!
-             
+
                """The frequency with which the app usage records are billed."""
                interval: AppPricingInterval!
-             
+
                """
                The terms and conditions for app usage pricing.
                Must be present in order to create usage charges.
@@ -296,7 +296,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
               """
               handle: String!
             }
-            
+
             """
             A Shopify application.
             """
@@ -346,19 +346,19 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
               metafield(
                 """The key for the metafield."""
                 key: String!
-            
+
                 """
                 The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
                 """
                 namespace: String
               ): Metafield
             }
-            
+
             """
             An example type that has metafields.
             """
             type ExampleTypeWithMetafields implements HasMetafields {
-                
+
                 """
                 A [custom field](https://shopify.dev/docs/apps/build/custom-data),
                 including its `namespace` and `key`, that's associated with a Shopify resource
@@ -367,7 +367,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
                 metafield(
                   """The key for the metafield."""
                   key: String!
-                
+
                   """
                   The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
                   """
