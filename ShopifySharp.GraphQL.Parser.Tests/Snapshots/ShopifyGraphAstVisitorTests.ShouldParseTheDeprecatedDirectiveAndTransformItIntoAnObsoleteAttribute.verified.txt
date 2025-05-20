@@ -1,0 +1,36 @@
+﻿public interface IFoo
+{
+    /// <summary>
+    /// The total number of orders placed for the location.
+    /// </summary>
+    [System.Text.Json.JsonProperty("orderCount")]
+    [System.Obsolete("Use `ordersCount` instead.")]
+    public Int OrderCount { get; set; }
+}
+public record Bar: IFoo
+{
+    /// <summary>
+    /// The total number of orders placed for the location.
+    /// </summary>
+    [System.Text.Json.JsonProperty("orderCount")]
+    [System.Obsolete("Use `ordersCount` instead.")]
+    public Int OrderCount { get; set; }
+}
+public enum AppPurchaseStatus
+{
+    /// <summary>
+    /// The app purchase has been approved by the merchant and is ready to be
+    /// activated by the app. App purchases created through the GraphQL Admin API are
+    /// activated upon approval.
+    /// </summary>
+    [System.Text.Json.JsonProperty("ACCEPTED")]
+    [System.Obsolete("As of API version 2021-01, when a merchant accepts an app purchase, the status immediately changes from `pending` to `active`.")]
+    ACCEPTED,
+
+    /// <summary>
+    /// The app purchase was approved by the merchant and has been activated by the
+    /// app. Active app purchases are charged to the merchant and are paid out to the partner.
+    /// </summary>
+    [System.Text.Json.JsonProperty("ACTIVE")]
+    ACTIVE
+}

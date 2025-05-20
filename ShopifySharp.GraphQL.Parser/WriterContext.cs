@@ -1,4 +1,5 @@
 using System.IO.Pipelines;
+using System.Text;
 using GraphQLParser.Visitors;
 
 namespace ShopifySharp.GraphQL.Parser;
@@ -21,8 +22,11 @@ public class WriterContext: IASTVisitorContext
         CancellationToken = cancellationToken;
     }
 
+    public async Task WriteEmptyLineAsync() =>
+        await _writer.WriteAsync(Encoding.UTF8.GetBytes(Environment.NewLine), CancellationToken);
+
     public async Task WriteAsync(string text) =>
-        await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(new string(' ', _indentations.Value * 4) + text), CancellationToken);
+        await _writer.WriteAsync(Encoding.UTF8.GetBytes(new string(' ', _indentations.Value * 4) + text), CancellationToken);
 
     public async Task WriteLineAsync(string text)
     {
@@ -30,8 +34,10 @@ public class WriterContext: IASTVisitorContext
         await WriteEmptyLineAsync();
     }
 
-    public async Task WriteEmptyLineAsync() =>
-        await _writer.WriteAsync(System.Text.Encoding.UTF8.GetBytes(Environment.NewLine), CancellationToken);
+    public async Task WriteLineAsync(StringBuilder sb)
+    {
+        await WriteLineAsync(sb.ToString());
+    }
 
     public void Indent() => _indentations.Value += 1;
 
