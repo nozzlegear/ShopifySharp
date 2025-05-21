@@ -62,6 +62,12 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
+###############################################################################
+# override GitHub's language detection to ignore vendor libs
+###############################################################################
+graphql.schema.graphql linguist-vendored
+graphql.schema.json linguist-vendored
+
 # Special handling for Verify's verified.* files
 # https://github.com/VerifyTests/Verify#text-file-settings
 *.verified.txt text eol=lf working-tree-encoding=UTF-8
