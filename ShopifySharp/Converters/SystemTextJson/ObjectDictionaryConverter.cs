@@ -47,18 +47,9 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
             if (propertyName is null or "")
                 continue;
 
-            object? value = reader.TokenType switch
-            {
-                JsonTokenType.String => reader.GetString(),
-                JsonTokenType.Number => reader.TryGetInt64(out var l) ? l : reader.GetDouble(),
-                JsonTokenType.True => true,
-                JsonTokenType.False => false,
-                JsonTokenType.Null => null,
-                JsonTokenType.StartObject => Read(ref reader, typeToConvert, options),
-                _ => new SystemJsonElement(JsonDocument.ParseValue(ref reader).RootElement.Clone())
-            };
-
-            result[propertyName] = value;
+            result[propertyName] = reader.TokenType == JsonTokenType.StartObject
+                ? Read(ref reader, typeToConvert, options)
+                : ReadValue(ref reader);
         }
 
         return result;
@@ -68,4 +59,14 @@ public class ObjectDictionaryConverter : JsonConverter<IReadOnlyDictionary<strin
     {
         throw new NotSupportedException();
     }
+
+    protected static object? ReadValue(ref Utf8JsonReader reader) => reader.TokenType switch
+    {
+        JsonTokenType.String => reader.GetString(),
+        JsonTokenType.Number => reader.TryGetInt64(out var l) ? l : reader.GetDouble(),
+        JsonTokenType.True => true,
+        JsonTokenType.False => false,
+        JsonTokenType.Null => null,
+        _ => new SystemJsonElement(JsonDocument.ParseValue(ref reader).RootElement.Clone())
+    };
 }

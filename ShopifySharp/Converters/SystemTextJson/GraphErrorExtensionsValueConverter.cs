@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace ShopifySharp.Converters.SystemTextJson;
 
 /// <summary>
-/// Handles the conversion <c>{"Value":"foo"}</c> into <c>{"Value": {"$value":"foo"}}</c>
+/// Handles the conversion of Shopify's error extensions into a standard string/object dictionary.
 /// </summary>
 public class GraphErrorExtensionsValueConverter : ObjectDictionaryConverter
 {
@@ -14,23 +14,44 @@ public class GraphErrorExtensionsValueConverter : ObjectDictionaryConverter
 
     public override IReadOnlyDictionary<string, object?> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        // We've seen GraphErrorExtensions.Value exhibit two structures so far:
-        // 1. {"Value": {"foo": "bar", "baz": "bat"}}
-        // 2. {"Value": "foo"}
+        // We've seen GraphErrorExtensions.Value exhibit three structures so far:
+        // 1. {"value": {"foo": "bar", "baz": "bat"}}
+        // 2. {"value": "foo"}
+        // 3."{"value": [{ "foo": "bar", "baz": "bat" }]}
         // If #2, map the value into a dictionary using the (arbitrary) key "$value"
+        // If #3, map the value into a dictionary using the [array_index]=[value]
 
         if (reader.TokenType == JsonTokenType.StartObject)
             return base.Read(ref reader, typeToConvert, options);
 
-        object? value = reader.TokenType switch
+        if (reader.TokenType == JsonTokenType.StartArray)
         {
-            JsonTokenType.String => reader.GetString(),
-            JsonTokenType.Number => reader.GetInt64(),
-            JsonTokenType.True or JsonTokenType.False => reader.GetBoolean(),
-            JsonTokenType.Null => null,
-            _ => throw new JsonException($"Unexpected token {reader.TokenType} when mapping a GraphErrorExtensionsValue object.")
-        };
+            var itemIndex = 0;
+            var dict = new Dictionary<string, object?>();
 
-        return new Dictionary<string, object?>() { { ConstructedDictionaryKey, value } }.ToReadOnlyDictionary();
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndArray)
+                    break;
+
+                if (reader.TokenType == JsonTokenType.StartObject)
+                {
+                    var subDict = base.Read(ref reader, typeToConvert, options);
+                    if (subDict.Count == 0)
+                        continue;
+                    dict.Add(itemIndex.ToString(),subDict);
+                }
+                else
+                {
+                    dict.Add(itemIndex.ToString(), ReadValue(ref reader));
+                }
+
+                itemIndex++;
+            }
+
+            return dict;
+        }
+
+        return new Dictionary<string, object?>() { { ConstructedDictionaryKey, ReadValue(ref reader) } }.ToReadOnlyDictionary();
     }
 }

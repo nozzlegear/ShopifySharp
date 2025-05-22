@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Converters.SystemTextJson;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using Xunit;
 
 namespace ShopifySharp.Tests.Converters;
@@ -53,6 +54,22 @@ public class GraphErrorExtensionsValueConverterTests
             .And.Contain(key2, value2);
     }
 
+    [Fact]
+    public void Read_WhenGivenAnEmptyJsonObject_ShouldReturnAnEmptyDictionary()
+    {
+        // Setup
+        const string jsonValue = "{}";
+        var bytes = Encoding.UTF8.GetBytes(jsonValue);
+        var reader = new Utf8JsonReader(bytes);
+        reader.Read();
+
+        // Act
+        var result = _sut.Read(ref reader, typeof(IDictionary<string, object>), _options);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
     [Theory]
     [InlineData("\"some-value1\"", "some-value1")]
     [InlineData("123", 123)]
@@ -75,23 +92,115 @@ public class GraphErrorExtensionsValueConverterTests
     }
 
     [Fact]
-    public void Read_WhenGivenAnUnsupportedJsonValueType_ShouldThrow()
+    public void Read_WhenGivenAnArrayOfObjects_ShouldReadToDictionaryWithIndexedValueKeys()
     {
         // Setup
-        const string jsonValue = "[]";
+        const string jsonValue =
+            """
+            [
+                {
+                    "filename": "foo",
+                    "fileSize": 123,
+                    "httpMethod": "PUT",
+                    "mimeType": "image/jpeg",
+                    "isHttpResource": true
+                },
+                {
+                    "filename": "bar",
+                    "fileSize": 456,
+                    "httpMethod": "GET",
+                    "mimeType": "image/png",
+                    "isHttpResource": false
+                }
+            ]
+            """;
         var bytes = Encoding.UTF8.GetBytes(jsonValue);
+        var reader = new Utf8JsonReader(bytes);
+        reader.Read();
 
         // Act
-        var act = () =>
-        {
-            var reader = new Utf8JsonReader(bytes);
-            reader.Read();
-            return _sut.Read(ref reader, typeof(IDictionary<string, object?>), _options);
-        };
+        var result = _sut.Read(ref reader, typeof(IDictionary<string, object>), _options);
 
         // Assert
-        act.Should().Throw<JsonException>()
-            .WithMessage("Unexpected token StartArray when mapping a GraphErrorExtensionsValue object.");
+        result.Should().HaveCount(2);
+        result.Should().ContainKey("0")
+            .WhoseValue.Should().BeEquivalentTo(new Dictionary<string, object?>
+            {
+                {"filename", "foo"},
+                {"fileSize", 123},
+                {"httpMethod", "PUT"},
+                {"mimeType", "image/jpeg"},
+                {"isHttpResource", true},
+            });
+        result.Should().ContainKey("1")
+            .WhoseValue.Should().BeEquivalentTo(new Dictionary<string, object?>
+            {
+                {"filename", "bar"},
+                {"fileSize", 456.0},
+                {"httpMethod", "GET"},
+                {"mimeType", "image/png"},
+                {"isHttpResource", false},
+            });
+    }
+
+    [Theory]
+    [InlineData("\"some-value1\"", "some-value1")]
+    [InlineData("123", 123)]
+    [InlineData("true", true)]
+    [InlineData("false", false)]
+    [InlineData("null", null)]
+    public void Read_WhenGivenAnArrayWithPrimitiveValues_ShouldReadToDictionaryWithIndexedValueKeys(string jsonValue, object? expectedValue)
+    {
+        // Setup
+        var json = $"[{jsonValue}]";
+        var bytes = Encoding.UTF8.GetBytes(json);
+        var reader = new Utf8JsonReader(bytes);
+        reader.Read();
+
+        // Act
+        var result = _sut.Read(ref reader, typeof(IDictionary<string, object>), _options);
+
+        // Assert
+        result.Should().HaveCount(1)
+            .And.Contain("0", expectedValue);
+    }
+
+    [Theory]
+    [InlineData("[]")]
+    [InlineData("[{}]")]
+    [InlineData("[{}, {}]")]
+    public void Read_WhenGivenAnEmptyArray_ShouldReturnAnEmptyDictionary(string jsonValue)
+    {
+        // Setup
+        var bytes = Encoding.UTF8.GetBytes(jsonValue);
+        var reader = new Utf8JsonReader(bytes);
+        reader.Read();
+
+        // Act
+        var result = _sut.Read(ref reader, typeof(IDictionary<string, object>), _options);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData("[ [] ]", "0")]
+    [InlineData("{ \"foo\": [] }", "foo")]
+    public void Read_WhenGivenASubArray_ShouldDeserializeToSystemJsonElement(string jsonValue, string dictionaryKey)
+    {
+        // Setup
+        var bytes = Encoding.UTF8.GetBytes(jsonValue);
+        var reader = new Utf8JsonReader(bytes);
+        reader.Read();
+
+        // Act
+        var result = _sut.Read(ref reader, typeof(IDictionary<string, object>), _options);
+
+        // Assert
+        result.Should().HaveCount(1);
+        result.Should().ContainKey(dictionaryKey)
+            .WhoseValue.Should().BeOfType<SystemJsonElement>()
+            .Which.ValueType.Should().Be(JsonValueType.Array);
     }
 
     #endregion
