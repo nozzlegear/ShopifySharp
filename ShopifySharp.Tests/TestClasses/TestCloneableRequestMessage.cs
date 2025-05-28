@@ -6,7 +6,7 @@ using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Tests.TestClasses;
 
-public class TestCloneableRequestMessage : CloneableRequestMessage
+public class TestCloneableRequestMessage : CloneableRequestMessage, IDisposable
 {
     public TestCloneableRequestMessage()
         : base(
@@ -15,6 +15,11 @@ public class TestCloneableRequestMessage : CloneableRequestMessage
             null
         )
     {
+    }
+
+    public new virtual void Dispose()
+    {
+        base.Dispose();
     }
 }
 

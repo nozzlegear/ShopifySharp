@@ -147,4 +147,7 @@ public static class Utils
             RequestId = "some-request-id";
         }
     }
+
+    // ReSharper disable once InconsistentNaming
+    public static TimeSpan ms(this int v) => TimeSpan.FromMilliseconds(v);
 }

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
-using NSubstitute;
+using FakeItEasy;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 using ShopifySharp.Tests.TestClasses;
@@ -24,16 +24,16 @@ public class ExponentialRetryPolicyTests
 
     public ExponentialRetryPolicyTests()
     {
-        _responseClassifier = Substitute.For<IResponseClassifier>();
-        _taskScheduler = Substitute.For<ITaskScheduler>();
-        _executeRequest = Substitute.For<ExecuteRequestAsync<int>>();
-        _cloneableRequestMessage = Substitute.For<TestCloneableRequestMessage>();
+        _responseClassifier = A.Fake<IResponseClassifier>();
+        _taskScheduler = A.Fake<ITaskScheduler>();
+        _executeRequest = A.Fake<ExecuteRequestAsync<int>>();
+        _cloneableRequestMessage = A.Fake<TestCloneableRequestMessage>();
 
         // Always return a completed task when the scheduler wants to delay, so no actual time is spent waiting during a test
-        _taskScheduler.DelayAsync(Arg.Any<TimeSpan>())
+        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, CancellationToken.None))
             .Returns(Task.CompletedTask);
         // Always have the test request message return itself when cloned
-        _cloneableRequestMessage.CloneAsync(Arg.Any<CancellationToken>())
+        A.CallTo(() => _cloneableRequestMessage.CloneAsync(A<CancellationToken>._))
             .Returns(_cloneableRequestMessage);
     }
 
@@ -73,7 +73,7 @@ public class ExponentialRetryPolicyTests
         const int expectedValue = 5;
         var expectedResult = new TestRequestResult<int>(expectedValue);
 
-        _executeRequest.Invoke(_cloneableRequestMessage)
+        A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage))
             .Returns(expectedResult);
 
         var policy = SetupPolicy();
@@ -86,231 +86,238 @@ public class ExponentialRetryPolicyTests
     [Fact]
     public async Task Run_ShouldDisposeClonedRequestMessages()
     {
-        _cloneableRequestMessage.When(x => x.Dispose())
-            .Throw<TestException>();
-
+        // Setup
         var policy = SetupPolicy();
+
+        var callToDispose = A.CallTo(() => _cloneableRequestMessage.Dispose());
+        callToDispose.Throws<TestException>();
+
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         await act.Should().ThrowAsync<TestException>();
-        _cloneableRequestMessage.Received(1).Dispose();
+        callToDispose.MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task Run_ShouldThrowWhenRequestIsNotRetriableAsync()
     {
+        // Setup
         var ex = new TestShopifyException();
-
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Throw(ex);
-        _responseClassifier.IsRetriableException(ex, 1)
-            .Returns(false);
-
         var policy = SetupPolicy();
+        var callToClassify = A.CallTo(() => _responseClassifier.IsRetriableException(ex, 1));
+
+        A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage))
+            .Throws(ex);
+        callToClassify.Returns(false);
+
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         await act.Should().ThrowAsync<TestShopifyException>();
-        _responseClassifier.Received(1).IsRetriableException(ex, 1);
+        callToClassify.MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task Run_ShouldRetryWhenRequestIsRetriableAsync()
     {
+        // Setup
         const int expectedValue = 5;
         var expectedResult = new TestRequestResult<int>(expectedValue);
         var ex = new TestShopifyException();
+        var policy = SetupPolicy();
         var iteration = 0;
 
-        _executeRequest(_cloneableRequestMessage)
-            .Returns(expectedResult);
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Do(_ =>
-            {
-                iteration++;
-                if (iteration < 4)
-                    throw ex;
-            });
+        var callToInvokeRequest = A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage));
+        callToInvokeRequest.Returns(expectedResult);
+        callToInvokeRequest.Invokes(_ =>
+        {
+            iteration++;
+            if (iteration < 4)
+                throw ex;
+        });
 
-        _responseClassifier.IsRetriableException(ex, Arg.Is<int>(x => x < 4))
-            .Returns(true);
-        _responseClassifier.IsRetriableException(ex, Arg.Is<int>(x => x >= 4))
-            .Returns(false);
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>._))
+            .ReturnsLazily(call => call.Arguments.Get<int>(1) < 4);
 
-        var policy = SetupPolicy();
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         var result = await act.Should().NotThrowAsync();
         result.Subject.Should().NotBeNull();
         result.Subject.Result.Should().Be(expectedValue);
         iteration.Should().Be(4);
-        Received.InOrder(() =>
-        {
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 1);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 2);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
-
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 3);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(400), Arg.Any<CancellationToken>());
-
-            _executeRequest.Invoke(_cloneableRequestMessage);
-        });
+        callToInvokeRequest.MustHaveHappened()
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 1)).MustHaveHappenedOnceExactly())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(100.ms(), A<CancellationToken>._)).MustHaveHappenedOnceExactly())
+            .Then(callToInvokeRequest.MustHaveHappened())
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 2)).MustHaveHappenedOnceExactly())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(200.ms(), A<CancellationToken>._)).MustHaveHappenedOnceExactly())
+            .Then(callToInvokeRequest.MustHaveHappened())
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 3)).MustHaveHappenedOnceExactly())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(400.ms(), A<CancellationToken>._)).MustHaveHappenedOnceExactly())
+            .Then(callToInvokeRequest.MustHaveHappened());
     }
 
     [Fact]
     public async Task Run_ShouldRetryImmediatelyWhenConfigured()
     {
+        // Setup
         const bool firstRetryIsImmediate = true;
+        var policy = SetupPolicy(x => x.FirstRetryIsImmediate = firstRetryIsImmediate);
         var ex = new TestShopifyException();
         var iteration = 0;
 
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Do(_ =>
+        A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage))
+            .Invokes(_ =>
             {
                 if (iteration >= 3) throw new TestException();
                 iteration++;
                 throw ex;
             });
-        _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>._))
             .Returns(true);
 
-        var policy = SetupPolicy(x => x.FirstRetryIsImmediate = firstRetryIsImmediate);
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         await act.Should().ThrowAsync<TestException>();
         iteration.Should().Be(3);
-        Received.InOrder(() =>
-        {
-            _taskScheduler.DelayAsync(TimeSpan.Zero, Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
-        });
+
+        A.CallTo(() => _taskScheduler.DelayAsync(TimeSpan.Zero, A<CancellationToken>._)).MustHaveHappenedOnceExactly()
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(100.ms(), A<CancellationToken>._)).MustHaveHappenedOnceExactly())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(200.ms(), A<CancellationToken>._)).MustHaveHappenedOnceExactly());
     }
 
     [Fact(Timeout = 1000)]
     public async Task Run_ShouldHandleNullMaxRetries()
     {
+        // Setup
         const int expectedIterations = 20;
-        var ex = new TestShopifyException();
-        var iteration = 0;
-
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Do(_ =>
-            {
-                iteration++;
-                // Cancel after 20 loops
-                if (iteration == expectedIterations)
-                    throw new TestException();
-                throw ex;
-            });
-
-        _responseClassifier.IsRetriableException(ex, Arg.Is<int>(x => x == iteration))
-            .Returns(true);
-
         var policy = SetupPolicy(x =>
         {
             x.MaximumRetriesBeforeRequestCancellation = null;
             x.MaximumDelayBeforeRequestCancellation = TimeSpan.FromSeconds(5);
         });
+        var ex = new TestShopifyException();
+        var iteration = 0;
+
+        var callToExecute = A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage));
+        callToExecute.Invokes(_ =>
+        {
+            iteration++;
+            // Cancel after 20 loops
+            if (iteration == expectedIterations)
+                throw new TestException();
+            throw ex;
+        });
+
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>.That.Matches(x => x == iteration)))
+            .Returns(true);
+
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         await act.Should().ThrowAsync<TestException>();
         iteration.Should().Be(expectedIterations);
-        await _executeRequest.Received(expectedIterations).Invoke(_cloneableRequestMessage);
+
+        callToExecute.MustHaveHappened(expectedIterations, Times.Exactly);
         // These will receive one less call, because TestException is not caught by the policy and crashes/exits the run
-        _responseClassifier.Received(expectedIterations - 1).IsRetriableException(ex, Arg.Is<int>(x => x >= 1 && x <= expectedIterations));
-        await _taskScheduler.Received(expectedIterations - 1).DelayAsync(Arg.Any<TimeSpan>(), Arg.Any<CancellationToken>());
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>.That.Matches(x => x >= 1 && x <= iteration)))
+            .MustHaveHappened(expectedIterations - 1, Times.Exactly);
+        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, A<CancellationToken>._))
+            .MustHaveHappened(expectedIterations - 1, Times.Exactly);
     }
 
     [Fact]
     public async Task Run_ShouldRetryUntilMaxRetriesIsReachedThenThrow()
     {
+        // Setup
         const int maximumRetries = 2;
+        var policy = SetupPolicy(x => x.MaximumRetriesBeforeRequestCancellation = maximumRetries);
         var ex = new TestShopifyException();
         var iteration = 0;
 
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Do(_ =>
-            {
-                iteration++;
-                throw ex;
-            });
+        var callToExecute = A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage));
+        callToExecute.Invokes(_ =>
+        {
+            iteration++;
+            throw ex;
+        });
 
-        _responseClassifier.IsRetriableException(ex, Arg.Is<int>(x => x == iteration))
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>.That.Matches(x => x == iteration)))
             .Returns(true);
 
-        var policy = SetupPolicy(x => x.MaximumRetriesBeforeRequestCancellation = maximumRetries);
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         await act.Should().ThrowAsync<ShopifyExponentialRetryCanceledException>()
             .Where(x => x.CurrentTry == maximumRetries)
             .Where(x => x.MaximumRetries == maximumRetries);
-        iteration.Should().Be(maximumRetries);
-        Received.InOrder(() =>
-        {
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 1);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 2);
-        });
-        await _taskScheduler.Received(0)
-            .DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
+        iteration.Should().Be(maximumRetries);
+
+        callToExecute.MustHaveHappened()
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 1)).MustHaveHappenedOnceExactly())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(100.ms(), A<CancellationToken>._)).MustHaveHappenedOnceExactly())
+            .Then(callToExecute.MustHaveHappened())
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 2)).MustHaveHappenedOnceExactly());
+
+        A.CallTo(() => _taskScheduler.DelayAsync(200.ms(), A<CancellationToken>._))
+            .MustNotHaveHappened();
     }
 
     [Fact(Timeout = 1000)]
     public async Task Run_ShouldIncreaseDelayBetweenRetriesUntilItReachesMaximumDelayBetweenRetries_ThenUseMaximumDelayBetweenRetries()
     {
+        // Setup
         const int backoffInMilliseconds = 50;
         const int expectedIterationsAfterReachingMaximum = 3;
         var ex = new TestShopifyException();
-        var maximumDelayBetweenRetries = TimeSpan.FromMilliseconds(777);
-        var currentDelaySeenCount = 0;
-
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Throw(ex);
-        _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
-            .Returns(true);
-        _taskScheduler.When(x => x.DelayAsync(Arg.Any<TimeSpan>(), Arg.Any<CancellationToken>()))
-            .Do(x =>
-            {
-                var currentDelay = x.Arg<TimeSpan>();
-                // Cancel once the policy starts using the maximum delay multiple times
-                if (currentDelay == maximumDelayBetweenRetries)
-                {
-                    currentDelaySeenCount++;
-                    if (currentDelaySeenCount == expectedIterationsAfterReachingMaximum)
-                    {
-                        throw new TestException();
-                    }
-                }
-            });
-
+        var maximumDelayBetweenRetries = 777.ms();
         var policy = SetupPolicy(x =>
         {
             x.InitialBackoffInMilliseconds = backoffInMilliseconds;
-            x.MaximumRetriesBeforeRequestCancellation = null;
+            x.MaximumRetriesBeforeRequestCancellation = 100;
             x.MaximumDelayBetweenRetries = maximumDelayBetweenRetries;
             x.MaximumDelayBeforeRequestCancellation = TimeSpan.FromMinutes(1);
         });
+        var currentDelaySeenCount = 0;
+
+        A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage))
+            .Throws(ex);
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>._))
+            .Returns(true);
+        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, A<CancellationToken>._))
+            .Invokes(call =>
+            {
+                var currentDelay = call.Arguments.Get<TimeSpan>(0);
+                // Cancel once the policy starts using the maximum delay multiple times
+                if (currentDelay != maximumDelayBetweenRetries)
+                    return;
+                currentDelaySeenCount++;
+                if (currentDelaySeenCount == expectedIterationsAfterReachingMaximum)
+                    throw new TestException();
+            });
+
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
+        // Assert
         await act.Should().ThrowAsync<TestException>();
-        Received.InOrder(() =>
-        {
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(50), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(400), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(777), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(777), Arg.Any<CancellationToken>());
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(777), Arg.Any<CancellationToken>());
-        });
+
+        A.CallTo(() => _taskScheduler.DelayAsync(50.ms(), A<CancellationToken>._)).MustHaveHappened()
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(100.ms(), A<CancellationToken>._)).MustHaveHappened())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(200.ms(), A<CancellationToken>._)).MustHaveHappened())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(400.ms(), A<CancellationToken>._)).MustHaveHappened())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(777.ms(), A<CancellationToken>._)).MustHaveHappened(3, Times.Exactly));
     }
 
     [Fact]
@@ -319,70 +326,73 @@ public class ExponentialRetryPolicyTests
         // TODO: this test could be improved by using the Microsoft.BCL.TimeProvider package,
         //       which includes System.Threading.Tasks.TimeProviderThreadingExtensions for creating
         //       cancellation token sources with a timeout using a TimeProvider.
+        // Setup
         const int maximumDelayMilliseconds = 0;
         const int maximumRetries = 100;
         var ex = new TestShopifyException();
         var timeout = new TimeSpan(maximumDelayMilliseconds);
-        var inputCancellationToken = CancellationToken.None;
-
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Throw(ex);
-        _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
-            .Returns(true);
-
         var policy = SetupPolicy(x =>
         {
             x.MaximumDelayBeforeRequestCancellation = timeout;
             x.MaximumRetriesBeforeRequestCancellation = maximumRetries;
         });
+        var inputCancellationToken = CancellationToken.None;
+
+        A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage))
+            .Throws(ex);
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>._))
+            .Returns(true);
+
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, inputCancellationToken);
 
+        // Assert
         await act.Should().ThrowAsync<OperationCanceledException>();
         // For now, we expect this test to execute the request, check the exception and wait. This
         // is because the cancellation token source puts the cancellation on a different thread when
         // cancellation is requested.
         // TODO: This seems to be a little bit flaky due to the comment above, sometimes the test receives a second _executeRequest before cancelling
-        Received.InOrder(() =>
-        {
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 1);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(BackoffInMilliseconds), Arg.Any<CancellationToken>());
-        });
+        A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage)).MustHaveHappenedOnceExactly()
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 1)).MustHaveHappenedOnceExactly())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(BackoffInMilliseconds), A<CancellationToken>._)).MustHaveHappenedOnceExactly());
     }
 
     [Fact]
     public async Task Run_ShouldThrowWhenCancellationTokenIsCanceled()
     {
+        // Setup
         const int maximumRetries = 100;
         var ex = new TestShopifyException();
         var inputCancellationToken = new CancellationTokenSource();
         var iteration = 0;
+        var policy = SetupPolicy(x => x.MaximumRetriesBeforeRequestCancellation = maximumRetries);
 
-        _executeRequest.When(x => x.Invoke(_cloneableRequestMessage))
-            .Do(_ =>
-            {
-                iteration++;
-                if (iteration > 1)
-                    inputCancellationToken.Cancel(true);
-                throw ex;
-            });
-        _responseClassifier.IsRetriableException(ex, Arg.Any<int>())
+        var callToExecute = A.CallTo(() => _executeRequest.Invoke(_cloneableRequestMessage));
+        callToExecute.Invokes(() =>
+        {
+            iteration++;
+            if (iteration > 1)
+                inputCancellationToken.Cancel(true);
+            throw ex;
+        });
+
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, An<int>._))
             .Returns(true);
 
-        var policy = SetupPolicy(x => x.MaximumRetriesBeforeRequestCancellation = maximumRetries);
+        // Act
         var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, inputCancellationToken.Token);
 
+        // Assert
         await act.Should().ThrowAsync<OperationCanceledException>();
-        Received.InOrder(() =>
-        {
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 1);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(100), Arg.Any<CancellationToken>());
 
-            _executeRequest.Invoke(_cloneableRequestMessage);
-            _responseClassifier.IsRetriableException(ex, 2);
-            _taskScheduler.DelayAsync(TimeSpan.FromMilliseconds(200), Arg.Any<CancellationToken>());
-        });
-        await _taskScheduler.Received(0).DelayAsync(TimeSpan.FromMilliseconds(400), Arg.Any<CancellationToken>());
+        callToExecute.MustHaveHappened()
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 1)).MustHaveHappened())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(100.ms(), A<CancellationToken>._)).MustHaveHappened())
+            .Then(callToExecute.MustHaveHappened())
+            .Then(A.CallTo(() => _responseClassifier.IsRetriableException(ex, 2)).MustHaveHappened())
+            .Then(A.CallTo(() => _taskScheduler.DelayAsync(200.ms(), A<CancellationToken>._)).MustHaveHappened());
+
+        A.CallTo(() => _taskScheduler.DelayAsync(400.ms(), A<CancellationToken>._))
+            .MustNotHaveHappened();
     }
 }
