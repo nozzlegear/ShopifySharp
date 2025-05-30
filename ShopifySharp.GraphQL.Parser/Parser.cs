@@ -1,10 +1,9 @@
 ﻿using System.IO.Pipelines;
 using System.Text;
-using GraphQLParser.AST;
 
 namespace ShopifySharp.GraphQL.Parser;
 
-public class Parser
+public class Parser(CasingType propertyNameCasingType)
 {
     public async Task<string> ParseAsync(ReadOnlyMemory<char> graphqlData, CancellationToken cancellationToken = default)
     {
@@ -13,7 +12,10 @@ public class Parser
         var pipe = new Pipe();
 
         var visitor = new ShopifyGraphAstVisitor();
-        var context = new WriterContext(pipe.Writer, cancellationToken);
+        var context = new WriterContext(pipe.Writer, cancellationToken)
+        {
+            CasingType = propertyNameCasingType
+        };
 
         var ast = GraphQLParser.Parser.Parse(graphqlData);
         await visitor.VisitAsync(ast, context);

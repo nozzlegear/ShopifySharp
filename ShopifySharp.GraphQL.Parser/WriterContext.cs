@@ -12,6 +12,8 @@ public class WriterContext: IASTVisitorContext
     /// <inheritdoc/>
     public CancellationToken CancellationToken { get; }
 
+    public CasingType CasingType { get; init; } = CasingType.PascalCase;
+
     public WriterContext(PipeWriter pipeWriter, CancellationToken cancellationToken = default)
     {
         _writer = pipeWriter;

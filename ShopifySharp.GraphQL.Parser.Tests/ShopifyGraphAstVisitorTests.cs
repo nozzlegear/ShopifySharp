@@ -50,7 +50,7 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
     public async Task ShouldParseInputDefinition()
     {
         // Setup
-        var graphql =
+        const string graphql =
             """"
             """
             The input fields to specify the value discounted every billing interval.
@@ -71,6 +71,40 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
+        await Verify(text, _verifySettings);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task ShouldParseInputDefinitionAndRespectCasingType(CasingType casingType)
+    {
+        // Setup
+        const string graphql =
+            """"
+            """
+            The input fields to specify the value discounted every billing interval.
+            """
+            input AppSubscriptionDiscountValueInput {
+              """The monetary value of a discount."""
+              amount: Decimal
+
+              """The percentage value of a discount."""
+              percentage: Float
+            }
+            """";
+        var writerContext = new WriterContext(_pipe.Writer, _cancellationToken)
+        {
+            CasingType = casingType
+        };
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        _verifySettings.UseParameters(casingType);
         await Verify(text, _verifySettings);
     }
 
@@ -101,6 +135,42 @@ public class ShopifyGraphAstVisitorTests: IClassFixture<VerifyFixture>
 
         // Assert
         var text = await GetTextWrittenToPipeAsync();
+        await Verify(text, _verifySettings);
+    }
+
+    [Theory]
+    [CombinatorialData]
+    public async Task ShouldIgnoreCasingTypeOnEnumsAndAlwaysCapitalizeEachCase(CasingType casingType)
+    {
+        // Setup
+        const string graphql =
+            //lang=graphql
+            """"
+            """Specifies the abandonment type."""
+            enum AbandonmentAbandonmentType {
+              """The abandonment event is an abandoned browse."""
+              BROWSE
+
+              """The abandonment event is an abandoned cart."""
+              CART
+
+              """The abandonment event is an abandoned checkout."""
+              CHECKOUT
+            }
+            """";
+        var writerContext = new WriterContext(_pipe.Writer, _cancellationToken)
+        {
+            CasingType = casingType
+        };
+
+        // Act
+        var ast = GraphQLParser.Parser.Parse(graphql);
+        await _sut.VisitAsync(ast, writerContext);
+        await _pipe.Writer.CompleteAsync();
+
+        // Assert
+        var text = await GetTextWrittenToPipeAsync();
+        _verifySettings.UseParameters(casingType);
         await Verify(text, _verifySettings);
     }
 

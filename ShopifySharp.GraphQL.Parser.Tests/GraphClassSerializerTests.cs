@@ -1,8 +1,13 @@
+using JetBrains.Annotations;
+
 namespace ShopifySharp.GraphQL.Parser.Tests;
 
+[TestSubject(typeof(Parser))]
 public class GraphClassSerializerTests
 {
-    private readonly Parser _sut = new();
+    private static Parser MakeParser(CasingType casingType = CasingType.PascalCase) =>
+        new(casingType);
+
 
     [Fact]
     public async Task ShouldParseInputDefinition()
@@ -21,9 +26,10 @@ public class GraphClassSerializerTests
               percentage: Float
             }
             """";
+        var sut = MakeParser();
 
         // Act
-        var result = await _sut.ParseAsync(graphql.AsMemory());
+        var result = await sut.ParseAsync(graphql.AsMemory());
 
         // Assert
         result.Should().Be(

@@ -1,15 +1,9 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using GraphQLParser.AST;
 using GraphQLParser.Visitors;
 
 namespace ShopifySharp.GraphQL.Parser;
-
-[Serializable]
-public class TypeNameNotFoundException(string scalarName)
-    : KeyNotFoundException($"Unable to find type name for scalar \"{scalarName}\".")
-{
-    public string ScalarName { get; } = scalarName;
-}
 
 public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 {
@@ -38,6 +32,16 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 
     private static string MakePascalCase(GraphQLName name) =>
         char.ToUpper(name.Value.Span[0]) + name.Value.Span[1..].ToString();
+
+    private static string MakeCamelCase(GraphQLName name) =>
+        char.ToLower(name.Value.Span[0]) + name.Value.Span[1..].ToString();
+
+    private static string ToCasing(GraphQLName name, CasingType casingType) => casingType switch
+    {
+        CasingType.PascalCase => MakePascalCase(name),
+        CasingType.CamelCase => MakeCamelCase(name),
+        _ => throw new SwitchExpressionException(casingType)
+    };
 
     private static string? MapScalarNameToTypeName(string scalarName) =>
         TypeMap.GetValueOrDefault(scalarName);
@@ -122,7 +126,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
             await VisitAsync(inputField.Description, context).ConfigureAwait(false);
 
             await WriteJsonPropertyAttributeAsync(inputField.Name, context);
-            await context.WriteLineAsync($$"""public {{fieldType}} {{MakePascalCase(inputField.Name)}} { get; set; }""");
+            await context.WriteLineAsync($$"""public {{fieldType}} {{ToCasing(inputField.Name, context.CasingType)}} { get; set; }""");
 
             if (!isLastItem)
                 await context.WriteEmptyLineAsync();
@@ -218,7 +222,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await WriteJsonPropertyAttributeAsync(fieldDefinition.Name, context);
         await VisitAsync(fieldDefinition.Directives, context).ConfigureAwait(false);
 
-        await context.WriteLineAsync($$"""public {{fieldType}} {{MakePascalCase(fieldDefinition.Name)}} { get; set; }""");
+        await context.WriteLineAsync($$"""public {{fieldType}} {{ToCasing(fieldDefinition.Name, context.CasingType)}} { get; set; }""");
 
         // await VisitAsync(fieldDefinition.Arguments, context).ConfigureAwait(false);
     }
