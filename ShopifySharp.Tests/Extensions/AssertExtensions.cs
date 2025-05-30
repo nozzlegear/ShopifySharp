@@ -139,9 +139,10 @@ public class ReflectedFieldAssertions(ReflectedMember subject)
     public AndConstraint<ReflectedFieldAssertions> NotBeNull(string because = "", params object[] becauseArgs)
     {
         using var scope = subject.CreateScope();
+        var chain = AssertionChain.GetOrCreate();
         var exists = subject.ReflectedMemberType == ReflectedMemberType.Field ? subject.Field is not null : subject.Property is not null;
 
-        scope.BecauseOf(because, becauseArgs)
+        chain.BecauseOf(because, becauseArgs)
             .ForCondition(exists)
             .FailWith("Expected {context} to exist, but found <null>.");
 
@@ -154,9 +155,10 @@ public class ReflectedFieldAssertions(ReflectedMember subject)
         NotBeNull(because, becauseArgs);
 
         using var scope = subject.CreateScope();
+        var chain = AssertionChain.GetOrCreate();
         var actualName = subject.ReflectedMemberType == ReflectedMemberType.Field ? subject.Field?.Name : subject.Property?.Name;
 
-        scope.BecauseOf(because, becauseArgs)
+        chain.BecauseOf(because, becauseArgs)
             .ForCondition(actualName == expectedName)
             .FailWith("Expected {context} to have name {0}, but found {1}.", expectedName, actualName);
 
@@ -169,9 +171,10 @@ public class ReflectedFieldAssertions(ReflectedMember subject)
         NotBeNull(because, becauseArgs);
 
         using var scope = subject.CreateScope();
+        var chain = AssertionChain.GetOrCreate();
         var subjectType = subject.GetFieldOrPropertyType();
 
-        scope.BecauseOf(because, becauseArgs)
+        chain.BecauseOf(because, becauseArgs)
             .ForCondition(subjectType is not null)
             .FailWith("Expected {context} to have {0}, but found <null>.", subject.ReflectedMemberType)
             .Then
@@ -189,10 +192,11 @@ public class ReflectedFieldAssertions(ReflectedMember subject)
         NotBeNull(because, becauseArgs);
 
         using var scope = subject.CreateScope();
+        var chain = AssertionChain.GetOrCreate();
         var subjectType = subject.GetFieldOrPropertyType();
         var expectedType = typeof(T);
 
-        scope.BecauseOf(because, becauseArgs)
+        chain.BecauseOf(because, becauseArgs)
             .ForCondition(subjectType is not null)
             .FailWith("Expected {context} to have {0}, but found <null>.", subject.ReflectedMemberType)
             .Then
@@ -217,20 +221,22 @@ public class ReflectedFieldAssertions(ReflectedMember subject)
         where T: IEquatable<T>
     {
         using var scope = subject.CreateScope();
+        var chain = AssertionChain.GetOrCreate();
+
         NotBeNull(because, becauseArgs);
         BeOfType<T>(because, becauseArgs);
 
         var subjectValue = subject.GetValue();
-        var assertion = scope.BecauseOf(because, becauseArgs);
+        chain = chain.BecauseOf(because, becauseArgs);
 
         if (expectedValue is null)
         {
-            assertion.ForCondition(subjectValue is null)
+            chain.ForCondition(subjectValue is null)
                 .FailWith("Expected {context} to have value <null>, but found {0}.", subjectValue);
         }
         else
         {
-            assertion.ForCondition(subjectValue is not null && subjectValue.Equals(expectedValue))
+            chain.ForCondition(subjectValue is not null && subjectValue.Equals(expectedValue))
                 .FailWith("Expected {context} to have value {0}, but found {1}", expectedValue, subjectValue);
         }
 

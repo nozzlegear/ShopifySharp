@@ -1,0 +1,17 @@
+﻿/// <summary>
+/// The input fields to specify the value discounted every billing interval.
+/// </summary>
+public record AppSubscriptionDiscountValueInput
+{
+    /// <summary>
+    /// The monetary value of a discount.
+    /// </summary>
+    [System.Text.Json.JsonProperty("amount")]
+    public decimal amount { get; set; }
+
+    /// <summary>
+    /// The percentage value of a discount.
+    /// </summary>
+    [System.Text.Json.JsonProperty("percentage")]
+    public decimal percentage { get; set; }
+}
