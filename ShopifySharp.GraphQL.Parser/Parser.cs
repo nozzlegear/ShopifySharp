@@ -17,30 +17,37 @@ public class Parser(CasingType propertyNameCasingType)
             CasingType = propertyNameCasingType
         };
 
-        var ast = GraphQLParser.Parser.Parse(graphqlData);
-        await visitor.VisitAsync(ast, context);
-        await pipe.Writer.CompleteAsync();
+        // Start reading the pipe before writing to it, or else the writer can hang if the pipe fills before it's read
+        var readTask = ReadPipeAsync(pipe.Reader, cancellationToken);
 
-        var csharpCode = "";
+        var ast = GraphQLParser.Parser.Parse(graphqlData);
+        var writeTask = visitor.VisitAsync(ast, context);
+        await writeTask.ConfigureAwait(false);
+        await pipe.Writer.CompleteAsync().ConfigureAwait(false);
+
+        var csharpCode = await readTask.ConfigureAwait(false);
+
+        return csharpCode.Trim();
+    }
+
+    static async Task<string> ReadPipeAsync(PipeReader reader, CancellationToken ct = default)
+    {
+        var sb = new StringBuilder();
 
         while (true)
         {
-            var readResult = await pipe.Reader.ReadAsync(cancellationToken);
-            if (readResult.IsCanceled)
-                break;
+            var result = await reader.ReadAsync(ct).ConfigureAwait(false);
+            var buffer = result.Buffer;
 
-            var buffer = readResult.Buffer;
             foreach (var segment in buffer)
-            {
-                csharpCode += Encoding.UTF8.GetString(segment.Span);
-            }
+                sb.Append(Encoding.UTF8.GetString(segment.Span));
 
-            pipe.Reader.AdvanceTo(buffer.End);
+            reader.AdvanceTo(buffer.End);
 
-            if (readResult.IsCompleted)
-                break;
+            if (result.IsCompleted || result.IsCanceled) break;
         }
 
-        return csharpCode.Trim();
+        await reader.CompleteAsync().ConfigureAwait(false);
+        return sb.ToString();
     }
 }
