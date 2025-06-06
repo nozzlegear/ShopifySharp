@@ -36,11 +36,6 @@ public class WriterContext: IASTVisitorContext
         await WriteEmptyLineAsync();
     }
 
-    public async Task WriteLineAsync(StringBuilder sb)
-    {
-        await WriteLineAsync(sb.ToString());
-    }
-
     public void Indent() => _indentations.Value += 1;
 
     public void Outdent() => _indentations.Value -= 1;

@@ -21,7 +21,7 @@ public class Parser(CasingType propertyNameCasingType)
         var readTask = ReadPipeAsync(pipe.Reader, cancellationToken);
 
         var ast = GraphQLParser.Parser.Parse(graphqlData);
-        var writeTask = visitor.VisitAsync(ast, context);
+        var writeTask = visitor.VisitDocumentAsync(ast, context);
         await writeTask.ConfigureAwait(false);
         await pipe.Writer.CompleteAsync().ConfigureAwait(false);
 

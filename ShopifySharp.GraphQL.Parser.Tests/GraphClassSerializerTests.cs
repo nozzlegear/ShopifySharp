@@ -3,11 +3,10 @@ using JetBrains.Annotations;
 namespace ShopifySharp.GraphQL.Parser.Tests;
 
 [TestSubject(typeof(Parser))]
-public class GraphClassSerializerTests
+public class GraphClassSerializerTests(VerifyFixture verifyFixture) : IClassFixture<VerifyFixture>
 {
     private static Parser MakeParser(CasingType casingType = CasingType.PascalCase) =>
         new(casingType);
-
 
     [Fact]
     public async Task ShouldParseInputDefinition()
@@ -29,26 +28,9 @@ public class GraphClassSerializerTests
         var sut = MakeParser();
 
         // Act
-        var result = await sut.ParseAsync(graphql.AsMemory());
+        var result = sut.ParseAsync(graphql.AsMemory()).ToBlockingEnumerable();
 
         // Assert
-        result.Should().Be(
-            """
-            public record AppSubscriptionDiscountValueInput
-            {
-                /// <summary>
-                /// The monetary value of a discount.
-                /// </summary>
-                [System.Text.Json.JsonProperty("amount")]
-                public decimal Amount { get; set; }
-
-                /// <summary>
-                /// The percentage value of a discount.
-                /// </summary>
-                [System.Text.Json.JsonProperty("percentage")]
-                public decimal Percentage { get; set; }
-            }
-            """
-        );
+        await Verify(result, verifyFixture.Settings);
     }
 }

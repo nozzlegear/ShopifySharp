@@ -72,6 +72,15 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await context.WriteLineAsync(sb.ToString());
     }
 
+    public new async ValueTask VisitDocumentAsync(GraphQLDocument document, WriterContext context)
+    {
+        // Start by writing the ShopifySharp namespace, then begin visiting each node in the document
+        await context.WriteLineAsync("namespace ShopifySharp.GraphQL;").ConfigureAwait(false);
+
+        await VisitAsync(document.Comments, context).ConfigureAwait(false);
+        await VisitAsync(document.Definitions, context).ConfigureAwait(false);
+    }
+
     protected override async ValueTask VisitDirectiveAsync(GraphQLDirective directive, WriterContext context)
     {
         await VisitAsync(directive.Comments, context).ConfigureAwait(false);
