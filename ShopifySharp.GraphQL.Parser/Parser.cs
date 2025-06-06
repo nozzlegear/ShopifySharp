@@ -1,11 +1,16 @@
 ﻿using System.IO.Pipelines;
+using System.Runtime.CompilerServices;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace ShopifySharp.GraphQL.Parser;
 
 public class Parser(CasingType propertyNameCasingType)
 {
-    public async Task<string> ParseAsync(ReadOnlyMemory<char> graphqlData, CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<GeneratedFile> ParseAsync(ReadOnlyMemory<char> graphqlData, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         using var stream = new MemoryStream();
         await using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
@@ -27,10 +32,38 @@ public class Parser(CasingType propertyNameCasingType)
 
         var csharpCode = await readTask.ConfigureAwait(false);
 
-        return csharpCode.Trim();
+        // Parse the generated code into individual files
+        await foreach (var item in ParseCsharpToGeneratedFilesAsync(csharpCode, cancellationToken))
+            yield return item;
     }
 
-    static async Task<string> ReadPipeAsync(PipeReader reader, CancellationToken ct = default)
+    private static async IAsyncEnumerable<GeneratedFile> ParseCsharpToGeneratedFilesAsync(string csharpCode, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var csharpTree = await CSharpSyntaxTree.ParseText(csharpCode, cancellationToken: cancellationToken)
+            .GetRootAsync(cancellationToken);
+        var syntaxRoot = (CompilationUnitSyntax)csharpTree;
+        var usings = syntaxRoot.Usings;
+        var externals = syntaxRoot.Externs;
+
+        foreach (var ns in syntaxRoot.Members.OfType<BaseNamespaceDeclarationSyntax>())
+        {
+            foreach (var type in ns.Members.OfType<BaseTypeDeclarationSyntax>())
+            {
+                var unit = CompilationUnit()
+                    .WithExterns(externals)
+                    .WithUsings(usings)
+                    .AddMembers(
+                        ns.WithMembers(
+                            SingletonList<MemberDeclarationSyntax>(type))
+                    )
+                    .NormalizeWhitespace(eol: Environment.NewLine);
+
+                yield return new GeneratedFile(type.Identifier.Text + ".cs", unit.ToFullString());
+            }
+        }
+    }
+
+    private static async Task<string> ReadPipeAsync(PipeReader reader, CancellationToken ct = default)
     {
         var sb = new StringBuilder();
 
