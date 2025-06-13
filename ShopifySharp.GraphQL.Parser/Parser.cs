@@ -39,6 +39,7 @@ public class Parser(CasingType propertyNameCasingType)
 
     private static async IAsyncEnumerable<GeneratedFile> ParseCsharpToGeneratedFilesAsync(string csharpCode, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
+        File.WriteAllText("temp.cs", csharpCode);
         var csharpTree = await CSharpSyntaxTree.ParseText(csharpCode, cancellationToken: cancellationToken)
             .GetRootAsync(cancellationToken);
         var syntaxRoot = (CompilationUnitSyntax)csharpTree;

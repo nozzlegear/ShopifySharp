@@ -30,6 +30,10 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         { "ID", "string" },
     };
 
+    private static readonly HashSet<string> EmittedTypes = new(StringComparer.OrdinalIgnoreCase);
+
+    public bool TryReserve(string fullyQualifiedName) => EmittedTypes.Add(fullyQualifiedName);
+
     private static string MakePascalCase(GraphQLName name) =>
         char.ToUpper(name.Value.Span[0]) + name.Value.Span[1..].ToString();
 
@@ -46,6 +50,21 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
     private static string? MapScalarNameToTypeName(string scalarName) =>
         TypeMap.GetValueOrDefault(scalarName);
 
+    public static string RemoveNewLines(ReadOnlySpan<char> value)
+    {
+        const char newlineChar = '\n';
+        var spanValue = value;
+        var hasNewLine = spanValue.Contains(newlineChar);
+
+        if (!hasNewLine)
+            return value.ToString();
+
+        Span<char> destination = stackalloc char[spanValue.Length];
+        value.Replace(destination, newlineChar, ' ');
+
+        return destination.ToString();
+    }
+
     private string MapGraphTypeToTypeName(GraphQLType graphType) =>
         graphType switch
         {
@@ -56,7 +75,7 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         };
 
     private async Task WriteJsonPropertyAttributeAsync(GraphQLName propertyName, WriterContext context) =>
-        await context.WriteLineAsync($"[System.Text.Json.JsonProperty(\"{propertyName.StringValue}\")]");
+        await context.WriteLineAsync($"[JsonProperty(\"{propertyName.StringValue}\")]");
 
     private async Task WriteObsoletePropertyAttributeAsync(GraphQLDirective directive, WriterContext context)
     {
@@ -64,18 +83,33 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
             .FirstOrDefault(arg => arg.Name == "reason" && arg.Value.Kind == ASTNodeKind.StringValue);
         var sb = new StringBuilder();
 
-        sb.Append("[System.Obsolete(");
+        sb.Append("[Obsolete(");
+
         if (reason?.Value is GraphQLStringValue reasonValue)
-            sb.Append($"\"{reasonValue.Value}\"");
+        {
+            var sanitizedValue = RemoveNewLines(reasonValue.Value);
+            sb.Append($"\"{sanitizedValue}\"");
+        }
+
         sb.Append(")]");
 
         await context.WriteLineAsync(sb.ToString());
     }
 
+    protected override ValueTask VisitDirectiveDefinitionAsync(GraphQLDirectiveDefinition directiveDefinition, WriterContext context)
+    {
+        return ValueTask.CompletedTask;
+    }
+
     public new async ValueTask VisitDocumentAsync(GraphQLDocument document, WriterContext context)
     {
-        // Start by writing the ShopifySharp namespace, then begin visiting each node in the document
+        // Start by writing the ShopifySharp namespace and usings, then begin visiting each node in the document
         await context.WriteLineAsync("namespace ShopifySharp.GraphQL;").ConfigureAwait(false);
+        await context.WriteEmptyLineAsync();
+        await context.WriteLineAsync("using System;").ConfigureAwait(false);
+        await context.WriteLineAsync("using System.Text.Json;").ConfigureAwait(false);
+        await context.WriteLineAsync("using System.Collections.Generic;").ConfigureAwait(false);
+        await context.WriteEmptyLineAsync();
 
         await VisitAsync(document.Comments, context).ConfigureAwait(false);
         await VisitAsync(document.Definitions, context).ConfigureAwait(false);
@@ -275,7 +309,9 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
 
             await context.WriteAsync("I" + MakePascalCase(interfaceItem.Name));
 
-            if (isLastItem)
+            if (!isLastItem)
+                await context.WriteAsync(", ");
+            else
                 await context.WriteEmptyLineAsync();
         }
     }
@@ -286,34 +322,38 @@ public class ShopifyGraphAstVisitor: ASTVisitor<WriterContext>
         await VisitAsync(unionTypeDefinition.Description, context).ConfigureAwait(false);
 
         await context.WriteLineAsync("""[(JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]""");
-        await using var sb = new StringWriter();
 
-        foreach (var type in unionTypeDefinition.Types?.Items ?? [])
+        var unionTypeCases = unionTypeDefinition.Types?.Items.ToArray() ?? [];
+        var defaultInterfaceMethods = new List<string>(unionTypeCases.Length);
+
+        foreach (var type in unionTypeCases)
         {
             var typeName = MakePascalCase(type.Name);
 
             await context.WriteLineAsync($"""[(JsonDerivedType(typeof({typeName}), typeDiscriminator: "{type.Name}")]""");
-            // Also write the types to a StringWriter while we're here, to be read again in a moment
-            await sb.WriteLineAsync($"public {typeName}? As{typeName}() => this as {typeName};");
+            // Also write the default interface methods to a list while we're here, to be read again in a moment
+            defaultInterfaceMethods.Add($"public {typeName}? As{typeName}() => this as {typeName};");
         }
 
         await VisitAsync(unionTypeDefinition.Directives, context).ConfigureAwait(false);
 
-        await context.WriteLineAsync("public abstract record " + MakePascalCase(unionTypeDefinition.Name));
+        await context.WriteLineAsync("public interface I" + MakePascalCase(unionTypeDefinition.Name) + "Union");
         await context.WriteLineAsync("{");
-        context.Indent();
 
-        using var sr = new StringReader(sb.ToString());
-
-        while (true)
+        if (defaultInterfaceMethods.Count > 0)
         {
-            var line = await sr.ReadLineAsync(context.CancellationToken);
-            if (line is null)
-                break;
-            await context.WriteLineAsync(line);
+            // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
+            // the compiler to throw an error.
+            await context.WriteLineAsync("#IF NET6_0_OR_GREATER").ConfigureAwait(false);
+            context.Indent();
+
+            foreach (var line in defaultInterfaceMethods)
+                await context.WriteLineAsync(line).ConfigureAwait(false);
+
+            context.Outdent();
+            await context.WriteLineAsync("#ENDIF").ConfigureAwait(false);
         }
 
-        context.Outdent();
         await context.WriteLineAsync("}");
     }
 }
