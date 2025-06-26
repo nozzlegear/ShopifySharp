@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Domain.fs" />
+        <Compile Include="PipeWriterComputationBuilder.fs" />
+        <Compile Include="Visitor.fs" />
+        <Compile Include="Writer.fs" />
+        <Compile Include="Parser.fs" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FSharp.Control.TaskSeq" />
+        <PackageReference Include="FSharp.Span.Utils" />
+        <PackageReference Include="GraphQL-Parser" />
+        <PackageReference Include="FSharp.Core" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    </ItemGroup>
+
+</Project>
