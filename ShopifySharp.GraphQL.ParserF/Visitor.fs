@@ -2,7 +2,6 @@ namespace ShopifySharp.GraphQL.ParserF
 
 open System
 open System.Runtime.CompilerServices
-open System.Text
 open System.Threading.Tasks
 open FSharp.Span.Utils.SafeLowLevelOperators
 open GraphQLParser.AST
@@ -130,13 +129,16 @@ type Visitor() =
                 let fieldType = mapGraphTypeToFieldType field.Type
                 createField fieldType field.Name.StringValue field.Directives field.Description (mapToArguments field.Arguments))
 
+    let strToInterfaceName =
+        sprintf "I%s"
+
     let rec mapToInheritedTypeNames (implementsInterface: GraphQLImplementsInterfaces): string[] =
         if isNull implementsInterface then
             Array.empty
         else
             implementsInterface.Items
             |> Array.ofSeq
-            |> Array.map _.Name.StringValue
+            |> Array.map (_.Name.StringValue >> strToInterfaceName)
 
     let mapToEnumCases (enumValuesDefinition: GraphQLEnumValuesDefinition): VisitedEnumCase[] =
         enumValuesDefinition.Items
@@ -171,7 +173,7 @@ type Visitor() =
 
     override this.VisitInterfaceTypeDefinitionAsync(interfaceTypeDefinition, context) =
         let generated: Interface =
-            { Name = interfaceTypeDefinition.Name.StringValue
+            { Name = strToInterfaceName interfaceTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary interfaceTypeDefinition.Description
               Deprecation = getDeprecationMessage interfaceTypeDefinition.Directives
               Fields = mapToFields (ObjectFields interfaceTypeDefinition.Fields)

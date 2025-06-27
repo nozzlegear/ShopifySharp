@@ -181,7 +181,7 @@ let private writeClass (class': Class) (writer: Writer): ValueTask =
         yield! writeSummary Outdented class'.XmlSummary
         yield! writeDeprecationAttribute Outdented class'.Deprecation
 
-        do! $"public record {class'.Name}: ShopifyGraphObject"
+        do! $"public record {class'.Name}: GraphQLObject"
 
         if class'.InheritedTypeNames.Length > 0 then
             do! ", "
@@ -202,10 +202,10 @@ let private writeInterface (interface': Interface) (writer: Writer): ValueTask =
         yield! writeSummary Outdented interface'.XmlSummary
         yield! writeDeprecationAttribute Outdented interface'.Deprecation
 
-        do! $"public interface {interface'.Name}"
+        do! $"public interface {interface'.Name}: IGraphQLObject"
 
         if interface'.InheritedTypeNames.Length > 0 then
-            do! ": "
+            do! ", "
             do! String.Join(", ", interface'.InheritedTypeNames)
 
         do! NewLine
@@ -246,7 +246,7 @@ let private writeInputObject (inputObject: InputObject) (writer: Writer): ValueT
         yield! writeSummary Outdented inputObject.XmlSummary
         yield! writeDeprecationAttribute Outdented inputObject.Deprecation
 
-        do! $"public record {inputObject.Name}: ShopifyGraphInputObject"
+        do! $"public record {inputObject.Name}: GraphQLInputObject"
 
         do! NewLine
         do! "{"
@@ -264,7 +264,7 @@ let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
         yield! writeJsonDerivedTypeAttributes unionType.Types
 
-        do! $"public interface I{unionType.Name}Union: IShopifyGraphUnionType<"
+        do! $"public interface I{unionType.Name}Union: IGraphQLUnionType<"
         do! String.Join(", ", unionType.Types)
         do! ">"
 
