@@ -12,6 +12,10 @@ type private FieldsDefinition =
     | InputFields of inputFields: GraphQLInputFieldsDefinition
     | ObjectFields of xFields: GraphQLFieldsDefinition
 
+type private Presence
+    = Present of fieldType: GraphQLType
+    | NotPresent
+
 type Visitor() =
     inherit ASTVisitor<ParserContext>()
 
@@ -132,6 +136,29 @@ type Visitor() =
     let strToInterfaceName =
         sprintf "I%s"
 
+    let getBestConnectionTypeInterfaceName (fields: GraphQLFieldsDefinition): ConnectionType =
+        let check (nodesFieldPresence: Presence, edgesFieldPresence: Presence) (field: GraphQLFieldDefinition) =
+            if nodesFieldPresence.IsPresent && edgesFieldPresence.IsPresent
+            then nodesFieldPresence, edgesFieldPresence
+            else match field.Name.StringValue.ToLowerInvariant() with
+                 | "nodes" -> Present field.Type, edgesFieldPresence
+                 | "edges" -> nodesFieldPresence, Present field.Type
+                 | _ -> nodesFieldPresence, edgesFieldPresence
+
+        let nodeFieldPresence, edgesFieldPresence =
+            fields.Items
+            |> Seq.fold check (NotPresent, NotPresent)
+
+        match nodeFieldPresence, edgesFieldPresence with
+        | Present nodesFieldType, Present edgesFieldType ->
+            ConnectionWithNodesAndEdges (mapGraphTypeToFieldType nodesFieldType, mapGraphTypeToFieldType edgesFieldType)
+        | Present nodesFieldType, NotPresent ->
+            ConnectionWithNodes (mapGraphTypeToFieldType nodesFieldType)
+        | NotPresent, Present edgesFieldType ->
+            ConnectionWithEdges (mapGraphTypeToFieldType edgesFieldType)
+        | NotPresent, NotPresent ->
+            ConnectionType.Connection
+
     let rec mapToInheritedTypeNames (implementsInterface: GraphQLImplementsInterfaces): string[] =
         if isNull implementsInterface then
             Array.empty
@@ -158,11 +185,22 @@ type Visitor() =
         |> Array.map _.Name.StringValue
 
     override this.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context) =
+        let objectTypeName = objectTypeDefinition.Name.StringValue
+        let classInheritedType =
+            if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
+                GenericEdge
+            else if objectTypeName.EndsWith("Connection", StringComparison.OrdinalIgnoreCase) then
+                getBestConnectionTypeInterfaceName objectTypeDefinition.Fields
+                |> Connection
+            else
+               GenericGraphQLObject
+
         let generated: Class =
             { Name = objectTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary objectTypeDefinition.Description
               Deprecation = getDeprecationMessage objectTypeDefinition.Directives
               Fields = mapToFields (ObjectFields objectTypeDefinition.Fields)
+              KnownInheritedType = classInheritedType
               InheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces }
 
         // Mark the type as visited
