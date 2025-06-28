@@ -105,12 +105,16 @@ let private mapValueTypeToString = function
     | FieldValueType.TimeSpan -> "TimeSpan"
     | FieldValueType.GraphObjectType graphObjectTypeName -> graphObjectTypeName
 
-let rec private mapFieldTypeToString (valueType: FieldType) =
+let rec private mapFieldTypeToString (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
     match valueType with
-    | NullableType nullableType -> $"{mapFieldTypeToString nullableType}?"
-    | NonNullableType nonNullableType -> mapFieldTypeToString nonNullableType
-    | CollectionType collectionType ->  $"ICollection<{mapFieldTypeToString collectionType}>"
     | ValueType valueType -> mapValueTypeToString valueType
+    | NonNullableType nonNullableType -> mapFieldTypeToString nonNullableType collectionHandling
+    | NullableType nullableType -> $"{mapFieldTypeToString nullableType collectionHandling}?"
+    | CollectionType collectionType ->
+        let mappedType = mapFieldTypeToString collectionType collectionHandling
+        match collectionHandling with
+        | KeepCollection -> $"ICollection<{mappedType}>"
+        | UnwrapCollection -> mappedType
 
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
@@ -163,10 +167,27 @@ let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTa
             do! NewLine
     }
 
+let private writeClassKnownInheritedType className (inheritedType: ClassInheritedType) writer: ValueTask =
+    pipeWriter writer {
+        match inheritedType with
+        | GenericEdge ->
+            $"Edge<{className}>"
+        | GenericGraphQLObject ->
+            $"GraphQLObject<{className}>"
+        | Connection ConnectionType.Connection ->
+            "IConnection"
+        | Connection (ConnectionWithEdges edgeType) ->
+            $"IConnection<{mapFieldTypeToString edgeType UnwrapCollection}>"
+        | Connection (ConnectionWithNodes nodeType) ->
+            $"IConnectionWithNodes<{mapFieldTypeToString nodeType UnwrapCollection}>"
+        | Connection (ConnectionWithNodesAndEdges (nodeType, edgeType)) ->
+            $"IConnectionWithNodesAndEdges<{mapFieldTypeToString nodeType UnwrapCollection}, {mapFieldTypeToString edgeType UnwrapCollection}>"
+    }
+
 let private writeFields (fields: Field[]) writer : ValueTask =
     pipeWriter writer {
         for field in fields do
-            let fieldType = mapFieldTypeToString field.ValueType
+            let fieldType = mapFieldTypeToString field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
@@ -181,7 +202,8 @@ let private writeClass (class': Class) (writer: Writer): ValueTask =
         yield! writeSummary Outdented class'.XmlSummary
         yield! writeDeprecationAttribute Outdented class'.Deprecation
 
-        do! $"public record {class'.Name}: GraphQLObject"
+        do! $"public record {class'.Name}: "
+        yield! writeClassKnownInheritedType class'.Name class'.KnownInheritedType
 
         if class'.InheritedTypeNames.Length > 0 then
             do! ", "

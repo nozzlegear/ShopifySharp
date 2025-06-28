@@ -11,6 +11,10 @@ type Indentation
     = Outdented
     | Indented
 
+type FieldTypeCollectionHandling
+    = UnwrapCollection
+    | KeepCollection
+
 type GeneratedCsharpFile =
     { FileName: string
       FileText: string }
@@ -34,6 +38,17 @@ type FieldType =
     | NullableType of valueType: FieldType
     | NonNullableType of valueType: FieldType
     | CollectionType of collectionType: FieldType
+
+type ConnectionType =
+    | ConnectionWithNodesAndEdges of nodesType: FieldType * edgesType: FieldType
+    | ConnectionWithNodes of nodesType: FieldType
+    | ConnectionWithEdges of edgesType: FieldType
+    | Connection
+
+type ClassInheritedType =
+    | GenericEdge
+    | GenericGraphQLObject
+    | Connection of connectionType: ConnectionType
 
 type IVisitedType =
     interface end
@@ -65,6 +80,7 @@ type Class =
       XmlSummary: string[]
       Deprecation: string option
       Fields: Field[]
+      KnownInheritedType: ClassInheritedType
       InheritedTypeNames: string [] }
     with interface IVisitedType
 
