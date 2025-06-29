@@ -15,6 +15,11 @@ type FieldTypeCollectionHandling
     = UnwrapCollection
     | KeepCollection
 
+type FileSystemDestination =
+    | SingleFile of filePath: string
+    | Directory of directoryPath: string
+    | DirectoryAndTemporaryFile of directoryPath: string * temporaryFilePath: string
+
 type GeneratedCsharpFile =
     { FileName: string
       FileText: string }
