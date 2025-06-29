@@ -57,6 +57,12 @@ let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationT
                   FileText = unit.ToFullString() }
             )
             |> Array.ofSeq
+let private parseCsharpCodeAndWriteToDirectoryPath directoryPath (csharpCode: StringBuilder) cancellationToken =
+    ValueTask(task {
+        let! generatedFiles = parseCsharpStringToGeneratedFiles (csharpCode.ToString()) cancellationToken
+        for file in generatedFiles do
+            let filePath = Path.Join(directoryPath, "/", file.FileName)
+            do! writeFileToPath filePath file.FileText cancellationToken
     })
 
 let private readPipe (reader: PipeReader) cancellationToken: ValueTask<StringBuilder> =
@@ -309,7 +315,7 @@ let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
         do! NewLine
     }
 
-let writeVisitedTypesToPipe (writer: Writer) (visitedTypes: VisitedTypes[]) (_: CancellationToken): ValueTask =
+let private writeVisitedTypesToPipe (writer: Writer) (visitedTypes: VisitedTypes[]) (_: CancellationToken): ValueTask =
     pipeWriter writer {
         // Always write the namespace and usings at the very top of the document
         yield! writeNamespaceAndUsings
@@ -328,9 +334,9 @@ let writeVisitedTypesToPipe (writer: Writer) (visitedTypes: VisitedTypes[]) (_: 
                 yield! writeUnionType unionType
     }
 
-let writeVisitedTypesToFileSystem (outDir: string) (visitedTypes: VisitedTypes[]) cancellationToken: ValueTask =
+let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (visitedTypes: VisitedTypes[]) cancellationToken: ValueTask =
     ValueTask(task {
-        let pipe = Pipe(PipeOptions(pauseWriterThreshold = 0, resumeWriterThreshold = 0))
+        let pipe = Pipe(PipeOptions())
         let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
 
         do! writeVisitedTypesToPipe pipe.Writer visitedTypes cancellationToken
@@ -338,13 +344,12 @@ let writeVisitedTypesToFileSystem (outDir: string) (visitedTypes: VisitedTypes[]
 
         let! csharpCode = readTask
 
-        // Write all generated code to a temporary file
-        do! writeFileToPath "temp.cs" (csharpCode.ToString()) cancellationToken
-
-        // Parse the generated code into individual files
-        let! generatedFiles = parseCsharpStringToGeneratedFiles (csharpCode.ToString()) cancellationToken
-
-        for file in generatedFiles do
-            let filePath = Path.Join(outDir, "/", file.FileName)
-            do! writeFileToPath filePath file.FileText cancellationToken
+        match destination with
+        | SingleFile filePath ->
+            do! writeFileToPath filePath (csharpCode.ToString()) cancellationToken
+        | Directory directoryPath ->
+            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
+        | DirectoryAndTemporaryFile(directoryPath, temporaryFilePath) ->
+            do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
+            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
     })
