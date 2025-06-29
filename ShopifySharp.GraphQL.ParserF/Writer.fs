@@ -22,6 +22,54 @@ let private toTab = function
     | Indented -> "\t"
     | Outdented -> String.Empty
 
+let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
+    ValueTask<GeneratedCsharpFile[]>(task {
+        let! csharpTree = CSharpSyntaxTree.ParseText(csharpCode).GetRootAsync(cancellationToken)
+        let syntaxRoot = csharpTree :?> CompilationUnitSyntax;
+        let usings = syntaxRoot.Usings;
+        let externals = syntaxRoot.Externs
+
+        let rootMembers = syntaxRoot.Members |> Array.ofSeq
+        let rootTypes = rootMembers |> Array.filter (fun m -> m :? BaseTypeDeclarationSyntax)
+
+        let namespaces = syntaxRoot.Members.OfType<BaseNamespaceDeclarationSyntax>() |> Array.ofSeq
+        let fileScopedNamespaces = syntaxRoot.Members.OfType<FileScopedNamespaceDeclarationSyntax>() |> Array.ofSeq
+
+        let allTypes =
+            if fileScopedNamespaces.Length > 0 then
+                // Handle file-scoped namespaces - collect ALL types (both from namespace and root)
+                let nsTypes =
+                    fileScopedNamespaces
+                    |> Array.collect (fun ns ->
+                        let types = ns.Members.OfType<BaseTypeDeclarationSyntax>() |> Array.ofSeq
+                        types |> Array.map (fun t -> (ns :> BaseNamespaceDeclarationSyntax, t)))
+
+                // Also collect types that ended up at root level due to parsing issues
+                let rootLevelTypes = rootTypes |> Array.map (fun t ->
+                    // Use the file-scoped namespace for root-level types
+                    (fileScopedNamespaces[0] :> BaseNamespaceDeclarationSyntax, t :?> BaseTypeDeclarationSyntax))
+                Array.concat [nsTypes; rootLevelTypes]
+            else
+                // Handle regular namespaces
+                namespaces
+                |> Array.collect (fun ns ->
+                    let types = ns.Members.OfType<BaseTypeDeclarationSyntax>() |> Array.ofSeq
+                    types |> Array.map (fun t -> (ns, t)))
+
+        return
+            allTypes
+            |> Array.map (fun (ns, type') ->
+                let unit = SyntaxFactory.CompilationUnit()
+                            .WithExterns(externals)
+                            .WithUsings(usings)
+                            .AddMembers(ns.WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(type')))
+                            .NormalizeWhitespace(eol = Environment.NewLine)
+
+                { FileName = type'.Identifier.Text + ".cs"
+                  FileText = unit.ToFullString() }
+            )
+    })
+
 let private writeFileToPath filePath (fileText: string) cancellationToken: ValueTask =
     ValueTask(task {
         if File.Exists(filePath) then
@@ -35,28 +83,6 @@ let private writeFileToPath filePath (fileText: string) cancellationToken: Value
         do! File.WriteAllTextAsync(filePath, fileText, cancellationToken)
     })
 
-let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
-    ValueTask<GeneratedCsharpFile[]>(task {
-        let! csharpTree = CSharpSyntaxTree.ParseText(csharpCode).GetRootAsync(cancellationToken)
-        let syntaxRoot = csharpTree :?> CompilationUnitSyntax;
-        let usings = syntaxRoot.Usings;
-        let externals = syntaxRoot.Externs
-
-        return
-            syntaxRoot.Members.OfType<BaseNamespaceDeclarationSyntax>()
-            |> Seq.collect (fun ns -> ns.Members.OfType<BaseTypeDeclarationSyntax>()
-                                      |> Seq.map (fun types -> (ns, types)))
-            |> Seq.map (fun (ns, type') ->
-                let unit = SyntaxFactory.CompilationUnit()
-                            .WithExterns(externals)
-                            .WithUsings(usings)
-                            .AddMembers(ns.WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(type')))
-                            .NormalizeWhitespace(eol = Environment.NewLine)
-
-                { FileName = type'.Identifier.Text + ".cs"
-                  FileText = unit.ToFullString() }
-            )
-            |> Array.ofSeq
 let private parseCsharpCodeAndWriteToDirectoryPath directoryPath (csharpCode: StringBuilder) cancellationToken =
     ValueTask(task {
         let! generatedFiles = parseCsharpStringToGeneratedFiles (csharpCode.ToString()) cancellationToken
