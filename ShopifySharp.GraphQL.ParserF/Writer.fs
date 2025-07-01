@@ -154,7 +154,9 @@ let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
         do! NewLine
         do! "using System;"
         do! NewLine
-        do! "using System.Text.Json;"
+        do! "using System.Text.Json.Serialization;"
+        do! NewLine
+        do! "using System.Collections.Generic;"
         do! NewLine
     }
 
@@ -185,7 +187,7 @@ let private writeDeprecationAttribute indentation (deprecationWarning: string op
 
 let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask =
     pipeWriter writer {
-        do! "\t" + $"[JsonProperty(\"{propertyName}\")]"
+        do! "\t" + $"[JsonPropertyName(\"{propertyName}\")]"
         do! NewLine
     }
 
