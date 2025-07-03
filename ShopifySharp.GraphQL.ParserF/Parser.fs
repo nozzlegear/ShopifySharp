@@ -26,5 +26,5 @@ let ParseAndWriteAsync (destination: FileSystemDestination)
                        : ValueTask =
     ValueTask(task {
         let! visitedTypes = Parse casing graphqlData cancellationToken
-        do! Writer.writeVisitedTypesToFileSystem destination visitedTypes cancellationToken
+        do! Writer.writeVisitedTypesToFileSystem destination casing visitedTypes cancellationToken
     })

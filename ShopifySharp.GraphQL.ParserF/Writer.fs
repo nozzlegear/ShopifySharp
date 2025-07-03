@@ -117,6 +117,30 @@ let private sanitizeString (str: string): string =
        .Replace("\"", "", StringComparison.OrdinalIgnoreCase)
        .Replace("'", "", StringComparison.OrdinalIgnoreCase)
 
+let private csharpKeywords = Set.ofList [
+    "abstract"; "as"; "base"; "bool"; "break"; "byte"; "case"; "catch"; "char"; "checked";
+    "class"; "const"; "continue"; "decimal"; "default"; "delegate"; "do"; "double"; "else";
+    "enum"; "event"; "explicit"; "extern"; "false"; "finally"; "fixed"; "float"; "for";
+    "foreach"; "goto"; "if"; "implicit"; "in"; "int"; "interface"; "internal"; "is"; "lock";
+    "long"; "namespace"; "new"; "null"; "object"; "operator"; "out"; "override"; "params";
+    "private"; "protected"; "public"; "readonly"; "ref"; "return"; "sbyte"; "sealed";
+    "short"; "sizeof"; "stackalloc"; "static"; "string"; "struct"; "switch"; "this";
+    "throw"; "true"; "try"; "typeof"; "uint"; "ulong"; "unchecked"; "unsafe"; "ushort";
+    "using"; "virtual"; "void"; "volatile"; "while";
+    // Contextual keywords that can also cause issues
+    "add"; "alias"; "ascending"; "async"; "await"; "by"; "descending"; "dynamic"; "equals";
+    "from"; "get"; "global"; "group"; "into"; "join"; "let"; "nameof"; "orderby"; "partial";
+    "remove"; "select"; "set"; "value"; "var"; "when"; "where"; "yield"
+]
+
+/// <summary>
+/// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
+/// </summary>
+let private sanitizeFieldName (value: string): string =
+    if Set.contains value csharpKeywords
+    then "@" + value
+    else value
+
 let private toCasing casing (str: string): string =
     let first = str[0]
     let rest  = str[1..]
@@ -150,6 +174,9 @@ let rec private mapFieldTypeToString (valueType: FieldType) (collectionHandling:
 
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
+        do! "#nullable enable"
+        do! NewLine
+        do! NewLine
         do! "namespace ShopifySharp.GraphQL;"
         do! NewLine
         do! "using System;"
@@ -193,32 +220,39 @@ let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask
 
 let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTask =
     pipeWriter writer {
-        do! "[(JsonPolymorphic(TypeDiscriminatorPropertyName = \"__typename\")]"
+        do! "[JsonPolymorphic(TypeDiscriminatorPropertyName = \"__typename\")]"
         do! NewLine
 
         for typeName in typeNames do
-            do! $"""[(JsonDerivedType(typeof({typeName}), typeDiscriminator: "{typeName}")]"""
+            do! $"""[JsonDerivedType(typeof({typeName}), typeDiscriminator: "{typeName}")]"""
             do! NewLine
     }
 
-let private writeClassKnownInheritedType className (inheritedType: ClassInheritedType) writer: ValueTask =
+let private findEdgeNodeType (fields: Field[]) =
+    fields
+    |> Array.find (fun field -> field.Name = "Node" || field.Name = "node")
+
+let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
+    let className = class'.Name
     pipeWriter writer {
-        match inheritedType with
+        match class'.KnownInheritedType with
         | GenericEdge ->
-            $"Edge<{className}>"
+            // We want to find the type of the edge's node and use it as the generic type in Edge<TNode>
+            let edgeNodeType = findEdgeNodeType class'.Fields
+            $"Edge<{mapFieldTypeToString edgeNodeType.ValueType UnwrapCollection}>"
         | GenericGraphQLObject ->
             $"GraphQLObject<{className}>"
         | Connection ConnectionType.Connection ->
             "IConnection"
         | Connection (ConnectionWithEdges edgeType) ->
-            $"IConnection<{mapFieldTypeToString edgeType UnwrapCollection}>"
+            $"ConnectionWithEdges<{mapFieldTypeToString edgeType UnwrapCollection}>"
         | Connection (ConnectionWithNodes nodeType) ->
-            $"IConnectionWithNodes<{mapFieldTypeToString nodeType UnwrapCollection}>"
-        | Connection (ConnectionWithNodesAndEdges (nodeType, edgeType)) ->
-            $"IConnectionWithNodesAndEdges<{mapFieldTypeToString nodeType UnwrapCollection}, {mapFieldTypeToString edgeType UnwrapCollection}>"
+            $"ConnectionWithNodes<{mapFieldTypeToString nodeType UnwrapCollection}>"
+        | Connection (ConnectionWithNodesAndEdges (nodeType, _)) ->
+            $"ConnectionWithNodesAndEdges<{mapFieldTypeToString nodeType UnwrapCollection}>"
     }
 
-let private writeFields (fields: Field[]) writer : ValueTask =
+let private writeFields casing (fields: Field[]) writer : ValueTask =
     pipeWriter writer {
         for field in fields do
             let fieldType = mapFieldTypeToString field.ValueType KeepCollection
@@ -227,17 +261,21 @@ let private writeFields (fields: Field[]) writer : ValueTask =
             yield! writeJsonPropertyAttribute field.Name
             yield! writeDeprecationAttribute Indented field.Deprecation
 
-            do! (toTab Indented) + $$"""public {{fieldType}} {{toCasing Casing.Camel field.Name}} { get; set; }"""
+            let fieldName = toCasing casing field.Name
+                            |> sanitizeFieldName
+
+            // TODO: do not write Cursor and Node fields for any class that implements Edge<TNode>
+            do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
             do! NewLine
     }
 
-let private writeClass (class': Class) (writer: Writer): ValueTask =
+let private writeClass (class': Class) casing (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented class'.XmlSummary
         yield! writeDeprecationAttribute Outdented class'.Deprecation
 
         do! $"public record {class'.Name}: "
-        yield! writeClassKnownInheritedType class'.Name class'.KnownInheritedType
+        yield! writeClassKnownInheritedType class'
 
         if class'.InheritedTypeNames.Length > 0 then
             do! ", "
@@ -247,13 +285,13 @@ let private writeClass (class': Class) (writer: Writer): ValueTask =
         do! "{"
         do! NewLine
 
-        yield! writeFields class'.Fields
+        yield! writeFields casing class'.Fields
 
         do! "}"
         do! NewLine
     }
 
-let private writeInterface (interface': Interface) (writer: Writer): ValueTask =
+let private writeInterface (interface': Interface) casing (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented interface'.XmlSummary
         yield! writeDeprecationAttribute Outdented interface'.Deprecation
@@ -268,7 +306,7 @@ let private writeInterface (interface': Interface) (writer: Writer): ValueTask =
         do! "{"
         do! NewLine
 
-        yield! writeFields interface'.Fields
+        yield! writeFields casing interface'.Fields
 
         do! "}"
         do! NewLine
@@ -297,18 +335,18 @@ let private writeEnum (enum: VisitedEnum) (writer: Writer): ValueTask =
         do! NewLine
     }
 
-let private writeInputObject (inputObject: InputObject) (writer: Writer): ValueTask =
+let private writeInputObject (inputObject: InputObject) casing (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented inputObject.XmlSummary
         yield! writeDeprecationAttribute Outdented inputObject.Deprecation
 
-        do! $"public record {inputObject.Name}: GraphQLInputObject"
+        do! $"public record {inputObject.Name}: GraphQLInputObject<{inputObject.Name}>"
 
         do! NewLine
         do! "{"
         do! NewLine
 
-        yield! writeFields inputObject.Fields
+        yield! writeFields casing inputObject.Fields
 
         do! "}"
         do! NewLine
@@ -320,7 +358,7 @@ let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
         yield! writeJsonDerivedTypeAttributes unionType.Types
 
-        do! $"public interface I{unionType.Name}Union: IGraphQLUnionType<"
+        do! $"public record {unionType.Name}: GraphQLUnionType<"
         do! String.Join(", ", unionType.Types)
         do! ">"
 
@@ -330,44 +368,61 @@ let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
 
         // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
         // the compiler to throw an error.
-        do! "#IF NET6_0_OR_GREATER"
+        do! "#if NET6_0_OR_GREATER"
         do! NewLine
 
         for typeName in unionType.Types do
             do! (toTab Indented) + $"public {typeName}? As{typeName}() => this as {typeName};"
             do! NewLine
 
-        do! "#ENDIF"
+        do! "#endif"
         do! NewLine
         do! "}"
         do! NewLine
     }
 
-let private writeVisitedTypesToPipe (writer: Writer) (visitedTypes: VisitedTypes[]) (_: CancellationToken): ValueTask =
+let private shouldSkipWrite visitedType: bool =
+    let typeNamesToSkip = Set.ofList [
+        "Node"; "INode"
+        "PageInfo"
+    ]
+    let typeName =
+        match visitedType with
+        | Class class' -> class'.Name
+        | Interface interface' -> interface'.Name
+        | Enum enum' -> enum'.Name
+        | InputObject inputObject -> inputObject.Name
+        | UnionType unionType -> unionType.Name
+    Set.contains typeName typeNamesToSkip
+
+let private writeVisitedTypesToPipe (writer: Writer) casing (visitedTypes: VisitedTypes[]) (_: CancellationToken): ValueTask =
     pipeWriter writer {
         // Always write the namespace and usings at the very top of the document
         yield! writeNamespaceAndUsings
 
         for visitedType in visitedTypes do
-            match visitedType with
-            | Class class' ->
-                yield! writeClass class'
-            | Interface interface' ->
-                yield! writeInterface interface'
-            | Enum enum' ->
-                yield! writeEnum enum'
-            | InputObject inputObject ->
-                yield! writeInputObject inputObject
-            | UnionType unionType ->
-                yield! writeUnionType unionType
+            if shouldSkipWrite visitedType then
+                ()
+            else
+                match visitedType with
+                | Class class' ->
+                    yield! writeClass class' casing
+                | Interface interface' ->
+                    yield! writeInterface interface' casing
+                | Enum enum' ->
+                    yield! writeEnum enum'
+                | InputObject inputObject ->
+                    yield! writeInputObject inputObject casing
+                | UnionType unionType ->
+                    yield! writeUnionType unionType
     }
 
-let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (visitedTypes: VisitedTypes[]) cancellationToken: ValueTask =
+let writeVisitedTypesToFileSystem (destination: FileSystemDestination) casing (visitedTypes: VisitedTypes[]) cancellationToken: ValueTask =
     ValueTask(task {
         let pipe = Pipe(PipeOptions())
         let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
 
-        do! writeVisitedTypesToPipe pipe.Writer visitedTypes cancellationToken
+        do! writeVisitedTypesToPipe pipe.Writer casing visitedTypes cancellationToken
         do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
 
         let! csharpCode = readTask
