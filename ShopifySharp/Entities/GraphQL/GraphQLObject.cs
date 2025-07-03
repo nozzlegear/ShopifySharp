@@ -6,7 +6,9 @@ public interface IGraphQLObject
 {
 }
 
-public abstract record GraphQLObject<TSelf> : IGraphQLObject where TSelf : GraphQLObject<TSelf>
+public abstract record GraphQLObject<TNode> : IGraphQLObject where TNode : IGraphQLObject
 {
-    public static TSelf? FromJson(string json) => Serializer.Deserialize<TSelf>(json);
+    #if NET6_0_OR_GREATER
+    public static IGraphQLObject? FromJson(string json) => Serializer.Deserialize<IGraphQLObject>(json);
+    #endif
 }
