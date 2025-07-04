@@ -252,19 +252,31 @@ let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
             $"ConnectionWithNodesAndEdges<{mapFieldTypeToString nodeType UnwrapCollection}>"
     }
 
-let private writeFields casing (fields: Field[]) writer : ValueTask =
+let shouldSkipField parentTypeInheritsEdge fieldName: bool =
+    if not parentTypeInheritsEdge then
+        false
+    else
+        let edgeCursorFieldName = "Cursor"
+        let nodeCursorFieldName = "Node"
+        let comparison = StringComparison.OrdinalIgnoreCase
+        edgeCursorFieldName.Equals(fieldName, comparison) || nodeCursorFieldName.Equals(fieldName, comparison)
+
+let private writeFields casing parentTypeInheritsEdge (fields: Field[]) writer : ValueTask =
+    // Filter out the Cursor and Node fields for any class that inherits the Edge<TNode> type
+    let writeableFields =
+        fields
+        |> Seq.map (fun field -> toCasing casing field.Name
+                                 |> sanitizeFieldName, field)
+        |> Seq.filter (fun (fieldName, _) -> not (shouldSkipField parentTypeInheritsEdge fieldName))
+
     pipeWriter writer {
-        for field in fields do
+        for fieldName, field in writeableFields do
             let fieldType = mapFieldTypeToString field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
             yield! writeDeprecationAttribute Indented field.Deprecation
 
-            let fieldName = toCasing casing field.Name
-                            |> sanitizeFieldName
-
-            // TODO: do not write Cursor and Node fields for any class that implements Edge<TNode>
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
             do! NewLine
     }
@@ -285,7 +297,7 @@ let private writeClass (class': Class) casing (writer: Writer): ValueTask =
         do! "{"
         do! NewLine
 
-        yield! writeFields casing class'.Fields
+        yield! writeFields casing class'.KnownInheritedType.IsGenericEdge class'.Fields
 
         do! "}"
         do! NewLine
@@ -306,7 +318,7 @@ let private writeInterface (interface': Interface) casing (writer: Writer): Valu
         do! "{"
         do! NewLine
 
-        yield! writeFields casing interface'.Fields
+        yield! writeFields casing false interface'.Fields
 
         do! "}"
         do! NewLine
@@ -346,7 +358,7 @@ let private writeInputObject (inputObject: InputObject) casing (writer: Writer):
         do! "{"
         do! NewLine
 
-        yield! writeFields casing inputObject.Fields
+        yield! writeFields casing false inputObject.Fields
 
         do! "}"
         do! NewLine
