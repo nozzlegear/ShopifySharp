@@ -242,26 +242,29 @@ let appendINodeInheritedTypeIfAppropriate (inheritedTypeNames: string[]) (fields
     else
         Array.append [|"INode"|] inheritedTypeNames
 
-let private findEdgeNodeType (fields: Field[]) =
+let private getAppropriateClassTNodeTypeFromField fieldName (fields: Field[]) =
     fields
-    |> Array.find (fun field -> field.Name = "Node" || field.Name = "node")
+    |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
+    |> fun field -> mapFieldTypeToString field.ValueType UnwrapCollection
 
 let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
     let className = class'.Name
     pipeWriter writer {
         match class'.KnownInheritedType with
         | Some Edge ->
-            // We want to find the type of the edge's node and use it as the generic type in Edge<TNode>
-            let edgeNodeType = findEdgeNodeType class'.Fields
-            $"Edge<{mapFieldTypeToString edgeNodeType.ValueType UnwrapCollection}>"
+            let edgeNodeType = getAppropriateClassTNodeTypeFromField "Node" class'.Fields
+            $"Edge<{edgeNodeType}>"
         | Some (Connection ConnectionType.Connection) ->
             "IConnection"
-        | Some (Connection (ConnectionWithEdges edgeType)) ->
-            $"ConnectionWithEdges<{mapFieldTypeToString edgeType UnwrapCollection}>"
-        | Some (Connection (ConnectionWithNodes nodeType)) ->
-            $"ConnectionWithNodes<{mapFieldTypeToString nodeType UnwrapCollection}>"
-        | Some (Connection (ConnectionWithNodesAndEdges (nodeType, _))) ->
-            $"ConnectionWithNodesAndEdges<{mapFieldTypeToString nodeType UnwrapCollection}>"
+        | Some (Connection (ConnectionWithEdges _)) ->
+            let edgesNodeType = getAppropriateClassTNodeTypeFromField "Edges" class'.Fields
+            $"ConnectionWithEdges<{edgesNodeType}>"
+        | Some (Connection (ConnectionWithNodes _)) ->
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField "Nodes" class'.Fields
+            $"ConnectionWithNodes<{nodesNodeType}>"
+        | Some (Connection (ConnectionWithNodesAndEdges _)) ->
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField "Nodes" class'.Fields
+            $"ConnectionWithNodesAndEdges<{nodesNodeType}>"
         | None ->
             $"GraphQLObject<{className}>"
     }
