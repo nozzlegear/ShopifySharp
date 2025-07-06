@@ -266,30 +266,52 @@ let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
             $"GraphQLObject<{className}>"
     }
 
-let shouldSkipField parentTypeInheritsEdge fieldName: bool =
-    if not parentTypeInheritsEdge then
+let shouldSkipField parentKnownInheritedType (field: Field): bool =
+    let fieldName = field.Name
+    let comparison = StringComparison.OrdinalIgnoreCase
+    match parentKnownInheritedType with
+    | None ->
         false
     | Some Edge ->
         let edgeCursorFieldName = "Cursor"
         let nodeCursorFieldName = "Node"
-        let comparison = StringComparison.OrdinalIgnoreCase
         edgeCursorFieldName.Equals(fieldName, comparison) || nodeCursorFieldName.Equals(fieldName, comparison)
+    | Some (Connection connectionType) ->
+        let pageInfoFieldName = "PageInfo"
+        let nodesFieldName = "Nodes"
+        let edgesFieldName = "Edges"
 
-let private writeFields casing parentTypeInheritsEdge (fields: Field[]) writer : ValueTask =
+        let pageInfoFieldMatches = fieldName.Equals(pageInfoFieldName, comparison)
+        let nodesFieldMatches = fieldName.Equals(nodesFieldName, comparison)
+        let edgesFieldMatches = fieldName.Equals(edgesFieldName, comparison)
+
+        match connectionType with
+        | ConnectionType.Connection ->
+            pageInfoFieldMatches
+        | ConnectionWithNodes _ ->
+            pageInfoFieldMatches || nodesFieldMatches
+        | ConnectionWithEdges _ ->
+            pageInfoFieldMatches || edgesFieldMatches
+        | ConnectionWithNodesAndEdges _ ->
+            pageInfoFieldMatches || nodesFieldMatches || edgesFieldMatches
+
+let private writeFields casing shouldSkipWritingField (fields: Field[]) writer : ValueTask =
     // Filter out the Cursor and Node fields for any class that inherits the Edge<TNode> type
     let writeableFields =
         fields
-        |> Seq.map (fun field -> toCasing casing field.Name
-                                 |> sanitizeFieldName, field)
-        |> Seq.filter (fun (fieldName, _) -> not (shouldSkipField parentTypeInheritsEdge fieldName))
+        |> Seq.filter (shouldSkipWritingField >> not)
 
     pipeWriter writer {
-        for fieldName, field in writeableFields do
+        for field in writeableFields do
             let fieldType = mapFieldTypeToString field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
             yield! writeDeprecationAttribute Indented field.Deprecation
+
+            let fieldName =
+                toCasing casing field.Name
+                |> sanitizeFieldName
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
             do! NewLine
@@ -313,7 +335,7 @@ let private writeClass (class': Class) casing (writer: Writer): ValueTask =
         do! "{"
         do! NewLine
 
-        yield! writeFields casing class'.KnownInheritedType.IsGenericEdge class'.Fields
+        yield! writeFields casing (shouldSkipField class'.KnownInheritedType) class'.Fields
 
         do! "}"
         do! NewLine
@@ -336,7 +358,7 @@ let private writeInterface (interface': Interface) casing (writer: Writer): Valu
         do! "{"
         do! NewLine
 
-        yield! writeFields casing false interface'.Fields
+        yield! writeFields casing (shouldSkipField None) interface'.Fields
 
         do! "}"
         do! NewLine
@@ -376,7 +398,7 @@ let private writeInputObject (inputObject: InputObject) casing (writer: Writer):
         do! "{"
         do! NewLine
 
-        yield! writeFields casing false inputObject.Fields
+        yield! writeFields casing (shouldSkipField None) inputObject.Fields
 
         do! "}"
         do! NewLine
@@ -411,7 +433,7 @@ let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
         do! NewLine
     }
 
-let private shouldSkipWrite visitedType: bool =
+let private shouldSkipType visitedType: bool =
     let typeNamesToSkip = Set.ofList [
         "Node"; "INode"
         "PageInfo"
@@ -431,7 +453,7 @@ let private writeVisitedTypesToPipe (writer: Writer) casing (visitedTypes: Visit
         yield! writeNamespaceAndUsings
 
         for visitedType in visitedTypes do
-            if shouldSkipWrite visitedType then
+            if shouldSkipType visitedType then
                 ()
             else
                 match visitedType with
