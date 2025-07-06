@@ -11,6 +11,12 @@ public interface INode
     string Id { get; }
 }
 
+public sealed record Node : INode
+{
+    [JsonPropertyName("id")]
+    public string Id { get; }
+}
+
 public interface IEdge<out TNode> where TNode : INode
 {
     string? Cursor { get; }
