@@ -236,26 +236,26 @@ let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
     let className = class'.Name
     pipeWriter writer {
         match class'.KnownInheritedType with
-        | GenericEdge ->
+        | Some Edge ->
             // We want to find the type of the edge's node and use it as the generic type in Edge<TNode>
             let edgeNodeType = findEdgeNodeType class'.Fields
             $"Edge<{mapFieldTypeToString edgeNodeType.ValueType UnwrapCollection}>"
-        | GenericGraphQLObject ->
-            $"GraphQLObject<{className}>"
-        | Connection ConnectionType.Connection ->
+        | Some (Connection ConnectionType.Connection) ->
             "IConnection"
-        | Connection (ConnectionWithEdges edgeType) ->
+        | Some (Connection (ConnectionWithEdges edgeType)) ->
             $"ConnectionWithEdges<{mapFieldTypeToString edgeType UnwrapCollection}>"
-        | Connection (ConnectionWithNodes nodeType) ->
+        | Some (Connection (ConnectionWithNodes nodeType)) ->
             $"ConnectionWithNodes<{mapFieldTypeToString nodeType UnwrapCollection}>"
-        | Connection (ConnectionWithNodesAndEdges (nodeType, _)) ->
+        | Some (Connection (ConnectionWithNodesAndEdges (nodeType, _))) ->
             $"ConnectionWithNodesAndEdges<{mapFieldTypeToString nodeType UnwrapCollection}>"
+        | None ->
+            $"GraphQLObject<{className}>"
     }
 
 let shouldSkipField parentTypeInheritsEdge fieldName: bool =
     if not parentTypeInheritsEdge then
         false
-    else
+    | Some Edge ->
         let edgeCursorFieldName = "Cursor"
         let nodeCursorFieldName = "Node"
         let comparison = StringComparison.OrdinalIgnoreCase
