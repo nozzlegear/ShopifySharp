@@ -51,8 +51,7 @@ type ConnectionType =
     | Connection
 
 type ClassInheritedType =
-    | GenericEdge
-    | GenericGraphQLObject
+    | Edge
     | Connection of connectionType: ConnectionType
 
 type IVisitedType =
@@ -70,7 +69,6 @@ type Field =
       Deprecation: string option
       Arguments: FieldArgument[]
       ValueType: FieldType }
-    with interface IVisitedType
 
 type Interface =
     { Name: string
@@ -85,7 +83,7 @@ type Class =
       XmlSummary: string[]
       Deprecation: string option
       Fields: Field[]
-      KnownInheritedType: ClassInheritedType
+      KnownInheritedType: ClassInheritedType option
       InheritedTypeNames: string [] }
     with interface IVisitedType
 

@@ -188,12 +188,13 @@ type Visitor() =
         let objectTypeName = objectTypeDefinition.Name.StringValue
         let classInheritedType =
             if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
-                GenericEdge
+                Some Edge
             else if objectTypeName.EndsWith("Connection", StringComparison.OrdinalIgnoreCase) then
                 getBestConnectionTypeInterfaceName objectTypeDefinition.Fields
                 |> Connection
+                |> Some
             else
-               GenericGraphQLObject
+               None
 
         let generated: Class =
             { Name = objectTypeDefinition.Name.StringValue
