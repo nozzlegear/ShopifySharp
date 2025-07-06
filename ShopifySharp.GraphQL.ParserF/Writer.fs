@@ -228,6 +228,20 @@ let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTa
             do! NewLine
     }
 
+let appendINodeInheritedTypeIfAppropriate (inheritedTypeNames: string[]) (fields: Field[]) =
+    let comparison = StringComparison.OrdinalIgnoreCase
+    let isNodeInterface (typeName: string) =
+        typeName.Equals("Node", comparison) || typeName.Equals("INode", comparison)
+    let isIdField (field: Field) =
+        field.Name.Equals("Id", comparison)
+
+    if Array.exists isNodeInterface inheritedTypeNames then
+        inheritedTypeNames
+    else if not (Array.exists isIdField fields) then
+        inheritedTypeNames
+    else
+        Array.append [|"INode"|] inheritedTypeNames
+
 let private findEdgeNodeType (fields: Field[]) =
     fields
     |> Array.find (fun field -> field.Name = "Node" || field.Name = "node")
@@ -282,6 +296,8 @@ let private writeFields casing parentTypeInheritsEdge (fields: Field[]) writer :
     }
 
 let private writeClass (class': Class) casing (writer: Writer): ValueTask =
+    let inheritedTypes = appendINodeInheritedTypeIfAppropriate class'.InheritedTypeNames class'.Fields
+
     pipeWriter writer {
         yield! writeSummary Outdented class'.XmlSummary
         yield! writeDeprecationAttribute Outdented class'.Deprecation
@@ -289,9 +305,9 @@ let private writeClass (class': Class) casing (writer: Writer): ValueTask =
         do! $"public record {class'.Name}: "
         yield! writeClassKnownInheritedType class'
 
-        if class'.InheritedTypeNames.Length > 0 then
+        if Array.length inheritedTypes > 0 then
             do! ", "
-            do! String.Join(", ", class'.InheritedTypeNames)
+            do! String.Join(", ", inheritedTypes)
 
         do! NewLine
         do! "{"
@@ -304,15 +320,17 @@ let private writeClass (class': Class) casing (writer: Writer): ValueTask =
     }
 
 let private writeInterface (interface': Interface) casing (writer: Writer): ValueTask =
+    let inheritedTypes = appendINodeInheritedTypeIfAppropriate interface'.InheritedTypeNames interface'.Fields
+
     pipeWriter writer {
         yield! writeSummary Outdented interface'.XmlSummary
         yield! writeDeprecationAttribute Outdented interface'.Deprecation
 
         do! $"public interface {interface'.Name}: IGraphQLObject"
 
-        if interface'.InheritedTypeNames.Length > 0 then
+        if Array.length inheritedTypes > 0 then
             do! ", "
-            do! String.Join(", ", interface'.InheritedTypeNames)
+            do! String.Join(", ", inheritedTypes)
 
         do! NewLine
         do! "{"
