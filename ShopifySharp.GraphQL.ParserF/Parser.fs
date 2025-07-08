@@ -7,15 +7,27 @@ open FSharp.Control
 open GraphQLParser
 open GraphQLParser.Visitors
 
-let Parse (casing: Casing) (graphqlData: ReadOnlyMemory<char>) (cancellationToken: CancellationToken): ValueTask<VisitedTypes[]> =
+let private parseAsync (casing: Casing)
+                       (graphqlData: ReadOnlyMemory<char>)
+                       cancellationToken
+                       : ValueTask<ParserContext> =
     let context = ParserContext(casing, cancellationToken)
     let visitor: ASTVisitor<ParserContext> = Visitor()
 
     // Read the GraphQL document
     let ast = Parser.Parse(graphqlData)
 
-    ValueTask<VisitedTypes[]>(task {
+    ValueTask<ParserContext>(task {
         do! visitor.VisitAsync(ast, context)
+        return context
+    })
+
+let ParseAsync (casing: Casing)
+               (graphqlData: ReadOnlyMemory<char>)
+               (cancellationToken: CancellationToken)
+               : ValueTask<VisitedTypes[]> =
+    ValueTask<VisitedTypes[]>(task {
+        let! context = parseAsync casing graphqlData cancellationToken
         return context.GetVisitedTypes()
     })
 
@@ -25,6 +37,6 @@ let ParseAndWriteAsync (destination: FileSystemDestination)
                        cancellationToken
                        : ValueTask =
     ValueTask(task {
-        let! visitedTypes = Parse casing graphqlData cancellationToken
-        do! Writer.writeVisitedTypesToFileSystem destination casing visitedTypes cancellationToken
+        let! context = parseAsync casing graphqlData cancellationToken
+        do! Writer.writeVisitedTypesToFileSystem destination context
     })
