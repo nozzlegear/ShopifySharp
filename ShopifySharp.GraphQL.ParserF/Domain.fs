@@ -123,6 +123,7 @@ type VisitedTypes =
 
 type ParserContext(casingType, ct) =
     let visitedTypes: HashSet<VisitedTypes> = HashSet()
+    let knownUnionCases: HashSet<string> = HashSet()
     let (~%) comp = ignore comp
 
     member _.CasingType: Casing = casingType
@@ -134,6 +135,13 @@ type ParserContext(casingType, ct) =
 
     member this.GetVisitedTypes () =
         Array.ofSeq visitedTypes
+
+    member _.AddKnownUnionCases unionCaseNames: unit =
+        for unionCase in unionCaseNames do
+            %knownUnionCases.Add unionCase
+
+    member this.TypeIsKnownUnionCase unionCaseName: bool =
+        knownUnionCases.Contains unionCaseName
 
     interface IASTVisitorContext with
         member _.CancellationToken = ct

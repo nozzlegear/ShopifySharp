@@ -5,7 +5,6 @@ open System.IO
 open System.IO.Pipelines
 open System.Linq
 open System.Text
-open System.Threading
 open System.Threading.Tasks
 open Microsoft.CodeAnalysis;
 open Microsoft.CodeAnalysis.CSharp;
@@ -269,6 +268,11 @@ let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
             $"GraphQLObject<{className}>"
     }
 
+let private writeInheritedUnionCaseType writer: ValueTask =
+    pipeWriter writer {
+        do! "IGraphQLUnionCase"
+    }
+
 let shouldSkipField parentKnownInheritedType (field: Field): bool =
     let fieldName = field.Name
     let comparison = StringComparison.OrdinalIgnoreCase
@@ -320,7 +324,7 @@ let private writeFields casing shouldSkipWritingField (fields: Field[]) writer :
             do! NewLine
     }
 
-let private writeClass (class': Class) casing (writer: Writer): ValueTask =
+let private writeClass (class': Class) casing typeIsKnownUnionCase (writer: Writer): ValueTask =
     let inheritedTypes = appendINodeInheritedTypeIfAppropriate class'.InheritedTypeNames class'.Fields
 
     pipeWriter writer {
@@ -334,6 +338,10 @@ let private writeClass (class': Class) casing (writer: Writer): ValueTask =
             do! ", "
             do! String.Join(", ", inheritedTypes)
 
+        if typeIsKnownUnionCase class'.Name then
+            do! ","
+            yield! writeInheritedUnionCaseType
+
         do! NewLine
         do! "{"
         do! NewLine
@@ -344,7 +352,7 @@ let private writeClass (class': Class) casing (writer: Writer): ValueTask =
         do! NewLine
     }
 
-let private writeInterface (interface': Interface) casing (writer: Writer): ValueTask =
+let private writeInterface (interface': Interface) casing typeIsKnownUnionCase (writer: Writer): ValueTask =
     let inheritedTypes = appendINodeInheritedTypeIfAppropriate interface'.InheritedTypeNames interface'.Fields
 
     pipeWriter writer {
@@ -357,6 +365,10 @@ let private writeInterface (interface': Interface) casing (writer: Writer): Valu
             do! ", "
             do! String.Join(", ", inheritedTypes)
 
+        if typeIsKnownUnionCase interface'.Name then
+            do! ","
+            yield! writeInheritedUnionCaseType
+
         do! NewLine
         do! "{"
         do! NewLine
@@ -367,12 +379,19 @@ let private writeInterface (interface': Interface) casing (writer: Writer): Valu
         do! NewLine
     }
 
-let private writeEnum (enum: VisitedEnum) (writer: Writer): ValueTask =
+let private writeEnum (enum: VisitedEnum) typeIsKnownUnionCase (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented enum.XmlSummary
         yield! writeDeprecationAttribute Outdented enum.Deprecation
 
         do! $"public enum {enum.Name}"
+
+        // This is invalid C# code, but we write it anyway so the compiler will throw an error and alert us of an
+        // incompatible GraphQL type
+        if typeIsKnownUnionCase enum.Name then
+            do! ": "
+            yield! writeInheritedUnionCaseType
+
         do! NewLine
         do! "{"
         do! NewLine
@@ -390,12 +409,16 @@ let private writeEnum (enum: VisitedEnum) (writer: Writer): ValueTask =
         do! NewLine
     }
 
-let private writeInputObject (inputObject: InputObject) casing (writer: Writer): ValueTask =
+let private writeInputObject (inputObject: InputObject) casing typeIsKnownUnionCase (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented inputObject.XmlSummary
         yield! writeDeprecationAttribute Outdented inputObject.Deprecation
 
         do! $"public record {inputObject.Name}: GraphQLInputObject<{inputObject.Name}>"
+
+        if typeIsKnownUnionCase inputObject.Name then
+            do! ", "
+            yield! writeInheritedUnionCaseType
 
         do! NewLine
         do! "{"
@@ -461,13 +484,13 @@ let private writeVisitedTypesToPipe (writer: Writer) casing (visitedTypes: Visit
             else
                 match visitedType with
                 | Class class' ->
-                    yield! writeClass class' casing
+                    yield! writeClass class' casing typeIsKnownUnionCase
                 | Interface interface' ->
-                    yield! writeInterface interface' casing
+                    yield! writeInterface interface' casing typeIsKnownUnionCase
                 | Enum enum' ->
-                    yield! writeEnum enum'
+                    yield! writeEnum enum' typeIsKnownUnionCase
                 | InputObject inputObject ->
-                    yield! writeInputObject inputObject casing
+                    yield! writeInputObject inputObject casing typeIsKnownUnionCase
                 | UnionType unionType ->
                     yield! writeUnionType unionType
     }

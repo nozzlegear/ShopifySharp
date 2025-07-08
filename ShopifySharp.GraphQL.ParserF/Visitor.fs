@@ -257,4 +257,7 @@ type Visitor() =
         VisitedTypes.UnionType generated
         |> context.SetVisitedType
 
+        generated.Types
+        |> context.AddKnownUnionCases
+
         ValueTask.CompletedTask
