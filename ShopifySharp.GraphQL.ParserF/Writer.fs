@@ -473,7 +473,10 @@ let private shouldSkipType visitedType: bool =
         | UnionType unionType -> unionType.Name
     Set.contains typeName typeNamesToSkip
 
-let private writeVisitedTypesToPipe (writer: Writer) casing (visitedTypes: VisitedTypes[]) (_: CancellationToken): ValueTask =
+let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
+    let casing, visitedTypes, typeIsKnownUnionCase =
+        context.CasingType, context.VisitedTypes, context.TypeIsKnownUnionCase
+
     pipeWriter writer {
         // Always write the namespace and usings at the very top of the document
         yield! writeNamespaceAndUsings
@@ -495,12 +498,14 @@ let private writeVisitedTypesToPipe (writer: Writer) casing (visitedTypes: Visit
                     yield! writeUnionType unionType
     }
 
-let writeVisitedTypesToFileSystem (destination: FileSystemDestination) casing (visitedTypes: VisitedTypes[]) cancellationToken: ValueTask =
+let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
+    let cancellationToken = context.CancellationToken
+
     ValueTask(task {
         let pipe = Pipe(PipeOptions())
         let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
 
-        do! writeVisitedTypesToPipe pipe.Writer casing visitedTypes cancellationToken
+        do! writeVisitedTypesToPipe pipe.Writer context
         do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
 
         let! csharpCode = readTask
