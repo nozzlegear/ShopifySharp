@@ -6,6 +6,9 @@ public interface IGraphQLUnionType;
 
 public record GraphQLUnionType : IGraphQLUnionType;
 
+public record GraphQLUnionType<T1> : IGraphQLUnionType
+    where T1 : IGraphQLUnionCase;
+
 public interface IGraphQLUnionType<T1, T2> : IGraphQLUnionType
     where T1 : IGraphQLUnionCase
     where T2 : IGraphQLUnionCase;
@@ -149,3 +152,78 @@ public record GraphQLUnionType<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> : GraphQ
     where T8 : IGraphQLUnionCase
     where T9 : IGraphQLUnionCase
     where T10 : IGraphQLUnionCase;
+
+public record GraphQLUnionType<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> : GraphQLUnionType
+    where T1 : IGraphQLUnionCase
+    where T2 : IGraphQLUnionCase
+    where T3 : IGraphQLUnionCase
+    where T4 : IGraphQLUnionCase
+    where T5 : IGraphQLUnionCase
+    where T6 : IGraphQLUnionCase
+    where T7 : IGraphQLUnionCase
+    where T8 : IGraphQLUnionCase
+    where T9 : IGraphQLUnionCase
+    where T10 : IGraphQLUnionCase
+    where T11 : IGraphQLUnionCase;
+
+public record GraphQLUnionType<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> : GraphQLUnionType
+    where T1 : IGraphQLUnionCase
+    where T2 : IGraphQLUnionCase
+    where T3 : IGraphQLUnionCase
+    where T4 : IGraphQLUnionCase
+    where T5 : IGraphQLUnionCase
+    where T6 : IGraphQLUnionCase
+    where T7 : IGraphQLUnionCase
+    where T8 : IGraphQLUnionCase
+    where T9 : IGraphQLUnionCase
+    where T10 : IGraphQLUnionCase
+    where T11 : IGraphQLUnionCase
+    where T12 : IGraphQLUnionCase;
+
+public record GraphQLUnionType<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> : GraphQLUnionType
+    where T1 : IGraphQLUnionCase
+    where T2 : IGraphQLUnionCase
+    where T3 : IGraphQLUnionCase
+    where T4 : IGraphQLUnionCase
+    where T5 : IGraphQLUnionCase
+    where T6 : IGraphQLUnionCase
+    where T7 : IGraphQLUnionCase
+    where T8 : IGraphQLUnionCase
+    where T9 : IGraphQLUnionCase
+    where T10 : IGraphQLUnionCase
+    where T11 : IGraphQLUnionCase
+    where T12 : IGraphQLUnionCase
+    where T13 : IGraphQLUnionCase;
+
+public record GraphQLUnionType<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> : GraphQLUnionType
+    where T1 : IGraphQLUnionCase
+    where T2 : IGraphQLUnionCase
+    where T3 : IGraphQLUnionCase
+    where T4 : IGraphQLUnionCase
+    where T5 : IGraphQLUnionCase
+    where T6 : IGraphQLUnionCase
+    where T7 : IGraphQLUnionCase
+    where T8 : IGraphQLUnionCase
+    where T9 : IGraphQLUnionCase
+    where T10 : IGraphQLUnionCase
+    where T11 : IGraphQLUnionCase
+    where T12 : IGraphQLUnionCase
+    where T13 : IGraphQLUnionCase
+    where T14 : IGraphQLUnionCase;
+
+public record GraphQLUnionType<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> : GraphQLUnionType
+    where T1 : IGraphQLUnionCase
+    where T2 : IGraphQLUnionCase
+    where T3 : IGraphQLUnionCase
+    where T4 : IGraphQLUnionCase
+    where T5 : IGraphQLUnionCase
+    where T6 : IGraphQLUnionCase
+    where T7 : IGraphQLUnionCase
+    where T8 : IGraphQLUnionCase
+    where T9 : IGraphQLUnionCase
+    where T10 : IGraphQLUnionCase
+    where T11 : IGraphQLUnionCase
+    where T12 : IGraphQLUnionCase
+    where T13 : IGraphQLUnionCase
+    where T14 : IGraphQLUnionCase
+    where T15 : IGraphQLUnionCase;
