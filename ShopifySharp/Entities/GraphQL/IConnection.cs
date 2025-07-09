@@ -17,14 +17,13 @@ public sealed record Node : INode
     public string Id { get; }
 }
 
-public interface IEdge<out TNode> where TNode : INode
+public interface IEdge<out TNode>
 {
     string? Cursor { get; }
-    TNode? Node   { get; }
+    TNode? Node { get; }
 }
 
-public abstract record Edge<TNode> : IEdge<TNode>
-    where TNode : INode
+public abstract record Edge<TNode>: IEdge<TNode>
 {
     public string? Cursor { get; set; }
     public TNode? Node { get; set; }
@@ -80,22 +79,18 @@ public interface IHasNodes<out TNode>
 // ── variants ─────────────────────────────────────────────────────────────────
 public interface IConnectionWithEdges<TNode> :
     IConnection,
-    IHasEdges<Edge<TNode>>
-    where TNode : INode;
+    IHasEdges<Edge<TNode>> { }
 
 public interface IConnectionWithNodes<out TNode> :
     IConnection,
-    IHasNodes<TNode>
-    where TNode : INode;
+    IHasNodes<TNode> { }
 
 public interface IConnectionWithNodesAndEdges<TNode> :
     IConnection,
     IHasEdges<Edge<TNode>>,
-    IHasNodes<TNode>
-    where TNode : INode;
+    IHasNodes<TNode> { }
 
 public abstract record ConnectionWithEdges<TNode> : IConnectionWithEdges<TNode>
-    where TNode : INode
 {
     public IReadOnlyList<Edge<TNode>> Edges { get; set; } = [];
     public PageInfo? PageInfo { get; set; }
@@ -105,7 +100,6 @@ public abstract record ConnectionWithEdges<TNode> : IConnectionWithEdges<TNode>
 }
 
 public abstract record ConnectionWithNodes<TNode> : IConnectionWithNodes<TNode>
-    where TNode : INode
 {
     public IReadOnlyList<TNode> Nodes { get; set; } = [];
     public PageInfo? PageInfo { get; set; }
@@ -115,7 +109,6 @@ public abstract record ConnectionWithNodes<TNode> : IConnectionWithNodes<TNode>
 }
 
 public abstract record ConnectionWithNodesAndEdges<TNode> : IConnectionWithNodesAndEdges<TNode>
-    where TNode : INode
 {
     public IReadOnlyList<Edge<TNode>> Edges { get; set; } = [];
     public IReadOnlyList<TNode> Nodes { get; set; } = [];
