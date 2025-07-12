@@ -147,6 +147,9 @@ let private toCasing casing (str: string): string =
     | Pascal -> Char.ToUpper(first).ToString() + rest
     | Camel -> Char.ToLower(first).ToString() + rest
 
+let private mapStrToInterfaceName =
+    sprintf "I%s"
+
 let private mapValueTypeToString = function
     | FieldValueType.ULong -> "ulong"
     | FieldValueType.Long -> "long"
@@ -273,6 +276,13 @@ let private writeInheritedUnionCaseType writer: ValueTask =
         do! "IGraphQLUnionCase"
     }
 
+/// Joins the type names with a comma and writes them to the PipeWriter. Intended for writing a list of inherited
+/// types or the generic types in `GraphQLUnionType<T1, T2>`
+let private writeJoinedTypeNames (typeNames: string[]) writer: ValueTask =
+    pipeWriter writer {
+        do! String.Join(", ", typeNames)
+    }
+
 let shouldSkipField parentKnownInheritedType (field: Field): bool =
     let fieldName = field.Name
     let comparison = StringComparison.OrdinalIgnoreCase
@@ -336,7 +346,7 @@ let private writeClass (class': Class) casing typeIsKnownUnionCase (writer: Writ
 
         if Array.length inheritedTypes > 0 then
             do! ", "
-            do! String.Join(", ", inheritedTypes)
+            yield! writeJoinedTypeNames inheritedTypes
 
         if typeIsKnownUnionCase class'.Name then
             do! ","
@@ -363,7 +373,7 @@ let private writeInterface (interface': Interface) casing typeIsKnownUnionCase (
 
         if Array.length inheritedTypes > 0 then
             do! ", "
-            do! String.Join(", ", inheritedTypes)
+            yield! writeJoinedTypeNames inheritedTypes
 
         if typeIsKnownUnionCase interface'.Name then
             do! ","
@@ -437,7 +447,7 @@ let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
         yield! writeJsonDerivedTypeAttributes unionType.Types
 
         do! $"public record {unionType.Name}: GraphQLUnionType<"
-        do! String.Join(", ", unionType.Types)
+        yield! writeJoinedTypeNames unionType.Types
         do! ">"
 
         do! NewLine
