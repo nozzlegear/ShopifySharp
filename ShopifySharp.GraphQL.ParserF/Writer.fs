@@ -216,7 +216,7 @@ let private writeDeprecationAttribute indentation (deprecationWarning: string op
 
 let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask =
     pipeWriter writer {
-        do! "\t" + $"[JsonPropertyName(\"{propertyName}\")]"
+        do! (toTab Indented) + $"[JsonPropertyName(\"{propertyName}\")]"
         do! NewLine
     }
 
@@ -334,7 +334,7 @@ let private writeFields casing shouldSkipWritingField (fields: Field[]) writer :
             do! NewLine
     }
 
-let private writeClass (class': Class) casing typeIsKnownUnionCase (writer: Writer): ValueTask =
+let private writeClass (class': Class) (context: IParsedContext) (writer: Writer): ValueTask =
     let inheritedTypes = appendINodeInheritedTypeIfAppropriate class'.InheritedTypeNames class'.Fields
 
     pipeWriter writer {
@@ -348,7 +348,7 @@ let private writeClass (class': Class) casing typeIsKnownUnionCase (writer: Writ
             do! ", "
             yield! writeJoinedTypeNames inheritedTypes
 
-        if typeIsKnownUnionCase class'.Name then
+        if context.TypeIsKnownUnionCase class'.Name then
             do! ","
             yield! writeInheritedUnionCaseType
 
@@ -356,13 +356,13 @@ let private writeClass (class': Class) casing typeIsKnownUnionCase (writer: Writ
         do! "{"
         do! NewLine
 
-        yield! writeFields casing (shouldSkipField class'.KnownInheritedType) class'.Fields
+        yield! writeFields context.CasingType (shouldSkipField class'.KnownInheritedType) class'.Fields
 
         do! "}"
         do! NewLine
     }
 
-let private writeInterface (interface': Interface) casing typeIsKnownUnionCase (writer: Writer): ValueTask =
+let private writeInterface (interface': Interface) (context: IParsedContext) (writer: Writer): ValueTask =
     let inheritedTypes = appendINodeInheritedTypeIfAppropriate interface'.InheritedTypeNames interface'.Fields
 
     pipeWriter writer {
@@ -375,7 +375,7 @@ let private writeInterface (interface': Interface) casing typeIsKnownUnionCase (
             do! ", "
             yield! writeJoinedTypeNames inheritedTypes
 
-        if typeIsKnownUnionCase interface'.Name then
+        if context.TypeIsKnownUnionCase interface'.Name then
             do! ","
             yield! writeInheritedUnionCaseType
 
@@ -383,13 +383,13 @@ let private writeInterface (interface': Interface) casing typeIsKnownUnionCase (
         do! "{"
         do! NewLine
 
-        yield! writeFields casing (shouldSkipField None) interface'.Fields
+        yield! writeFields context.CasingType (shouldSkipField None) interface'.Fields
 
         do! "}"
         do! NewLine
     }
 
-let private writeEnum (enum: VisitedEnum) typeIsKnownUnionCase (writer: Writer): ValueTask =
+let private writeEnum (enum: VisitedEnum) (context: IParsedContext) (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented enum.XmlSummary
         yield! writeDeprecationAttribute Outdented enum.Deprecation
@@ -398,7 +398,7 @@ let private writeEnum (enum: VisitedEnum) typeIsKnownUnionCase (writer: Writer):
 
         // This is invalid C# code, but we write it anyway so the compiler will throw an error and alert us of an
         // incompatible GraphQL type
-        if typeIsKnownUnionCase enum.Name then
+        if context.TypeIsKnownUnionCase enum.Name then
             do! ": "
             yield! writeInheritedUnionCaseType
 
@@ -409,7 +409,7 @@ let private writeEnum (enum: VisitedEnum) typeIsKnownUnionCase (writer: Writer):
         for case in enum.Cases do
             yield! writeDeprecationAttribute Outdented case.Deprecation
 
-            do! $"\t{case.Name}"
+            do! (toTab Indented) + case.Name
             if Option.isSome case.Value then
                 do! " = " + (Option.get case.Value)
             do! ","
@@ -419,14 +419,14 @@ let private writeEnum (enum: VisitedEnum) typeIsKnownUnionCase (writer: Writer):
         do! NewLine
     }
 
-let private writeInputObject (inputObject: InputObject) casing typeIsKnownUnionCase (writer: Writer): ValueTask =
+let private writeInputObject (inputObject: InputObject) (context: IParsedContext) (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented inputObject.XmlSummary
         yield! writeDeprecationAttribute Outdented inputObject.Deprecation
 
         do! $"public record {inputObject.Name}: GraphQLInputObject<{inputObject.Name}>"
 
-        if typeIsKnownUnionCase inputObject.Name then
+        if context.TypeIsKnownUnionCase inputObject.Name then
             do! ", "
             yield! writeInheritedUnionCaseType
 
@@ -434,13 +434,13 @@ let private writeInputObject (inputObject: InputObject) casing typeIsKnownUnionC
         do! "{"
         do! NewLine
 
-        yield! writeFields casing (shouldSkipField None) inputObject.Fields
+        yield! writeFields context.CasingType (shouldSkipField None) inputObject.Fields
 
         do! "}"
         do! NewLine
     }
 
-let private writeUnionType (unionType: UnionType) (writer: Writer): ValueTask =
+let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented unionType.XmlSummary
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
@@ -484,28 +484,27 @@ let private shouldSkipType visitedType: bool =
     Set.contains typeName typeNamesToSkip
 
 let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
-    let casing, visitedTypes, typeIsKnownUnionCase =
-        context.CasingType, context.VisitedTypes, context.TypeIsKnownUnionCase
+    let parsedContext = context :> IParsedContext
 
     pipeWriter writer {
         // Always write the namespace and usings at the very top of the document
         yield! writeNamespaceAndUsings
 
-        for visitedType in visitedTypes do
+        for visitedType in context.VisitedTypes do
             if shouldSkipType visitedType then
                 ()
             else
                 match visitedType with
                 | Class class' ->
-                    yield! writeClass class' casing typeIsKnownUnionCase
+                    yield! writeClass class' parsedContext
                 | Interface interface' ->
-                    yield! writeInterface interface' casing typeIsKnownUnionCase
+                    yield! writeInterface interface' parsedContext
                 | Enum enum' ->
-                    yield! writeEnum enum' typeIsKnownUnionCase
+                    yield! writeEnum enum' parsedContext
                 | InputObject inputObject ->
-                    yield! writeInputObject inputObject casing typeIsKnownUnionCase
+                    yield! writeInputObject inputObject parsedContext
                 | UnionType unionType ->
-                    yield! writeUnionType unionType
+                    yield! writeUnionType unionType parsedContext
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =

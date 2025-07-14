@@ -121,27 +121,53 @@ type VisitedTypes =
     | InputObject of inputObject: InputObject
     | UnionType of unionType: UnionType
 
+[<RequireQualifiedAccess>]
+type NamedType =
+    | Class of name: string
+    | Interface of name: string
+    | Enum of name: string
+    | InputObject of name: string
+    | UnionType of name: string
+
+type IParsedContext =
+    abstract member CasingType: Casing with get
+    abstract member TypeIsKnownUnionCase: unionCaseName: string -> bool
+    abstract member IsNamedType: namedType: NamedType -> bool
+
 type ParserContext(casingType, ct) =
     let visitedTypes: HashSet<VisitedTypes> = HashSet()
     let knownUnionCases: HashSet<string> = HashSet()
+    let namedTypes: HashSet<NamedType> = HashSet()
     let (~%) comp = ignore comp
 
     member _.CasingType: Casing = casingType
-    member _.CancellationToken = ct
-    member _.VisitedTypes with get() = visitedTypes
 
-    member this.SetVisitedType (type': VisitedTypes): unit =
-        %visitedTypes.Add type'
+    member _.CancellationToken = ct
+
+    member _.VisitedTypes with get() = visitedTypes
 
     member this.GetVisitedTypes () =
         Array.ofSeq visitedTypes
+
+    member this.SetVisitedType (type': VisitedTypes): unit =
+        %visitedTypes.Add type'
 
     member _.AddKnownUnionCases unionCaseNames: unit =
         for unionCase in unionCaseNames do
             %knownUnionCases.Add unionCase
 
-    member this.TypeIsKnownUnionCase unionCaseName: bool =
-        knownUnionCases.Contains unionCaseName
+    member _.AddNamedType namedType: unit =
+        %namedTypes.Add namedType
+
+    interface IParsedContext with
+        member _.CasingType: Casing = casingType
+
+        member _.TypeIsKnownUnionCase unionCaseName: bool =
+            knownUnionCases.Contains unionCaseName
+
+        member _.IsNamedType name: bool =
+            namedTypes.Contains name
+
 
     interface IASTVisitorContext with
         member _.CancellationToken = ct
