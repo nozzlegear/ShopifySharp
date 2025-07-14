@@ -204,9 +204,11 @@ type Visitor() =
               KnownInheritedType = classInheritedType
               InheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces }
 
-        // Mark the type as visited
         VisitedTypes.Class generated
         |> context.SetVisitedType
+
+        NamedType.Class objectTypeDefinition.Name.StringValue
+        |> context.AddNamedType
 
         ValueTask.CompletedTask
 
@@ -221,6 +223,9 @@ type Visitor() =
         VisitedTypes.Interface generated
         |> context.SetVisitedType
 
+        NamedType.Interface interfaceTypeDefinition.Name.StringValue
+        |> context.AddNamedType
+
         ValueTask.CompletedTask
 
     override this.VisitEnumTypeDefinitionAsync(enumTypeDefinition, context) =
@@ -232,6 +237,9 @@ type Visitor() =
 
         VisitedTypes.Enum generated
         |> context.SetVisitedType
+
+        NamedType.Enum enumTypeDefinition.Name.StringValue
+        |> context.AddNamedType
 
         ValueTask.CompletedTask
 
@@ -245,6 +253,9 @@ type Visitor() =
         VisitedTypes.InputObject generated
         |> context.SetVisitedType
 
+        NamedType.InputObject inputObjectTypeDefinition.Name.StringValue
+        |> context.AddNamedType
+
         ValueTask.CompletedTask
 
     override this.VisitUnionTypeDefinitionAsync(unionTypeDefinition, context) =
@@ -256,6 +267,9 @@ type Visitor() =
 
         VisitedTypes.UnionType generated
         |> context.SetVisitedType
+
+        NamedType.UnionType unionTypeDefinition.Name.StringValue
+        |> context.AddNamedType
 
         generated.Types
         |> context.AddKnownUnionCases
