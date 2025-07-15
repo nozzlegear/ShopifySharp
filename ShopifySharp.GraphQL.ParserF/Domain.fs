@@ -128,6 +128,13 @@ type NamedType =
     | Enum of name: string
     | InputObject of name: string
     | UnionType of name: string
+    with override this.ToString (): string =
+          match this with
+          | Class name -> name
+          | Interface name -> name
+          | Enum name -> name
+          | InputObject name -> name
+          | UnionType name -> name
 
 type IParsedContext =
     abstract member CasingType: Casing with get

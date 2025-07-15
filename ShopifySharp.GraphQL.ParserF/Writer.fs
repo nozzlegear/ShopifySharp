@@ -135,10 +135,14 @@ let private csharpKeywords = Set.ofList [
 /// <summary>
 /// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
 /// </summary>
-let private sanitizeFieldName (value: string): string =
-    if Set.contains value csharpKeywords
-    then "@" + value
-    else value
+let private sanitizeFieldName (parentType: NamedType) (fieldName: string): string =
+    if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
+        // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
+        fieldName + "_"
+    elif Set.contains fieldName csharpKeywords then
+        "@" + fieldName
+    else
+        fieldName
 
 let private toCasing casing (str: string): string =
     let first = str[0]
@@ -315,7 +319,7 @@ let shouldSkipField parentKnownInheritedType (field: Field): bool =
         | ConnectionWithNodesAndEdges _ ->
             pageInfoFieldMatches || nodesFieldMatches || edgesFieldMatches
 
-let private writeFields (context: IParsedContext) shouldSkipWritingField (fields: Field[]) writer : ValueTask =
+let private writeFields (context: IParsedContext) shouldSkipWritingField parentType (fields: Field[]) writer : ValueTask =
     // Filter out the Cursor and Node fields for any class that inherits the Edge<TNode> type
     let writeableFields =
         fields
@@ -331,7 +335,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField (fields
 
             let fieldName =
                 toCasing context.CasingType field.Name
-                |> sanitizeFieldName
+                |> sanitizeFieldName parentType
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
             do! NewLine
@@ -359,7 +363,7 @@ let private writeClass (class': Class) (context: IParsedContext) (writer: Writer
         do! "{"
         do! NewLine
 
-        yield! writeFields context (shouldSkipField class'.KnownInheritedType) class'.Fields
+        yield! writeFields context (shouldSkipField class'.KnownInheritedType) (NamedType.Class class'.Name) class'.Fields
 
         do! "}"
         do! NewLine
@@ -386,7 +390,7 @@ let private writeInterface (interface': Interface) (context: IParsedContext) (wr
         do! "{"
         do! NewLine
 
-        yield! writeFields context (shouldSkipField None) interface'.Fields
+        yield! writeFields context (shouldSkipField None) (NamedType.Interface interface'.Name) interface'.Fields
 
         do! "}"
         do! NewLine
@@ -437,7 +441,7 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
         do! "{"
         do! NewLine
 
-        yield! writeFields context (shouldSkipField None) inputObject.Fields
+        yield! writeFields context (shouldSkipField None) (NamedType.InputObject inputObject.Name) inputObject.Fields
 
         do! "}"
         do! NewLine
