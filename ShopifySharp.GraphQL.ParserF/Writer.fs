@@ -449,9 +449,7 @@ let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: W
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
         yield! writeJsonDerivedTypeAttributes unionType.Types
 
-        do! $"public record {unionType.Name}: GraphQLUnionType<"
-        yield! writeJoinedTypeNames unionType.Types
-        do! ">"
+        do! $"public record {unionType.Name}: IGraphQLUnionType"
 
         do! NewLine
         do! "{"
