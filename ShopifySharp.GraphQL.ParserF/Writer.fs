@@ -150,7 +150,7 @@ let private toCasing casing (str: string): string =
 let private mapStrToInterfaceName =
     sprintf "I%s"
 
-let private mapValueTypeToString = function
+let private mapValueTypeToString (isNamedType: NamedType -> bool) = function
     | FieldValueType.ULong -> "ulong"
     | FieldValueType.Long -> "long"
     | FieldValueType.Int -> "int"
@@ -161,15 +161,18 @@ let private mapValueTypeToString = function
     | FieldValueType.DateTime -> "DateTime"
     | FieldValueType.DateOnly -> "DateOnly"
     | FieldValueType.TimeSpan -> "TimeSpan"
-    | FieldValueType.GraphObjectType graphObjectTypeName -> graphObjectTypeName
+    | FieldValueType.GraphObjectType graphObjectTypeName ->
+        if isNamedType (NamedType.Interface graphObjectTypeName)
+        then mapStrToInterfaceName graphObjectTypeName
+        else graphObjectTypeName
 
-let rec private mapFieldTypeToString (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
+let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
     match valueType with
-    | ValueType valueType -> mapValueTypeToString valueType
-    | NonNullableType nonNullableType -> mapFieldTypeToString nonNullableType collectionHandling
-    | NullableType nullableType -> $"{mapFieldTypeToString nullableType collectionHandling}?"
+    | ValueType valueType -> mapValueTypeToString isNamedType valueType
+    | NonNullableType nonNullableType -> mapFieldTypeToString isNamedType nonNullableType collectionHandling
+    | NullableType nullableType -> $"{mapFieldTypeToString isNamedType nullableType collectionHandling}?"
     | CollectionType collectionType ->
-        let mappedType = mapFieldTypeToString collectionType collectionHandling
+        let mappedType = mapFieldTypeToString isNamedType collectionType collectionHandling
         match collectionHandling with
         | KeepCollection -> $"ICollection<{mappedType}>"
         | UnwrapCollection -> mappedType
@@ -244,28 +247,28 @@ let appendINodeInheritedTypeIfAppropriate (inheritedTypeNames: string[]) (fields
     else
         Array.append [|"INode"|] inheritedTypeNames
 
-let private getAppropriateClassTNodeTypeFromField fieldName (fields: Field[]) =
+let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
-    |> fun field -> mapFieldTypeToString field.ValueType UnwrapCollection
+    |> fun field -> mapFieldTypeToString isNamedType field.ValueType UnwrapCollection
 
-let private writeClassKnownInheritedType (class': Class) writer: ValueTask =
+let private writeClassKnownInheritedType (isNamedType: NamedType -> bool) (class': Class) writer: ValueTask =
     let className = class'.Name
     pipeWriter writer {
         match class'.KnownInheritedType with
         | Some Edge ->
-            let edgeNodeType = getAppropriateClassTNodeTypeFromField "Node" class'.Fields
+            let edgeNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Node" class'.Fields
             $"Edge<{edgeNodeType}>"
         | Some (Connection ConnectionType.Connection) ->
             "IConnection"
         | Some (Connection (ConnectionWithEdges _)) ->
-            let edgesNodeType = getAppropriateClassTNodeTypeFromField "Edges" class'.Fields
+            let edgesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Edges" class'.Fields
             $"ConnectionWithEdges<{edgesNodeType}>"
         | Some (Connection (ConnectionWithNodes _)) ->
-            let nodesNodeType = getAppropriateClassTNodeTypeFromField "Nodes" class'.Fields
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Nodes" class'.Fields
             $"ConnectionWithNodes<{nodesNodeType}>"
         | Some (Connection (ConnectionWithNodesAndEdges _)) ->
-            let nodesNodeType = getAppropriateClassTNodeTypeFromField "Nodes" class'.Fields
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Nodes" class'.Fields
             $"ConnectionWithNodesAndEdges<{nodesNodeType}>"
         | None ->
             $"GraphQLObject<{className}>"
@@ -312,7 +315,7 @@ let shouldSkipField parentKnownInheritedType (field: Field): bool =
         | ConnectionWithNodesAndEdges _ ->
             pageInfoFieldMatches || nodesFieldMatches || edgesFieldMatches
 
-let private writeFields casing shouldSkipWritingField (fields: Field[]) writer : ValueTask =
+let private writeFields (context: IParsedContext) shouldSkipWritingField (fields: Field[]) writer : ValueTask =
     // Filter out the Cursor and Node fields for any class that inherits the Edge<TNode> type
     let writeableFields =
         fields
@@ -320,14 +323,14 @@ let private writeFields casing shouldSkipWritingField (fields: Field[]) writer :
 
     pipeWriter writer {
         for field in writeableFields do
-            let fieldType = mapFieldTypeToString field.ValueType KeepCollection
+            let fieldType = mapFieldTypeToString context.IsNamedType field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
             yield! writeDeprecationAttribute Indented field.Deprecation
 
             let fieldName =
-                toCasing casing field.Name
+                toCasing context.CasingType field.Name
                 |> sanitizeFieldName
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
@@ -342,7 +345,7 @@ let private writeClass (class': Class) (context: IParsedContext) (writer: Writer
         yield! writeDeprecationAttribute Outdented class'.Deprecation
 
         do! $"public record {class'.Name}: "
-        yield! writeClassKnownInheritedType class'
+        yield! writeClassKnownInheritedType context.IsNamedType class'
 
         if Array.length inheritedTypes > 0 then
             do! ", "
@@ -356,7 +359,7 @@ let private writeClass (class': Class) (context: IParsedContext) (writer: Writer
         do! "{"
         do! NewLine
 
-        yield! writeFields context.CasingType (shouldSkipField class'.KnownInheritedType) class'.Fields
+        yield! writeFields context (shouldSkipField class'.KnownInheritedType) class'.Fields
 
         do! "}"
         do! NewLine
@@ -383,7 +386,7 @@ let private writeInterface (interface': Interface) (context: IParsedContext) (wr
         do! "{"
         do! NewLine
 
-        yield! writeFields context.CasingType (shouldSkipField None) interface'.Fields
+        yield! writeFields context (shouldSkipField None) interface'.Fields
 
         do! "}"
         do! NewLine
@@ -434,7 +437,7 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
         do! "{"
         do! NewLine
 
-        yield! writeFields context.CasingType (shouldSkipField None) inputObject.Fields
+        yield! writeFields context (shouldSkipField None) inputObject.Fields
 
         do! "}"
         do! NewLine
