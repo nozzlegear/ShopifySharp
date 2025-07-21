@@ -154,6 +154,9 @@ let private toCasing casing (str: string): string =
 let private mapStrToInterfaceName =
     sprintf "I%s"
 
+let private toUnionCaseWrapperName unionTypeName unionCaseName =
+    unionTypeName + unionCaseName
+
 let private mapValueTypeToString (isNamedType: NamedType -> bool) = function
     | FieldValueType.ULong -> "ulong"
     | FieldValueType.Long -> "long"
@@ -299,7 +302,7 @@ let private writeJoinedTypeNames (typeNames: string[]) writer: ValueTask =
         do! String.Join(", ", typeNames)
     }
 
-let shouldSkipField parentKnownInheritedType (field: Field): bool =
+let private shouldSkipField parentKnownInheritedType (field: Field): bool =
     let fieldName = field.Name
     let comparison = StringComparison.OrdinalIgnoreCase
     match parentKnownInheritedType with
@@ -453,31 +456,64 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
         do! NewLine
     }
 
+let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (writer: Writer): ValueTask =
+    pipeWriter writer {
+        // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
+        // the compiler to throw an error.
+        do! "#if NET6_0_OR_GREATER"
+        do! NewLine
+
+        for unionCaseName in unionTypeCases do
+            let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
+            do! $"internal record {caseWrapperName}({unionCaseName} Value): {unionTypeName};"
+            do! NewLine
+
+        do! "#endif"
+    }
+
+/// <summary>
+/// Maps the union type's case names to public type methods, each using the internal union case wrapper types.
+/// <example>
+/// <code>
+///	public MoneyV2? AsMoneyV2() => this is DeliveryConditionCriteriaMoneyV2 wrapper ? wrapper.Value : null;
+///	public Weight? AsWeight() => this is DeliveryConditionCriteriaWeight wrapper ? wrapper.Value : null;
+/// </code>
+/// </example>
+/// </summary>
+let private writeUnionTypeConversionMethods unionTypeName (unionCaseNames: string[]) writer: ValueTask =
+    pipeWriter writer {
+        // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
+        // the compiler to throw an error.
+        do! "#if NET6_0_OR_GREATER"
+        do! NewLine
+
+        for unionCaseName in unionCaseNames do
+            let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
+            do! (toTab Indented) + $"public {unionCaseName}? As{unionCaseName}() => this is {caseWrapperName} wrapper ? wrapper.Value : null;"
+            do! NewLine
+
+        do! "#endif"
+    }
+
 let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: Writer): ValueTask =
     pipeWriter writer {
         yield! writeSummary Outdented unionType.XmlSummary
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
         yield! writeJsonDerivedTypeAttributes unionType.Types
 
-        do! $"public record {unionType.Name}: IGraphQLUnionType"
+        do! $"public record {unionType.Name}: GraphQLObject<{unionType.Name}>, IGraphQLUnionType"
 
         do! NewLine
         do! "{"
         do! NewLine
 
-        // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
-        // the compiler to throw an error.
-        do! "#if NET6_0_OR_GREATER"
-        do! NewLine
+        yield! writeUnionTypeConversionMethods unionType.Name unionType.Types
 
-        for typeName in unionType.Types do
-            do! (toTab Indented) + $"public {typeName}? As{typeName}() => this as {typeName};"
-            do! NewLine
-
-        do! "#endif"
         do! NewLine
         do! "}"
         do! NewLine
+
+        yield! writeUnionCaseWrappers unionType.Name unionType.Types
     }
 
 let private shouldSkipType visitedType: bool =
