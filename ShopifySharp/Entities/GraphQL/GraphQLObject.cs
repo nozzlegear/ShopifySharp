@@ -2,9 +2,7 @@
 
 namespace ShopifySharp.GraphQL;
 
-public interface IGraphQLObject
-{
-}
+public interface IGraphQLObject;
 
 public abstract record GraphQLObject<TNode> : IGraphQLObject where TNode : IGraphQLObject
 {

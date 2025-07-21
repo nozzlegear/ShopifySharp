@@ -256,9 +256,23 @@ let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> boo
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
     |> fun field -> mapFieldTypeToString isNamedType field.ValueType UnwrapCollection
 
-let private writeClassKnownInheritedType (isNamedType: NamedType -> bool) (class': Class) writer: ValueTask =
-    let className = class'.Name
+let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName: string) writer: ValueTask =
     pipeWriter writer {
+        match context.TryFindUnionRelationship unionCaseName with
+        | Some relationship ->
+            do! $"{relationship.UnionTypeName}, IGraphQLUnionCase"
+        | None ->
+            do! "IGraphQLUnionCase"
+    }
+
+let private writeClassKnownInheritedType (context: IParsedContext) (class': Class) writer: ValueTask =
+    let isNamedType = context.IsNamedType
+
+    pipeWriter writer {
+        if context.TypeIsKnownUnionCase class'.Name then
+            yield! writeInheritedUnionCaseType context class'.Name
+            do! ", "
+
         match class'.KnownInheritedType with
         | Some Edge ->
             let edgeNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Node" class'.Fields
@@ -275,12 +289,7 @@ let private writeClassKnownInheritedType (isNamedType: NamedType -> bool) (class
             let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Nodes" class'.Fields
             $"ConnectionWithNodesAndEdges<{nodesNodeType}>"
         | None ->
-            $"GraphQLObject<{className}>"
-    }
-
-let private writeInheritedUnionCaseType writer: ValueTask =
-    pipeWriter writer {
-        do! "IGraphQLUnionCase"
+            "IGraphQLObject"
     }
 
 /// Joins the type names with a comma and writes them to the PipeWriter. Intended for writing a list of inherited
@@ -349,15 +358,12 @@ let private writeClass (class': Class) (context: IParsedContext) (writer: Writer
         yield! writeDeprecationAttribute Outdented class'.Deprecation
 
         do! $"public record {class'.Name}: "
-        yield! writeClassKnownInheritedType context.IsNamedType class'
+
+        yield! writeClassKnownInheritedType context class'
 
         if Array.length inheritedTypes > 0 then
             do! ", "
             yield! writeJoinedTypeNames inheritedTypes
-
-        if context.TypeIsKnownUnionCase class'.Name then
-            do! ","
-            yield! writeInheritedUnionCaseType
 
         do! NewLine
         do! "{"
@@ -383,8 +389,8 @@ let private writeInterface (interface': Interface) (context: IParsedContext) (wr
             yield! writeJoinedTypeNames inheritedTypes
 
         if context.TypeIsKnownUnionCase interface'.Name then
-            do! ","
-            yield! writeInheritedUnionCaseType
+            do! ", "
+            yield! writeInheritedUnionCaseType context interface'.Name
 
         do! NewLine
         do! "{"
@@ -407,7 +413,7 @@ let private writeEnum (enum: VisitedEnum) (context: IParsedContext) (writer: Wri
         // incompatible GraphQL type
         if context.TypeIsKnownUnionCase enum.Name then
             do! ": "
-            yield! writeInheritedUnionCaseType
+            yield! writeInheritedUnionCaseType context enum.Name
 
         do! NewLine
         do! "{"
@@ -435,7 +441,7 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
 
         if context.TypeIsKnownUnionCase inputObject.Name then
             do! ", "
-            yield! writeInheritedUnionCaseType
+            yield! writeInheritedUnionCaseType context inputObject.Name
 
         do! NewLine
         do! "{"
