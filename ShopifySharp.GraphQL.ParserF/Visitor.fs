@@ -272,6 +272,6 @@ type Visitor() =
         |> context.AddNamedType
 
         generated.Types
-        |> context.AddKnownUnionCases
+        |> context.AddUnionRelationship unionTypeDefinition.Name.StringValue
 
         ValueTask.CompletedTask

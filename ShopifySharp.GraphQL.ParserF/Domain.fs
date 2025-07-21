@@ -114,6 +114,10 @@ type VisitedEnum =
       Cases: VisitedEnumCase[] }
     with interface IVisitedType
 
+type UnionRelationship =
+    { UnionTypeName: string
+      UnionCaseName: string }
+
 type VisitedTypes =
     | Class of class': Class
     | Interface of interface': Interface
@@ -140,10 +144,11 @@ type IParsedContext =
     abstract member CasingType: Casing with get
     abstract member TypeIsKnownUnionCase: unionCaseName: string -> bool
     abstract member IsNamedType: namedType: NamedType -> bool
+    abstract member TryFindUnionRelationship: unionCaseName: string -> UnionRelationship option
 
 type ParserContext(casingType, ct) =
     let visitedTypes: HashSet<VisitedTypes> = HashSet()
-    let knownUnionCases: HashSet<string> = HashSet()
+    let unionRelationships: HashSet<UnionRelationship> = HashSet()
     let namedTypes: HashSet<NamedType> = HashSet()
     let (~%) comp = ignore comp
 
@@ -159,9 +164,12 @@ type ParserContext(casingType, ct) =
     member this.SetVisitedType (type': VisitedTypes): unit =
         %visitedTypes.Add type'
 
-    member _.AddKnownUnionCases unionCaseNames: unit =
+    member _.AddUnionRelationship unionName unionCaseNames: unit =
         for unionCase in unionCaseNames do
-            %knownUnionCases.Add unionCase
+            { UnionTypeName = unionName
+              UnionCaseName = unionCase }
+            |> unionRelationships.Add
+            |> ignore
 
     member _.AddNamedType namedType: unit =
         %namedTypes.Add namedType
@@ -169,12 +177,16 @@ type ParserContext(casingType, ct) =
     interface IParsedContext with
         member _.CasingType: Casing = casingType
 
-        member _.TypeIsKnownUnionCase unionCaseName: bool =
-            knownUnionCases.Contains unionCaseName
+        member ctx.TypeIsKnownUnionCase unionCaseName: bool =
+            (ctx :> IParsedContext).TryFindUnionRelationship unionCaseName
+            |> Option.isSome
 
         member _.IsNamedType name: bool =
             namedTypes.Contains name
 
+        member _.TryFindUnionRelationship unionCaseName: UnionRelationship option =
+            unionRelationships
+            |> Seq.tryFind (fun r -> r.UnionCaseName = unionCaseName)
 
     interface IASTVisitorContext with
         member _.CancellationToken = ct
