@@ -302,20 +302,26 @@ let private shouldSkipField parentKnownInheritedType (field: Field): bool =
         let pageInfoFieldName = "PageInfo"
         let nodesFieldName = "Nodes"
         let edgesFieldName = "Edges"
+        let totalCountFieldName = "TotalCount"
 
         let pageInfoFieldMatches = fieldName.Equals(pageInfoFieldName, comparison)
         let nodesFieldMatches = fieldName.Equals(nodesFieldName, comparison)
         let edgesFieldMatches = fieldName.Equals(edgesFieldName, comparison)
+        let totalCountFieldMatches = fieldName.Equals(totalCountFieldName, comparison)
 
-        match connectionType with
-        | ConnectionType.Connection ->
-            pageInfoFieldMatches
-        | ConnectionWithNodes _ ->
-            pageInfoFieldMatches || nodesFieldMatches
-        | ConnectionWithEdges _ ->
-            pageInfoFieldMatches || edgesFieldMatches
-        | ConnectionWithNodesAndEdges _ ->
-            pageInfoFieldMatches || nodesFieldMatches || edgesFieldMatches
+        // All connection field types have a PageInfo and TotalCount field
+        if pageInfoFieldMatches || totalCountFieldMatches then
+            true
+        else
+            match connectionType with
+            | ConnectionType.Connection ->
+                false
+            | ConnectionWithNodes _ ->
+                nodesFieldMatches
+            | ConnectionWithEdges _ ->
+                edgesFieldMatches
+            | ConnectionWithNodesAndEdges _ ->
+                nodesFieldMatches || edgesFieldMatches
 
 let private writeFields (context: IParsedContext) shouldSkipWritingField parentType (fields: Field[]) writer : ValueTask =
     // Filter out the Cursor and Node fields for any class that inherits the Edge<TNode> type
