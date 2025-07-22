@@ -240,20 +240,6 @@ let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTa
             do! NewLine
     }
 
-let appendINodeInheritedTypeIfAppropriate (inheritedTypeNames: string[]) (fields: Field[]) =
-    let comparison = StringComparison.OrdinalIgnoreCase
-    let isNodeInterface (typeName: string) =
-        typeName.Equals("Node", comparison) || typeName.Equals("INode", comparison)
-    let isIdField (field: Field) =
-        field.Name.Equals("Id", comparison)
-
-    if Array.exists isNodeInterface inheritedTypeNames then
-        inheritedTypeNames
-    else if not (Array.exists isIdField fields) then
-        inheritedTypeNames
-    else
-        Array.append [|"INode"|] inheritedTypeNames
-
 let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
@@ -354,8 +340,6 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
     }
 
 let private writeClass (class': Class) (context: IParsedContext) (writer: Writer): ValueTask =
-    let inheritedTypes = appendINodeInheritedTypeIfAppropriate class'.InheritedTypeNames class'.Fields
-
     pipeWriter writer {
         yield! writeSummary Outdented class'.XmlSummary
         yield! writeDeprecationAttribute Outdented class'.Deprecation
@@ -364,9 +348,9 @@ let private writeClass (class': Class) (context: IParsedContext) (writer: Writer
 
         yield! writeClassKnownInheritedType context class'
 
-        if Array.length inheritedTypes > 0 then
+        if Array.length class'.InheritedTypeNames > 0 then
             do! ", "
-            yield! writeJoinedTypeNames inheritedTypes
+            yield! writeJoinedTypeNames class'.InheritedTypeNames
 
         do! NewLine
         do! "{"
@@ -379,17 +363,15 @@ let private writeClass (class': Class) (context: IParsedContext) (writer: Writer
     }
 
 let private writeInterface (interface': Interface) (context: IParsedContext) (writer: Writer): ValueTask =
-    let inheritedTypes = appendINodeInheritedTypeIfAppropriate interface'.InheritedTypeNames interface'.Fields
-
     pipeWriter writer {
         yield! writeSummary Outdented interface'.XmlSummary
         yield! writeDeprecationAttribute Outdented interface'.Deprecation
 
         do! $"public interface {interface'.Name}: IGraphQLObject"
 
-        if Array.length inheritedTypes > 0 then
+        if Array.length interface'.InheritedTypeNames > 0 then
             do! ", "
-            yield! writeJoinedTypeNames inheritedTypes
+            yield! writeJoinedTypeNames interface'.InheritedTypeNames
 
         if context.TypeIsKnownUnionCase interface'.Name then
             do! ", "
