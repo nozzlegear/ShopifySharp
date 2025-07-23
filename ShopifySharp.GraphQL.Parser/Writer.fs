@@ -230,6 +230,22 @@ let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask
         do! NewLine
     }
 
+/// <summary>
+/// Writes an attribute for deserializing the <see cref="DateOnly"/> data type in .NET Standard 2.0. Uses the
+/// <see cref="Portable.System.DateTimeOnly.Json"/> package's <see cref="DateOnlyConverter"/> converter.
+/// </summary>
+let private writeDateOnlyJsonConverterAttribute writer: ValueTask =
+    pipeWriter writer {
+        // This attribute comes from the Portable.System.DateTimeOnly.Json package
+        do! (toTab Indented) + "#if NETSTANDARD2_0"
+        do! NewLine
+        do! (toTab Indented) + "[System.Text.Json.DateOnlyConverter]"
+        do! NewLine
+        do! (toTab Indented) + "#endif"
+        do! NewLine
+    }
+
+
 let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTask =
     pipeWriter writer {
         do! "[JsonPolymorphic(TypeDiscriminatorPropertyName = \"__typename\")]"
@@ -335,6 +351,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
+            yield! writeDateOnlyJsonConverterAttribute
             yield! writeDeprecationAttribute Indented field.Deprecation
 
             let fieldName =
