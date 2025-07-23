@@ -34,6 +34,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageVersion Include="Portable.System.DateTimeOnly" Version="9.0.0" />
+    <PackageVersion Include="Portable.System.DateTimeOnly.Json" Version="9.0.0" />
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageVersion Include="System.Net.Http" Version="4.3.4" />
   </ItemGroup>
