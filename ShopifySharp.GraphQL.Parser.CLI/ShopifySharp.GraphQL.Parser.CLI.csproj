@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" />
+      <PackageReference Include="JetBrains.Annotations" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ShopifySharp.GraphQL.ParserF\ShopifySharp.GraphQL.ParserF.fsproj" />
+      <ProjectReference Include="..\ShopifySharp.GraphQL.Parser\ShopifySharp.GraphQL.Parser.csproj" />
+    </ItemGroup>
+
+</Project>
