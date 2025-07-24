@@ -359,6 +359,18 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
                 |> sanitizeFieldName parentType
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
+
+            // Write a default value for the class types to fix nullable compiler warnings
+            match parentType with
+            | NamedType.Class _
+            | NamedType.InputObject _ ->
+                do! " = default!;"
+            | NamedType.Interface _ ->
+                ()
+            | NamedType.Enum p
+            | NamedType.UnionType p ->
+                failwith $"Parent \"{p}\" is unsupported type {parentType.GetType()}"
+
             do! NewLine
     }
 

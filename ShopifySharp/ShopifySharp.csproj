@@ -7,6 +7,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <LangVersion>Latest</LangVersion>
+    <NoWarn>CS0618</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
