@@ -11,6 +11,18 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
     private readonly VerifySettings _verifySettings = verifyFixture.Settings;
     private readonly IGraphService _sut = graphServiceFixture.Service;
 
+    private static OptionCreateInput MakeOptionCreationInput(string optionName, string[] optionValues)
+    {
+        return new OptionCreateInput
+        {
+            Name = optionName,
+            Values = optionValues.Select(value => new OptionValueCreateInput
+            {
+                Name = value
+            }).ToArray(),
+        };
+    }
+
     [Fact]
     public async Task ProductsQuery_ShouldListProducts()
     {
@@ -162,6 +174,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         // Setup
         var request = new GraphRequest
         {
+            //lang=txt
             Query =
                 """
                 mutation updateProductTitle {
@@ -223,8 +236,8 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var result = await _sut.PostAsync<UpdateProductResponse>(request);
 
         // Assert
-        result.Data.Result.Product.title.Should().Be(expectedNewTitle);
-        result.Data.Result.Product.id.Should().Be(product.Id);
+        result.Data.Result.Product.Title.Should().Be(expectedNewTitle);
+        result.Data.Result.Product.Id.Should().Be(product.Id);
 
         await Verify(result.Data.Result.Product, _verifySettings);
     }
@@ -239,10 +252,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var product = await CreateProductAsync("some-title");
         OptionCreateInput[] newOptions =
         [
-            new(expectedOptionName, [
-                new OptionValueCreateInput(expectedOptionValue1),
-                new OptionValueCreateInput(expectedOptionValue2)
-            ])
+            MakeOptionCreationInput(expectedOptionName, [expectedOptionValue1, expectedOptionValue2])
         ];
         var request = new GraphRequest
         {
@@ -334,14 +344,8 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         const string expectedOptionValue3 = "some-expected-option-value3";
         const string expectedOptionValue4 = "some-expected-option-value4";
         var product = await CreateProductAsync("some-title", [
-            new OptionCreateInput(expectedOptionName1, [
-                new OptionValueCreateInput(expectedOptionValue1),
-                new OptionValueCreateInput(expectedOptionValue2)
-            ]),
-            new OptionCreateInput(expectedOptionName2, [
-                new OptionValueCreateInput(expectedOptionValue3),
-                new OptionValueCreateInput(expectedOptionValue4)
-            ])
+            MakeOptionCreationInput(expectedOptionName1, [expectedOptionValue1, expectedOptionValue2]),
+            MakeOptionCreationInput(expectedOptionName2, [expectedOptionValue3, expectedOptionValue4]),
         ]);
         // Select just Option 1 for deletion
         var optionIds = product.Options
@@ -573,7 +577,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
                 """
         };
         var result = await _sut.PostAsync<MutationResponse<PublicationCreatePayload>>(request);
-        return result.Data.Result.publication?.id!;
+        return result.Data.Result.Publication?.Id!;
     }
 
     // private async Task<string> CreateShopifySharpCatalogAsync()
