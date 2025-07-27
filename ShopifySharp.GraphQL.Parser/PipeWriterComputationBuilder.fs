@@ -1,4 +1,4 @@
-namespace ShopifySharp.GraphQL.ParserF
+namespace ShopifySharp.GraphQL.Parser
 
 open System
 open System.IO.Pipelines

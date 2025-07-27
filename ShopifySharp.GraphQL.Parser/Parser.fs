@@ -1,4 +1,4 @@
-module ShopifySharp.GraphQL.ParserF.Parser
+module ShopifySharp.GraphQL.Parser.Parser
 
 open System
 open System.Threading

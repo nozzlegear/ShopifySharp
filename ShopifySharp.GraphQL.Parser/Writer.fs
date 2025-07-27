@@ -1,4 +1,4 @@
-module ShopifySharp.GraphQL.ParserF.Writer
+module ShopifySharp.GraphQL.Parser.Writer
 
 open System
 open System.IO
@@ -9,7 +9,7 @@ open System.Threading.Tasks
 open Microsoft.CodeAnalysis;
 open Microsoft.CodeAnalysis.CSharp;
 open Microsoft.CodeAnalysis.CSharp.Syntax
-open ShopifySharp.GraphQL.ParserF.PipeWriter;
+open ShopifySharp.GraphQL.Parser.PipeWriter;
 
 type private Writer = PipeWriter
 
