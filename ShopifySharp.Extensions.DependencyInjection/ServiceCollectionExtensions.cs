@@ -5,7 +5,6 @@ using ShopifySharp.Factories;
 using ShopifySharp.Utilities;
 using System.Reflection;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -44,6 +43,7 @@ public static class ServiceCollectionExtensions
     /// <item><see cref="IShopifyOauthUtility"/></item>
     /// <item><see cref="IShopifyDomainUtility"/></item>
     /// <item><see cref="IShopifyRequestValidationUtility"/></item>
+    /// <item><see cref="IShopifyGraphqlUtility"/></item>
     /// </list>
     /// <param name="services">The service collection (DI container) to which the utilities will be added.</param>
     /// <param name="configure">An optional configuration action for configuring the utilities.</param>
@@ -79,6 +79,15 @@ public static class ServiceCollectionExtensions
         else
         {
             services.TryAdd(new ServiceDescriptor(typeof(IShopifyRequestValidationUtility), typeof(ShopifyRequestValidationUtility), lifetime));
+        }
+
+        if (options.GraphqlSchemaUtility != null)
+        {
+            services.Add(new ServiceDescriptor(typeof(IShopifyGraphqlUtility), _ => options.GraphqlSchemaUtility, lifetime));
+        }
+        else
+        {
+            services.TryAdd(new ServiceDescriptor(typeof(IShopifyGraphqlUtility), typeof(ShopifyGraphqlUtility), lifetime));
         }
 
         return services;

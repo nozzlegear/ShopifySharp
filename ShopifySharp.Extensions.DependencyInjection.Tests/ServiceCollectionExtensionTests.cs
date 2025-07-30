@@ -99,6 +99,11 @@ public class ServiceCollectionExtensionTests
             .NotBeNull()
             .And.BeOfType<ShopifyRequestValidationUtility>()
             .And.BeAssignableTo<IShopifyRequestValidationUtility>();
+        serviceProvider.GetService<IShopifyGraphqlUtility>()
+            .Should()
+            .NotBeNull()
+            .And.BeOfType<ShopifyGraphqlUtility>()
+            .And.BeAssignableTo<IShopifyGraphqlUtility>();
     }
 
     [Fact]
@@ -113,6 +118,7 @@ public class ServiceCollectionExtensionTests
                 options.DomainUtility = null;
                 options.OauthUtility = null;
                 options.RequestValidationUtility = null;
+                options.GraphqlSchemaUtility = null;
             })
             .BuildServiceProvider();
 
@@ -132,6 +138,11 @@ public class ServiceCollectionExtensionTests
             .NotBeNull()
             .And.BeOfType<ShopifyRequestValidationUtility>()
             .And.BeAssignableTo<IShopifyRequestValidationUtility>();
+        serviceProvider.GetService<IShopifyGraphqlUtility>()
+            .Should()
+            .NotBeNull()
+            .And.BeOfType<ShopifyGraphqlUtility>()
+            .And.BeAssignableTo<IShopifyGraphqlUtility>();
     }
 
     [Fact]
