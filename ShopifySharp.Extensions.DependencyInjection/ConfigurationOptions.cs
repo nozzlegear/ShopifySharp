@@ -7,4 +7,5 @@ public record ShopifySharpUtilityOptions
     public IShopifyDomainUtility? DomainUtility { get; set; }
     public IShopifyOauthUtility? OauthUtility { get; set; }
     public IShopifyRequestValidationUtility? RequestValidationUtility { get; set; }
+    public IShopifyGraphqlUtility? GraphqlSchemaUtility { get; set; }
 }
