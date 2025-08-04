@@ -76,14 +76,13 @@ public class ShopifyGraphqlUtility : IShopifyGraphqlUtility
         };
 
         var client = _httpClientFactory.CreateClient();
-        using var requestData = new JsonContent(new
-        {
-            query = IntrospectionQuery,
-            operationName = IntrospectionOperationName,
-        });
         var msg = new HttpRequestMessage(HttpMethod.Post, uriBuilder.Uri)
         {
-            Content = requestData,
+            Content = new JsonContent(new
+            {
+                query = IntrospectionQuery,
+                operationName = IntrospectionOperationName,
+            }),
         };
         msg.Headers.Add("User-Agent", UserAgent);
         msg.Headers.Add("X-Shopify-Access-Token", credentials.AccessToken);
