@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\generate-graphql-types.yml = .github\workflows\generate-graphql-types.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{1D5FA585-B39C-49E2-A405-935A2EE58222}"
