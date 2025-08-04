@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       schema_version:
-        description: 'Shopify API version (e.g., 2024-10, leave empty to update current version)'
-        required: false
+        description: 'Shopify API version (e.g., 2025-07)'
+        required: true
         type: string
 
 jobs:
   generate-types:
     runs-on: ubuntu-latest
+    environment: "Build Environment"
 
     steps:
     - name: Checkout code
@@ -31,16 +32,33 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Clean output directory
-      run: rm -rf ShopifySharp/Entities/GraphQL/Generated/*
-
     - name: Build CLI tool
       run: dotnet build ShopifySharp.GraphQL.Parser.CLI/ShopifySharp.GraphQL.Parser.CLI.csproj --configuration Release
 
-    - name: Generate GraphQL types
-      run: fish .github/scripts/generate-types.fish "${{ github.event.inputs.schema_version }}"
+    - name: Download GraphQL schema
+      run: |
+        dotnet run --no-build \
+          --project ShopifySharp.GraphQL.Parser.CLI \
+          -- \
+          download \
+          -o "${{ github.event.inputs.schema_version }}.schema.json" \
+          --api-version "${{ github.event.inputs.schema_version }}" \
+          --domain "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}" \
+          --token "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
+
+    - name: Clean output directory
+      run: rm -rf ShopifySharp/Entities/GraphQL/Generated/*
+
+    - name: Generate types from new schema
+      run: |
+        dotnet run --no-build \
+          --project ShopifySharp.GraphQL.Parser.CLI \
+          -- \
+          generate \
+          -o ShopifySharp/Entities/GraphQL/Generated \
+          "${{ github.event.inputs.schema_version }}.schema.json"
 
     - name: Create pull request
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: fish .github/scripts/create-pr.fish
+      run: fish .github/scripts/create-pr.fish --schema-file "${{ github.event.inputs.schema_version }}.schema.json"
