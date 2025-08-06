@@ -48,7 +48,7 @@ public class CommandContext(TextWriter standardWriter, TextWriter errorWriter)
     private void PrintErrorsWithHeader(IEnumerable<string> errors)
     {
         // Bold + RedC9
-        const string ansiEscapeSequence = "\\x1b[1;38;5;9m";
+        const string ansiEscapeSequence = @"\x1b[1;38;5;9m";
 
         PrintHeaderAndVersion(WriterMode.Error);
         errorWriter.WriteLine(_programCopyrightInfo.ToString());
