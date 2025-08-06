@@ -98,14 +98,14 @@ public class GraphServiceSendAsyncTests
           result = await _sut.SendAsync<OrderConnection>(GraphServiceTestUtils.MakeGraphRequest());
 
         // Assert
-        result.Nodes
+        result.nodes
           .Should().NotBeNullOrEmpty()
-          .And.AllSatisfy(o => o.Name.Should().NotBeNull())
+          .And.AllSatisfy(o => o.name.Should().NotBeNull())
           .And.AllSatisfy(o =>
-            o.LineItems?.Nodes
+            o.lineItems?.nodes
               .Should().NotBeNullOrEmpty()
               .And.AllSatisfy(li =>
-                li.Quantity
+                li.quantity
                   .Should().BeGreaterThanOrEqualTo(0)))
           .And.AllSatisfy(o =>
             o.Should().BeAssignableTo<CommentEventEmbed>()

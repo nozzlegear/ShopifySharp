@@ -15,10 +15,10 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
     {
         return new OptionCreateInput
         {
-            Name = optionName,
-            Values = optionValues.Select(value => new OptionValueCreateInput
+            name = optionName,
+            values = optionValues.Select(value => new OptionValueCreateInput
             {
-                Name = value
+                name = value
             }).ToArray(),
         };
     }
@@ -236,8 +236,8 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var result = await _sut.PostAsync<UpdateProductResponse>(request);
 
         // Assert
-        result.Data.Result.Product.Title.Should().Be(expectedNewTitle);
-        result.Data.Result.Product.Id.Should().Be(product.Id);
+        result.Data.Result.Product.title.Should().Be(expectedNewTitle);
+        result.Data.Result.Product.id.Should().Be(product.Id);
 
         await Verify(result.Data.Result.Product, _verifySettings);
     }
@@ -577,7 +577,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
                 """
         };
         var result = await _sut.PostAsync<MutationResponse<PublicationCreatePayload>>(request);
-        return result.Data.Result.Publication?.Id!;
+        return result.Data.Result.publication?.id!;
     }
 
     // private async Task<string> CreateShopifySharpCatalogAsync()
