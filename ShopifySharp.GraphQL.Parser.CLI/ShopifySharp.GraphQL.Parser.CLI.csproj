@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ShopifySharp.GraphQL.ParserF\ShopifySharp.GraphQL.ParserF.fsproj" />
-      <ProjectReference Include="..\ShopifySharp.GraphQL.Parser\ShopifySharp.GraphQL.Parser.csproj" />
+      <ProjectReference Include="..\ShopifySharp.GraphQL.Parser\ShopifySharp.GraphQL.Parser.fsproj" />
+      <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
     </ItemGroup>
 
 </Project>
