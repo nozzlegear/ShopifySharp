@@ -55,6 +55,7 @@ jobs:
           --project ShopifySharp.GraphQL.Parser.CLI \
           -- \
           generate \
+          --casing camel \
           -o ShopifySharp/Entities/GraphQL/Generated \
           "${{ github.event.inputs.schema_version }}.schema.json"
 

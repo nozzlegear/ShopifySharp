@@ -5,11 +5,12 @@ namespace ShopifySharp.GraphQL;
 
 public interface INode
 {
-    string Id { get; }
+    // ReSharper disable once InconsistentNaming
+    string? id { get; }
 }
 
 public sealed record Node : INode
 {
     [JsonPropertyName("id")]
-    public string Id { get; }
+    public string? id { get; } = null;
 }

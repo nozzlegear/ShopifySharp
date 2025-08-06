@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 #nullable enable
 
 namespace ShopifySharp.GraphQL;
@@ -7,19 +9,19 @@ using System.Collections.Generic;
 
 public interface IConnection
 {
-    PageInfo? PageInfo { get; }
-    int? TotalCount { get; }
+    PageInfo? pageInfo { get; }
+    int? totalCount { get; }
     Type GetNodeType();
 }
 
 public interface IHasEdges<out TEdge>
 {
-    IReadOnlyList<TEdge> Edges { get; }
+    IReadOnlyList<TEdge> edges { get; }
 }
 
 public interface IHasNodes<out TNode>
 {
-    IReadOnlyList<TNode> Nodes { get; }
+    IReadOnlyList<TNode> nodes { get; }
 }
 
 public interface IConnectionWithEdges<TNode> :
@@ -37,28 +39,28 @@ public interface IConnectionWithNodesAndEdges<TNode> :
 
 public abstract record ConnectionWithEdges<TNode> : IConnectionWithEdges<TNode>
 {
-    public IReadOnlyList<Edge<TNode>> Edges { get; set; } = [];
-    public PageInfo? PageInfo { get; set; }
-    public int? TotalCount { get; set; } = null;
+    public IReadOnlyList<Edge<TNode>> edges { get; set; } = [];
+    public PageInfo? pageInfo { get; set; }
+    public int? totalCount { get; set; } = null;
 
     public Type GetNodeType() => typeof(TNode);
 }
 
 public abstract record ConnectionWithNodes<TNode> : IConnectionWithNodes<TNode>
 {
-    public IReadOnlyList<TNode> Nodes { get; set; } = [];
-    public PageInfo? PageInfo { get; set; }
-    public int? TotalCount { get; set; } = null;
+    public IReadOnlyList<TNode> nodes { get; set; } = [];
+    public PageInfo? pageInfo { get; set; }
+    public int? totalCount { get; set; } = null;
 
     public Type GetNodeType() => typeof(TNode);
 }
 
 public abstract record ConnectionWithNodesAndEdges<TNode> : IConnectionWithNodesAndEdges<TNode>
 {
-    public IReadOnlyList<Edge<TNode>> Edges { get; set; } = [];
-    public IReadOnlyList<TNode> Nodes { get; set; } = [];
-    public PageInfo? PageInfo { get; set; }
-    public int? TotalCount { get; set; } = null;
+    public IReadOnlyList<Edge<TNode>> edges { get; set; } = [];
+    public IReadOnlyList<TNode> nodes { get; set; } = [];
+    public PageInfo? pageInfo { get; set; }
+    public int? totalCount { get; set; } = null;
 
     public Type GetNodeType() => typeof(TNode);
 }
