@@ -173,13 +173,22 @@ let private mapValueTypeToString (isNamedType: NamedType -> bool) = function
         then mapStrToInterfaceName graphObjectTypeName
         else graphObjectTypeName
 
-let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
+let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
+    let maybeWriteNullability isNullable fieldStr =
+        fieldStr + (if isNullable then "?" else "")
+
     match valueType with
-    | ValueType valueType -> mapValueTypeToString isNamedType valueType
-    | NonNullableType nonNullableType -> mapFieldTypeToString isNamedType nonNullableType collectionHandling
-    | NullableType nullableType -> $"{mapFieldTypeToString isNamedType nullableType collectionHandling}?"
+    | ValueType valueType ->
+        mapValueTypeToString isNamedType valueType
+        |> maybeWriteNullability assumeNullability
+    | NonNullableType nonNullableType ->
+        mapFieldTypeToString isNamedType false nonNullableType collectionHandling
+        // |> maybeWriteNullability assumeNullability
+    | NullableType nullableType ->
+        mapFieldTypeToString isNamedType assumeNullability nullableType collectionHandling
+        |> maybeWriteNullability true
     | CollectionType collectionType ->
-        let mappedType = mapFieldTypeToString isNamedType collectionType collectionHandling
+        let mappedType = mapFieldTypeToString isNamedType assumeNullability collectionType collectionHandling
         match collectionHandling with
         | KeepCollection -> $"ICollection<{mappedType}>"
         | UnwrapCollection -> mappedType
@@ -256,10 +265,10 @@ let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTa
             do! NewLine
     }
 
-let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) fieldName (fields: Field[]) =
+let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) assumeNullability fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
-    |> fun field -> mapFieldTypeToString isNamedType field.ValueType UnwrapCollection
+    |> fun field -> mapFieldTypeToString isNamedType assumeNullability field.ValueType UnwrapCollection
 
 let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName: string) writer: ValueTask =
     pipeWriter writer {
@@ -280,18 +289,18 @@ let private writeClassKnownInheritedType (context: IParsedContext) (class': Clas
 
         match class'.KnownInheritedType with
         | Some Edge ->
-            let edgeNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Node" class'.Fields
+            let edgeNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Node" class'.Fields
             $"Edge<{edgeNodeType}>"
         | Some (Connection ConnectionType.Connection) ->
             "IConnection"
         | Some (Connection (ConnectionWithEdges _)) ->
-            let edgesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Edges" class'.Fields
+            let edgesNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Edges" class'.Fields
             $"ConnectionWithEdges<{edgesNodeType}>"
         | Some (Connection (ConnectionWithNodes _)) ->
-            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Nodes" class'.Fields
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Nodes" class'.Fields
             $"ConnectionWithNodes<{nodesNodeType}>"
         | Some (Connection (ConnectionWithNodesAndEdges _)) ->
-            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType "Nodes" class'.Fields
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Nodes" class'.Fields
             $"ConnectionWithNodesAndEdges<{nodesNodeType}>"
         | None ->
             "IGraphQLObject"
@@ -347,7 +356,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
     pipeWriter writer {
         for field in writeableFields do
-            let fieldType = mapFieldTypeToString context.IsNamedType field.ValueType KeepCollection
+            let fieldType = mapFieldTypeToString context.IsNamedType context.AssumeNullability field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name

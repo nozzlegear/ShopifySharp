@@ -28,7 +28,7 @@ public class GenerateCommand(CommandContext context)
 
         var mem = (await File.ReadAllTextAsync(options.GraphqlFilePath, cancellationToken)).AsMemory();
 
-        await Parser.ParseAndWriteAsync(destination, casingType, mem, CancellationToken.None);
+        await Parser.ParseAndWriteAsync(destination, casingType, options.Nullability == true, mem, CancellationToken.None);
 
         return 0;
     }

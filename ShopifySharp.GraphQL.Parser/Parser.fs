@@ -8,10 +8,11 @@ open GraphQLParser
 open GraphQLParser.Visitors
 
 let private parseAsync (casing: Casing)
+                       (assumeNullability: bool)
                        (graphqlData: ReadOnlyMemory<char>)
                        cancellationToken
                        : ValueTask<ParserContext> =
-    let context = ParserContext(casing, cancellationToken)
+    let context = ParserContext(casing, assumeNullability, cancellationToken)
     let visitor: ASTVisitor<ParserContext> = Visitor()
 
     // Read the GraphQL document
@@ -23,20 +24,22 @@ let private parseAsync (casing: Casing)
     })
 
 let ParseAsync (casing: Casing)
+               (assumeNullability: bool)
                (graphqlData: ReadOnlyMemory<char>)
                (cancellationToken: CancellationToken)
                : ValueTask<VisitedTypes[]> =
     ValueTask<VisitedTypes[]>(task {
-        let! context = parseAsync casing graphqlData cancellationToken
+        let! context = parseAsync casing assumeNullability graphqlData cancellationToken
         return context.GetVisitedTypes()
     })
 
 let ParseAndWriteAsync (destination: FileSystemDestination)
                        (casing: Casing)
+                       (assumeNullability: bool)
                        (graphqlData: ReadOnlyMemory<char>)
                        cancellationToken
                        : ValueTask =
     ValueTask(task {
-        let! context = parseAsync casing graphqlData cancellationToken
+        let! context = parseAsync casing assumeNullability graphqlData cancellationToken
         do! Writer.writeVisitedTypesToFileSystem destination context
     })
