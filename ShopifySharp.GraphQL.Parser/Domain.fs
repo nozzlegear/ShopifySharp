@@ -142,11 +142,12 @@ type NamedType =
 
 type IParsedContext =
     abstract member CasingType: Casing with get
+    abstract member AssumeNullability: bool with get
     abstract member TypeIsKnownUnionCase: unionCaseName: string -> bool
     abstract member IsNamedType: namedType: NamedType -> bool
     abstract member TryFindUnionRelationship: unionCaseName: string -> UnionRelationship option
 
-type ParserContext(casingType, ct) =
+type ParserContext(casingType, assumeNullability, ct) =
     let visitedTypes: HashSet<VisitedTypes> = HashSet()
     let unionRelationships: HashSet<UnionRelationship> = HashSet()
     let namedTypes: HashSet<NamedType> = HashSet()
@@ -176,6 +177,8 @@ type ParserContext(casingType, ct) =
 
     interface IParsedContext with
         member _.CasingType: Casing = casingType
+
+        member _.AssumeNullability: bool = assumeNullability
 
         member ctx.TypeIsKnownUnionCase unionCaseName: bool =
             (ctx :> IParsedContext).TryFindUnionRelationship unionCaseName
