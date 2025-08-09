@@ -173,6 +173,12 @@ let private mapValueTypeToString (isNamedType: NamedType -> bool) = function
         then mapStrToInterfaceName graphObjectTypeName
         else graphObjectTypeName
 
+let rec private unwrapFieldType  = function
+    | ValueType valueType -> valueType
+    | NullableType valueType -> unwrapFieldType valueType
+    | NonNullableType valueType -> unwrapFieldType valueType
+    | CollectionType collectionType -> unwrapFieldType collectionType
+
 let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
     let maybeWriteNullability isNullable fieldStr =
         fieldStr + (if isNullable then "?" else "")
@@ -243,15 +249,17 @@ let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask
 /// Writes an attribute for deserializing the <see cref="DateOnly"/> data type in .NET Standard 2.0. Uses the
 /// <see cref="Portable.System.DateTimeOnly.Json"/> package's <see cref="DateOnlyConverter"/> converter.
 /// </summary>
-let private writeDateOnlyJsonConverterAttribute writer: ValueTask =
+let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: ValueTask =
+    let fieldValueType = unwrapFieldType fieldType
     pipeWriter writer {
-        // This attribute comes from the Portable.System.DateTimeOnly.Json package
-        do! (toTab Indented) + "#if NETSTANDARD2_0"
-        do! NewLine
-        do! (toTab Indented) + "[System.Text.Json.DateOnlyConverter]"
-        do! NewLine
-        do! (toTab Indented) + "#endif"
-        do! NewLine
+        if fieldValueType = FieldValueType.DateOnly || fieldValueType = FieldValueType.DateTime then
+            do! (toTab Indented) + "#if NETSTANDARD2_0"
+            do! NewLine
+            // This attribute comes from the Portable.System.DateTimeOnly.Json package
+            do! (toTab Indented) + "[System.Text.Json.DateOnlyConverter]"
+            do! NewLine
+            do! (toTab Indented) + "#endif"
+            do! NewLine
     }
 
 
@@ -360,7 +368,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
-            yield! writeDateOnlyJsonConverterAttribute
+            yield! writeDateOnlyJsonConverterAttribute field.ValueType
             yield! writeDeprecationAttribute Indented field.Deprecation
 
             let fieldName =
