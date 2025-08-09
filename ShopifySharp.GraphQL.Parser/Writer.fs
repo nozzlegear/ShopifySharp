@@ -189,7 +189,6 @@ let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNull
         |> maybeWriteNullability assumeNullability
     | NonNullableType nonNullableType ->
         mapFieldTypeToString isNamedType false nonNullableType collectionHandling
-        // |> maybeWriteNullability assumeNullability
     | NullableType nullableType ->
         mapFieldTypeToString isNamedType assumeNullability nullableType collectionHandling
         |> maybeWriteNullability true
@@ -377,13 +376,18 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
 
-            // Write a default value for the class types to fix nullable compiler warnings
             match parentType with
-            | NamedType.Class _
-            | NamedType.InputObject _ ->
-                do! " = default!;"
             | NamedType.Interface _ ->
                 ()
+            | NamedType.Class _
+            | NamedType.InputObject _ ->
+                // Write a null or default value for the class types to satisfy nullable compiler warnings
+                match field.ValueType with
+                | ValueType (FieldValueType.GraphObjectType _) -> do! " = default!;"
+                | ValueType _ -> do! " = null;";
+                | NullableType _ -> do! " = null;"
+                | NonNullableType _ -> do! " = default!;"
+                | CollectionType _ -> do! " = [];"
             | NamedType.Enum p
             | NamedType.UnionType p ->
                 failwith $"Parent \"{p}\" is unsupported type {parentType.GetType()}"
