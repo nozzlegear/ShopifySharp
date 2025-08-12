@@ -183,20 +183,29 @@ let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNull
     let maybeWriteNullability isNullable fieldStr =
         fieldStr + (if isNullable then "?" else "")
 
-    match valueType with
-    | ValueType valueType ->
-        mapValueTypeToString isNamedType valueType
-        |> maybeWriteNullability assumeNullability
-    | NonNullableType nonNullableType ->
-        mapFieldTypeToString isNamedType false nonNullableType collectionHandling
-    | NullableType nullableType ->
-        mapFieldTypeToString isNamedType assumeNullability nullableType collectionHandling
-        |> maybeWriteNullability true
-    | CollectionType collectionType ->
-        let mappedType = mapFieldTypeToString isNamedType assumeNullability collectionType collectionHandling
-        match collectionHandling with
-        | KeepCollection -> $"ICollection<{mappedType}>"
-        | UnwrapCollection -> mappedType
+    let rec unwrapType isRecursing = function
+        | ValueType valueType
+        | NonNullableType (ValueType valueType) ->
+            mapValueTypeToString isNamedType valueType
+            |> maybeWriteNullability (not isRecursing && assumeNullability)
+        | NullableType (ValueType valueType) ->
+            mapValueTypeToString isNamedType valueType
+            |> maybeWriteNullability true
+        | NonNullableType (CollectionType collectionType) // We unwrap this one twice because CollectionTypes are all (NonNullable (CollectionType Type)) in GraphQL
+        | CollectionType collectionType ->
+            let mappedType = unwrapType true collectionType
+            match collectionHandling with
+            | KeepCollection -> $"ICollection<{mappedType}>"
+            | UnwrapCollection -> mappedType
+            |> maybeWriteNullability (not isRecursing && assumeNullability)
+        | NonNullableType nonNullableType ->
+            unwrapType true nonNullableType
+        | NullableType nullableType ->
+            unwrapFieldType nullableType
+            |> mapValueTypeToString isNamedType
+            |> maybeWriteNullability true
+
+    unwrapType false valueType
 
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
