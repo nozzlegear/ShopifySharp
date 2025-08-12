@@ -355,6 +355,27 @@ let private shouldSkipField parentKnownInheritedType (field: Field): bool =
             | ConnectionWithNodesAndEdges _ ->
                 nodesFieldMatches || edgesFieldMatches
 
+let rec private writeDefaultValueForFieldType fieldType assumeNullable writer =
+    pipeWriter writer {
+        // Write a null or default value for the class types to satisfy nullable compiler warnings
+        match fieldType, assumeNullable with
+        | NullableType _, _
+        | _, true ->
+            do! " = null;"
+        | NonNullableType (CollectionType _), false
+        | CollectionType _, false ->
+            do! " = [];"
+        | NonNullableType (ValueType FieldValueType.Boolean), false
+        | ValueType FieldValueType.Boolean, false ->
+            do! " = false;"
+        | NonNullableType (ValueType (FieldValueType.GraphObjectType _)), false
+        | ValueType (FieldValueType.GraphObjectType _), false ->
+            do! " = default;"
+        | NonNullableType _, false
+        | ValueType _, false ->
+            do! " = default;"
+    }
+
 let private writeFields (context: IParsedContext) shouldSkipWritingField parentType (fields: Field[]) writer : ValueTask =
     // Filter out the Cursor and Node fields for any class that inherits the Edge<TNode> type
     let writeableFields =
@@ -381,13 +402,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
                 ()
             | NamedType.Class _
             | NamedType.InputObject _ ->
-                // Write a null or default value for the class types to satisfy nullable compiler warnings
-                match field.ValueType with
-                | ValueType (FieldValueType.GraphObjectType _) -> do! " = default!;"
-                | ValueType _ -> do! " = null;";
-                | NullableType _ -> do! " = null;"
-                | NonNullableType _ -> do! " = default!;"
-                | CollectionType _ -> do! " = [];"
+                yield! writeDefaultValueForFieldType field.ValueType context.AssumeNullability
             | NamedType.Enum p
             | NamedType.UnionType p ->
                 failwith $"Parent \"{p}\" is unsupported type {parentType.GetType()}"
