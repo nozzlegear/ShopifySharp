@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="CommandLineParser" Version="2.9.1" />
+    <PackageVersion Include="Faqt" Version="5.0.0" />
     <PackageVersion Include="FSharp.Control.TaskSeq" Version="0.4.0" />
     <PackageVersion Include="FSharp.Core" Version="9.0.300" />
     <PackageVersion Include="FakeItEasy" Version="8.3.0" />
