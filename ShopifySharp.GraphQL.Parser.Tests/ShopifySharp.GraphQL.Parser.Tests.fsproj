@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="DomainTests.fs" />
+    <Compile Include="ParserTests.fs" />
+    <Compile Include="VisitorTests.fs" />
+    <Compile Include="WriterTests.fs" />
+    <Compile Include="PipeWriterComputationBuilderTests.fs" />
+    <Compile Include="IntegrationTests.fs" />
   </ItemGroup>
 
   <ItemGroup>
