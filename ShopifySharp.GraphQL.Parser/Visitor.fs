@@ -185,6 +185,8 @@ type Visitor() =
         |> Array.map _.Name.StringValue
 
     override this.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context) =
+        context.CancellationToken.ThrowIfCancellationRequested()
+
         let objectTypeName = objectTypeDefinition.Name.StringValue
         let classInheritedType =
             if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
@@ -213,6 +215,8 @@ type Visitor() =
         ValueTask.CompletedTask
 
     override this.VisitInterfaceTypeDefinitionAsync(interfaceTypeDefinition, context) =
+        context.CancellationToken.ThrowIfCancellationRequested()
+
         let generated: Interface =
             { Name = strToInterfaceName interfaceTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary interfaceTypeDefinition.Description
@@ -229,6 +233,8 @@ type Visitor() =
         ValueTask.CompletedTask
 
     override this.VisitEnumTypeDefinitionAsync(enumTypeDefinition, context) =
+        context.CancellationToken.ThrowIfCancellationRequested()
+
         let generated: VisitedEnum =
             { Name = enumTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary enumTypeDefinition.Description
@@ -244,6 +250,8 @@ type Visitor() =
         ValueTask.CompletedTask
 
     override this.VisitInputObjectTypeDefinitionAsync(inputObjectTypeDefinition, context) =
+        context.CancellationToken.ThrowIfCancellationRequested()
+
         let generated: InputObject =
             { Name = inputObjectTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary inputObjectTypeDefinition.Description
@@ -259,6 +267,8 @@ type Visitor() =
         ValueTask.CompletedTask
 
     override this.VisitUnionTypeDefinitionAsync(unionTypeDefinition, context) =
+        context.CancellationToken.ThrowIfCancellationRequested()
+
         let generated: UnionType =
             { Name = unionTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary unionTypeDefinition.Description
