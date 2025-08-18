@@ -79,6 +79,21 @@ type PipeWriterComputationBuilderTests() =
             stream.Dispose()
 
     [<Fact>]
+    member _.``Yield with any value should return completed task``() =
+        // Setup
+        let writer, stream = createPipeWriter()
+        let sut = PipeWriterComputationBuilder(writer)
+        
+        try
+            // Act
+            let result = sut.Yield(42)
+            
+            // Assert
+            %result.IsCompleted.Should().BeTrue()
+        finally
+            stream.Dispose()
+
+    [<Fact>]
     member _.``Yield with string should write to pipe``() =
         // Setup
         let writer, stream = createPipeWriter()
@@ -116,6 +131,30 @@ type PipeWriterComputationBuilderTests() =
 
             // Assert
             %continuationCalled.Should().BeTrue()
+            let writtenBytes = stream.ToArray()
+            let writtenString = Encoding.UTF8.GetString(writtenBytes)
+            %writtenString.Should().Be(testString)
+        finally
+            stream.Dispose()
+
+    [<Fact>]
+    member _.``Bind with string and FlushResult continuation should write to pipe and pass FlushResult``() =
+        // Setup
+        let writer, stream = createPipeWriter()
+        let sut = PipeWriterComputationBuilder(writer)
+        let testString = "Test string with flush"
+        let mutable receivedFlushResult: FlushResult option = None
+        
+        try
+            // Act
+            let task = sut.Bind(testString, fun flushResult -> 
+                receivedFlushResult <- Some flushResult
+                ValueTask.CompletedTask)
+            task.GetAwaiter().GetResult()
+            writer.Complete()
+
+            // Assert
+            %receivedFlushResult.Should().BeSome()
             let writtenBytes = stream.ToArray()
             let writtenString = Encoding.UTF8.GetString(writtenBytes)
             %writtenString.Should().Be(testString)

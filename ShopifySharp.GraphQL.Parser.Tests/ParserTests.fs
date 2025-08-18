@@ -220,6 +220,37 @@ type ParserTests() =
         %deprecatedField.Should().BeSome()
         %deprecatedField.Value.Deprecation.Should().BeSome()
 
+    [<Fact>]
+    member _.``ParseAsync should parse schema with deprecated fields and remove new lines``() =
+        // Setup
+        let expectedDeprecationMessage = "Metafields created using a reserved namespace are private by default. See our guide for [migrating private metafields](https://shopify.dev/docs/apps/custom-data/metafields/migrate-private-metafields)."
+        let schemaWithDeprecation = """
+            type User {
+                id: ID!
+                name: String
+                oldField: String @deprecated(reason: "Metafields created using a reserved namespace are private by default. See our guide for\n[migrating private metafields](https://shopify.dev/docs/apps/custom-data/metafields/migrate-private-metafields).\n")
+                newField: String
+            }
+        """
+        let graphqlData = ReadOnlyMemory<char>(schemaWithDeprecation.ToCharArray())
+        let cancellationToken = CancellationToken.None
+
+        // Act
+        let task = ParseAsync Pascal false graphqlData cancellationToken
+        let result = task.GetAwaiter().GetResult()
+
+        // Assert
+        %result.Should().NotBeEmpty()
+        let userType = result |> Array.tryPick (fun t ->
+            match t with
+            | VisitedTypes.Class c when c.Name = "User" -> Some c
+            | _ -> None
+        )
+
+        let deprecatedField = userType.Value.Fields |> Array.tryFind (fun f -> f.Name = "oldField")
+        %deprecatedField.Should().BeSome()
+        %deprecatedField.Value.Deprecation.Should().BeSome(expectedDeprecationMessage)
+
     [<Theory>]
     [<CombinatorialData>]
     member _.``ParseAsync should handle different scalar types``(
