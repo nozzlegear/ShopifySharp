@@ -18,6 +18,7 @@
         <PackageReference Include="FSharp.Span.Utils" />
         <PackageReference Include="GraphQL-Parser" />
         <PackageReference Include="FSharp.Core" />
+        <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     </ItemGroup>
 

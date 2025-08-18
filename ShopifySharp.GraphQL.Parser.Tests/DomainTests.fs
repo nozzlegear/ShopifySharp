@@ -1,8 +1,10 @@
 module ShopifySharp.GraphQL.Parser.Tests.DomainTests
 
 open System.Threading
+open FakeItEasy
 open Faqt
 open Faqt.Operators
+open GraphQLParser.Visitors
 open Xunit
 open ShopifySharp.GraphQL.Parser
 
@@ -28,6 +30,16 @@ type DomainTests() =
 
             // Assert
             %result.Should().Be(typeName)
+
+    [<Fact>]
+    member _.``ParserContext.CancellationToken should return correct token``() =
+        // Setup
+        let cancellationToken = CancellationToken()
+        let sut = ParserContext(Pascal, false, cancellationToken)
+
+        // Act & Assert
+        %sut.CancellationToken.Should().Be(cancellationToken)
+        %(sut :> IASTVisitorContext).CancellationToken.Should().Be(cancellationToken)
 
     [<Theory>]
     [<CombinatorialData>]

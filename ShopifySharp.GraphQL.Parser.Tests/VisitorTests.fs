@@ -337,3 +337,223 @@ type VisitorTests() =
         
         %userType.Should().BeSome()
         %userType.Value.InheritedTypeNames.Should().Contain("INode")
+
+    [<Fact>]
+    member _.``Visitor should handle connection type with both nodes and edges fields``() =
+        // Setup
+        let cancellationToken = CancellationToken.None
+        let context = ParserContext(Pascal, false, cancellationToken)
+        let sut = Visitor()
+
+        let schema = """
+            type UserConnection {
+                nodes: [User]
+                edges: [UserEdge]
+                pageInfo: PageInfo
+            }
+            
+            type User {
+                id: ID!
+            }
+            
+            type UserEdge {
+                node: User
+            }
+            
+            type PageInfo {
+                hasNextPage: Boolean
+            }
+        """
+        let document = parseDocument schema
+
+        // Act
+        let task = sut.VisitAsync(document, context)
+        task.GetAwaiter().GetResult()
+
+        // Assert
+        let visitedTypes = context.GetVisitedTypes()
+        let connectionType = visitedTypes |> Array.tryPick (fun t ->
+            match t with
+            | VisitedTypes.Class c when c.Name = "UserConnection" -> Some c
+            | _ -> None
+        )
+        
+        %connectionType.Should().BeSome()
+        match connectionType.Value.KnownInheritedType with
+        | Some (Connection (ConnectionWithNodesAndEdges (nodesType, edgesType))) -> 
+            %true.Should().BeTrue() // Test passes
+        | _ -> 
+            %false.Should().BeTrue() // Should have ConnectionWithNodesAndEdges
+
+    [<Fact>]
+    member _.``Visitor should handle connection type with only nodes field``() =
+        // Setup
+        let cancellationToken = CancellationToken.None
+        let context = ParserContext(Pascal, false, cancellationToken)
+        let sut = Visitor()
+
+        let schema = """
+            type UserConnection {
+                nodes: [User]
+                pageInfo: PageInfo
+            }
+            
+            type User {
+                id: ID!
+            }
+            
+            type PageInfo {
+                hasNextPage: Boolean
+            }
+        """
+        let document = parseDocument schema
+
+        // Act
+        let task = sut.VisitAsync(document, context)
+        task.GetAwaiter().GetResult()
+
+        // Assert
+        let visitedTypes = context.GetVisitedTypes()
+        let connectionType = visitedTypes |> Array.tryPick (fun t ->
+            match t with
+            | VisitedTypes.Class c when c.Name = "UserConnection" -> Some c
+            | _ -> None
+        )
+        
+        %connectionType.Should().BeSome()
+        match connectionType.Value.KnownInheritedType with
+        | Some (Connection (ConnectionWithNodes nodesType)) -> 
+            %true.Should().BeTrue() // Test passes
+        | _ -> 
+            %false.Should().BeTrue() // Should have ConnectionWithNodes
+
+    [<Fact>]
+    member _.``Visitor should handle connection type with only edges field``() =
+        // Setup
+        let cancellationToken = CancellationToken.None
+        let context = ParserContext(Pascal, false, cancellationToken)
+        let sut = Visitor()
+
+        let schema = """
+            type UserConnection {
+                edges: [UserEdge]
+                pageInfo: PageInfo
+            }
+            
+            type UserEdge {
+                node: User
+            }
+            
+            type User {
+                id: ID!
+            }
+            
+            type PageInfo {
+                hasNextPage: Boolean
+            }
+        """
+        let document = parseDocument schema
+
+        // Act
+        let task = sut.VisitAsync(document, context)
+        task.GetAwaiter().GetResult()
+
+        // Assert
+        let visitedTypes = context.GetVisitedTypes()
+        let connectionType = visitedTypes |> Array.tryPick (fun t ->
+            match t with
+            | VisitedTypes.Class c when c.Name = "UserConnection" -> Some c
+            | _ -> None
+        )
+        
+        %connectionType.Should().BeSome()
+        match connectionType.Value.KnownInheritedType with
+        | Some (Connection (ConnectionWithEdges edgesType)) -> 
+            %true.Should().BeTrue() // Test passes
+        | _ -> 
+            %false.Should().BeTrue() // Should have ConnectionWithEdges
+
+    [<Fact>]
+    member _.``Visitor should handle connection type with neither nodes nor edges fields``() =
+        // Setup
+        let cancellationToken = CancellationToken.None
+        let context = ParserContext(Pascal, false, cancellationToken)
+        let sut = Visitor()
+
+        let schema = """
+            type UserConnection {
+                pageInfo: PageInfo
+                totalCount: Int
+            }
+            
+            type PageInfo {
+                hasNextPage: Boolean
+            }
+        """
+        let document = parseDocument schema
+
+        // Act
+        let task = sut.VisitAsync(document, context)
+        task.GetAwaiter().GetResult()
+
+        // Assert
+        let visitedTypes = context.GetVisitedTypes()
+        let connectionType = visitedTypes |> Array.tryPick (fun t ->
+            match t with
+            | VisitedTypes.Class c when c.Name = "UserConnection" -> Some c
+            | _ -> None
+        )
+        
+        %connectionType.Should().BeSome()
+        match connectionType.Value.KnownInheritedType with
+        | Some (Connection ConnectionType.Connection) -> 
+            %true.Should().BeTrue() // Test passes
+        | _ -> 
+            %false.Should().BeTrue() // Should have basic Connection
+
+    [<Fact>]
+    member _.``Visitor should handle connection type with case insensitive field names``() =
+        // Setup
+        let cancellationToken = CancellationToken.None
+        let context = ParserContext(Pascal, false, cancellationToken)
+        let sut = Visitor()
+
+        let schema = """
+            type UserConnection {
+                NODES: [User]
+                Edges: [UserEdge]
+                pageInfo: PageInfo
+            }
+            
+            type User {
+                id: ID!
+            }
+            
+            type UserEdge {
+                node: User
+            }
+            
+            type PageInfo {
+                hasNextPage: Boolean
+            }
+        """
+        let document = parseDocument schema
+
+        // Act
+        let task = sut.VisitAsync(document, context)
+        task.GetAwaiter().GetResult()
+
+        // Assert
+        let visitedTypes = context.GetVisitedTypes()
+        let connectionType = visitedTypes |> Array.tryPick (fun t ->
+            match t with
+            | VisitedTypes.Class c when c.Name = "UserConnection" -> Some c
+            | _ -> None
+        )
+        
+        %connectionType.Should().BeSome()
+        match connectionType.Value.KnownInheritedType with
+        | Some (Connection (ConnectionWithNodesAndEdges (nodesType, edgesType))) -> 
+            %true.Should().BeTrue() // Test passes - case insensitive matching works
+        | _ -> 
+            %false.Should().BeTrue() // Should have ConnectionWithNodesAndEdges

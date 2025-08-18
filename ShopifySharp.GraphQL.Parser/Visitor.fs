@@ -1,6 +1,7 @@
 namespace ShopifySharp.GraphQL.Parser
 
 open System
+open System.Diagnostics.CodeAnalysis
 open System.Runtime.CompilerServices
 open System.Threading.Tasks
 open FSharp.Span.Utils.SafeLowLevelOperators
@@ -19,6 +20,7 @@ type private Presence
 type Visitor() =
     inherit ASTVisitor<ParserContext>()
 
+    [<ExcludeFromCodeCoverage>]
     let (~%) job = ignore job
 
     let removeNewLines (value: char readonlyspan): string =
@@ -97,7 +99,8 @@ type Visitor() =
         | :? GraphQLNonNullType as nonNullType ->
             mapGraphTypeToFieldType nonNullType.Type
             |> FieldType.NonNullableType
-        | _ -> raise (SwitchExpressionException fieldType)
+        | _ ->
+            raise (SwitchExpressionException fieldType)
 
     let mapToArguments (argument: GraphQLArgumentsDefinition | null): FieldArgument[] =
         if isNull argument then
