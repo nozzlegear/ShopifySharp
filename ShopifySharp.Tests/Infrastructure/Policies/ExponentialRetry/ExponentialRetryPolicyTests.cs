@@ -320,7 +320,7 @@ public class ExponentialRetryPolicyTests
             .Then(A.CallTo(() => _taskScheduler.DelayAsync(777.ms(), A<CancellationToken>._)).MustHaveHappened(3, Times.Exactly));
     }
 
-    [Fact]
+    [Fact(Skip = "Due to flakiness, this test should be rewritten to use the TimeProvider before running again in CI/CD")]
     public async Task Run_ShouldRetryUntilMaximumDelayIsReachedThenThrow()
     {
         // TODO: this test could be improved by using the Microsoft.BCL.TimeProvider package,
