@@ -1,0 +1,37 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
+/// <summary>
+/// The business type of a Shopify Payments account.
+/// </summary>
+public enum ShopifyPaymentsBusinessType
+{
+    CORPORATION,
+    GOVERNMENT,
+    INCORPORATED_PARTNERSHIP,
+    INDIVIDUAL,
+    LLC,
+    NON_PROFIT,
+    NON_PROFIT_INCORPORATED,
+    NON_PROFIT_UNINCORPORATED,
+    NON_PROFIT_UNINCORPORATED_ASSOCIATION,
+    NON_PROFIT_REGISTERED_CHARITY,
+    PARTNERSHIP,
+    PRIVATE_CORPORATION,
+    PUBLIC_COMPANY,
+    PUBLIC_CORPORATION,
+    SOLE_PROP,
+    UNINCORPORATED_PARTNERSHIP,
+    PRIVATE_MULTI_MEMBER_LLC,
+    PRIVATE_SINGLE_MEMBER_LLC,
+    PRIVATE_UNINCORPORATED_ASSOCIATION,
+    PRIVATE_PARTNERSHIP,
+    PUBLIC_PARTNERSHIP,
+    FREE_ZONE_ESTABLISHMENT,
+    FREE_ZONE_LLC,
+    SOLE_ESTABLISHMENT,
+    NOT_SET,
+}

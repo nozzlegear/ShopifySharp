@@ -1,0 +1,29 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
+/// <summary>
+/// The input fields used to update a container's divider customizations.
+/// </summary>
+public record CheckoutBrandingContainerDividerInput : GraphQLInputObject<CheckoutBrandingContainerDividerInput>
+{
+    /// <summary>
+    /// The divider style.
+    /// </summary>
+    [JsonPropertyName("borderStyle")]
+    public CheckoutBrandingBorderStyle? borderStyle { get; set; } = null;
+
+    /// <summary>
+    /// The divider width.
+    /// </summary>
+    [JsonPropertyName("borderWidth")]
+    public CheckoutBrandingBorderWidth? borderWidth { get; set; } = null;
+
+    /// <summary>
+    /// The divider visibility.
+    /// </summary>
+    [JsonPropertyName("visibility")]
+    public CheckoutBrandingVisibility? visibility { get; set; } = null;
+}

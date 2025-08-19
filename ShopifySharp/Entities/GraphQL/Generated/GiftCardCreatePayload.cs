@@ -1,0 +1,29 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
+/// <summary>
+/// Return type for `giftCardCreate` mutation.
+/// </summary>
+public record GiftCardCreatePayload : IGraphQLObject
+{
+    /// <summary>
+    /// The created gift card.
+    /// </summary>
+    [JsonPropertyName("giftCard")]
+    public GiftCard? giftCard { get; set; } = null;
+
+    /// <summary>
+    /// The created gift card's code.
+    /// </summary>
+    [JsonPropertyName("giftCardCode")]
+    public string? giftCardCode { get; set; } = null;
+
+    /// <summary>
+    /// The list of errors that occurred from executing the mutation.
+    /// </summary>
+    [JsonPropertyName("userErrors")]
+    public ICollection<GiftCardUserError>? userErrors { get; set; } = null;
+}
