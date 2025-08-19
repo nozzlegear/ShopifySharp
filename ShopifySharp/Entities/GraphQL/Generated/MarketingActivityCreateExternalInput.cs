@@ -1,0 +1,155 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+
+/// <summary>
+/// The input fields for creating an externally-managed marketing activity.
+/// </summary>
+public record MarketingActivityCreateExternalInput : GraphQLInputObject<MarketingActivityCreateExternalInput>
+{
+    /// <summary>
+    /// The amount spent on the marketing activity.
+    /// </summary>
+    [JsonPropertyName("adSpend")]
+    public MoneyInput? adSpend { get; set; } = null;
+
+    /// <summary>
+    /// The budget for this marketing activity.
+    /// </summary>
+    [JsonPropertyName("budget")]
+    public MarketingActivityBudgetInput? budget { get; set; } = null;
+
+    /// <summary>
+    /// The unique string identifier of the channel to which this activity belongs.
+    /// For the correct handle for your channel, contact your partner manager.
+    /// </summary>
+    [JsonPropertyName("channelHandle")]
+    public string? channelHandle { get; set; } = null;
+
+    /// <summary>
+    /// The date and time at which the activity ended. If omitted or set to `null`,
+    /// the current time will be used if the status is set to `INACTIVE` or
+    /// `DELETED_EXTERNALLY`.
+    /// </summary>
+    [JsonPropertyName("end")]
+#if NETSTANDARD2_0
+	[System.Text.Json.DateOnlyConverter]
+#endif
+    public DateTime? end { get; set; } = null;
+
+    /// <summary>
+    /// The hierarchy level of the activity within a campaign. The hierarchy level can't be updated.
+    /// </summary>
+    [JsonPropertyName("hierarchyLevel")]
+    public MarketingActivityHierarchyLevel? hierarchyLevel { get; set; } = null;
+
+    /// <summary>
+    /// The medium through which the marketing activity and event reached consumers. This is used for reporting aggregation.
+    /// </summary>
+    [JsonPropertyName("marketingChannelType")]
+    public MarketingChannel? marketingChannelType { get; set; } = null;
+
+    /// <summary>
+    /// The ID for the parent marketing activity, if creating hierarchical activities.
+    /// </summary>
+    [JsonPropertyName("parentActivityId")]
+    public string? parentActivityId { get; set; } = null;
+
+    /// <summary>
+    /// The remote ID for the parent marketing activity, if creating hierarchical activities.
+    /// </summary>
+    [JsonPropertyName("parentRemoteId")]
+    public string? parentRemoteId { get; set; } = null;
+
+    /// <summary>
+    /// The domain from which ad clicks are forwarded to the shop.
+    /// </summary>
+    [JsonPropertyName("referringDomain")]
+    public string? referringDomain { get; set; } = null;
+
+    /// <summary>
+    /// A custom unique identifier for the marketing activity, which can be used to
+    /// manage the activity and send engagement metrics without having to store our
+    /// marketing activity ID in your systems.
+    /// </summary>
+    [JsonPropertyName("remoteId")]
+    public string? remoteId { get; set; } = null;
+
+    /// <summary>
+    /// The URL for a preview image that's used for the marketing activity.
+    /// </summary>
+    [JsonPropertyName("remotePreviewImageUrl")]
+    public string? remotePreviewImageUrl { get; set; } = null;
+
+    /// <summary>
+    /// The URL for viewing and/or managing the activity outside of Shopify.
+    /// </summary>
+    [JsonPropertyName("remoteUrl")]
+    public string? remoteUrl { get; set; } = null;
+
+    /// <summary>
+    /// The date and time at which the activity is scheduled to end.
+    /// </summary>
+    [JsonPropertyName("scheduledEnd")]
+#if NETSTANDARD2_0
+	[System.Text.Json.DateOnlyConverter]
+#endif
+    public DateTime? scheduledEnd { get; set; } = null;
+
+    /// <summary>
+    /// The date and time at which the activity is scheduled to start.
+    /// </summary>
+    [JsonPropertyName("scheduledStart")]
+#if NETSTANDARD2_0
+	[System.Text.Json.DateOnlyConverter]
+#endif
+    public DateTime? scheduledStart { get; set; } = null;
+
+    /// <summary>
+    /// The date and time at which the activity started. If omitted or set to `null`, the current time will be used.
+    /// </summary>
+    [JsonPropertyName("start")]
+#if NETSTANDARD2_0
+	[System.Text.Json.DateOnlyConverter]
+#endif
+    public DateTime? start { get; set; } = null;
+
+    /// <summary>
+    /// The status of the marketing activity. If status isn't set it will default to UNDEFINED.
+    /// </summary>
+    [JsonPropertyName("status")]
+    public MarketingActivityExternalStatus? status { get; set; } = null;
+
+    /// <summary>
+    /// The method of marketing used for this marketing activity. The marketing tactic
+    /// determines which default fields are included in the marketing activity.
+    /// </summary>
+    [JsonPropertyName("tactic")]
+    public MarketingTactic? tactic { get; set; } = null;
+
+    /// <summary>
+    /// The title of the marketing activity.
+    /// </summary>
+    [JsonPropertyName("title")]
+    public string? title { get; set; } = null;
+
+    /// <summary>
+    /// Value for a query parameter that gets inserted into storefront URLs for
+    /// matching storefront traffic to this activity. This feature is currently
+    /// available on a limited basis to some partners only. UTMs should continue to be
+    /// used for most partners. Both the URL parameter value and UTM parameters can be set.
+    /// </summary>
+    [JsonPropertyName("urlParameterValue")]
+    public string? urlParameterValue { get; set; } = null;
+
+    /// <summary>
+    /// Specifies the [Urchin Traffic Module (UTM)
+    /// parameters](https://en.wikipedia.org/wiki/UTM_parameters) that are associated
+    /// with a related marketing campaign. Either the URL parameter value or UTM can
+    /// be set, but not both.
+    /// </summary>
+    [JsonPropertyName("utm")]
+    public UTMInput? utm { get; set; } = null;
+}
