@@ -1,2 +1,2 @@
-schema: 2025-07.schema.graphql
+schema: current.schema.graphql
 documents: '**/*.graphql'
