@@ -51,6 +51,12 @@ public class LineItem : ShopifyObject
     public int? Quantity { get; set; }
 
     /// <summary>
+    /// Gets or sets the current quantity of the item (If the Quantity is ajusted after the order is created this will show the current quantity).
+    /// </summary>
+    [JsonProperty("current_quantity")]
+    public int? CurrentQuantity { get; set; }
+
+    /// <summary>
     /// States whether or not the fulfillment requires shipping.
     /// </summary>
     [JsonProperty("requires_shipping")]
