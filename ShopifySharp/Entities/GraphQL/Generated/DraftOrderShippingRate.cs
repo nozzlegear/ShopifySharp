@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DraftOrderPlatformDiscountAllocationTargetCalculatedDraftOrderLineItem(CalculatedDraftOrderLineItem Value): DraftOrderPlatformDiscountAllocationTarget;
-internal record DraftOrderPlatformDiscountAllocationTargetDraftOrderLineItem(DraftOrderLineItem Value): DraftOrderPlatformDiscountAllocationTarget;
-internal record DraftOrderPlatformDiscountAllocationTargetShippingLine(ShippingLine Value): DraftOrderPlatformDiscountAllocationTarget;
-#endif /// <summary>
-
+/// <summary>
 /// A shipping rate is an additional cost added to the cost of the products that were ordered.
 /// </summary>
 public record DraftOrderShippingRate : IGraphQLObject

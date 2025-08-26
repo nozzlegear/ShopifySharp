@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SellingPlanDeliveryPolicySellingPlanFixedDeliveryPolicy(SellingPlanFixedDeliveryPolicy Value): SellingPlanDeliveryPolicy;
-internal record SellingPlanDeliveryPolicySellingPlanRecurringDeliveryPolicy(SellingPlanRecurringDeliveryPolicy Value): SellingPlanDeliveryPolicy;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields that are required to create or update a delivery policy.
 /// </summary>
 public record SellingPlanDeliveryPolicyInput : GraphQLInputObject<SellingPlanDeliveryPolicyInput>

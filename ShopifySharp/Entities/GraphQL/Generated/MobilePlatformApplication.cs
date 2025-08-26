@@ -24,8 +24,8 @@ using System.Collections.Generic;
 /// or [Android app link](https://developer.android.com/training/app-links) technical documentation.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(AndroidApplication), typeDiscriminator: "AndroidApplication")]
-[JsonDerivedType(typeof(AppleApplication), typeDiscriminator: "AppleApplication")]
+[JsonDerivedType(typeof(MobilePlatformApplicationAndroidApplication), typeDiscriminator: "AndroidApplication")]
+[JsonDerivedType(typeof(MobilePlatformApplicationAppleApplication), typeDiscriminator: "AppleApplication")]
 public record MobilePlatformApplication : GraphQLObject<MobilePlatformApplication>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

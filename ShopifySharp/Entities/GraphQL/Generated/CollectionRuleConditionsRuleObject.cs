@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// Specifies object with additional rule attributes.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CollectionRuleMetafieldCondition), typeDiscriminator: "CollectionRuleMetafieldCondition")]
+[JsonDerivedType(typeof(CollectionRuleConditionsRuleObjectCollectionRuleMetafieldCondition), typeDiscriminator: "CollectionRuleMetafieldCondition")]
 public record CollectionRuleConditionsRuleObject : GraphQLObject<CollectionRuleConditionsRuleObject>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

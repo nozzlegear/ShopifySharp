@@ -12,14 +12,14 @@ using System.Collections.Generic;
 /// Function-backed discounts to create custom discount configurations.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
-[JsonDerivedType(typeof(DiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
-[JsonDerivedType(typeof(DiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
-[JsonDerivedType(typeof(DiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
-[JsonDerivedType(typeof(DiscountCodeApp), typeDiscriminator: "DiscountCodeApp")]
-[JsonDerivedType(typeof(DiscountCodeBasic), typeDiscriminator: "DiscountCodeBasic")]
-[JsonDerivedType(typeof(DiscountCodeBxgy), typeDiscriminator: "DiscountCodeBxgy")]
-[JsonDerivedType(typeof(DiscountCodeFreeShipping), typeDiscriminator: "DiscountCodeFreeShipping")]
+[JsonDerivedType(typeof(DiscountDiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
+[JsonDerivedType(typeof(DiscountDiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
+[JsonDerivedType(typeof(DiscountDiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
+[JsonDerivedType(typeof(DiscountDiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
+[JsonDerivedType(typeof(DiscountDiscountCodeApp), typeDiscriminator: "DiscountCodeApp")]
+[JsonDerivedType(typeof(DiscountDiscountCodeBasic), typeDiscriminator: "DiscountCodeBasic")]
+[JsonDerivedType(typeof(DiscountDiscountCodeBxgy), typeDiscriminator: "DiscountCodeBxgy")]
+[JsonDerivedType(typeof(DiscountDiscountCodeFreeShipping), typeDiscriminator: "DiscountCodeFreeShipping")]
 public record Discount : GraphQLObject<Discount>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

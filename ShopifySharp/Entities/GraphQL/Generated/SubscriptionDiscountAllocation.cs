@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SubscriptionDiscountSubscriptionAppliedCodeDiscount(SubscriptionAppliedCodeDiscount Value): SubscriptionDiscount;
-internal record SubscriptionDiscountSubscriptionManualDiscount(SubscriptionManualDiscount Value): SubscriptionDiscount;
-#endif /// <summary>
-
+/// <summary>
 /// Represents what a particular discount reduces from a line price.
 /// </summary>
 public record SubscriptionDiscountAllocation : IGraphQLObject

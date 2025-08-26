@@ -4,10 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record CollectionRuleConditionsRuleObjectCollectionRuleMetafieldCondition(CollectionRuleMetafieldCondition Value): CollectionRuleConditionsRuleObject;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for a rule to associate with a collection.
 /// </summary>
 public record CollectionRuleInput : GraphQLInputObject<CollectionRuleInput>

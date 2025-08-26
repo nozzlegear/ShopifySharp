@@ -4,17 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountDiscountAutomaticApp(DiscountAutomaticApp Value): Discount;
-internal record DiscountDiscountAutomaticBasic(DiscountAutomaticBasic Value): Discount;
-internal record DiscountDiscountAutomaticBxgy(DiscountAutomaticBxgy Value): Discount;
-internal record DiscountDiscountAutomaticFreeShipping(DiscountAutomaticFreeShipping Value): Discount;
-internal record DiscountDiscountCodeApp(DiscountCodeApp Value): Discount;
-internal record DiscountDiscountCodeBasic(DiscountCodeBasic Value): Discount;
-internal record DiscountDiscountCodeBxgy(DiscountCodeBxgy Value): Discount;
-internal record DiscountDiscountCodeFreeShipping(DiscountCodeFreeShipping Value): Discount;
-#endif /// <summary>
-
+/// <summary>
 /// An amount that's allocated to a line based on an associated discount application.
 /// </summary>
 public record DiscountAllocation : IGraphQLObject

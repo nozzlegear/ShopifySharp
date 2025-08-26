@@ -4,10 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record StoreCreditAccountTransactionOriginOrderTransaction(OrderTransaction Value): StoreCreditAccountTransactionOrigin;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields to process a refund to store credit.
 /// </summary>
 public record StoreCreditRefundInput : GraphQLInputObject<StoreCreditRefundInput>

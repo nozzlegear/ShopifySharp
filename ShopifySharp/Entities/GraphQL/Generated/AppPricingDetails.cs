@@ -9,8 +9,8 @@ using System.Collections.Generic;
 /// The concrete type can be `AppRecurringPricing` for recurring billing or `AppUsagePricing` for usage-based billing.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(AppRecurringPricing), typeDiscriminator: "AppRecurringPricing")]
-[JsonDerivedType(typeof(AppUsagePricing), typeDiscriminator: "AppUsagePricing")]
+[JsonDerivedType(typeof(AppPricingDetailsAppRecurringPricing), typeDiscriminator: "AppRecurringPricing")]
+[JsonDerivedType(typeof(AppPricingDetailsAppUsagePricing), typeDiscriminator: "AppUsagePricing")]
 public record AppPricingDetails : GraphQLObject<AppPricingDetails>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

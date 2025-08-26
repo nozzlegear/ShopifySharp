@@ -4016,9 +4016,9 @@ public record Mutation : IGraphQLObject
     public UrlRedirectBulkDeleteAllPayload? urlRedirectBulkDeleteAll { get; set; } = null;
 
     /// <summary>
-    /// Asynchronously delete [URLRedirect](https://shopify.dev/api/admin-graphql/latest/objects/UrlRedirect) 
+    /// Asynchronously delete [URLRedirect](https://shopify.dev/api/admin-graphql/latest/objects/UrlRedirect)
     /// objects in bulk by IDs.
-    /// Learn more about [URLRedirect](https://help.shopify.com/en/manual/online-store/menus-and-links/url-redirect) 
+    /// Learn more about [URLRedirect](https://help.shopify.com/en/manual/online-store/menus-and-links/url-redirect)
     /// objects.
     /// </summary>
     [JsonPropertyName("urlRedirectBulkDeleteByIds")]

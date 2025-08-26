@@ -4,17 +4,12 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SubscriptionDeliveryOptionSubscriptionLocalDeliveryOption(SubscriptionLocalDeliveryOption Value): SubscriptionDeliveryOption;
-internal record SubscriptionDeliveryOptionSubscriptionPickupOption(SubscriptionPickupOption Value): SubscriptionDeliveryOption;
-internal record SubscriptionDeliveryOptionSubscriptionShippingOption(SubscriptionShippingOption Value): SubscriptionDeliveryOption;
-#endif /// <summary>
-
+/// <summary>
 /// The result of the query to fetch delivery options for the subscription contract.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SubscriptionDeliveryOptionResultFailure), typeDiscriminator: "SubscriptionDeliveryOptionResultFailure")]
-[JsonDerivedType(typeof(SubscriptionDeliveryOptionResultSuccess), typeDiscriminator: "SubscriptionDeliveryOptionResultSuccess")]
+[JsonDerivedType(typeof(SubscriptionDeliveryOptionResultSubscriptionDeliveryOptionResultFailure), typeDiscriminator: "SubscriptionDeliveryOptionResultFailure")]
+[JsonDerivedType(typeof(SubscriptionDeliveryOptionResultSubscriptionDeliveryOptionResultSuccess), typeDiscriminator: "SubscriptionDeliveryOptionResultSuccess")]
 public record SubscriptionDeliveryOptionResult : GraphQLObject<SubscriptionDeliveryOptionResult>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SellingPlanBillingPolicySellingPlanFixedBillingPolicy(SellingPlanFixedBillingPolicy Value): SellingPlanBillingPolicy;
-internal record SellingPlanBillingPolicySellingPlanRecurringBillingPolicy(SellingPlanRecurringBillingPolicy Value): SellingPlanBillingPolicy;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields that are required to create or update a billing policy type.
 /// </summary>
 public record SellingPlanBillingPolicyInput : GraphQLInputObject<SellingPlanBillingPolicyInput>

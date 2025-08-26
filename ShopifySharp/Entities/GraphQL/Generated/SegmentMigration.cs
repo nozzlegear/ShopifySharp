@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
 /// <summary>
-/// A segment and its corresponding saved search. 
+/// A segment and its corresponding saved search.
 /// For example, you can use `SegmentMigration` to retrieve the segment ID that corresponds to a saved search ID.
 /// </summary>
 public record SegmentMigration : IGraphQLObject

@@ -4,16 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record OrderStagedChangeOrderStagedChangeAddCustomItem(OrderStagedChangeAddCustomItem Value): OrderStagedChange;
-internal record OrderStagedChangeOrderStagedChangeAddLineItemDiscount(OrderStagedChangeAddLineItemDiscount Value): OrderStagedChange;
-internal record OrderStagedChangeOrderStagedChangeAddShippingLine(OrderStagedChangeAddShippingLine Value): OrderStagedChange;
-internal record OrderStagedChangeOrderStagedChangeAddVariant(OrderStagedChangeAddVariant Value): OrderStagedChange;
-internal record OrderStagedChangeOrderStagedChangeDecrementItem(OrderStagedChangeDecrementItem Value): OrderStagedChange;
-internal record OrderStagedChangeOrderStagedChangeIncrementItem(OrderStagedChangeIncrementItem Value): OrderStagedChange;
-internal record OrderStagedChangeOrderStagedChangeRemoveShippingLine(OrderStagedChangeRemoveShippingLine Value): OrderStagedChange;
-#endif /// <summary>
-
+/// <summary>
 /// A change to the order representing the addition of a
 /// custom line item. For example, you might want to add gift wrapping service
 /// as a custom line item.

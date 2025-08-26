@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// All possible instruments for CustomerPaymentMethods.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CustomerCreditCard), typeDiscriminator: "CustomerCreditCard")]
-[JsonDerivedType(typeof(CustomerPaypalBillingAgreement), typeDiscriminator: "CustomerPaypalBillingAgreement")]
-[JsonDerivedType(typeof(CustomerShopPayAgreement), typeDiscriminator: "CustomerShopPayAgreement")]
+[JsonDerivedType(typeof(CustomerPaymentInstrumentCustomerCreditCard), typeDiscriminator: "CustomerCreditCard")]
+[JsonDerivedType(typeof(CustomerPaymentInstrumentCustomerPaypalBillingAgreement), typeDiscriminator: "CustomerPaypalBillingAgreement")]
+[JsonDerivedType(typeof(CustomerPaymentInstrumentCustomerShopPayAgreement), typeDiscriminator: "CustomerShopPayAgreement")]
 public record CustomerPaymentInstrument : GraphQLObject<CustomerPaymentInstrument>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

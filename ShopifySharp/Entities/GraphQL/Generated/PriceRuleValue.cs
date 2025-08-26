@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// The type of the price rule value. The price rule value might be a percentage value, or a fixed amount.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(PriceRuleFixedAmountValue), typeDiscriminator: "PriceRuleFixedAmountValue")]
-[JsonDerivedType(typeof(PriceRulePercentValue), typeDiscriminator: "PriceRulePercentValue")]
+[JsonDerivedType(typeof(PriceRuleValuePriceRuleFixedAmountValue), typeDiscriminator: "PriceRuleFixedAmountValue")]
+[JsonDerivedType(typeof(PriceRuleValuePriceRulePercentValue), typeDiscriminator: "PriceRulePercentValue")]
 public record PriceRuleValue : GraphQLObject<PriceRuleValue>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

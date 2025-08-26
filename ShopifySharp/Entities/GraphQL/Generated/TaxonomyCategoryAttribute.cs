@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// A product taxonomy attribute interface.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(TaxonomyAttribute), typeDiscriminator: "TaxonomyAttribute")]
-[JsonDerivedType(typeof(TaxonomyChoiceListAttribute), typeDiscriminator: "TaxonomyChoiceListAttribute")]
-[JsonDerivedType(typeof(TaxonomyMeasurementAttribute), typeDiscriminator: "TaxonomyMeasurementAttribute")]
+[JsonDerivedType(typeof(TaxonomyCategoryAttributeTaxonomyAttribute), typeDiscriminator: "TaxonomyAttribute")]
+[JsonDerivedType(typeof(TaxonomyCategoryAttributeTaxonomyChoiceListAttribute), typeDiscriminator: "TaxonomyChoiceListAttribute")]
+[JsonDerivedType(typeof(TaxonomyCategoryAttributeTaxonomyMeasurementAttribute), typeDiscriminator: "TaxonomyMeasurementAttribute")]
 public record TaxonomyCategoryAttribute : GraphQLObject<TaxonomyCategoryAttribute>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

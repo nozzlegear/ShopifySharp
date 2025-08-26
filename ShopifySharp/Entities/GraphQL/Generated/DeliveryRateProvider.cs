@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// A rate provided by a merchant-defined rate or a participant.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DeliveryParticipant), typeDiscriminator: "DeliveryParticipant")]
-[JsonDerivedType(typeof(DeliveryRateDefinition), typeDiscriminator: "DeliveryRateDefinition")]
+[JsonDerivedType(typeof(DeliveryRateProviderDeliveryParticipant), typeDiscriminator: "DeliveryParticipant")]
+[JsonDerivedType(typeof(DeliveryRateProviderDeliveryRateDefinition), typeDiscriminator: "DeliveryRateDefinition")]
 public record DeliveryRateProvider : GraphQLObject<DeliveryRateProvider>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

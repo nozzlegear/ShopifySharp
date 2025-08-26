@@ -8,10 +8,10 @@ using System.Collections.Generic;
 /// Payment details related to a transaction.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CardPaymentDetails), typeDiscriminator: "CardPaymentDetails")]
-[JsonDerivedType(typeof(LocalPaymentMethodsPaymentDetails), typeDiscriminator: "LocalPaymentMethodsPaymentDetails")]
-[JsonDerivedType(typeof(PaypalWalletPaymentDetails), typeDiscriminator: "PaypalWalletPaymentDetails")]
-[JsonDerivedType(typeof(ShopPayInstallmentsPaymentDetails), typeDiscriminator: "ShopPayInstallmentsPaymentDetails")]
+[JsonDerivedType(typeof(PaymentDetailsCardPaymentDetails), typeDiscriminator: "CardPaymentDetails")]
+[JsonDerivedType(typeof(PaymentDetailsLocalPaymentMethodsPaymentDetails), typeDiscriminator: "LocalPaymentMethodsPaymentDetails")]
+[JsonDerivedType(typeof(PaymentDetailsPaypalWalletPaymentDetails), typeDiscriminator: "PaypalWalletPaymentDetails")]
+[JsonDerivedType(typeof(PaymentDetailsShopPayInstallmentsPaymentDetails), typeDiscriminator: "ShopPayInstallmentsPaymentDetails")]
 public record PaymentDetails : GraphQLObject<PaymentDetails>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

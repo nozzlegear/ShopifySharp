@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// Represents the body of a theme file.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(OnlineStoreThemeFileBodyBase64), typeDiscriminator: "OnlineStoreThemeFileBodyBase64")]
-[JsonDerivedType(typeof(OnlineStoreThemeFileBodyText), typeDiscriminator: "OnlineStoreThemeFileBodyText")]
-[JsonDerivedType(typeof(OnlineStoreThemeFileBodyUrl), typeDiscriminator: "OnlineStoreThemeFileBodyUrl")]
+[JsonDerivedType(typeof(OnlineStoreThemeFileBodyOnlineStoreThemeFileBodyBase64), typeDiscriminator: "OnlineStoreThemeFileBodyBase64")]
+[JsonDerivedType(typeof(OnlineStoreThemeFileBodyOnlineStoreThemeFileBodyText), typeDiscriminator: "OnlineStoreThemeFileBodyText")]
+[JsonDerivedType(typeof(OnlineStoreThemeFileBodyOnlineStoreThemeFileBodyUrl), typeDiscriminator: "OnlineStoreThemeFileBodyUrl")]
 public record OnlineStoreThemeFileBody : GraphQLObject<OnlineStoreThemeFileBody>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

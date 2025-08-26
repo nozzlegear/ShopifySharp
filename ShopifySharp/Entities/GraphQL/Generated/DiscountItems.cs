@@ -14,9 +14,9 @@ using System.Collections.Generic;
 /// the order, or to specific products and product variants, or items in a given collection.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(AllDiscountItems), typeDiscriminator: "AllDiscountItems")]
-[JsonDerivedType(typeof(DiscountCollections), typeDiscriminator: "DiscountCollections")]
-[JsonDerivedType(typeof(DiscountProducts), typeDiscriminator: "DiscountProducts")]
+[JsonDerivedType(typeof(DiscountItemsAllDiscountItems), typeDiscriminator: "AllDiscountItems")]
+[JsonDerivedType(typeof(DiscountItemsDiscountCollections), typeDiscriminator: "DiscountCollections")]
+[JsonDerivedType(typeof(DiscountItemsDiscountProducts), typeDiscriminator: "DiscountProducts")]
 public record DiscountItems : GraphQLObject<DiscountItems>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountShippingDestinationSelectionDiscountCountries(DiscountCountries Value): DiscountShippingDestinationSelection;
-internal record DiscountShippingDestinationSelectionDiscountCountryAll(DiscountCountryAll Value): DiscountShippingDestinationSelection;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for the destinations where the free shipping discount will be applied.
 /// </summary>
 public record DiscountShippingDestinationSelectionInput : GraphQLInputObject<DiscountShippingDestinationSelectionInput>

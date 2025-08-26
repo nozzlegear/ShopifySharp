@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// The delivery option for a subscription contract.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SubscriptionLocalDeliveryOption), typeDiscriminator: "SubscriptionLocalDeliveryOption")]
-[JsonDerivedType(typeof(SubscriptionPickupOption), typeDiscriminator: "SubscriptionPickupOption")]
-[JsonDerivedType(typeof(SubscriptionShippingOption), typeDiscriminator: "SubscriptionShippingOption")]
+[JsonDerivedType(typeof(SubscriptionDeliveryOptionSubscriptionLocalDeliveryOption), typeDiscriminator: "SubscriptionLocalDeliveryOption")]
+[JsonDerivedType(typeof(SubscriptionDeliveryOptionSubscriptionPickupOption), typeDiscriminator: "SubscriptionPickupOption")]
+[JsonDerivedType(typeof(SubscriptionDeliveryOptionSubscriptionShippingOption), typeDiscriminator: "SubscriptionShippingOption")]
 public record SubscriptionDeliveryOption : GraphQLObject<SubscriptionDeliveryOption>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

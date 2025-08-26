@@ -4,10 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DepositConfigurationDepositPercentage(DepositPercentage Value): DepositConfiguration;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields configuring the deposit for a B2B buyer.
 /// </summary>
 public record DepositInput : GraphQLInputObject<DepositInput>

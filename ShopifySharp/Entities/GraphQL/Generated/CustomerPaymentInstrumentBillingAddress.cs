@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record CustomerPaymentInstrumentCustomerCreditCard(CustomerCreditCard Value): CustomerPaymentInstrument;
-internal record CustomerPaymentInstrumentCustomerPaypalBillingAgreement(CustomerPaypalBillingAgreement Value): CustomerPaymentInstrument;
-internal record CustomerPaymentInstrumentCustomerShopPayAgreement(CustomerShopPayAgreement Value): CustomerPaymentInstrument;
-#endif /// <summary>
-
+/// <summary>
 /// The billing address of a payment instrument.
 /// </summary>
 public record CustomerPaymentInstrumentBillingAddress : IGraphQLObject

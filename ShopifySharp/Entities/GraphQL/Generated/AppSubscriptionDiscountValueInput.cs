@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record AppSubscriptionDiscountValueAppSubscriptionDiscountAmount(AppSubscriptionDiscountAmount Value): AppSubscriptionDiscountValue;
-internal record AppSubscriptionDiscountValueAppSubscriptionDiscountPercentage(AppSubscriptionDiscountPercentage Value): AppSubscriptionDiscountValue;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields to specify the value discounted every billing interval.
 /// </summary>
 public record AppSubscriptionDiscountValueInput : GraphQLInputObject<AppSubscriptionDiscountValueInput>

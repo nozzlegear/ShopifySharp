@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountItemsAllDiscountItems(AllDiscountItems Value): DiscountItems;
-internal record DiscountItemsDiscountCollections(DiscountCollections Value): DiscountItems;
-internal record DiscountItemsDiscountProducts(DiscountProducts Value): DiscountItems;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for the items attached to a discount. You can specify the discount items by product ID or collection ID.
 /// </summary>
 public record DiscountItemsInput : GraphQLInputObject<DiscountItemsInput>

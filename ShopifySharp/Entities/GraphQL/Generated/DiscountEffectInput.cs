@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountEffectDiscountAmount(DiscountAmount Value): DiscountEffect;
-internal record DiscountEffectDiscountPercentage(DiscountPercentage Value): DiscountEffect;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for how the discount will be applied. Currently, only percentage off is supported.
 /// </summary>
 public record DiscountEffectInput : GraphQLInputObject<DiscountEffectInput>

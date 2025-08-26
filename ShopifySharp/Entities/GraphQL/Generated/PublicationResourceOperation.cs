@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record PublicationOperationAddAllProductsOperation(AddAllProductsOperation Value): PublicationOperation;
-internal record PublicationOperationCatalogCsvOperation(CatalogCsvOperation Value): PublicationOperation;
-internal record PublicationOperationPublicationResourceOperation(PublicationResourceOperation Value): PublicationOperation;
-#endif /// <summary>
-
+/// <summary>
 /// A bulk update operation on a publication.
 /// </summary>
 public record PublicationResourceOperation : PublicationOperation, IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
