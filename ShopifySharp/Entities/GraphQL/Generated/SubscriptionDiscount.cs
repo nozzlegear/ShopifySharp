@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// Subscription draft discount types.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SubscriptionAppliedCodeDiscount), typeDiscriminator: "SubscriptionAppliedCodeDiscount")]
-[JsonDerivedType(typeof(SubscriptionManualDiscount), typeDiscriminator: "SubscriptionManualDiscount")]
+[JsonDerivedType(typeof(SubscriptionDiscountSubscriptionAppliedCodeDiscount), typeDiscriminator: "SubscriptionAppliedCodeDiscount")]
+[JsonDerivedType(typeof(SubscriptionDiscountSubscriptionManualDiscount), typeDiscriminator: "SubscriptionManualDiscount")]
 public record SubscriptionDiscount : GraphQLObject<SubscriptionDiscount>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

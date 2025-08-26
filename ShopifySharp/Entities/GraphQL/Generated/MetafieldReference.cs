@@ -8,19 +8,19 @@ using System.Collections.Generic;
 /// The resource referenced by the metafield value.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
-[JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
-[JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
-[JsonDerivedType(typeof(GenericFile), typeDiscriminator: "GenericFile")]
-[JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
-[JsonDerivedType(typeof(Metaobject), typeDiscriminator: "Metaobject")]
-[JsonDerivedType(typeof(Model3d), typeDiscriminator: "Model3d")]
-[JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
-[JsonDerivedType(typeof(Page), typeDiscriminator: "Page")]
-[JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
-[JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
-[JsonDerivedType(typeof(TaxonomyValue), typeDiscriminator: "TaxonomyValue")]
-[JsonDerivedType(typeof(Video), typeDiscriminator: "Video")]
+[JsonDerivedType(typeof(MetafieldReferenceCollection), typeDiscriminator: "Collection")]
+[JsonDerivedType(typeof(MetafieldReferenceCompany), typeDiscriminator: "Company")]
+[JsonDerivedType(typeof(MetafieldReferenceCustomer), typeDiscriminator: "Customer")]
+[JsonDerivedType(typeof(MetafieldReferenceGenericFile), typeDiscriminator: "GenericFile")]
+[JsonDerivedType(typeof(MetafieldReferenceMediaImage), typeDiscriminator: "MediaImage")]
+[JsonDerivedType(typeof(MetafieldReferenceMetaobject), typeDiscriminator: "Metaobject")]
+[JsonDerivedType(typeof(MetafieldReferenceModel3d), typeDiscriminator: "Model3d")]
+[JsonDerivedType(typeof(MetafieldReferenceOrder), typeDiscriminator: "Order")]
+[JsonDerivedType(typeof(MetafieldReferencePage), typeDiscriminator: "Page")]
+[JsonDerivedType(typeof(MetafieldReferenceProduct), typeDiscriminator: "Product")]
+[JsonDerivedType(typeof(MetafieldReferenceProductVariant), typeDiscriminator: "ProductVariant")]
+[JsonDerivedType(typeof(MetafieldReferenceTaxonomyValue), typeDiscriminator: "TaxonomyValue")]
+[JsonDerivedType(typeof(MetafieldReferenceVideo), typeDiscriminator: "Video")]
 public record MetafieldReference : GraphQLObject<MetafieldReference>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

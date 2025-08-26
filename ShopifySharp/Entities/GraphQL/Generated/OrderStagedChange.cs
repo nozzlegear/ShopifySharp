@@ -8,13 +8,13 @@ using System.Collections.Generic;
 /// A change that has been applied to an order.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(OrderStagedChangeAddCustomItem), typeDiscriminator: "OrderStagedChangeAddCustomItem")]
-[JsonDerivedType(typeof(OrderStagedChangeAddLineItemDiscount), typeDiscriminator: "OrderStagedChangeAddLineItemDiscount")]
-[JsonDerivedType(typeof(OrderStagedChangeAddShippingLine), typeDiscriminator: "OrderStagedChangeAddShippingLine")]
-[JsonDerivedType(typeof(OrderStagedChangeAddVariant), typeDiscriminator: "OrderStagedChangeAddVariant")]
-[JsonDerivedType(typeof(OrderStagedChangeDecrementItem), typeDiscriminator: "OrderStagedChangeDecrementItem")]
-[JsonDerivedType(typeof(OrderStagedChangeIncrementItem), typeDiscriminator: "OrderStagedChangeIncrementItem")]
-[JsonDerivedType(typeof(OrderStagedChangeRemoveShippingLine), typeDiscriminator: "OrderStagedChangeRemoveShippingLine")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeAddCustomItem), typeDiscriminator: "OrderStagedChangeAddCustomItem")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeAddLineItemDiscount), typeDiscriminator: "OrderStagedChangeAddLineItemDiscount")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeAddShippingLine), typeDiscriminator: "OrderStagedChangeAddShippingLine")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeAddVariant), typeDiscriminator: "OrderStagedChangeAddVariant")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeDecrementItem), typeDiscriminator: "OrderStagedChangeDecrementItem")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeIncrementItem), typeDiscriminator: "OrderStagedChangeIncrementItem")]
+[JsonDerivedType(typeof(OrderStagedChangeOrderStagedChangeRemoveShippingLine), typeDiscriminator: "OrderStagedChangeRemoveShippingLine")]
 public record OrderStagedChange : GraphQLObject<OrderStagedChange>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// Describes the delivery method to use to get the physical goods to the customer.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SubscriptionDeliveryMethodLocalDelivery), typeDiscriminator: "SubscriptionDeliveryMethodLocalDelivery")]
-[JsonDerivedType(typeof(SubscriptionDeliveryMethodPickup), typeDiscriminator: "SubscriptionDeliveryMethodPickup")]
-[JsonDerivedType(typeof(SubscriptionDeliveryMethodShipping), typeDiscriminator: "SubscriptionDeliveryMethodShipping")]
+[JsonDerivedType(typeof(SubscriptionDeliveryMethodSubscriptionDeliveryMethodLocalDelivery), typeDiscriminator: "SubscriptionDeliveryMethodLocalDelivery")]
+[JsonDerivedType(typeof(SubscriptionDeliveryMethodSubscriptionDeliveryMethodPickup), typeDiscriminator: "SubscriptionDeliveryMethodPickup")]
+[JsonDerivedType(typeof(SubscriptionDeliveryMethodSubscriptionDeliveryMethodShipping), typeDiscriminator: "SubscriptionDeliveryMethodShipping")]
 public record SubscriptionDeliveryMethod : GraphQLObject<SubscriptionDeliveryMethod>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -41,7 +41,7 @@ public record ReverseFulfillmentOrder : IGraphQLObject, INode
     public ReverseFulfillmentOrderStatus? status { get; set; } = null;
 
     /// <summary>
-    /// The current confirmation for the reverse fulfillment order from a third-party logistics service. 
+    /// The current confirmation for the reverse fulfillment order from a third-party logistics service.
     /// If no third-party service is involved, then this value is `nil`.
     /// </summary>
     [JsonPropertyName("thirdPartyConfirmation")]

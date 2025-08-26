@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// Represents information about the purchasing entity for the order or draft order.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
-[JsonDerivedType(typeof(PurchasingCompany), typeDiscriminator: "PurchasingCompany")]
+[JsonDerivedType(typeof(PurchasingEntityCustomer), typeDiscriminator: "Customer")]
+[JsonDerivedType(typeof(PurchasingEntityPurchasingCompany), typeDiscriminator: "PurchasingCompany")]
 public record PurchasingEntity : GraphQLObject<PurchasingEntity>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

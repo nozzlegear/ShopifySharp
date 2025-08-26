@@ -11,8 +11,8 @@ using System.Collections.Generic;
 /// might give the customer a monetary value in a given currency off an order.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(MoneyV2), typeDiscriminator: "MoneyV2")]
-[JsonDerivedType(typeof(PricingPercentageValue), typeDiscriminator: "PricingPercentageValue")]
+[JsonDerivedType(typeof(PricingValueMoneyV2), typeDiscriminator: "MoneyV2")]
+[JsonDerivedType(typeof(PricingValuePricingPercentageValue), typeDiscriminator: "PricingPercentageValue")]
 public record PricingValue : GraphQLObject<PricingValue>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

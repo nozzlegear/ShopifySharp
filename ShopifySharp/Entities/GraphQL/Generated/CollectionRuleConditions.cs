@@ -4,13 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record CollectionRuleConditionObjectCollectionRuleCategoryCondition(CollectionRuleCategoryCondition Value): CollectionRuleConditionObject;
-internal record CollectionRuleConditionObjectCollectionRuleMetafieldCondition(CollectionRuleMetafieldCondition Value): CollectionRuleConditionObject;
-internal record CollectionRuleConditionObjectCollectionRuleProductCategoryCondition(CollectionRuleProductCategoryCondition Value): CollectionRuleConditionObject;
-internal record CollectionRuleConditionObjectCollectionRuleTextCondition(CollectionRuleTextCondition Value): CollectionRuleConditionObject;
-#endif /// <summary>
-
+/// <summary>
 /// This object defines all columns and allowed relations that can be used in rules
 /// for smart collections to automatically include the matching products.
 /// </summary>

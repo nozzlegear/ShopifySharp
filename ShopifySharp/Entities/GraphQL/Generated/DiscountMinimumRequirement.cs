@@ -11,8 +11,8 @@ using System.Collections.Generic;
 /// be eligible for the discount.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountMinimumQuantity), typeDiscriminator: "DiscountMinimumQuantity")]
-[JsonDerivedType(typeof(DiscountMinimumSubtotal), typeDiscriminator: "DiscountMinimumSubtotal")]
+[JsonDerivedType(typeof(DiscountMinimumRequirementDiscountMinimumQuantity), typeDiscriminator: "DiscountMinimumQuantity")]
+[JsonDerivedType(typeof(DiscountMinimumRequirementDiscountMinimumSubtotal), typeDiscriminator: "DiscountMinimumSubtotal")]
 public record DiscountMinimumRequirement : GraphQLObject<DiscountMinimumRequirement>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

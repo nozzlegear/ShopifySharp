@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record PaymentInstrumentVaultCreditCard(VaultCreditCard Value): PaymentInstrument;
-internal record PaymentInstrumentVaultPaypalBillingAgreement(VaultPaypalBillingAgreement Value): PaymentInstrument;
-#endif /// <summary>
-
+/// <summary>
 /// A payment instrument and the permission
 /// the owner of the instrument gives to the merchant to debit it.
 /// </summary>

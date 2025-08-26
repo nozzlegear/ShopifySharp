@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// Configuration of the deposit.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DepositPercentage), typeDiscriminator: "DepositPercentage")]
+[JsonDerivedType(typeof(DepositConfigurationDepositPercentage), typeDiscriminator: "DepositPercentage")]
 public record DepositConfiguration : GraphQLObject<DepositConfiguration>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

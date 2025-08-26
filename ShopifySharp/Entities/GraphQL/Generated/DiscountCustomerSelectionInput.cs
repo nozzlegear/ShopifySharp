@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountCustomerSelectionDiscountCustomerAll(DiscountCustomerAll Value): DiscountCustomerSelection;
-internal record DiscountCustomerSelectionDiscountCustomerSegments(DiscountCustomerSegments Value): DiscountCustomerSelection;
-internal record DiscountCustomerSelectionDiscountCustomers(DiscountCustomers Value): DiscountCustomerSelection;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for the customers who can use this discount.
 /// </summary>
 public record DiscountCustomerSelectionInput : GraphQLInputObject<DiscountCustomerSelectionInput>

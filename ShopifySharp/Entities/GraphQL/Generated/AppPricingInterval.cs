@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record AppPricingDetailsAppRecurringPricing(AppRecurringPricing Value): AppPricingDetails;
-internal record AppPricingDetailsAppUsagePricing(AppUsagePricing Value): AppPricingDetails;
-#endif /// <summary>
-
+/// <summary>
 /// The frequency at which the shop is billed for an app subscription.
 /// </summary>
 public enum AppPricingInterval

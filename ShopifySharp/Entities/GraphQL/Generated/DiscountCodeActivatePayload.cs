@@ -4,13 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountCodeDiscountCodeApp(DiscountCodeApp Value): DiscountCode;
-internal record DiscountCodeDiscountCodeBasic(DiscountCodeBasic Value): DiscountCode;
-internal record DiscountCodeDiscountCodeBxgy(DiscountCodeBxgy Value): DiscountCode;
-internal record DiscountCodeDiscountCodeFreeShipping(DiscountCodeFreeShipping Value): DiscountCode;
-#endif /// <summary>
-
+/// <summary>
 /// Return type for `discountCodeActivate` mutation.
 /// </summary>
 public record DiscountCodeActivatePayload : IGraphQLObject

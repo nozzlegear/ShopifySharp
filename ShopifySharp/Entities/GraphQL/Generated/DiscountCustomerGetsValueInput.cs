@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountCustomerGetsValueDiscountAmount(DiscountAmount Value): DiscountCustomerGetsValue;
-internal record DiscountCustomerGetsValueDiscountOnQuantity(DiscountOnQuantity Value): DiscountCustomerGetsValue;
-internal record DiscountCustomerGetsValueDiscountPercentage(DiscountPercentage Value): DiscountCustomerGetsValue;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for the quantity of items discounted and the discount value.
 /// </summary>
 public record DiscountCustomerGetsValueInput : GraphQLInputObject<DiscountCustomerGetsValueInput>

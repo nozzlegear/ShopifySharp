@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// The delivery method and artifacts associated with a reverse delivery.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(ReverseDeliveryShippingDeliverable), typeDiscriminator: "ReverseDeliveryShippingDeliverable")]
+[JsonDerivedType(typeof(ReverseDeliveryDeliverableReverseDeliveryShippingDeliverable), typeDiscriminator: "ReverseDeliveryShippingDeliverable")]
 public record ReverseDeliveryDeliverable : GraphQLObject<ReverseDeliveryDeliverable>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -11,8 +11,8 @@ using System.Collections.Generic;
 /// We recommend backing up these records if you need to restore them later.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SellingPlanFixedDeliveryPolicy), typeDiscriminator: "SellingPlanFixedDeliveryPolicy")]
-[JsonDerivedType(typeof(SellingPlanRecurringDeliveryPolicy), typeDiscriminator: "SellingPlanRecurringDeliveryPolicy")]
+[JsonDerivedType(typeof(SellingPlanDeliveryPolicySellingPlanFixedDeliveryPolicy), typeDiscriminator: "SellingPlanFixedDeliveryPolicy")]
+[JsonDerivedType(typeof(SellingPlanDeliveryPolicySellingPlanRecurringDeliveryPolicy), typeDiscriminator: "SellingPlanRecurringDeliveryPolicy")]
 public record SellingPlanDeliveryPolicy : GraphQLObject<SellingPlanDeliveryPolicy>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// Represents a selling plan pricing policy adjustment value type.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(MoneyV2), typeDiscriminator: "MoneyV2")]
-[JsonDerivedType(typeof(SellingPlanPricingPolicyPercentageValue), typeDiscriminator: "SellingPlanPricingPolicyPercentageValue")]
+[JsonDerivedType(typeof(SellingPlanPricingPolicyAdjustmentValueMoneyV2), typeDiscriminator: "MoneyV2")]
+[JsonDerivedType(typeof(SellingPlanPricingPolicyAdjustmentValueSellingPlanPricingPolicyPercentageValue), typeDiscriminator: "SellingPlanPricingPolicyPercentageValue")]
 public record SellingPlanPricingPolicyAdjustmentValue : GraphQLObject<SellingPlanPricingPolicyAdjustmentValue>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

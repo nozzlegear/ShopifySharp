@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SellingPlanCheckoutChargeValueMoneyV2(MoneyV2 Value): SellingPlanCheckoutChargeValue;
-internal record SellingPlanCheckoutChargeValueSellingPlanCheckoutChargePercentageValue(SellingPlanCheckoutChargePercentageValue Value): SellingPlanCheckoutChargeValue;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields required to create or update an checkout charge value.
 /// </summary>
 public record SellingPlanCheckoutChargeValueInput : GraphQLInputObject<SellingPlanCheckoutChargeValueInput>

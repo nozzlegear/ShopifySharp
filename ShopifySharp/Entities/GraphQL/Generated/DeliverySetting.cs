@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DeliveryRateProviderDeliveryParticipant(DeliveryParticipant Value): DeliveryRateProvider;
-internal record DeliveryRateProviderDeliveryRateDefinition(DeliveryRateDefinition Value): DeliveryRateProvider;
-#endif /// <summary>
-
+/// <summary>
 /// The `DeliverySetting` object enables you to manage shop-wide shipping settings.
 /// You can enable legacy compatibility mode for the multi-location delivery profiles feature
 /// if the legacy mode isn't blocked.

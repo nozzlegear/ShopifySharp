@@ -4,18 +4,12 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record PaymentDetailsCardPaymentDetails(CardPaymentDetails Value): PaymentDetails;
-internal record PaymentDetailsLocalPaymentMethodsPaymentDetails(LocalPaymentMethodsPaymentDetails Value): PaymentDetails;
-internal record PaymentDetailsPaypalWalletPaymentDetails(PaypalWalletPaymentDetails Value): PaymentDetails;
-internal record PaymentDetailsShopPayInstallmentsPaymentDetails(ShopPayInstallmentsPaymentDetails Value): PaymentDetails;
-#endif /// <summary>
-
+/// <summary>
 /// All possible instrument outputs for Payment Mandates.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(VaultCreditCard), typeDiscriminator: "VaultCreditCard")]
-[JsonDerivedType(typeof(VaultPaypalBillingAgreement), typeDiscriminator: "VaultPaypalBillingAgreement")]
+[JsonDerivedType(typeof(PaymentInstrumentVaultCreditCard), typeDiscriminator: "VaultCreditCard")]
+[JsonDerivedType(typeof(PaymentInstrumentVaultPaypalBillingAgreement), typeDiscriminator: "VaultPaypalBillingAgreement")]
 public record PaymentInstrument : GraphQLObject<PaymentInstrument>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

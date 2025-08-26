@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record PurchasingEntityCustomer(Customer Value): PurchasingEntity;
-internal record PurchasingEntityPurchasingCompany(PurchasingCompany Value): PurchasingEntity;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for a purchasing entity. Can either be a customer or a purchasing company.
 /// </summary>
 public record PurchasingEntityInput : GraphQLInputObject<PurchasingEntityInput>

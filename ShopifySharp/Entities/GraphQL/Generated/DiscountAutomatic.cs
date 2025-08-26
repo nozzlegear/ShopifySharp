@@ -12,10 +12,10 @@ using System.Collections.Generic;
 /// they add a specific product to their order.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
-[JsonDerivedType(typeof(DiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
-[JsonDerivedType(typeof(DiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
-[JsonDerivedType(typeof(DiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
+[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
+[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
+[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
+[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
 public record DiscountAutomatic : GraphQLObject<DiscountAutomatic>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

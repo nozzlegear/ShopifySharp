@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// An endpoint to which webhook subscriptions send webhooks events.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(WebhookEventBridgeEndpoint), typeDiscriminator: "WebhookEventBridgeEndpoint")]
-[JsonDerivedType(typeof(WebhookHttpEndpoint), typeDiscriminator: "WebhookHttpEndpoint")]
-[JsonDerivedType(typeof(WebhookPubSubEndpoint), typeDiscriminator: "WebhookPubSubEndpoint")]
+[JsonDerivedType(typeof(WebhookSubscriptionEndpointWebhookEventBridgeEndpoint), typeDiscriminator: "WebhookEventBridgeEndpoint")]
+[JsonDerivedType(typeof(WebhookSubscriptionEndpointWebhookHttpEndpoint), typeDiscriminator: "WebhookHttpEndpoint")]
+[JsonDerivedType(typeof(WebhookSubscriptionEndpointWebhookPubSubEndpoint), typeDiscriminator: "WebhookPubSubEndpoint")]
 public record WebhookSubscriptionEndpoint : GraphQLObject<WebhookSubscriptionEndpoint>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// The value of the discount.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(AppSubscriptionDiscountAmount), typeDiscriminator: "AppSubscriptionDiscountAmount")]
-[JsonDerivedType(typeof(AppSubscriptionDiscountPercentage), typeDiscriminator: "AppSubscriptionDiscountPercentage")]
+[JsonDerivedType(typeof(AppSubscriptionDiscountValueAppSubscriptionDiscountAmount), typeDiscriminator: "AppSubscriptionDiscountAmount")]
+[JsonDerivedType(typeof(AppSubscriptionDiscountValueAppSubscriptionDiscountPercentage), typeDiscriminator: "AppSubscriptionDiscountPercentage")]
 public record AppSubscriptionDiscountValue : GraphQLObject<AppSubscriptionDiscountValue>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

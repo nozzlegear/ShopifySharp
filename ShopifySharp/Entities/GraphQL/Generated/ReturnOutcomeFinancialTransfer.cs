@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// The financial transfer details for the return outcome.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(InvoiceReturnOutcome), typeDiscriminator: "InvoiceReturnOutcome")]
-[JsonDerivedType(typeof(RefundReturnOutcome), typeDiscriminator: "RefundReturnOutcome")]
+[JsonDerivedType(typeof(ReturnOutcomeFinancialTransferInvoiceReturnOutcome), typeDiscriminator: "InvoiceReturnOutcome")]
+[JsonDerivedType(typeof(ReturnOutcomeFinancialTransferRefundReturnOutcome), typeDiscriminator: "RefundReturnOutcome")]
 public record ReturnOutcomeFinancialTransfer : GraphQLObject<ReturnOutcomeFinancialTransfer>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

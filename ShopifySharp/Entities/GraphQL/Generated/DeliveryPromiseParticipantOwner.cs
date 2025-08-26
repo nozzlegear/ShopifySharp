@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// The object that the participant references.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
+[JsonDerivedType(typeof(DeliveryPromiseParticipantOwnerProductVariant), typeDiscriminator: "ProductVariant")]
 public record DeliveryPromiseParticipantOwner : GraphQLObject<DeliveryPromiseParticipantOwner>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

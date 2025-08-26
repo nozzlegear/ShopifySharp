@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// The portion of the price to be charged at checkout.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(MoneyV2), typeDiscriminator: "MoneyV2")]
-[JsonDerivedType(typeof(SellingPlanCheckoutChargePercentageValue), typeDiscriminator: "SellingPlanCheckoutChargePercentageValue")]
+[JsonDerivedType(typeof(SellingPlanCheckoutChargeValueMoneyV2), typeDiscriminator: "MoneyV2")]
+[JsonDerivedType(typeof(SellingPlanCheckoutChargeValueSellingPlanCheckoutChargePercentageValue), typeDiscriminator: "SellingPlanCheckoutChargePercentageValue")]
 public record SellingPlanCheckoutChargeValue : GraphQLObject<SellingPlanCheckoutChargeValue>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

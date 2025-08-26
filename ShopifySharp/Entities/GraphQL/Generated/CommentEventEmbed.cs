@@ -8,12 +8,12 @@ using System.Collections.Generic;
 /// The main embed of a comment event.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
-[JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
-[JsonDerivedType(typeof(InventoryTransfer), typeDiscriminator: "InventoryTransfer")]
-[JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
-[JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
-[JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
+[JsonDerivedType(typeof(CommentEventEmbedCustomer), typeDiscriminator: "Customer")]
+[JsonDerivedType(typeof(CommentEventEmbedDraftOrder), typeDiscriminator: "DraftOrder")]
+[JsonDerivedType(typeof(CommentEventEmbedInventoryTransfer), typeDiscriminator: "InventoryTransfer")]
+[JsonDerivedType(typeof(CommentEventEmbedOrder), typeDiscriminator: "Order")]
+[JsonDerivedType(typeof(CommentEventEmbedProduct), typeDiscriminator: "Product")]
+[JsonDerivedType(typeof(CommentEventEmbedProductVariant), typeDiscriminator: "ProductVariant")]
 public record CommentEventEmbed : GraphQLObject<CommentEventEmbed>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

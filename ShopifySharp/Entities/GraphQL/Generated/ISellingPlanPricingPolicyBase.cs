@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SellingPlanPricingPolicyAdjustmentValueMoneyV2(MoneyV2 Value): SellingPlanPricingPolicyAdjustmentValue;
-internal record SellingPlanPricingPolicyAdjustmentValueSellingPlanPricingPolicyPercentageValue(SellingPlanPricingPolicyPercentageValue Value): SellingPlanPricingPolicyAdjustmentValue;
-#endif /// <summary>
-
+/// <summary>
 /// Represents selling plan pricing policy common fields.
 /// </summary>
 public interface ISellingPlanPricingPolicyBase : IGraphQLObject

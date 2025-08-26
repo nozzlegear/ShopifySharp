@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record ReturnOutcomeFinancialTransferInvoiceReturnOutcome(InvoiceReturnOutcome Value): ReturnOutcomeFinancialTransfer;
-internal record ReturnOutcomeFinancialTransferRefundReturnOutcome(RefundReturnOutcome Value): ReturnOutcomeFinancialTransfer;
-#endif /// <summary>
-
+/// <summary>
 /// The input fields for an exchange line item.
 /// </summary>
 public record ReturnProcessExchangeLineItemInput : GraphQLInputObject<ReturnProcessExchangeLineItemInput>

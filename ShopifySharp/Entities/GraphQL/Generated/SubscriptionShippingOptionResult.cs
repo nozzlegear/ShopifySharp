@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// The result of the query to fetch shipping options for the subscription contract.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SubscriptionShippingOptionResultFailure), typeDiscriminator: "SubscriptionShippingOptionResultFailure")]
-[JsonDerivedType(typeof(SubscriptionShippingOptionResultSuccess), typeDiscriminator: "SubscriptionShippingOptionResultSuccess")]
+[JsonDerivedType(typeof(SubscriptionShippingOptionResultSubscriptionShippingOptionResultFailure), typeDiscriminator: "SubscriptionShippingOptionResultFailure")]
+[JsonDerivedType(typeof(SubscriptionShippingOptionResultSubscriptionShippingOptionResultSuccess), typeDiscriminator: "SubscriptionShippingOptionResultSuccess")]
 public record SubscriptionShippingOptionResult : GraphQLObject<SubscriptionShippingOptionResult>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

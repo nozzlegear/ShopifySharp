@@ -8,10 +8,10 @@ using System.Collections.Generic;
 /// Specifies object for the condition of the rule.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CollectionRuleCategoryCondition), typeDiscriminator: "CollectionRuleCategoryCondition")]
-[JsonDerivedType(typeof(CollectionRuleMetafieldCondition), typeDiscriminator: "CollectionRuleMetafieldCondition")]
-[JsonDerivedType(typeof(CollectionRuleProductCategoryCondition), typeDiscriminator: "CollectionRuleProductCategoryCondition")]
-[JsonDerivedType(typeof(CollectionRuleTextCondition), typeDiscriminator: "CollectionRuleTextCondition")]
+[JsonDerivedType(typeof(CollectionRuleConditionObjectCollectionRuleCategoryCondition), typeDiscriminator: "CollectionRuleCategoryCondition")]
+[JsonDerivedType(typeof(CollectionRuleConditionObjectCollectionRuleMetafieldCondition), typeDiscriminator: "CollectionRuleMetafieldCondition")]
+[JsonDerivedType(typeof(CollectionRuleConditionObjectCollectionRuleProductCategoryCondition), typeDiscriminator: "CollectionRuleProductCategoryCondition")]
+[JsonDerivedType(typeof(CollectionRuleConditionObjectCollectionRuleTextCondition), typeDiscriminator: "CollectionRuleTextCondition")]
 public record CollectionRuleConditionObject : GraphQLObject<CollectionRuleConditionObject>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

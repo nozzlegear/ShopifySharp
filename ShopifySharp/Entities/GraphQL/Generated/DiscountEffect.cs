@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// The type of discount that will be applied. Currently, only a percentage discount is supported.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountAmount), typeDiscriminator: "DiscountAmount")]
-[JsonDerivedType(typeof(DiscountPercentage), typeDiscriminator: "DiscountPercentage")]
+[JsonDerivedType(typeof(DiscountEffectDiscountAmount), typeDiscriminator: "DiscountAmount")]
+[JsonDerivedType(typeof(DiscountEffectDiscountPercentage), typeDiscriminator: "DiscountPercentage")]
 public record DiscountEffect : GraphQLObject<DiscountEffect>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

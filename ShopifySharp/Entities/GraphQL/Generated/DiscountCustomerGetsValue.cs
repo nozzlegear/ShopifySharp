@@ -11,9 +11,9 @@ using System.Collections.Generic;
 /// third example is a percentage discount on all items.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountAmount), typeDiscriminator: "DiscountAmount")]
-[JsonDerivedType(typeof(DiscountOnQuantity), typeDiscriminator: "DiscountOnQuantity")]
-[JsonDerivedType(typeof(DiscountPercentage), typeDiscriminator: "DiscountPercentage")]
+[JsonDerivedType(typeof(DiscountCustomerGetsValueDiscountAmount), typeDiscriminator: "DiscountAmount")]
+[JsonDerivedType(typeof(DiscountCustomerGetsValueDiscountOnQuantity), typeDiscriminator: "DiscountOnQuantity")]
+[JsonDerivedType(typeof(DiscountCustomerGetsValueDiscountPercentage), typeDiscriminator: "DiscountPercentage")]
 public record DiscountCustomerGetsValue : GraphQLObject<DiscountCustomerGetsValue>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

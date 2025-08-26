@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SubscriptionDeliveryOptionResultSubscriptionDeliveryOptionResultFailure(SubscriptionDeliveryOptionResultFailure Value): SubscriptionDeliveryOptionResult;
-internal record SubscriptionDeliveryOptionResultSubscriptionDeliveryOptionResultSuccess(SubscriptionDeliveryOptionResultSuccess Value): SubscriptionDeliveryOptionResult;
-#endif /// <summary>
-
+/// <summary>
 /// A failure to find the available delivery options for a subscription contract.
 /// </summary>
 public record SubscriptionDeliveryOptionResultFailure : SubscriptionDeliveryOptionResult, IGraphQLUnionCase, IGraphQLObject

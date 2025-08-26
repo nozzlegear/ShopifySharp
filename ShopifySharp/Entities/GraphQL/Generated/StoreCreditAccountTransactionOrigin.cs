@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// The origin of a store credit account transaction.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(OrderTransaction), typeDiscriminator: "OrderTransaction")]
+[JsonDerivedType(typeof(StoreCreditAccountTransactionOriginOrderTransaction), typeDiscriminator: "OrderTransaction")]
 public record StoreCreditAccountTransactionOrigin : GraphQLObject<StoreCreditAccountTransactionOrigin>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

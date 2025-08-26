@@ -8,9 +8,9 @@ using System.Collections.Generic;
 /// The element of the draft being discounted.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CalculatedDraftOrderLineItem), typeDiscriminator: "CalculatedDraftOrderLineItem")]
-[JsonDerivedType(typeof(DraftOrderLineItem), typeDiscriminator: "DraftOrderLineItem")]
-[JsonDerivedType(typeof(ShippingLine), typeDiscriminator: "ShippingLine")]
+[JsonDerivedType(typeof(DraftOrderPlatformDiscountAllocationTargetCalculatedDraftOrderLineItem), typeDiscriminator: "CalculatedDraftOrderLineItem")]
+[JsonDerivedType(typeof(DraftOrderPlatformDiscountAllocationTargetDraftOrderLineItem), typeDiscriminator: "DraftOrderLineItem")]
+[JsonDerivedType(typeof(DraftOrderPlatformDiscountAllocationTargetShippingLine), typeDiscriminator: "ShippingLine")]
 public record DraftOrderPlatformDiscountAllocationTarget : GraphQLObject<DraftOrderPlatformDiscountAllocationTarget>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

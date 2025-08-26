@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SubscriptionDiscountValueSubscriptionDiscountFixedAmountValue(SubscriptionDiscountFixedAmountValue Value): SubscriptionDiscountValue;
-internal record SubscriptionDiscountValueSubscriptionDiscountPercentageValue(SubscriptionDiscountPercentageValue Value): SubscriptionDiscountValue;
-#endif /// <summary>
-
+/// <summary>
 /// The `SubscriptionDraft` object represents a draft version of a
 /// [subscription contract](https://shopify.dev/docs/api/admin-graphql/latest/objects/SubscriptionContract)
 /// before it's committed. It serves as a staging area for making changes to an existing subscription or creating

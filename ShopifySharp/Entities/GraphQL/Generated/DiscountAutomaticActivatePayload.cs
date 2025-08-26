@@ -4,13 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record DiscountAutomaticDiscountAutomaticApp(DiscountAutomaticApp Value): DiscountAutomatic;
-internal record DiscountAutomaticDiscountAutomaticBasic(DiscountAutomaticBasic Value): DiscountAutomatic;
-internal record DiscountAutomaticDiscountAutomaticBxgy(DiscountAutomaticBxgy Value): DiscountAutomatic;
-internal record DiscountAutomaticDiscountAutomaticFreeShipping(DiscountAutomaticFreeShipping Value): DiscountAutomatic;
-#endif /// <summary>
-
+/// <summary>
 /// Return type for `discountAutomaticActivate` mutation.
 /// </summary>
 public record DiscountAutomaticActivatePayload : IGraphQLObject

@@ -4,11 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record PricingValueMoneyV2(MoneyV2 Value): PricingValue;
-internal record PricingValuePricingPercentageValue(PricingPercentageValue Value): PricingValue;
-#endif /// <summary>
-
+/// <summary>
 /// A country code from the `ISO 3166` standard. e.g. `CA` for Canada.
 /// </summary>
 public enum PrivacyCountryCode

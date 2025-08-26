@@ -10,8 +10,8 @@ using System.Collections.Generic;
 /// applicable when shipping to all countries, or only to a set of countries.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountCountries), typeDiscriminator: "DiscountCountries")]
-[JsonDerivedType(typeof(DiscountCountryAll), typeDiscriminator: "DiscountCountryAll")]
+[JsonDerivedType(typeof(DiscountShippingDestinationSelectionDiscountCountries), typeDiscriminator: "DiscountCountries")]
+[JsonDerivedType(typeof(DiscountShippingDestinationSelectionDiscountCountryAll), typeDiscriminator: "DiscountCountryAll")]
 public record DiscountShippingDestinationSelection : GraphQLObject<DiscountShippingDestinationSelection>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER

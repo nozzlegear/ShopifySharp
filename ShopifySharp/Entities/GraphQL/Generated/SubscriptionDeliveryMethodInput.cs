@@ -4,12 +4,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
-#if NET6_0_OR_GREATER
-internal record SubscriptionDeliveryMethodSubscriptionDeliveryMethodLocalDelivery(SubscriptionDeliveryMethodLocalDelivery Value): SubscriptionDeliveryMethod;
-internal record SubscriptionDeliveryMethodSubscriptionDeliveryMethodPickup(SubscriptionDeliveryMethodPickup Value): SubscriptionDeliveryMethod;
-internal record SubscriptionDeliveryMethodSubscriptionDeliveryMethodShipping(SubscriptionDeliveryMethodShipping Value): SubscriptionDeliveryMethod;
-#endif /// <summary>
-
+/// <summary>
 /// Specifies delivery method fields for a subscription draft.
 /// This is an input union: one, and only one, field can be provided.
 /// The field provided will determine which delivery method is to be used.

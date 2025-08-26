@@ -12,9 +12,9 @@ using System.Collections.Generic;
 /// specific customers.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountCustomerAll), typeDiscriminator: "DiscountCustomerAll")]
-[JsonDerivedType(typeof(DiscountCustomerSegments), typeDiscriminator: "DiscountCustomerSegments")]
-[JsonDerivedType(typeof(DiscountCustomers), typeDiscriminator: "DiscountCustomers")]
+[JsonDerivedType(typeof(DiscountCustomerSelectionDiscountCustomerAll), typeDiscriminator: "DiscountCustomerAll")]
+[JsonDerivedType(typeof(DiscountCustomerSelectionDiscountCustomerSegments), typeDiscriminator: "DiscountCustomerSegments")]
+[JsonDerivedType(typeof(DiscountCustomerSelectionDiscountCustomers), typeDiscriminator: "DiscountCustomers")]
 public record DiscountCustomerSelection : GraphQLObject<DiscountCustomerSelection>, IGraphQLUnionType
 {
 #if NET6_0_OR_GREATER
