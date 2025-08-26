@@ -187,39 +187,55 @@ type Visitor() =
         |> Array.ofSeq
         |> Array.map _.Name.StringValue
 
+    let visitOperationDefinitions (objectTypeDefinition: GraphQLObjectTypeDefinition) (context: ParserContext): ValueTask =
+        for definition in objectTypeDefinition.Fields do
+            { Name = definition.Name.StringValue
+              XmlSummary = mapDescriptionToXmlSummary definition.Description
+              Deprecation = getDeprecationMessage definition.Directives
+              Arguments = Array.empty //definition.Arguments
+              ReturnTypes = Array.empty }
+            |> QueryOrMutation
+            |> context.SetVisitedType
+        ValueTask.CompletedTask
+
     override this.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context) =
         context.CancellationToken.ThrowIfCancellationRequested()
 
         let objectTypeName = objectTypeDefinition.Name.StringValue
-        let classInheritedType =
-            if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
-                Some Edge
-            else if objectTypeName.EndsWith("Connection", StringComparison.OrdinalIgnoreCase) then
-                getBestConnectionTypeInterfaceName objectTypeDefinition.Fields
-                |> Connection
-                |> Some
-            else
-               None
 
-        let inheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces
-        let generated: Class =
-            { Name = objectTypeDefinition.Name.StringValue
-              XmlSummary = mapDescriptionToXmlSummary objectTypeDefinition.Description
-              Deprecation = getDeprecationMessage objectTypeDefinition.Directives
-              Fields = mapToFields (ObjectFields objectTypeDefinition.Fields)
-              KnownInheritedType = classInheritedType
-              InheritedTypeNames = inheritedTypeNames }
+        if objectTypeName = "QueryRoot" || objectTypeName = "Mutation" then
+            visitOperationDefinitions objectTypeDefinition context
+        else
+            let classInheritedType =
+                if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
+                    Some Edge
+                else if objectTypeName.EndsWith("Connection", StringComparison.OrdinalIgnoreCase) then
+                    getBestConnectionTypeInterfaceName objectTypeDefinition.Fields
+                    |> Connection
+                    |> Some
+                else
+                   None
 
-        VisitedTypes.Class generated
-        |> context.SetVisitedType
+            let inheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces
 
-        NamedType.Class objectTypeDefinition.Name.StringValue
-        |> context.AddNamedType
+            let generated: Class =
+                { Name = objectTypeDefinition.Name.StringValue
+                  XmlSummary = mapDescriptionToXmlSummary objectTypeDefinition.Description
+                  Deprecation = getDeprecationMessage objectTypeDefinition.Directives
+                  Fields = mapToFields (ObjectFields objectTypeDefinition.Fields)
+                  KnownInheritedType = classInheritedType
+                  InheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces }
 
-        inheritedTypeNames
-        |> context.AddInterfaceRelationship objectTypeDefinition.Name.StringValue
+            VisitedTypes.Class generated
+            |> context.SetVisitedType
 
-        ValueTask.CompletedTask
+            inheritedTypeNames
+            |> context.AddInterfaceRelationship objectTypeDefinition.Name.StringValue
+
+            NamedType.Class objectTypeDefinition.Name.StringValue
+            |> context.AddNamedType
+
+            ValueTask.CompletedTask
 
     override this.VisitInterfaceTypeDefinitionAsync(interfaceTypeDefinition, context) =
         context.CancellationToken.ThrowIfCancellationRequested()
