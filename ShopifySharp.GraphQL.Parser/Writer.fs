@@ -271,13 +271,14 @@ let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: V
     }
 
 
-let private writeJsonDerivedTypeAttributes (typeNames: string[]) writer: ValueTask =
+let private writeJsonDerivedTypeAttributes unionTypeName (typeNames: string[]) writer: ValueTask =
     pipeWriter writer {
         do! "[JsonPolymorphic(TypeDiscriminatorPropertyName = \"__typename\")]"
         do! NewLine
 
         for typeName in typeNames do
-            do! $"""[JsonDerivedType(typeof({typeName}), typeDiscriminator: "{typeName}")]"""
+            let wrapperTypeName = toUnionCaseWrapperName unionTypeName typeName
+            do! $"""[JsonDerivedType(typeof({wrapperTypeName}), typeDiscriminator: "{typeName}")]"""
             do! NewLine
     }
 
@@ -520,17 +521,10 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
 
 let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (writer: Writer): ValueTask =
     pipeWriter writer {
-        // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
-        // the compiler to throw an error.
-        do! "#if NET6_0_OR_GREATER"
-        do! NewLine
-
         for unionCaseName in unionTypeCases do
             let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
             do! $"internal record {caseWrapperName}({unionCaseName} Value): {unionTypeName};"
             do! NewLine
-
-        do! "#endif"
     }
 
 /// <summary>
@@ -561,7 +555,7 @@ let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: W
     pipeWriter writer {
         yield! writeSummary Outdented unionType.XmlSummary
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
-        yield! writeJsonDerivedTypeAttributes unionType.Types
+        yield! writeJsonDerivedTypeAttributes unionType.Name unionType.Types
 
         do! $"public record {unionType.Name}: GraphQLObject<{unionType.Name}>, IGraphQLUnionType"
 
