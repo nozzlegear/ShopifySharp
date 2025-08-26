@@ -122,15 +122,16 @@ type InterfaceRelationship =
     { InterfaceName: string
       ImplementationName: string }
 
-type VisitedTypes =
-    | Class of class': Class
-    | Interface of interface': Interface
-    | Enum of enum': VisitedEnum
-    | InputObject of inputObject: InputObject
-    | UnionType of unionType: UnionType
+type OperationArgument =
+    { Id: string }
 
-[<RequireQualifiedAccess>]
-type NamedType =
+type QueryOrMutation =
+    { Name: string
+      XmlSummary: string[]
+      Deprecation: string option
+      Arguments: OperationArgument[]
+      ReturnTypes: NamedType[] }
+and NamedType =
     | Class of name: string
     | Interface of name: string
     | Enum of name: string
@@ -143,6 +144,14 @@ type NamedType =
           | Enum name -> name
           | InputObject name -> name
           | UnionType name -> name
+
+type VisitedTypes =
+    | Class of class': Class
+    | Interface of interface': Interface
+    | Enum of enum': VisitedEnum
+    | InputObject of inputObject: InputObject
+    | UnionType of unionType: UnionType
+    | QueryOrMutation of queryOrMutation: QueryOrMutation
 
 type IParsedContext =
     abstract member CasingType: Casing with get
