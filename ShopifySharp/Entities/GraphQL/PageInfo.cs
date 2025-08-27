@@ -15,24 +15,27 @@ public sealed record PageInfo(
     bool    hasPreviousPage,
     bool    hasNextPage)
 {
+    /// <summary>
     /// The cursor corresponding to the first node in edges.
+    /// </summary>
     [JsonPropertyName("startCursor")]
     public string? startCursor { get; set; } = startCursor;
 
+    /// <summary>
     /// The cursor corresponding to the last node in edges.
     /// </summary>
     [JsonPropertyName("endCursor")]
-    public readonly string? endCursor = endCursor;
+    public string? endCursor { get; set; } = endCursor;
 
     /// <summary>
     /// Whether there are more pages to fetch following the current page.
     /// </summary>
     [JsonPropertyName("hasNextPage")]
-    public readonly bool hasNextPage = hasNextPage;
+    public bool hasNextPage { get; set; } = hasNextPage;
 
     /// <summary>
     /// Whether there are any pages prior to the current page.
     /// </summary>
     [JsonPropertyName("hasPreviousPage")]
-    public readonly bool hasPreviousPage = hasPreviousPage;
+    public bool hasPreviousPage { get; set; } = hasPreviousPage;
 }

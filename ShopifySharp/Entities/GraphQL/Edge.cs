@@ -8,7 +8,7 @@ public interface IEdge<out TNode>
     TNode? node { get; }
 }
 
-public abstract record Edge<TNode>: IEdge<TNode>
+public record Edge<TNode>: IEdge<TNode>
 {
     public string? cursor { get; set; }
     public TNode? node { get; set; }
