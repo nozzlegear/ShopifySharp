@@ -249,6 +249,53 @@ public class GraphServicePostAsyncTests
             .WithInnerException(typeof(JsonException));
     }
 
+    [Theory(DisplayName = "PostAsync<T>(GraphRequest graphRequest) should throw if T is abstract/an interface or contains an asbract/an interface")]
+    [CombinatorialData]
+    public async Task PostAsync_T_WithGraphRequestParameter_WhenGivenTWithAnAbstractOrInterfaceTypeShouldThrow(bool childIsProblematic, bool isAbstract)
+    {
+        // Setup
+        const string responseJson =
+            //lang=json
+            """
+            { "data": { "value": { "foo": "bar" }}}
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+        A.CallTo(() => _jsonSerializer.Parse(responseJson))
+            .CallsWrappedMethod();
+            // .Throws(expectedInnerException);
+
+        // Act
+        var act= async () =>
+        {
+            if (childIsProblematic)
+            {
+                if (isAbstract)
+                    await _sut.PostAsync<InvalidDeserializationTestWithInvalidChild<TestFooBase>>(graphRequest);
+                else
+                    await _sut.PostAsync<InvalidDeserializationTestWithInvalidChild<ITestFoo>>(graphRequest);
+            }
+            else
+            {
+                if (isAbstract)
+                    await _sut.PostAsync<InvalidDeserializationTestRecord>(graphRequest);
+                else
+                    await _sut.PostAsync<IInvalidDeserializationTestInterface>(graphRequest);
+            }
+        };
+
+        // Assert
+        await act.Should()
+            .ThrowAsync<ShopifyUnsupportedTypeDeserializationException>()
+            .WithMessage("Deserialization of * failed. An unsupported abstract or interface type was encountered at JSON path 'data'. This typically indicates a Shopify API version mismatch or missing polymorphic configuration attributes (e.g., [JsonDerivedType]/[JsonPolymorphic]) on a custom return type.")
+            .Where(x => x.RequestId == expectedRequestId)
+            .WithInnerException(typeof(NotSupportedException));
+    }
+
     [Fact(DisplayName = "PostAsync<T>(GraphRequest graphRequest) should deserialize the graph extensions object along with the data object")]
     public async Task PostAsync_T_WithGraphRequestParameter_ShouldDeserializeTheGraphExtensionsObjectAlongWithTheDataObject()
     {
@@ -1128,5 +1175,35 @@ public class GraphServicePostAsyncTests
     {
         public string? Bat { get; set; }
         public DateTimeOffset? Qux { get; set; }
+    }
+
+    public interface ITestFoo
+    {
+        string? Foo { get; }
+    }
+
+    public abstract record TestFooBase : ITestFoo
+    {
+        public virtual string? Foo { get; set; }
+    }
+
+    public record TestFoo(string? Foo) : TestFooBase;
+
+    public interface IInvalidDeserializationTestInterface
+    {
+        object? Value { get; set; }
+    }
+
+    public abstract record InvalidDeserializationTestRecord
+    {
+        public object? Value { get; set; }
+    }
+
+    public record InvalidDeserializationTestWithInvalidChild<T>
+    {
+        /// <summary>
+        /// Value is the invalid type.
+        /// </summary>
+        public T? Value { get; set; }
     }
 }

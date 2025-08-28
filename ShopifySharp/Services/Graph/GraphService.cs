@@ -107,7 +107,19 @@ public class GraphService : ShopifyService, IGraphService
         {
             data = await _jsonSerializer.DeserializeAsync(dataElement, resultType, cancellationToken);
         }
-        catch (Exception exn)
+        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported"))
+        {
+            var offendingType = ShopifyUnsupportedTypeDeserializationException.TryGetOffendingTypeFromMessage(exn);
+
+            throw new ShopifyUnsupportedTypeDeserializationException(
+                rootType: resultType,
+                jsonPath: DataPropertyName,
+                offendingType: offendingType,
+                requestId: response.RequestId,
+                innerException: exn
+            );
+        }
+        catch (Exception exn)  when (exn is not ShopifyJsonParseException)
         {
             throw new ShopifyJsonParseException(
                 $"The json serializer threw a {exn.GetType().FullName} exception when deserializing the '{DataPropertyName}' property into a {resultType.FullName}. Check the inner exception for more details.",
