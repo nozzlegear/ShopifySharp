@@ -282,6 +282,16 @@ let private writeJsonDerivedTypeAttributes unionTypeName (typeNames: string[]) w
             do! NewLine
     }
 
+let private writeJsonDerivedTypeAttributes2 interfaceName (classNames: string[]) writer: ValueTask =
+    pipeWriter writer {
+        do! "[JsonPolymorphic(TypeDiscriminatorPropertyName = \"__typename\")]"
+        do! NewLine
+
+        for typeName in classNames do
+            do! $"""[JsonDerivedType(typeof({typeName}), typeDiscriminator: "{typeName}")]"""
+            do! NewLine
+    }
+
 let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) assumeNullability fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
@@ -447,6 +457,7 @@ let private writeInterface (interface': Interface) (context: IParsedContext) (wr
     pipeWriter writer {
         yield! writeSummary Outdented interface'.XmlSummary
         yield! writeDeprecationAttribute Outdented interface'.Deprecation
+        yield! writeJsonDerivedTypeAttributes2 interface'.Name (context.GetInterfaceImplementationTypeNames interface'.Name)
 
         do! $"public interface {interface'.Name}: IGraphQLObject"
 
