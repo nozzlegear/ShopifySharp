@@ -1,0 +1,32 @@
+﻿{
+  "Order": {
+    "billingAddress": "{Scrubbed}",
+    "createdAt": "DateTime_1",
+    "customer": {
+      "id": "{Scrubbed}",
+      "legacyResourceId": "{Scrubbed}"
+    },
+    "displayFinancialStatus": "AUTHORIZED",
+    "id": "{Scrubbed}",
+    "legacyResourceId": "{Scrubbed}",
+    "name": "#1001",
+    "processedAt": "DateTime_1",
+    "shippingAddress": "{Scrubbed}",
+    "shippingLine": {
+      "id": "{Scrubbed}",
+      "originalPriceSet": {
+        "shopMoney": {
+          "amount": 10.0,
+          "currencyCode": "USD"
+        }
+      },
+      "title": "Standard Shipping"
+    },
+    "totalPriceSet": {
+      "shopMoney": {
+        "amount": 26.26,
+        "currencyCode": "USD"
+      }
+    }
+  }
+}

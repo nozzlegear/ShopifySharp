@@ -1,0 +1,17 @@
+﻿{
+  "ProductStatusUpdateResult": {
+    "Product": {
+      "Id": "{Scrubbed}",
+      "Title": "some-title",
+      "Status": "DRAFT"
+    }
+  },
+  "PublicationResult": {
+    "Product": {
+      "PublishedOnPublication": false,
+      "Id": "{Scrubbed}",
+      "Title": "some-title",
+      "Status": "DRAFT"
+    }
+  }
+}

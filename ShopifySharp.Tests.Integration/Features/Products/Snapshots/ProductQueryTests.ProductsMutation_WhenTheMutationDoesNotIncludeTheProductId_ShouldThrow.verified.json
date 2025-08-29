@@ -1,0 +1,15 @@
+﻿[
+  {
+    "Message": "Field 'id' doesn't exist on type 'UserError'",
+    "Path": [
+      "mutation updateProductTitle",
+      "result",
+      "userErrors",
+      "id"
+    ],
+    "Extensions": {
+      "Code": "undefinedField",
+      "TypeName": "UserError"
+    }
+  }
+]
