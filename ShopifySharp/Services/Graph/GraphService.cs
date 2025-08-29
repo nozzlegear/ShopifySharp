@@ -169,7 +169,7 @@ public class GraphService : ShopifyService, IGraphService
         {
             jsonDocument = _jsonSerializer.Parse(result.RawResult);
         }
-        catch (Exception ex)
+        catch (Exception ex)  when (ex is not ShopifyJsonParseException)
         {
             throw new ShopifyJsonParseException(
                 "Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.",
