@@ -6,6 +6,7 @@ public class VerifyFixture
 
     public VerifyFixture()
     {
+        Settings.UseStrictJson();
         Settings.ScrubMembers(info => info.Name is "LegacyResourceId" or "legacyResourceId");
         Settings.ScrubMembers(info => info.Name is "Id" or "id");
         Settings.ScrubMembers(info => info.Name is "RequestId" or "requestId");

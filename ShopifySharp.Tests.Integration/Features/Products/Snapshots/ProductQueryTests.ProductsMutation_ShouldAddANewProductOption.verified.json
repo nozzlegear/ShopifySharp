@@ -1,0 +1,54 @@
+﻿{
+  "Id": "{Scrubbed}",
+  "Title": "some-title",
+  "Options": [
+    {
+      "Name": "some-expected-option-name",
+      "Id": "{Scrubbed}",
+      "Values": [
+        "some-expected-option-value1",
+        "some-expected-option-value2"
+      ],
+      "OptionValues": [
+        {
+          "Id": "{Scrubbed}",
+          "Name": "some-expected-option-value1",
+          "HasVariants": true
+        },
+        {
+          "Id": "{Scrubbed}",
+          "Name": "some-expected-option-value2",
+          "HasVariants": true
+        }
+      ]
+    }
+  ],
+  "VariantsCount": {
+    "Count": 2
+  },
+  "HasOnlyDefaultVariant": false,
+  "Variants": {
+    "Nodes": [
+      {
+        "Id": "{Scrubbed}",
+        "DisplayName": "some-title - some-expected-option-value1",
+        "SelectedOptions": [
+          {
+            "Name": "some-expected-option-name",
+            "Value": "some-expected-option-value1"
+          }
+        ]
+      },
+      {
+        "Id": "{Scrubbed}",
+        "DisplayName": "some-title - some-expected-option-value2",
+        "SelectedOptions": [
+          {
+            "Name": "some-expected-option-name",
+            "Value": "some-expected-option-value2"
+          }
+        ]
+      }
+    ]
+  }
+}
