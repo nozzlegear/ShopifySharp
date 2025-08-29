@@ -118,6 +118,10 @@ type UnionRelationship =
     { UnionTypeName: string
       UnionCaseName: string }
 
+type InterfaceRelationship =
+    { InterfaceName: string
+      ImplementationName: string }
+
 type VisitedTypes =
     | Class of class': Class
     | Interface of interface': Interface
@@ -146,10 +150,12 @@ type IParsedContext =
     abstract member TypeIsKnownUnionCase: unionCaseName: string -> bool
     abstract member IsNamedType: namedType: NamedType -> bool
     abstract member TryFindUnionRelationship: unionCaseName: string -> UnionRelationship option
+    abstract member GetInterfaceImplementationTypeNames: interfaceName: string -> string[]
 
 type ParserContext(casingType, assumeNullability, ct) =
     let visitedTypes: HashSet<VisitedTypes> = HashSet()
     let unionRelationships: HashSet<UnionRelationship> = HashSet()
+    let interfaceRelationships: HashSet<InterfaceRelationship> = HashSet()
     let namedTypes: HashSet<NamedType> = HashSet()
     let (~%) comp = ignore comp
 
@@ -172,6 +178,13 @@ type ParserContext(casingType, assumeNullability, ct) =
             |> unionRelationships.Add
             |> ignore
 
+    member _.AddInterfaceRelationship implementationName interfaceNames: unit =
+        for interfaceName in interfaceNames do
+            { InterfaceName = interfaceName
+              ImplementationName = implementationName }
+            |> interfaceRelationships.Add
+            |> ignore
+
     member _.AddNamedType namedType: unit =
         %namedTypes.Add namedType
 
@@ -190,6 +203,12 @@ type ParserContext(casingType, assumeNullability, ct) =
         member _.TryFindUnionRelationship unionCaseName: UnionRelationship option =
             unionRelationships
             |> Seq.tryFind (fun r -> r.UnionCaseName = unionCaseName)
+
+        member this.GetInterfaceImplementationTypeNames interfaceName =
+            interfaceRelationships
+            |> Seq.filter (fun x -> x.InterfaceName = interfaceName)
+            |> Seq.map _.ImplementationName
+            |> Array.ofSeq
 
     interface IASTVisitorContext with
         member _.CancellationToken = ct

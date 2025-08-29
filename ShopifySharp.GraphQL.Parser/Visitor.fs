@@ -201,19 +201,23 @@ type Visitor() =
             else
                None
 
+        let inheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces
         let generated: Class =
             { Name = objectTypeDefinition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary objectTypeDefinition.Description
               Deprecation = getDeprecationMessage objectTypeDefinition.Directives
               Fields = mapToFields (ObjectFields objectTypeDefinition.Fields)
               KnownInheritedType = classInheritedType
-              InheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces }
+              InheritedTypeNames = inheritedTypeNames }
 
         VisitedTypes.Class generated
         |> context.SetVisitedType
 
         NamedType.Class objectTypeDefinition.Name.StringValue
         |> context.AddNamedType
+
+        inheritedTypeNames
+        |> context.AddInterfaceRelationship objectTypeDefinition.Name.StringValue
 
         ValueTask.CompletedTask
 
