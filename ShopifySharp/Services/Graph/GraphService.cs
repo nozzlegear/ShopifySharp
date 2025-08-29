@@ -14,6 +14,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;
+using ShopifySharp.Extensions;
 using JsonException = System.Text.Json.JsonException;
 
 // ReSharper disable once CheckNamespace
@@ -109,12 +110,22 @@ public class GraphService : ShopifyService, IGraphService
         }
         catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported"))
         {
-            var offendingType = ShopifyUnsupportedTypeDeserializationException.TryGetOffendingTypeFromMessage(exn);
-
+            var offendingPath = exn.GetOffendingPathFromMessage();
             throw new ShopifyUnsupportedTypeDeserializationException(
                 rootType: resultType,
-                jsonPath: DataPropertyName,
-                offendingType: offendingType,
+                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
+                offendingType: exn.GetOffendingTypeFromMessage(),
+                requestId: response.RequestId,
+                innerException: exn
+            );
+        }
+        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("The JSON payload for polymorphic interface or abstract type") && exn.Message.ContainsIgnoreCase("must specify a type discriminator."))
+        {
+            var offendingPath = exn.GetOffendingPathFromMessage();
+            throw new ShopifyUnspecifiedTypeDiscriminatorException(
+                rootType: resultType,
+                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
+                offendingType: exn.GetOffendingTypeFromMessage(),
                 requestId: response.RequestId,
                 innerException: exn
             );
@@ -168,6 +179,28 @@ public class GraphService : ShopifyService, IGraphService
         try
         {
             jsonDocument = _jsonSerializer.Parse(result.RawResult);
+        }
+        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported"))
+        {
+            var offendingPath = exn.GetOffendingPathFromMessage();
+            throw new ShopifyUnsupportedTypeDeserializationException(
+                rootType: typeof(IJsonElement),
+                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
+                offendingType: exn.GetOffendingTypeFromMessage(),
+                requestId: requestId,
+                innerException: exn
+            );
+        }
+        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("The JSON payload for polymorphic interface or abstract type") && exn.Message.ContainsIgnoreCase("must specify a type discriminator."))
+        {
+            var offendingPath = exn.GetOffendingPathFromMessage();
+            throw new ShopifyUnspecifiedTypeDiscriminatorException(
+                rootType: typeof(IJsonElement),
+                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
+                offendingType: exn.GetOffendingTypeFromMessage(),
+                requestId: requestId,
+                innerException: exn
+            );
         }
         catch (Exception ex)  when (ex is not ShopifyJsonParseException)
         {

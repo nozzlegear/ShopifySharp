@@ -23,6 +23,30 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
     }
 
+    public record ListProductsResult
+    {
+        public required ProductConnection Products { get; set; }
+    }
+
+    private async Task<string> GetProductsCursorAsync()
+    {
+        var request = new GraphRequest
+        {
+            Query =
+                """
+                query {
+                    products(first: 1) {
+                        pageInfo {
+                            startCursor
+                        }
+                    }
+                }
+                """
+        };
+        var result = await _sut.PostAsync<GetProductsCursorResponse>(request);
+        return result.Data.Result;
+    }
+
     [Fact]
     public async Task ProductsQuery_ShouldListProducts()
     {
@@ -91,6 +115,79 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
 
         // Assert
         await Verify(products.Data.Products, _verifySettings);
+    }
+
+    [Fact]
+    public async Task ProductsQuery_ShouldListProductsWithFilter()
+    {
+       // Setup
+       var cursor = await GetProductsCursorAsync();
+       var graphRequest = new GraphRequest
+       {
+           Query = """
+           query ($first: Int!, $after: String) {
+               products(first: $first, after: $after, query: "status:active AND published_status:published") {
+                   edges {
+                       node {
+                           id
+                           title
+                           handle
+                           createdAt
+                           updatedAt
+                           productType
+                           vendor
+                           variants(first: 10) {
+                               edges {
+                                   node {
+                                       id
+                                       inventoryQuantity
+                                       inventoryPolicy
+                                       image {
+                                           url
+                                       }
+                                   }
+                               }
+                           }
+                           media(first: 10) {
+                               nodes {
+                                   preview {
+                                       image {
+                                           url
+                                       }
+                                   }
+                               }
+                           }
+                           tags
+                           collections(first: 10) {
+                               edges {
+                                   node {
+                                       id
+                                   }
+                               }
+                           }
+                       }
+                   }
+                   pageInfo {
+                       hasPreviousPage 
+                       hasNextPage
+                       startCursor
+                       endCursor
+                   }
+               }
+           }
+           """,
+           Variables = new Dictionary<string, object>
+           {
+               {"first", 3},
+               {"after", cursor}
+           }
+       };
+
+       // Act
+       var result = await _sut.PostAsync<ListProductsResult>(graphRequest);
+
+       // Assert
+       await Verify(result.Data, _verifySettings);
     }
 
     [Fact]

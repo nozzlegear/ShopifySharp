@@ -4,7 +4,7 @@ using System;
 namespace ShopifySharp;
 
 [Serializable]
-public class ShopifyUnsupportedTypeDeserializationException(
+public class ShopifyUnspecifiedTypeDiscriminatorException(
     Type rootType,
     string? jsonPath = null,
     Type? offendingType = null,
@@ -22,13 +22,13 @@ public class ShopifyUnsupportedTypeDeserializationException(
     private static string BuildMessage(Type rootType, string? jsonPath, Type? offendingType)
     {
         var root = rootType.FullName ?? rootType.Name;
-        var offending = offendingType != null ? $": '{offendingType.FullName}'" : string.Empty;
+        var offending = offendingType != null ? $" '{offendingType.FullName}'" : string.Empty;
         var path = !string.IsNullOrWhiteSpace(jsonPath) ? $" at JSON path '{jsonPath}'" : string.Empty;
 
         return
             $"Deserialization of '{root}' failed. " +
-            $"An unsupported abstract or interface type was encountered{offending}{path}. " +
-            "This typically indicates a Shopify API version mismatch or missing polymorphic configuration " +
-            "attributes (e.g., [JsonDerivedType]/[JsonPolymorphic]) on a custom return type.";
+            $"The JSON payload for the GraphQL union or interface type{offending}{path} " +
+            "does not include the required type discriminator ('__typename'). " +
+            "Add '__typename' to your query selection for this type to enable polymorphic deserialization.";
     }
 }
