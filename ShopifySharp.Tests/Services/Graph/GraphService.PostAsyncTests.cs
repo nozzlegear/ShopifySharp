@@ -257,7 +257,7 @@ public class GraphServicePostAsyncTests
         const string responseJson =
             //lang=json
             """
-            { "data": { "value": { "foo": "bar" }}}
+            { "data": { "value": { "foo": { "bar": { "baz": true }}}}}
             """;
         const string expectedRequestId = "some-expected-request-id";
         var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow);
@@ -289,10 +289,42 @@ public class GraphServicePostAsyncTests
         };
 
         // Assert
+        const string expectedJsonPath = "data"; // JsonPath falls back to "data" when GetOffendingPathFromMessage() returns null
         await act.Should()
             .ThrowAsync<ShopifyUnsupportedTypeDeserializationException>()
             .WithMessage("Deserialization of * failed. An unsupported abstract or interface type was encountered at JSON path 'data'. This typically indicates a Shopify API version mismatch or missing polymorphic configuration attributes (e.g., [JsonDerivedType]/[JsonPolymorphic]) on a custom return type.")
-            .Where(x => x.RequestId == expectedRequestId)
+            .Where(x => x.RequestId == expectedRequestId && x.JsonPath == expectedJsonPath)
+            .WithInnerException(typeof(NotSupportedException));
+    }
+
+    [Fact(DisplayName = "PostAsync<T>(GraphRequest graphRequest) should throw if query contains an interface/union type but no __typename discriminator")]
+    public async Task PostAsync_T_WithGraphRequestParameter_ShouldThrowIfQueryContainsAnInterfaceOrUnionTypeButNoTypenameDiscriminator()
+    {
+        // Setup
+        const string responseJson =
+            //lang=json
+            """
+            { "data": { "value": { "foo": { "bar": { "baz": true }}}}}
+            """;
+        const string exceptionMessage = "The JSON payload for polymorphic interface or abstract type 'ShopifySharp.GraphQL.IMedia' must specify a type discriminator. Path: $.products.edges[0].node.media.nodes[0] | LineNumber: 0 | BytePositionInLine: 449.";
+        const string expectedRequestId = "some-expected-request-id";
+        var graphRequest = GraphServiceTestUtils.MakeGraphRequest(x => x.UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow);
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+        A.CallTo(() => _jsonSerializer.Parse(responseJson))
+            .Throws(new NotSupportedException(exceptionMessage));
+
+        // Act
+        var act = async () => await _sut.PostAsync<IInvalidDeserializationTestInterface>(graphRequest);
+
+        // Assert
+        const string expectedJsonPath = "data"; // JsonPath falls back to "data" when GetOffendingPathFromMessage() returns null
+        await act.Should()
+            .ThrowAsync<ShopifyUnspecifiedTypeDiscriminatorException>()
+            .WithMessage($"Deserialization of * failed. The JSON payload for the GraphQL union or interface type * at JSON path '{expectedJsonPath}' does not include the required type discriminator ('__typename'). Add '__typename' to your query selection for this type to enable polymorphic deserialization.")
+            .Where(x => x.RequestId == expectedRequestId && x.JsonPath == expectedJsonPath)
             .WithInnerException(typeof(NotSupportedException));
     }
 
@@ -1179,15 +1211,24 @@ public class GraphServicePostAsyncTests
 
     public interface ITestFoo
     {
-        string? Foo { get; }
+        ITestBaz? Foo { get; }
     }
 
     public abstract record TestFooBase : ITestFoo
     {
-        public virtual string? Foo { get; set; }
+        public virtual ITestBaz? Foo { get; set; }
     }
 
-    public record TestFoo(string? Foo) : TestFooBase;
+    public record TestFoo(ITestBaz? Foo) : TestFooBase;
+
+    public interface ITestBaz
+    {
+        string? Baz { get; }
+    }
+
+    public abstract record TestBazBase(string? Baz) : ITestBaz;
+
+    public record TestBaz(string? Baz) : ITestBaz;
 
     public interface IInvalidDeserializationTestInterface
     {
