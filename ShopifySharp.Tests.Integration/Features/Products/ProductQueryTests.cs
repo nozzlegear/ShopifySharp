@@ -150,6 +150,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
                            }
                            media(first: 10) {
                                nodes {
+                                   __typename
                                    preview {
                                        image {
                                            url

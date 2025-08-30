@@ -1,0 +1,315 @@
+﻿{
+  "Products": {
+    "edges": [
+      {
+        "node": {
+          "collections": {
+            "edges": [
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              }
+            ]
+          },
+          "createdAt": "DateTime_1",
+          "handle": "Guid_1",
+          "id": "{Scrubbed}",
+          "legacyResourceId": "{Scrubbed}",
+          "media": {
+            "nodes": [
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
+              }
+            ]
+          },
+          "productType": "Foobars",
+          "title": "Shopify Prime Test Product",
+          "updatedAt": "DateTime_2",
+          "variants": {
+            "edges": [
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 0,
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              }
+            ]
+          },
+          "vendor": "Auntie Dot"
+        }
+      },
+      {
+        "node": {
+          "collections": {
+            "edges": [
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              }
+            ]
+          },
+          "createdAt": "DateTime_3",
+          "handle": "Guid_2",
+          "id": "{Scrubbed}",
+          "legacyResourceId": "{Scrubbed}",
+          "media": {
+            "nodes": [
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
+              }
+            ]
+          },
+          "productType": "Foobars",
+          "title": "Shopify Prime Test Product",
+          "updatedAt": "DateTime_2",
+          "variants": {
+            "edges": [
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 0,
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              }
+            ]
+          },
+          "vendor": "Auntie Dot"
+        }
+      },
+      {
+        "node": {
+          "collections": {
+            "edges": [
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              }
+            ]
+          },
+          "createdAt": "DateTime_4",
+          "handle": "Guid_3",
+          "id": "{Scrubbed}",
+          "legacyResourceId": "{Scrubbed}",
+          "media": {
+            "nodes": [
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
+              }
+            ]
+          },
+          "productType": "Snowboard",
+          "title": "Burton Custom Freestlye 151",
+          "updatedAt": "DateTime_5",
+          "variants": {
+            "edges": [
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 0,
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              }
+            ]
+          },
+          "vendor": "Burton"
+        }
+      }
+    ],
+    "pageInfo": {
+      "startCursor": "{Scrubbed}",
+      "endCursor": "{Scrubbed}",
+      "hasNextPage": "{Scrubbed}",
+      "hasPreviousPage": "{Scrubbed}"
+    }
+  }
+}
