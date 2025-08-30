@@ -18,6 +18,16 @@ using System.Collections.Generic;
 /// currency units across line items is immutable. After they are allocated,
 /// currency units are never reallocated or redistributed among the line items.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(AdditionalFeeSale), typeDiscriminator: "AdditionalFeeSale")]
+[JsonDerivedType(typeof(AdjustmentSale), typeDiscriminator: "AdjustmentSale")]
+[JsonDerivedType(typeof(DutySale), typeDiscriminator: "DutySale")]
+[JsonDerivedType(typeof(FeeSale), typeDiscriminator: "FeeSale")]
+[JsonDerivedType(typeof(GiftCardSale), typeDiscriminator: "GiftCardSale")]
+[JsonDerivedType(typeof(ProductSale), typeDiscriminator: "ProductSale")]
+[JsonDerivedType(typeof(ShippingLineSale), typeDiscriminator: "ShippingLineSale")]
+[JsonDerivedType(typeof(TipSale), typeDiscriminator: "TipSale")]
+[JsonDerivedType(typeof(UnknownSale), typeDiscriminator: "UnknownSale")]
 public interface ISale : IGraphQLObject
 {
     /// <summary>

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a session preceding an order, often used for building a timeline of events leading to an order.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CustomerVisit), typeDiscriminator: "CustomerVisit")]
 public interface ICustomerMoment : IGraphQLObject
 {
     /// <summary>

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// A font.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CheckoutBrandingCustomFont), typeDiscriminator: "CheckoutBrandingCustomFont")]
+[JsonDerivedType(typeof(CheckoutBrandingShopifyFont), typeDiscriminator: "CheckoutBrandingShopifyFont")]
 public interface ICheckoutBrandingFont : IGraphQLObject
 {
     /// <summary>

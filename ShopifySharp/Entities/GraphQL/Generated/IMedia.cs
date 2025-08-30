@@ -7,6 +7,11 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a media interface.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(ExternalVideo), typeDiscriminator: "ExternalVideo")]
+[JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
+[JsonDerivedType(typeof(Model3d), typeDiscriminator: "Model3d")]
+[JsonDerivedType(typeof(Video), typeDiscriminator: "Video")]
 public interface IMedia : IGraphQLObject
 {
     /// <summary>

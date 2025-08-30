@@ -8,6 +8,9 @@ using System.Collections.Generic;
 /// Represents a resource that can be published to a channel.
 /// A publishable resource can be either a Product or Collection.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
+[JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
 public interface IPublishable : IGraphQLObject
 {
     /// <summary>

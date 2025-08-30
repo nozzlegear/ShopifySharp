@@ -7,6 +7,10 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a merchandising background operation interface.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(AddAllProductsOperation), typeDiscriminator: "AddAllProductsOperation")]
+[JsonDerivedType(typeof(CatalogCsvOperation), typeDiscriminator: "CatalogCsvOperation")]
+[JsonDerivedType(typeof(PublicationResourceOperation), typeDiscriminator: "PublicationResourceOperation")]
 public interface IResourceOperation : IGraphQLObject
 {
     /// <summary>

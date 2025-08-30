@@ -15,6 +15,11 @@ using System.Collections.Generic;
 /// things such as a purchased product, a tip added by a customer, shipping costs
 /// collected at checkout, and more.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(OrderAgreement), typeDiscriminator: "OrderAgreement")]
+[JsonDerivedType(typeof(OrderEditAgreement), typeDiscriminator: "OrderEditAgreement")]
+[JsonDerivedType(typeof(RefundAgreement), typeDiscriminator: "RefundAgreement")]
+[JsonDerivedType(typeof(ReturnAgreement), typeDiscriminator: "ReturnAgreement")]
 public interface ISalesAgreement : IGraphQLObject
 {
     /// <summary>

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// A return line item of any type.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(ReturnLineItem), typeDiscriminator: "ReturnLineItem")]
+[JsonDerivedType(typeof(UnverifiedReturnLineItem), typeDiscriminator: "UnverifiedReturnLineItem")]
 public interface IReturnLineItemType : IGraphQLObject
 {
     /// <summary>

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// Localized fields associated with the specified resource.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+[JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
 public interface IHasLocalizedFields : IGraphQLObject
 {
     /// <summary>

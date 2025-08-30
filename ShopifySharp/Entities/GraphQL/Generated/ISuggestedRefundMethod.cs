@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Generic attributes of a suggested refund method.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(SuggestedStoreCreditRefund), typeDiscriminator: "SuggestedStoreCreditRefund")]
 public interface ISuggestedRefundMethod : IGraphQLObject
 {
     /// <summary>

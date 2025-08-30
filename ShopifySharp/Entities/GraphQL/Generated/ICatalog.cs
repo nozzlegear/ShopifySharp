@@ -10,6 +10,10 @@ using System.Collections.Generic;
 /// [`Market`](https://shopify.dev/api/admin-graphql/current/objects/market), [`CompanyLocation`](https://shopify.dev/api/admin-graphql/current/objects/companylocation),
 /// or [`App`](https://shopify.dev/api/admin-graphql/current/objects/app).
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(AppCatalog), typeDiscriminator: "AppCatalog")]
+[JsonDerivedType(typeof(CompanyLocationCatalog), typeDiscriminator: "CompanyLocationCatalog")]
+[JsonDerivedType(typeof(MarketCatalog), typeDiscriminator: "MarketCatalog")]
 public interface ICatalog : IGraphQLObject
 {
     /// <summary>

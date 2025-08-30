@@ -7,6 +7,11 @@ using System.Collections.Generic;
 /// <summary>
 /// A [discount application](https://shopify.dev/api/admin-graphql/latest/interfaces/discountapplication) involved in order editing that might be newly added or have new changes applied.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CalculatedAutomaticDiscountApplication), typeDiscriminator: "CalculatedAutomaticDiscountApplication")]
+[JsonDerivedType(typeof(CalculatedDiscountCodeApplication), typeDiscriminator: "CalculatedDiscountCodeApplication")]
+[JsonDerivedType(typeof(CalculatedManualDiscountApplication), typeDiscriminator: "CalculatedManualDiscountApplication")]
+[JsonDerivedType(typeof(CalculatedScriptDiscountApplication), typeDiscriminator: "CalculatedScriptDiscountApplication")]
 public interface ICalculatedDiscountApplication : IGraphQLObject
 {
     /// <summary>

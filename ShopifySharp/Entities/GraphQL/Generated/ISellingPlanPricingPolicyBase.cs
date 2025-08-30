@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents selling plan pricing policy common fields.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(SellingPlanFixedPricingPolicy), typeDiscriminator: "SellingPlanFixedPricingPolicy")]
+[JsonDerivedType(typeof(SellingPlanRecurringPricingPolicy), typeDiscriminator: "SellingPlanRecurringPricingPolicy")]
 public interface ISellingPlanPricingPolicyBase : IGraphQLObject
 {
     /// <summary>

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Online Store preview URL of the object.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
 public interface IOnlineStorePreviewable : IGraphQLObject
 {
     /// <summary>

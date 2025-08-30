@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// A calculated return fee.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CalculatedRestockingFee), typeDiscriminator: "CalculatedRestockingFee")]
+[JsonDerivedType(typeof(CalculatedReturnShippingFee), typeDiscriminator: "CalculatedReturnShippingFee")]
 public interface ICalculatedReturnFee : IGraphQLObject
 {
     /// <summary>

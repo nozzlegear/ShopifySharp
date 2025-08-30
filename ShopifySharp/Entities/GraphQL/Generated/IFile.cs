@@ -7,6 +7,12 @@ using System.Collections.Generic;
 /// <summary>
 /// A file interface.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(ExternalVideo), typeDiscriminator: "ExternalVideo")]
+[JsonDerivedType(typeof(GenericFile), typeDiscriminator: "GenericFile")]
+[JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
+[JsonDerivedType(typeof(Model3d), typeDiscriminator: "Model3d")]
+[JsonDerivedType(typeof(Video), typeDiscriminator: "Video")]
 public interface IFile : IGraphQLObject
 {
     /// <summary>
