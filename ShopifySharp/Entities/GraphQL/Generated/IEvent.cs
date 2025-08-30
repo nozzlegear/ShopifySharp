@@ -8,6 +8,9 @@ using System.Collections.Generic;
 /// Events chronicle resource activities such as the creation of an article, the fulfillment of an order, or the
 /// addition of a product.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(BasicEvent), typeDiscriminator: "BasicEvent")]
+[JsonDerivedType(typeof(CommentEvent), typeDiscriminator: "CommentEvent")]
 public interface IEvent : IGraphQLObject
 {
     /// <summary>

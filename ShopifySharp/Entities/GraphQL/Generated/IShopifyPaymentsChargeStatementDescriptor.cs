@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// The charge descriptors for a payments account.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(ShopifyPaymentsDefaultChargeStatementDescriptor), typeDiscriminator: "ShopifyPaymentsDefaultChargeStatementDescriptor")]
+[JsonDerivedType(typeof(ShopifyPaymentsJpChargeStatementDescriptor), typeDiscriminator: "ShopifyPaymentsJpChargeStatementDescriptor")]
 public interface IShopifyPaymentsChargeStatementDescriptor : IGraphQLObject
 {
     /// <summary>

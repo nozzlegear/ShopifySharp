@@ -11,6 +11,11 @@ using System.Collections.Generic;
 /// line (line item or shipping line). The actual amount discounted on a line is
 /// represented by the [DiscountAllocation](https://shopify.dev/api/admin-graphql/latest/objects/discountallocation) object.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(AutomaticDiscountApplication), typeDiscriminator: "AutomaticDiscountApplication")]
+[JsonDerivedType(typeof(DiscountCodeApplication), typeDiscriminator: "DiscountCodeApplication")]
+[JsonDerivedType(typeof(ManualDiscountApplication), typeDiscriminator: "ManualDiscountApplication")]
+[JsonDerivedType(typeof(ScriptDiscountApplication), typeDiscriminator: "ScriptDiscountApplication")]
 public interface IDiscountApplication : IGraphQLObject
 {
     /// <summary>

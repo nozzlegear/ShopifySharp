@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Services and features purchased once by the store.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(AppPurchaseOneTime), typeDiscriminator: "AppPurchaseOneTime")]
 public interface IAppPurchase : IGraphQLObject
 {
     /// <summary>

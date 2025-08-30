@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// A job corresponds to some long running task that the client should poll for status.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CustomerSegmentMembersQuery), typeDiscriminator: "CustomerSegmentMembersQuery")]
 public interface IJobResult : IGraphQLObject
 {
     /// <summary>

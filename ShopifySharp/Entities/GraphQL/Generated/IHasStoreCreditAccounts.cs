@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents information about the store credit accounts associated to the specified owner.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
 public interface IHasStoreCreditAccounts : IGraphQLObject
 {
     /// <summary>

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// Localization extensions associated with the specified resource. For example, the tax id for government invoice.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+[JsonDerivedType(typeof(Order), typeDiscriminator: "Order")]
 public interface IHasLocalizationExtensions : IGraphQLObject
 {
     /// <summary>

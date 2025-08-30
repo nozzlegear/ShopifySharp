@@ -11,6 +11,17 @@ using System.Collections.Generic;
 /// To learn more about using cursor-based pagination, refer to
 /// [Paginating results with GraphQL](https://shopify.dev/api/usage/pagination-graphql).
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(AbandonedCheckout), typeDiscriminator: "AbandonedCheckout")]
+[JsonDerivedType(typeof(Article), typeDiscriminator: "Article")]
+[JsonDerivedType(typeof(Company), typeDiscriminator: "Company")]
+[JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
+[JsonDerivedType(typeof(CustomerAccountAppExtensionPage), typeDiscriminator: "CustomerAccountAppExtensionPage")]
+[JsonDerivedType(typeof(CustomerAccountNativePage), typeDiscriminator: "CustomerAccountNativePage")]
+[JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
+[JsonDerivedType(typeof(Page), typeDiscriminator: "Page")]
+[JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+[JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
 public interface INavigable : IGraphQLObject
 {
     /// <summary>

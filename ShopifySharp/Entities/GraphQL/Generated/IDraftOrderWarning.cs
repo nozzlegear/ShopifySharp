@@ -7,6 +7,10 @@ using System.Collections.Generic;
 /// <summary>
 /// A warning that is displayed to the merchant when a change is made to a draft order.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(DraftOrderBundleAddedWarning), typeDiscriminator: "DraftOrderBundleAddedWarning")]
+[JsonDerivedType(typeof(DraftOrderDiscountNotAppliedWarning), typeDiscriminator: "DraftOrderDiscountNotAppliedWarning")]
+[JsonDerivedType(typeof(DraftOrderMarketRegionCountryCodeNotSupportedWarning), typeDiscriminator: "DraftOrderMarketRegionCountryCodeNotSupportedWarning")]
 public interface IDraftOrderWarning : IGraphQLObject
 {
     /// <summary>

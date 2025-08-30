@@ -7,6 +7,11 @@ using System.Collections.Generic;
 /// <summary>
 /// Interface for a store credit account transaction.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(StoreCreditAccountCreditTransaction), typeDiscriminator: "StoreCreditAccountCreditTransaction")]
+[JsonDerivedType(typeof(StoreCreditAccountDebitRevertTransaction), typeDiscriminator: "StoreCreditAccountDebitRevertTransaction")]
+[JsonDerivedType(typeof(StoreCreditAccountDebitTransaction), typeDiscriminator: "StoreCreditAccountDebitTransaction")]
+[JsonDerivedType(typeof(StoreCreditAccountExpirationTransaction), typeDiscriminator: "StoreCreditAccountExpirationTransaction")]
 public interface IStoreCreditAccountTransaction : IGraphQLObject
 {
     /// <summary>

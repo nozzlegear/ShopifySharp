@@ -7,6 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// A geographic region which comprises a market.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(MarketRegionCountry), typeDiscriminator: "MarketRegionCountry")]
 public interface IMarketRegion : IGraphQLObject
 {
     /// <summary>

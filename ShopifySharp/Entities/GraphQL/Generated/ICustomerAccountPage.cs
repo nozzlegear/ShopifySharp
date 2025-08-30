@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// A customer account page.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CustomerAccountAppExtensionPage), typeDiscriminator: "CustomerAccountAppExtensionPage")]
+[JsonDerivedType(typeof(CustomerAccountNativePage), typeDiscriminator: "CustomerAccountNativePage")]
 public interface ICustomerAccountPage : IGraphQLObject
 {
     /// <summary>

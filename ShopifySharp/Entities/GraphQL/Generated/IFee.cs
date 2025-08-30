@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// A additional cost, charged by the merchant, on an order. Examples include return shipping fees and restocking fees.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(RestockingFee), typeDiscriminator: "RestockingFee")]
+[JsonDerivedType(typeof(ReturnShippingFee), typeDiscriminator: "ReturnShippingFee")]
 public interface IFee : IGraphQLObject
 {
     /// <summary>

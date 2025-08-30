@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// Interface for a gift card transaction.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(GiftCardCreditTransaction), typeDiscriminator: "GiftCardCreditTransaction")]
+[JsonDerivedType(typeof(GiftCardDebitTransaction), typeDiscriminator: "GiftCardDebitTransaction")]
 public interface IGiftCardTransaction : IGraphQLObject
 {
     /// <summary>

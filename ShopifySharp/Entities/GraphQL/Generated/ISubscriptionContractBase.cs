@@ -7,6 +7,9 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents subscription contract common fields.
 /// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(SubscriptionBillingCycleEditedContract), typeDiscriminator: "SubscriptionBillingCycleEditedContract")]
+[JsonDerivedType(typeof(SubscriptionContract), typeDiscriminator: "SubscriptionContract")]
 public interface ISubscriptionContractBase : IGraphQLObject
 {
     /// <summary>
