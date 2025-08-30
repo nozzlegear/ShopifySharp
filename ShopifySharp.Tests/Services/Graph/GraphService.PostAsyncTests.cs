@@ -10,13 +10,14 @@ using FakeItEasy.Configuration;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
-using ShopifySharp.Infrastructure;
+using ShopifySharp.GraphQL;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;
 using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Tests.Utilities;
 using Xunit;
 using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
+using Serializer = ShopifySharp.Infrastructure.Serializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
 

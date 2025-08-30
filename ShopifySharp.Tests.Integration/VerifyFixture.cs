@@ -1,3 +1,5 @@
+using ShopifySharp.GraphQL;
+
 namespace ShopifySharp.Tests.Integration;
 
 public class VerifyFixture
@@ -13,6 +15,8 @@ public class VerifyFixture
         Settings.ScrubMembers(info => info.Name is "ShippingAddress" or "shippingAddress");
         Settings.ScrubMembers(info => info.Name is "BillingAddress" or "billingAddress");
         Settings.ScrubMembers(info => info.DeclaringType?.Name is "PageInfo" or "pageInfo");
+        Settings.ScrubMembers(info => info.DeclaringType?.Name is "PageInfo" or "pageInfo");
+        Settings.ScrubMember(typeof(Image), nameof(Image.url));
         Settings.UseDirectory("Snapshots");
     }
 }
