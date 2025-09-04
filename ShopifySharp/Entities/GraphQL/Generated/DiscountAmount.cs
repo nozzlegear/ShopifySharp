@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// The fixed amount value of a discount, and whether the amount is applied to each
 /// entitled item or spread evenly across the entitled items.
 /// </summary>
-public record DiscountAmount : DiscountCustomerGetsValue, IGraphQLUnionCase, IGraphQLObject
+public record DiscountAmount : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The value of the discount.

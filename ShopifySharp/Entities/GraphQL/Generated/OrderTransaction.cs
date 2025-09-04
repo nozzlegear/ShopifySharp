@@ -24,7 +24,7 @@ using System.Collections.Generic;
 /// Learn more about [payment processing](https://help.shopify.com/manual/payments)
 /// and [payment gateway integrations](https://www.shopify.com/ca/payment-gateways).
 /// </summary>
-public record OrderTransaction : StoreCreditAccountTransactionOrigin, IGraphQLUnionCase, IGraphQLObject, INode
+public record OrderTransaction : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// The masked account number associated with the payment method.

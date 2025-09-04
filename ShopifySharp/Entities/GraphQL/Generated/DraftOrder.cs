@@ -23,7 +23,7 @@ using System.Collections.Generic;
 /// legitimate use for the associated data.
 /// Draft orders created on or after April 1, 2025 will be automatically purged after one year of inactivity.
 /// </summary>
-public record DraftOrder : CommentEventEmbed, IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasLocalizationExtensions, IHasLocalizedFields, IHasMetafields, ILegacyInteroperability, INavigable, INode
+public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasLocalizationExtensions, IHasLocalizedFields, IHasMetafields, ILegacyInteroperability, INavigable, INode
 {
     /// <summary>
     /// Whether or not to accept automatic discounts on the draft order during calculation.

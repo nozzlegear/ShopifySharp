@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A payment customization.
 /// </summary>
-public record PaymentCustomization : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
+public record PaymentCustomization : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
 {
     /// <summary>
     /// The enabled status of the payment customization.

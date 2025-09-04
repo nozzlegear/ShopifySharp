@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// A subscription delivery method for local delivery.
 /// The other subscription delivery methods can be found in the `SubscriptionDeliveryMethod` union type.
 /// </summary>
-public record SubscriptionDeliveryMethodLocalDelivery : SubscriptionDeliveryMethod, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionDeliveryMethodLocalDelivery : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The address to deliver to.

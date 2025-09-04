@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A weight, which includes a numeric value and a unit of measurement.
 /// </summary>
-public record Weight : DeliveryConditionCriteria, IGraphQLUnionCase, IGraphQLObject
+public record Weight : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The unit of measurement for `value`.

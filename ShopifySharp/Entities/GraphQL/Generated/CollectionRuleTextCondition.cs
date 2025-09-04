@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Specifies the condition for a text field.
 /// </summary>
-public record CollectionRuleTextCondition : CollectionRuleConditionObject, IGraphQLUnionCase, IGraphQLObject
+public record CollectionRuleTextCondition : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The value of the condition.

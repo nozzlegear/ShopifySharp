@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A bulk update operation on a publication.
 /// </summary>
-public record PublicationResourceOperation : PublicationOperation, IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
+public record PublicationResourceOperation : IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
 {
     /// <summary>
     /// A globally-unique ID.

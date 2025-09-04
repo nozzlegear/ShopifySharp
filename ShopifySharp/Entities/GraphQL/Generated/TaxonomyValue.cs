@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a Shopify product taxonomy value.
 /// </summary>
-public record TaxonomyValue : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, INode
+public record TaxonomyValue : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// A globally-unique ID.

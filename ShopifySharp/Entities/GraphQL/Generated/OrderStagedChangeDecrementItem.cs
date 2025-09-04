@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// An removal of items from an existing line item on the order.
 /// </summary>
-public record OrderStagedChangeDecrementItem : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeDecrementItem : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The number of items removed.

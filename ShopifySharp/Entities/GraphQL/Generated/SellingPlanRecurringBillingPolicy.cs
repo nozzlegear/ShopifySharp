@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a recurring selling plan billing policy.
 /// </summary>
-public record SellingPlanRecurringBillingPolicy : SellingPlanBillingPolicy, IGraphQLUnionCase, IGraphQLObject
+public record SellingPlanRecurringBillingPolicy : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Specific anchor dates upon which the billing interval calculations should be made.

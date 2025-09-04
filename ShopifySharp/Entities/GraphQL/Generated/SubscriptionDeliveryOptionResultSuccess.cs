@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The delivery option for a subscription contract.
 /// </summary>
-public record SubscriptionDeliveryOptionResultSuccess : SubscriptionDeliveryOptionResult, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionDeliveryOptionResultSuccess : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The available delivery options.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a credit card payment instrument.
 /// </summary>
-public record VaultCreditCard : PaymentInstrument, IGraphQLUnionCase, IGraphQLObject
+public record VaultCreditCard : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The billing address of the card.

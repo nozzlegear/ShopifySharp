@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// The fixed selling plan billing policy defines how much of the price of the product will be billed to customer
 /// at checkout. If there is an outstanding balance, it determines when it will be paid.
 /// </summary>
-public record SellingPlanFixedBillingPolicy : SellingPlanBillingPolicy, IGraphQLUnionCase, IGraphQLObject
+public record SellingPlanFixedBillingPolicy : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The checkout charge when the full amount isn't charged at checkout.

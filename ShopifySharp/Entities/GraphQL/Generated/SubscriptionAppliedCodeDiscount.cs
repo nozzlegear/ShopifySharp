@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents an applied code discount.
 /// </summary>
-public record SubscriptionAppliedCodeDiscount : SubscriptionDiscount, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionAppliedCodeDiscount : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The unique ID.

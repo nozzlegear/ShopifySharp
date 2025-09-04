@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// An HTTPS endpoint to which webhook subscriptions send POST requests.
 /// </summary>
-public record WebhookHttpEndpoint : WebhookSubscriptionEndpoint, IGraphQLUnionCase, IGraphQLObject
+public record WebhookHttpEndpoint : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The URL to which the webhooks events are sent.

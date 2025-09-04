@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// An Amazon EventBridge partner event source to which webhook subscriptions publish events.
 /// </summary>
-public record WebhookEventBridgeEndpoint : WebhookSubscriptionEndpoint, IGraphQLUnionCase, IGraphQLObject
+public record WebhookEventBridgeEndpoint : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The ARN of this EventBridge partner event source.

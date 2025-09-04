@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// A new [shipping line](https://shopify.dev/api/admin-graphql/latest/objects/shippingline)
 /// added as part of an order edit.
 /// </summary>
-public record OrderStagedChangeAddShippingLine : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeAddShippingLine : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The phone number at the shipping address.

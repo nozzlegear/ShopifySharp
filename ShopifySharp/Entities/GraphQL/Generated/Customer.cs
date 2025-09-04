@@ -12,7 +12,7 @@ using System.Collections.Generic;
 /// scopes](https://shopify.dev/api/usage/access-scopes) for apps that don't have a
 /// legitimate use for the associated data.
 /// </summary>
-public record Customer : CommentEventEmbed, IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasStoreCreditAccounts, ILegacyInteroperability, INode
+public record Customer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasStoreCreditAccounts, ILegacyInteroperability, INode
 {
     /// <summary>
     /// A list of addresses associated with the customer.

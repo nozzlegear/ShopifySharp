@@ -16,7 +16,7 @@ using System.Collections.Generic;
 /// Learn more about working with [Shopify's product model](https://shopify.dev/docs/apps/build/graphql/migrate/new-product-model/product-model-components),
 /// including limitations and considerations.
 /// </summary>
-public record Product : CommentEventEmbed, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, ILegacyInteroperability, INavigable, INode, IOnlineStorePreviewable, IPublishable
+public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, ILegacyInteroperability, INavigable, INode, IOnlineStorePreviewable, IPublishable
 {
     /// <summary>
     /// The number of

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a PayPal instrument for customer payment method.
 /// </summary>
-public record CustomerPaypalBillingAgreement : CustomerPaymentInstrument, IGraphQLUnionCase, IGraphQLObject
+public record CustomerPaypalBillingAgreement : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The billing address of this payment method.

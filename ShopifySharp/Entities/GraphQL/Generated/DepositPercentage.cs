@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A percentage deposit.
 /// </summary>
-public record DepositPercentage : DepositConfiguration, IGraphQLUnionCase, IGraphQLObject
+public record DepositPercentage : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The percentage value of the deposit.

@@ -20,7 +20,7 @@ using System.Collections.Generic;
 /// object has similar functionality to the `DiscountAutomaticBxgy` object, but customers need to enter a code to
 /// receive a discount.
 /// </summary>
-public record DiscountAutomaticBxgy : Discount, IGraphQLUnionCase, IGraphQLObject, IHasEvents, INode
+public record DiscountAutomaticBxgy : IGraphQLUnionCase, IGraphQLObject, IHasEvents, INode
 {
     /// <summary>
     /// The number of times that the discount has been used.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents the intention to move inventory between locations.
 /// </summary>
-public record InventoryTransfer : CommentEventEmbed, IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
+public record InventoryTransfer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
 {
     /// <summary>
     /// The date and time the inventory transfer was created in UTC format.

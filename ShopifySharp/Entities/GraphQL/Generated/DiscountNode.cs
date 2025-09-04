@@ -18,7 +18,7 @@ using System.Collections.Generic;
 /// Learn more about working with [Shopify's discount model](https://shopify.dev/docs/apps/build/discounts),
 /// including related mutations, limitations, and considerations.
 /// </summary>
-public record DiscountNode : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
+public record DiscountNode : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
 {
     /// <summary>
     /// A discount that's applied at checkout or on cart.

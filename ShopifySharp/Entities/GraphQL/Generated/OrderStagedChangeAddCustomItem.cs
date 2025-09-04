@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// custom line item. For example, you might want to add gift wrapping service
 /// as a custom line item.
 /// </summary>
-public record OrderStagedChangeAddCustomItem : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeAddCustomItem : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The price of an individual item without any discounts applied. This value can't be negative.

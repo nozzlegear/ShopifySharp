@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents the body of a theme file.
 /// </summary>
-public record OnlineStoreThemeFileBodyText : OnlineStoreThemeFileBody, IGraphQLUnionCase, IGraphQLObject
+public record OnlineStoreThemeFileBodyText : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The body of the theme file.

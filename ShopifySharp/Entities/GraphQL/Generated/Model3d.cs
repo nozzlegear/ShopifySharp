@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a Shopify hosted 3D model.
 /// </summary>
-public record Model3d : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, IFile, IMedia, INode
+public record Model3d : IGraphQLUnionCase, IGraphQLObject, IFile, IMedia, INode
 {
     /// <summary>
     /// A word or phrase to describe the contents or the function of a file.

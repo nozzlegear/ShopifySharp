@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The financial transfer details for a return outcome that results in a refund.
 /// </summary>
-public record RefundReturnOutcome : ReturnOutcomeFinancialTransfer, IGraphQLUnionCase, IGraphQLObject
+public record RefundReturnOutcome : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The total monetary value to be refunded in shop and presentment currencies.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents the url of the body of a theme file.
 /// </summary>
-public record OnlineStoreThemeFileBodyUrl : OnlineStoreThemeFileBody, IGraphQLUnionCase, IGraphQLObject
+public record OnlineStoreThemeFileBodyUrl : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The short lived url for the body of the theme file.

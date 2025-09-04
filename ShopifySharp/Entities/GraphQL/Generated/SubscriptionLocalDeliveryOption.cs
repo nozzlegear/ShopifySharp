@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A local delivery option for a subscription contract.
 /// </summary>
-public record SubscriptionLocalDeliveryOption : SubscriptionDeliveryOption, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionLocalDeliveryOption : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The code of the local delivery option.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Custom subscription discount.
 /// </summary>
-public record SubscriptionManualDiscount : SubscriptionDiscount, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionManualDiscount : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Entitled line items used to apply the subscription discount on.

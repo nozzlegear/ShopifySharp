@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Failure determining available shipping options for delivery of a subscription contract.
 /// </summary>
-public record SubscriptionShippingOptionResultFailure : SubscriptionShippingOptionResult, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionShippingOptionResultFailure : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Failure reason.

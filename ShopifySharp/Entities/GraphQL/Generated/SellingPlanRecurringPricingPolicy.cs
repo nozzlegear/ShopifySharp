@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// when the recurring pricing policy comes into effect. Recurring pricing policies
 /// are not available for deferred purchase options.
 /// </summary>
-public record SellingPlanRecurringPricingPolicy : SellingPlanPricingPolicy, IGraphQLUnionCase, IGraphQLObject, ISellingPlanPricingPolicyBase
+public record SellingPlanRecurringPricingPolicy : IGraphQLUnionCase, IGraphQLObject, ISellingPlanPricingPolicyBase
 {
     /// <summary>
     /// The price adjustment type.

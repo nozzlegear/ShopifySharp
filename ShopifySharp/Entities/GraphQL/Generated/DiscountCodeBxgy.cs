@@ -21,7 +21,7 @@ using System.Collections.Generic;
 /// object has similar functionality to the `DiscountCodeBxgy` object, but discounts are automatically applied,
 /// without the need for customers to enter a code.
 /// </summary>
-public record DiscountCodeBxgy : Discount, IGraphQLUnionCase, IGraphQLObject
+public record DiscountCodeBxgy : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Whether a customer can only use the discount once.

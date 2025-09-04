@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a paypal billing agreement payment instrument.
 /// </summary>
-public record VaultPaypalBillingAgreement : PaymentInstrument, IGraphQLUnionCase, IGraphQLObject
+public record VaultPaypalBillingAgreement : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Whether the paypal billing agreement is inactive.

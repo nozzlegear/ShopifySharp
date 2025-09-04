@@ -128,7 +128,7 @@ using System.Collections.Generic;
 /// to be notified whenever fulfillment order related domain events occur.
 /// [Learn about fulfillment workflows](https://shopify.dev/apps/fulfillment).
 /// </summary>
-public record FulfillmentOrder : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, INode
+public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// The fulfillment order's assigned location. This is the location where the fulfillment is expected to happen.

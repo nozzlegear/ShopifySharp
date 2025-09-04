@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A Shopify product taxonomy choice list attribute.
 /// </summary>
-public record TaxonomyChoiceListAttribute : TaxonomyCategoryAttribute, IGraphQLUnionCase, IGraphQLObject, INode
+public record TaxonomyChoiceListAttribute : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// The unique ID of the TaxonomyAttribute.

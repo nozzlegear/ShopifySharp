@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// A participant defines carrier-calculated rates for shipping services
 /// with a possible merchant-defined fixed fee or a percentage-of-rate fee.
 /// </summary>
-public record DeliveryParticipant : DeliveryRateProvider, IGraphQLUnionCase, IGraphQLObject, INode
+public record DeliveryParticipant : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// Whether to display new shipping services automatically to the customer when the service becomes available.

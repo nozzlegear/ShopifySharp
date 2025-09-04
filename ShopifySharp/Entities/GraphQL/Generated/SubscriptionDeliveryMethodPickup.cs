@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A delivery method with a pickup option.
 /// </summary>
-public record SubscriptionDeliveryMethodPickup : SubscriptionDeliveryMethod, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionDeliveryMethodPickup : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The details of the pickup delivery method to use.

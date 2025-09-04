@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A Shopify product taxonomy measurement attribute.
 /// </summary>
-public record TaxonomyMeasurementAttribute : TaxonomyCategoryAttribute, IGraphQLUnionCase, IGraphQLObject, INode
+public record TaxonomyMeasurementAttribute : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// The unique ID of the TaxonomyAttribute.

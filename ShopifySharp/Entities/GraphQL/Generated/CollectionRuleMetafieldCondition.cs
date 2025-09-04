@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Identifies a metafield definition used as a rule for the smart collection.
 /// </summary>
-public record CollectionRuleMetafieldCondition : CollectionRuleConditionObject, IGraphQLUnionCase, IGraphQLObject
+public record CollectionRuleMetafieldCondition : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The metafield definition associated with the condition.

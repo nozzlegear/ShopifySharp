@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// locations that have `fulfills_online_orders: true` and are configured with a shipping rate, pickup enabled or
 /// local delivery will be able to sell from their storefront.
 /// </summary>
-public record Location : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode
+public record Location : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode
 {
     /// <summary>
     /// Whether the location can be reactivated. If `false`, then trying to activate the location with the

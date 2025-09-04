@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The merchant-defined rate of the [DeliveryMethodDefinition](https://shopify.dev/api/admin-graphql/latest/objects/DeliveryMethodDefinition).
 /// </summary>
-public record DeliveryRateDefinition : DeliveryRateProvider, IGraphQLUnionCase, IGraphQLObject, INode
+public record DeliveryRateDefinition : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// A globally-unique ID.

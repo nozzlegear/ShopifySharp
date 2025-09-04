@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// An addition of items to an existing line item on the order.
 /// </summary>
-public record OrderStagedChangeIncrementItem : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeIncrementItem : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The number of items added.

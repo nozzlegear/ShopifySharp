@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// Shopify stores come with a built-in blogging engine, allowing a shop to have one or more blogs.  Blogs are meant
 /// to be used as a type of magazine or newsletter for the shop, with content that changes over time.
 /// </summary>
-public record Blog : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode
+public record Blog : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode
 {
     /// <summary>
     /// List of the blog's articles.

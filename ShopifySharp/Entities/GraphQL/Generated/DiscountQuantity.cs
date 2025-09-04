@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// define the minimum quantity of items required to apply a discount.
 /// Alternatively, it can be used to define the quantity of items that can be discounted.
 /// </summary>
-public record DiscountQuantity : DiscountCustomerBuysValue, IGraphQLUnionCase, IGraphQLObject
+public record DiscountQuantity : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The quantity of items.

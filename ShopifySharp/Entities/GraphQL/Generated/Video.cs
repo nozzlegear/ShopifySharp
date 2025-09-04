@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a Shopify hosted video.
 /// </summary>
-public record Video : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, IFile, IMedia, INode
+public record Video : IGraphQLUnionCase, IGraphQLObject, IFile, IMedia, INode
 {
     /// <summary>
     /// A word or phrase to share the nature or contents of a media.

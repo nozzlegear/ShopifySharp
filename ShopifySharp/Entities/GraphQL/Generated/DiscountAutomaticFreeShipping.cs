@@ -20,7 +20,7 @@ using System.Collections.Generic;
 /// object has similar functionality to the `DiscountAutomaticFreeShipping` object, but customers need to enter a code to
 /// receive a discount.
 /// </summary>
-public record DiscountAutomaticFreeShipping : Discount, IGraphQLUnionCase, IGraphQLObject
+public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Whether the discount applies on one-time purchases.

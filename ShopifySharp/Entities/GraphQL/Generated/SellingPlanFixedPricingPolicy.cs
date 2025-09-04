@@ -11,7 +11,7 @@ using System.Collections.Generic;
 /// For example, a subscription with a $10 discount and two deliveries will have a $5
 /// discount applied to each delivery.
 /// </summary>
-public record SellingPlanFixedPricingPolicy : SellingPlanPricingPolicy, IGraphQLUnionCase, IGraphQLObject, ISellingPlanPricingPolicyBase
+public record SellingPlanFixedPricingPolicy : IGraphQLUnionCase, IGraphQLObject, ISellingPlanPricingPolicyBase
 {
     /// <summary>
     /// The price adjustment type.

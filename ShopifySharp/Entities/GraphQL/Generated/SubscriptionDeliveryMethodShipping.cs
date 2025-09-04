@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a shipping delivery method: a mailing address and a shipping option.
 /// </summary>
-public record SubscriptionDeliveryMethodShipping : SubscriptionDeliveryMethod, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionDeliveryMethodShipping : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The address to ship to.

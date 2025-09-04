@@ -18,7 +18,7 @@ using System.Collections.Generic;
 /// object has similar functionality to the `DiscountCodeApp` object, with the exception that `DiscountAutomaticApp`
 /// stores information about automatic discounts that are managed by an app using Shopify Functions.
 /// </summary>
-public record DiscountCodeApp : Discount, IGraphQLUnionCase, IGraphQLObject
+public record DiscountCodeApp : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The details about the app extension that's providing the

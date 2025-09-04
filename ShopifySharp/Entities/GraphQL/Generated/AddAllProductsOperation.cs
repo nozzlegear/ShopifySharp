@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents an operation publishing all products to a publication.
 /// </summary>
-public record AddAllProductsOperation : PublicationOperation, IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
+public record AddAllProductsOperation : IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
 {
     /// <summary>
     /// A globally-unique ID.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The quantity of items discounted, the discount value, and how the discount will be applied.
 /// </summary>
-public record DiscountOnQuantity : DiscountCustomerGetsValue, IGraphQLUnionCase, IGraphQLObject
+public record DiscountOnQuantity : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The discount's effect on qualifying items.

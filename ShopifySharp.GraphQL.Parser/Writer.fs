@@ -299,11 +299,11 @@ let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> boo
 
 let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName: string) writer: ValueTask =
     pipeWriter writer {
-        match context.TryFindUnionRelationship unionCaseName with
-        | Some relationship ->
-            do! $"{relationship.UnionTypeName}, IGraphQLUnionCase"
-        | None ->
-            do! "IGraphQLUnionCase"
+        // Union cases previously wrote both this interface type and their inherited union type. That does not work though,
+        // as A) a union case can appear in more than one union (e.g. Metaobject was in MetaobjectReference and MetaobjectReferencer)
+        // and B) it made it impossible to serialize the union case to json in cases where the union case had a property
+        // chain that referenced its own union type parent (e.g. the Metaobject -> MetaobjectField -> MetaobjectReferencer -> Metaobject).
+        do! "IGraphQLUnionCase"
     }
 
 let private writeClassKnownInheritedType (context: IParsedContext) (class': Class) writer: ValueTask =

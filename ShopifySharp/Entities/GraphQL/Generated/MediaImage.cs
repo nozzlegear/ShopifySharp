@@ -25,7 +25,7 @@ using System.Collections.Generic;
 /// [product variants](https://shopify.dev/docs/apps/build/online-store/product-variant-media), and
 /// [asynchronous media management](https://shopify.dev/docs/apps/build/graphql/migrate/new-product-model/product-model-components#asynchronous-media-management).
 /// </summary>
-public record MediaImage : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, IFile, IHasMetafields, IMedia, INode
+public record MediaImage : IGraphQLUnionCase, IGraphQLObject, IFile, IHasMetafields, IMedia, INode
 {
     /// <summary>
     /// A word or phrase to share the nature or contents of a media.

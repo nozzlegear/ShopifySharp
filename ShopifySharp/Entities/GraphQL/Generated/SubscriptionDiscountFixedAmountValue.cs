@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The value of the discount and how it will be applied.
 /// </summary>
-public record SubscriptionDiscountFixedAmountValue : SubscriptionDiscountValue, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionDiscountFixedAmountValue : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The fixed amount value of the discount.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The financial transfer details for a return outcome that results in an invoice.
 /// </summary>
-public record InvoiceReturnOutcome : ReturnOutcomeFinancialTransfer, IGraphQLUnionCase, IGraphQLObject
+public record InvoiceReturnOutcome : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The total monetary value to be invoiced in shop and presentment currencies.
