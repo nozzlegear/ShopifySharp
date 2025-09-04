@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents information about a company which is also a customer of the shop.
 /// </summary>
-public record Company : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
+public record Company : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
 {
     /// <summary>
     /// The number of contacts that belong to the company.

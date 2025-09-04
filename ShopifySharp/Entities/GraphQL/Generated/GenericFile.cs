@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents any file other than HTML.
 /// </summary>
-public record GenericFile : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, IFile, INode
+public record GenericFile : IGraphQLUnionCase, IGraphQLObject, IFile, INode
 {
     /// <summary>
     /// A word or phrase to describe the contents or the function of a file.

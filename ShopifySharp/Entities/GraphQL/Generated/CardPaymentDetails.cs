@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Card payment details related to a transaction.
 /// </summary>
-public record CardPaymentDetails : PaymentDetails, IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
+public record CardPaymentDetails : IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
 {
     /// <summary>
     /// The response code from the address verification system (AVS). The code is always a single letter.

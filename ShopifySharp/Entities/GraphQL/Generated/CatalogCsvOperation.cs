@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A catalog csv operation represents a CSV file import.
 /// </summary>
-public record CatalogCsvOperation : PublicationOperation, IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
+public record CatalogCsvOperation : IGraphQLUnionCase, IGraphQLObject, INode, IResourceOperation
 {
     /// <summary>
     /// A globally-unique ID.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents the base64 encoded body of a theme file.
 /// </summary>
-public record OnlineStoreThemeFileBodyBase64 : OnlineStoreThemeFileBody, IGraphQLUnionCase, IGraphQLObject
+public record OnlineStoreThemeFileBodyBase64 : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The body of the theme file, base64 encoded.

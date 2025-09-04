@@ -1,0 +1,13 @@
+﻿{
+  "Result": {
+    "userErrors": [
+      {
+        "field": [
+          "handle",
+          "type"
+        ],
+        "message": "No metaobject definition exists for type \"some-type\""
+      }
+    ]
+  }
+}

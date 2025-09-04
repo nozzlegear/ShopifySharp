@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A list of customer segments who are eligible for the discount.
 /// </summary>
-public record DiscountCustomerSegments : DiscountCustomerSelection, IGraphQLUnionCase, IGraphQLObject
+public record DiscountCustomerSegments : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The list of customer segments who are eligible for the discount.

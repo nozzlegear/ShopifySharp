@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The Android mobile platform application.
 /// </summary>
-public record AndroidApplication : MobilePlatformApplication, IGraphQLUnionCase, IGraphQLObject
+public record AndroidApplication : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The Android application ID.

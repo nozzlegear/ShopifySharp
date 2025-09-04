@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// An article in the blogging system.
 /// </summary>
-public record Article : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INavigable, INode
+public record Article : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INavigable, INode
 {
     /// <summary>
     /// The name of the author of the article.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The percentage value of a selling plan pricing policy percentage type.
 /// </summary>
-public record SellingPlanPricingPolicyPercentageValue : SellingPlanPricingPolicyAdjustmentValue, IGraphQLUnionCase, IGraphQLObject
+public record SellingPlanPricingPolicyPercentageValue : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The percentage value.

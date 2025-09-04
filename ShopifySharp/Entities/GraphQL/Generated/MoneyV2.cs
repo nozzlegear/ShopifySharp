@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A precise monetary value and its associated currency. For example, 12.99 USD.
 /// </summary>
-public record MoneyV2 : DeliveryConditionCriteria, IGraphQLUnionCase, IGraphQLObject
+public record MoneyV2 : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// A monetary value in decimal format, allowing for precise representation of cents or fractional

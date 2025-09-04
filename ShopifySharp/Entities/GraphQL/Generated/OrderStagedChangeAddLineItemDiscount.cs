@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The discount applied to an item that was added during the current order edit.
 /// </summary>
-public record OrderStagedChangeAddLineItemDiscount : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeAddLineItemDiscount : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The description of the discount.

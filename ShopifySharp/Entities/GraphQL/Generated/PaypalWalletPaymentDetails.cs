@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// PayPal Wallet payment details related to a transaction.
 /// </summary>
-public record PaypalWalletPaymentDetails : PaymentDetails, IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
+public record PaypalWalletPaymentDetails : IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
 {
     /// <summary>
     /// The name of payment method used by the buyer.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The calculated line item for a draft order.
 /// </summary>
-public record CalculatedDraftOrderLineItem : DraftOrderPlatformDiscountAllocationTarget, IGraphQLUnionCase, IGraphQLObject
+public record CalculatedDraftOrderLineItem : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The custom applied discount.

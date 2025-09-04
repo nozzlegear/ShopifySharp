@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The value of a fixed amount price rule.
 /// </summary>
-public record PriceRuleFixedAmountValue : PriceRuleValue, IGraphQLUnionCase, IGraphQLObject
+public record PriceRuleFixedAmountValue : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The monetary value of the price rule.

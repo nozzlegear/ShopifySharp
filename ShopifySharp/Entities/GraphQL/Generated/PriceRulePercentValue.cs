@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The value of a percent price rule.
 /// </summary>
-public record PriceRulePercentValue : PriceRuleValue, IGraphQLUnionCase, IGraphQLObject
+public record PriceRulePercentValue : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The percent value of the price rule.

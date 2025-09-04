@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The fixed amount value of a discount.
 /// </summary>
-public record AppSubscriptionDiscountAmount : AppSubscriptionDiscountValue, IGraphQLUnionCase, IGraphQLObject
+public record AppSubscriptionDiscountAmount : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The fixed amount value of a discount.

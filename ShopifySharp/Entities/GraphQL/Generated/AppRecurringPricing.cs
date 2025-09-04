@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// The object contains an interval (the frequency at which the shop is billed for an app subscription) and
 /// a price (the amount to be charged to the subscribing shop at each interval).
 /// </summary>
-public record AppRecurringPricing : AppPricingDetails, IGraphQLUnionCase, IGraphQLObject
+public record AppRecurringPricing : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The discount applied to the subscription for a given number of billing intervals.

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// shop. Configuration of B2B relationship, for example prices lists and checkout
 /// settings, may be done for a location.
 /// </summary>
-public record CompanyLocation : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
+public record CompanyLocation : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
 {
     /// <summary>
     /// The address used as billing address for the location.

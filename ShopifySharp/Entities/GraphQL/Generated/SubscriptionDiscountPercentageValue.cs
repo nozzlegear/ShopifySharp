@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The percentage value of the discount.
 /// </summary>
-public record SubscriptionDiscountPercentageValue : SubscriptionDiscountValue, IGraphQLUnionCase, IGraphQLObject
+public record SubscriptionDiscountPercentageValue : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The percentage value of the discount.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents the shipping details that the customer chose for their order.
 /// </summary>
-public record ShippingLine : DraftOrderPlatformDiscountAllocationTarget, IGraphQLUnionCase, IGraphQLObject
+public record ShippingLine : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// A reference to the carrier service that provided the rate.

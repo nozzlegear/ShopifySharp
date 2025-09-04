@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// prerequisite or a list of products and product variants to which the discount
 /// can be applied.
 /// </summary>
-public record DiscountProducts : DiscountItems, IGraphQLUnionCase, IGraphQLObject
+public record DiscountProducts : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The list of products that the discount can have as a prerequisite or the list

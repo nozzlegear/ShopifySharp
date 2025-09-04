@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Information about the credit card used for this transaction.
 /// </summary>
-public record TenderTransactionCreditCardDetails : TenderTransactionDetails, IGraphQLUnionCase, IGraphQLObject
+public record TenderTransactionCreditCardDetails : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The name of the company that issued the customer's credit card. Example: `Visa`.

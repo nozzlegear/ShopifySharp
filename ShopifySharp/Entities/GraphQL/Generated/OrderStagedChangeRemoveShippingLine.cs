@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A shipping line removed during an order edit.
 /// </summary>
-public record OrderStagedChangeRemoveShippingLine : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeRemoveShippingLine : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The removed shipping line.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Specifies the taxonomy category to used for the condition.
 /// </summary>
-public record CollectionRuleCategoryCondition : CollectionRuleConditionObject, IGraphQLUnionCase, IGraphQLObject
+public record CollectionRuleCategoryCondition : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The taxonomy category used as condition.

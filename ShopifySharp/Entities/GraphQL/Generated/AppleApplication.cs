@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The Apple mobile platform application.
 /// </summary>
-public record AppleApplication : MobilePlatformApplication, IGraphQLUnionCase, IGraphQLObject
+public record AppleApplication : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The iOS App Clip application ID.

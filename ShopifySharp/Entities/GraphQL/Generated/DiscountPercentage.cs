@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A discount effect that gives customers a percentage off of specified items on their order.
 /// </summary>
-public record DiscountPercentage : DiscountCustomerGetsValue, IGraphQLUnionCase, IGraphQLObject
+public record DiscountPercentage : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The percentage value of the discount.

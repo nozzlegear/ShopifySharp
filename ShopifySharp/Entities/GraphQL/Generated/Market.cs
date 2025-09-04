@@ -12,7 +12,7 @@ using System.Collections.Generic;
 /// [configure international pricing](https://shopify.dev/apps/internationalization/product-price-lists),
 /// or [add market-specific domains or subfolders](https://shopify.dev/api/admin-graphql/current/objects/MarketWebPresence).
 /// </summary>
-public record Market : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
+public record Market : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
 {
     /// <summary>
     /// Whether the market has a customization with the given ID.

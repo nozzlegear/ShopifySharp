@@ -14,7 +14,7 @@ using System.Collections.Generic;
 /// Learn more about working with [Shopify's discount model](https://shopify.dev/docs/apps/build/discounts),
 /// including related queries, mutations, limitations, and considerations.
 /// </summary>
-public record DiscountCodeNode : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
+public record DiscountCodeNode : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
 {
     /// <summary>
     /// The underlying code discount object.

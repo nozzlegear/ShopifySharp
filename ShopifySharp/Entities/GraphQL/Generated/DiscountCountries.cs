@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The shipping destinations where the discount can be applied.
 /// </summary>
-public record DiscountCountries : DiscountShippingDestinationSelection, IGraphQLUnionCase, IGraphQLObject
+public record DiscountCountries : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The codes for the countries where the discount can be applied.

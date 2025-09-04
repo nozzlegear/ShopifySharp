@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// Defines a usage pricing model for the app subscription.
 /// These charges are variable based on how much the merchant uses the app.
 /// </summary>
-public record AppUsagePricing : AppPricingDetails, IGraphQLUnionCase, IGraphQLObject
+public record AppUsagePricing : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The total usage records for interval.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Targets all items the cart for a specified discount.
 /// </summary>
-public record AllDiscountItems : DiscountItems, IGraphQLUnionCase, IGraphQLObject
+public record AllDiscountItems : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// Whether all items are eligible for the discount. This value always returns `true`.

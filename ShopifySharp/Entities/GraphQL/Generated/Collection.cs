@@ -32,7 +32,7 @@ using System.Collections.Generic;
 /// and contextual publication for location-based catalogs.
 /// Learn about [using metafields with smart collections](https://shopify.dev/docs/apps/build/custom-data/metafields/use-metafield-capabilities).
 /// </summary>
-public record Collection : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode, IPublishable
+public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode, IPublishable
 {
     /// <summary>
     /// The number of

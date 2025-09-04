@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A delivery customization.
 /// </summary>
-public record DeliveryCustomization : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
+public record DeliveryCustomization : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
 {
     /// <summary>
     /// The enabled status of the delivery customization.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A page on the Online Store.
 /// </summary>
-public record Page : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INavigable, INode
+public record Page : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INavigable, INode
 {
     /// <summary>
     /// The text content of the page, complete with HTML markup.

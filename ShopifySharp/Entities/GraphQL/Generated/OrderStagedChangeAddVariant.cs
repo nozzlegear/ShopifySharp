@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A change to the order representing the addition of an existing product variant.
 /// </summary>
-public record OrderStagedChangeAddVariant : OrderStagedChange, IGraphQLUnionCase, IGraphQLObject
+public record OrderStagedChangeAddVariant : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The quantity of the product variant that was added.

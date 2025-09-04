@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Local payment methods payment details related to a transaction.
 /// </summary>
-public record LocalPaymentMethodsPaymentDetails : PaymentDetails, IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
+public record LocalPaymentMethodsPaymentDetails : IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
 {
     /// <summary>
     /// The descriptor by the payment provider. Only available for Amazon Pay and Buy with Prime.

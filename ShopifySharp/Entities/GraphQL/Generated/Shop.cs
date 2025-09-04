@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a collection of general settings and information about the shop.
 /// </summary>
-public record Shop : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode
+public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode
 {
     /// <summary>
     /// Account owner information.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents information about the purchasing company for the order or draft order.
 /// </summary>
-public record PurchasingCompany : PurchasingEntity, IGraphQLUnionCase, IGraphQLObject
+public record PurchasingCompany : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The company associated to the order or draft order.

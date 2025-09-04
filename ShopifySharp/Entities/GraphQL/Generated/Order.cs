@@ -30,7 +30,7 @@ using System.Collections.Generic;
 /// for apps that don't have a legitimate use for the associated data.
 /// Learn more about [building apps for orders and fulfillment](https://shopify.dev/docs/apps/build/orders-fulfillment).
 /// </summary>
-public record Order : CommentEventEmbed, IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasLocalizationExtensions, IHasLocalizedFields, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode
+public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasLocalizationExtensions, IHasLocalizedFields, IHasMetafieldDefinitions, IHasMetafields, ILegacyInteroperability, INode
 {
     /// <summary>
     /// A list of additional fees applied to an order, such as duties, import fees, or [tax lines](https://shopify.dev/docs/api/admin-graphql/latest/objects/order#field-Order.fields.additionalFees.taxLines).

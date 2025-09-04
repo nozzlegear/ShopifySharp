@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Provides an object instance represented by a MetaobjectDefinition.
 /// </summary>
-public record Metaobject : MetafieldReference, IGraphQLUnionCase, IGraphQLObject, INode
+public record Metaobject : IGraphQLUnionCase, IGraphQLObject, INode
 {
     /// <summary>
     /// Metaobject capabilities for this Metaobject.

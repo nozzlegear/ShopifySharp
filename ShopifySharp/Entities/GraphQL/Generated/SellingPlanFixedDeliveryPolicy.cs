@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents a fixed selling plan delivery policy.
 /// </summary>
-public record SellingPlanFixedDeliveryPolicy : SellingPlanDeliveryPolicy, IGraphQLUnionCase, IGraphQLObject
+public record SellingPlanFixedDeliveryPolicy : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The specific anchor dates upon which the delivery interval calculations should be made.

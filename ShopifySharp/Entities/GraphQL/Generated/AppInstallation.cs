@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents an installed application on a shop.
 /// </summary>
-public record AppInstallation : MetafieldReferencer, IGraphQLUnionCase, IGraphQLObject, IHasMetafields, INode
+public record AppInstallation : IGraphQLUnionCase, IGraphQLObject, IHasMetafields, INode
 {
     /// <summary>
     /// The access scopes granted to the application by a merchant during installation.

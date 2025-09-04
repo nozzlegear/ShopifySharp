@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A reverse shipping deliverable that may include a label and tracking information.
 /// </summary>
-public record ReverseDeliveryShippingDeliverable : ReverseDeliveryDeliverable, IGraphQLUnionCase, IGraphQLObject
+public record ReverseDeliveryShippingDeliverable : IGraphQLUnionCase, IGraphQLObject
 {
     /// <summary>
     /// The return label attached to the reverse delivery.
