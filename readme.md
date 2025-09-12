@@ -62,8 +62,8 @@ Shopify has begun versioning their API, meaning new features are locked behind n
 | 6.13.0 - 6.14.1      | 2024-01             |
 | 6.15.0 - 6.17.0      | 2024-04             |
 | 6.18.0 - 6.19.0      | 2024-07             |
-| 6.20.0 - 6.24.1      | 2024-10             |
-| 6.25.0 and above.    | 2025-07             |
+| 6.20.0 - 6.25.2      | 2024-10             |
+| 6.25.3 and above.    | 2025-07             |
 
 The oldest version of .NET Framework we can support is [whichever version is supported by .NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions).
 
