@@ -22,7 +22,7 @@ public abstract class ShopifyService : IShopifyService
 
 #nullable enable
 
-    public virtual string APIVersion => "2024-10";
+    public virtual string APIVersion => "2025-07";
     public virtual bool SupportsAPIVersioning => true;
 
     protected Uri _ShopUri { get; set; }
