@@ -10,8 +10,11 @@ using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Tests.TestClasses;
 using Xunit;
+using Serializer = ShopifySharp.Infrastructure.Serializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
 
@@ -76,6 +79,7 @@ public class GraphServiceTests
         // Setup
         var request = new GraphRequest
         {
+            //language=txt
             Query = "some-graph-request-query",
             Variables = new Dictionary<string, object>
             {
@@ -92,4 +96,83 @@ public class GraphServiceTests
         // Assert
         await act.Should().ThrowAsync<TestException>();
     }
+
+    [Fact]
+    public async Task WhenDeserializingUnionTypesForSubscriptionContract_ShouldNotThrow()
+    {
+        const string json =
+            """
+            {
+              "data": {
+                "subscriptionContract": {
+                  "id": "gid://shopify/SubscriptionContract/some-contract-id",
+                  "discounts": {
+                    "edges": [
+                      {
+                        "node": {
+                          "id": "gid://shopify/SubscriptionManualDiscount/some-discount-id",
+                          "value": {
+                            "__typename": "SubscriptionDiscountPercentageValue",
+                            "percentage": 10
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "customerPaymentMethod": {
+                    "id": "gid://shopify/CustomerPaymentMethod/some-payment-id",
+                    "revokedReason": "PAYMENT_METHOD_VERIFICATION_FAILED",
+                    "revokedAt": null,
+                    "instrument": {
+                      "__typename": "CustomerCreditCard",
+                      "brand": "visa",
+                      "expiresSoon": false,
+                      "expiryMonth": 12,
+                      "expiryYear": 2025,
+                      "lastDigits": "4242",
+                      "isRevocable": false,
+                      "maskedNumber": "•••• •••• •••• 4242",
+                      "name": "name",
+                      "source": "credit_card"
+                    }
+                  }
+                }
+              }
+            }
+            """;
+
+        // Act
+        var document = JsonDocument.Parse(json);
+        var element = new SystemJsonElement(document.RootElement.GetProperty("data"));
+        var systemJsonSerializer = new SystemJsonSerializer(Serializer.GraphSerializerOptions);
+        var result = await systemJsonSerializer.DeserializeAsync<GetSubscriptionContractResult>(element);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.subscriptionContract.id.Should().Be("gid://shopify/SubscriptionContract/some-contract-id");
+
+        result.subscriptionContract.customerPaymentMethod.Should().NotBeNull();
+        result.subscriptionContract.customerPaymentMethod!.id.Should().Be("gid://shopify/CustomerPaymentMethod/some-payment-id");
+        result.subscriptionContract.customerPaymentMethod!.revokedReason.Should().Be(CustomerPaymentMethodRevocationReason.PAYMENT_METHOD_VERIFICATION_FAILED);
+
+        var instrument = result.subscriptionContract.customerPaymentMethod.instrument!.AsCustomerCreditCard();
+        instrument.Should().NotBeNull()
+            .And.BeOfType<CustomerCreditCard>()
+            .Which
+            .Should()
+            .BeEquivalentTo(new CustomerCreditCard
+            {
+                brand = "visa",
+                expiresSoon = false,
+                expiryMonth = 12,
+                expiryYear = 2025,
+                lastDigits = "4242",
+                isRevocable = false,
+                maskedNumber = "•••• •••• •••• 4242",
+                name = "name",
+                source = "credit_card"
+            });
+    }
+
+    public record GetSubscriptionContractResult(SubscriptionContract subscriptionContract);
 }
