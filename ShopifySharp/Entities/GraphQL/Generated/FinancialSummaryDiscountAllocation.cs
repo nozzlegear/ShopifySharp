@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// An amount that's allocated to a line item based on an associated discount application.

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for creating or updating an automatic discount
@@ -48,9 +49,6 @@ public record DiscountAutomaticAppInput : GraphQLInputObject<DiscountAutomaticAp
     /// For discounts without a fixed expiration date, specify `null`.
     /// </summary>
     [JsonPropertyName("endsAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? endsAt { get; set; } = null;
 
     /// <summary>
@@ -85,9 +83,6 @@ public record DiscountAutomaticAppInput : GraphQLInputObject<DiscountAutomaticAp
     /// The date and time when the discount becomes active and is available to customers.
     /// </summary>
     [JsonPropertyName("startsAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? startsAt { get; set; } = null;
 
     /// <summary>

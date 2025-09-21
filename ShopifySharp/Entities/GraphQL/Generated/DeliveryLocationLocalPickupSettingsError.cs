@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents an error that happened when changing local pickup settings for a location.

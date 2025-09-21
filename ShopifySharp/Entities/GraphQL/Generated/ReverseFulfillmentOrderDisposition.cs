@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The details of the arrangement of an item.
@@ -13,9 +14,6 @@ public record ReverseFulfillmentOrderDisposition : IGraphQLObject, INode
     /// The date and time when the disposition was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

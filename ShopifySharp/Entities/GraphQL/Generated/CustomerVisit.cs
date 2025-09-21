@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a customer's session visiting a shop's online store, including
@@ -40,9 +41,6 @@ public record CustomerVisit : IGraphQLObject, ICustomerMoment, INode
     /// The date and time when the customer's session occurred.
     /// </summary>
     [JsonPropertyName("occurredAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? occurredAt { get; set; } = null;
 
     /// <summary>

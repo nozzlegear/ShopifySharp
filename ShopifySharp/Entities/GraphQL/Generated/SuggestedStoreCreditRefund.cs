@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The suggested values for a refund to store credit.
@@ -19,9 +20,6 @@ public record SuggestedStoreCreditRefund : IGraphQLObject, ISuggestedRefundMetho
     /// The suggested expiration date for the store credit.
     /// </summary>
     [JsonPropertyName("expiresAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? expiresAt { get; set; } = null;
 
     /// <summary>

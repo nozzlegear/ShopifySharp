@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a billing or shipping address for a company location.
@@ -50,9 +51,6 @@ public record CompanyAddress : IGraphQLObject, INode
     /// The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company address was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -109,9 +107,6 @@ public record CompanyAddress : IGraphQLObject, INode
     /// at which the company address was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

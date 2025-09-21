@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A person that acts on behalf of company associated to [a
@@ -21,9 +22,6 @@ public record CompanyContact : IGraphQLObject, INode
     /// at which the company contact was created at Shopify.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -86,8 +84,5 @@ public record CompanyContact : IGraphQLObject, INode
     /// at which the company contact was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

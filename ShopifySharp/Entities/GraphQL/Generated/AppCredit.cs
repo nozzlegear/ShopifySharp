@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// App credits can be applied by the merchant towards future app purchases, subscriptions, or usage records in Shopify.
@@ -19,9 +20,6 @@ public record AppCredit : IGraphQLObject, INode
     /// The date and time when the app credit was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

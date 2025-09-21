@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for a scheduled change of an inventory item.
@@ -13,9 +14,6 @@ public record InventoryScheduledChangeInput : GraphQLInputObject<InventorySchedu
     /// The date and time that the scheduled change is expected to happen.
     /// </summary>
     [JsonPropertyName("expectedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? expectedAt { get; set; } = null;
 
     /// <summary>

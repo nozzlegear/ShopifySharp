@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a recurring selling plan pricing policy. It applies after the fixed
@@ -34,8 +35,5 @@ public record SellingPlanRecurringPricingPolicy : IGraphQLUnionCase, IGraphQLObj
     /// The date and time when the recurring selling plan pricing policy was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 }

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A dynamic collection of customers based on specific criteria.
@@ -13,9 +14,6 @@ public record Segment : IGraphQLObject, INode
     /// The date and time when the segment was added to the store.
     /// </summary>
     [JsonPropertyName("creationDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? creationDate { get; set; } = null;
 
     /// <summary>
@@ -28,9 +26,6 @@ public record Segment : IGraphQLObject, INode
     /// The date and time when the segment was last updated.
     /// </summary>
     [JsonPropertyName("lastEditDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? lastEditDate { get; set; } = null;
 
     /// <summary>

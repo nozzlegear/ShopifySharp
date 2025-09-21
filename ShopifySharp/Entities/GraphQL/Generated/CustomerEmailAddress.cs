@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents an email address.
@@ -39,9 +40,6 @@ public record CustomerEmailAddress : IGraphQLObject
     /// No date is provided if the email address never updated its marketing consent.
     /// </summary>
     [JsonPropertyName("marketingUpdatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? marketingUpdatedAt { get; set; } = null;
 
     /// <summary>

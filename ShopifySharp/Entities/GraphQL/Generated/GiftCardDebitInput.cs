@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for a gift card debit transaction.
@@ -25,8 +26,5 @@ public record GiftCardDebitInput : GraphQLInputObject<GiftCardDebitInput>
     /// The date and time the debit was processed. Defaults to current date and time.
     /// </summary>
     [JsonPropertyName("processedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? processedAt { get; set; } = null;
 }

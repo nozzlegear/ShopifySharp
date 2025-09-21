@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The market localization of a field within a resource, which is determined by the market ID.
@@ -31,9 +32,6 @@ public record MarketLocalization : IGraphQLObject
     /// The date and time when the market localization was updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

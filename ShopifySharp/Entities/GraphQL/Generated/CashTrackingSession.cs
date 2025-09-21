@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Tracks the balance in a cash drawer for a point of sale device over the course of a shift.
@@ -49,9 +50,6 @@ public record CashTrackingSession : IGraphQLObject, INode
     /// When the session was closed.
     /// </summary>
     [JsonPropertyName("closingTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? closingTime { get; set; } = null;
 
     /// <summary>
@@ -112,9 +110,6 @@ public record CashTrackingSession : IGraphQLObject, INode
     /// When the session was opened.
     /// </summary>
     [JsonPropertyName("openingTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? openingTime { get; set; } = null;
 
     /// <summary>

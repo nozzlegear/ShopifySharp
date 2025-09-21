@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// You can use the `MobilePlatformApplication` resource to enable
@@ -23,13 +24,9 @@ using System.Collections.Generic;
 /// see the respective [iOS universal link](https://developer.apple.com/documentation/uikit/core_app/allowing_apps_and_websites_to_link_to_your_content)
 /// or [Android app link](https://developer.android.com/training/app-links) technical documentation.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(MobilePlatformApplicationAndroidApplication), typeDiscriminator: "AndroidApplication")]
-[JsonDerivedType(typeof(MobilePlatformApplicationAppleApplication), typeDiscriminator: "AppleApplication")]
+[JsonConverter(typeof(GraphUnionTypeConverter<MobilePlatformApplication>))]
 public record MobilePlatformApplication : GraphQLObject<MobilePlatformApplication>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public AndroidApplication? AsAndroidApplication() => this is MobilePlatformApplicationAndroidApplication wrapper ? wrapper.Value : null;
-	public AppleApplication? AsAppleApplication() => this is MobilePlatformApplicationAppleApplication wrapper ? wrapper.Value : null;
-#endif
+    public AndroidApplication? AsAndroidApplication() => this is MobilePlatformApplicationAndroidApplication wrapper ? wrapper.Value : null;
+    public AppleApplication? AsAppleApplication() => this is MobilePlatformApplicationAppleApplication wrapper ? wrapper.Value : null;
 }

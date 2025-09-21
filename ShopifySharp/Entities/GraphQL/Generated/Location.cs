@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents the location where the physical good resides. You can stock inventory at active locations. Active
@@ -35,9 +36,6 @@ public record Location : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinit
     /// The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) that the location was added to a shop.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -184,8 +182,5 @@ public record Location : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinit
     /// The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) when the location was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

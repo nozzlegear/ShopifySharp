@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The FulfillmentOrder object represents either an item or a group of items in an
@@ -157,9 +158,6 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     /// Date and time when the fulfillment order was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -182,18 +180,12 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     /// date would be `nil`, and a standard order `fulfill_at` date would be the order creation date.
     /// </summary>
     [JsonPropertyName("fulfillAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? fulfillAt { get; set; } = null;
 
     /// <summary>
     /// The latest date and time by which all items in the fulfillment order need to be fulfilled.
     /// </summary>
     [JsonPropertyName("fulfillBy")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? fulfillBy { get; set; } = null;
 
     /// <summary>
@@ -269,9 +261,6 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     /// This date and time might not match the date and time when the order was created.
     /// </summary>
     [JsonPropertyName("orderProcessedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? orderProcessedAt { get; set; } = null;
 
     /// <summary>
@@ -296,8 +285,5 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     /// The date and time when the fulfillment order was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

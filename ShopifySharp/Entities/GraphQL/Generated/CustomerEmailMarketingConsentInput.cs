@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Information that describes when a customer consented to
@@ -15,9 +16,6 @@ public record CustomerEmailMarketingConsentInput : GraphQLInputObject<CustomerEm
     ///           receiving marketing material by email.
     /// </summary>
     [JsonPropertyName("consentUpdatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? consentUpdatedAt { get; set; } = null;
 
     /// <summary>

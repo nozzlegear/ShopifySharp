@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for a store credit account credit transaction.
@@ -19,8 +20,5 @@ public record StoreCreditAccountCreditInput : GraphQLInputObject<StoreCreditAcco
     /// The date and time when the credit expires.
     /// </summary>
     [JsonPropertyName("expiresAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? expiresAt { get; set; } = null;
 }

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A snapshot of location details including name and address captured at a specific
@@ -34,8 +35,5 @@ public record LocationSnapshot : IGraphQLObject
     /// The date and time when these snapshot details (name and address) were recorded.
     /// </summary>
     [JsonPropertyName("snapshottedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? snapshottedAt { get; set; } = null;
 }

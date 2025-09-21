@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields required to move inventory quantities.
@@ -16,7 +17,7 @@ public record InventoryMoveQuantitiesInput : GraphQLInputObject<InventoryMoveQua
     public ICollection<InventoryMoveQuantityChange>? changes { get; set; } = null;
 
     /// <summary>
-    /// The reason for the quantity changes. The value must be one of the [possible
+    /// The reason for the quantity changes. The value must be one of the [possible 
     /// reasons](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps/quantities-states#set-inventory-quantities-on-hand).
     /// </summary>
     [JsonPropertyName("reason")]

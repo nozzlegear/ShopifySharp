@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a subscription contract with billing cycles.
@@ -31,9 +32,6 @@ public record SubscriptionBillingCycleEditedContract : IGraphQLObject, ISubscrip
     /// The date and time when the subscription contract was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -113,8 +111,5 @@ public record SubscriptionBillingCycleEditedContract : IGraphQLObject, ISubscrip
     /// The date and time when the subscription contract was updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

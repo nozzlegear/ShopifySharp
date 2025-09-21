@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for parameters to modify the schedule of a specific billing cycle.
@@ -13,9 +14,6 @@ public record SubscriptionBillingCycleScheduleEditInput : GraphQLInputObject<Sub
     /// Sets the expected billing date for the billing cycle.
     /// </summary>
     [JsonPropertyName("billingDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? billingDate { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A record of an execution of the subscription billing process. Billing attempts use
@@ -15,18 +16,12 @@ public record SubscriptionBillingAttempt : IGraphQLObject, INode
     /// The date and time when the billing attempt was completed.
     /// </summary>
     [JsonPropertyName("completedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? completedAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the billing attempt was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -73,9 +68,6 @@ public record SubscriptionBillingAttempt : IGraphQLObject, INode
     /// pushed to the next anchor date, this field can override the billing attempt date.
     /// </summary>
     [JsonPropertyName("originTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? originTime { get; set; } = null;
 
     /// <summary>

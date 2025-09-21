@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for a return.
@@ -25,9 +26,6 @@ public record ReturnInput : GraphQLInputObject<ReturnInput>
     /// The UTC date and time when the return was first solicited by the customer.
     /// </summary>
     [JsonPropertyName("requestedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? requestedAt { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The type of minimum requirement that must be met for the discount to be applied.
@@ -10,13 +11,9 @@ using System.Collections.Generic;
 /// discount. Alternatively, a customer must purchase a minimum quantity of items to
 /// be eligible for the discount.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountMinimumRequirementDiscountMinimumQuantity), typeDiscriminator: "DiscountMinimumQuantity")]
-[JsonDerivedType(typeof(DiscountMinimumRequirementDiscountMinimumSubtotal), typeDiscriminator: "DiscountMinimumSubtotal")]
+[JsonConverter(typeof(GraphUnionTypeConverter<DiscountMinimumRequirement>))]
 public record DiscountMinimumRequirement : GraphQLObject<DiscountMinimumRequirement>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public DiscountMinimumQuantity? AsDiscountMinimumQuantity() => this is DiscountMinimumRequirementDiscountMinimumQuantity wrapper ? wrapper.Value : null;
-	public DiscountMinimumSubtotal? AsDiscountMinimumSubtotal() => this is DiscountMinimumRequirementDiscountMinimumSubtotal wrapper ? wrapper.Value : null;
-#endif
+    public DiscountMinimumQuantity? AsDiscountMinimumQuantity() => this is DiscountMinimumRequirementDiscountMinimumQuantity wrapper ? wrapper.Value : null;
+    public DiscountMinimumSubtotal? AsDiscountMinimumSubtotal() => this is DiscountMinimumRequirementDiscountMinimumSubtotal wrapper ? wrapper.Value : null;
 }

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Relevant reference information for an alternate currency payout.
@@ -19,18 +20,12 @@ public record ShopifyPaymentsToolingProviderPayout : IGraphQLObject
     /// A timestamp for the arrival of the alternate currency payout.
     /// </summary>
     [JsonPropertyName("arrivalDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? arrivalDate { get; set; } = null;
 
     /// <summary>
     /// A timestamp for the creation of the alternate currency payout.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

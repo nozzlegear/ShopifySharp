@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for creating an order.
@@ -31,9 +32,6 @@ public record OrderCreateOrderInput : GraphQLInputObject<OrderCreateOrderInput>
     /// when the order was closed. Returns null if the order isn't closed.
     /// </summary>
     [JsonPropertyName("closedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? closedAt { get; set; } = null;
 
     /// <summary>
@@ -152,9 +150,6 @@ public record OrderCreateOrderInput : GraphQLInputObject<OrderCreateOrderInput>
     /// time in the past to match when the original order was created.
     /// </summary>
     [JsonPropertyName("processedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? processedAt { get; set; } = null;
 
     /// <summary>

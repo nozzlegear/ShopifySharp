@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The delivery method used by a fulfillment order.
@@ -31,9 +32,6 @@ public record DeliveryMethod : IGraphQLObject, INode
     /// The latest delivery date and time when the fulfillment is expected to arrive at the buyer's location.
     /// </summary>
     [JsonPropertyName("maxDeliveryDateTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? maxDeliveryDateTime { get; set; } = null;
 
     /// <summary>
@@ -46,9 +44,6 @@ public record DeliveryMethod : IGraphQLObject, INode
     /// The earliest delivery date and time when the fulfillment is expected to arrive at the buyer's location.
     /// </summary>
     [JsonPropertyName("minDeliveryDateTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? minDeliveryDateTime { get; set; } = null;
 
     /// <summary>

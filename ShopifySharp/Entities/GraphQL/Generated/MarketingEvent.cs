@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents actions that market a merchant's store or products.
@@ -39,9 +40,6 @@ public record MarketingEvent : IGraphQLObject, ILegacyInteroperability, INode
     /// The date and time when the marketing event ended.
     /// </summary>
     [JsonPropertyName("endedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? endedAt { get; set; } = null;
 
     /// <summary>
@@ -84,9 +82,6 @@ public record MarketingEvent : IGraphQLObject, ILegacyInteroperability, INode
     /// The date and time when the marketing event is scheduled to end.
     /// </summary>
     [JsonPropertyName("scheduledToEndAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? scheduledToEndAt { get; set; } = null;
 
     /// <summary>
@@ -103,9 +98,6 @@ public record MarketingEvent : IGraphQLObject, ILegacyInteroperability, INode
     /// The date and time when the marketing event started.
     /// </summary>
     [JsonPropertyName("startedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? startedAt { get; set; } = null;
 
     /// <summary>

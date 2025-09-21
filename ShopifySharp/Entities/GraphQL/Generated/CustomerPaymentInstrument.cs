@@ -3,19 +3,15 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// All possible instruments for CustomerPaymentMethods.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CustomerPaymentInstrumentCustomerCreditCard), typeDiscriminator: "CustomerCreditCard")]
-[JsonDerivedType(typeof(CustomerPaymentInstrumentCustomerPaypalBillingAgreement), typeDiscriminator: "CustomerPaypalBillingAgreement")]
-[JsonDerivedType(typeof(CustomerPaymentInstrumentCustomerShopPayAgreement), typeDiscriminator: "CustomerShopPayAgreement")]
+[JsonConverter(typeof(GraphUnionTypeConverter<CustomerPaymentInstrument>))]
 public record CustomerPaymentInstrument : GraphQLObject<CustomerPaymentInstrument>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public CustomerCreditCard? AsCustomerCreditCard() => this is CustomerPaymentInstrumentCustomerCreditCard wrapper ? wrapper.Value : null;
-	public CustomerPaypalBillingAgreement? AsCustomerPaypalBillingAgreement() => this is CustomerPaymentInstrumentCustomerPaypalBillingAgreement wrapper ? wrapper.Value : null;
-	public CustomerShopPayAgreement? AsCustomerShopPayAgreement() => this is CustomerPaymentInstrumentCustomerShopPayAgreement wrapper ? wrapper.Value : null;
-#endif
+    public CustomerCreditCard? AsCustomerCreditCard() => this is CustomerPaymentInstrumentCustomerCreditCard wrapper ? wrapper.Value : null;
+    public CustomerPaypalBillingAgreement? AsCustomerPaypalBillingAgreement() => this is CustomerPaymentInstrumentCustomerPaypalBillingAgreement wrapper ? wrapper.Value : null;
+    public CustomerShopPayAgreement? AsCustomerShopPayAgreement() => this is CustomerPaymentInstrumentCustomerShopPayAgreement wrapper ? wrapper.Value : null;
 }

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Events chronicle resource activities such as the creation of an article, the fulfillment of an order, or the
@@ -41,9 +42,6 @@ public interface IEvent : IGraphQLObject
     /// The date and time when the event was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; }
 
     /// <summary>

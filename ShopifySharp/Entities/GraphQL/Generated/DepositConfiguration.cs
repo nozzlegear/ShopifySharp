@@ -3,15 +3,13 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Configuration of the deposit.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DepositConfigurationDepositPercentage), typeDiscriminator: "DepositPercentage")]
+[JsonConverter(typeof(GraphUnionTypeConverter<DepositConfiguration>))]
 public record DepositConfiguration : GraphQLObject<DepositConfiguration>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public DepositPercentage? AsDepositPercentage() => this is DepositConfigurationDepositPercentage wrapper ? wrapper.Value : null;
-#endif
+    public DepositPercentage? AsDepositPercentage() => this is DepositConfigurationDepositPercentage wrapper ? wrapper.Value : null;
 }

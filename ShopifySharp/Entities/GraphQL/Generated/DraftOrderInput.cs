@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields used to create or update a draft order.
@@ -116,9 +117,6 @@ public record DraftOrderInput : GraphQLInputObject<DraftOrderInput>
     /// The time after which inventory reservation will expire.
     /// </summary>
     [JsonPropertyName("reserveInventoryUntil")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? reserveInventoryUntil { get; set; } = null;
 
     /// <summary>

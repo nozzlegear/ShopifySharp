@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A transaction that contributes to a Shopify Payments account balance.
@@ -88,9 +89,6 @@ public record ShopifyPaymentsBalanceTransaction : IGraphQLObject, INode
     /// The date and time when the balance transaction was processed.
     /// </summary>
     [JsonPropertyName("transactionDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? transactionDate { get; set; } = null;
 
     /// <summary>

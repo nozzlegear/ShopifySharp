@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields to select SubscriptionBillingCycle by either date or index.
@@ -14,9 +15,6 @@ public record SubscriptionBillingCycleSelector : GraphQLInputObject<Subscription
     /// Returns a billing cycle by date.
     /// </summary>
     [JsonPropertyName("date")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? date { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for a resource feedback object.
@@ -14,9 +15,6 @@ public record ResourceFeedbackCreateInput : GraphQLInputObject<ResourceFeedbackC
     /// incoming feedback is outdated compared to existing feedback.
     /// </summary>
     [JsonPropertyName("feedbackGeneratedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? feedbackGeneratedAt { get; set; } = null;
 
     /// <summary>

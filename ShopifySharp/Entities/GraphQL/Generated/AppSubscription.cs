@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Provides users access to services and/or features for a duration of time.
@@ -13,18 +14,12 @@ public record AppSubscription : IGraphQLObject, INode
     /// The date and time when the app subscription was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the current app subscription period ends. Returns `null` if the subscription isn't active.
     /// </summary>
     [JsonPropertyName("currentPeriodEnd")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? currentPeriodEnd { get; set; } = null;
 
     /// <summary>

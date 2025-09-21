@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields to update an article.
@@ -56,9 +57,6 @@ public record ArticleUpdateInput : GraphQLInputObject<ArticleUpdateInput>
     /// The date and time (ISO 8601 format) when the article should become visible.
     /// </summary>
     [JsonPropertyName("publishDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishDate { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents the channels where a product is published.
@@ -31,8 +32,5 @@ public record ProductPublication : IGraphQLObject
     /// The date that the product was or is going to be published on the channel.
     /// </summary>
     [JsonPropertyName("publishDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishDate { get; set; } = null;
 }

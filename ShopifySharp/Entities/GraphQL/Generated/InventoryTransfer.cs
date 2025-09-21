@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents the intention to move inventory between locations.
@@ -13,9 +14,6 @@ public record InventoryTransfer : IGraphQLUnionCase, IGraphQLObject, ICommentEve
     /// The date and time the inventory transfer was created in UTC format.
     /// </summary>
     [JsonPropertyName("dateCreated")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? dateCreated { get; set; } = null;
 
     /// <summary>

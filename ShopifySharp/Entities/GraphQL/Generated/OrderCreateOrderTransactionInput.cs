@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for a transaction to create for an order.
@@ -55,9 +56,6 @@ public record OrderCreateOrderTransactionInput : GraphQLInputObject<OrderCreateO
     /// The date and time when the transaction was processed.
     /// </summary>
     [JsonPropertyName("processedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? processedAt { get; set; } = null;
 
     /// <summary>

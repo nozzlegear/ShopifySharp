@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A credit transaction which increases the store credit account balance.
@@ -31,9 +32,6 @@ public record StoreCreditAccountCreditTransaction : IGraphQLObject, INode, IStor
     /// The date and time when the transaction was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -47,9 +45,6 @@ public record StoreCreditAccountCreditTransaction : IGraphQLObject, INode, IStor
     /// Debit transactions will always spend the soonest expiring credit first.
     /// </summary>
     [JsonPropertyName("expiresAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? expiresAt { get; set; } = null;
 
     /// <summary>

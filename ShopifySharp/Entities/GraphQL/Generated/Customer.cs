@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents information about a customer of the shop, such as the customer's contact details, their order
@@ -50,9 +51,6 @@ public record Customer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject
     /// The date and time when the customer was added to the store.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -305,9 +303,6 @@ public record Customer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject
     /// The date and time when the customer was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

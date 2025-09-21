@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields used to create a product feedback.
@@ -15,9 +16,6 @@ public record ProductResourceFeedbackInput : GraphQLInputObject<ProductResourceF
     /// feedback already received, and if it should be ignored upon arrival.
     /// </summary>
     [JsonPropertyName("feedbackGeneratedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? feedbackGeneratedAt { get; set; } = null;
 
     /// <summary>
@@ -39,9 +37,6 @@ public record ProductResourceFeedbackInput : GraphQLInputObject<ProductResourceF
     /// The timestamp of the product associated with the feedback.
     /// </summary>
     [JsonPropertyName("productUpdatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? productUpdatedAt { get; set; } = null;
 
     /// <summary>

@@ -3,19 +3,15 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Describes the delivery method to use to get the physical goods to the customer.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SubscriptionDeliveryMethodSubscriptionDeliveryMethodLocalDelivery), typeDiscriminator: "SubscriptionDeliveryMethodLocalDelivery")]
-[JsonDerivedType(typeof(SubscriptionDeliveryMethodSubscriptionDeliveryMethodPickup), typeDiscriminator: "SubscriptionDeliveryMethodPickup")]
-[JsonDerivedType(typeof(SubscriptionDeliveryMethodSubscriptionDeliveryMethodShipping), typeDiscriminator: "SubscriptionDeliveryMethodShipping")]
+[JsonConverter(typeof(GraphUnionTypeConverter<SubscriptionDeliveryMethod>))]
 public record SubscriptionDeliveryMethod : GraphQLObject<SubscriptionDeliveryMethod>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public SubscriptionDeliveryMethodLocalDelivery? AsSubscriptionDeliveryMethodLocalDelivery() => this is SubscriptionDeliveryMethodSubscriptionDeliveryMethodLocalDelivery wrapper ? wrapper.Value : null;
-	public SubscriptionDeliveryMethodPickup? AsSubscriptionDeliveryMethodPickup() => this is SubscriptionDeliveryMethodSubscriptionDeliveryMethodPickup wrapper ? wrapper.Value : null;
-	public SubscriptionDeliveryMethodShipping? AsSubscriptionDeliveryMethodShipping() => this is SubscriptionDeliveryMethodSubscriptionDeliveryMethodShipping wrapper ? wrapper.Value : null;
-#endif
+    public SubscriptionDeliveryMethodLocalDelivery? AsSubscriptionDeliveryMethodLocalDelivery() => this is SubscriptionDeliveryMethodSubscriptionDeliveryMethodLocalDelivery wrapper ? wrapper.Value : null;
+    public SubscriptionDeliveryMethodPickup? AsSubscriptionDeliveryMethodPickup() => this is SubscriptionDeliveryMethodSubscriptionDeliveryMethodPickup wrapper ? wrapper.Value : null;
+    public SubscriptionDeliveryMethodShipping? AsSubscriptionDeliveryMethodShipping() => this is SubscriptionDeliveryMethodSubscriptionDeliveryMethodShipping wrapper ? wrapper.Value : null;
 }

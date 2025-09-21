@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents app revenue that was captured externally by the partner.
@@ -19,18 +20,12 @@ public record AppRevenueAttributionRecord : IGraphQLObject, INode
     /// The timestamp when the financial amount was captured.
     /// </summary>
     [JsonPropertyName("capturedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? capturedAt { get; set; } = null;
 
     /// <summary>
     /// The timestamp at which this revenue attribution was issued.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

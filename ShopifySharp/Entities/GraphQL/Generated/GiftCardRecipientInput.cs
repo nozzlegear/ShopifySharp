@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields to add a recipient to a gift card.
@@ -32,8 +33,5 @@ public record GiftCardRecipientInput : GraphQLInputObject<GiftCardRecipientInput
     /// The gift card will be sent within an hour of the specified datetime.
     /// </summary>
     [JsonPropertyName("sendNotificationAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? sendNotificationAt { get; set; } = null;
 }

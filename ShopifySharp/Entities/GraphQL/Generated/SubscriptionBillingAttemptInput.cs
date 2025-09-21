@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields required to complete a subscription billing attempt.
@@ -37,8 +38,5 @@ public record SubscriptionBillingAttemptInput : GraphQLInputObject<SubscriptionB
     /// pushed to the next anchor date, this field can override the billing attempt date.
     /// </summary>
     [JsonPropertyName("originTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? originTime { get; set; } = null;
 }

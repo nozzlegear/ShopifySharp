@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents how a product can be sold and purchased. Selling plans and associated records (selling plan groups
@@ -29,9 +30,6 @@ public record SellingPlan : IGraphQLObject, IHasMetafieldDefinitions, IHasMetafi
     /// The date and time when the selling plan was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

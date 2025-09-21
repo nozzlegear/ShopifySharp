@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// An asynchronous long-running operation to fetch data in bulk or to bulk import data.
@@ -17,18 +18,12 @@ public record BulkOperation : IGraphQLObject, INode
     /// When the bulk operation was successfully completed.
     /// </summary>
     [JsonPropertyName("completedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? completedAt { get; set; } = null;
 
     /// <summary>
     /// When the bulk operation was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

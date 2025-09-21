@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A checkout that was abandoned by the customer.
@@ -27,18 +28,12 @@ public record AbandonedCheckout : IGraphQLObject, INavigable, INode
     /// Null if the checkout has not been completed.
     /// </summary>
     [JsonPropertyName("completedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? completedAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the checkout was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -157,8 +152,5 @@ public record AbandonedCheckout : IGraphQLObject, INavigable, INode
     /// The date and time when the checkout was most recently updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

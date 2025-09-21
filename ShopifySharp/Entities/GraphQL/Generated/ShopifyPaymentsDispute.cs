@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A dispute occurs when a buyer questions the legitimacy of a charge with their financial institution.
@@ -52,9 +53,6 @@ public record ShopifyPaymentsDispute : IGraphQLObject, ILegacyInteroperability, 
     /// The date when this dispute was initiated.
     /// </summary>
     [JsonPropertyName("initiatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? initiatedAt { get; set; } = null;
 
     /// <summary>

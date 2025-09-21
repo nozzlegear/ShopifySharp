@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A customer's payment method.
@@ -31,9 +32,6 @@ public record CustomerPaymentMethod : IGraphQLObject, INode
     /// The time that the payment method was revoked.
     /// </summary>
     [JsonPropertyName("revokedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? revokedAt { get; set; } = null;
 
     /// <summary>

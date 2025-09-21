@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents an issued gift card.
@@ -19,9 +20,6 @@ public record GiftCard : IGraphQLObject, INode
     /// The date and time at which the gift card was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -34,9 +32,6 @@ public record GiftCard : IGraphQLObject, INode
     /// The date and time at which the gift card was deactivated.
     /// </summary>
     [JsonPropertyName("deactivatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? deactivatedAt { get; set; } = null;
 
     /// <summary>
@@ -112,8 +107,5 @@ public record GiftCard : IGraphQLObject, INode
     /// The date and time at which the gift card was updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

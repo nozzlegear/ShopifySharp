@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents the delivery frequency associated to the selling plan (for example, deliver every month, or deliver
@@ -10,13 +11,9 @@ using System.Collections.Generic;
 /// pricing policies, and billing policy) are deleted 48 hours after a merchant uninstalls their subscriptions app.
 /// We recommend backing up these records if you need to restore them later.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(SellingPlanDeliveryPolicySellingPlanFixedDeliveryPolicy), typeDiscriminator: "SellingPlanFixedDeliveryPolicy")]
-[JsonDerivedType(typeof(SellingPlanDeliveryPolicySellingPlanRecurringDeliveryPolicy), typeDiscriminator: "SellingPlanRecurringDeliveryPolicy")]
+[JsonConverter(typeof(GraphUnionTypeConverter<SellingPlanDeliveryPolicy>))]
 public record SellingPlanDeliveryPolicy : GraphQLObject<SellingPlanDeliveryPolicy>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public SellingPlanFixedDeliveryPolicy? AsSellingPlanFixedDeliveryPolicy() => this is SellingPlanDeliveryPolicySellingPlanFixedDeliveryPolicy wrapper ? wrapper.Value : null;
-	public SellingPlanRecurringDeliveryPolicy? AsSellingPlanRecurringDeliveryPolicy() => this is SellingPlanDeliveryPolicySellingPlanRecurringDeliveryPolicy wrapper ? wrapper.Value : null;
-#endif
+    public SellingPlanFixedDeliveryPolicy? AsSellingPlanFixedDeliveryPolicy() => this is SellingPlanDeliveryPolicySellingPlanFixedDeliveryPolicy wrapper ? wrapper.Value : null;
+    public SellingPlanRecurringDeliveryPolicy? AsSellingPlanRecurringDeliveryPolicy() => this is SellingPlanDeliveryPolicySellingPlanRecurringDeliveryPolicy wrapper ? wrapper.Value : null;
 }

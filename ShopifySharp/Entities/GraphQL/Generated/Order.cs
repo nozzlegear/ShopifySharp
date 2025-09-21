@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `Order` object represents a customer's request to purchase one or more
@@ -88,9 +89,6 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// Returns `null` if the order hasn't been canceled.
     /// </summary>
     [JsonPropertyName("cancelledAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? cancelledAt { get; set; } = null;
 
     /// <summary>
@@ -176,9 +174,6 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// complete. Returns `null` if the order isn't closed.
     /// </summary>
     [JsonPropertyName("closedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? closedAt { get; set; } = null;
 
     /// <summary>
@@ -204,9 +199,6 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// checkout and remains unchanged throughout an order's lifecycle.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -704,9 +696,6 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// This date and time might not match the date and time when the order was created.
     /// </summary>
     [JsonPropertyName("processedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? processedAt { get; set; } = null;
 
     /// <summary>
@@ -1136,8 +1125,5 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// The date and time in [ISO 8601 format](https://en.wikipedia.org/wiki/ISO_8601) when the order was last modified.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

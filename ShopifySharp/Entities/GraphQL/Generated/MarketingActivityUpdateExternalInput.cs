@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields required to update an externally managed marketing activity.
@@ -25,9 +26,6 @@ public record MarketingActivityUpdateExternalInput : GraphQLInputObject<Marketin
     /// The date and time at which the activity ended.
     /// </summary>
     [JsonPropertyName("end")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? end { get; set; } = null;
 
     /// <summary>
@@ -58,27 +56,18 @@ public record MarketingActivityUpdateExternalInput : GraphQLInputObject<Marketin
     /// The date and time at which the activity is scheduled to end.
     /// </summary>
     [JsonPropertyName("scheduledEnd")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? scheduledEnd { get; set; } = null;
 
     /// <summary>
     /// The date and time at which the activity is scheduled to start.
     /// </summary>
     [JsonPropertyName("scheduledStart")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? scheduledStart { get; set; } = null;
 
     /// <summary>
     /// The date and time at which the activity started.
     /// </summary>
     [JsonPropertyName("start")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? start { get; set; } = null;
 
     /// <summary>

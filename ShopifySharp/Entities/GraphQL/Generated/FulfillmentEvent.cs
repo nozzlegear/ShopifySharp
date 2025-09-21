@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The fulfillment event that describes the fulfilllment status at a particular time.
@@ -31,27 +32,18 @@ public record FulfillmentEvent : IGraphQLObject, INode
     /// The date and time when the fulfillment event was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
     /// The estimated delivery date and time of the fulfillment.
     /// </summary>
     [JsonPropertyName("estimatedDeliveryAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? estimatedDeliveryAt { get; set; } = null;
 
     /// <summary>
     /// The time at which this fulfillment event happened.
     /// </summary>
     [JsonPropertyName("happenedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? happenedAt { get; set; } = null;
 
     /// <summary>

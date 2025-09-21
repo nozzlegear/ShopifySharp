@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for company attributes when creating or updating a company.
@@ -14,9 +15,6 @@ public record CompanyInput : GraphQLInputObject<CompanyInput>
     ///           which the company became the customer.
     /// </summary>
     [JsonPropertyName("customerSince")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? customerSince { get; set; } = null;
 
     /// <summary>

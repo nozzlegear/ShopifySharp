@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A checkout profile defines the branding settings and the UI extensions for a
@@ -17,18 +18,12 @@ public record CheckoutProfile : IGraphQLObject, INode
     /// The date and time when the checkout profile was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the checkout profile was last edited.
     /// </summary>
     [JsonPropertyName("editedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? editedAt { get; set; } = null;
 
     /// <summary>
@@ -59,8 +54,5 @@ public record CheckoutProfile : IGraphQLObject, INode
     /// The date and time when the checkout profile was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

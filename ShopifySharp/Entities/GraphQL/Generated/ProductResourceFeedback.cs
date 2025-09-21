@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Reports the status of product for a Sales Channel or Storefront API.
@@ -16,9 +17,6 @@ public record ProductResourceFeedback : IGraphQLObject
     /// incoming feedback is outdated compared to existing feedback.
     /// </summary>
     [JsonPropertyName("feedbackGeneratedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? feedbackGeneratedAt { get; set; } = null;
 
     /// <summary>
@@ -37,9 +35,6 @@ public record ProductResourceFeedback : IGraphQLObject
     /// The timestamp of the product associated with the feedback.
     /// </summary>
     [JsonPropertyName("productUpdatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? productUpdatedAt { get; set; } = null;
 
     /// <summary>

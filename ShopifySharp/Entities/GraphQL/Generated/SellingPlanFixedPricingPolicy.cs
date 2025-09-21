@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents the pricing policy of a subscription or deferred purchase option selling plan.
@@ -29,8 +30,5 @@ public record SellingPlanFixedPricingPolicy : IGraphQLUnionCase, IGraphQLObject,
     /// The date and time when the fixed selling plan pricing policy was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 }

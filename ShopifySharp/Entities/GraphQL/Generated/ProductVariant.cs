@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `ProductVariant` object represents a version of a
@@ -59,9 +60,6 @@ public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IH
     /// The date and time when the variant was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -295,8 +293,5 @@ public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IH
     /// The date and time (ISO 8601 format) when the product variant was last modified.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

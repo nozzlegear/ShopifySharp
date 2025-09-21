@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Reports the status of shops and their resources and displays this information
@@ -21,9 +22,6 @@ public record AppFeedback : IGraphQLObject
     /// The date and time when the app feedback was generated.
     /// </summary>
     [JsonPropertyName("feedbackGeneratedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? feedbackGeneratedAt { get; set; } = null;
 
     /// <summary>

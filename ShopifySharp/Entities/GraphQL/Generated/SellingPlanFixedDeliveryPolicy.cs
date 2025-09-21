@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a fixed selling plan delivery policy.
@@ -25,9 +26,6 @@ public record SellingPlanFixedDeliveryPolicy : IGraphQLUnionCase, IGraphQLObject
     /// The date and time when the fulfillment should trigger.
     /// </summary>
     [JsonPropertyName("fulfillmentExactTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? fulfillmentExactTime { get; set; } = null;
 
     /// <summary>

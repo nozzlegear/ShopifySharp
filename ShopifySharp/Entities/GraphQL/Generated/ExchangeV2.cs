@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// An exchange where existing items on an order are returned and new items are added to the order.
@@ -19,18 +20,12 @@ public record ExchangeV2 : IGraphQLObject, INode
     /// The date and time when the exchange was completed.
     /// </summary>
     [JsonPropertyName("completedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? completedAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the exchange was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>

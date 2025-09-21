@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields required to create or update a fixed billing policy.
@@ -19,9 +20,6 @@ public record SellingPlanFixedBillingPolicyInput : GraphQLInputObject<SellingPla
     /// The date and time to capture the full payment.
     /// </summary>
     [JsonPropertyName("remainingBalanceChargeExactTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? remainingBalanceChargeExactTime { get; set; } = null;
 
     /// <summary>
