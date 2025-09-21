@@ -549,17 +549,10 @@ let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (wri
 /// </summary>
 let private writeUnionTypeConversionMethods unionTypeName (unionCaseNames: string[]) writer: ValueTask =
     pipeWriter writer {
-        // These default interface methods are only usable in .NET 6.0 and above - anything lower will cause
-        // the compiler to throw an error.
-        do! "#if NET6_0_OR_GREATER"
-        do! NewLine
-
         for unionCaseName in unionCaseNames do
             let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
             do! (toTab Indented) + $"public {unionCaseName}? As{unionCaseName}() => this is {caseWrapperName} wrapper ? wrapper.Value : null;"
             do! NewLine
-
-        do! "#endif"
     }
 
 let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: Writer): ValueTask =
