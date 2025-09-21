@@ -229,3 +229,6 @@ appsettings.local.json
 
 # Ignore Verify's received.* files
 *.received.*
+
+# Ignore the .graphql schema
+graphql.schema.graphql
