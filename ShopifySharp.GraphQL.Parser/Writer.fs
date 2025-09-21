@@ -220,6 +220,8 @@ let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
         do! NewLine
         do! "using System.Collections.Generic;"
         do! NewLine
+        do! "using ShopifySharp.Infrastructure.Serialization.Json;"
+        do! NewLine
     }
 
 let private writeSummary  indentation (summary: string[]) writer : ValueTask =
@@ -271,15 +273,10 @@ let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: V
     }
 
 
-let private writeJsonDerivedTypeAttributes unionTypeName (typeNames: string[]) writer: ValueTask =
+let private writeGraphUnionTypeConverterAttribute unionTypeName writer: ValueTask =
     pipeWriter writer {
-        do! "[JsonPolymorphic(TypeDiscriminatorPropertyName = \"__typename\")]"
+        do! $"[JsonConverter(typeof(GraphUnionTypeConverter<{unionTypeName}>))]"
         do! NewLine
-
-        for typeName in typeNames do
-            let wrapperTypeName = toUnionCaseWrapperName unionTypeName typeName
-            do! $"""[JsonDerivedType(typeof({wrapperTypeName}), typeDiscriminator: "{typeName}")]"""
-            do! NewLine
     }
 
 let private writeJsonDerivedTypeAttributes2 interfaceName (classNames: string[]) writer: ValueTask =
@@ -559,7 +556,7 @@ let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: W
     pipeWriter writer {
         yield! writeSummary Outdented unionType.XmlSummary
         yield! writeDeprecationAttribute Outdented unionType.Deprecation
-        yield! writeJsonDerivedTypeAttributes unionType.Name unionType.Types
+        yield! writeGraphUnionTypeConverterAttribute unionType.Name
 
         do! $"public record {unionType.Name}: GraphQLObject<{unionType.Name}>, IGraphQLUnionType"
 
