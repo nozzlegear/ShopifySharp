@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields for specifying a publication to which a product will be published.
@@ -19,8 +20,5 @@ public record ProductPublicationInput : GraphQLInputObject<ProductPublicationInp
     /// The date and time that the product was (or will be) published.
     /// </summary>
     [JsonPropertyName("publishDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishDate { get; set; } = null;
 }

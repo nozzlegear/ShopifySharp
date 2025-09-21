@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `Return` object represents the intent of a buyer to ship one or more items from an order back to a merchant
@@ -27,18 +28,12 @@ public record Return : IGraphQLObject, INode
     /// The date and time when the return was closed.
     /// </summary>
     [JsonPropertyName("closedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? closedAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the return was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -81,9 +76,6 @@ public record Return : IGraphQLObject, INode
     /// The date and time when the return was approved.
     /// </summary>
     [JsonPropertyName("requestApprovedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? requestApprovedAt { get; set; } = null;
 
     /// <summary>

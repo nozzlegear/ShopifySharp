@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A page on the Online Store.
@@ -26,9 +27,6 @@ public record Page : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafiel
     /// The date and time (ISO 8601 format) of the page creation.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -90,9 +88,6 @@ public record Page : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafiel
     /// Returns null when the page isn't visible.
     /// </summary>
     [JsonPropertyName("publishedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishedAt { get; set; } = null;
 
     /// <summary>
@@ -117,8 +112,5 @@ public record Page : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafiel
     /// The date and time (ISO 8601 format) of the latest page update.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

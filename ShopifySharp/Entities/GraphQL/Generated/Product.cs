@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `Product` object lets you manage products in a merchant’s store.
@@ -92,9 +93,6 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// The date and time when the product was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -367,9 +365,6 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// The date and time when the product was published to the online store.
     /// </summary>
     [JsonPropertyName("publishedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishedAt { get; set; } = null;
 
     /// <summary>
@@ -586,9 +581,6 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// is counted as an update.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields required to create a Subscription Contract.
@@ -31,8 +32,5 @@ public record SubscriptionContractCreateInput : GraphQLInputObject<SubscriptionC
     /// The next billing date for the subscription contract.
     /// </summary>
     [JsonPropertyName("nextBillingDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? nextBillingDate { get; set; } = null;
 }

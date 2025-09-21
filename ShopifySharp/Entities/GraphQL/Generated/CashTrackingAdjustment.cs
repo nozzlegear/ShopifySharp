@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Tracks an adjustment to the cash in a cash tracking session for a point of sale device over the course of a shift.
@@ -37,8 +38,5 @@ public record CashTrackingAdjustment : IGraphQLObject, INode
     /// The time when the adjustment was made.
     /// </summary>
     [JsonPropertyName("time")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? time { get; set; } = null;
 }

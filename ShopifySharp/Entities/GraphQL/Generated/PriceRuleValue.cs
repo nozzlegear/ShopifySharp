@@ -3,17 +3,14 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The type of the price rule value. The price rule value might be a percentage value, or a fixed amount.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(PriceRuleValuePriceRuleFixedAmountValue), typeDiscriminator: "PriceRuleFixedAmountValue")]
-[JsonDerivedType(typeof(PriceRuleValuePriceRulePercentValue), typeDiscriminator: "PriceRulePercentValue")]
+[JsonConverter(typeof(GraphUnionTypeConverter<PriceRuleValue>))]
 public record PriceRuleValue : GraphQLObject<PriceRuleValue>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public PriceRuleFixedAmountValue? AsPriceRuleFixedAmountValue() => this is PriceRuleValuePriceRuleFixedAmountValue wrapper ? wrapper.Value : null;
-	public PriceRulePercentValue? AsPriceRulePercentValue() => this is PriceRuleValuePriceRulePercentValue wrapper ? wrapper.Value : null;
-#endif
+    public PriceRuleFixedAmountValue? AsPriceRuleFixedAmountValue() => this is PriceRuleValuePriceRuleFixedAmountValue wrapper ? wrapper.Value : null;
+    public PriceRulePercentValue? AsPriceRulePercentValue() => this is PriceRuleValuePriceRulePercentValue wrapper ? wrapper.Value : null;
 }

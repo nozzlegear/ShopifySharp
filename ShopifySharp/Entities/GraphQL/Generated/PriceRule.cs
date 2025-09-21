@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Price rules are a set of conditions, including entitlements and prerequisites,
@@ -44,9 +45,6 @@ public record PriceRule : IGraphQLObject, ICommentEventSubject, IHasEvents, ILeg
     /// The date and time when the price rule was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -86,9 +84,6 @@ public record PriceRule : IGraphQLObject, ICommentEventSubject, IHasEvents, ILeg
     /// The date and time when the price rule ends. For open-ended price rules, use `null`.
     /// </summary>
     [JsonPropertyName("endsAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? endsAt { get; set; } = null;
 
     /// <summary>
@@ -186,9 +181,6 @@ public record PriceRule : IGraphQLObject, ICommentEventSubject, IHasEvents, ILeg
     /// The date and time when the price rule starts.
     /// </summary>
     [JsonPropertyName("startsAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? startsAt { get; set; } = null;
 
     /// <summary>

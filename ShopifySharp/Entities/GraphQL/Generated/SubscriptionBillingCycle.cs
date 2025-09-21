@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A subscription billing cycle.
@@ -13,9 +14,6 @@ public record SubscriptionBillingCycle : IGraphQLObject
     /// The date on which the billing attempt is expected to be made.
     /// </summary>
     [JsonPropertyName("billingAttemptExpectedDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? billingAttemptExpectedDate { get; set; } = null;
 
     /// <summary>
@@ -28,9 +26,6 @@ public record SubscriptionBillingCycle : IGraphQLObject
     /// The end date of the billing cycle.
     /// </summary>
     [JsonPropertyName("cycleEndAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? cycleEndAt { get; set; } = null;
 
     /// <summary>
@@ -43,9 +38,6 @@ public record SubscriptionBillingCycle : IGraphQLObject
     /// The start date of the billing cycle.
     /// </summary>
     [JsonPropertyName("cycleStartAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? cycleStartAt { get; set; } = null;
 
     /// <summary>

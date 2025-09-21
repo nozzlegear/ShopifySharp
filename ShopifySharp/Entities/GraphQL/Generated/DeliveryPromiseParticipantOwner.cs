@@ -3,15 +3,13 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The object that the participant references.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DeliveryPromiseParticipantOwnerProductVariant), typeDiscriminator: "ProductVariant")]
+[JsonConverter(typeof(GraphUnionTypeConverter<DeliveryPromiseParticipantOwner>))]
 public record DeliveryPromiseParticipantOwner : GraphQLObject<DeliveryPromiseParticipantOwner>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public ProductVariant? AsProductVariant() => this is DeliveryPromiseParticipantOwnerProductVariant wrapper ? wrapper.Value : null;
-#endif
+    public ProductVariant? AsProductVariant() => this is DeliveryPromiseParticipantOwnerProductVariant wrapper ? wrapper.Value : null;
 }

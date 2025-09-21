@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a recipient who will receive the issued gift card.
@@ -32,8 +33,5 @@ public record GiftCardRecipient : IGraphQLObject
     /// The gift card will be sent within an hour of the specified datetime.
     /// </summary>
     [JsonPropertyName("sendNotificationAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? sendNotificationAt { get; set; } = null;
 }

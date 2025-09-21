@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A browse, cart, or checkout that was abandoned by a customer.
@@ -37,9 +38,6 @@ public record Abandonment : IGraphQLObject, INode
     /// The date and time when the abandonment was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -70,9 +68,6 @@ public record Abandonment : IGraphQLObject, INode
     /// When the email was sent, if that's the case.
     /// </summary>
     [JsonPropertyName("emailSentAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? emailSentAt { get; set; } = null;
 
     /// <summary>
@@ -133,27 +128,18 @@ public record Abandonment : IGraphQLObject, INode
     /// The date for the latest browse abandonment.
     /// </summary>
     [JsonPropertyName("lastBrowseAbandonmentDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? lastBrowseAbandonmentDate { get; set; } = null;
 
     /// <summary>
     /// The date for the latest cart abandonment.
     /// </summary>
     [JsonPropertyName("lastCartAbandonmentDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? lastCartAbandonmentDate { get; set; } = null;
 
     /// <summary>
     /// The date for the latest checkout abandonment.
     /// </summary>
     [JsonPropertyName("lastCheckoutAbandonmentDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? lastCheckoutAbandonmentDate { get; set; } = null;
 
     /// <summary>
@@ -178,8 +164,5 @@ public record Abandonment : IGraphQLObject, INode
     /// The date and time when the visit started.
     /// </summary>
     [JsonPropertyName("visitStartedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? visitStartedAt { get; set; } = null;
 }

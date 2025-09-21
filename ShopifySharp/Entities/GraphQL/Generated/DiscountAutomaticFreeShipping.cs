@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `DiscountAutomaticFreeShipping` object lets you manage
@@ -65,9 +66,6 @@ public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
     /// The date and time when the discount was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -99,9 +97,6 @@ public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
     /// For discounts without a fixed expiration date, specify `null`.
     /// </summary>
     [JsonPropertyName("endsAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? endsAt { get; set; } = null;
 
     /// <summary>
@@ -145,9 +140,6 @@ public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
     /// The date and time when the discount becomes active and is available to customers.
     /// </summary>
     [JsonPropertyName("startsAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? startsAt { get; set; } = null;
 
     /// <summary>
@@ -181,8 +173,5 @@ public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
     /// The date and time when the discount was updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

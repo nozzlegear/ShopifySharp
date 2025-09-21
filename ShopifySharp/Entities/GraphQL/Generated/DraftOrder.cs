@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// An order that a merchant creates on behalf of a customer. Draft orders are
@@ -74,18 +75,12 @@ public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubje
     /// and had it's status changed to **Completed**.
     /// </summary>
     [JsonPropertyName("completedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? completedAt { get; set; } = null;
 
     /// <summary>
     /// The date and time when the draft order was created in Shopify.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -153,9 +148,6 @@ public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubje
     /// The date and time when the invoice was last emailed to the customer.
     /// </summary>
     [JsonPropertyName("invoiceSentAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? invoiceSentAt { get; set; } = null;
 
     /// <summary>
@@ -290,9 +282,6 @@ public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubje
     /// The time after which inventory will automatically be restocked.
     /// </summary>
     [JsonPropertyName("reserveInventoryUntil")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? reserveInventoryUntil { get; set; } = null;
 
     /// <summary>
@@ -431,9 +420,6 @@ public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubje
     /// The format is YYYY-MM-DD HH:mm:ss. For example, 2016-02-05 17:04:01.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

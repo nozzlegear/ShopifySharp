@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields to select a subset of subscription billing cycles within a date range.
@@ -13,17 +14,11 @@ public record SubscriptionBillingCyclesDateRangeSelector : GraphQLInputObject<Su
     /// The end date and time for the range.
     /// </summary>
     [JsonPropertyName("endDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? endDate { get; set; } = null;
 
     /// <summary>
     /// The start date and time for the range.
     /// </summary>
     [JsonPropertyName("startDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? startDate { get; set; } = null;
 }

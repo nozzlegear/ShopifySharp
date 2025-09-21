@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A setting for a presentment currency.
@@ -41,8 +42,5 @@ public record CurrencySetting : IGraphQLObject
     /// last updated at date if active.
     /// </summary>
     [JsonPropertyName("rateUpdatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? rateUpdatedAt { get; set; } = null;
 }

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a collection of general settings and information about the shop.
@@ -118,9 +119,6 @@ public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions
     /// The date and time when the shop was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -529,9 +527,6 @@ public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions
     /// The date and time when the shop was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The type of discount associated to the automatic discount. For example, the
@@ -11,17 +12,11 @@ using System.Collections.Generic;
 /// also be a BXGY discount, which offers customer discounts on select products if
 /// they add a specific product to their order.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticApp), typeDiscriminator: "DiscountAutomaticApp")]
-[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticBasic), typeDiscriminator: "DiscountAutomaticBasic")]
-[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticBxgy), typeDiscriminator: "DiscountAutomaticBxgy")]
-[JsonDerivedType(typeof(DiscountAutomaticDiscountAutomaticFreeShipping), typeDiscriminator: "DiscountAutomaticFreeShipping")]
+[JsonConverter(typeof(GraphUnionTypeConverter<DiscountAutomatic>))]
 public record DiscountAutomatic : GraphQLObject<DiscountAutomatic>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public DiscountAutomaticApp? AsDiscountAutomaticApp() => this is DiscountAutomaticDiscountAutomaticApp wrapper ? wrapper.Value : null;
-	public DiscountAutomaticBasic? AsDiscountAutomaticBasic() => this is DiscountAutomaticDiscountAutomaticBasic wrapper ? wrapper.Value : null;
-	public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this is DiscountAutomaticDiscountAutomaticBxgy wrapper ? wrapper.Value : null;
-	public DiscountAutomaticFreeShipping? AsDiscountAutomaticFreeShipping() => this is DiscountAutomaticDiscountAutomaticFreeShipping wrapper ? wrapper.Value : null;
-#endif
+    public DiscountAutomaticApp? AsDiscountAutomaticApp() => this is DiscountAutomaticDiscountAutomaticApp wrapper ? wrapper.Value : null;
+    public DiscountAutomaticBasic? AsDiscountAutomaticBasic() => this is DiscountAutomaticDiscountAutomaticBasic wrapper ? wrapper.Value : null;
+    public DiscountAutomaticBxgy? AsDiscountAutomaticBxgy() => this is DiscountAutomaticDiscountAutomaticBxgy wrapper ? wrapper.Value : null;
+    public DiscountAutomaticFreeShipping? AsDiscountAutomaticFreeShipping() => this is DiscountAutomaticDiscountAutomaticFreeShipping wrapper ? wrapper.Value : null;
 }

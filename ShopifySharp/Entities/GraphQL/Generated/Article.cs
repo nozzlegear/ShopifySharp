@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// An article in the blogging system.
@@ -43,9 +44,6 @@ public record Article : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// The date and time (ISO 8601 format) when the article was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -113,9 +111,6 @@ public record Article : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// Returns null when the article isn't visible.
     /// </summary>
     [JsonPropertyName("publishedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishedAt { get; set; } = null;
 
     /// <summary>
@@ -156,8 +151,5 @@ public record Article : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// The date and time (ISO 8601 format) when the article was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

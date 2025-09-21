@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A resource publication represents information about the publication of a resource.
@@ -42,8 +43,5 @@ public record ResourcePublication : IGraphQLObject
     /// If the product isn't published, then this field returns an epoch timestamp.
     /// </summary>
     [JsonPropertyName("publishDate")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishDate { get; set; } = null;
 }

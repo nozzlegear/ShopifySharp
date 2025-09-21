@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The fixed selling plan billing policy defines how much of the price of the product will be billed to customer
@@ -20,9 +21,6 @@ public record SellingPlanFixedBillingPolicy : IGraphQLUnionCase, IGraphQLObject
     /// The exact time when to capture the full payment.
     /// </summary>
     [JsonPropertyName("remainingBalanceChargeExactTime")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? remainingBalanceChargeExactTime { get; set; } = null;
 
     /// <summary>

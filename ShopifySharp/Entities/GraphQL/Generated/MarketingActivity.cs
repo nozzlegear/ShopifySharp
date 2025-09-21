@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The marketing activity resource represents marketing that a
@@ -44,9 +45,6 @@ public record MarketingActivity : IGraphQLObject, INode
     /// The date and time when the marketing activity was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -147,9 +145,6 @@ public record MarketingActivity : IGraphQLObject, INode
     ///           ) when the activity's status last changed.
     /// </summary>
     [JsonPropertyName("statusTransitionedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? statusTransitionedAt { get; set; } = null;
 
     /// <summary>
@@ -174,9 +169,6 @@ public record MarketingActivity : IGraphQLObject, INode
     /// The date and time when the marketing activity was updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

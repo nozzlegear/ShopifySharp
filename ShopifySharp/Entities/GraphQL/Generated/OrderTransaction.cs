@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `OrderTransaction` object represents a payment transaction that's associated with an order. An order
@@ -68,18 +69,12 @@ public record OrderTransaction : IGraphQLUnionCase, IGraphQLObject, INode
     /// The time when the authorization expires. This field is available only to stores on a Shopify Plus plan.
     /// </summary>
     [JsonPropertyName("authorizationExpiresAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? authorizationExpiresAt { get; set; } = null;
 
     /// <summary>
     /// Date and time when the transaction was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -210,9 +205,6 @@ public record OrderTransaction : IGraphQLUnionCase, IGraphQLObject, INode
     /// Date and time when the transaction was processed.
     /// </summary>
     [JsonPropertyName("processedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? processedAt { get; set; } = null;
 
     /// <summary>

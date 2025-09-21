@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The type of discount associated with the discount code. For example, the
@@ -12,17 +13,11 @@ using System.Collections.Generic;
 /// Y (BXGY) discount, which offers a customer discounts on select products if they
 /// add a specific product to their order.
 /// </summary>
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(DiscountCodeDiscountCodeApp), typeDiscriminator: "DiscountCodeApp")]
-[JsonDerivedType(typeof(DiscountCodeDiscountCodeBasic), typeDiscriminator: "DiscountCodeBasic")]
-[JsonDerivedType(typeof(DiscountCodeDiscountCodeBxgy), typeDiscriminator: "DiscountCodeBxgy")]
-[JsonDerivedType(typeof(DiscountCodeDiscountCodeFreeShipping), typeDiscriminator: "DiscountCodeFreeShipping")]
+[JsonConverter(typeof(GraphUnionTypeConverter<DiscountCode>))]
 public record DiscountCode : GraphQLObject<DiscountCode>, IGraphQLUnionType
 {
-#if NET6_0_OR_GREATER
-	public DiscountCodeApp? AsDiscountCodeApp() => this is DiscountCodeDiscountCodeApp wrapper ? wrapper.Value : null;
-	public DiscountCodeBasic? AsDiscountCodeBasic() => this is DiscountCodeDiscountCodeBasic wrapper ? wrapper.Value : null;
-	public DiscountCodeBxgy? AsDiscountCodeBxgy() => this is DiscountCodeDiscountCodeBxgy wrapper ? wrapper.Value : null;
-	public DiscountCodeFreeShipping? AsDiscountCodeFreeShipping() => this is DiscountCodeDiscountCodeFreeShipping wrapper ? wrapper.Value : null;
-#endif
+    public DiscountCodeApp? AsDiscountCodeApp() => this is DiscountCodeDiscountCodeApp wrapper ? wrapper.Value : null;
+    public DiscountCodeBasic? AsDiscountCodeBasic() => this is DiscountCodeDiscountCodeBasic wrapper ? wrapper.Value : null;
+    public DiscountCodeBxgy? AsDiscountCodeBxgy() => this is DiscountCodeDiscountCodeBxgy wrapper ? wrapper.Value : null;
+    public DiscountCodeFreeShipping? AsDiscountCodeFreeShipping() => this is DiscountCodeDiscountCodeFreeShipping wrapper ? wrapper.Value : null;
 }

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The record of when a customer consented to receive marketing material by email.
@@ -15,9 +16,6 @@ public record CustomerEmailMarketingConsentState : IGraphQLObject
     /// If no date is provided, then the date and time at which the consent information was sent is used.
     /// </summary>
     [JsonPropertyName("consentUpdatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? consentUpdatedAt { get; set; } = null;
 
     /// <summary>

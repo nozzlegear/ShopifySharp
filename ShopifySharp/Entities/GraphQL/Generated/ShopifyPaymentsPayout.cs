@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Payouts represent the movement of money between a merchant's Shopify
@@ -41,9 +42,6 @@ public record ShopifyPaymentsPayout : IGraphQLObject, ILegacyInteroperability, I
     /// balance transactions that were available at this time.
     /// </summary>
     [JsonPropertyName("issuedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? issuedAt { get; set; } = null;
 
     /// <summary>

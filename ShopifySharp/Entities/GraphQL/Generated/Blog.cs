@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Shopify stores come with a built-in blogging engine, allowing a shop to have one or more blogs.  Blogs are meant
@@ -32,9 +33,6 @@ public record Blog : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafiel
     /// The date and time when the blog was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -114,8 +112,5 @@ public record Blog : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafiel
     /// The date and time when the blog was update.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

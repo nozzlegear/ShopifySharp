@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A request to import a [`URLRedirect`](https://shopify.dev/api/admin-graphql/latest/objects/UrlRedirect) object
@@ -39,9 +40,6 @@ public record UrlRedirectImport : IGraphQLObject, INode
     /// The date and time when the import finished.
     /// </summary>
     [JsonPropertyName("finishedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? finishedAt { get; set; } = null;
 
     /// <summary>

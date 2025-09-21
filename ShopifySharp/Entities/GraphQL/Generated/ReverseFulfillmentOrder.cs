@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A group of one or more items in a return that will be processed at a fulfillment service.
@@ -41,7 +42,7 @@ public record ReverseFulfillmentOrder : IGraphQLObject, INode
     public ReverseFulfillmentOrderStatus? status { get; set; } = null;
 
     /// <summary>
-    /// The current confirmation for the reverse fulfillment order from a third-party logistics service.
+    /// The current confirmation for the reverse fulfillment order from a third-party logistics service. 
     /// If no third-party service is involved, then this value is `nil`.
     /// </summary>
     [JsonPropertyName("thirdPartyConfirmation")]

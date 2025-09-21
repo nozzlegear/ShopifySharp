@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// An agreement between the merchant and customer for a return.
@@ -19,9 +20,6 @@ public record ReturnAgreement : IGraphQLObject, ISalesAgreement
     /// The date and time at which the agreement occured.
     /// </summary>
     [JsonPropertyName("happenedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? happenedAt { get; set; } = null;
 
     /// <summary>

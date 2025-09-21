@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A comment on an article.
@@ -37,9 +38,6 @@ public record Comment : IGraphQLObject, IHasEvents, INode
     /// The date and time when the comment was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -70,9 +68,6 @@ public record Comment : IGraphQLObject, IHasEvents, INode
     /// The date and time when the comment was published.
     /// </summary>
     [JsonPropertyName("publishedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? publishedAt { get; set; } = null;
 
     /// <summary>
@@ -85,9 +80,6 @@ public record Comment : IGraphQLObject, IHasEvents, INode
     /// The date and time when the comment was last updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A carrier service (also known as a carrier calculated service or shipping
@@ -131,34 +132,36 @@ using System.Collections.Generic;
 /// Other values remain as `null` and are not sent to the callback URL.
 /// ### Response fields
 /// When Shopify requests shipping rates using your callback URL, the response
-/// object `rates` must be a JSON array of objects with the following fields.
+/// object `rates` must be a JSON array of objects with the following fields. 
 /// Required fields must be included in the response for the carrier service
 /// integration to work properly.
-/// | Field                   | Required | Description
+/// | Field                   | Required | Description                              
+///                                                                                 
 ///                                                                                   |
 /// | ----------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 /// | `service_name`          | Yes      | The name of the rate, which customers see
-/// at checkout. For example: `Expedited Mail`.
+/// at checkout. For example: `Expedited Mail`.                                     
 ///                                                                                   |
 /// | `description`           | Yes      | A description of the rate, which
-/// customers see at checkout. For example: `Includes tracking and insurance`.
+/// customers see at checkout. For example: `Includes tracking and insurance`.      
 ///                                                                                            |
 /// | `service_code`          | Yes      | A unique code associated with the rate.
-/// For example: `expedited_mail`.
+/// For example: `expedited_mail`.                                                  
 ///                                                                                     |
-/// | `currency`              | Yes      | The currency of the shipping rate.
+/// | `currency`              | Yes      | The currency of the shipping rate.       
+///                                                                                 
 ///                                                                                   |
 /// | `total_price`           | Yes      | The total price expressed in subunits. If
 /// the currency doesn't use subunits, then the value must be multiplied by 100. For
 /// example: `"total_price": 500` for 5.00 CAD, `"total_price": 100000` for 1000 JPY. |
 /// | `phone_required`        | No       | Whether the customer must provide a phone
-/// number at checkout.
+/// number at checkout.                                                             
 ///                                                                                   |
 /// | `min_delivery_date`     | No       | The earliest delivery date for the
-/// displayed rate.
+/// displayed rate.                                                                 
 ///                                                                                          |
 /// | `max_delivery_date`     | No       | The latest delivery date for the
-/// displayed rate to still be valid.
+/// displayed rate to still be valid.                                               
 ///                                                                                            |
 /// ### Special conditions
 /// * To indicate that this carrier service cannot handle this shipping request,

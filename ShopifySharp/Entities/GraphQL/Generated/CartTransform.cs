@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A Cart Transform Function to create [Customized Bundles.](https://shopify.dev/docs/apps/selling-strategies/bundles/add-a-customized-bundle).

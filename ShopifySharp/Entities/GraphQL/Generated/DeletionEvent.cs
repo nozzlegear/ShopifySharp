@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Deletion events chronicle the destruction of resources (e.g. products and collections).
@@ -15,9 +16,6 @@ public record DeletionEvent : IGraphQLObject
     /// The date and time when the deletion event for the related resource was generated.
     /// </summary>
     [JsonPropertyName("occurredAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? occurredAt { get; set; } = null;
 
     /// <summary>

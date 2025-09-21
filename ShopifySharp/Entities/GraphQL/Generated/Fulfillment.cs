@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents a fulfillment.
@@ -17,18 +18,12 @@ public record Fulfillment : IGraphQLObject, ILegacyInteroperability, INode
     /// The date and time when the fulfillment was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
     /// The date that this fulfillment was delivered.
     /// </summary>
     [JsonPropertyName("deliveredAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? deliveredAt { get; set; } = null;
 
     /// <summary>
@@ -41,9 +36,6 @@ public record Fulfillment : IGraphQLObject, ILegacyInteroperability, INode
     /// The estimated date that this fulfillment will arrive.
     /// </summary>
     [JsonPropertyName("estimatedDeliveryAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? estimatedDeliveryAt { get; set; } = null;
 
     /// <summary>
@@ -74,9 +66,6 @@ public record Fulfillment : IGraphQLObject, ILegacyInteroperability, INode
     /// The date and time when the fulfillment went into transit.
     /// </summary>
     [JsonPropertyName("inTransitAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? inTransitAt { get; set; } = null;
 
     /// <summary>
@@ -150,8 +139,5 @@ public record Fulfillment : IGraphQLObject, ILegacyInteroperability, INode
     /// The date and time when the fulfillment was last modified.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

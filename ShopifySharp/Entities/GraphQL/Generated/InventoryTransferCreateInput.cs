@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The input fields to create an inventory transfer.
@@ -13,9 +14,6 @@ public record InventoryTransferCreateInput : GraphQLInputObject<InventoryTransfe
     /// The date and time the inventory transfer was created. If left blank, defaults to the current date and time in UTC format.
     /// </summary>
     [JsonPropertyName("dateCreated")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? dateCreated { get; set; } = null;
 
     /// <summary>

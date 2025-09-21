@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A location or branch of a [company that's a
@@ -47,9 +48,6 @@ public record CompanyLocation : IGraphQLUnionCase, IGraphQLObject, ICommentEvent
     /// at which the company location was created in Shopify.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -224,8 +222,5 @@ public record CompanyLocation : IGraphQLUnionCase, IGraphQLObject, ICommentEvent
     /// at which the company location was last modified.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

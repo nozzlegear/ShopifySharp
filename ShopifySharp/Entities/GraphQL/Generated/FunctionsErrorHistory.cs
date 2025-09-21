@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The error history from running a Shopify Function.
@@ -13,18 +14,12 @@ public record FunctionsErrorHistory : IGraphQLObject
     /// The date and time that the first error occurred.
     /// </summary>
     [JsonPropertyName("errorsFirstOccurredAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? errorsFirstOccurredAt { get; set; } = null;
 
     /// <summary>
     /// The date and time that the first error occurred.
     /// </summary>
     [JsonPropertyName("firstOccurredAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? firstOccurredAt { get; set; } = null;
 
     /// <summary>

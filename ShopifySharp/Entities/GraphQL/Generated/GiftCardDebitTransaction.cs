@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A debit transaction which decreases the gift card balance.
@@ -52,8 +53,5 @@ public record GiftCardDebitTransaction : IGraphQLObject, IGiftCardTransaction, I
     /// The date and time when the transaction was processed.
     /// </summary>
     [JsonPropertyName("processedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? processedAt { get; set; } = null;
 }

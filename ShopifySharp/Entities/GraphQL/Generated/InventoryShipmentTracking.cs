@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Represents the tracking information for an inventory shipment.
@@ -13,9 +14,6 @@ public record InventoryShipmentTracking : IGraphQLObject
     /// The estimated date and time that the shipment will arrive.
     /// </summary>
     [JsonPropertyName("arrivesAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? arrivesAt { get; set; } = null;
 
     /// <summary>

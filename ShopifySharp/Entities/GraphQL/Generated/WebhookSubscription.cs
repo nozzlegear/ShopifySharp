@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A webhook subscription is a persisted data object created by an app using the REST Admin API or GraphQL Admin API.
@@ -31,9 +32,6 @@ public record WebhookSubscription : IGraphQLObject, ILegacyInteroperability, INo
     /// The date and time when the webhook subscription was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? createdAt { get; set; } = null;
 
     /// <summary>
@@ -101,8 +99,5 @@ public record WebhookSubscription : IGraphQLObject, ILegacyInteroperability, INo
     /// The date and time when the webhook subscription was updated.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? updatedAt { get; set; } = null;
 }

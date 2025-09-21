@@ -3,6 +3,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A contract between a merchant and a customer to do business. Shopify creates a
@@ -32,9 +33,6 @@ public interface ISalesAgreement : IGraphQLObject
     /// The date and time at which the agreement occured.
     /// </summary>
     [JsonPropertyName("happenedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
     public DateTime? happenedAt { get; set; }
 
     /// <summary>
