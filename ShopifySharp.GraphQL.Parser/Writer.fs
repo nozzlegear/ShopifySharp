@@ -260,7 +260,7 @@ let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask
 let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: ValueTask =
     let fieldValueType = unwrapFieldType fieldType
     pipeWriter writer {
-        if fieldValueType = FieldValueType.DateOnly || fieldValueType = FieldValueType.DateTime then
+        if fieldValueType = FieldValueType.DateOnly then
             do! (toTab Indented) + "#if NETSTANDARD2_0"
             do! NewLine
             // This attribute comes from the Portable.System.DateTimeOnly.Json package
