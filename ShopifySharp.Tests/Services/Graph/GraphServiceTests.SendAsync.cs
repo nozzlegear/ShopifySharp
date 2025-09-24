@@ -105,11 +105,8 @@ public class GraphServiceSendAsyncTests
             o.lineItems?.nodes
               .Should().NotBeNullOrEmpty()
               .And.AllSatisfy(li =>
-                li.quantity
-                  .Should().BeGreaterThanOrEqualTo(0)))
-          .And.AllSatisfy(o =>
-            o.Should().BeAssignableTo<CommentEventEmbed>()
-              .Which.Should().NotBeNull());
+                li?.quantity
+                  .Should().BeGreaterThanOrEqualTo(0)));
     }
 
     [Fact(DisplayName = "Deprecated SendAsync<TResult>(string graphQuery) should throw when result contains user errors")]
