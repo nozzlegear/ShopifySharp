@@ -2,7 +2,7 @@ name: Build/Test Pipeline
 
 on:
   push:
-    branches: [ master, setup-github-actions ]
+    branches: [ master ]
     paths-ignore:
       - 'docs/wiki'
       - '.gitmodules'
@@ -87,9 +87,8 @@ jobs:
 
   test:
     name: "Unit tests"
-    runs-on: ubuntu-22.04
-    # Do not run this job until the build job completes
-    needs: test-windows
+    runs-on: ubuntu-latest
+    needs: build
     environment: "Unit test environment"
 
     env:
@@ -145,8 +144,10 @@ jobs:
 
   publish:
     name: "Publish prerelease packages"
-    runs-on: ubuntu-22.04
-    needs: test
+    runs-on: ubuntu-latest
+    needs:
+      - test-windows
+      - test
     environment: "Prerelease deployment environment"
     # Only publish prerelease packages on the master branch
     if: ${{ github.ref_name == 'master' }}
