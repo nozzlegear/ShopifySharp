@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <AssemblyName>ShopifySharp</AssemblyName>
     <RootNamespace>ShopifySharp</RootNamespace>
-    <VersionPrefix>6.25.3</VersionPrefix>
+    <VersionPrefix>6.25.4</VersionPrefix>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <LangVersion>Latest</LangVersion>
