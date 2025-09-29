@@ -585,6 +585,8 @@ let private shouldSkipType visitedType: bool =
         | Enum enum' -> enum'.Name
         | InputObject inputObject -> inputObject.Name
         | UnionType unionType -> unionType.Name
+        | QueryOrMutation queryOrMutation -> queryOrMutation.Name
+
     Set.contains typeName typeNamesToSkip
 
 let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
@@ -609,6 +611,8 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                     yield! writeInputObject inputObject parsedContext
                 | UnionType unionType ->
                     yield! writeUnionType unionType parsedContext
+                | QueryOrMutation _ ->
+                    ()
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
@@ -632,3 +636,7 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
             do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
             do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
     })
+
+let mapVisitedTypesToServiceClasses (destination: FileSystemDestination) (context: ParserContext): ValueTask {
+    // TODO: pick out the QueryRoot and Mutation types from the parser context and handle them explicitly
+}
