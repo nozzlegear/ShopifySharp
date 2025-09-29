@@ -102,7 +102,7 @@ type Visitor() =
         | _ ->
             raise (SwitchExpressionException fieldType)
 
-    let mapToArguments (argument: GraphQLArgumentsDefinition | null): FieldArgument[] =
+    let mapToArguments (argument: GraphQLArgumentsDefinition | null): FieldOrOperationArgument[] =
         if isNull argument then
             Array.empty
         else
@@ -192,8 +192,8 @@ type Visitor() =
             { Name = definition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary definition.Description
               Deprecation = getDeprecationMessage definition.Directives
-              Arguments = Array.empty //definition.Arguments
-              ReturnTypes = Array.empty }
+              Arguments = mapToArguments definition.Arguments
+              ReturnType = mapGraphTypeToFieldType definition.Type }
             |> QueryOrMutation
             |> context.SetVisitedType
         ValueTask.CompletedTask

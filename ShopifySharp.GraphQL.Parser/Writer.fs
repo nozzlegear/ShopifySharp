@@ -135,7 +135,7 @@ let private csharpKeywords = Set.ofList [
 /// <summary>
 /// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
 /// </summary>
-let private sanitizeFieldName (parentType: NamedType) (fieldName: string): string =
+let private sanitizeFieldOrOperationName (parentType: NamedType) (fieldName: string): string =
     if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
         // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
         fieldName + "_"
@@ -215,6 +215,8 @@ let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
         do! "namespace ShopifySharp.GraphQL;"
         do! NewLine
         do! "using System;"
+        do! NewLine
+        do! "using System.Threading.Tasks;"
         do! NewLine
         do! "using System.Text.Json.Serialization;"
         do! NewLine
@@ -410,7 +412,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
             let fieldName =
                 toCasing context.CasingType field.Name
-                |> sanitizeFieldName parentType
+                |> sanitizeFieldOrOperationName parentType
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
 
@@ -585,7 +587,52 @@ let private shouldSkipType visitedType: bool =
         | Enum enum' -> enum'.Name
         | InputObject inputObject -> inputObject.Name
         | UnionType unionType -> unionType.Name
+        | QueryOrMutation queryOrMutation -> queryOrMutation.Name
+
     Set.contains typeName typeNamesToSkip
+
+let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
+    pipeWriter writer {
+        // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
+        //       (e.g. orders go into a GraphOrderService).
+        let className = toCasing Casing.Pascal (queryOrMutation.Name + "Service")
+        let methodName = toCasing Casing.Pascal (queryOrMutation.Name + "Async")
+
+        let sanitizeArgumentName argName =
+            sanitizeFieldOrOperationName (NamedType.Class className) argName
+
+        let returnType = mapFieldTypeToString context.IsNamedType false queryOrMutation.ReturnType FieldTypeCollectionHandling.KeepCollection
+        let methodArguments =
+            queryOrMutation.Arguments
+            |> Array.map (fun arg ->
+                let valueType =
+                    mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
+                let argumentName =
+                    sanitizeArgumentName arg.Name
+                    |> toCasing Camel
+                $"{valueType} {argumentName}"
+            )
+
+        do! $"public partial class {className}: ShopifySharp.GraphService" + NewLine
+        do! "{" + NewLine
+
+        yield! writeDeprecationAttribute Indented queryOrMutation.Deprecation
+
+        do! toTab Indented
+        do! $"public async Task<{returnType}> {methodName}("
+        yield! writeJoinedTypeNames methodArguments
+        do! ")"
+
+        do! NewLine
+        do! (toTab Indented) + "{"
+        do! NewLine
+        do! (toTab Indented) + (toTab Indented) + "throw new System.NotImplementedException();"
+        do! NewLine
+        do! (toTab Indented) + "}"
+        do! NewLine
+
+        do! "}" + NewLine
+    }
 
 let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
     let parsedContext = context :> IParsedContext
@@ -609,6 +656,8 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                     yield! writeInputObject inputObject parsedContext
                 | UnionType unionType ->
                     yield! writeUnionType unionType parsedContext
+                | QueryOrMutation queryOrMutationType ->
+                    yield! writeQueryOrMutationServices queryOrMutationType parsedContext
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =

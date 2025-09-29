@@ -57,7 +57,7 @@ type ClassInheritedType =
 type IVisitedType =
     interface end
 
-type FieldArgument =
+type FieldOrOperationArgument =
     { Name: string
       XmlSummary: string[]
       Deprecation: string option
@@ -67,7 +67,7 @@ type Field =
     { Name: string
       XmlSummary: string[]
       Deprecation: string option
-      Arguments: FieldArgument[]
+      Arguments: FieldOrOperationArgument[]
       ValueType: FieldType }
 
 type Interface =
@@ -122,15 +122,12 @@ type InterfaceRelationship =
     { InterfaceName: string
       ImplementationName: string }
 
-type OperationArgument =
-    { Id: string }
-
 type QueryOrMutation =
     { Name: string
       XmlSummary: string[]
       Deprecation: string option
-      Arguments: OperationArgument[]
-      ReturnTypes: NamedType[] }
+      Arguments: FieldOrOperationArgument[]
+      ReturnType: FieldType }
 and NamedType =
     | Class of name: string
     | Interface of name: string
