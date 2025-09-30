@@ -216,6 +216,8 @@ let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
         do! NewLine
         do! "using System;"
         do! NewLine
+        do! "using System.Threading.Tasks;"
+        do! NewLine
         do! "using System.Text.Json.Serialization;"
         do! NewLine
         do! "using System.Collections.Generic;"
@@ -589,6 +591,34 @@ let private shouldSkipType visitedType: bool =
 
     Set.contains typeName typeNamesToSkip
 
+let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
+    pipeWriter writer {
+        // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
+        //       (e.g. orders go into a GraphOrderService).
+
+        let className = toCasing Casing.Pascal (queryOrMutation.Name + "Service")
+        let methodName = toCasing Casing.Pascal (queryOrMutation.Name + "Async")
+        let returnType = mapFieldTypeToString context.IsNamedType false queryOrMutation.ReturnType FieldTypeCollectionHandling.KeepCollection
+        let methodArguments =
+            queryOrMutation.Arguments
+            |> Array.map (fun arg ->
+                let valueType = mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
+                $"{valueType} {toCasing Camel arg.Name}"
+            )
+
+        do! $"public partial class {className}: ShopifySharp.GraphService" + NewLine
+        do! "{" + NewLine
+
+        yield! writeDeprecationAttribute Indented queryOrMutation.Deprecation
+
+        do! toTab Indented
+        do! $"public async Task<{returnType}> {methodName}("
+        yield! writeJoinedTypeNames methodArguments
+        do! ");" + NewLine
+
+        do! "}" + NewLine
+    }
+
 let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
     let parsedContext = context :> IParsedContext
 
@@ -611,8 +641,8 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                     yield! writeInputObject inputObject parsedContext
                 | UnionType unionType ->
                     yield! writeUnionType unionType parsedContext
-                | QueryOrMutation _ ->
-                    ()
+                | QueryOrMutation queryOrMutationType ->
+                    yield! writeQueryOrMutationServices queryOrMutationType parsedContext
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
@@ -636,7 +666,3 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
             do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
             do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
     })
-
-let mapVisitedTypesToServiceClasses (destination: FileSystemDestination) (context: ParserContext): ValueTask {
-    // TODO: pick out the QueryRoot and Mutation types from the parser context and handle them explicitly
-}
