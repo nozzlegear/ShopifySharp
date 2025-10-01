@@ -135,7 +135,7 @@ let private csharpKeywords = Set.ofList [
 /// <summary>
 /// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
 /// </summary>
-let private sanitizeFieldName (parentType: NamedType) (fieldName: string): string =
+let private sanitizeFieldOrOperationName (parentType: NamedType) (fieldName: string): string =
     if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
         // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
         fieldName + "_"
@@ -412,7 +412,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
             let fieldName =
                 toCasing context.CasingType field.Name
-                |> sanitizeFieldName parentType
+                |> sanitizeFieldOrOperationName parentType
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
 
@@ -595,15 +595,22 @@ let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IP
     pipeWriter writer {
         // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
         //       (e.g. orders go into a GraphOrderService).
-
         let className = toCasing Casing.Pascal (queryOrMutation.Name + "Service")
         let methodName = toCasing Casing.Pascal (queryOrMutation.Name + "Async")
+
+        let sanitizeArgumentName argName =
+            sanitizeFieldOrOperationName (NamedType.Class className) argName
+
         let returnType = mapFieldTypeToString context.IsNamedType false queryOrMutation.ReturnType FieldTypeCollectionHandling.KeepCollection
         let methodArguments =
             queryOrMutation.Arguments
             |> Array.map (fun arg ->
-                let valueType = mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
-                $"{valueType} {toCasing Camel arg.Name}"
+                let valueType =
+                    mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
+                let argumentName =
+                    sanitizeArgumentName arg.Name
+                    |> toCasing Camel
+                $"{valueType} {argumentName}"
             )
 
         do! $"public partial class {className}: ShopifySharp.GraphService" + NewLine
@@ -614,7 +621,15 @@ let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IP
         do! toTab Indented
         do! $"public async Task<{returnType}> {methodName}("
         yield! writeJoinedTypeNames methodArguments
-        do! ");" + NewLine
+        do! ")"
+
+        do! NewLine
+        do! (toTab Indented) + "{"
+        do! NewLine
+        do! (toTab Indented) + (toTab Indented) + "throw new System.NotImplementedException();"
+        do! NewLine
+        do! (toTab Indented) + "}"
+        do! NewLine
 
         do! "}" + NewLine
     }

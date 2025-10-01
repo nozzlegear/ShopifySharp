@@ -189,9 +189,6 @@ type Visitor() =
 
     let visitOperationDefinitions (objectTypeDefinition: GraphQLObjectTypeDefinition) (context: ParserContext): ValueTask =
         for definition in objectTypeDefinition.Fields do
-            if definition.Name.StringValue = "metafieldDefinitions" then
-                printfn "Found metafield definitions operation"
-
             { Name = definition.Name.StringValue
               XmlSummary = mapDescriptionToXmlSummary definition.Description
               Deprecation = getDeprecationMessage definition.Directives
