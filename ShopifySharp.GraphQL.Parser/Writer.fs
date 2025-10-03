@@ -210,8 +210,6 @@ let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNull
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
         do! "#nullable enable"
-        do! NewLine
-        do! NewLine
         do! "namespace ShopifySharp.GraphQL;"
         do! NewLine
         do! "using System;"
@@ -221,6 +219,8 @@ let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
         do! "using System.Text.Json.Serialization;"
         do! NewLine
         do! "using System.Collections.Generic;"
+        do! NewLine
+        do! "using ShopifySharp.Credentials;"
         do! NewLine
         do! "using ShopifySharp.Infrastructure.Serialization.Json;"
         do! NewLine
@@ -591,6 +591,17 @@ let private shouldSkipType visitedType: bool =
 
     Set.contains typeName typeNamesToSkip
 
+let writeQueryOrMutationServiceConstructor (className: string) writer: ValueTask =
+    pipeWriter writer {
+        do! toTab Indented
+        do! $"public {className}(ShopifyApiCredentials credentials, IServiceProvider serviceProvider, string? apiVersion = null)"
+        do! ": base(credentials, serviceProvider, apiVersion) {}"
+        do! NewLine
+        do! $"public {className}(ShopifyApiCredentials credentials, string? apiVersion = null)"
+        do! ": base(credentials, apiVersion) {}"
+        do! NewLine
+    }
+
 let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
     pipeWriter writer {
         // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
@@ -613,9 +624,10 @@ let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IP
                 $"{valueType} {argumentName}"
             )
 
-        do! $"public partial class {className}: ShopifySharp.GraphService" + NewLine
+        do! $"public class {className}: ShopifySharp.GraphService" + NewLine
         do! "{" + NewLine
 
+        yield! writeQueryOrMutationServiceConstructor className
         yield! writeDeprecationAttribute Indented queryOrMutation.Deprecation
 
         do! toTab Indented
