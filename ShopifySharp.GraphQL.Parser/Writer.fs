@@ -9,7 +9,9 @@ open System.Threading.Tasks
 open Microsoft.CodeAnalysis;
 open Microsoft.CodeAnalysis.CSharp;
 open Microsoft.CodeAnalysis.CSharp.Syntax
-open ShopifySharp.GraphQL.Parser.PipeWriter;
+open ShopifySharp.GraphQL.Parser.PipeWriter
+
+type QueryBuilder<'t> = ShopifySharp.Infrastructure.Query<'t>
 
 type private Writer = PipeWriter
 
@@ -210,6 +212,7 @@ let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNull
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
         do! "#nullable enable"
+        do! NewLine
         do! "namespace ShopifySharp.GraphQL;"
         do! NewLine
         do! "using System;"
@@ -529,11 +532,11 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
         do! NewLine
     }
 
-let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (writer: Writer): ValueTask =
+let private writeUnionCaseWrappers (unionType: UnionType) (writer: Writer): ValueTask =
     pipeWriter writer {
-        for unionCaseName in unionTypeCases do
-            let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
-            do! $"internal record {caseWrapperName}({unionCaseName} Value): {unionTypeName};"
+        for unionCase in unionType.Cases do
+            let caseWrapperName = toUnionCaseWrapperName unionType.Name unionCase.Name
+            do! $"internal record {caseWrapperName}({unionCase.Name} Value): {unionType.Name};"
             do! NewLine
     }
 
@@ -546,11 +549,11 @@ let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (wri
 /// </code>
 /// </example>
 /// </summary>
-let private writeUnionTypeConversionMethods unionTypeName (unionCaseNames: string[]) writer: ValueTask =
+let private writeUnionTypeConversionMethods (unionType: UnionType) writer: ValueTask =
     pipeWriter writer {
-        for unionCaseName in unionCaseNames do
-            let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
-            do! (toTab Indented) + $"public {unionCaseName}? As{unionCaseName}() => this is {caseWrapperName} wrapper ? wrapper.Value : null;"
+        for unionCase in unionType.Cases do
+            let caseWrapperName = toUnionCaseWrapperName unionType.Name unionCase.Name
+            do! (toTab Indented) + $"public {unionCase.Name}? As{unionCase.Name}() => this is {caseWrapperName} wrapper ? wrapper.Value : null;"
             do! NewLine
     }
 
@@ -566,40 +569,93 @@ let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: W
         do! "{"
         do! NewLine
 
-        yield! writeUnionTypeConversionMethods unionType.Name unionType.Types
+        yield! writeUnionTypeConversionMethods unionType
 
         do! NewLine
         do! "}"
         do! NewLine
 
-        yield! writeUnionCaseWrappers unionType.Name unionType.Types
+        yield! writeUnionCaseWrappers unionType
     }
 
-let private shouldSkipType visitedType: bool =
+let private shouldSkipType (visitedType: VisitedTypes): bool =
     let typeNamesToSkip = Set.ofList [
         "Node"; "INode"
         "PageInfo"
     ]
-    let typeName =
-        match visitedType with
-        | Class class' -> class'.Name
-        | Interface interface' -> interface'.Name
-        | Enum enum' -> enum'.Name
-        | InputObject inputObject -> inputObject.Name
-        | UnionType unionType -> unionType.Name
-        | QueryOrMutation queryOrMutation -> queryOrMutation.Name
 
-    Set.contains typeName typeNamesToSkip
+    Set.contains visitedType.Name typeNamesToSkip
 
-let writeQueryOrMutationServiceConstructor (className: string) writer: ValueTask =
+let writeQueryOrMutationServiceConstructor (className: string) (arguments: FieldOrOperationArgument[]) (context: IParsedContext) writer: ValueTask =
+    let sanitizeArgumentName argName =
+        sanitizeFieldOrOperationName (NamedType.Class className) argName
+
     pipeWriter writer {
         do! toTab Indented
-        do! $"public {className}(ShopifyApiCredentials credentials, IServiceProvider serviceProvider, string? apiVersion = null)"
-        do! ": base(credentials, serviceProvider, apiVersion) {}"
+        do! $"public {className}("
+
+        if arguments.Length > 0 then
+            let joinedArgs =
+                arguments
+                |> Array.map (fun arg ->
+                    let valueType =
+                        mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
+                    let argumentName =
+                        sanitizeArgumentName arg.Name
+                        |> toCasing Camel
+                    $"{valueType} {argumentName}"
+                )
+            do! String.Join(", ", joinedArgs)
+
+        do! ")"
         do! NewLine
-        do! $"public {className}(ShopifyApiCredentials credentials, string? apiVersion = null)"
-        do! ": base(credentials, apiVersion) {}"
+        do! "{}"
         do! NewLine
+    }
+
+let writeUnionTypeMutationJoins (unionType: UnionType) (context: IParsedContext) writer: ValueTask =
+    pipeWriter writer {
+        for unionCase in unionType.Cases do
+            let pascalUnionCaseName = toCasing Pascal unionCase.Name
+
+            // TODO: find the actual VisitedType representing this union case so we can get its fields
+
+            do! NewLine
+
+            do! $"public void On{pascalUnionCaseName}(Func<{pascalUnionCaseName}> configure)"
+            do! NewLine
+            do! (toTab Indented) + "{"
+            do! (toTab Indented) + (toTab Indented) + "throw new NotImplementedException();"
+            do! (toTab Indented) + "}"
+            do! NewLine
+    }
+
+let writeQueryOrMutationReturnTypeFields (returnType: VisitedTypes) (context: IParsedContext) writer: ValueTask =
+    pipeWriter writer {
+        match returnType with
+        | VisitedTypes.UnionType unionType ->
+            yield! writeUnionTypeMutationJoins unionType context
+        | returnType ->
+            let fields =
+                match returnType with
+                | VisitedTypes.Class class' ->
+                    class'.Fields
+                | VisitedTypes.Interface interface' ->
+                    interface'.Fields
+                | VisitedTypes.InputObject inputObject ->
+                    inputObject.Fields
+                | _ ->
+                    failwith $"The VisitedType %A{returnType} is not supported here."
+
+            for field in fields do
+                do! NewLine
+
+                do! $"public void Add{toCasing Pascal field.Name}()"
+                do! NewLine
+                do! (toTab Indented) + "{"
+                do! (toTab Indented) + (toTab Indented) + "throw new NotImplementedException();"
+                do! (toTab Indented) + "}"
+                do! NewLine
     }
 
 let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
@@ -607,12 +663,11 @@ let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IP
         // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
         //       (e.g. orders go into a GraphOrderService).
         let className = toCasing Casing.Pascal (queryOrMutation.Name + "Service")
-        let methodName = toCasing Casing.Pascal (queryOrMutation.Name + "Async")
+        let returnType = queryOrMutation.ReturnType
 
         let sanitizeArgumentName argName =
             sanitizeFieldOrOperationName (NamedType.Class className) argName
 
-        let returnType = mapFieldTypeToString context.IsNamedType false queryOrMutation.ReturnType FieldTypeCollectionHandling.KeepCollection
         let methodArguments =
             queryOrMutation.Arguments
             |> Array.map (fun arg ->
@@ -623,26 +678,34 @@ let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IP
                     |> toCasing Camel
                 $"{valueType} {argumentName}"
             )
+        let methodReturnType =
+            match returnType with
+            | ReturnType.VisitedType visitedTypes ->
+                visitedTypes.Name
+            | ReturnType.FieldType fieldType ->
+                mapFieldTypeToString context.IsNamedType context.AssumeNullability fieldType FieldTypeCollectionHandling.KeepCollection
 
-        do! $"public class {className}: ShopifySharp.GraphService" + NewLine
-        do! "{" + NewLine
-
-        yield! writeQueryOrMutationServiceConstructor className
         yield! writeDeprecationAttribute Indented queryOrMutation.Deprecation
 
-        do! toTab Indented
-        do! $"public async Task<{returnType}> {methodName}("
-        yield! writeJoinedTypeNames methodArguments
-        do! ")"
+        do! $"public class {className}: IGraphQuery<{toCasing Pascal methodReturnType}>" + NewLine
+        do! "{" + NewLine
+
+        yield! writeQueryOrMutationServiceConstructor className queryOrMutation.Arguments context
+
+        match returnType with
+        | ReturnType.VisitedType visitedType ->
+            yield! writeQueryOrMutationReturnTypeFields visitedType context
+        | _ -> ()
+
+        // let returnType =
+        //     context.Document.Definitions.Find(function
+        //         | :? GraphQLTypeDefinition as namedType when namedType.Name.StringValue.Equals(methodReturnType, StringComparison.OrdinalIgnoreCase) ->
+        //             true
+        //         | _ ->
+        //             false )
+        // let returnType = returnType :?> GraphQLTypeDefinition
 
         do! NewLine
-        do! (toTab Indented) + "{"
-        do! NewLine
-        do! (toTab Indented) + (toTab Indented) + "throw new System.NotImplementedException();"
-        do! NewLine
-        do! (toTab Indented) + "}"
-        do! NewLine
-
         do! "}" + NewLine
     }
 
@@ -658,18 +721,16 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                 ()
             else
                 match visitedType with
-                | Class class' ->
+                | VisitedTypes.Class class' ->
                     yield! writeClass class' parsedContext
-                | Interface interface' ->
+                | VisitedTypes.Interface interface' ->
                     yield! writeInterface interface' parsedContext
-                | Enum enum' ->
+                | VisitedTypes.Enum enum' ->
                     yield! writeEnum enum' parsedContext
-                | InputObject inputObject ->
+                | VisitedTypes.InputObject inputObject ->
                     yield! writeInputObject inputObject parsedContext
-                | UnionType unionType ->
+                | VisitedTypes.UnionType unionType ->
                     yield! writeUnionType unionType parsedContext
-                | QueryOrMutation queryOrMutationType ->
-                    yield! writeQueryOrMutationServices queryOrMutationType parsedContext
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
@@ -680,6 +741,39 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
         let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
 
         do! writeVisitedTypesToPipe pipe.Writer context
+        do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
+
+        let! csharpCode = readTask
+
+        match destination with
+        | SingleFile filePath ->
+            do! writeFileToPath filePath (csharpCode.ToString()) cancellationToken
+        | Directory directoryPath ->
+            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
+        | DirectoryAndTemporaryFile(directoryPath, temporaryFilePath) ->
+            do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
+            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
+    })
+
+let private writeServicesToPipe (writer: Writer) (context: ParserContext): ValueTask =
+    let parsedContext = context :> IParsedContext
+
+    pipeWriter writer {
+        // Always write the namespace and usings at the very top of the document
+        yield! writeNamespaceAndUsings
+
+        for queryOrMutationType in context.GetQueryOrMutationTypes () do
+            yield! writeQueryOrMutationServices queryOrMutationType context
+    }
+
+let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =
+    let cancellationToken = context.CancellationToken
+
+    ValueTask(task {
+        let pipe = Pipe(PipeOptions())
+        let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
+
+        do! writeServicesToPipe pipe.Writer context
         do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
 
         let! csharpCode = readTask
