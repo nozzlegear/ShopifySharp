@@ -1,10 +1,12 @@
 module ShopifySharp.GraphQL.Parser.Parser
 
 open System
+open System.IO
 open System.Threading
 open System.Threading.Tasks
 open FSharp.Control
 open GraphQLParser
+open GraphQLParser.AST
 open GraphQLParser.Visitors
 
 let private parseAsync (casing: Casing)
@@ -12,11 +14,15 @@ let private parseAsync (casing: Casing)
                        (graphqlData: ReadOnlyMemory<char>)
                        cancellationToken
                        : ValueTask<ParserContext> =
-    let context = ParserContext(casing, assumeNullability, cancellationToken)
+    let ast = Parser.Parse(graphqlData)
+    let context = ParserContext(casing, assumeNullability, ast, cancellationToken)
     let visitor: ASTVisitor<ParserContext> = Visitor()
 
-    // Read the GraphQL document
-    let ast = Parser.Parse(graphqlData)
+    // let sdlThing = StructurePrinter()
+    // use writer = new StringWriter()
+    // let result = sdlThing.PrintAsync(ast, writer, context.CancellationToken).AsTask()
+    //              |> Async.AwaitTask
+    //              |> Async.RunSynchronously
 
     ValueTask<ParserContext>(task {
         do! visitor.VisitAsync(ast, context)
@@ -42,4 +48,5 @@ let ParseAndWriteAsync (destination: FileSystemDestination)
     ValueTask(task {
         let! context = parseAsync casing assumeNullability graphqlData cancellationToken
         do! Writer.writeVisitedTypesToFileSystem destination context
+        do! Writer.writeServicesToFileSystem destination context
     })

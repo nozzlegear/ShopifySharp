@@ -9,6 +9,7 @@
     <ItemGroup>
         <Compile Include="Domain.fs" />
         <Compile Include="PipeWriterComputationBuilder.fs" />
+        <Compile Include="AstNodeMapper.fs" />
         <Compile Include="Visitor.fs" />
         <Compile Include="Writer.fs" />
         <Compile Include="Parser.fs" />
