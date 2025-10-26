@@ -12,6 +12,19 @@ type Casing
 type Indentation
     = Outdented
     | Indented
+    | DoubleIndented
+    | TripleIndented
+    with
+    override x.ToString() =
+        match x with
+        | Outdented -> ""
+        | Indented -> "\t"
+        | DoubleIndented -> "\t\t"
+        | TripleIndented -> "\t\t\t"
+    static member (+) (x, str: string) =
+        x.ToString() + str
+    static member (+) (x: Indentation, y: Indentation) =
+        x.ToString() + y.ToString()
 
 type FieldTypeCollectionHandling
     = UnwrapCollection
