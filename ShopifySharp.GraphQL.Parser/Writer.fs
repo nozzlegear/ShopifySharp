@@ -19,9 +19,8 @@ let private (~%) job = ignore job
 
 let private NewLine = Environment.NewLine
 
-let private toTab = function
-    | Indented -> "\t"
-    | Outdented -> String.Empty
+let private toTab (indentation: Indentation) =
+    indentation.ToString()
 
 let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
     ValueTask<GeneratedCsharpFile[]>(task {
@@ -224,6 +223,8 @@ let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
         do! "using System.Collections.Generic;"
         do! NewLine
         do! "using ShopifySharp.Credentials;"
+        do! NewLine
+        do! "using ShopifySharp.Infrastructure;"
         do! NewLine
         do! "using ShopifySharp.Infrastructure.Serialization.Json;"
         do! NewLine
@@ -586,58 +587,36 @@ let private shouldSkipType (visitedType: VisitedTypes): bool =
 
     Set.contains visitedType.Name typeNamesToSkip
 
-let writeQueryOrMutationServiceConstructor (className: string) (arguments: FieldOrOperationArgument[]) (context: IParsedContext) writer: ValueTask =
-    let sanitizeArgumentName argName =
-        sanitizeFieldOrOperationName (NamedType.Class className) argName
-
-    pipeWriter writer {
-        do! toTab Indented
-        do! $"public {className}("
-
-        if arguments.Length > 0 then
-            let joinedArgs =
-                arguments
-                |> Array.map (fun arg ->
-                    let valueType =
-                        mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
-                    let argumentName =
-                        sanitizeArgumentName arg.Name
-                        |> toCasing Camel
-                    $"{valueType} {argumentName}"
-                )
-            do! String.Join(", ", joinedArgs)
-
-        do! ")"
-        do! NewLine
-        do! "{}"
-        do! NewLine
-    }
-
 let writeUnionTypeMutationJoins (unionType: UnionType) (context: IParsedContext) writer: ValueTask =
     pipeWriter writer {
         for unionCase in unionType.Cases do
             let pascalUnionCaseName = toCasing Pascal unionCase.Name
+            let camelUnionCaseName = toCasing Camel unionCase.Name
 
-            // TODO: find the actual VisitedType representing this union case so we can get its fields
-
+            do! Indented + $"public void AddUnion{pascalUnionCaseName}(Func<IQuery<{pascalUnionCaseName}>, IQuery<{pascalUnionCaseName}>> configure)"
             do! NewLine
-
-            do! $"public void On{pascalUnionCaseName}(Func<{pascalUnionCaseName}> configure)"
+            do! Indented + "{"
             do! NewLine
-            do! (toTab Indented) + "{"
-            do! (toTab Indented) + (toTab Indented) + "throw new NotImplementedException();"
-            do! (toTab Indented) + "}"
+            do! DoubleIndented + $"base.AddUnion<{pascalUnionCaseName}>(\"{unionCase.Name}\", configure);"
+            do! NewLine
+            do! DoubleIndented + "return this;"
+            do! NewLine
+            do! Indented + "}"
             do! NewLine
     }
 
-let writeQueryOrMutationReturnTypeFields (returnType: VisitedTypes) (context: IParsedContext) writer: ValueTask =
+let writeQueryBuilderAddFieldMethods (pascalClassName: string) (operation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
     pipeWriter writer {
-        match returnType with
-        | VisitedTypes.UnionType unionType ->
+        match operation.ReturnType with
+        | ReturnType.FieldType _ ->
+            // TODO: This is probably where we just AddField("fieldName"), and ReturnType.VisitedType is where we AddField("fieldName", Func<IQuery<T>, IQuery<T>>)
+            ()
+        | ReturnType.VisitedType (VisitedTypes.UnionType unionType) ->
+            printfn $"Operation {operation.Name} has union return type {unionType.Name}"
             yield! writeUnionTypeMutationJoins unionType context
-        | returnType ->
+        | ReturnType.VisitedType visitedType ->
             let fields =
-                match returnType with
+                match visitedType with
                 | VisitedTypes.Class class' ->
                     class'.Fields
                 | VisitedTypes.Interface interface' ->
@@ -645,65 +624,76 @@ let writeQueryOrMutationReturnTypeFields (returnType: VisitedTypes) (context: IP
                 | VisitedTypes.InputObject inputObject ->
                     inputObject.Fields
                 | _ ->
-                    failwith $"The VisitedType %A{returnType} is not supported here."
+                    failwith $"The VisitedType %A{visitedType.Name} is not supported here."
 
             for field in fields do
-                do! NewLine
+                let pascalFieldName = toCasing Pascal field.Name
+                let camelFieldName = toCasing Camel field.Name
 
-                do! $"public void Add{toCasing Pascal field.Name}()"
+                // TODO: add the Func<IQuery<T>, IQuery<T>> overload
+
+                yield! writeDeprecationAttribute Indented field.Deprecation
+                do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
                 do! NewLine
-                do! (toTab Indented) + "{"
-                do! (toTab Indented) + (toTab Indented) + "throw new NotImplementedException();"
-                do! (toTab Indented) + "}"
+                do! DoubleIndented + "{"
                 do! NewLine
+                do! DoubleIndented + $"Query = Query.AddField(\"{field.Name}\");"
+                do! NewLine
+                do! TripleIndented + "return this;"
+                do! NewLine
+                do! DoubleIndented + "}"
+                do! NewLine
+    }
+
+let writeQueryBuilderAddArgumentMethods (pascalClassName: string) (operation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
+    pipeWriter writer {
+        let sanitizeArgumentName casing argName =
+            sanitizeFieldOrOperationName (NamedType.Class pascalClassName) argName
+            |> toCasing casing
+
+        for argument in operation.Arguments do
+            let valueType =
+                mapFieldTypeToString context.IsNamedType context.AssumeNullability argument.ValueType FieldTypeCollectionHandling.KeepCollection
+            let camelArgumentName =
+                sanitizeArgumentName Camel argument.Name
+            let pascalArgumentName =
+                toCasing Pascal argument.Name
+
+            yield! writeDeprecationAttribute Indented argument.Deprecation
+            do! $"public {pascalClassName} AddArgument{pascalArgumentName}({valueType} {camelArgumentName})"
+            do! NewLine
+            do! DoubleIndented + "{"
+            do! NewLine
+            do! DoubleIndented + $"Query = Query.AddArgument(\"{argument.Name}\", {camelArgumentName});"
+            do! NewLine
+            do! TripleIndented + "return this;"
+            do! NewLine
+            do! DoubleIndented + "}"
+            do! NewLine
     }
 
 let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
     pipeWriter writer {
         // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
         //       (e.g. orders go into a GraphOrderService).
-        let className = toCasing Casing.Pascal (queryOrMutation.Name + "Service")
+        let pascalClassName = toCasing Pascal (queryOrMutation.Name + "Service")
+        let camelTypeName = toCasing Camel type'.Name
         let returnType = queryOrMutation.ReturnType
 
-        let sanitizeArgumentName argName =
-            sanitizeFieldOrOperationName (NamedType.Class className) argName
-
-        let methodArguments =
-            queryOrMutation.Arguments
-            |> Array.map (fun arg ->
-                let valueType =
-                    mapFieldTypeToString context.IsNamedType context.AssumeNullability arg.ValueType FieldTypeCollectionHandling.KeepCollection
-                let argumentName =
-                    sanitizeArgumentName arg.Name
-                    |> toCasing Camel
-                $"{valueType} {argumentName}"
-            )
-        let methodReturnType =
-            match returnType with
-            | ReturnType.VisitedType visitedTypes ->
-                visitedTypes.Name
-            | ReturnType.FieldType fieldType ->
-                mapFieldTypeToString context.IsNamedType context.AssumeNullability fieldType FieldTypeCollectionHandling.KeepCollection
+        // Fully qualify class names that might collide with System types
+        let qualifiedGenericType =
+            let pascalGenericType = toCasing Pascal genericType
+            match pascalGenericType with
+            | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
+            | _ -> pascalGenericType
 
         yield! writeDeprecationAttribute Indented queryOrMutation.Deprecation
 
-        do! $"public class {className}: IGraphQuery<{toCasing Pascal methodReturnType}>" + NewLine
+        do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"{camelTypeName}\")" + NewLine
         do! "{" + NewLine
 
-        yield! writeQueryOrMutationServiceConstructor className queryOrMutation.Arguments context
-
-        match returnType with
-        | ReturnType.VisitedType visitedType ->
-            yield! writeQueryOrMutationReturnTypeFields visitedType context
-        | _ -> ()
-
-        // let returnType =
-        //     context.Document.Definitions.Find(function
-        //         | :? GraphQLTypeDefinition as namedType when namedType.Name.StringValue.Equals(methodReturnType, StringComparison.OrdinalIgnoreCase) ->
-        //             true
-        //         | _ ->
-        //             false )
-        // let returnType = returnType :?> GraphQLTypeDefinition
+        yield! writeQueryBuilderAddFieldMethods pascalClassName queryOrMutation context
+        yield! writeQueryBuilderAddArgumentMethods pascalClassName queryOrMutation context
 
         do! NewLine
         do! "}" + NewLine
