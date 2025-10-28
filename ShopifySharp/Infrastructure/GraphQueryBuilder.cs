@@ -57,4 +57,11 @@ public abstract class GraphQueryBuilder<T>(string name) where T: IGraphQLObject
         Query = Query.AddUnion(name, customize);
         return this;
     }
+
+    public GraphQueryBuilder<T> AddUnionX<TUnionCase>(string name, System.Func<IQuery<TUnionCase>, IQuery<TUnionCase>> customize)
+        where TUnionCase : class, IGraphQLUnionCase
+    {
+        Query = Query.AddUnionX(name, customize);
+        return this;
+    }
 }
