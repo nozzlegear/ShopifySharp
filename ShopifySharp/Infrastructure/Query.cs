@@ -46,10 +46,11 @@ public interface IQuery<TSource> : IQuery
         string typeName,
         Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
         where TUnionType : class?, TSource;
+
     IQuery<TSource> AddUnionX<TUnionType>(
         string typeName,
         Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, IGraphQLUnionCase;
+        where TUnionType : class?, IGraphQLUnionCase, IGraphQLObject;
     IQuery<TSource> AddUnion<TUnionType>(
         Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
         where TUnionType : class?, TSource;
@@ -158,7 +159,8 @@ public class Query<TSource> : IQuery<TSource>
         return this;
     }
 
-    public IQuery<TSource> AddUnionX<TUnionType>(string typeName, Func<IQuery<TUnionType>, IQuery<TUnionType>> build) where TUnionType : class?, IGraphQLUnionCase
+    public IQuery<TSource> AddUnionX<TUnionType>(string typeName, Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
+        where TUnionType : class?, IGraphQLUnionCase, IGraphQLObject
     {
         RequiredArgument.NotNullOrEmpty(typeName, nameof(typeName));
         RequiredArgument.NotNull(build, nameof(build));
