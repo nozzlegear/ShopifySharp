@@ -592,12 +592,15 @@ let writeUnionTypeMutationJoins (unionType: UnionType) (context: IParsedContext)
         for unionCase in unionType.Cases do
             let pascalUnionCaseName = toCasing Pascal unionCase.Name
             let camelUnionCaseName = toCasing Camel unionCase.Name
+            let unionCaseQueryBuilderName = $"{pascalUnionCaseName}QueryBuilder"
 
-            do! Indented + $"public void AddUnion{pascalUnionCaseName}(Func<IQuery<{pascalUnionCaseName}>, IQuery<{pascalUnionCaseName}>> configure)"
+            // TODO: write a {UnionCaseName}QueryBuilder class for every union case, to be used in these AddUnion and AddField methods
+
+            do! Indented + $"public void AddUnion{pascalUnionCaseName}(Func<{unionCaseQueryBuilderName}, {unionCaseQueryBuilderName}> build)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"base.AddUnion<{pascalUnionCaseName}>(\"{unionCase.Name}\", configure);"
+            do! DoubleIndented + $"base.AddUnion<{pascalUnionCaseName}>(\"{unionCase.Name}\", build);"
             do! NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
@@ -629,6 +632,8 @@ let writeQueryBuilderAddFieldMethods (pascalClassName: string) (operation: Query
             for field in fields do
                 let pascalFieldName = toCasing Pascal field.Name
                 let camelFieldName = toCasing Camel field.Name
+
+                // TODO: check if field.Type is a union type – if so, use AddUnion<TUnion>?
 
                 // TODO: add the Func<IQuery<T>, IQuery<T>> overload
 
