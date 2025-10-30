@@ -42,15 +42,12 @@ public interface IQuery<TSource> : IQuery
         string field,
         Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
         where TSubSource : class?;
+    IQuery<TSource> AddUnion<TUnionType>(IQuery<TUnionType> union)
+        where TUnionType : class?;
     IQuery<TSource> AddUnion<TUnionType>(
         string typeName,
         Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
         where TUnionType : class?, TSource;
-
-    IQuery<TSource> AddUnionX<TUnionType>(
-        string typeName,
-        Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, IGraphQLUnionCase, IGraphQLObject;
     IQuery<TSource> AddUnion<TUnionType>(
         Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
         where TUnionType : class?, TSource;
@@ -133,7 +130,8 @@ public class Query<TSource> : IQuery<TSource>
         return AddField(name, build);
     }
 
-    public IQuery<TSource> AddField<TSubSource>(string field, Func<IQuery<TSubSource>, IQuery<TSubSource>> build) where TSubSource : class?
+    public IQuery<TSource> AddField<TSubSource>(string field, Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
+        where TSubSource : class?
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
         RequiredArgument.NotNull(build, nameof(build));
@@ -146,7 +144,18 @@ public class Query<TSource> : IQuery<TSource>
         return this;
     }
 
-    public IQuery<TSource> AddUnion<TUnionType>(string typeName, Func<IQuery<TUnionType>, IQuery<TUnionType>> build) where TUnionType : class?, TSource
+    public IQuery<TSource> AddUnion<TUnionType>(IQuery<TUnionType> union)
+        where TUnionType : class?
+    {
+        RequiredArgument.NotNull(union, nameof(union));
+
+        SelectList.Add(union);
+
+        return this;
+    }
+
+    public IQuery<TSource> AddUnion<TUnionType>(string typeName, Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
+        where TUnionType : class?, TSource
     {
         RequiredArgument.NotNullOrEmpty(typeName, nameof(typeName));
         RequiredArgument.NotNull(build, nameof(build));
@@ -154,26 +163,11 @@ public class Query<TSource> : IQuery<TSource>
         var query = new Query<TUnionType>($"... on {typeName}", Options);
         var union = build.Invoke(query);
 
-        SelectList.Add(union);
-
-        return this;
+        return AddUnion(union);
     }
 
-    public IQuery<TSource> AddUnionX<TUnionType>(string typeName, Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, IGraphQLUnionCase, IGraphQLObject
-    {
-        RequiredArgument.NotNullOrEmpty(typeName, nameof(typeName));
-        RequiredArgument.NotNull(build, nameof(build));
-
-        var query = new Query<TUnionType>($"... on {typeName}", Options);
-        var union = build.Invoke(query);
-
-        SelectList.Add(union);
-
-        return this;
-    }
-
-    public IQuery<TSource> AddUnion<TUnionType>(Func<IQuery<TUnionType>, IQuery<TUnionType>> build) where TUnionType : class?, TSource
+    public IQuery<TSource> AddUnion<TUnionType>(Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
+        where TUnionType : class?, TSource
     {
         RequiredArgument.NotNull(build, nameof(build));
         return AddUnion(typeof(TUnionType).Name, build);
