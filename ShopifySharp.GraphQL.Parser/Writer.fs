@@ -10,17 +10,13 @@ open Microsoft.CodeAnalysis;
 open Microsoft.CodeAnalysis.CSharp;
 open Microsoft.CodeAnalysis.CSharp.Syntax
 open ShopifySharp.GraphQL.Parser.PipeWriter
+open Utils
 
 type QueryBuilder<'t> = ShopifySharp.Infrastructure.Query<'t>
 
 type private Writer = PipeWriter
 
 let private (~%) job = ignore job
-
-let private NewLine = Environment.NewLine
-
-let private toTab (indentation: Indentation) =
-    indentation.ToString()
 
 let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
     ValueTask<GeneratedCsharpFile[]>(task {
@@ -112,102 +108,6 @@ let private readPipe (reader: PipeReader) cancellationToken: ValueTask<StringBui
         return sb
     })
 
-let private sanitizeString (str: string): string =
-    str.ReplaceLineEndings("")
-       .Replace("\"", "", StringComparison.OrdinalIgnoreCase)
-       .Replace("'", "", StringComparison.OrdinalIgnoreCase)
-
-let private csharpKeywords = Set.ofList [
-    "abstract"; "as"; "base"; "bool"; "break"; "byte"; "case"; "catch"; "char"; "checked";
-    "class"; "const"; "continue"; "decimal"; "default"; "delegate"; "do"; "double"; "else";
-    "enum"; "event"; "explicit"; "extern"; "false"; "finally"; "fixed"; "float"; "for";
-    "foreach"; "goto"; "if"; "implicit"; "in"; "int"; "interface"; "internal"; "is"; "lock";
-    "long"; "namespace"; "new"; "null"; "object"; "operator"; "out"; "override"; "params";
-    "private"; "protected"; "public"; "readonly"; "ref"; "return"; "sbyte"; "sealed";
-    "short"; "sizeof"; "stackalloc"; "static"; "string"; "struct"; "switch"; "this";
-    "throw"; "true"; "try"; "typeof"; "uint"; "ulong"; "unchecked"; "unsafe"; "ushort";
-    "using"; "virtual"; "void"; "volatile"; "while";
-    // Contextual keywords that can also cause issues
-    "add"; "alias"; "ascending"; "async"; "await"; "by"; "descending"; "dynamic"; "equals";
-    "from"; "get"; "global"; "group"; "into"; "join"; "let"; "nameof"; "orderby"; "partial";
-    "remove"; "select"; "set"; "value"; "var"; "when"; "where"; "yield"
-]
-
-/// <summary>
-/// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
-/// </summary>
-let private sanitizeFieldOrOperationName (parentType: NamedType) (fieldName: string): string =
-    if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
-        // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
-        fieldName + "_"
-    elif Set.contains fieldName csharpKeywords then
-        "@" + fieldName
-    else
-        fieldName
-
-let private toCasing casing (str: string): string =
-    let first = str[0]
-    let rest  = str[1..]
-    match casing with
-    | Pascal -> Char.ToUpper(first).ToString() + rest
-    | Camel -> Char.ToLower(first).ToString() + rest
-
-let private mapStrToInterfaceName =
-    sprintf "I%s"
-
-let private toUnionCaseWrapperName unionTypeName unionCaseName =
-    unionTypeName + unionCaseName
-
-let private mapValueTypeToString (isNamedType: NamedType -> bool) = function
-    | FieldValueType.ULong -> "ulong"
-    | FieldValueType.Long -> "long"
-    | FieldValueType.Int -> "int"
-    | FieldValueType.Decimal -> "decimal"
-    | FieldValueType.Float -> "float"
-    | FieldValueType.Boolean -> "bool"
-    | FieldValueType.String -> "string"
-    | FieldValueType.DateTime -> "DateTime"
-    | FieldValueType.DateOnly -> "DateOnly"
-    | FieldValueType.TimeSpan -> "TimeSpan"
-    | FieldValueType.GraphObjectType graphObjectTypeName ->
-        if isNamedType (NamedType.Interface graphObjectTypeName)
-        then mapStrToInterfaceName graphObjectTypeName
-        else graphObjectTypeName
-
-let rec private unwrapFieldType  = function
-    | ValueType valueType -> valueType
-    | NullableType valueType -> unwrapFieldType valueType
-    | NonNullableType valueType -> unwrapFieldType valueType
-    | CollectionType collectionType -> unwrapFieldType collectionType
-
-let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
-    let maybeWriteNullability isNullable fieldStr =
-        fieldStr + (if isNullable then "?" else "")
-
-    let rec unwrapType isRecursing = function
-        | ValueType valueType
-        | NonNullableType (ValueType valueType) ->
-            mapValueTypeToString isNamedType valueType
-            |> maybeWriteNullability (not isRecursing && assumeNullability)
-        | NullableType (ValueType valueType) ->
-            mapValueTypeToString isNamedType valueType
-            |> maybeWriteNullability true
-        | NonNullableType (CollectionType collectionType) // We unwrap this one twice because CollectionTypes are all (NonNullable (CollectionType Type)) in GraphQL
-        | CollectionType collectionType ->
-            let mappedType = unwrapType true collectionType
-            match collectionHandling with
-            | KeepCollection -> $"ICollection<{mappedType}>"
-            | UnwrapCollection -> mappedType
-            |> maybeWriteNullability (not isRecursing && assumeNullability)
-        | NonNullableType nonNullableType ->
-            unwrapType true nonNullableType
-        | NullableType nullableType ->
-            unwrapFieldType nullableType
-            |> mapValueTypeToString isNamedType
-            |> maybeWriteNullability true
-
-    unwrapType false valueType
-
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
         do! "#nullable enable"
@@ -239,22 +139,6 @@ let private writeSummary  indentation (summary: string[]) writer : ValueTask =
             do! NewLine
     }
 
-let private writeDeprecationAttribute indentation (deprecationWarning: string option) writer : ValueTask =
-    let indentation = toTab indentation
-    pipeWriter writer {
-        match deprecationWarning with
-        | Some x when String.IsNullOrWhiteSpace x ->
-            do! indentation
-            do! "[Obsolete]"
-            do! NewLine
-        | Some x ->
-            do! indentation
-            do! $"[Obsolete(\"{sanitizeString x}\")]"
-            do! NewLine
-        | None ->
-            ()
-    }
-
 let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask =
     pipeWriter writer {
         do! (toTab Indented) + $"[JsonPropertyName(\"{propertyName}\")]"
@@ -266,7 +150,7 @@ let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask
 /// <see cref="Portable.System.DateTimeOnly.Json"/> package's <see cref="DateOnlyConverter"/> converter.
 /// </summary>
 let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: ValueTask =
-    let fieldValueType = unwrapFieldType fieldType
+    let fieldValueType = AstNodeMapper.unwrapFieldType fieldType
     pipeWriter writer {
         if fieldValueType = FieldValueType.DateOnly then
             do! (toTab Indented) + "#if NETSTANDARD2_0"
@@ -298,7 +182,7 @@ let private writeJsonDerivedTypeAttributes2 interfaceName (classNames: string[])
 let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) assumeNullability fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
-    |> fun field -> mapFieldTypeToString isNamedType assumeNullability field.ValueType UnwrapCollection
+    |> fun field -> AstNodeMapper.mapFieldTypeToString isNamedType assumeNullability field.ValueType UnwrapCollection
 
 let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName: string) writer: ValueTask =
     pipeWriter writer {
@@ -407,7 +291,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
     pipeWriter writer {
         for field in writeableFields do
-            let fieldType = mapFieldTypeToString context.IsNamedType context.AssumeNullability field.ValueType KeepCollection
+            let fieldType = AstNodeMapper.mapFieldTypeToString context.IsNamedType context.AssumeNullability field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
@@ -587,123 +471,6 @@ let private shouldSkipType (visitedType: VisitedTypes): bool =
 
     Set.contains visitedType.Name typeNamesToSkip
 
-let writeUnionTypeMutationJoins (unionType: UnionType) (context: IParsedContext) writer: ValueTask =
-    pipeWriter writer {
-        for unionCase in unionType.Cases do
-            let pascalUnionCaseName = toCasing Pascal unionCase.Name
-            let camelUnionCaseName = toCasing Camel unionCase.Name
-            let unionCaseQueryBuilderName = $"{pascalUnionCaseName}QueryBuilder"
-
-            // TODO: write a {UnionCaseName}QueryBuilder class for every union case, to be used in these AddUnion and AddField methods
-
-            do! Indented + $"public void AddUnion{pascalUnionCaseName}(Func<{unionCaseQueryBuilderName}, {unionCaseQueryBuilderName}> build)"
-            do! NewLine
-            do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + $"base.AddUnion<{pascalUnionCaseName}>(\"{unionCase.Name}\", build);"
-            do! NewLine
-            do! DoubleIndented + "return this;"
-            do! NewLine
-            do! Indented + "}"
-            do! NewLine
-    }
-
-let writeQueryBuilderAddFieldMethods (pascalClassName: string) (operation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
-    pipeWriter writer {
-        match operation.ReturnType with
-        | ReturnType.FieldType _ ->
-            // TODO: This is probably where we just AddField("fieldName"), and ReturnType.VisitedType is where we AddField("fieldName", Func<IQuery<T>, IQuery<T>>)
-            ()
-        | ReturnType.VisitedType (VisitedTypes.UnionType unionType) ->
-            printfn $"Operation {operation.Name} has union return type {unionType.Name}"
-            yield! writeUnionTypeMutationJoins unionType context
-        | ReturnType.VisitedType visitedType ->
-            let fields =
-                match visitedType with
-                | VisitedTypes.Class class' ->
-                    class'.Fields
-                | VisitedTypes.Interface interface' ->
-                    interface'.Fields
-                | VisitedTypes.InputObject inputObject ->
-                    inputObject.Fields
-                | _ ->
-                    failwith $"The VisitedType %A{visitedType.Name} is not supported here."
-
-            for field in fields do
-                let pascalFieldName = toCasing Pascal field.Name
-                let camelFieldName = toCasing Camel field.Name
-
-                // TODO: check if field.Type is a union type – if so, use AddUnion<TUnion>?
-
-                // TODO: add the Func<IQuery<T>, IQuery<T>> overload
-
-                yield! writeDeprecationAttribute Indented field.Deprecation
-                do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
-                do! NewLine
-                do! DoubleIndented + "{"
-                do! NewLine
-                do! DoubleIndented + $"Query = Query.AddField(\"{field.Name}\");"
-                do! NewLine
-                do! TripleIndented + "return this;"
-                do! NewLine
-                do! DoubleIndented + "}"
-                do! NewLine
-    }
-
-let writeQueryBuilderAddArgumentMethods (pascalClassName: string) (operation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
-    pipeWriter writer {
-        let sanitizeArgumentName casing argName =
-            sanitizeFieldOrOperationName (NamedType.Class pascalClassName) argName
-            |> toCasing casing
-
-        for argument in operation.Arguments do
-            let valueType =
-                mapFieldTypeToString context.IsNamedType context.AssumeNullability argument.ValueType FieldTypeCollectionHandling.KeepCollection
-            let camelArgumentName =
-                sanitizeArgumentName Camel argument.Name
-            let pascalArgumentName =
-                toCasing Pascal argument.Name
-
-            yield! writeDeprecationAttribute Indented argument.Deprecation
-            do! $"public {pascalClassName} AddArgument{pascalArgumentName}({valueType} {camelArgumentName})"
-            do! NewLine
-            do! DoubleIndented + "{"
-            do! NewLine
-            do! DoubleIndented + $"Query = Query.AddArgument(\"{argument.Name}\", {camelArgumentName});"
-            do! NewLine
-            do! TripleIndented + "return this;"
-            do! NewLine
-            do! DoubleIndented + "}"
-            do! NewLine
-    }
-
-let writeQueryOrMutationServices (queryOrMutation: QueryOrMutation) (context: IParsedContext) writer: ValueTask =
-    pipeWriter writer {
-        // TODO: handle all of the query and mutation operations at once, then categorize them by their "entity type"
-        //       (e.g. orders go into a GraphOrderService).
-        let pascalClassName = toCasing Pascal (queryOrMutation.Name + "Service")
-        let camelTypeName = toCasing Camel type'.Name
-        let returnType = queryOrMutation.ReturnType
-
-        // Fully qualify class names that might collide with System types
-        let qualifiedGenericType =
-            let pascalGenericType = toCasing Pascal genericType
-            match pascalGenericType with
-            | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
-            | _ -> pascalGenericType
-
-        yield! writeDeprecationAttribute Indented queryOrMutation.Deprecation
-
-        do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"{camelTypeName}\")" + NewLine
-        do! "{" + NewLine
-
-        yield! writeQueryBuilderAddFieldMethods pascalClassName queryOrMutation context
-        yield! writeQueryBuilderAddArgumentMethods pascalClassName queryOrMutation context
-
-        do! NewLine
-        do! "}" + NewLine
-    }
-
 let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
     let parsedContext = context :> IParsedContext
 
@@ -751,14 +518,12 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
     })
 
 let private writeServicesToPipe (writer: Writer) (context: ParserContext): ValueTask =
-    let parsedContext = context :> IParsedContext
-
     pipeWriter writer {
         // Always write the namespace and usings at the very top of the document
         yield! writeNamespaceAndUsings
 
         for queryOrMutationType in context.GetQueryOrMutationTypes () do
-            yield! writeQueryOrMutationServices queryOrMutationType context
+            yield! QueryBuilderWriter.writeQueryBuilder queryOrMutationType context
     }
 
 let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =

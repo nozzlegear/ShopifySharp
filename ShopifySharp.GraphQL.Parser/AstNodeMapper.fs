@@ -6,6 +6,7 @@ open GraphQLParser
 open GraphQLParser.AST
 open FSharp.Span.Utils.SafeLowLevelOperators
 open FSharp.Span.Utils
+open Utils
 
 module AstNodeMapper =
     type private Presence
@@ -15,6 +16,56 @@ module AstNodeMapper =
     type private FieldsDefinition =
         | InputFields of inputFields: GraphQLInputFieldsDefinition
         | ObjectFields of xFields: GraphQLFieldsDefinition
+
+    let mapValueTypeToString (isNamedType: NamedType -> bool) = function
+        | FieldValueType.ULong -> "ulong"
+        | FieldValueType.Long -> "long"
+        | FieldValueType.Int -> "int"
+        | FieldValueType.Decimal -> "decimal"
+        | FieldValueType.Float -> "float"
+        | FieldValueType.Boolean -> "bool"
+        | FieldValueType.String -> "string"
+        | FieldValueType.DateTime -> "DateTime"
+        | FieldValueType.DateOnly -> "DateOnly"
+        | FieldValueType.TimeSpan -> "TimeSpan"
+        | FieldValueType.GraphObjectType graphObjectTypeName ->
+            if isNamedType (NamedType.Interface graphObjectTypeName)
+            then mapStrToInterfaceName graphObjectTypeName
+            else graphObjectTypeName
+
+    let rec unwrapFieldType  = function
+        | ValueType valueType -> valueType
+        | NullableType valueType -> unwrapFieldType valueType
+        | NonNullableType valueType -> unwrapFieldType valueType
+        | CollectionType collectionType -> unwrapFieldType collectionType
+
+    let rec mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
+        let maybeWriteNullability isNullable fieldStr =
+            fieldStr + (if isNullable then "?" else "")
+
+        let rec unwrapType isRecursing = function
+            | ValueType valueType
+            | NonNullableType (ValueType valueType) ->
+                mapValueTypeToString isNamedType valueType
+                |> maybeWriteNullability (not isRecursing && assumeNullability)
+            | NullableType (ValueType valueType) ->
+                mapValueTypeToString isNamedType valueType
+                |> maybeWriteNullability true
+            | NonNullableType (CollectionType collectionType) // We unwrap this one twice because CollectionTypes are all (NonNullable (CollectionType Type)) in GraphQL
+            | CollectionType collectionType ->
+                let mappedType = unwrapType true collectionType
+                match collectionHandling with
+                | KeepCollection -> $"ICollection<{mappedType}>"
+                | UnwrapCollection -> mappedType
+                |> maybeWriteNullability (not isRecursing && assumeNullability)
+            | NonNullableType nonNullableType ->
+                unwrapType true nonNullableType
+            | NullableType nullableType ->
+                unwrapFieldType nullableType
+                |> mapValueTypeToString isNamedType
+                |> maybeWriteNullability true
+
+        unwrapType false valueType
 
     let rec private mapGraphTypeToName (fieldType: GraphQLType): string =
         match fieldType with
