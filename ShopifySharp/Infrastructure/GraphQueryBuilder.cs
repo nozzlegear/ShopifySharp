@@ -10,41 +10,35 @@ public abstract class GraphQueryBuilder<T>(string name)
 {
     protected IQuery<T> Query { get; private set; } = new Query<T>(name);
 
-    public GraphQueryBuilder<T> Alias(string alias)
+    public void Alias(string alias)
     {
         Query = Query.Alias(alias);
-        return this;
     }
 
-    public GraphQueryBuilder<T> AddArgument(string key, object? value)
+    public void AddArgument(string key, object? value)
     {
         Query = Query.AddArgument(key, value);
-        return this;
     }
 
-    public GraphQueryBuilder<T> AddArguments(Dictionary<string, object?> arguments)
+    public void AddArguments(Dictionary<string, object?> arguments)
     {
         Query = Query.AddArguments(arguments);
-        return this;
     }
 
-    public GraphQueryBuilder<T> AddArguments<TArguments>(TArguments arguments) where TArguments : class
+    public void AddArguments<TArguments>(TArguments arguments) where TArguments : class
     {
         Query = Query.AddArguments(arguments);
-        return this;
     }
 
-    public GraphQueryBuilder<T> AddField(string name)
+    public void AddField(string name)
     {
         Query = Query.AddField(name);
-        return this;
     }
 
-    public GraphQueryBuilder<T> AddField<TField>(string name, System.Func<IQuery<TField>, IQuery<TField>> customize)
+    public void AddField<TField>(string name, Func<IQuery<TField>, IQuery<TField>> customize)
         where TField: class, IGraphQLObject
     {
         Query = Query.AddField(name, customize);
-        return this;
     }
 
     public GraphQueryBuilder<T> AddUnion<TUnionCase, TGraphQueryBuilder>(string name, Func<GraphQueryBuilder<TUnionCase>, GraphQueryBuilder<TUnionCase>> build)
@@ -55,5 +49,15 @@ public abstract class GraphQueryBuilder<T>(string name)
         var union = build.Invoke(thing);
 
         Query = Query.AddUnion(union.Query);
+
+        return this;
+    }
+
+    public GraphQueryBuilder<T> AddUnion<TUnionCase>(string name, GraphQueryBuilder<TUnionCase> union)
+        where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
+    {
+        Query.AddUnion(union.Query);
+
+        return this;
     }
 }
