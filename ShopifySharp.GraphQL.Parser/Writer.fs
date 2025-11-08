@@ -493,6 +493,8 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                     yield! writeInputObject inputObject parsedContext
                 | VisitedTypes.UnionType unionType ->
                     yield! writeUnionType unionType parsedContext
+                | VisitedTypes.Operation _ ->
+                    ()
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
@@ -517,15 +519,6 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
             do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
     })
 
-let private writeServicesToPipe (writer: Writer) (context: ParserContext): ValueTask =
-    pipeWriter writer {
-        // Always write the namespace and usings at the very top of the document
-        yield! writeNamespaceAndUsings
-
-        for queryOrMutationType in context.GetQueryOrMutationTypes () do
-            yield! QueryBuilderWriter.writeQueryBuilder queryOrMutationType context
-    }
-
 let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =
     let cancellationToken = context.CancellationToken
 
@@ -533,7 +526,7 @@ let writeServicesToFileSystem(destination: FileSystemDestination) (context: Pars
         let pipe = Pipe(PipeOptions())
         let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
 
-        do! writeServicesToPipe pipe.Writer context
+        do! QueryBuilderWriter.writeServicesToPipe context pipe.Writer
         do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
 
         let! csharpCode = readTask
