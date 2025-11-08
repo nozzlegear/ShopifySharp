@@ -297,14 +297,30 @@ module AstNodeMapper =
           Deprecation = getDeprecationMessage unionTypeDefinition.Directives
           Cases = Array.map (map context) unionCaseNodes }
 
-    and map (context: IParsedContext) (node: ASTNode): VisitedTypes =
+    and tryMap (context: IParsedContext) (node: ASTNode): VisitedTypes option =
         match node with
-        | :? GraphQLUnionTypeDefinition as unionType -> VisitedTypes.UnionType (mapUnionTypeDefinition context unionType)
-        | :? GraphQLInputObjectTypeDefinition as input -> VisitedTypes.InputObject (mapInputObjectTypeDefinition input)
-        | :? GraphQLEnumTypeDefinition as enum -> VisitedTypes.Enum (mapEnumTypeDefinition enum)
-        | :? GraphQLInterfaceTypeDefinition as interface' -> VisitedTypes.Interface (mapInterfaceTypeDefinition interface')
-        | :? GraphQLObjectTypeDefinition as objectType -> VisitedTypes.Class (mapObjectTypeDefinition objectType)
-        | _ -> raise (SwitchExpressionException(node.GetType()))
+        | :? GraphQLUnionTypeDefinition as unionType ->
+            VisitedTypes.UnionType (mapUnionTypeDefinition context unionType)
+            |> Some
+        | :? GraphQLInputObjectTypeDefinition as input ->
+            VisitedTypes.InputObject (mapInputObjectTypeDefinition input)
+            |> Some
+        | :? GraphQLEnumTypeDefinition as enum ->
+            VisitedTypes.Enum (mapEnumTypeDefinition enum)
+            |> Some
+        | :? GraphQLInterfaceTypeDefinition as interface' ->
+            VisitedTypes.Interface (mapInterfaceTypeDefinition interface')
+            |> Some
+        | :? GraphQLObjectTypeDefinition as objectType ->
+            VisitedTypes.Class (mapObjectTypeDefinition objectType)
+            |> Some
+        | _ ->
+            None
+
+    and map (context: IParsedContext) (node: ASTNode): VisitedTypes =
+        match tryMap context node with
+        | Some mappedType -> mappedType
+        | None -> raise (SwitchExpressionException(node.GetType()))
 
     let mapRootFieldDefinition (fieldDefinition: GraphQLFieldDefinition) (context: IParsedContext): QueryOrMutation =
         let returnTypeName =

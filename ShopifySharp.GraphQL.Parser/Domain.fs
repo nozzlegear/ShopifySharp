@@ -132,12 +132,23 @@ type UnionType =
       Deprecation: string option
       Cases: VisitedTypes[] }
     with interface IVisitedType
+and QueryOrMutation =
+    { Name: string
+      XmlSummary: string[]
+      Deprecation: string option
+      Arguments: FieldOrOperationArgument[]
+      ReturnType: ReturnType }
+    with interface IVisitedType
+and [<RequireQualifiedAccess>] ReturnType =
+    | VisitedType of VisitedTypes
+    | FieldType of FieldType
 and VisitedTypes =
     | Class of class': Class
     | Interface of interface': Interface
     | Enum of enum': VisitedEnum
     | InputObject of inputObject: InputObject
     | UnionType of unionType: UnionType
+    | Operation of operation: QueryOrMutation
     with
     member x.Name =
         match x with
@@ -146,18 +157,15 @@ and VisitedTypes =
         | VisitedTypes.Enum enum' -> enum'.Name
         | VisitedTypes.InputObject inputObject' -> inputObject'.Name
         | VisitedTypes.UnionType unionType' -> unionType'.Name
-
-[<RequireQualifiedAccess>]
-type ReturnType =
-    | VisitedType of VisitedTypes
-    | FieldType of FieldType
-
-type QueryOrMutation =
-    { Name: string
-      XmlSummary: string[]
-      Deprecation: string option
-      Arguments: FieldOrOperationArgument[]
-      ReturnType: ReturnType }
+        | VisitedTypes.Operation operation -> operation.Name
+    member x.Deprecation =
+        match x with
+        | VisitedTypes.Class class' -> class'.Deprecation
+        | VisitedTypes.Interface interface' -> interface'.Deprecation
+        | VisitedTypes.Enum enum' -> enum'.Deprecation
+        | VisitedTypes.InputObject inputObject -> inputObject.Deprecation
+        | VisitedTypes.UnionType unionType -> unionType.Deprecation
+        | VisitedTypes.Operation operation -> operation.Deprecation
 
 type NamedType =
     | Class of name: string
