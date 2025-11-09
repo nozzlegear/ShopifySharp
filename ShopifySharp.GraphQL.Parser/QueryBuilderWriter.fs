@@ -161,8 +161,15 @@ module rec QueryBuilderWriter =
                         AstNodeMapper.mapFieldTypeToString context.IsNamedType context.AssumeNullability fieldType FieldTypeCollectionHandling.KeepCollection
                 | x -> x.Name
 
+            // Fully qualify class names that might collide with System types
+            let qualifiedGenericType =
+                let pascalGenericType = toCasing Pascal genericType
+                match pascalGenericType with
+                | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
+                | _ -> pascalGenericType
+
             // TODO: this may not always be a query, it may also be a mutation (or even a subselection in the case of nested objects)
-            do! $"public class {pascalClassName}(): GraphQueryBuilder<{toCasing Pascal genericType}>(\"query {camelClassName}\")"
+            do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"query {camelClassName}\")"
             do! NewLine
         }
 
