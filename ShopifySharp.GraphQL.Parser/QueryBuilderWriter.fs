@@ -162,6 +162,8 @@ module rec QueryBuilderWriter =
             // Fully qualify class names that might collide with System types
             let qualifiedGenericType =
                 let pascalGenericType = toCasing Pascal genericType
+                // The type name should already have the "I" prefix if it's an interface
+                // (it comes from VisitedTypes.Name which includes the prefix)
                 match pascalGenericType with
                 | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
                 | _ -> pascalGenericType
