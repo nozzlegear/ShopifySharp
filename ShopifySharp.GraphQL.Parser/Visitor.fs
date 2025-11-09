@@ -28,21 +28,21 @@ type Visitor() =
         context.CancellationToken.ThrowIfCancellationRequested()
 
         let objectTypeName = objectTypeDefinition.Name.StringValue
+        let class' = AstNodeMapper.mapObjectTypeDefinition objectTypeDefinition
 
+        VisitedTypes.Class class'
+        |> context.SetVisitedType
+
+        class'.InheritedTypeNames
+        |> context.AddInterfaceRelationship class'.Name
+
+        NamedType.Class class'.Name
+        |> context.AddNamedType
+
+        // Still visit the fields of QueryRoot and Mutation to extract operation definitions
         if objectTypeName = "QueryRoot" || objectTypeName = "Mutation" then
             base.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context)
         else
-            let class' = AstNodeMapper.mapObjectTypeDefinition objectTypeDefinition
-
-            VisitedTypes.Class class'
-            |> context.SetVisitedType
-
-            class'.InheritedTypeNames
-            |> context.AddInterfaceRelationship class'.Name
-
-            NamedType.Class class'.Name
-            |> context.AddNamedType
-
             ValueTask.CompletedTask
 
     override this.VisitInterfaceTypeDefinitionAsync(interfaceTypeDefinition, context) =
@@ -53,7 +53,9 @@ type Visitor() =
         VisitedTypes.Interface interface'
         |> context.SetVisitedType
 
-        NamedType.Interface interface'.Name
+        // Register the interface with its original schema name (without "I" prefix)
+        // so that field type lookups can find it
+        NamedType.Interface interfaceTypeDefinition.Name.StringValue
         |> context.AddNamedType
 
         ValueTask.CompletedTask
