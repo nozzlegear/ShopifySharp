@@ -18,7 +18,7 @@ module rec QueryBuilderWriter =
     let private canAddArguments (type': VisitedTypes) =
         type'.IsOperation
 
-    let writeUnionTypeMutationJoins (pascalParentClassName: string) (unionCaseName: string) (context: IParsedContext) writer: ValueTask =
+    let writeUnionTypeMutationJoins (pascalParentClassName: string) (unionCaseName: string) (_: IParsedContext) writer: ValueTask =
         pipeWriter writer {
             let pascalUnionCaseName = toCasing Pascal unionCaseName
             let camelUnionCaseName = toCasing Camel unionCaseName
@@ -174,8 +174,8 @@ module rec QueryBuilderWriter =
         }
 
     let writeQueryBuilder (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
-        if type'.IsEnum then
-            failwithf $"The {nameof VisitedTypes.Enum} type is not supported."
+        if type'.IsEnum || type'.IsInputObject then
+            failwithf $"The {type'.GetType().Name} type is not supported."
 
         pipeWriter writer {
             let pascalClassName = toCasing Pascal (type'.Name + "QueryBuilder")
@@ -229,13 +229,11 @@ module rec QueryBuilderWriter =
                 match node with
                 | :? GraphQLObjectTypeDefinition as objDef when
                     objDef.Name.StringValue = "QueryRoot" || objDef.Name.StringValue = "Mutation" ->
-                    // Skip the QueryRoot and Mutation types, as the more appropriate FieldOperation type will be mapped
-                    // for each of their operations.
 
-                    // TODO: context.Document.Definitions doesn't seem to have the FieldOperations in it
+                    // Each field in this object is an operation and should have a QueryBuilder
                     for field in objDef.Fields do
-                        ()
-                    ()
+                        let operation = AstNodeMapper.mapRootFieldDefinition field context
+                        yield! writeQueryBuilder (VisitedTypes.Operation operation) context
                 | _ ->
                     match AstNodeMapper.tryMap context node with
                     | None ->
@@ -246,7 +244,4 @@ module rec QueryBuilderWriter =
                         ()
                     | Some mappedType ->
                         yield! writeQueryBuilder mappedType context
-
-            // for queryOrMutationType in context.GetQueryOrMutationTypes () do
-            //     yield! writeQueryBuilder queryOrMutationType context
         }

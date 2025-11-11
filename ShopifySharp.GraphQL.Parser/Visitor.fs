@@ -11,12 +11,8 @@ type Visitor() =
     [<ExcludeFromCodeCoverage>]
     let (~%) job = ignore job
 
-    override this.VisitFieldDefinitionAsync(fieldDefinition, context) =
+    override this.VisitFieldDefinitionAsync(_, _) =
         // This method is called for each query/mutation operation in QueryRoot and Mutation
-        let queryOrMutation = AstNodeMapper.mapRootFieldDefinition fieldDefinition context
-
-        context.SetQueryOrMutation queryOrMutation
-
         ValueTask.CompletedTask
 
     override this.VisitFieldAsync (field: GraphQLField, context: ParserContext): ValueTask =
@@ -28,21 +24,21 @@ type Visitor() =
         context.CancellationToken.ThrowIfCancellationRequested()
 
         let objectTypeName = objectTypeDefinition.Name.StringValue
-        let class' = AstNodeMapper.mapObjectTypeDefinition objectTypeDefinition
 
-        VisitedTypes.Class class'
-        |> context.SetVisitedType
-
-        class'.InheritedTypeNames
-        |> context.AddInterfaceRelationship class'.Name
-
-        NamedType.Class class'.Name
-        |> context.AddNamedType
-
-        // Still visit the fields of QueryRoot and Mutation to extract operation definitions
         if objectTypeName = "QueryRoot" || objectTypeName = "Mutation" then
             base.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context)
         else
+            let class' = AstNodeMapper.mapObjectTypeDefinition objectTypeDefinition
+
+            VisitedTypes.Class class'
+            |> context.SetVisitedType
+
+            class'.InheritedTypeNames
+            |> context.AddInterfaceRelationship class'.Name
+
+            NamedType.Class class'.Name
+            |> context.AddNamedType
+
             ValueTask.CompletedTask
 
     override this.VisitInterfaceTypeDefinitionAsync(interfaceTypeDefinition, context) =
