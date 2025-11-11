@@ -196,7 +196,6 @@ type ParserContext(casingType, assumeNullability, document, ct) =
     let knownUnionCaseNames: HashSet<string> = HashSet()
     let interfaceRelationships: HashSet<InterfaceRelationship> = HashSet()
     let namedTypes: HashSet<NamedType> = HashSet()
-    let queryOrMutationTypes: HashSet<QueryOrMutation> = HashSet()
     let (~%) comp = ignore comp
 
     member _.CasingType: Casing = casingType
@@ -210,12 +209,6 @@ type ParserContext(casingType, assumeNullability, document, ct) =
 
     member this.SetVisitedType (type': VisitedTypes): unit =
         %visitedTypes.Add type'
-
-    member this.SetQueryOrMutation (type': QueryOrMutation): unit =
-        %queryOrMutationTypes.Add type'
-
-    member this.GetQueryOrMutationTypes () =
-        Array.ofSeq queryOrMutationTypes
 
     member _.AddUnionCases (unionCases: VisitedTypes[]) : unit =
         for case in unionCases do
