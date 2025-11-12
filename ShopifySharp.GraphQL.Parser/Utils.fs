@@ -1,6 +1,8 @@
 namespace ShopifySharp.GraphQL.Parser
 
 open System
+open System.IO.Pipelines
+open System.Text
 open System.Threading.Tasks
 open ShopifySharp.GraphQL.Parser.PipeWriter
 
@@ -55,3 +57,25 @@ module Utils =
             | None ->
                 ()
         }
+
+    let readPipe (reader: PipeReader) cancellationToken: ValueTask<StringBuilder> =
+        let sb = StringBuilder()
+        let rec loop () = task {
+            let! result = reader.ReadAsync(cancellationToken).ConfigureAwait(false)
+
+            let mutable enumerator = result.Buffer.GetEnumerator()
+            while enumerator.MoveNext() do
+                sb.Append(Encoding.UTF8.GetString(enumerator.Current.Span))
+                |> ignore
+
+            reader.AdvanceTo(result.Buffer.End)
+
+            if not (result.IsCompleted || result.IsCanceled) then
+                do! loop()
+        }
+
+        ValueTask<StringBuilder>(task {
+            do! loop()
+            do! reader.CompleteAsync().ConfigureAwait(false)
+            return sb
+        })
