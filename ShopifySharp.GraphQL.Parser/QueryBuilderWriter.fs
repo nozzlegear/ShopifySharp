@@ -1,5 +1,6 @@
 namespace ShopifySharp.GraphQL.Parser
 
+open System.IO.Pipelines
 open System.Threading.Tasks
 open GraphQLParser.AST
 open ShopifySharp.GraphQL.Parser.PipeWriter
@@ -220,7 +221,7 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let writeServicesToPipe (context: IParsedContext) writer: ValueTask =
+    let private writeServicesToPipe (context: IParsedContext) writer: ValueTask =
         pipeWriter writer {
             // Always write the namespace and usings at the very top of the document
             yield! writeNamespaceAndUsings
@@ -245,3 +246,17 @@ module rec QueryBuilderWriter =
                     | Some mappedType ->
                         yield! writeQueryBuilder mappedType context
         }
+
+    let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =
+        let cancellationToken = context.CancellationToken
+
+        ValueTask(task {
+            let pipe = Pipe(PipeOptions())
+            let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
+
+            do! writeServicesToPipe context pipe.Writer
+            do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
+
+            let! csharpCode = readTask
+            do! (FileSystem.writeCsharpCodeToFileSystem destination csharpCode cancellationToken).ConfigureAwait(false)
+        })
