@@ -1,112 +1,14 @@
 module ShopifySharp.GraphQL.Parser.Writer
 
 open System
-open System.IO
 open System.IO.Pipelines
-open System.Linq
-open System.Text
 open System.Threading.Tasks
-open Microsoft.CodeAnalysis;
-open Microsoft.CodeAnalysis.CSharp;
-open Microsoft.CodeAnalysis.CSharp.Syntax
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open Utils
-
-type QueryBuilder<'t> = ShopifySharp.Infrastructure.Query<'t>
 
 type private Writer = PipeWriter
 
 let private (~%) job = ignore job
-
-let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
-    ValueTask<GeneratedCsharpFile[]>(task {
-        let! csharpTree = CSharpSyntaxTree.ParseText(csharpCode).GetRootAsync(cancellationToken)
-        let syntaxRoot = csharpTree :?> CompilationUnitSyntax;
-        let usings = syntaxRoot.Usings;
-        let externals = syntaxRoot.Externs
-
-        let rootMembers = syntaxRoot.Members |> Array.ofSeq
-        let rootTypes = rootMembers |> Array.filter (fun m -> m :? BaseTypeDeclarationSyntax)
-
-        let namespaces = syntaxRoot.Members.OfType<BaseNamespaceDeclarationSyntax>() |> Array.ofSeq
-        let fileScopedNamespaces = syntaxRoot.Members.OfType<FileScopedNamespaceDeclarationSyntax>() |> Array.ofSeq
-
-        let allTypes =
-            if fileScopedNamespaces.Length > 0 then
-                // Handle file-scoped namespaces - collect ALL types (both from namespace and root)
-                let nsTypes =
-                    fileScopedNamespaces
-                    |> Array.collect (fun ns ->
-                        let types = ns.Members.OfType<BaseTypeDeclarationSyntax>() |> Array.ofSeq
-                        types |> Array.map (fun t -> (ns :> BaseNamespaceDeclarationSyntax, t)))
-
-                // Also collect types that ended up at root level due to parsing issues
-                let rootLevelTypes = rootTypes |> Array.map (fun t ->
-                    // Use the file-scoped namespace for root-level types
-                    (fileScopedNamespaces[0] :> BaseNamespaceDeclarationSyntax, t :?> BaseTypeDeclarationSyntax))
-                Array.concat [nsTypes; rootLevelTypes]
-            else
-                // Handle regular namespaces
-                namespaces
-                |> Array.collect (fun ns ->
-                    let types = ns.Members.OfType<BaseTypeDeclarationSyntax>() |> Array.ofSeq
-                    types |> Array.map (fun t -> (ns, t)))
-
-        return
-            allTypes
-            |> Array.map (fun (ns, type') ->
-                let unit = SyntaxFactory.CompilationUnit()
-                            .WithExterns(externals)
-                            .WithUsings(usings)
-                            .AddMembers(ns.WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(type')))
-                            .NormalizeWhitespace(eol = Environment.NewLine)
-
-                { FileName = type'.Identifier.Text + ".cs"
-                  FileText = unit.ToFullString() }
-            )
-    })
-
-let private writeFileToPath filePath (fileText: string) cancellationToken: ValueTask =
-    ValueTask(task {
-        if File.Exists(filePath) then
-            File.Delete(filePath)
-
-        let directory = Path.GetDirectoryName filePath
-
-        if directory <> "" && not (Directory.Exists directory) then
-            %Directory.CreateDirectory(directory)
-
-        do! File.WriteAllTextAsync(filePath, fileText, cancellationToken)
-    })
-
-let private parseCsharpCodeAndWriteToDirectoryPath directoryPath (csharpCode: StringBuilder) cancellationToken =
-    ValueTask(task {
-        let! generatedFiles = parseCsharpStringToGeneratedFiles (csharpCode.ToString()) cancellationToken
-        for file in generatedFiles do
-            let filePath = Path.Join(directoryPath, "/", file.FileName)
-            do! writeFileToPath filePath file.FileText cancellationToken
-    })
-
-let private readPipe (reader: PipeReader) cancellationToken: ValueTask<StringBuilder> =
-    let sb = StringBuilder()
-    let rec loop () = task {
-        let! result = reader.ReadAsync(cancellationToken).ConfigureAwait(false)
-
-        let mutable enumerator = result.Buffer.GetEnumerator()
-        while enumerator.MoveNext() do
-            %sb.Append(Encoding.UTF8.GetString(enumerator.Current.Span))
-
-        reader.AdvanceTo(result.Buffer.End)
-
-        if not (result.IsCompleted || result.IsCanceled) then
-            do! loop()
-    }
-
-    ValueTask<StringBuilder>(task {
-        do! loop()
-        do! reader.CompleteAsync().ConfigureAwait(false)
-        return sb
-    })
 
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
@@ -508,35 +410,5 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
         do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
 
         let! csharpCode = readTask
-
-        match destination with
-        | SingleFile filePath ->
-            do! writeFileToPath filePath (csharpCode.ToString()) cancellationToken
-        | Directory directoryPath ->
-            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
-        | DirectoryAndTemporaryFile(directoryPath, temporaryFilePath) ->
-            do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
-            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
-    })
-
-let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =
-    let cancellationToken = context.CancellationToken
-
-    ValueTask(task {
-        let pipe = Pipe(PipeOptions())
-        let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
-
-        do! QueryBuilderWriter.writeServicesToPipe context pipe.Writer
-        do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
-
-        let! csharpCode = readTask
-
-        match destination with
-        | SingleFile filePath ->
-            do! writeFileToPath filePath (csharpCode.ToString()) cancellationToken
-        | Directory directoryPath ->
-            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
-        | DirectoryAndTemporaryFile(directoryPath, temporaryFilePath) ->
-            do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
-            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
+        do! (FileSystem.writeCsharpCodeToFileSystem destination csharpCode cancellationToken).ConfigureAwait(false)
     })
