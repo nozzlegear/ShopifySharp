@@ -1,224 +1,32 @@
 module ShopifySharp.GraphQL.Parser.Writer
 
 open System
-open System.IO
 open System.IO.Pipelines
-open System.Linq
-open System.Text
 open System.Threading.Tasks
-open Microsoft.CodeAnalysis;
-open Microsoft.CodeAnalysis.CSharp;
-open Microsoft.CodeAnalysis.CSharp.Syntax
-open ShopifySharp.GraphQL.Parser.PipeWriter;
+open ShopifySharp.GraphQL.Parser.PipeWriter
+open Utils
 
 type private Writer = PipeWriter
 
 let private (~%) job = ignore job
 
-let private NewLine = Environment.NewLine
-
-let private toTab = function
-    | Indented -> "\t"
-    | Outdented -> String.Empty
-
-let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
-    ValueTask<GeneratedCsharpFile[]>(task {
-        let! csharpTree = CSharpSyntaxTree.ParseText(csharpCode).GetRootAsync(cancellationToken)
-        let syntaxRoot = csharpTree :?> CompilationUnitSyntax;
-        let usings = syntaxRoot.Usings;
-        let externals = syntaxRoot.Externs
-
-        let rootMembers = syntaxRoot.Members |> Array.ofSeq
-        let rootTypes = rootMembers |> Array.filter (fun m -> m :? BaseTypeDeclarationSyntax)
-
-        let namespaces = syntaxRoot.Members.OfType<BaseNamespaceDeclarationSyntax>() |> Array.ofSeq
-        let fileScopedNamespaces = syntaxRoot.Members.OfType<FileScopedNamespaceDeclarationSyntax>() |> Array.ofSeq
-
-        let allTypes =
-            if fileScopedNamespaces.Length > 0 then
-                // Handle file-scoped namespaces - collect ALL types (both from namespace and root)
-                let nsTypes =
-                    fileScopedNamespaces
-                    |> Array.collect (fun ns ->
-                        let types = ns.Members.OfType<BaseTypeDeclarationSyntax>() |> Array.ofSeq
-                        types |> Array.map (fun t -> (ns :> BaseNamespaceDeclarationSyntax, t)))
-
-                // Also collect types that ended up at root level due to parsing issues
-                let rootLevelTypes = rootTypes |> Array.map (fun t ->
-                    // Use the file-scoped namespace for root-level types
-                    (fileScopedNamespaces[0] :> BaseNamespaceDeclarationSyntax, t :?> BaseTypeDeclarationSyntax))
-                Array.concat [nsTypes; rootLevelTypes]
-            else
-                // Handle regular namespaces
-                namespaces
-                |> Array.collect (fun ns ->
-                    let types = ns.Members.OfType<BaseTypeDeclarationSyntax>() |> Array.ofSeq
-                    types |> Array.map (fun t -> (ns, t)))
-
-        return
-            allTypes
-            |> Array.map (fun (ns, type') ->
-                let unit = SyntaxFactory.CompilationUnit()
-                            .WithExterns(externals)
-                            .WithUsings(usings)
-                            .AddMembers(ns.WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(type')))
-                            .NormalizeWhitespace(eol = Environment.NewLine)
-
-                { FileName = type'.Identifier.Text + ".cs"
-                  FileText = unit.ToFullString() }
-            )
-    })
-
-let private writeFileToPath filePath (fileText: string) cancellationToken: ValueTask =
-    ValueTask(task {
-        if File.Exists(filePath) then
-            File.Delete(filePath)
-
-        let directory = Path.GetDirectoryName filePath
-
-        if directory <> "" && not (Directory.Exists directory) then
-            %Directory.CreateDirectory(directory)
-
-        do! File.WriteAllTextAsync(filePath, fileText, cancellationToken)
-    })
-
-let private parseCsharpCodeAndWriteToDirectoryPath directoryPath (csharpCode: StringBuilder) cancellationToken =
-    ValueTask(task {
-        let! generatedFiles = parseCsharpStringToGeneratedFiles (csharpCode.ToString()) cancellationToken
-        for file in generatedFiles do
-            let filePath = Path.Join(directoryPath, "/", file.FileName)
-            do! writeFileToPath filePath file.FileText cancellationToken
-    })
-
-let private readPipe (reader: PipeReader) cancellationToken: ValueTask<StringBuilder> =
-    let sb = StringBuilder()
-    let rec loop () = task {
-        let! result = reader.ReadAsync(cancellationToken).ConfigureAwait(false)
-
-        let mutable enumerator = result.Buffer.GetEnumerator()
-        while enumerator.MoveNext() do
-            %sb.Append(Encoding.UTF8.GetString(enumerator.Current.Span))
-
-        reader.AdvanceTo(result.Buffer.End)
-
-        if not (result.IsCompleted || result.IsCanceled) then
-            do! loop()
-    }
-
-    ValueTask<StringBuilder>(task {
-        do! loop()
-        do! reader.CompleteAsync().ConfigureAwait(false)
-        return sb
-    })
-
-let private sanitizeString (str: string): string =
-    str.ReplaceLineEndings("")
-       .Replace("\"", "", StringComparison.OrdinalIgnoreCase)
-       .Replace("'", "", StringComparison.OrdinalIgnoreCase)
-
-let private csharpKeywords = Set.ofList [
-    "abstract"; "as"; "base"; "bool"; "break"; "byte"; "case"; "catch"; "char"; "checked";
-    "class"; "const"; "continue"; "decimal"; "default"; "delegate"; "do"; "double"; "else";
-    "enum"; "event"; "explicit"; "extern"; "false"; "finally"; "fixed"; "float"; "for";
-    "foreach"; "goto"; "if"; "implicit"; "in"; "int"; "interface"; "internal"; "is"; "lock";
-    "long"; "namespace"; "new"; "null"; "object"; "operator"; "out"; "override"; "params";
-    "private"; "protected"; "public"; "readonly"; "ref"; "return"; "sbyte"; "sealed";
-    "short"; "sizeof"; "stackalloc"; "static"; "string"; "struct"; "switch"; "this";
-    "throw"; "true"; "try"; "typeof"; "uint"; "ulong"; "unchecked"; "unsafe"; "ushort";
-    "using"; "virtual"; "void"; "volatile"; "while";
-    // Contextual keywords that can also cause issues
-    "add"; "alias"; "ascending"; "async"; "await"; "by"; "descending"; "dynamic"; "equals";
-    "from"; "get"; "global"; "group"; "into"; "join"; "let"; "nameof"; "orderby"; "partial";
-    "remove"; "select"; "set"; "value"; "var"; "when"; "where"; "yield"
-]
-
-/// <summary>
-/// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
-/// </summary>
-let private sanitizeFieldName (parentType: NamedType) (fieldName: string): string =
-    if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
-        // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
-        fieldName + "_"
-    elif Set.contains fieldName csharpKeywords then
-        "@" + fieldName
-    else
-        fieldName
-
-let private toCasing casing (str: string): string =
-    let first = str[0]
-    let rest  = str[1..]
-    match casing with
-    | Pascal -> Char.ToUpper(first).ToString() + rest
-    | Camel -> Char.ToLower(first).ToString() + rest
-
-let private mapStrToInterfaceName =
-    sprintf "I%s"
-
-let private toUnionCaseWrapperName unionTypeName unionCaseName =
-    unionTypeName + unionCaseName
-
-let private mapValueTypeToString (isNamedType: NamedType -> bool) = function
-    | FieldValueType.ULong -> "ulong"
-    | FieldValueType.Long -> "long"
-    | FieldValueType.Int -> "int"
-    | FieldValueType.Decimal -> "decimal"
-    | FieldValueType.Float -> "float"
-    | FieldValueType.Boolean -> "bool"
-    | FieldValueType.String -> "string"
-    | FieldValueType.DateTime -> "DateTime"
-    | FieldValueType.DateOnly -> "DateOnly"
-    | FieldValueType.TimeSpan -> "TimeSpan"
-    | FieldValueType.GraphObjectType graphObjectTypeName ->
-        if isNamedType (NamedType.Interface graphObjectTypeName)
-        then mapStrToInterfaceName graphObjectTypeName
-        else graphObjectTypeName
-
-let rec private unwrapFieldType  = function
-    | ValueType valueType -> valueType
-    | NullableType valueType -> unwrapFieldType valueType
-    | NonNullableType valueType -> unwrapFieldType valueType
-    | CollectionType collectionType -> unwrapFieldType collectionType
-
-let rec private mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
-    let maybeWriteNullability isNullable fieldStr =
-        fieldStr + (if isNullable then "?" else "")
-
-    let rec unwrapType isRecursing = function
-        | ValueType valueType
-        | NonNullableType (ValueType valueType) ->
-            mapValueTypeToString isNamedType valueType
-            |> maybeWriteNullability (not isRecursing && assumeNullability)
-        | NullableType (ValueType valueType) ->
-            mapValueTypeToString isNamedType valueType
-            |> maybeWriteNullability true
-        | NonNullableType (CollectionType collectionType) // We unwrap this one twice because CollectionTypes are all (NonNullable (CollectionType Type)) in GraphQL
-        | CollectionType collectionType ->
-            let mappedType = unwrapType true collectionType
-            match collectionHandling with
-            | KeepCollection -> $"ICollection<{mappedType}>"
-            | UnwrapCollection -> mappedType
-            |> maybeWriteNullability (not isRecursing && assumeNullability)
-        | NonNullableType nonNullableType ->
-            unwrapType true nonNullableType
-        | NullableType nullableType ->
-            unwrapFieldType nullableType
-            |> mapValueTypeToString isNamedType
-            |> maybeWriteNullability true
-
-    unwrapType false valueType
-
 let private writeNamespaceAndUsings (writer: Writer) : ValueTask =
     pipeWriter writer {
         do! "#nullable enable"
-        do! NewLine
         do! NewLine
         do! "namespace ShopifySharp.GraphQL;"
         do! NewLine
         do! "using System;"
         do! NewLine
+        do! "using System.Threading.Tasks;"
+        do! NewLine
         do! "using System.Text.Json.Serialization;"
         do! NewLine
         do! "using System.Collections.Generic;"
+        do! NewLine
+        do! "using ShopifySharp.Credentials;"
+        do! NewLine
+        do! "using ShopifySharp.Infrastructure;"
         do! NewLine
         do! "using ShopifySharp.Infrastructure.Serialization.Json;"
         do! NewLine
@@ -233,22 +41,6 @@ let private writeSummary  indentation (summary: string[]) writer : ValueTask =
             do! NewLine
     }
 
-let private writeDeprecationAttribute indentation (deprecationWarning: string option) writer : ValueTask =
-    let indentation = toTab indentation
-    pipeWriter writer {
-        match deprecationWarning with
-        | Some x when String.IsNullOrWhiteSpace x ->
-            do! indentation
-            do! "[Obsolete]"
-            do! NewLine
-        | Some x ->
-            do! indentation
-            do! $"[Obsolete(\"{sanitizeString x}\")]"
-            do! NewLine
-        | None ->
-            ()
-    }
-
 let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask =
     pipeWriter writer {
         do! (toTab Indented) + $"[JsonPropertyName(\"{propertyName}\")]"
@@ -260,7 +52,7 @@ let private writeJsonPropertyAttribute (propertyName: string) writer : ValueTask
 /// <see cref="Portable.System.DateTimeOnly.Json"/> package's <see cref="DateOnlyConverter"/> converter.
 /// </summary>
 let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: ValueTask =
-    let fieldValueType = unwrapFieldType fieldType
+    let fieldValueType = AstNodeMapper.unwrapFieldType fieldType
     pipeWriter writer {
         if fieldValueType = FieldValueType.DateOnly then
             do! (toTab Indented) + "#if NETSTANDARD2_0"
@@ -292,7 +84,7 @@ let private writeJsonDerivedTypeAttributes2 interfaceName (classNames: string[])
 let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) assumeNullability fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
-    |> fun field -> mapFieldTypeToString isNamedType assumeNullability field.ValueType UnwrapCollection
+    |> fun field -> AstNodeMapper.mapFieldTypeToString isNamedType assumeNullability field.ValueType UnwrapCollection
 
 let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName: string) writer: ValueTask =
     pipeWriter writer {
@@ -401,7 +193,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
     pipeWriter writer {
         for field in writeableFields do
-            let fieldType = mapFieldTypeToString context.IsNamedType context.AssumeNullability field.ValueType KeepCollection
+            let fieldType = AstNodeMapper.mapFieldTypeToString context.IsNamedType context.AssumeNullability field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name
@@ -410,7 +202,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
             let fieldName =
                 toCasing context.CasingType field.Name
-                |> sanitizeFieldName parentType
+                |> sanitizeFieldOrOperationName parentType
 
             do! (toTab Indented) + $$"""public {{fieldType}} {{fieldName}} { get; set; }"""
 
@@ -527,11 +319,11 @@ let private writeInputObject (inputObject: InputObject) (context: IParsedContext
         do! NewLine
     }
 
-let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (writer: Writer): ValueTask =
+let private writeUnionCaseWrappers (unionType: UnionType) (writer: Writer): ValueTask =
     pipeWriter writer {
-        for unionCaseName in unionTypeCases do
-            let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
-            do! $"internal record {caseWrapperName}({unionCaseName} Value): {unionTypeName};"
+        for unionCase in unionType.Cases do
+            let caseWrapperName = toUnionCaseWrapperName unionType.Name unionCase.Name
+            do! $"internal record {caseWrapperName}({unionCase.Name} Value): {unionType.Name};"
             do! NewLine
     }
 
@@ -544,11 +336,11 @@ let private writeUnionCaseWrappers unionTypeName (unionTypeCases: string[]) (wri
 /// </code>
 /// </example>
 /// </summary>
-let private writeUnionTypeConversionMethods unionTypeName (unionCaseNames: string[]) writer: ValueTask =
+let private writeUnionTypeConversionMethods (unionType: UnionType) writer: ValueTask =
     pipeWriter writer {
-        for unionCaseName in unionCaseNames do
-            let caseWrapperName = toUnionCaseWrapperName unionTypeName unionCaseName
-            do! (toTab Indented) + $"public {unionCaseName}? As{unionCaseName}() => this is {caseWrapperName} wrapper ? wrapper.Value : null;"
+        for unionCase in unionType.Cases do
+            let caseWrapperName = toUnionCaseWrapperName unionType.Name unionCase.Name
+            do! (toTab Indented) + $"public {unionCase.Name}? As{unionCase.Name}() => this is {caseWrapperName} wrapper ? wrapper.Value : null;"
             do! NewLine
     }
 
@@ -564,28 +356,22 @@ let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: W
         do! "{"
         do! NewLine
 
-        yield! writeUnionTypeConversionMethods unionType.Name unionType.Types
+        yield! writeUnionTypeConversionMethods unionType
 
         do! NewLine
         do! "}"
         do! NewLine
 
-        yield! writeUnionCaseWrappers unionType.Name unionType.Types
+        yield! writeUnionCaseWrappers unionType
     }
 
-let private shouldSkipType visitedType: bool =
+let private shouldSkipType (visitedType: VisitedTypes): bool =
     let typeNamesToSkip = Set.ofList [
         "Node"; "INode"
         "PageInfo"
     ]
-    let typeName =
-        match visitedType with
-        | Class class' -> class'.Name
-        | Interface interface' -> interface'.Name
-        | Enum enum' -> enum'.Name
-        | InputObject inputObject -> inputObject.Name
-        | UnionType unionType -> unionType.Name
-    Set.contains typeName typeNamesToSkip
+
+    Set.contains visitedType.Name typeNamesToSkip
 
 let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
     let parsedContext = context :> IParsedContext
@@ -599,16 +385,18 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                 ()
             else
                 match visitedType with
-                | Class class' ->
+                | VisitedTypes.Class class' ->
                     yield! writeClass class' parsedContext
-                | Interface interface' ->
+                | VisitedTypes.Interface interface' ->
                     yield! writeInterface interface' parsedContext
-                | Enum enum' ->
+                | VisitedTypes.Enum enum' ->
                     yield! writeEnum enum' parsedContext
-                | InputObject inputObject ->
+                | VisitedTypes.InputObject inputObject ->
                     yield! writeInputObject inputObject parsedContext
-                | UnionType unionType ->
+                | VisitedTypes.UnionType unionType ->
                     yield! writeUnionType unionType parsedContext
+                | VisitedTypes.Operation _ ->
+                    ()
     }
 
 let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
@@ -622,13 +410,5 @@ let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context:
         do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
 
         let! csharpCode = readTask
-
-        match destination with
-        | SingleFile filePath ->
-            do! writeFileToPath filePath (csharpCode.ToString()) cancellationToken
-        | Directory directoryPath ->
-            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
-        | DirectoryAndTemporaryFile(directoryPath, temporaryFilePath) ->
-            do! writeFileToPath temporaryFilePath (csharpCode.ToString()) cancellationToken
-            do! parseCsharpCodeAndWriteToDirectoryPath directoryPath csharpCode cancellationToken
+        do! (FileSystem.writeCsharpCodeToFileSystem destination csharpCode cancellationToken).ConfigureAwait(false)
     })

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ShopifySharp.GraphQL;
 
-public interface INode
+public interface INode : IGraphQLObject
 {
     // ReSharper disable once InconsistentNaming
     string? id { get; }
