@@ -132,7 +132,7 @@ module rec QueryBuilderWriter =
                 let camelArgumentName =
                     sanitizeArgumentName Camel argument.Name
                 let pascalArgumentName =
-                    sanitizeArgumentName Pascal argument.Name
+                    toCasing Pascal argument.Name
 
                 yield! writeDeprecationAttribute Indented argument.Deprecation
                 do! $"public {pascalClassName} AddArgument{pascalArgumentName}({valueType} {camelArgumentName})"
