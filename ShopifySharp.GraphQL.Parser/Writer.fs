@@ -6,8 +6,6 @@ open System.Threading.Tasks
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open Utils
 
-type QueryBuilder<'t> = ShopifySharp.Infrastructure.Query<'t>
-
 type private Writer = PipeWriter
 
 let private (~%) job = ignore job

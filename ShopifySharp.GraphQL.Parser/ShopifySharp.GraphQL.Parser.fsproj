@@ -26,8 +26,5 @@
         <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
-    </ItemGroup>
 
 </Project>

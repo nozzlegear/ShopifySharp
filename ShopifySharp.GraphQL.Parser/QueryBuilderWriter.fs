@@ -8,8 +8,6 @@ open Utils
 
 module rec QueryBuilderWriter =
 
-    type QueryBuilder<'t> = ShopifySharp.Infrastructure.Query<'t>
-
     let private canAddFields = function
         | VisitedTypes.Class _ -> true
         | VisitedTypes.Interface _ -> true
