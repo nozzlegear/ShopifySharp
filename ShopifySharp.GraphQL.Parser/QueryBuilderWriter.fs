@@ -149,7 +149,7 @@ module rec QueryBuilderWriter =
 
     let writeQueryBuilderConstructor (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
         pipeWriter writer {
-            let camelClassName = toCasing Camel pascalClassName
+            let camelTypeName = toCasing Camel type'.Name
 
             let genericType =
                 match type' with
@@ -171,7 +171,7 @@ module rec QueryBuilderWriter =
                 | _ -> pascalGenericType
 
             // TODO: this may not always be a query, it may also be a mutation (or even a subselection in the case of nested objects)
-            do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"query {camelClassName}\")"
+            do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"query {camelTypeName}\")"
             do! NewLine
         }
 
