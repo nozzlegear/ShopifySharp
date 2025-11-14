@@ -233,9 +233,6 @@ module AstNodeMapper =
     let mapObjectTypeDefinition (objectTypeDefinition: GraphQLObjectTypeDefinition): Class =
         let objectTypeName = objectTypeDefinition.Name.StringValue
 
-        if objectTypeName = "QueryRoot" || objectTypeName = "Mutation" then
-            failwith $"ObjectTypeDefinition must not be QueryRoot or Mutation, but was {objectTypeName}"
-
         let classInheritedType =
             if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
                 Some Edge
