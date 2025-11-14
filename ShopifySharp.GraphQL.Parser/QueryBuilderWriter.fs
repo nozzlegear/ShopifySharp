@@ -14,6 +14,7 @@ module rec QueryBuilderWriter =
         | VisitedTypes.Enum _ -> false
         | VisitedTypes.InputObject _ -> true
         | VisitedTypes.UnionType _ -> false
+        | VisitedTypes.Operation operation when operation.ReturnType.IsFieldType -> true
         | VisitedTypes.Operation _ -> false
 
     let private canAddArguments (type': VisitedTypes) =
