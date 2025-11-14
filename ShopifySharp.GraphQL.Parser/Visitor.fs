@@ -25,7 +25,7 @@ type Visitor() =
 
         let objectTypeName = objectTypeDefinition.Name.StringValue
 
-        if objectTypeName = "QueryRoot" || objectTypeName = "Mutation" then
+        if objectTypeName = "Mutation" then
             base.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context)
         else
             let class' = AstNodeMapper.mapObjectTypeDefinition objectTypeDefinition
