@@ -1,0 +1,25 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class DiscountAutomaticAppCreatePayloadQueryBuilder() : GraphQueryBuilder<DiscountAutomaticAppCreatePayload>("query discountAutomaticAppCreatePayload")
+{
+    public DiscountAutomaticAppCreatePayloadQueryBuilder AddFieldAutomaticAppDiscount()
+    {
+        AddField("automaticAppDiscount");
+        return this;
+    }
+
+    public DiscountAutomaticAppCreatePayloadQueryBuilder AddFieldUserErrors()
+    {
+        AddField("userErrors");
+        return this;
+    }
+}

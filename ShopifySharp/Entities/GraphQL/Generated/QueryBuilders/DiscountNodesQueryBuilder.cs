@@ -1,0 +1,61 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class DiscountNodesQueryBuilder() : GraphQueryBuilder<DiscountNodeConnection>("query discountNodes")
+{
+    public DiscountNodesQueryBuilder AddArgumentAfter(string? after)
+    {
+        AddArgument("after", after);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentBefore(string? before)
+    {
+        AddArgument("before", before);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentFirst(int? first)
+    {
+        AddArgument("first", first);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentLast(int? last)
+    {
+        AddArgument("last", last);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentQuery(string? query)
+    {
+        AddArgument("query", query);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentReverse(bool? reverse)
+    {
+        AddArgument("reverse", reverse);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentSavedSearchId(string? savedSearchId)
+    {
+        AddArgument("savedSearchId", savedSearchId);
+        return this;
+    }
+
+    public DiscountNodesQueryBuilder AddArgumentSortKey(DiscountSortKeys? sortKey)
+    {
+        AddArgument("sortKey", sortKey);
+        return this;
+    }
+}

@@ -1,0 +1,21 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The input fields to specify a region condition.
+/// </summary>
+public record MarketConditionsRegionInput : GraphQLInputObject<MarketConditionsRegionInput>
+{
+    /// <summary>
+    /// A country code to which this condition should apply.
+    /// </summary>
+    [JsonPropertyName("countryCode")]
+    public CountryCode? countryCode { get; set; } = null;
+}

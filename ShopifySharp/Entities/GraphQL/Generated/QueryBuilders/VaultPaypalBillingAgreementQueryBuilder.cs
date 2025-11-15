@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class VaultPaypalBillingAgreementQueryBuilder() : GraphQueryBuilder<VaultPaypalBillingAgreement>("query vaultPaypalBillingAgreement")
+{
+    public VaultPaypalBillingAgreementQueryBuilder AddFieldInactive()
+    {
+        AddField("inactive");
+        return this;
+    }
+
+    public VaultPaypalBillingAgreementQueryBuilder AddFieldName()
+    {
+        AddField("name");
+        return this;
+    }
+
+    public VaultPaypalBillingAgreementQueryBuilder AddFieldPaypalAccountEmail()
+    {
+        AddField("paypalAccountEmail");
+        return this;
+    }
+}

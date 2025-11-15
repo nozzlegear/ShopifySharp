@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class FinancialSummaryDiscountApplicationQueryBuilder() : GraphQueryBuilder<FinancialSummaryDiscountApplication>("query financialSummaryDiscountApplication")
+{
+    public FinancialSummaryDiscountApplicationQueryBuilder AddFieldAllocationMethod()
+    {
+        AddField("allocationMethod");
+        return this;
+    }
+
+    public FinancialSummaryDiscountApplicationQueryBuilder AddFieldTargetSelection()
+    {
+        AddField("targetSelection");
+        return this;
+    }
+
+    public FinancialSummaryDiscountApplicationQueryBuilder AddFieldTargetType()
+    {
+        AddField("targetType");
+        return this;
+    }
+}

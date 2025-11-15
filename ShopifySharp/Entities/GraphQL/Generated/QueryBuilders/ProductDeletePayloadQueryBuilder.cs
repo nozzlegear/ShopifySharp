@@ -1,0 +1,37 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class ProductDeletePayloadQueryBuilder() : GraphQueryBuilder<ProductDeletePayload>("query productDeletePayload")
+{
+    public ProductDeletePayloadQueryBuilder AddFieldDeletedProductId()
+    {
+        AddField("deletedProductId");
+        return this;
+    }
+
+    public ProductDeletePayloadQueryBuilder AddFieldProductDeleteOperation()
+    {
+        AddField("productDeleteOperation");
+        return this;
+    }
+
+    public ProductDeletePayloadQueryBuilder AddFieldShop()
+    {
+        AddField("shop");
+        return this;
+    }
+
+    public ProductDeletePayloadQueryBuilder AddFieldUserErrors()
+    {
+        AddField("userErrors");
+        return this;
+    }
+}
