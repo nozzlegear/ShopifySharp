@@ -158,7 +158,8 @@ module rec QueryBuilderWriter =
                     | ReturnType.VisitedType visitedTypes ->
                         visitedTypes.Name
                     | ReturnType.FieldType fieldType ->
-                        AstNodeMapper.mapFieldTypeToString context.IsNamedType context.AssumeNullability fieldType FieldTypeCollectionHandling.KeepCollection
+                        // Use the wrapper function to ensure primitives are wrapped in GraphQLValue<T> or GraphQLCollection<T>
+                        AstNodeMapper.mapFieldTypeToStringWithPrimitiveWrapper context.IsNamedType context.AssumeNullability fieldType
                 | x -> x.Name
 
             // Fully qualify class names that might collide with System types
