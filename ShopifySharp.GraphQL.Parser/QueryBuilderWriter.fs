@@ -62,9 +62,9 @@ module rec QueryBuilderWriter =
                 // TODO: add the Func overload
             }
 
-        let writeAddValue (_: FieldType): ValueTask =
+        let writeAddReturnValue (_: FieldType): ValueTask =
             pipeWriter writer {
-                do! Indented + $"public {pascalClassName} AddValue()"
+                do! Indented + $"public {pascalClassName} AddReturnValue()"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
@@ -108,7 +108,7 @@ module rec QueryBuilderWriter =
                     else
                         do! writeField graphObjectTypeName None
                 | ReturnType.FieldType fieldType ->
-                    do! writeAddValue fieldType
+                    do! writeAddReturnValue fieldType
                 | ReturnType.VisitedType visitedTypes ->
                     do! writeForVisitedType visitedTypes
             | visitedType ->
