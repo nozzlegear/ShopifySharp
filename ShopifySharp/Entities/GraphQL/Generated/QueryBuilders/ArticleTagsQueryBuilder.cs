@@ -9,7 +9,7 @@ using ShopifySharp.GraphQL;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
-public class ArticleTagsQueryBuilder() : GraphQueryBuilder<ICollection<string>?>("query articleTags")
+public class ArticleTagsQueryBuilder() : GraphQueryBuilder<GraphQLCollection<string>>("query articleTags")
 {
     public ArticleTagsQueryBuilder AddReturnValue()
     {
