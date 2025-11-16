@@ -39,6 +39,7 @@ module AstNodeMapper =
         | NonNullableType valueType -> unwrapFieldType valueType
         | CollectionType collectionType -> unwrapFieldType collectionType
 
+    /// Maps a field type to a string representation.
     let rec mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
         let maybeWriteNullability isNullable fieldStr =
             fieldStr + (if isNullable then "?" else "")
@@ -66,6 +67,40 @@ module AstNodeMapper =
                 |> maybeWriteNullability true
 
         unwrapType false valueType
+
+    /// <summary>
+    /// Maps a field type to a string representation, wrapping primitives in <see cref="GraphQLValue&lt;T&gt;"/> or
+    /// <see cref="GraphQLCollection&lt;T&gt;" /> to ensure the type implements IGraphQLObject. Used for operation return types.
+    /// </summary>
+    let rec mapFieldTypeToStringWithPrimitiveWrapper (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) =
+        let rec isCollectionType = function
+            | CollectionType _ -> true
+            | NonNullableType type' -> isCollectionType type'
+            | NullableType type' -> isCollectionType type'
+            | _ -> false
+
+        let rec isPrimitiveType = function
+            | ValueType valueType ->
+                match valueType with
+                | FieldValueType.GraphObjectType _ -> false
+                | _ -> true
+            | NonNullableType type' -> isPrimitiveType type'
+            | NullableType type' -> isPrimitiveType type'
+            | CollectionType type' -> isPrimitiveType type'
+
+        // Determine if we need to wrap this type
+        match valueType with
+        | _ when isCollectionType valueType && isPrimitiveType valueType ->
+            // It's a collection of primitives, wrap it in GraphQLCollection<T>
+            let elementType = mapFieldTypeToString isNamedType false valueType FieldTypeCollectionHandling.UnwrapCollection
+            $"GraphQLCollection<{elementType}>"
+        | _ when isPrimitiveType valueType ->
+            // It's a single primitive, wrap it in GraphQLValue<T>
+            let primitiveType = mapFieldTypeToString isNamedType false valueType FieldTypeCollectionHandling.KeepCollection
+            $"GraphQLValue<{primitiveType}>"
+        | _ ->
+            // It's GraphQL object, no wrapper needed. Return the base type string without a wrapper
+            mapFieldTypeToString isNamedType assumeNullability valueType FieldTypeCollectionHandling.KeepCollection
 
     let rec private mapGraphTypeToName (fieldType: GraphQLType): string =
         match fieldType with
