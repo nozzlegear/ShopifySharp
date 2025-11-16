@@ -11,7 +11,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 
 public class ArticleTagsQueryBuilder() : GraphQueryBuilder<ICollection<string>?>("query articleTags")
 {
-    public ArticleTagsQueryBuilder AddValue()
+    public ArticleTagsQueryBuilder AddReturnValue()
     {
         // This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being including
         return this;
