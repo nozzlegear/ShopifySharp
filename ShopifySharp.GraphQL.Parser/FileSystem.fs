@@ -68,7 +68,7 @@ module FileSystem =
                                 .AddMembers(ns.WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(type')))
                                 .NormalizeWhitespace(eol = Environment.NewLine)
 
-                    { FileName = type'.Identifier.Text + ".cs"
+                    { FileName = type'.Identifier.Text + ".generated.cs"
                       FileText = unit.ToFullString() }
                 )
         })
