@@ -1,6 +1,5 @@
 namespace ShopifySharp.GraphQL.Parser
 
-open System.IO.Pipelines
 open System.Threading.Tasks
 open GraphQLParser.AST
 open ShopifySharp.GraphQL.Parser.PipeWriter
@@ -22,7 +21,7 @@ module rec QueryBuilderWriter =
     let private canAddArguments (type': VisitedTypes) =
         type'.IsOperation
 
-    let writeUnionTypeMutationJoins (pascalParentClassName: string) (unionCaseName: string) (_: IParsedContext) writer: ValueTask =
+    let private writeUnionTypeMutationJoins (pascalParentClassName: string) (unionCaseName: string) (_: IParsedContext) writer: ValueTask =
         pipeWriter writer {
             let pascalUnionCaseName = toCasing Pascal unionCaseName
             let camelUnionCaseName = toCasing Camel unionCaseName
@@ -40,7 +39,7 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let writeQueryBuilderAddFieldMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
+    let private writeQueryBuilderAddFieldMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
         let writeField (fieldName: string) fieldDeprecationWarning: ValueTask =
             let pascalFieldName = toCasing Pascal fieldName
             let camelFieldName = toCasing Camel fieldName
@@ -51,7 +50,6 @@ module rec QueryBuilderWriter =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                // TODO: check if field.Type is a union type – if so, use AddUnion<TUnion>?
                 if context.TypeIsKnownUnionCase fieldName then
                     do! DoubleIndented + $"Add{pascalClassName}()"
                 else
@@ -117,7 +115,7 @@ module rec QueryBuilderWriter =
                 do! writeForVisitedType visitedType
         }
 
-    let writeQueryBuilderAddArgumentMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
+    let private writeQueryBuilderAddArgumentMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
         let arguments =
             match type' with
             | Operation operation -> operation.Arguments
@@ -279,17 +277,3 @@ module rec QueryBuilderWriter =
                     | Some mappedType ->
                         yield! writeQueryBuilder mappedType None context
         }
-
-    let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =
-        let cancellationToken = context.CancellationToken
-
-        ValueTask(task {
-            let pipe = Pipe(PipeOptions())
-            let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
-
-            do! writeServicesToPipe context pipe.Writer
-            do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
-
-            let! csharpCode = readTask
-            do! (FileSystem.writeCsharpCodeToFileSystem destination csharpCode cancellationToken).ConfigureAwait(false)
-        })

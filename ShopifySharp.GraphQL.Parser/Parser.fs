@@ -1,11 +1,13 @@
 module ShopifySharp.GraphQL.Parser.Parser
 
 open System
+open System.IO.Pipelines
 open System.Threading
 open System.Threading.Tasks
 open FSharp.Control
 open GraphQLParser
 open GraphQLParser.Visitors
+open ShopifySharp.GraphQL.Parser.Utils
 
 let private parseAsync (casing: Casing)
                        (assumeNullability: bool)
@@ -27,6 +29,23 @@ let private parseAsync (casing: Casing)
         return context
     })
 
+let private parseAndWriteToFilesystem (parseAndWriteFn: ParserContext -> PipeWriter -> ValueTask)
+                                      (destination: FileSystemDestination)
+                                      (context: ParserContext)
+                                      : ValueTask =
+    let cancellationToken = context.CancellationToken
+
+    ValueTask(task {
+        let pipe = Pipe(PipeOptions())
+        let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
+
+        do! parseAndWriteFn context pipe.Writer
+        do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
+
+        let! csharpCode = readTask
+        do! (FileSystem.writeCsharpCodeToFileSystem destination csharpCode cancellationToken).ConfigureAwait(false)
+    })
+
 let ParseAsync (casing: Casing)
                (assumeNullability: bool)
                (graphqlData: ReadOnlyMemory<char>)
@@ -45,6 +64,6 @@ let ParseAndWriteAsync (typesDestination: FileSystemDestination, servicesDestina
                        : ValueTask =
     ValueTask(task {
         let! context = parseAsync casing assumeNullability graphqlData cancellationToken
-        do! Writer.writeVisitedTypesToFileSystem typesDestination context
-        do! QueryBuilderWriter.writeServicesToFileSystem servicesDestination context
+        do! parseAndWriteToFilesystem Writer.writeVisitedTypesToPipe typesDestination context
+        do! parseAndWriteToFilesystem QueryBuilderWriter.writeQueryBuildersToPipe servicesDestination context
     })

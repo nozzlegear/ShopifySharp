@@ -373,7 +373,7 @@ let private shouldSkipType (visitedType: VisitedTypes): bool =
 
     Set.contains visitedType.Name typeNamesToSkip
 
-let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): ValueTask =
+let writeVisitedTypesToPipe (context: ParserContext) (writer: Writer): ValueTask =
     let parsedContext = context :> IParsedContext
 
     pipeWriter writer {
@@ -398,17 +398,3 @@ let private writeVisitedTypesToPipe (writer: Writer) (context: ParserContext): V
                 | VisitedTypes.Operation _ ->
                     ()
     }
-
-let writeVisitedTypesToFileSystem (destination: FileSystemDestination) (context: ParserContext) : ValueTask =
-    let cancellationToken = context.CancellationToken
-
-    ValueTask(task {
-        let pipe = Pipe(PipeOptions())
-        let readTask = (readPipe pipe.Reader cancellationToken).ConfigureAwait(false)
-
-        do! writeVisitedTypesToPipe pipe.Writer context
-        do! pipe.Writer.CompleteAsync().ConfigureAwait(false);
-
-        let! csharpCode = readTask
-        do! (FileSystem.writeCsharpCodeToFileSystem destination csharpCode cancellationToken).ConfigureAwait(false)
-    })
