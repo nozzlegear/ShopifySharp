@@ -354,7 +354,7 @@ module AstNodeMapper =
         | Some mappedType -> mappedType
         | None -> raise (SwitchExpressionException(node.GetType()))
 
-    let mapRootFieldDefinition (fieldDefinition: GraphQLFieldDefinition) (context: IParsedContext): QueryOrMutation =
+    let mapRootFieldDefinition (parentType: OperationType) (fieldDefinition: GraphQLFieldDefinition) (context: IParsedContext): Operation =
         let returnTypeName =
             mapGraphTypeToName fieldDefinition.Type
             |> _.ToCharArray()
@@ -380,6 +380,7 @@ module AstNodeMapper =
                 |> ReturnType.VisitedType
 
         { Name = fieldDefinition.Name.StringValue
+          Type = parentType
           XmlSummary = mapDescriptionToXmlSummary fieldDefinition.Description
           Deprecation = getDeprecationMessage fieldDefinition.Directives
           Arguments = mapToArguments fieldDefinition.Arguments

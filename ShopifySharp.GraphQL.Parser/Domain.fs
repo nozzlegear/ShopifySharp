@@ -132,8 +132,9 @@ type UnionType =
       Deprecation: string option
       Cases: VisitedTypes[] }
     with interface IVisitedType
-and QueryOrMutation =
+and Operation =
     { Name: string
+      Type: OperationType
       XmlSummary: string[]
       Deprecation: string option
       Arguments: FieldOrOperationArgument[]
@@ -148,7 +149,8 @@ and VisitedTypes =
     | Enum of enum': VisitedEnum
     | InputObject of inputObject: InputObject
     | UnionType of unionType: UnionType
-    | Operation of operation: QueryOrMutation
+    | Operation of operation: Operation
+
     with
     member x.Name =
         match x with
