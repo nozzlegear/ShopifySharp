@@ -7,6 +7,8 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open Utils
 
 module rec QueryBuilderWriter =
+    let [<Literal>] private QueryRootObjectName = "QueryRoot"
+    let [<Literal>] private MutationRootObjectName = "Mutation"
 
     let private canAddFields = function
         | VisitedTypes.Class _ -> true
@@ -147,7 +149,12 @@ module rec QueryBuilderWriter =
                 do! NewLine
         }
 
-    let writeQueryBuilderConstructor (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
+    let private writeQueryBuilderConstructor (pascalClassName: string)
+                                             (isOperation: bool)
+                                             (type': VisitedTypes)
+                                             (context: IParsedContext)
+                                             writer
+                                             : ValueTask =
         pipeWriter writer {
             let camelTypeName = toCasing Camel type'.Name
 
@@ -171,12 +178,25 @@ module rec QueryBuilderWriter =
                 | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
                 | _ -> pascalGenericType
 
-            // TODO: this may not always be a query, it may also be a mutation (or even a subselection in the case of nested objects)
-            do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"query {camelTypeName}\")"
+            do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"{camelTypeName}\")"
+
+            if isOperation then
+                do! ", IGraphOperationQueryBuilder"
+
             do! NewLine
         }
 
-    let writeQueryBuilder (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
+    let writeOperationTypeProperty (operationType: OperationType) (_: IParsedContext) writer: ValueTask =
+        pipeWriter writer {
+            do! "public OperationType OperationType { get; } = "
+            match operationType with
+            | OperationType.Query -> do! "OperationType.Query;"
+            | OperationType.Mutation -> do! "OperationType.Mutation;"
+            | value -> failwith $"Operation type \"{value}\" is not supported."
+            do! NewLine
+        }
+
+    let writeQueryBuilder (type': VisitedTypes) (operationType: OperationType option) (context: IParsedContext) writer: ValueTask =
         if type'.IsEnum || type'.IsInputObject then
             failwithf $"The {type'.GetType().Name} type is not supported."
 
@@ -184,9 +204,12 @@ module rec QueryBuilderWriter =
             let pascalClassName = toCasing Pascal (type'.Name + "QueryBuilder")
 
             yield! writeDeprecationAttribute Outdented type'.Deprecation
-            yield! writeQueryBuilderConstructor pascalClassName type' context
+            yield! writeQueryBuilderConstructor pascalClassName operationType.IsSome type' context
             do! "{"
             do! NewLine
+
+            if operationType.IsSome then
+                yield! writeOperationTypeProperty operationType.Value context
 
             if canAddFields type' then
                 yield! writeQueryBuilderAddFieldMethods pascalClassName type' context
@@ -223,20 +246,28 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let private writeServicesToPipe (context: IParsedContext) writer: ValueTask =
+    let writeQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
+        let parsedContext = context :> IParsedContext
+
         pipeWriter writer {
             // Always write the namespace and usings at the very top of the document
             yield! writeNamespaceAndUsings
 
-            for node in context.Document.Definitions do
+            for node in parsedContext.Document.Definitions do
                 match node with
                 | :? GraphQLObjectTypeDefinition as objDef when
-                    objDef.Name.StringValue = "QueryRoot" || objDef.Name.StringValue = "Mutation" ->
+                    objDef.Name.StringValue = QueryRootObjectName || objDef.Name.StringValue = MutationRootObjectName ->
+
+                    let operationType =
+                        match objDef.Name.StringValue with
+                        | "QueryRoot" -> OperationType.Query
+                        | "Mutation" -> OperationType.Mutation
+                        | value -> failwith $"{value} is not a supported operation type"
 
                     // Each field in this object is an operation and should have a QueryBuilder
                     for field in objDef.Fields do
-                        let operation = AstNodeMapper.mapRootFieldDefinition field context
-                        yield! writeQueryBuilder (VisitedTypes.Operation operation) context
+                        let operation = AstNodeMapper.mapRootFieldDefinition operationType field context
+                        yield! writeQueryBuilder (VisitedTypes.Operation operation) (Some operationType) context
                 | _ ->
                     match AstNodeMapper.tryMap context node with
                     | None ->
@@ -246,7 +277,7 @@ module rec QueryBuilderWriter =
                         // InputObjects and Enums do not need a QueryBuilder and are not supported
                         ()
                     | Some mappedType ->
-                        yield! writeQueryBuilder mappedType context
+                        yield! writeQueryBuilder mappedType None context
         }
 
     let writeServicesToFileSystem(destination: FileSystemDestination) (context: ParserContext): ValueTask =
