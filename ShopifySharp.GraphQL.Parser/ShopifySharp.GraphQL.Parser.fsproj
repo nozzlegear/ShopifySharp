@@ -15,7 +15,7 @@
         <Compile Include="AstNodeMapper.fs" />
         <Compile Include="QueryBuilderWriter.fs" />
         <Compile Include="Visitor.fs" />
-        <Compile Include="Writer.fs" />
+        <Compile Include="VisitedTypeWriter.fs" />
         <Compile Include="Parser.fs" />
     </ItemGroup>
     <ItemGroup>

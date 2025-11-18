@@ -7,7 +7,7 @@ open Faqt
 open Faqt.Operators
 open Xunit
 open ShopifySharp.GraphQL.Parser
-open ShopifySharp.GraphQL.Parser.Writer
+open ShopifySharp.GraphQL.Parser.VisitedTypeWriter
 
 type WriterTests() =
     let schema = """
