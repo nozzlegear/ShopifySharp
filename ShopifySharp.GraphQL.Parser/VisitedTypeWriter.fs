@@ -1,4 +1,4 @@
-module ShopifySharp.GraphQL.Parser.Writer
+module ShopifySharp.GraphQL.Parser.VisitedTypeWriter
 
 open System
 open System.IO.Pipelines
@@ -63,7 +63,6 @@ let private writeDateOnlyJsonConverterAttribute (fieldType: FieldType) writer: V
             do! (toTab Indented) + "#endif"
             do! NewLine
     }
-
 
 let private writeGraphUnionTypeConverterAttribute unionTypeName writer: ValueTask =
     pipeWriter writer {

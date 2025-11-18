@@ -25,6 +25,8 @@ let private parseAsync (casing: Casing)
     //              |> Async.RunSynchronously
 
     ValueTask<ParserContext>(task {
+        // TODO: It's simpler to just skip the visitor concept entirely and pass the parsed GraphDocument to the writers.
+        //       The QueryBuilderWriter does this already; the VisitedTypeWriter should do it as well.
         do! visitor.VisitAsync(ast, context)
         return context
     })
@@ -64,6 +66,6 @@ let ParseAndWriteAsync (typesDestination: FileSystemDestination, servicesDestina
                        : ValueTask =
     ValueTask(task {
         let! context = parseAsync casing assumeNullability graphqlData cancellationToken
-        do! parseAndWriteToFilesystem Writer.writeVisitedTypesToPipe typesDestination context
+        do! parseAndWriteToFilesystem VisitedTypeWriter.writeVisitedTypesToPipe typesDestination context
         do! parseAndWriteToFilesystem QueryBuilderWriter.writeQueryBuildersToPipe servicesDestination context
     })
