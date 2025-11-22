@@ -30,13 +30,7 @@ public interface IQuery<TSource> : IQuery
     IQuery<TSource> Alias(string alias);
     IQuery<TSource> AddField<TProperty>(Expression<Func<TSource, TProperty>> selector);
     IQuery<TSource> AddField(string field);
-    IQuery<TSource> AddField<TSubSource>(
-        Expression<Func<TSource, TSubSource>> selector,
-        Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
-        where TSubSource : class?;
-    IQuery<TSource> AddField<TSubSource>(
-        Expression<Func<TSource, IEnumerable<TSubSource>>> selector,
-        Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
+    IQuery<TSource> AddField<TSubSource>(string field, IQuery<TSubSource> build)
         where TSubSource : class?;
     IQuery<TSource> AddField<TSubSource>(
         string field,
@@ -140,6 +134,17 @@ public class Query<TSource> : IQuery<TSource>
         var subQuery = build.Invoke(query);
 
         SelectList.Add(subQuery);
+
+        return this;
+    }
+
+    public IQuery<TSource> AddField<TSubSource>(string field, IQuery<TSubSource> build)
+        where TSubSource : class?
+    {
+        RequiredArgument.NotNullOrEmpty(field, nameof(field));
+        RequiredArgument.NotNull(build, nameof(build));
+
+        SelectList.Add(build);
 
         return this;
     }
