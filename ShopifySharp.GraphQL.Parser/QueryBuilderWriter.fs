@@ -39,29 +39,53 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let private writeQueryBuilderAddFieldMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
-        let writeField (fieldName: string) fieldDeprecationWarning: ValueTask =
-            let pascalFieldName = toCasing Pascal fieldName
-            let camelFieldName = toCasing Camel fieldName
+    let private writeQueryBuilderAddFieldMethod (pascalClassName: string)
+                                                (fieldName: string)
+                                                (fieldType: FieldType)
+                                                (deprecationWarning: string option)
+                                                (context: IParsedContext)
+                                                writer =
+        let pascalFieldName = toCasing Pascal fieldName
+        let camelFieldName = toCasing Camel fieldName
 
-            pipeWriter writer {
-                yield! writeDeprecationAttribute Indented fieldDeprecationWarning
+        pipeWriter writer {
+            if context.TypeIsKnownUnionCase fieldName || context.IsNamedType (NamedType.UnionType fieldName) then
+                yield! writeUnionTypeMutationJoins pascalClassName fieldName context
+            else
+                yield! writeDeprecationAttribute Indented deprecationWarning
                 do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                if context.TypeIsKnownUnionCase fieldName then
-                    do! DoubleIndented + $"Add{pascalClassName}()"
-                else
-                    do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
+                do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
                 do! DoubleIndented + "}"
                 do! NewLine
-                // TODO: add the Func overload
-            }
 
+                match fieldType with
+                | FieldType.ValueType (FieldValueType.GraphObjectType graphObjectTypeName) ->
+                    let queryBuilderName = $"{toCasing Pascal graphObjectTypeName}QueryBuilder"
+
+                    // TODO: if this is an enum or union case, throw as they're not or supported by this particular function
+
+                    yield! writeDeprecationAttribute Indented None
+                    do! Indented + $"public {pascalClassName} AddField{pascalClassName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
+                    do! NewLine
+                    do! DoubleIndented + "{"
+                    do! NewLine
+                    do! TripleIndented + $"AddField(\"{camelFieldName}\", selector);"
+                    do! NewLine
+                    do! TripleIndented + "return this;"
+                    do! NewLine
+                    do! DoubleIndented + "}"
+                    do! NewLine
+                | _ ->
+                    ()
+        }
+
+    let private writeQueryBuilderAddFieldMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
         let writeAddReturnValue (_: FieldType): ValueTask =
             pipeWriter writer {
                 do! Indented + $"public {pascalClassName} AddReturnValue()"
@@ -95,18 +119,16 @@ module rec QueryBuilderWriter =
                             failwith $"The VisitedType %A{visitedType.Name} is not supported here."
 
                     for field in fields do
-                        do! writeField field.Name field.Deprecation
+                        yield! writeQueryBuilderAddFieldMethod pascalClassName field.Name field.ValueType field.Deprecation context
             }
 
         pipeWriter writer {
             match type' with
             | VisitedTypes.Operation operation ->
                 match operation.ReturnType with
-                | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType graphObjectTypeName)) ->
-                    if context.TypeIsKnownUnionCase graphObjectTypeName || context.IsNamedType (NamedType.UnionType graphObjectTypeName) then
-                        yield! writeUnionTypeMutationJoins pascalClassName graphObjectTypeName context
-                    else
-                        do! writeField graphObjectTypeName None
+                | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)) ->
+                    let fieldType = FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)
+                    yield! writeQueryBuilderAddFieldMethod pascalClassName graphValueType fieldType None context
                 | ReturnType.FieldType fieldType ->
                     do! writeAddReturnValue fieldType
                 | ReturnType.VisitedType visitedTypes ->
@@ -233,6 +255,8 @@ module rec QueryBuilderWriter =
             do! "using System.Text.Json.Serialization;"
             do! NewLine
             do! "using System.Collections.Generic;"
+            do! NewLine
+            do! "using System.Expressions;"
             do! NewLine
             do! "using ShopifySharp.Credentials;"
             do! NewLine
