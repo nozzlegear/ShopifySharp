@@ -2,6 +2,7 @@ namespace ShopifySharp.GraphQL.Parser
 
 open System.Threading.Tasks
 open GraphQLParser.AST
+open ShopifySharp.GraphQL.Parser
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open Utils
 
@@ -49,40 +50,48 @@ module rec QueryBuilderWriter =
         let camelFieldName = toCasing Camel fieldName
 
         pipeWriter writer {
+            // TODO: does the context actually know about union cases/named types now that we parse the document definitions directly?
+            //       (i.e. now that we aren't using the visitor pattern)
             if context.TypeIsKnownUnionCase fieldName || context.IsNamedType (NamedType.UnionType fieldName) then
                 yield! writeUnionTypeMutationJoins pascalClassName fieldName context
             else
-                yield! writeDeprecationAttribute Indented deprecationWarning
-                do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
-                do! NewLine
-                do! DoubleIndented + "{"
-                do! NewLine
-                do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
-                do! NewLine
-                do! TripleIndented + "return this;"
-                do! NewLine
-                do! DoubleIndented + "}"
-                do! NewLine
-
-                match fieldType with
-                | FieldType.ValueType (FieldValueType.GraphObjectType graphObjectTypeName) ->
+                match AstNodeMapper.unwrapFieldType fieldType with
+                | FieldValueType.GraphObjectType (NamedType.UnionType graphObjectTypeName) ->
+                    printfn $"{graphObjectTypeName} should have procced the writeUnionTypeMutationJoins fn"
+                    yield! writeUnionTypeMutationJoins pascalClassName fieldName context
+                | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName)
+                | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName)
+                | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName) ->
+                    let pascalTypeName = toCasing Pascal graphObjectTypeName
                     let queryBuilderName = $"{toCasing Pascal graphObjectTypeName}QueryBuilder"
 
-                    // TODO: if this is an enum or union case, throw as they're not or supported by this particular function
+                    // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
                     yield! writeDeprecationAttribute Indented None
-                    do! Indented + $"public {pascalClassName} AddField{pascalClassName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
+                    do! Indented + $"public {pascalClassName} AddField{pascalFieldName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
                     do! NewLine
                     do! DoubleIndented + "{"
                     do! NewLine
-                    do! TripleIndented + $"AddField(\"{camelFieldName}\", selector);"
+                    do! TripleIndented + $"AddField<{pascalTypeName}, {queryBuilderName}>(\"{camelFieldName}\", build);"
                     do! NewLine
                     do! TripleIndented + "return this;"
                     do! NewLine
                     do! DoubleIndented + "}"
                     do! NewLine
                 | _ ->
-                    ()
+                    // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
+
+                    yield! writeDeprecationAttribute Indented deprecationWarning
+                    do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
+                    do! NewLine
+                    do! DoubleIndented + "{"
+                    do! NewLine
+                    do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
+                    do! NewLine
+                    do! TripleIndented + "return this;"
+                    do! NewLine
+                    do! DoubleIndented + "}"
+                    do! NewLine
         }
 
     let private writeQueryBuilderAddFieldMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
@@ -128,7 +137,8 @@ module rec QueryBuilderWriter =
                 match operation.ReturnType with
                 | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)) ->
                     let fieldType = FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)
-                    yield! writeQueryBuilderAddFieldMethod pascalClassName graphValueType fieldType None context
+                    let fieldName = graphValueType.ToString()
+                    yield! writeQueryBuilderAddFieldMethod pascalClassName fieldName fieldType None context
                 | ReturnType.FieldType fieldType ->
                     do! writeAddReturnValue fieldType
                 | ReturnType.VisitedType visitedTypes ->
@@ -150,7 +160,7 @@ module rec QueryBuilderWriter =
 
             for argument in arguments do
                 let valueType =
-                    AstNodeMapper.mapFieldTypeToString context.IsNamedType context.AssumeNullability argument.ValueType FieldTypeCollectionHandling.KeepCollection
+                    AstNodeMapper.mapFieldTypeToString context.AssumeNullability argument.ValueType FieldTypeCollectionHandling.KeepCollection
                 let camelArgumentName =
                     sanitizeArgumentName Camel argument.Name
                 let pascalArgumentName =
@@ -186,7 +196,7 @@ module rec QueryBuilderWriter =
                         visitedTypes.Name
                     | ReturnType.FieldType fieldType ->
                         // Use the wrapper function to ensure primitives are wrapped in GraphQLValue<T> or GraphQLCollection<T>
-                        AstNodeMapper.mapFieldTypeToStringWithPrimitiveWrapper context.IsNamedType context.AssumeNullability fieldType
+                        AstNodeMapper.mapFieldTypeToStringWithPrimitiveWrapper context.AssumeNullability fieldType
                 | x -> x.Name
 
             // Fully qualify class names that might collide with System types
@@ -216,7 +226,7 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let writeQueryBuilder (type': VisitedTypes) (operationType: OperationType option) (context: IParsedContext) writer: ValueTask =
+    let writeQueryBuilder context (type': VisitedTypes) (operationType: OperationType option) writer: ValueTask =
         if type'.IsEnum || type'.IsInputObject then
             failwithf $"The {type'.GetType().Name} type is not supported."
 
@@ -256,7 +266,7 @@ module rec QueryBuilderWriter =
             do! NewLine
             do! "using System.Collections.Generic;"
             do! NewLine
-            do! "using System.Expressions;"
+            do! "using System.Linq.Expressions;"
             do! NewLine
             do! "using ShopifySharp.Credentials;"
             do! NewLine
@@ -288,8 +298,8 @@ module rec QueryBuilderWriter =
 
                     // Each field in this object is an operation and should have a QueryBuilder
                     for field in objDef.Fields do
-                        let operation = AstNodeMapper.mapRootFieldDefinition operationType field context
-                        yield! writeQueryBuilder (VisitedTypes.Operation operation) (Some operationType) context
+                        let operation = AstNodeMapper.mapRootFieldDefinition context operationType field
+                        yield! writeQueryBuilder context (VisitedTypes.Operation operation) (Some operationType)
                 | _ ->
                     match AstNodeMapper.tryMap context node with
                     | None ->
@@ -299,5 +309,5 @@ module rec QueryBuilderWriter =
                         // InputObjects and Enums do not need a QueryBuilder and are not supported
                         ()
                     | Some mappedType ->
-                        yield! writeQueryBuilder mappedType None context
+                        yield! writeQueryBuilder context mappedType None
         }
