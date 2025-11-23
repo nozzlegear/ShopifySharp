@@ -28,7 +28,7 @@ type Visitor() =
         if objectTypeName = "Mutation" then
             base.VisitObjectTypeDefinitionAsync(objectTypeDefinition, context)
         else
-            let class' = AstNodeMapper.mapObjectTypeDefinition objectTypeDefinition
+            let class' = AstNodeMapper.mapObjectTypeDefinition context objectTypeDefinition
 
             VisitedTypes.Class class'
             |> context.SetVisitedType
@@ -44,7 +44,7 @@ type Visitor() =
     override this.VisitInterfaceTypeDefinitionAsync(interfaceTypeDefinition, context) =
         context.CancellationToken.ThrowIfCancellationRequested()
 
-        let interface' = AstNodeMapper.mapInterfaceTypeDefinition interfaceTypeDefinition
+        let interface' = AstNodeMapper.mapInterfaceTypeDefinition context interfaceTypeDefinition
 
         VisitedTypes.Interface interface'
         |> context.SetVisitedType
@@ -72,7 +72,7 @@ type Visitor() =
     override this.VisitInputObjectTypeDefinitionAsync(inputObjectTypeDefinition, context) =
         context.CancellationToken.ThrowIfCancellationRequested()
 
-        let inputObject = AstNodeMapper.mapInputObjectTypeDefinition inputObjectTypeDefinition
+        let inputObject = AstNodeMapper.mapInputObjectTypeDefinition context inputObjectTypeDefinition
 
         VisitedTypes.InputObject inputObject
         |> context.SetVisitedType

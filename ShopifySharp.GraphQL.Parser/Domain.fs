@@ -39,6 +39,23 @@ type GeneratedCsharpFile =
     { FileName: string
       FileText: string }
 
+type NamedType =
+    | Class of name: string
+    | Interface of name: string
+    | Enum of name: string
+    | InputObject of name: string
+    | UnionType of name: string
+    with
+    member this.Name: string =
+        match this with
+        | Class name -> name
+        | Interface name -> name
+        | Enum name -> name
+        | InputObject name -> name
+        | UnionType name -> name
+    override this.ToString (): string =
+        this.Name
+
 [<RequireQualifiedAccess>]
 type FieldValueType =
     | ULong
@@ -51,7 +68,7 @@ type FieldValueType =
     | DateTime
     | DateOnly
     | TimeSpan
-    | GraphObjectType of graphObjectTypeName: string
+    | GraphObjectType of graphObjectType: NamedType
 
 type FieldType =
     | ValueType of valueType: FieldValueType
@@ -168,20 +185,6 @@ and VisitedTypes =
         | VisitedTypes.InputObject inputObject -> inputObject.Deprecation
         | VisitedTypes.UnionType unionType -> unionType.Deprecation
         | VisitedTypes.Operation operation -> operation.Deprecation
-
-type NamedType =
-    | Class of name: string
-    | Interface of name: string
-    | Enum of name: string
-    | InputObject of name: string
-    | UnionType of name: string
-    with override this.ToString (): string =
-          match this with
-          | Class name -> name
-          | Interface name -> name
-          | Enum name -> name
-          | InputObject name -> name
-          | UnionType name -> name
 
 type IParsedContext =
     abstract member CasingType: Casing with get
