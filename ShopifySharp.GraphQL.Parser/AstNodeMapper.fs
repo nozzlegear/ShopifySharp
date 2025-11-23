@@ -8,6 +8,7 @@ open FSharp.Span.Utils.SafeLowLevelOperators
 open FSharp.Span.Utils
 open Utils
 
+[<RequireQualifiedAccess>]
 module AstNodeMapper =
     type private Presence
         = Present of fieldType: GraphQLType
@@ -17,7 +18,7 @@ module AstNodeMapper =
         | InputFields of inputFields: GraphQLInputFieldsDefinition
         | ObjectFields of xFields: GraphQLFieldsDefinition
 
-    let mapValueTypeToString (isNamedType: NamedType -> bool) = function
+    let mapValueTypeToString = function
         | FieldValueType.ULong -> "ulong"
         | FieldValueType.Long -> "long"
         | FieldValueType.Int -> "int"
@@ -28,10 +29,10 @@ module AstNodeMapper =
         | FieldValueType.DateTime -> "DateTime"
         | FieldValueType.DateOnly -> "DateOnly"
         | FieldValueType.TimeSpan -> "TimeSpan"
+        | FieldValueType.GraphObjectType (NamedType.Interface graphInterfaceName) ->
+            mapStrToInterfaceName graphInterfaceName
         | FieldValueType.GraphObjectType graphObjectTypeName ->
-            if isNamedType (NamedType.Interface graphObjectTypeName)
-            then mapStrToInterfaceName graphObjectTypeName
-            else graphObjectTypeName
+            graphObjectTypeName.ToString()
 
     let rec unwrapFieldType  = function
         | ValueType valueType -> valueType
@@ -40,17 +41,17 @@ module AstNodeMapper =
         | CollectionType collectionType -> unwrapFieldType collectionType
 
     /// Maps a field type to a string representation.
-    let rec mapFieldTypeToString (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
+    let rec mapFieldTypeToString assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
         let maybeWriteNullability isNullable fieldStr =
             fieldStr + (if isNullable then "?" else "")
 
         let rec unwrapType isRecursing = function
             | ValueType valueType
             | NonNullableType (ValueType valueType) ->
-                mapValueTypeToString isNamedType valueType
+                mapValueTypeToString valueType
                 |> maybeWriteNullability (not isRecursing && assumeNullability)
             | NullableType (ValueType valueType) ->
-                mapValueTypeToString isNamedType valueType
+                mapValueTypeToString valueType
                 |> maybeWriteNullability true
             | NonNullableType (CollectionType collectionType) // We unwrap this one twice because CollectionTypes are all (NonNullable (CollectionType Type)) in GraphQL
             | CollectionType collectionType ->
@@ -63,7 +64,7 @@ module AstNodeMapper =
                 unwrapType true nonNullableType
             | NullableType nullableType ->
                 unwrapFieldType nullableType
-                |> mapValueTypeToString isNamedType
+                |> mapValueTypeToString
                 |> maybeWriteNullability true
 
         unwrapType false valueType
@@ -72,7 +73,7 @@ module AstNodeMapper =
     /// Maps a field type to a string representation, wrapping primitives in <see cref="GraphQLValue&lt;T&gt;"/> or
     /// <see cref="GraphQLCollection&lt;T&gt;" /> to ensure the type implements IGraphQLObject. Used for operation return types.
     /// </summary>
-    let rec mapFieldTypeToStringWithPrimitiveWrapper (isNamedType: NamedType -> bool) assumeNullability (valueType: FieldType) =
+    let rec mapFieldTypeToStringWithPrimitiveWrapper assumeNullability (valueType: FieldType) =
         let rec isCollectionType = function
             | CollectionType _ -> true
             | NonNullableType type' -> isCollectionType type'
@@ -92,15 +93,15 @@ module AstNodeMapper =
         match valueType with
         | _ when isCollectionType valueType && isPrimitiveType valueType ->
             // It's a collection of primitives, wrap it in GraphQLCollection<T>
-            let elementType = mapFieldTypeToString isNamedType false valueType FieldTypeCollectionHandling.UnwrapCollection
+            let elementType = mapFieldTypeToString false valueType FieldTypeCollectionHandling.UnwrapCollection
             $"GraphQLCollection<{elementType}>"
         | _ when isPrimitiveType valueType ->
             // It's a single primitive, wrap it in GraphQLValue<T>
-            let primitiveType = mapFieldTypeToString isNamedType false valueType FieldTypeCollectionHandling.KeepCollection
+            let primitiveType = mapFieldTypeToString false valueType FieldTypeCollectionHandling.KeepCollection
             $"GraphQLValue<{primitiveType}>"
         | _ ->
             // It's GraphQL object, no wrapper needed. Return the base type string without a wrapper
-            mapFieldTypeToString isNamedType assumeNullability valueType FieldTypeCollectionHandling.KeepCollection
+            mapFieldTypeToString assumeNullability valueType FieldTypeCollectionHandling.KeepCollection
 
     let rec private mapGraphTypeToName (fieldType: GraphQLType): string =
         match fieldType with
@@ -136,17 +137,29 @@ module AstNodeMapper =
         "ID", FieldValueType.String
     ]
 
-    let rec private mapGraphTypeToFieldType (fieldType: GraphQLType): FieldType =
+    let private mapGraphTypeToNamedType (context: IParsedContext) (namedType: GraphQLNamedType): NamedType =
+        let typeName = namedType.Name.StringValue
+        match context.TryFindDocumentNode namedType.Name.Value with
+        | Some (:? GraphQLUnionTypeDefinition) -> NamedType.UnionType typeName
+        | Some (:? GraphQLInputObjectTypeDefinition) -> NamedType.InputObject typeName
+        | Some (:? GraphQLEnumTypeDefinition) -> NamedType.Enum typeName
+        | Some (:? GraphQLInterfaceTypeDefinition) -> NamedType.Interface typeName
+        | Some (:? GraphQLObjectTypeDefinition) -> NamedType.Class typeName
+        | Some node -> raise (SwitchExpressionException(node.GetType()))
+        | None -> failwith $"Could not find a type named \"{namedType.Name.StringValue}\"."
+
+    let rec private mapGraphTypeToFieldType (context: IParsedContext) (fieldType: GraphQLType): FieldType =
         match fieldType with
         | :? GraphQLNamedType as namedType ->
             Map.tryFind namedType.Name.StringValue typeMap
-            |> Option.defaultWith (fun _ -> FieldValueType.GraphObjectType namedType.Name.StringValue)
+            |> Option.defaultWith (fun _ ->
+                FieldValueType.GraphObjectType (mapGraphTypeToNamedType context namedType))
             |> FieldType.ValueType
         | :? GraphQLListType as listType ->
-            mapGraphTypeToFieldType listType.Type
+            mapGraphTypeToFieldType context listType.Type
             |> FieldType.CollectionType
         | :? GraphQLNonNullType as nonNullType ->
-            mapGraphTypeToFieldType nonNullType.Type
+            mapGraphTypeToFieldType context nonNullType.Type
             |> FieldType.NonNullableType
         | _ ->
             raise (SwitchExpressionException fieldType)
@@ -192,7 +205,7 @@ module AstNodeMapper =
                 yield "/// </summary>"
             |]
 
-    let private mapToArguments (argument: GraphQLArgumentsDefinition | null): FieldOrOperationArgument[] =
+    let private mapToArguments context (argument: GraphQLArgumentsDefinition | null): FieldOrOperationArgument[] =
         if isNull argument then
             Array.empty
         else
@@ -202,9 +215,9 @@ module AstNodeMapper =
                 { Name = argument.Name.StringValue
                   Deprecation = getDeprecationMessage argument.Directives
                   XmlSummary = mapDescriptionToXmlSummary argument.Description
-                  ValueType = mapGraphTypeToFieldType argument.Type })
+                  ValueType = mapGraphTypeToFieldType context argument.Type })
 
-    let private mapToFields (fieldsDefinition: FieldsDefinition): Field[] =
+    let private mapToFields context (fieldsDefinition: FieldsDefinition): Field[] =
         let createField (fieldType: FieldType) name directives description arguments =
             { Name = name
               XmlSummary = mapDescriptionToXmlSummary description
@@ -217,16 +230,16 @@ module AstNodeMapper =
             inputFields.Items
             |> Array.ofSeq
             |> Array.map (fun field ->
-                let fieldType = mapGraphTypeToFieldType field.Type
+                let fieldType = mapGraphTypeToFieldType context field.Type
                 createField fieldType field.Name.StringValue field.Directives field.Description Array.empty)
         | ObjectFields objectFields ->
             objectFields.Items
             |> Array.ofSeq
             |> Array.map (fun field ->
-                let fieldType = mapGraphTypeToFieldType field.Type
-                createField fieldType field.Name.StringValue field.Directives field.Description (mapToArguments field.Arguments))
+                let fieldType = mapGraphTypeToFieldType context field.Type
+                createField fieldType field.Name.StringValue field.Directives field.Description (mapToArguments context field.Arguments))
 
-    let private getBestConnectionTypeInterfaceName (fields: GraphQLFieldsDefinition): ConnectionType =
+    let private getBestConnectionTypeInterfaceName context (fields: GraphQLFieldsDefinition): ConnectionType =
         let check (nodesFieldPresence: Presence, edgesFieldPresence: Presence) (field: GraphQLFieldDefinition) =
             if nodesFieldPresence.IsPresent && edgesFieldPresence.IsPresent
             then nodesFieldPresence, edgesFieldPresence
@@ -241,11 +254,11 @@ module AstNodeMapper =
 
         match nodeFieldPresence, edgesFieldPresence with
         | Present nodesFieldType, Present edgesFieldType ->
-            ConnectionWithNodesAndEdges (mapGraphTypeToFieldType nodesFieldType, mapGraphTypeToFieldType edgesFieldType)
+            ConnectionWithNodesAndEdges (mapGraphTypeToFieldType context nodesFieldType, mapGraphTypeToFieldType context edgesFieldType)
         | Present nodesFieldType, NotPresent ->
-            ConnectionWithNodes (mapGraphTypeToFieldType nodesFieldType)
+            ConnectionWithNodes (mapGraphTypeToFieldType context nodesFieldType)
         | NotPresent, Present edgesFieldType ->
-            ConnectionWithEdges (mapGraphTypeToFieldType edgesFieldType)
+            ConnectionWithEdges (mapGraphTypeToFieldType context edgesFieldType)
         | NotPresent, NotPresent ->
             ConnectionType.Connection
 
@@ -265,14 +278,14 @@ module AstNodeMapper =
             |> Array.ofSeq
             |> Array.map (_.Name.StringValue >> strToInterfaceName)
 
-    let mapObjectTypeDefinition (objectTypeDefinition: GraphQLObjectTypeDefinition): Class =
+    let mapObjectTypeDefinition context (objectTypeDefinition: GraphQLObjectTypeDefinition): Class =
         let objectTypeName = objectTypeDefinition.Name.StringValue
 
         let classInheritedType =
             if objectTypeName.EndsWith("Edge", StringComparison.Ordinal) then
                 Some Edge
             else if objectTypeName.EndsWith("Connection", StringComparison.OrdinalIgnoreCase) then
-                getBestConnectionTypeInterfaceName objectTypeDefinition.Fields
+                getBestConnectionTypeInterfaceName context objectTypeDefinition.Fields
                 |> Connection
                 |> Some
             else
@@ -281,15 +294,15 @@ module AstNodeMapper =
         { Name = objectTypeDefinition.Name.StringValue
           XmlSummary = mapDescriptionToXmlSummary objectTypeDefinition.Description
           Deprecation = getDeprecationMessage objectTypeDefinition.Directives
-          Fields = mapToFields (ObjectFields objectTypeDefinition.Fields)
+          Fields = mapToFields context (ObjectFields objectTypeDefinition.Fields)
           KnownInheritedType = classInheritedType
           InheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces }
 
-    let mapInterfaceTypeDefinition (interfaceTypeDefinition: GraphQLInterfaceTypeDefinition): Interface =
+    let mapInterfaceTypeDefinition context (interfaceTypeDefinition: GraphQLInterfaceTypeDefinition): Interface =
         { Name = strToInterfaceName interfaceTypeDefinition.Name.StringValue
           XmlSummary = mapDescriptionToXmlSummary interfaceTypeDefinition.Description
           Deprecation = getDeprecationMessage interfaceTypeDefinition.Directives
-          Fields = mapToFields (ObjectFields interfaceTypeDefinition.Fields)
+          Fields = mapToFields context (ObjectFields interfaceTypeDefinition.Fields)
           InheritedTypeNames = mapToInheritedTypeNames interfaceTypeDefinition.Interfaces }
 
     let mapEnumCases (enumValuesDefinition: GraphQLEnumValuesDefinition): VisitedEnumCase[] =
@@ -310,11 +323,11 @@ module AstNodeMapper =
           Deprecation = getDeprecationMessage enumTypeDefinition.Directives
           Cases = mapEnumCases enumTypeDefinition.Values }
 
-    let mapInputObjectTypeDefinition (inputObjectTypeDefinition: GraphQLInputObjectTypeDefinition): InputObject =
+    let mapInputObjectTypeDefinition context (inputObjectTypeDefinition: GraphQLInputObjectTypeDefinition): InputObject =
         { Name = inputObjectTypeDefinition.Name.StringValue
           XmlSummary = mapDescriptionToXmlSummary inputObjectTypeDefinition.Description
           Deprecation = getDeprecationMessage inputObjectTypeDefinition.Directives
-          Fields = mapToFields (InputFields inputObjectTypeDefinition.Fields) }
+          Fields = mapToFields context (InputFields inputObjectTypeDefinition.Fields) }
 
     let rec mapUnionTypeDefinition (context: IParsedContext) (unionTypeDefinition: GraphQLUnionTypeDefinition): UnionType =
         let unionCaseNodes = [|
@@ -335,16 +348,16 @@ module AstNodeMapper =
             VisitedTypes.UnionType (mapUnionTypeDefinition context unionType)
             |> Some
         | :? GraphQLInputObjectTypeDefinition as input ->
-            VisitedTypes.InputObject (mapInputObjectTypeDefinition input)
+            VisitedTypes.InputObject (mapInputObjectTypeDefinition context input)
             |> Some
         | :? GraphQLEnumTypeDefinition as enum ->
             VisitedTypes.Enum (mapEnumTypeDefinition enum)
             |> Some
         | :? GraphQLInterfaceTypeDefinition as interface' ->
-            VisitedTypes.Interface (mapInterfaceTypeDefinition interface')
+            VisitedTypes.Interface (mapInterfaceTypeDefinition context interface')
             |> Some
         | :? GraphQLObjectTypeDefinition as objectType ->
-            VisitedTypes.Class (mapObjectTypeDefinition objectType)
+            VisitedTypes.Class (mapObjectTypeDefinition context objectType)
             |> Some
         | _ ->
             None
@@ -354,7 +367,7 @@ module AstNodeMapper =
         | Some mappedType -> mappedType
         | None -> raise (SwitchExpressionException(node.GetType()))
 
-    let mapRootFieldDefinition (parentType: OperationType) (fieldDefinition: GraphQLFieldDefinition) (context: IParsedContext): Operation =
+    let mapRootFieldDefinition (context: IParsedContext) (parentType: OperationType) (fieldDefinition: GraphQLFieldDefinition): Operation =
         let returnTypeName =
             mapGraphTypeToName fieldDefinition.Type
             |> _.ToCharArray()
@@ -362,7 +375,7 @@ module AstNodeMapper =
 
         let returnType =
             if typeMap.ContainsKey (returnTypeName.ToString()) then
-                mapGraphTypeToFieldType fieldDefinition.Type
+                mapGraphTypeToFieldType context fieldDefinition.Type
                 |> ReturnType.FieldType
             else
                 let returnType = context.Document.Definitions.Find(function
@@ -383,5 +396,5 @@ module AstNodeMapper =
           Type = parentType
           XmlSummary = mapDescriptionToXmlSummary fieldDefinition.Description
           Deprecation = getDeprecationMessage fieldDefinition.Directives
-          Arguments = mapToArguments fieldDefinition.Arguments
+          Arguments = mapToArguments context fieldDefinition.Arguments
           ReturnType = returnType }
