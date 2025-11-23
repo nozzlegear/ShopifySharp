@@ -80,10 +80,10 @@ let private writeJsonDerivedTypeAttributes2 interfaceName (classNames: string[])
             do! NewLine
     }
 
-let private getAppropriateClassTNodeTypeFromField (isNamedType: NamedType -> bool) assumeNullability fieldName (fields: Field[]) =
+let private getAppropriateClassTNodeTypeFromField assumeNullability fieldName (fields: Field[]) =
     fields
     |> Array.find _.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase)
-    |> fun field -> AstNodeMapper.mapFieldTypeToString isNamedType assumeNullability field.ValueType UnwrapCollection
+    |> fun field -> AstNodeMapper.mapFieldTypeToString assumeNullability field.ValueType UnwrapCollection
 
 let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName: string) writer: ValueTask =
     pipeWriter writer {
@@ -95,8 +95,6 @@ let private writeInheritedUnionCaseType (context: IParsedContext) (unionCaseName
     }
 
 let private writeClassKnownInheritedType (context: IParsedContext) (class': Class) writer: ValueTask =
-    let isNamedType = context.IsNamedType
-
     pipeWriter writer {
         if context.TypeIsKnownUnionCase class'.Name then
             yield! writeInheritedUnionCaseType context class'.Name
@@ -104,18 +102,18 @@ let private writeClassKnownInheritedType (context: IParsedContext) (class': Clas
 
         match class'.KnownInheritedType with
         | Some Edge ->
-            let edgeNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Node" class'.Fields
+            let edgeNodeType = getAppropriateClassTNodeTypeFromField context.AssumeNullability "Node" class'.Fields
             $"Edge<{edgeNodeType}>"
         | Some (Connection ConnectionType.Connection) ->
             "IConnection"
         | Some (Connection (ConnectionWithEdges _)) ->
-            let edgesNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Edges" class'.Fields
+            let edgesNodeType = getAppropriateClassTNodeTypeFromField context.AssumeNullability "Edges" class'.Fields
             $"ConnectionWithEdges<{edgesNodeType}>"
         | Some (Connection (ConnectionWithNodes _)) ->
-            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Nodes" class'.Fields
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField context.AssumeNullability "Nodes" class'.Fields
             $"ConnectionWithNodes<{nodesNodeType}>"
         | Some (Connection (ConnectionWithNodesAndEdges _)) ->
-            let nodesNodeType = getAppropriateClassTNodeTypeFromField isNamedType context.AssumeNullability "Nodes" class'.Fields
+            let nodesNodeType = getAppropriateClassTNodeTypeFromField context.AssumeNullability "Nodes" class'.Fields
             $"ConnectionWithNodesAndEdges<{nodesNodeType}>"
         | None ->
             "IGraphQLObject"
@@ -192,7 +190,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
 
     pipeWriter writer {
         for field in writeableFields do
-            let fieldType = AstNodeMapper.mapFieldTypeToString context.IsNamedType context.AssumeNullability field.ValueType KeepCollection
+            let fieldType = AstNodeMapper.mapFieldTypeToString context.AssumeNullability field.ValueType KeepCollection
 
             yield! writeSummary Indented field.XmlSummary
             yield! writeJsonPropertyAttribute field.Name

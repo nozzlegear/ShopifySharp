@@ -41,12 +41,22 @@ public abstract class GraphQueryBuilder<T>(string name)
         Query = Query.AddField(name, customize);
     }
 
-    public GraphQueryBuilder<T> AddUnion<TUnionCase, TGraphQueryBuilder>(string name, Func<GraphQueryBuilder<TUnionCase>, GraphQueryBuilder<TUnionCase>> build)
+    public void AddField<TField, TGraphQueryBuilder>(string name, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
+        where TField : class, IGraphQLObject
+        where TGraphQueryBuilder : GraphQueryBuilder<TField>, new()
+    {
+        var builder = new TGraphQueryBuilder();
+        var field = build.Invoke(builder);
+
+        Query = Query.AddUnion(field.Query);
+    }
+
+    public GraphQueryBuilder<T> AddUnion<TUnionCase, TGraphQueryBuilder>(string name, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
         where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
         where TGraphQueryBuilder : GraphQueryBuilder<TUnionCase>, new()
     {
-        var thing = new TGraphQueryBuilder();
-        var union = build.Invoke(thing);
+        var builder = new TGraphQueryBuilder();
+        var union = build.Invoke(builder);
 
         Query = Query.AddUnion(union.Query);
 
@@ -56,7 +66,7 @@ public abstract class GraphQueryBuilder<T>(string name)
     public GraphQueryBuilder<T> AddUnion<TUnionCase>(string name, GraphQueryBuilder<TUnionCase> union)
         where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
     {
-        Query.AddUnion(union.Query);
+        Query = Query.AddUnion(union.Query);
 
         return this;
     }
