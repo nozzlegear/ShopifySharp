@@ -10,6 +10,12 @@ module rec QueryBuilderWriter =
     let [<Literal>] private QueryRootObjectName = "QueryRoot"
     let [<Literal>] private MutationRootObjectName = "Mutation"
 
+    // Fully qualify class names which might collide with System types
+    let qualifiedPascalTypeName  className =
+        match toCasing Pascal className with
+        | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
+        | pascalGenericType -> pascalGenericType
+
     let private canAddFields = function
         | VisitedTypes.Class _ -> true
         | VisitedTypes.Interface _ -> true
@@ -22,17 +28,18 @@ module rec QueryBuilderWriter =
     let private canAddArguments (type': VisitedTypes) =
         type'.IsOperation
 
-    let private writeUnionTypeMutationJoins (pascalParentClassName: string) (unionCaseName: string) (_: IParsedContext) writer: ValueTask =
+    let private writeUnionCaseJoin (pascalParentClassName: string) (unionCaseName: string) (fieldName: string) (_: IParsedContext) writer: ValueTask =
         pipeWriter writer {
             let pascalUnionCaseName = toCasing Pascal unionCaseName
-            let camelUnionCaseName = toCasing Camel unionCaseName
+            let pascalFieldName = toCasing Pascal fieldName
+            let camelFieldName = toCasing Camel fieldName
             let unionCaseQueryBuilderName = $"{pascalUnionCaseName}QueryBuilder"
 
-            do! Indented + $"public {pascalParentClassName} AddUnion{pascalUnionCaseName}(Func<{unionCaseQueryBuilderName}, {unionCaseQueryBuilderName}> build)"
+            do! Indented + $"public {pascalParentClassName} AddUnionCase{pascalFieldName}(Func<{unionCaseQueryBuilderName}, {unionCaseQueryBuilderName}> build)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"AddUnion<{pascalUnionCaseName}>(\"{camelUnionCaseName}\", build);"
+            do! DoubleIndented + $"AddUnion<{pascalUnionCaseName}, {unionCaseQueryBuilderName}>(\"{camelFieldName}\", build);"
             do! NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
@@ -50,48 +57,47 @@ module rec QueryBuilderWriter =
         let camelFieldName = toCasing Camel fieldName
 
         pipeWriter writer {
-            // TODO: does the context actually know about union cases/named types now that we parse the document definitions directly?
-            //       (i.e. now that we aren't using the visitor pattern)
-            if context.TypeIsKnownUnionCase fieldName || context.IsNamedType (NamedType.UnionType fieldName) then
-                yield! writeUnionTypeMutationJoins pascalClassName fieldName context
-            else
-                match AstNodeMapper.unwrapFieldType fieldType with
-                | FieldValueType.GraphObjectType (NamedType.UnionType graphObjectTypeName) ->
-                    printfn $"{graphObjectTypeName} should have procced the writeUnionTypeMutationJoins fn"
-                    yield! writeUnionTypeMutationJoins pascalClassName fieldName context
-                | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName)
-                | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName)
-                | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName) ->
-                    let pascalTypeName = toCasing Pascal graphObjectTypeName
-                    let queryBuilderName = $"{toCasing Pascal graphObjectTypeName}QueryBuilder"
+            match AstNodeMapper.unwrapFieldType fieldType with
+            | FieldValueType.GraphObjectType (NamedType.UnionType (_, unionCaseNames)) ->
+                // yield! writeUnionCaseJoin pascalClassName unionTypeName fieldName context
+                for unionCaseName in unionCaseNames do
+                    yield! writeUnionCaseJoin pascalClassName unionCaseName fieldName context
+            | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName as namedType)
+            | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName as namedType)
+            | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName as namedType) ->
+                let pascalTypeName =
+                    if namedType.IsInterface
+                    then toCasing Pascal (mapStrToInterfaceName graphObjectTypeName)
+                    else qualifiedPascalTypeName graphObjectTypeName
+                let queryBuilderName = $"{toCasing Pascal graphObjectTypeName}QueryBuilder"
 
-                    // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
+                // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
-                    yield! writeDeprecationAttribute Indented None
-                    do! Indented + $"public {pascalClassName} AddField{pascalFieldName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
-                    do! NewLine
-                    do! DoubleIndented + "{"
-                    do! NewLine
-                    do! TripleIndented + $"AddField<{pascalTypeName}, {queryBuilderName}>(\"{camelFieldName}\", build);"
-                    do! NewLine
-                    do! TripleIndented + "return this;"
-                    do! NewLine
-                    do! DoubleIndented + "}"
-                    do! NewLine
-                | _ ->
-                    // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
+                yield! writeDeprecationAttribute Indented None
+                do! Indented + $"public {pascalClassName} AddField{pascalFieldName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
+                do! NewLine
+                do! DoubleIndented + "{"
+                do! NewLine
+                do! TripleIndented + $"AddField<{pascalTypeName}, {queryBuilderName}>(\"{camelFieldName}\", build);"
+                do! NewLine
+                do! TripleIndented + "return this;"
+                do! NewLine
+                do! DoubleIndented + "}"
+                do! NewLine
+            | _ ->
+                // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
-                    yield! writeDeprecationAttribute Indented deprecationWarning
-                    do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
-                    do! NewLine
-                    do! DoubleIndented + "{"
-                    do! NewLine
-                    do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
-                    do! NewLine
-                    do! TripleIndented + "return this;"
-                    do! NewLine
-                    do! DoubleIndented + "}"
-                    do! NewLine
+                yield! writeDeprecationAttribute Indented deprecationWarning
+                do! Indented + $"public {pascalClassName} AddField{pascalFieldName}()"
+                do! NewLine
+                do! DoubleIndented + "{"
+                do! NewLine
+                do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
+                do! NewLine
+                do! TripleIndented + "return this;"
+                do! NewLine
+                do! DoubleIndented + "}"
+                do! NewLine
         }
 
     let private writeQueryBuilderAddFieldMethods (pascalClassName: string) (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
@@ -114,7 +120,8 @@ module rec QueryBuilderWriter =
                 match visitedType with
                 | VisitedTypes.UnionType unionType ->
                     for unionCase in unionType.Cases do
-                        yield! writeUnionTypeMutationJoins pascalClassName unionCase.Name context
+                        yield! writeUnionCaseJoin pascalClassName unionCase.Name unionCase.Name context
+                        //yield! writeUnionTypeJoin pascalClassName unionCase.Name context
                 | visitedType ->
                     let fields =
                         match visitedType with
@@ -190,8 +197,12 @@ module rec QueryBuilderWriter =
 
             let genericType =
                 match type' with
+                | VisitedTypes.Interface interface' ->
+                    interface'.DotnetName
                 | VisitedTypes.Operation operation ->
                     match operation.ReturnType with
+                    | ReturnType.VisitedType (VisitedTypes.Interface interface') ->
+                        interface'.DotnetName
                     | ReturnType.VisitedType visitedTypes ->
                         visitedTypes.Name
                     | ReturnType.FieldType fieldType ->
@@ -199,14 +210,7 @@ module rec QueryBuilderWriter =
                         AstNodeMapper.mapFieldTypeToStringWithPrimitiveWrapper context.AssumeNullability fieldType
                 | x -> x.Name
 
-            // Fully qualify class names that might collide with System types
-            let qualifiedGenericType =
-                let pascalGenericType = toCasing Pascal genericType
-                // The type name should already have the "I" prefix if it's an interface
-                // (it comes from VisitedTypes.Name which includes the prefix)
-                match pascalGenericType with
-                | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
-                | _ -> pascalGenericType
+            let qualifiedGenericType = qualifiedPascalTypeName genericType
 
             do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"{camelTypeName}\")"
 
