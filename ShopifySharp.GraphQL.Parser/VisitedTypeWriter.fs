@@ -210,7 +210,7 @@ let private writeFields (context: IParsedContext) shouldSkipWritingField parentT
             | NamedType.InputObject _ ->
                 yield! writeDefaultValueForFieldType field.ValueType context.AssumeNullability
             | NamedType.Enum p
-            | NamedType.UnionType p ->
+            | NamedType.UnionType (p, _) ->
                 failwith $"Parent \"{p}\" is unsupported type {parentType.GetType()}"
 
             do! NewLine
@@ -245,7 +245,7 @@ let private writeInterface (interface': Interface) (context: IParsedContext) (wr
         yield! writeDeprecationAttribute Outdented interface'.Deprecation
         yield! writeJsonDerivedTypeAttributes2 interface'.Name (context.GetInterfaceImplementationTypeNames interface'.Name)
 
-        do! $"public interface {interface'.Name}: IGraphQLObject"
+        do! $"public interface {interface'.DotnetName}: IGraphQLObject"
 
         if Array.length interface'.InheritedTypeNames > 0 then
             do! ", "

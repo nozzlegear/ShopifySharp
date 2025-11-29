@@ -44,7 +44,7 @@ type NamedType =
     | Interface of name: string
     | Enum of name: string
     | InputObject of name: string
-    | UnionType of name: string
+    | UnionType of name: string * caseNames: string[]
     with
     member this.Name: string =
         match this with
@@ -52,7 +52,7 @@ type NamedType =
         | Interface name -> name
         | Enum name -> name
         | InputObject name -> name
-        | UnionType name -> name
+        | UnionType (name, _) -> name
     override this.ToString (): string =
         this.Name
 
@@ -104,6 +104,8 @@ type Field =
 
 type Interface =
     { Name: string
+      /// The preferred type name when this interface is transformed to dotnet, i.e. the type name prefixed with "I".
+      DotnetName: string
       XmlSummary: string[]
       Deprecation: string option
       Fields: Field[]
