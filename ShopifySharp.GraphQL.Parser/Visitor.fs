@@ -90,7 +90,7 @@ type Visitor() =
         VisitedTypes.UnionType unionType
         |> context.SetVisitedType
 
-        NamedType.UnionType unionType.Name
+        NamedType.UnionType (unionType.Name, unionType.Cases |> Array.map _.Name)
         |> context.AddNamedType
 
         unionType.Cases
