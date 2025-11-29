@@ -140,7 +140,12 @@ module AstNodeMapper =
     let private mapGraphTypeToNamedType (context: IParsedContext) (namedType: GraphQLNamedType): NamedType =
         let typeName = namedType.Name.StringValue
         match context.TryFindDocumentNode namedType.Name.Value with
-        | Some (:? GraphQLUnionTypeDefinition) -> NamedType.UnionType typeName
+        | Some (:? GraphQLUnionTypeDefinition as unionType) ->
+            let caseTypes =
+                unionType.Types.Items
+                |> Seq.map _.Name.StringValue
+                |> Array.ofSeq
+            NamedType.UnionType (typeName, caseTypes)
         | Some (:? GraphQLInputObjectTypeDefinition) -> NamedType.InputObject typeName
         | Some (:? GraphQLEnumTypeDefinition) -> NamedType.Enum typeName
         | Some (:? GraphQLInterfaceTypeDefinition) -> NamedType.Interface typeName
@@ -299,7 +304,8 @@ module AstNodeMapper =
           InheritedTypeNames = mapToInheritedTypeNames objectTypeDefinition.Interfaces }
 
     let mapInterfaceTypeDefinition context (interfaceTypeDefinition: GraphQLInterfaceTypeDefinition): Interface =
-        { Name = strToInterfaceName interfaceTypeDefinition.Name.StringValue
+        { Name = interfaceTypeDefinition.Name.StringValue
+          DotnetName = strToInterfaceName interfaceTypeDefinition.Name.StringValue
           XmlSummary = mapDescriptionToXmlSummary interfaceTypeDefinition.Description
           Deprecation = getDeprecationMessage interfaceTypeDefinition.Directives
           Fields = mapToFields context (ObjectFields interfaceTypeDefinition.Fields)
