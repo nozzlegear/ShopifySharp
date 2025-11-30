@@ -1,0 +1,33 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The input fields for updating a metafield capability.
+/// </summary>
+public record MetafieldCapabilityUpdateInput : GraphQLInputObject<MetafieldCapabilityUpdateInput>
+{
+    /// <summary>
+    /// The input for updating the admin filterable capability.
+    /// </summary>
+    [JsonPropertyName("adminFilterable")]
+    public MetafieldCapabilityAdminFilterableInput? adminFilterable { get; set; } = null;
+
+    /// <summary>
+    /// The input for updating the smart collection condition capability.
+    /// </summary>
+    [JsonPropertyName("smartCollectionCondition")]
+    public MetafieldCapabilitySmartCollectionConditionInput? smartCollectionCondition { get; set; } = null;
+
+    /// <summary>
+    /// The input for updating the unique values capability.
+    /// </summary>
+    [JsonPropertyName("uniqueValues")]
+    public MetafieldCapabilityUniqueValuesInput? uniqueValues { get; set; } = null;
+}

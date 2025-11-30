@@ -1,0 +1,27 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Return type for `metafieldsSet` mutation.
+/// </summary>
+public record MetafieldsSetPayload : IGraphQLObject
+{
+    /// <summary>
+    /// The list of metafields that were set.
+    /// </summary>
+    [JsonPropertyName("metafields")]
+    public ICollection<Metafield>? metafields { get; set; } = null;
+
+    /// <summary>
+    /// The list of errors that occurred from executing the mutation.
+    /// </summary>
+    [JsonPropertyName("userErrors")]
+    public ICollection<MetafieldsSetUserError>? userErrors { get; set; } = null;
+}
