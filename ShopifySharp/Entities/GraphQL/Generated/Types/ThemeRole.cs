@@ -1,0 +1,24 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The role of the theme.
+/// </summary>
+public enum ThemeRole
+{
+    MAIN,
+    UNPUBLISHED,
+    DEMO,
+    DEVELOPMENT,
+    ARCHIVED,
+    LOCKED,
+    [Obsolete("The feature for this role has been deprecated.")]
+    MOBILE,
+}

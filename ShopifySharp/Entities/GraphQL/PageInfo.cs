@@ -13,7 +13,7 @@ public sealed record PageInfo(
     string? startCursor,
     string? endCursor,
     bool    hasPreviousPage,
-    bool    hasNextPage)
+    bool    hasNextPage) : IGraphQLObject
 {
     /// <summary>
     /// The cursor corresponding to the first node in edges.

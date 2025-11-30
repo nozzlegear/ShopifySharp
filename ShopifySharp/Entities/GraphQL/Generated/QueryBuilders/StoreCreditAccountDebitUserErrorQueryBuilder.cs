@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class StoreCreditAccountDebitUserErrorQueryBuilder() : GraphQueryBuilder<StoreCreditAccountDebitUserError>("query storeCreditAccountDebitUserError")
+{
+    public StoreCreditAccountDebitUserErrorQueryBuilder AddFieldCode()
+    {
+        AddField("code");
+        return this;
+    }
+
+    public StoreCreditAccountDebitUserErrorQueryBuilder AddFieldField()
+    {
+        AddField("field");
+        return this;
+    }
+
+    public StoreCreditAccountDebitUserErrorQueryBuilder AddFieldMessage()
+    {
+        AddField("message");
+        return this;
+    }
+}

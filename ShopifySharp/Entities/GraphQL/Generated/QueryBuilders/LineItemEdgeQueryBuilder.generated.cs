@@ -1,0 +1,26 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class LineItemEdgeQueryBuilder() : GraphQueryBuilder<LineItemEdge>("lineItemEdge")
+{
+    public LineItemEdgeQueryBuilder AddFieldCursor()
+    {
+        AddField("cursor");
+        return this;
+    }
+
+    public LineItemEdgeQueryBuilder AddFieldNode(Func<LineItemQueryBuilder, LineItemQueryBuilder> build)
+    {
+        AddField<LineItem, LineItemQueryBuilder>("node", build);
+        return this;
+    }
+}

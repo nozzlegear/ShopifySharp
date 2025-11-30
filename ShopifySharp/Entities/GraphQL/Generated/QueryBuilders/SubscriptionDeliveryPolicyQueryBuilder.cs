@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class SubscriptionDeliveryPolicyQueryBuilder() : GraphQueryBuilder<SubscriptionDeliveryPolicy>("query subscriptionDeliveryPolicy")
+{
+    public SubscriptionDeliveryPolicyQueryBuilder AddFieldAnchors()
+    {
+        AddField("anchors");
+        return this;
+    }
+
+    public SubscriptionDeliveryPolicyQueryBuilder AddFieldInterval()
+    {
+        AddField("interval");
+        return this;
+    }
+
+    public SubscriptionDeliveryPolicyQueryBuilder AddFieldIntervalCount()
+    {
+        AddField("intervalCount");
+        return this;
+    }
+}

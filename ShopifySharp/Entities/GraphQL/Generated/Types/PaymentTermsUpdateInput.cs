@@ -1,0 +1,27 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The input fields used to update the payment terms.
+/// </summary>
+public record PaymentTermsUpdateInput : GraphQLInputObject<PaymentTermsUpdateInput>
+{
+    /// <summary>
+    /// The attributes used to update the payment terms.
+    /// </summary>
+    [JsonPropertyName("paymentTermsAttributes")]
+    public PaymentTermsInput? paymentTermsAttributes { get; set; } = null;
+
+    /// <summary>
+    /// The ID of the payment terms being updated.
+    /// </summary>
+    [JsonPropertyName("paymentTermsId")]
+    public string? paymentTermsId { get; set; } = null;
+}

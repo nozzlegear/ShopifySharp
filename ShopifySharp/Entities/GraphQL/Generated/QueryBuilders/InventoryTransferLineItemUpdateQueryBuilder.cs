@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class InventoryTransferLineItemUpdateQueryBuilder() : GraphQueryBuilder<InventoryTransferLineItemUpdate>("query inventoryTransferLineItemUpdate")
+{
+    public InventoryTransferLineItemUpdateQueryBuilder AddFieldDeltaQuantity()
+    {
+        AddField("deltaQuantity");
+        return this;
+    }
+
+    public InventoryTransferLineItemUpdateQueryBuilder AddFieldInventoryItemId()
+    {
+        AddField("inventoryItemId");
+        return this;
+    }
+
+    public InventoryTransferLineItemUpdateQueryBuilder AddFieldNewQuantity()
+    {
+        AddField("newQuantity");
+        return this;
+    }
+}

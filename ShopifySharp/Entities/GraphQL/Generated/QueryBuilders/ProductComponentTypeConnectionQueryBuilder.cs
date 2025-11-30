@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class ProductComponentTypeConnectionQueryBuilder() : GraphQueryBuilder<ProductComponentTypeConnection>("query productComponentTypeConnection")
+{
+    public ProductComponentTypeConnectionQueryBuilder AddFieldEdges()
+    {
+        AddField("edges");
+        return this;
+    }
+
+    public ProductComponentTypeConnectionQueryBuilder AddFieldNodes()
+    {
+        AddField("nodes");
+        return this;
+    }
+
+    public ProductComponentTypeConnectionQueryBuilder AddFieldPageInfo()
+    {
+        AddField("pageInfo");
+        return this;
+    }
+}

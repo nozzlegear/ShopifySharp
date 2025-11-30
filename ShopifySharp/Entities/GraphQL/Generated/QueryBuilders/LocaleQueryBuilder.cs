@@ -1,0 +1,25 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class LocaleQueryBuilder() : GraphQueryBuilder<Locale>("query locale")
+{
+    public LocaleQueryBuilder AddFieldIsoCode()
+    {
+        AddField("isoCode");
+        return this;
+    }
+
+    public LocaleQueryBuilder AddFieldName()
+    {
+        AddField("name");
+        return this;
+    }
+}

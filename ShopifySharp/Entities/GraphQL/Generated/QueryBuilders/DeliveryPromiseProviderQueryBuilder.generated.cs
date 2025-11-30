@@ -1,0 +1,22 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class DeliveryPromiseProviderQueryBuilder() : GraphQueryBuilder<DeliveryPromiseProvider>("deliveryPromiseProvider"), IGraphOperationQueryBuilder
+{
+    public OperationType OperationType { get; } = OperationType.Query;
+
+    public DeliveryPromiseProviderQueryBuilder AddArgumentLocationId(string? locationId)
+    {
+        AddArgument("locationId", locationId);
+        return this;
+    }
+}

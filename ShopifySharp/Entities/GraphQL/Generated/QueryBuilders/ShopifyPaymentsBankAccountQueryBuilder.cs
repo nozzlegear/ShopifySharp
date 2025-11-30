@@ -1,0 +1,61 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class ShopifyPaymentsBankAccountQueryBuilder() : GraphQueryBuilder<ShopifyPaymentsBankAccount>("query shopifyPaymentsBankAccount")
+{
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldAccountNumberLastDigits()
+    {
+        AddField("accountNumberLastDigits");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldBankName()
+    {
+        AddField("bankName");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldCountry()
+    {
+        AddField("country");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldCreatedAt()
+    {
+        AddField("createdAt");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldCurrency()
+    {
+        AddField("currency");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldId()
+    {
+        AddField("id");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldPayouts()
+    {
+        AddField("payouts");
+        return this;
+    }
+
+    public ShopifyPaymentsBankAccountQueryBuilder AddFieldStatus()
+    {
+        AddField("status");
+        return this;
+    }
+}

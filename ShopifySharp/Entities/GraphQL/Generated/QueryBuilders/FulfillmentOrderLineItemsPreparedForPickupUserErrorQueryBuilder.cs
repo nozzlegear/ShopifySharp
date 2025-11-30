@@ -1,0 +1,31 @@
+#nullable enable
+namespace ShopifySharp.Services.Generated;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+public class FulfillmentOrderLineItemsPreparedForPickupUserErrorQueryBuilder() : GraphQueryBuilder<FulfillmentOrderLineItemsPreparedForPickupUserError>("query fulfillmentOrderLineItemsPreparedForPickupUserError")
+{
+    public FulfillmentOrderLineItemsPreparedForPickupUserErrorQueryBuilder AddFieldCode()
+    {
+        AddField("code");
+        return this;
+    }
+
+    public FulfillmentOrderLineItemsPreparedForPickupUserErrorQueryBuilder AddFieldField()
+    {
+        AddField("field");
+        return this;
+    }
+
+    public FulfillmentOrderLineItemsPreparedForPickupUserErrorQueryBuilder AddFieldMessage()
+    {
+        AddField("message");
+        return this;
+    }
+}
