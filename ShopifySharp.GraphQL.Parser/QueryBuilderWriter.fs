@@ -225,7 +225,7 @@ module rec QueryBuilderWriter =
             do! "public OperationType OperationType { get; } = "
             match operationType with
             | OperationType.Query -> do! "OperationType.Query;"
-            | OperationType.Mutation -> do! "OperationType.Query;"
+            | OperationType.Mutation -> do! "OperationType.Mutation;"
             | value -> failwith $"Operation type \"{value}\" is not supported."
             do! NewLine
         }
