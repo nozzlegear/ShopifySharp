@@ -1,0 +1,1 @@
+﻿shop{createdAt shopAddress{address1 address2 city zip company province countryCodeV2}}
