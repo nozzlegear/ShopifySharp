@@ -222,7 +222,7 @@ module rec QueryBuilderWriter =
 
     let writeOperationTypeProperty (operationType: OperationType) (_: IParsedContext) writer: ValueTask =
         pipeWriter writer {
-            do! "public readonly OperationType OperationType = "
+            do! "public OperationType OperationType { get; } = "
             match operationType with
             | OperationType.Query -> do! "OperationType.Query;"
             | OperationType.Mutation -> do! "OperationType.Query;"
