@@ -1,0 +1,1 @@
+calculatedDiscountCodeApplication{code value{... on MoneyV2{amount}}}

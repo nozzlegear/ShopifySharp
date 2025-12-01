@@ -1,0 +1,1 @@
+﻿query { articleTags(foo:3,bar:true,baz:false,bat:6.7) }
