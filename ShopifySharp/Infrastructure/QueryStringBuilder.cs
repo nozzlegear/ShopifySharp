@@ -128,77 +128,80 @@ public class QueryStringBuilder : IQueryStringBuilder
     /// <exception cref="InvalidDataException">Invalid Object Type in Param List</exception>
     protected internal virtual string FormatQueryParam(object? value)
     {
-        switch (value)
+        while (true)
         {
-            case null:
-                return "null";
+            switch (value)
+            {
+                case null:
+                    return "null";
 
-            case string strValue:
-                var encoded = strValue.Replace("\"", "\\\"");
-                return $"\"{encoded}\"";
+                case string strValue:
+                    var encoded = strValue.Replace("\"", "\\\"");
+                    return $"\"{encoded}\"";
 
-            case char charValue:
-                return $"\"{charValue}\"";
+                case char charValue:
+                    return $"\"{charValue}\"";
 
-            case byte byteValue:
-                return byteValue.ToString();
+                case byte byteValue:
+                    return byteValue.ToString();
 
-            case sbyte sbyteValue:
-                return sbyteValue.ToString();
+                case sbyte sbyteValue:
+                    return sbyteValue.ToString();
 
-            case short shortValue:
-                return shortValue.ToString();
+                case short shortValue:
+                    return shortValue.ToString();
 
-            case ushort ushortValue:
-                return ushortValue.ToString();
+                case ushort ushortValue:
+                    return ushortValue.ToString();
 
-            case int intValue:
-                return intValue.ToString();
+                case int intValue:
+                    return intValue.ToString();
 
-            case uint uintValue:
-                return uintValue.ToString();
+                case uint uintValue:
+                    return uintValue.ToString();
 
-            case long longValue:
-                return longValue.ToString();
+                case long longValue:
+                    return longValue.ToString();
 
-            case ulong ulongValue:
-                return ulongValue.ToString();
+                case ulong ulongValue:
+                    return ulongValue.ToString();
 
-            case float floatValue:
-                return floatValue.ToString(CultureInfo.CreateSpecificCulture("en-us"));
+                case float floatValue:
+                    return floatValue.ToString(CultureInfo.CreateSpecificCulture("en-us"));
 
-            case double doubleValue:
-                return doubleValue.ToString(CultureInfo.CreateSpecificCulture("en-us"));
+                case double doubleValue:
+                    return doubleValue.ToString(CultureInfo.CreateSpecificCulture("en-us"));
 
-            case decimal decimalValue:
-                return decimalValue.ToString(CultureInfo.CreateSpecificCulture("en-us"));
+                case decimal decimalValue:
+                    return decimalValue.ToString(CultureInfo.CreateSpecificCulture("en-us"));
 
-            case bool booleanValue:
-                return booleanValue ? "true" : "false";
+                case bool booleanValue:
+                    return booleanValue ? "true" : "false";
 
-            case Enum enumValue:
-                return enumValue.ToString();
+                case Enum enumValue:
+                    return enumValue.ToString();
 
-            case DateTime dateTimeValue:
-                return FormatQueryParam(dateTimeValue.ToString("o"));
+                case DateTime dateTimeValue:
+                    value = dateTimeValue.ToString("o");
+                    continue;
 
-            case KeyValuePair<string, object> kvValue:
-                return $"{kvValue.Key}:{FormatQueryParam(kvValue.Value)}";
+                case KeyValuePair<string, object> kvValue:
+                    return $"{kvValue.Key}:{FormatQueryParam(kvValue.Value)}";
 
-            case IDictionary<string, object> dictValue:
-                return $"{{{string.Join(",", dictValue.Select(e => FormatQueryParam(e)))}}}";
+                case IDictionary<string, object> dictValue:
+                    return $"{{{string.Join(",", dictValue.Select(e => FormatQueryParam(e)))}}}";
 
-            case IEnumerable enumerableValue:
-                List<string> items = [];
-                foreach (var item in enumerableValue)
-                {
-                    items.Add(FormatQueryParam(item));
-                }
-                return $"[{string.Join(",", items)}]";
+                case IEnumerable enumerableValue:
+                    List<string> items = [];
+                    items.AddRange(enumerableValue.Cast<object?>().Select(FormatQueryParam));
 
-            case { } objectValue:
-                var dictionary = ObjectToDictionary(objectValue);
-                return FormatQueryParam(dictionary);
+                    return $"[{string.Join(",", items)}]";
+
+                case { } objectValue:
+                    var dictionary = ObjectToDictionary(objectValue);
+                    value = dictionary;
+                    continue;
+            }
         }
     }
 
