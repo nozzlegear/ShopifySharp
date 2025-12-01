@@ -10,6 +10,8 @@ public abstract class GraphQueryBuilder<T>(string name)
 {
     protected IQuery<T> Query { get; private set; } = new Query<T>(name);
 
+    public string Build() => Query.Build();
+
     public void Alias(string alias)
     {
         Query = Query.Alias(alias);

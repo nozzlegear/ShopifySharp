@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
@@ -54,6 +53,9 @@ public class Query<TSource> : IQuery<TSource>
 {
     protected readonly QueryOptions Options;
 
+    /// <summary>Gets the query string builder.</summary>
+    protected IQueryStringBuilder QueryStringBuilder { get; } = new QueryStringBuilder();
+
     public string Name { get; }
     public string? AliasName { get; private set; }
     public List<object?> SelectList { get; private set; } = [];
@@ -66,10 +68,17 @@ public class Query<TSource> : IQuery<TSource>
         Options = options ?? new QueryOptions();
     }
 
+    /// <summary>Builds the query.</summary>
+    /// <returns>The GraphQL query as string, without outer enclosing block.</returns>
+    /// <exception cref="ArgumentException">Must have a 'Name' specified in the Query</exception>
+    /// <exception cref="ArgumentException">Must have a one or more 'Select' fields in the Query</exception>
     public string Build()
     {
-        throw new NotImplementedException();
+        this.QueryStringBuilder.Clear();
+
+        return this.QueryStringBuilder.Build(this);
     }
+
 
     public IQuery<TSource> Alias(string alias)
     {
