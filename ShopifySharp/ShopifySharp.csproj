@@ -18,9 +18,10 @@
     <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
     <PackageTags>Shopify;Ecommerce;Rest;Graphql</PackageTags>
-    <PackageReadme>For detailed usage examples and documentation, check our Github repository at [https://github.com/nozzlegear/shopifysharp](https://github.com/nozzlegear/shopifysharp).</PackageReadme>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="../readme.md" Pack="true" PackagePath="." />
     <None Include="../attributions.md" Pack="true" PackagePath="." />
   </ItemGroup>
   <ItemGroup>
