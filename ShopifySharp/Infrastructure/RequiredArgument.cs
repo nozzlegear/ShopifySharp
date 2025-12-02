@@ -1,3 +1,7 @@
+/// Original code from graphql-query-builder-dotnet by Charles de Vandière
+/// Copyright (c) 2025 Charles de Vandière
+/// Modifications copyright (c) 2025 Nozzlegear Software
+/// Licensed under MIT License - see attributions.md
 #nullable enable
 using System;
 using System.Diagnostics.CodeAnalysis;
