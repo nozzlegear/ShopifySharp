@@ -1,5 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/CodeEditing/SuppressUninitializedWarningFix/Enabled/@EntryValue">False</s:Boolean>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/GeneratedFilesAndFolders/=833EC12B_002D956D_002D427B_002DA598_002D2F12B84589EF_002Fd_003AEntities_002Fd_003AGraphQL_002Fd_003AGenerated/@EntryIndexedValue">833EC12B-956D-427B-A598-2F12B84589EF/d:Entities/d:GraphQL/d:Generated</s:String>
 	<s:Boolean x:Key="/Default/Environment/Filtering/ExcludeAttributeFilters/=System_002EObsoleteAttribute/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=encodable/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=fulfillments/@EntryIndexedValue">True</s:Boolean>

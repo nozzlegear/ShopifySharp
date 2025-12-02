@@ -70,6 +70,7 @@ type IntegrationTests() =
             | VisitedTypes.Enum e -> e.Name
             | VisitedTypes.InputObject io -> io.Name
             | VisitedTypes.UnionType u -> u.Name
+            | Operation o -> o.Name
         )
         
         %typeNames.Should().Contain("INode")

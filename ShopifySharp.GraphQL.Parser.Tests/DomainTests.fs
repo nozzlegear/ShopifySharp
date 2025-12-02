@@ -1,7 +1,6 @@
 module ShopifySharp.GraphQL.Parser.Tests.DomainTests
 
 open System.Threading
-open FakeItEasy
 open Faqt
 open Faqt.Operators
 open GraphQLParser.Visitors
@@ -9,6 +8,13 @@ open Xunit
 open ShopifySharp.GraphQL.Parser
 
 type DomainTests() =
+    let schema = """
+        type TestType {
+            id: ID!
+            name: String
+        }
+    """
+    let document = GraphQLParser.Parser.Parse(schema)
 
     [<Theory>]
     [<CombinatorialData>]
@@ -35,7 +41,7 @@ type DomainTests() =
     member _.``ParserContext.CancellationToken should return correct token``() =
         // Setup
         let cancellationToken = CancellationToken()
-        let sut = ParserContext(Pascal, false, cancellationToken)
+        let sut = ParserContext(Pascal, false, document, cancellationToken)
 
         // Act & Assert
         %sut.CancellationToken.Should().Be(cancellationToken)
@@ -53,7 +59,7 @@ type DomainTests() =
             | "camel" -> Camel
             | _ -> failwithf $"Unhandled {nameof casingType} value \"{casingType}\""
         let cancellationToken = CancellationToken.None
-        let sut = ParserContext(casing, false, cancellationToken)
+        let sut = ParserContext(casing, false, document, cancellationToken)
 
         // Act & Assert
         %sut.CasingType.Should().Be(casing)
@@ -65,7 +71,7 @@ type DomainTests() =
     ) =
         // Setup
         let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, assumeNullability, cancellationToken)
+        let sut = ParserContext(Pascal, assumeNullability, document, cancellationToken)
         let context = sut :> IParsedContext
 
         // Act & Assert
@@ -75,7 +81,7 @@ type DomainTests() =
     member _.``ParserContext SetVisitedType should add type to collection``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
+        let sut = ParserContext(Pascal, false, document, cancellationToken)
         let testClass = VisitedTypes.Class {
             Name = "TestClass"
             XmlSummary = [||]
@@ -96,58 +102,10 @@ type DomainTests() =
         | _ -> failwith "Expected Class type"
 
     [<Fact>]
-    member _.``ParserContext AddUnionRelationship should add relationship``() =
-        // Setup
-        let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
-        let context = sut :> IParsedContext
-        let unionName = "TestUnion"
-        let unionCases = [| "Case1"; "Case2" |]
-
-        // Act
-        sut.AddUnionRelationship unionName unionCases
-
-        // Assert
-        for unionCase in unionCases do
-            %context.TypeIsKnownUnionCase(unionCase).Should().BeTrue()
-
-    [<Fact>]
-    member _.``ParserContext TryFindUnionRelationship should return relationship when exists``() =
-        // Setup
-        let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
-        let context = sut :> IParsedContext
-        let unionName = "TestUnion"
-        let unionCase = "TestCase"
-
-        sut.AddUnionRelationship unionName [| unionCase |]
-
-        // Act
-        let result = context.TryFindUnionRelationship unionCase
-
-        // Assert
-        %result.Should().BeSome()
-        %result.Value.UnionTypeName.Should().Be(unionName)
-        %result.Value.UnionCaseName.Should().Be(unionCase)
-
-    [<Fact>]
-    member _.``ParserContext TryFindUnionRelationship should return None when not exists``() =
-        // Setup
-        let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
-        let context = sut :> IParsedContext
-
-        // Act
-        let result = context.TryFindUnionRelationship "NonExistentCase"
-
-        // Assert
-        %result.Should().BeNone()
-
-    [<Fact>]
     member _.``ParserContext AddNamedType should add type``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
+        let sut = ParserContext(Pascal, false, document, cancellationToken)
         let context = sut :> IParsedContext
         let namedType = NamedType.Class "TestClass"
 
@@ -161,7 +119,7 @@ type DomainTests() =
     member _.``ParserContext IsNamedType should return false when type not added``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
+        let sut = ParserContext(Pascal, false, document, cancellationToken)
         let context = sut :> IParsedContext
         let namedType = NamedType.Class "TestClass"
 
@@ -172,7 +130,7 @@ type DomainTests() =
     member _.``ParserContext TypeIsKnownUnionCase should return false when case not added``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let sut = ParserContext(Pascal, false, cancellationToken)
+        let sut = ParserContext(Pascal, false, document, cancellationToken)
         let context = sut :> IParsedContext
 
         // Act & Assert
