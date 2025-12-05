@@ -167,9 +167,7 @@ public class Query<TSource> : IQuery<TSource>
     {
         RequiredArgument.NotNull(union, nameof(union));
 
-        var query = new Query<TUnionType>($"... on {union.Name}", Options);
-
-        SelectList.Add(query);
+        SelectList.Add(union);
 
         return this;
     }
