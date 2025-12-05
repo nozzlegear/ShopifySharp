@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace ShopifySharp.Infrastructure;
@@ -31,7 +30,6 @@ public interface IQuery<TSource> : IQuery
     List<object?> SelectList { get; }
     Dictionary<string, object?> Arguments { get; }
     IQuery<TSource> Alias(string alias);
-    IQuery<TSource> AddField<TProperty>(Expression<Func<TSource, TProperty>> selector);
     IQuery<TSource> AddField(string field);
     IQuery<TSource> AddField<TSubSource>(string field, IQuery<TSubSource> build)
         where TSubSource : class?;
@@ -91,50 +89,11 @@ public class Query<TSource> : IQuery<TSource>
         return this;
     }
 
-    public IQuery<TSource> AddField<TProperty>(Expression<Func<TSource, TProperty>> selector)
-    {
-        RequiredArgument.NotNull(selector, nameof(selector));
-        var property = GetPropertyInfo(selector);
-        var name = GetPropertyName(property);
-
-        SelectList.Add(name);
-
-        return this;
-    }
-
     public IQuery<TSource> AddField(string field)
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
         SelectList.Add(field);
         return this;
-    }
-
-    public IQuery<TSource> AddField<TSubSource>(
-        Expression<Func<TSource, TSubSource>> selector,
-        Func<IQuery<TSubSource>, IQuery<TSubSource>> build
-    ) where TSubSource : class?
-    {
-        RequiredArgument.NotNull(selector, nameof(selector));
-        RequiredArgument.NotNull(build, nameof(build));
-
-        var property = GetPropertyInfo(selector);
-        var name = GetPropertyName(property);
-
-        return AddField(name, build);
-    }
-
-    public IQuery<TSource> AddField<TSubSource>(
-        Expression<Func<TSource, IEnumerable<TSubSource>>> selector,
-        Func<IQuery<TSubSource>, IQuery<TSubSource>> build
-    ) where TSubSource : class?
-    {
-        RequiredArgument.NotNull(selector, nameof(selector));
-        RequiredArgument.NotNull(build, nameof(build));
-
-        var property = GetPropertyInfo(selector);
-        var name = GetPropertyName(property);
-
-        return AddField(name, build);
     }
 
     public IQuery<TSource> AddField<TSubSource>(string field, Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
@@ -225,24 +184,6 @@ public class Query<TSource> : IQuery<TSource>
         }
 
         return this;
-    }
-
-    private static PropertyInfo GetPropertyInfo<TProperty>(Expression<Func<TSource, TProperty>> lambda)
-    {
-        if (lambda.Body is not MemberExpression member)
-            throw new ArgumentException($"Expression '{lambda}' body is not member expression.");
-
-        if (member.Member is not PropertyInfo propertyInfo)
-            throw new ArgumentException($"Expression '{lambda}' not refers to a property.");
-
-        if (propertyInfo.ReflectedType is null)
-            throw new ArgumentException($"Expression '{lambda}' not refers to a property.");
-
-        var type = typeof(TSource);
-        if (type != propertyInfo.ReflectedType && !propertyInfo.ReflectedType.IsAssignableFrom(type))
-            throw new ArgumentException($"Expression '{lambda}' refers to a property that is not from type {type}.");
-
-        return propertyInfo;
     }
 
     private string GetPropertyName(PropertyInfo property)
