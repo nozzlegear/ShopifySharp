@@ -54,7 +54,7 @@ public abstract class GraphQueryBuilder<T>(string name)
         var builder = new TGraphQueryBuilder();
         var field = build.Invoke(builder);
 
-        Query = Query.AddUnion(field.Query);
+        Query = Query.AddField(name, field.Query);
     }
 
     public GraphQueryBuilder<T> AddUnion<TUnionCase, TGraphQueryBuilder>(string name, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
