@@ -99,4 +99,86 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     }
 
     #endregion
+
+    #region AddArgument
+
+    [Fact]
+    public async Task QueryBuilder_AddArgument_WhenPrimitiveArgumentsAreAdded_ShouldBuild()
+    {
+        // Setup
+        var sut = new ShopQueryBuilder();
+        sut.AddFieldCreatedAt();
+        sut.AddArgument("foo", "bar");
+        sut.AddArgument("bat", "baz");
+
+        // Act
+        var result = sut.Build();
+
+        // Assert
+        await Verify(result, _verifySettings);
+    }
+
+    [Fact]
+    public async Task QueryBuilder_AddArgument_WhenPrimitiveArgumentsAreAddedOfAnyType_ShouldBuild()
+    {
+        // Setup
+        var sut = new ShopQueryBuilder();
+        sut.AddFieldCreatedAt();
+        sut.AddArgument("foo", 3);
+        sut.AddArgument("bar", true);
+        sut.AddArgument("baz", false);
+        sut.AddArgument("bat", 6.7);
+
+        // Act
+        var result = sut.Build();
+
+        // Assert
+        await Verify(result, _verifySettings);
+    }
+
+    #endregion
+
+    #region AddArguments
+
+    [Fact]
+    public async Task QueryBuilder_AddArguments_WhenPrimitiveArgumentsAreAdded_ShouldBuild()
+    {
+        // Setup
+        var sut = new ShopQueryBuilder();
+        sut.AddFieldCreatedAt();
+        sut.AddArguments(new Dictionary<string, object>
+        {
+            { "foo", "bar" },
+            { "bat", "baz" },
+        });
+
+        // Act
+        var result = sut.Build();
+
+        // Assert
+        await Verify(result, _verifySettings);
+    }
+
+    [Fact]
+    public async Task QueryBuilder_AddArguments_WhenPrimitiveArgumentsAreAddedOfAnyType_ShouldBuild()
+    {
+        // Setup
+        var sut = new ShopQueryBuilder();
+        sut.AddFieldCreatedAt();
+        sut.AddArguments(new Dictionary<string, object>
+        {
+            { "foo", 3 },
+            { "bar", true },
+            { "baz", false },
+            { "bat", 6.7 },
+        });
+
+        // Act
+        var result = sut.Build();
+
+        // Assert
+        await Verify(result, _verifySettings);
+    }
+
+    #endregion
 }
