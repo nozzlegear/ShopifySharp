@@ -39,7 +39,7 @@ module rec QueryBuilderWriter =
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"AddUnion<{pascalUnionCaseName}, {unionCaseQueryBuilderName}>(\"{camelFieldName}\", build);"
+            do! DoubleIndented + $"AddUnionCase<{pascalUnionCaseName}, {unionCaseQueryBuilderName}>(\"{camelFieldName}\", build);"
             do! NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
