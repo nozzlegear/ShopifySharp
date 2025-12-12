@@ -61,10 +61,16 @@ public abstract class GraphQueryBuilder<T>(string name)
         where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
         where TGraphQueryBuilder : GraphQueryBuilder<TUnionCase>, new()
     {
-        var builder = new TGraphQueryBuilder();
-        var union = build.Invoke(builder);
-
-        Query = Query.AddUnionCase(union.Query);
+        Query = Query.AddField(name, (IQuery<TUnionCase> query) =>
+        {
+            var unionQuery = new Query<TUnionCase>($"... on {name}");
+            var builder = new TGraphQueryBuilder
+            {
+                Query = unionQuery
+            };
+            var union = build.Invoke(builder);
+            return query.AddUnionCase(union.Query);
+        });
 
         return this;
     }
