@@ -25,9 +25,6 @@ type VisitorTests() =
     ) =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         // Create a simple GraphQL schema with the type
         let schema = $"""
             type {typeName} {{
@@ -36,6 +33,8 @@ type VisitorTests() =
             }}
         """
         let document = parseDocument(schema)
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -58,15 +57,14 @@ type VisitorTests() =
     member _.``Visitor should handle GraphQL interface definition``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             interface Node {
                 id: ID!
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -90,9 +88,6 @@ type VisitorTests() =
     member _.``Visitor should handle GraphQL enum definition``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             enum UserStatus {
                 ACTIVE
@@ -101,6 +96,8 @@ type VisitorTests() =
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -127,9 +124,6 @@ type VisitorTests() =
     member _.``Visitor should handle GraphQL input object definition``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             input UserInput {
                 name: String!
@@ -138,6 +132,8 @@ type VisitorTests() =
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -164,21 +160,20 @@ type VisitorTests() =
     member _.``Visitor should handle GraphQL union type definition``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type User {
                 id: ID!
             }
-            
+
             type Product {
                 id: ID!
             }
-            
+
             union SearchResult = User | Product
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -195,17 +190,14 @@ type VisitorTests() =
         )
         
         %unionType.Should().BeSome()
-        %unionType.Value.Types.Should().HaveLength(2)
-        %unionType.Value.Types.Should().Contain("User")
-        %unionType.Value.Types.Should().Contain("Product")
+        %unionType.Value.Cases.Should().HaveLength(2)
+        %unionType.Value.Cases.Should().ContainExactlyOneItemMatching(fun x -> x.Name = "User")
+        %unionType.Value.Cases.Should().ContainExactlyOneItemMatching(fun x -> x.Name = "Product")
 
     [<Fact>]
     member _.``Visitor should handle type with deprecated field``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type User {
                 id: ID!
@@ -215,6 +207,8 @@ type VisitorTests() =
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -238,9 +232,6 @@ type VisitorTests() =
     member _.``Visitor should handle type with field descriptions``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type User {
                 "The unique identifier for the user"
@@ -250,6 +241,8 @@ type VisitorTests() =
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -278,15 +271,14 @@ type VisitorTests() =
     ) =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = $"""
             type TestType {{
                 field: {scalarType}
             }}
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -308,20 +300,19 @@ type VisitorTests() =
     member _.``Visitor should handle type implementing interface``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             interface Node {
                 id: ID!
             }
-            
+
             type User implements Node {
                 id: ID!
                 name: String
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -342,29 +333,28 @@ type VisitorTests() =
     member _.``Visitor should handle connection type with both nodes and edges fields``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type UserConnection {
                 nodes: [User]
                 edges: [UserEdge]
                 pageInfo: PageInfo
             }
-            
+
             type User {
                 id: ID!
             }
-            
+
             type UserEdge {
                 node: User
             }
-            
+
             type PageInfo {
                 hasNextPage: Boolean
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -389,24 +379,23 @@ type VisitorTests() =
     member _.``Visitor should handle connection type with only nodes field``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type UserConnection {
                 nodes: [User]
                 pageInfo: PageInfo
             }
-            
+
             type User {
                 id: ID!
             }
-            
+
             type PageInfo {
                 hasNextPage: Boolean
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -431,28 +420,27 @@ type VisitorTests() =
     member _.``Visitor should handle connection type with only edges field``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type UserConnection {
                 edges: [UserEdge]
                 pageInfo: PageInfo
             }
-            
+
             type UserEdge {
                 node: User
             }
-            
+
             type User {
                 id: ID!
             }
-            
+
             type PageInfo {
                 hasNextPage: Boolean
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -477,20 +465,19 @@ type VisitorTests() =
     member _.``Visitor should handle connection type with neither nodes nor edges fields``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type UserConnection {
                 pageInfo: PageInfo
                 totalCount: Int
             }
-            
+
             type PageInfo {
                 hasNextPage: Boolean
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -515,29 +502,28 @@ type VisitorTests() =
     member _.``Visitor should handle connection type with case insensitive field names``() =
         // Setup
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
-        let sut = Visitor()
-
         let schema = """
             type UserConnection {
                 NODES: [User]
                 Edges: [UserEdge]
                 pageInfo: PageInfo
             }
-            
+
             type User {
                 id: ID!
             }
-            
+
             type UserEdge {
                 node: User
             }
-            
+
             type PageInfo {
                 hasNextPage: Boolean
             }
         """
         let document = parseDocument schema
+        let context = ParserContext(Pascal, false, document, cancellationToken)
+        let sut = Visitor()
 
         // Act
         let task = sut.VisitAsync(document, context)
@@ -553,7 +539,7 @@ type VisitorTests() =
         
         %connectionType.Should().BeSome()
         match connectionType.Value.KnownInheritedType with
-        | Some (Connection (ConnectionWithNodesAndEdges (nodesType, edgesType))) -> 
-            %true.Should().BeTrue() // Test passes - case insensitive matching works
+        | Some (Connection (ConnectionWithNodesAndEdges _)) ->
+            %true.Should().BeTrue() // Test passes - case-insensitive matching works
         | _ -> 
             %false.Should().BeTrue() // Should have ConnectionWithNodesAndEdges

@@ -7,8 +7,11 @@ namespace ShopifySharp.GraphQL.Parser.CLI;
 [Verb("parse", aliases: ["generate"], HelpText = "Reads a .graphql file and generates C# classes, enums and input types compatible with ShopifySharp.")]
 public record GenerateOptions
 {
-    [Option('o', "output", Required = true, HelpText = "Output directory for generated C# files")]
-    public required string Output { get; init; }
+    [Option('t', "types-dir", Required = true, HelpText = "Output directory for generated type files")]
+    public required string TypesPath { get; init; }
+
+    [Option('b', "builders-dir", Required = true, HelpText = "Output directory for generated QueryBuilder files")]
+    public required string QueryBuildersPath { get; init; }
 
     [Value(0, MetaName = "<schema.graphql>", HelpText = "Path to the GraphQL schema file to convert. Both JSON and GraphQL are accepted.")]
     public required string GraphqlFilePath { get; init; }
