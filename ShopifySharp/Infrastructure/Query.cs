@@ -128,6 +128,7 @@ public class Query<TSource> : IQuery<TSource>
 
         // Ensure we also select the __typename, which is required for deserializing union cases
         SelectList.Add("__typename");
+        SelectList.Add(union);
 
         return this;
     }
