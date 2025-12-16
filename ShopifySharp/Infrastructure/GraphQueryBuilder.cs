@@ -9,10 +9,20 @@ using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
-public abstract class GraphQueryBuilder<T>(string name)
+public abstract class GraphQueryBuilder<T>
     where T: IGraphQLObject
 {
-    protected IQuery<T> Query { get; private set; } = new Query<T>(name);
+    protected QueryOptions QueryOptions { get; init; } = new();
+
+    protected IQuery<T> Query { get; private set; }
+
+    protected readonly string Name;
+
+    protected GraphQueryBuilder(string name)
+    {
+        Name = name;
+        Query = new Query<T>(name, QueryOptions);
+    }
 
     public string Build() => Query.Build();
 
@@ -44,41 +54,40 @@ public abstract class GraphQueryBuilder<T>(string name)
     public void AddField<TField>(string name, Func<IQuery<TField>, IQuery<TField>> customize)
         where TField: class, IGraphQLObject
     {
-        Query = Query.AddField(name, customize);
+        RequiredArgument.NotNull(customize, nameof(customize));
+
+        var query = new Query<TField>(name, QueryOptions);
+        var subQuery = customize.Invoke(query);
+
+        Query = Query.AddField(subQuery);
     }
 
     public void AddField<TField, TGraphQueryBuilder>(string name, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
         where TField : class, IGraphQLObject
         where TGraphQueryBuilder : GraphQueryBuilder<TField>, new()
     {
-        var builder = new TGraphQueryBuilder();
-        var field = build.Invoke(builder);
+        var builder = new TGraphQueryBuilder()
+        {
+            Query = new Query<TField>(name),
+            QueryOptions = QueryOptions
+        };
+        builder = build.Invoke(builder);
 
-        Query = Query.AddField(name, field.Query);
+        Query = Query.AddField(builder.Query);
     }
 
-    public GraphQueryBuilder<T> AddUnionCase<TUnionCase, TGraphQueryBuilder>(string name, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
+    public GraphQueryBuilder<T> AddUnionCase<TUnionCase, TGraphQueryBuilder>(string fieldName, string unionCaseTypeName, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
         where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
         where TGraphQueryBuilder : GraphQueryBuilder<TUnionCase>, new()
     {
-        Query = Query.AddField(name, (IQuery<TUnionCase> query) =>
+        var builder = new TGraphQueryBuilder
         {
-            var unionQuery = new Query<TUnionCase>($"... on {name}");
-            var builder = new TGraphQueryBuilder
-            {
-                Query = unionQuery
-            };
-            var union = build.Invoke(builder);
-            return query.AddUnionCase(union.Query);
-        });
+            Query = new Query<TUnionCase>(unionCaseTypeName),
+            QueryOptions = QueryOptions
+        };
+        builder = build.Invoke(builder);
 
-        return this;
-    }
-
-    public GraphQueryBuilder<T> AddUnionCase<TUnionCase>(string name, GraphQueryBuilder<TUnionCase> union)
-        where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
-    {
-        Query = Query.AddUnionCase(union.Query);
+        Query = Query.AddUnionCase(fieldName, builder.Query);
 
         return this;
     }
