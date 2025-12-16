@@ -31,21 +31,10 @@ public interface IQuery<TSource> : IQuery
     Dictionary<string, object?> Arguments { get; }
     IQuery<TSource> Alias(string alias);
     IQuery<TSource> AddField(string field);
-    IQuery<TSource> AddField<TSubSource>(string field, IQuery<TSubSource> build)
+    IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build)
         where TSubSource : class?;
-    IQuery<TSource> AddField<TSubSource>(
-        string field,
-        Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
-        where TSubSource : class?;
-    IQuery<TSource> AddUnionCase<TUnionType>(IQuery<TUnionType> union)
+    IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> union)
         where TUnionType : class?;
-    IQuery<TSource> AddUnionCase<TUnionType>(
-        string typeName,
-        Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, TSource;
-    IQuery<TSource> AddUnionCase<TUnionType>(
-        Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, TSource;
     IQuery<TSource> AddArgument(string key, object? value);
     IQuery<TSource> AddArguments(Dictionary<string, object?> arguments);
     IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class;
@@ -96,60 +85,25 @@ public class Query<TSource> : IQuery<TSource>
         return this;
     }
 
-    public IQuery<TSource> AddField<TSubSource>(string field, Func<IQuery<TSubSource>, IQuery<TSubSource>> build)
+    public IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build)
         where TSubSource : class?
     {
-        RequiredArgument.NotNullOrEmpty(field, nameof(field));
         RequiredArgument.NotNull(build, nameof(build));
-
-        var query = new Query<TSubSource>(field, Options);
-        var subQuery = build.Invoke(query);
-
-        SelectList.Add(subQuery);
-
-        return this;
-    }
-
-    public IQuery<TSource> AddField<TSubSource>(string field, IQuery<TSubSource> build)
-        where TSubSource : class?
-    {
-        RequiredArgument.NotNullOrEmpty(field, nameof(field));
-        RequiredArgument.NotNull(build, nameof(build));
-
         SelectList.Add(build);
-
         return this;
     }
 
-    public IQuery<TSource> AddUnionCase<TUnionType>(IQuery<TUnionType> union)
+    public IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> union)
         where TUnionType : class?
     {
+        RequiredArgument.NotNullOrEmpty(field, nameof(field));
         RequiredArgument.NotNull(union, nameof(union));
 
         // Ensure we also select the __typename, which is required for deserializing union cases
-        SelectList.Add("__typename");
+        union.SelectList.Add("__typename");
         SelectList.Add(union);
 
         return this;
-    }
-
-    public IQuery<TSource> AddUnionCase<TUnionType>(string typeName, Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, TSource
-    {
-        RequiredArgument.NotNullOrEmpty(typeName, nameof(typeName));
-        RequiredArgument.NotNull(build, nameof(build));
-
-        var query = new Query<TUnionType>($"... on {typeName}", Options);
-        var union = build.Invoke(query);
-
-        return AddUnionCase(union);
-    }
-
-    public IQuery<TSource> AddUnionCase<TUnionType>(Func<IQuery<TUnionType>, IQuery<TUnionType>> build)
-        where TUnionType : class?, TSource
-    {
-        RequiredArgument.NotNull(build, nameof(build));
-        return AddUnionCase(typeof(TUnionType).Name, build);
     }
 
     public IQuery<TSource> AddArgument(string key, object? value)
