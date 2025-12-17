@@ -99,9 +99,12 @@ public class Query<TSource> : IQuery<TSource>
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
         RequiredArgument.NotNull(union, nameof(union));
 
+        var fieldQuery = new Query<object>(field, Options);
+        fieldQuery.SelectList.Add(union);
         // Ensure we also select the __typename, which is required for deserializing union cases
-        union.SelectList.Add("__typename");
-        SelectList.Add(union);
+        fieldQuery.SelectList.Add("__typename");
+
+        SelectList.Add(fieldQuery);
 
         return this;
     }
