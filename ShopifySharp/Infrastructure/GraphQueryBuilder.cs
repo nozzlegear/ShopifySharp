@@ -68,7 +68,7 @@ public abstract class GraphQueryBuilder<T>
     {
         var builder = new TGraphQueryBuilder()
         {
-            Query = new Query<TField>(name),
+            Query = new Query<TField>(name, QueryOptions),
             QueryOptions = QueryOptions
         };
         builder = build.Invoke(builder);
@@ -82,7 +82,7 @@ public abstract class GraphQueryBuilder<T>
     {
         var builder = new TGraphQueryBuilder
         {
-            Query = new Query<TUnionCase>(unionCaseTypeName),
+            Query = new Query<TUnionCase>($"... on {unionCaseTypeName}"),
             QueryOptions = QueryOptions
         };
         builder = build.Invoke(builder);
