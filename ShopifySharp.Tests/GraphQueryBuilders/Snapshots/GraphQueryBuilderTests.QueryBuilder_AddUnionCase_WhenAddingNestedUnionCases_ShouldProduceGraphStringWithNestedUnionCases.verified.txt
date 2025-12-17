@@ -1,0 +1,1 @@
+﻿calculatedDiscountCodeApplication{code myCustomThing{... on DineroV2{foo myNestedCustomThing{... on NestedDineroV2{foo} __typename}} __typename}}

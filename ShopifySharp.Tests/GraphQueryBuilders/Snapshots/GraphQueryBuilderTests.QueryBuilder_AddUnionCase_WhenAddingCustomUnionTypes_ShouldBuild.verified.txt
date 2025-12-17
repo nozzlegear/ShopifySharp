@@ -1,1 +1,1 @@
-﻿calculatedDiscountCodeApplication{code value{... on MoneyV2{amount}} myCustomThing{... on CustomThing{foo}}}
+﻿calculatedDiscountCodeApplication{code value{... on MoneyV2{amount} __typename} myCustomThing{... on DineroV2{foo} __typename}}

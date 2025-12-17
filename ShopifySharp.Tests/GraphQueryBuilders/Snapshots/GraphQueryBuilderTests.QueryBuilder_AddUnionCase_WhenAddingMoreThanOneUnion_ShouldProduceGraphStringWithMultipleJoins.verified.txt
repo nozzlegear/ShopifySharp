@@ -1,0 +1,1 @@
+﻿metafieldRelation{target{... on GenericFile{alt mimeType} __typename} target{... on Video{duration status} __typename}}

@@ -186,7 +186,7 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     #region Unions
 
     [Fact]
-    public async Task QueryBuilder_AddUnionCase_ShouldBuild()
+    public async Task QueryBuilder_AddUnionCase_ShouldProduceGraphStringWithUnionCaseJoinAndExpectedFields()
     {
         // Setup
         var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
@@ -197,16 +197,32 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
         var result = sut.Build();
 
         // Assert
+        result.Should().ContainAll([
+            "value{",
+            "... on MoneyV2{",
+            "__typename",
+            "amount"
+        ]);
         await Verify(result, _verifySettings);
     }
 
     [Fact]
-    public async Task QueryBuilder_AddUnionCase_WhenAddingMoreThanOneUnion_ShouldBuild()
+    public async Task QueryBuilder_AddUnionCase_WhenAddingMoreThanOneUnion_ShouldProduceGraphStringWithMultipleJoins()
     {
         // Setup
-        var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
-        sut.AddFieldCode();
-        sut.AddUnionCaseValue((MoneyV2QueryBuilder x) => x.AddFieldAmount());
+        var sut = new MetafieldRelationQueryBuilder();
+        sut.AddUnionCaseTarget((GenericFileQueryBuilder builder) =>
+        {
+            builder.AddFieldAlt();
+            builder.AddFieldMimeType();
+            return builder;
+        });
+        sut.AddUnionCaseTarget((VideoQueryBuilder builder) =>
+        {
+            builder.AddFieldDuration();
+            builder.AddFieldStatus();
+            return builder;
+        });
 
         // Act
         var result = sut.Build();
@@ -222,7 +238,31 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
         var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
         sut.AddFieldCode();
         sut.AddUnionCaseValue((MoneyV2QueryBuilder x) => x.AddFieldAmount());
-        sut.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myCustomThing", x => x.AddFoo());
+        sut.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myCustomThing", "DineroV2", x => x.AddFoo());
+
+        // Act
+        var result = sut.Build();
+
+        // Assert
+        await Verify(result, _verifySettings);
+    }
+
+    [Fact]
+    public async Task QueryBuilder_AddUnionCase_WhenAddingNestedUnionCases_ShouldProduceGraphStringWithNestedUnionCases()
+    {
+        // Setup
+        var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
+        sut.AddFieldCode();
+        sut.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myCustomThing", "DineroV2", builder =>
+        {
+            builder.AddFoo();
+            builder.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myNestedCustomThing", "NestedDineroV2", builder2 =>
+            {
+                builder2.AddFoo();
+                return builder2;
+            });
+            return builder;
+        });
 
         // Act
         var result = sut.Build();
