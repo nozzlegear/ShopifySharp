@@ -24,6 +24,8 @@ public abstract class GraphQueryBuilder<T>
         Query = new Query<T>(name, QueryOptions);
     }
 
+    public readonly IArgumentsQuery<T> Arguments = new ArgumentsQuery<T>();
+
     public string Build() => Query.Build();
 
     public void Alias(string alias)
