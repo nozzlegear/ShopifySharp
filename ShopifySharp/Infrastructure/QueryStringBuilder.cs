@@ -57,7 +57,7 @@ public class QueryStringBuilder : IQueryStringBuilder
 
         QueryString.Append(query.Name);
 
-        if (query.Arguments.Count > 0)
+        if (query.ArgumentsList.Count > 0)
         {
             QueryString.Append("(");
             AddParams(query);
@@ -215,12 +215,12 @@ public class QueryStringBuilder : IQueryStringBuilder
     {
         RequiredArgument.NotNull(query, nameof(query));
 
-        foreach (KeyValuePair<string, object?> param in query.Arguments)
+        foreach (KeyValuePair<string, object?> param in query.ArgumentsList)
         {
             QueryString.Append($"{param.Key}:{FormatQueryParam(param.Value)},");
         }
 
-        if (query.Arguments.Count > 0)
+        if (query.ArgumentsList.Count > 0)
         {
             QueryString.Length--;
         }

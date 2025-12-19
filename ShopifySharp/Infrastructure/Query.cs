@@ -19,86 +19,63 @@ public interface IQuery
     string Build();
 }
 
-public interface ISelectQuery
+public interface IQuery<TSource> : IQuery
 {
-    void Alias(string alias);
+    Dictionary<string, object?> ArgumentsList { get; }
 
     List<object?> SelectList { get; }
 
-    /// <summary>Gets the query name.</summary>
     string Name { get; }
 
     /// <summary>Gets the alias name.</summary>
     string? AliasName { get; }
+
+    void Alias(string alias);
 }
 
-public interface IFieldsQuery<TSource> : IQuery, ISelectQuery
+public interface IFieldsBuilder<TSource>
 {
     void AddField(string field);
-    void AddField<TSubSource>(IQuery build)
+    void AddField<TSubSource>(IQuery<TSubSource> build)
         where TSubSource : class?;
 }
 
-public interface IUnionsQuery : IQuery, ISelectQuery
+public interface IUnionsBuilder<TSource>
 {
-    void AddUnionCase<TUnionType>(string field, IQuery union)
+    void AddUnionCase<TUnionType>(string field, IQuery<TUnionType> union)
         where TUnionType : class?;
 }
 
-public interface IArgumentsQuery : IQuery
+public interface IArgumentsBuilder
 {
-    // Dictionary<string, object?> Arguments { get; }
     void AddArgument(string key, object? value);
     void AddArguments(Dictionary<string, object?> arguments);
     void AddArguments<TArguments>(TArguments arguments) where TArguments : class;
 }
 
-public abstract class SelectQuery : ISelectQuery
+public class FieldsBuilder<TSource>(ref List<object?> selectList)
+    : IFieldsBuilder<TSource>
 {
-    protected readonly QueryOptions Options;
-
-    public List<object?> SelectList { get; } = [];
-    public string Name { get; }
-    public string? AliasName { get; protected set; }
-
-    public SelectQuery(string name, QueryOptions? options = null)
-    {
-        Name = name;
-        Options = options ?? new QueryOptions();
-    }
-
-    public void Alias(string alias)
-    {
-        RequiredArgument.NotNullOrEmpty(alias, nameof(alias));
-        AliasName = alias;
-    }
-}
-
-public class FieldsQuery<TSource>(string name, QueryOptions? options = null)
-    : SelectQuery(name, options), IFieldsQuery<TSource>
-{
-    public string Build()
-    {
-        throw new NotImplementedException();
-    }
+    private readonly List<object?> _selectList = selectList;
 
     public void AddField(string field)
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
-        SelectList.Add(field);
+        _selectList.Add(field);
     }
 
     public void AddField<TSubSource>(IQuery<TSubSource> build)
         where TSubSource : class?
     {
         RequiredArgument.NotNull(build, nameof(build));
-        SelectList.Add(build);
+        _selectList.Add(build);
     }
 }
 
-public class ArgumentsQuery(QueryOptions options): IArgumentsQuery
+public class ArgumentsBuilder(QueryOptions options, ref Dictionary<string, object?> arguments)
+    : IArgumentsBuilder
 {
-    private readonly Dictionary<string, object?> _arguments = new();
+    private readonly Dictionary<string, object?> _arguments = arguments;
 
     public void AddArgument(string key, object? value)
     {
@@ -142,20 +119,12 @@ public class ArgumentsQuery(QueryOptions options): IArgumentsQuery
             ? options.Formatter.Invoke(property)
             : property.Name;
     }
-
-    public string Build()
-    {
-        throw new NotImplementedException();
-    }
 }
 
-public class UnionsQuery<TSource>(string name, QueryOptions? options = null)
-    : SelectQuery(name, options), IUnionsQuery
+public class UnionsBuilder<TSource>(QueryOptions options, ref List<object?> selectList)
+    : IUnionsBuilder<TSource>
 {
-    public string Build()
-    {
-        throw new NotImplementedException();
-    }
+    private readonly List<object?> _selectList = selectList;
 
     public void AddUnionCase<TUnionType>(string field, IQuery<TUnionType> union)
         where TUnionType : class?
@@ -163,25 +132,28 @@ public class UnionsQuery<TSource>(string name, QueryOptions? options = null)
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
         RequiredArgument.NotNull(union, nameof(union));
 
-        var fieldQuery = new Query<object>(field, Options);
+        var fieldQuery = new Query<object>(field, options);
         fieldQuery.SelectList.Add(union);
         // Ensure we also select the __typename, which is required for deserializing union cases
         fieldQuery.SelectList.Add("__typename");
 
-        SelectList.Add(fieldQuery);
+        _selectList.Add(fieldQuery);
     }
 }
 
-public class Query<TSource> : IQuery
+public class Query<TSource> : IQuery<TSource>
 {
     protected readonly QueryOptions Options;
 
-    /// <summary>Gets the query string builder.</summary>
+    public Dictionary<string, object?> ArgumentsList { get; }
+
     protected IQueryStringBuilder QueryStringBuilder { get; } = new QueryStringBuilder();
 
     public string Name { get; }
+
     public string? AliasName { get; private set; }
-    public List<object?> SelectList { get; private set; } = [];
+
+    public List<object?> SelectList { get; }
 
     public Query(string name, QueryOptions? options = null)
     {
@@ -189,16 +161,27 @@ public class Query<TSource> : IQuery
         Name = name;
         Options = options ?? new QueryOptions();
 
-        Arguments = new ArgumentsQuery(Options);
-        Fields = new FieldsQuery<TSource>(Name, Options);
-        Unions = new UnionsQuery<TSource>(Name, Options);
+        var argumentsList = new Dictionary<string, object?>();
+        ArgumentsList = argumentsList;
+
+        var selectList = new List<object?>();
+        SelectList = selectList;
+
+        Arguments = new ArgumentsBuilder(Options, ref argumentsList);
+        Fields = new FieldsBuilder<TSource>(ref selectList);
+        Unions = new UnionsBuilder<TSource>(Options, ref selectList);
     }
 
-    public ArgumentsQuery Arguments { get; private init; }
+    public ArgumentsBuilder Arguments { get; private init; }
 
-    public FieldsQuery<TSource> Fields { get; private init; }
+    public FieldsBuilder<TSource> Fields { get; private init; }
 
-    public UnionsQuery<TSource> Unions { get; private init; }
+    public UnionsBuilder<TSource> Unions { get; private init; }
+
+    public void Alias(string alias)
+    {
+        AliasName = alias;
+    }
 
     /// <summary>Builds the query.</summary>
     /// <returns>The GraphQL query as string, without outer enclosing block.</returns>
