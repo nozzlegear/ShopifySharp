@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
@@ -124,6 +125,44 @@ public class Query<TSource> : IQuery<TSource>
             Arguments.Add(argument.Key, argument.Value);
 
         return this;
+    }
+
+    public void AddField<TField>(string name, Func<IQuery<TField>, IQuery<TField>> customize)
+        where TField: class, IGraphQLObject
+    {
+        RequiredArgument.NotNull(customize, nameof(customize));
+
+        var query = new Query<TField>(name, Options);
+        var subQuery = customize.Invoke(query);
+
+        AddField(subQuery);
+    }
+
+    public void AddField<TField, TQueryBuilder>(string name, Func<TQueryBuilder, TQueryBuilder> build)
+        where TField : class, IGraphQLObject
+        where TQueryBuilder : GraphQueryBuilder<TField>
+    {
+        var query = new Query<TField>(name, Options);
+        throw new NotImplementedException("todo: replace this with an implementation of this method on the actual XYZQueryBuilder class itself");
+        // var builder = new GraphQueryBuilder<TField>(name);
+        // builder = build.Invoke(builder);
+        //
+        // Query = Query.AddField(builder.Query);
+    }
+
+    public void AddUnionCase<TUnionCase, TGraphQueryBuilder>(string fieldName, string unionCaseTypeName, Func<TGraphQueryBuilder, TGraphQueryBuilder> build)
+        where TUnionCase : class, IGraphQLUnionCase, IGraphQLObject
+        where TGraphQueryBuilder : GraphQueryBuilder<TUnionCase>, new()
+    {
+        throw new NotImplementedException("todo: replace this with an implementation of this method on the actual XYZQueryBuilder class itself");
+        // var builder = new TGraphQueryBuilder
+        // {
+        //     Query = new Query<TUnionCase>($"... on {unionCaseTypeName}"),
+        //     QueryOptions = QueryOptions
+        // };
+        // builder = build.Invoke(builder);
+        //
+        // Query.AddUnionCase(fieldName, builder.Query);
     }
 
     public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class
