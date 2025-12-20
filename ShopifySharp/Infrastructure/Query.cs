@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
@@ -122,25 +123,6 @@ public class Query<TSource> : IQuery<TSource>
 
         foreach (var argument in arguments)
             Arguments.Add(argument.Key, argument.Value);
-
-        return this;
-    }
-
-    public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class
-    {
-        RequiredArgument.NotNull(arguments, nameof(arguments));
-
-        IEnumerable<PropertyInfo> properties = arguments
-            .GetType()
-            .GetProperties()
-            .Where(property => property.GetValue(arguments) != null)
-            .OrderBy(property => property.Name);
-        foreach (var property in properties)
-        {
-            Arguments.Add(
-                GetPropertyName(property),
-                property.GetValue(arguments));
-        }
 
         return this;
     }
