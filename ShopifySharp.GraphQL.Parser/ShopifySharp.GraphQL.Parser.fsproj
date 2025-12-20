@@ -13,6 +13,9 @@
         <Compile Include="Utils.fs" />
         <Compile Include="FileSystem.fs" />
         <Compile Include="AstNodeMapper.fs" />
+        <Compile Include="ArgumentsBuilderWriter.fs" />
+        <Compile Include="UnionsBuilderWriter.fs" />
+        <Compile Include="FieldsBuilderWriter.fs" />
         <Compile Include="QueryBuilderWriter.fs" />
         <Compile Include="Visitor.fs" />
         <Compile Include="VisitedTypeWriter.fs" />
