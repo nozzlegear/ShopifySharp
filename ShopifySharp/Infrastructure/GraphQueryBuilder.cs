@@ -27,27 +27,36 @@ public abstract class GraphQueryBuilder<T>
 
 public sealed class OrderQueryArgumentsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
 {
-    public OrderQueryArgumentsBuilder Id(string id)
-    {
-        return this;
-    }
+    public OrderQueryArgumentsBuilder Id(string id) =>
+        throw new NotImplementedException();
 }
 
 public sealed class OrderQueryFieldsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
 {
-    public OrderQueryFieldsBuilder Name() => this;
+    public OrderQueryFieldsBuilder Name() =>
+        throw new NotImplementedException();
 
-    public OrderQueryFieldsBuilder DateCreated() => this;
+    public OrderQueryFieldsBuilder DateCreated() =>
+        throw new NotImplementedException();
 
-    public OrderQueryFieldsBuilder DateUpdated() => this;
+    public OrderQueryFieldsBuilder DateUpdated() =>
+        throw new NotImplementedException();
 
-    public OrderQueryFieldsBuilder Id() => this;
+    public OrderQueryFieldsBuilder Id() =>
+        throw new NotImplementedException();
+}
+
+public sealed class PurchasingEntityUnionsBuilder(IQuery<ShopifySharp.GraphQL.PurchasingEntity> query)
+{
+    public PurchasingEntityUnionsBuilder Customer(Action<ShopifySharp.GraphQL.Customer> builder) =>
+        throw new NotImplementedException();
+    public PurchasingEntityUnionsBuilder Company(Action<ShopifySharp.GraphQL.Company> builder) =>
+        throw new NotImplementedException();
 }
 
 public sealed class OrderQueryUnionsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
 {
-    public OrderQueryUnionsBuilder PurchasingEntityCustomer(Action<PurchasingEntity> build) => this;
-    public OrderQueryUnionsBuilder PurchasingEntityCompany(Action<PurchasingEntity> build) => this;
+    public PurchasingEntityUnionsBuilder PurchasingEntity { get; } = new(query);
 }
 
 public sealed class OrderQueryBuilder : GraphQueryBuilder<ShopifySharp.GraphQL.Order>
