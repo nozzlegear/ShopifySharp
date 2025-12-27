@@ -6,7 +6,6 @@ open GraphQLParser
 open GraphQLParser.AST
 open FSharp.Span.Utils.SafeLowLevelOperators
 open FSharp.Span.Utils
-open Utils
 
 [<RequireQualifiedAccess>]
 module AstNodeMapper =
@@ -30,7 +29,7 @@ module AstNodeMapper =
         | FieldValueType.DateOnly -> "DateOnly"
         | FieldValueType.TimeSpan -> "TimeSpan"
         | FieldValueType.GraphObjectType (NamedType.Interface graphInterfaceName) ->
-            mapStrToInterfaceName graphInterfaceName
+            $"I{graphInterfaceName}"
         | FieldValueType.GraphObjectType graphObjectTypeName ->
             graphObjectTypeName.ToString()
 
