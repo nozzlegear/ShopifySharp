@@ -25,6 +25,12 @@ module Utils =
         | Pascal -> Char.ToUpper(first).ToString() + rest
         | Camel -> Char.ToLower(first).ToString() + rest
 
+    /// Fully qualify class names which might collide with System types
+    let qualifiedPascalTypeName  className =
+        match toCasing Pascal className with
+        | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
+        | pascalGenericType -> pascalGenericType
+
     let sanitizeString (str: string): string =
         str.ReplaceLineEndings("")
            .Replace("\"", "", StringComparison.OrdinalIgnoreCase)

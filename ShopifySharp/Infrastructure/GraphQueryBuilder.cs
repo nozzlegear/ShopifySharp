@@ -25,51 +25,82 @@ public abstract class GraphQueryBuilder<T>
     public string Build() => Query.Build();
 }
 
-public sealed class OrderQueryArgumentsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
-{
-    public OrderQueryArgumentsBuilder Id(string id) =>
-        throw new NotImplementedException();
-}
-
-public sealed class OrderQueryFieldsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
-{
-    public OrderQueryFieldsBuilder Name() =>
-        throw new NotImplementedException();
-
-    public OrderQueryFieldsBuilder DateCreated() =>
-        throw new NotImplementedException();
-
-    public OrderQueryFieldsBuilder DateUpdated() =>
-        throw new NotImplementedException();
-
-    public OrderQueryFieldsBuilder Id() =>
-        throw new NotImplementedException();
-}
-
-public sealed class PurchasingEntityUnionsBuilder(IQuery<ShopifySharp.GraphQL.PurchasingEntity> query)
-{
-    public PurchasingEntityUnionsBuilder Customer(Action<ShopifySharp.GraphQL.Customer> builder) =>
-        throw new NotImplementedException();
-    public PurchasingEntityUnionsBuilder Company(Action<ShopifySharp.GraphQL.Company> builder) =>
-        throw new NotImplementedException();
-}
-
-public sealed class OrderQueryUnionsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
-{
-    public PurchasingEntityUnionsBuilder PurchasingEntity { get; } = new(query);
-}
-
-public sealed class OrderQueryBuilder : GraphQueryBuilder<ShopifySharp.GraphQL.Order>
-{
-    public OrderQueryBuilder(QueryOptions? queryOptions = null) : base("order", queryOptions)
-    {
-        Arguments = new OrderQueryArgumentsBuilder(Query);
-        Fields = new OrderQueryFieldsBuilder(Query);
-        Unions = new OrderQueryUnionsBuilder(Query);
-    }
-
-    public OrderQueryArgumentsBuilder Arguments { get; }
-    public OrderQueryFieldsBuilder Fields { get; }
-    public OrderQueryUnionsBuilder Unions { get; }
-}
-
+// public sealed class OrderQueryArgumentsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
+// {
+//     public OrderQueryArgumentsBuilder Id(string id) =>
+//         throw new NotImplementedException();
+// }
+//
+// public sealed class OrderQueryFieldsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
+// {
+//     public OrderQueryFieldsBuilder Name() =>
+//         throw new NotImplementedException();
+//
+//     public OrderQueryFieldsBuilder DateCreated() =>
+//         throw new NotImplementedException();
+//
+//     public OrderQueryFieldsBuilder DateUpdated() =>
+//         throw new NotImplementedException();
+//
+//     public OrderQueryFieldsBuilder Id() =>
+//         throw new NotImplementedException();
+// }
+//
+// public sealed class PurchasingEntityUnionsBuilder<TParentQuery>(IQuery<TParentQuery> parentQuery, QueryOptions? queryOptions = null)
+//     where TParentQuery : class
+// {
+//     public const string FieldName = "purchasingEntity";
+//
+//     public PurchasingEntityUnionsBuilder<TParentQuery> Customer(Action<ShopifySharp.GraphQL.CustomerQueryBuilder> builder)
+//     {
+//         var queryBuilder = new CustomerQueryBuilder()
+//         {
+//             Query = new Query<ShopifySharp.GraphQL.Customer>("... on customer"),
+//             QueryOptions = queryOptions,
+//         };
+//
+//         builder.Invoke(queryBuilder);
+//         parentQuery.AddUnionCase(FieldName, queryBuilder.Query);
+//
+//         return this;
+//     }
+//
+//     public PurchasingEntityUnionsBuilder<TParentQuery> Company(Action<ShopifySharp.GraphQL.CompanyQueryBuilder> builder)
+//     {
+//         var queryBuilder = new CustomerQueryBuilder()
+//         {
+//             Query = new Query<ShopifySharp.GraphQL.Customer>("... on company"),
+//             QueryOptions = queryOptions,
+//         };
+//
+//         builder.Invoke(queryBuilder);
+//         parentQuery.AddUnionCase(FieldName, queryBuilder.Query);
+//
+//         return this;
+//     }
+// }
+//
+// public sealed class OrderQueryUnionsBuilder
+// {
+//     public OrderQueryUnionsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
+//     {
+//         PurchasingEntity = new PurchasingEntityUnionsBuilder<GraphQL.Order>(query);
+//     }
+//
+//     public PurchasingEntityUnionsBuilder<ShopifySharp.GraphQL.Order> PurchasingEntity { get; }
+// }
+//
+// public sealed class OrderQueryBuilder : GraphQueryBuilder<ShopifySharp.GraphQL.Order>
+// {
+//     public OrderQueryBuilder(QueryOptions? queryOptions = null) : base("order", queryOptions)
+//     {
+//         Arguments = new OrderQueryArgumentsBuilder(Query);
+//         Fields = new OrderQueryFieldsBuilder(Query);
+//         Unions = new OrderQueryUnionsBuilder(Query);
+//     }
+//
+//     public OrderQueryArgumentsBuilder Arguments { get; }
+//     public OrderQueryFieldsBuilder Fields { get; }
+//     public OrderQueryUnionsBuilder Unions { get; }
+// }
+//
