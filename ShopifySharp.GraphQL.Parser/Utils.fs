@@ -9,9 +9,6 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 module Utils =
     let NewLine = Environment.NewLine
 
-    let mapStrToInterfaceName =
-        sprintf "I%s"
-
     let toUnionCaseWrapperName (unionTypeName: string) unionCaseName =
         unionTypeName + unionCaseName
 
@@ -30,6 +27,27 @@ module Utils =
         match toCasing Pascal className with
         | "Attribute" -> "ShopifySharp.GraphQL.Attribute"
         | pascalGenericType -> pascalGenericType
+
+    let toBuilderName = function
+        | QueryBuilder str -> toCasing Pascal $"{str}QueryBuilder"
+        | ArgumentBuilder str -> toCasing Pascal $"{str}ArgumentsBuilder"
+        | FieldsBuilder str -> toCasing Pascal $"{str}FieldsBuilder"
+        | UnionsBuilder str -> toCasing Pascal $"{str}UnionsBuilder"
+
+    let toGenericType type' assumeNullability =
+        match type' with
+        | VisitedTypes.Interface interface' ->
+            interface'.DotnetName
+        | VisitedTypes.Operation operation ->
+            match operation.ReturnType with
+            | ReturnType.VisitedType (VisitedTypes.Interface interface') ->
+                interface'.DotnetName
+            | ReturnType.VisitedType visitedTypes ->
+                visitedTypes.Name
+            | ReturnType.FieldType fieldType ->
+                // Use the wrapper function to ensure primitives are wrapped in GraphQLValue<T> or GraphQLCollection<T>
+                AstNodeMapper.mapFieldTypeToStringWithPrimitiveWrapper assumeNullability fieldType
+        | x -> x.Name
 
     let sanitizeString (str: string): string =
         str.ReplaceLineEndings("")

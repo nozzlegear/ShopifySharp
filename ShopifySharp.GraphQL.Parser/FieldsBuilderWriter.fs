@@ -6,19 +6,11 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let pascalTypeName = toCasing Pascal type'.Name
-    let pascalClassName = toCasing Pascal (type'.Name + "QueryFieldsBuilder")
-    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{pascalTypeName}}>"""
-
-    let canAddFields =
-        match type' with
-        | VisitedTypes.Class _ -> true
-        | VisitedTypes.Interface _ -> true
-        | VisitedTypes.Enum _ -> false
-        | VisitedTypes.InputObject _ -> true
-        | VisitedTypes.UnionType _ -> false
-        | VisitedTypes.Operation operation when operation.ReturnType.IsFieldType -> true
-        | VisitedTypes.Operation _ -> false
+    let pascalClassName = toBuilderName (FieldsBuilder type'.Name)
+    let genericTypeName =
+        toGenericType type' context.AssumeNullability
+        |> qualifiedPascalTypeName
+    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{genericTypeName}}>"""
 
     let writeQueryBuilderAddFieldMethod (fieldName: string)
                                         (fieldType: FieldType)
@@ -29,23 +21,22 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
         pipeWriter writer {
             match AstNodeMapper.unwrapFieldType fieldType with
-            | FieldValueType.GraphObjectType (NamedType.UnionType (_, unionCaseNames)) ->
-                for unionCaseName in unionCaseNames do
-                    failwith "not implemented – was previously yielding writeUnionCaseJoin"
-                    //yield! writeUnionCaseJoin pascalClassName unionCaseName fieldName context
+            | FieldValueType.GraphObjectType (NamedType.UnionType _) ->
+                // Handled by the UnionsBuilderWriter
+                ()
             | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName as namedType)
             | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName as namedType)
             | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName as namedType) ->
                 let pascalTypeName =
                     if namedType.IsInterface
-                    then toCasing Pascal (mapStrToInterfaceName graphObjectTypeName)
+                    then toCasing Pascal $"I{graphObjectTypeName}"
                     else qualifiedPascalTypeName graphObjectTypeName
                 let queryBuilderName = $"{toCasing Pascal graphObjectTypeName}QueryBuilder"
 
                 // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
                 yield! writeDeprecationAttribute Indented None
-                do! Indented + $"public {pascalClassName} AddField{pascalFieldName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
+                do! Indented + $"public {pascalClassName} {pascalFieldName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
@@ -89,10 +80,9 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         let writeForVisitedType (visitedType: VisitedTypes): ValueTask =
             pipeWriter writer {
                 match visitedType with
-                | VisitedTypes.UnionType unionType ->
-                    for unionCase in unionType.Cases do
-                        failwith "not implemented – was previously yielding writeUnionCaseJoin"
-                        //yield! writeUnionCaseJoin pascalClassName unionCase.Name unionCase.Name context
+                | VisitedTypes.UnionType _ ->
+                    // Handled by the UnionsBuilderWriter
+                    ()
                 | visitedType ->
                     let fields =
                         match visitedType with
@@ -137,16 +127,32 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
         }
 
+    static member CanAddFields type' =
+        // TODO: improve this by checking if the type actually has fields available
+        match type' with
+        | VisitedTypes.Class _ -> true
+        | VisitedTypes.Interface _ -> true
+        | VisitedTypes.Enum _ -> false
+        | VisitedTypes.InputObject _ -> true
+        | VisitedTypes.UnionType _ -> false
+        | VisitedTypes.Operation operation ->
+            match operation.ReturnType with
+            | ReturnType.FieldType _ -> true
+            | ReturnType.VisitedType type' -> FieldsBuilderWriter.CanAddFields type'
+
     member _.WriteToPipewriter writer: ValueTask =
-        pipeWriter writer {
-            do! $$"""public sealed class {{pascalClassName}}"""
-            do! NewLine
-            do! "{"
-            do! NewLine
-            do! Indented + $$"""private {{queryType}} Query { get; }"""
-            do! NewLine + NewLine
-            yield! writeConstructor
-            do! NewLine + NewLine
-            yield! writeAddFieldMethods
-            do! "}"
-        }
+        if not (FieldsBuilderWriter.CanAddFields type') then
+            ValueTask.CompletedTask
+        else
+            pipeWriter writer {
+                do! $$"""public sealed class {{pascalClassName}}"""
+                do! NewLine
+                do! "{"
+                do! NewLine
+                do! Indented + $$"""private {{queryType}} Query { get; }"""
+                do! NewLine + NewLine
+                yield! writeConstructor
+                do! NewLine + NewLine
+                yield! writeAddFieldMethods
+                do! "}"
+            }

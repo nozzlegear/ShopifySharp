@@ -26,6 +26,12 @@ type Indentation
     static member (+) (x: Indentation, y: Indentation) =
         x.ToString() + y.ToString()
 
+type QueryBuilderTypes =
+    | QueryBuilder of str: string
+    | ArgumentBuilder of str: string
+    | FieldsBuilder of str: string
+    | UnionsBuilder of str: string
+
 type FieldTypeCollectionHandling
     = UnwrapCollection
     | KeepCollection

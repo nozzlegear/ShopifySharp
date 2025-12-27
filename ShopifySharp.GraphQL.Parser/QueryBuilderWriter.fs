@@ -10,47 +10,20 @@ module rec QueryBuilderWriter =
     let [<Literal>] private QueryRootObjectName = "QueryRoot"
     let [<Literal>] private MutationRootObjectName = "Mutation"
 
-    let private canAddFields = function
-        | VisitedTypes.Class _ -> true
-        | VisitedTypes.Interface _ -> true
-        | VisitedTypes.Enum _ -> false
-        | VisitedTypes.InputObject _ -> true
-        | VisitedTypes.UnionType _ -> false
-        | VisitedTypes.Operation operation when operation.ReturnType.IsFieldType -> true
-        | VisitedTypes.Operation _ -> false
-
     let private canAddArguments (type': VisitedTypes) =
         type'.IsOperation
 
-    // TODO: add unionsbuilder here
+    let private writeClassNameAndInheritedType (isOperation: bool)
+                                               (type': VisitedTypes)
+                                               (context: IParsedContext)
+                                               writer
+                                               : ValueTask =
+        let genericTypeName =
+            toGenericType type' context.AssumeNullability
+            |> qualifiedPascalTypeName
 
-    let private writeQueryBuilderConstructor (pascalClassName: string)
-                                             (isOperation: bool)
-                                             (type': VisitedTypes)
-                                             (context: IParsedContext)
-                                             writer
-                                             : ValueTask =
         pipeWriter writer {
-            let camelTypeName = toCasing Camel type'.Name
-
-            let genericType =
-                match type' with
-                | VisitedTypes.Interface interface' ->
-                    interface'.DotnetName
-                | VisitedTypes.Operation operation ->
-                    match operation.ReturnType with
-                    | ReturnType.VisitedType (VisitedTypes.Interface interface') ->
-                        interface'.DotnetName
-                    | ReturnType.VisitedType visitedTypes ->
-                        visitedTypes.Name
-                    | ReturnType.FieldType fieldType ->
-                        // Use the wrapper function to ensure primitives are wrapped in GraphQLValue<T> or GraphQLCollection<T>
-                        AstNodeMapper.mapFieldTypeToStringWithPrimitiveWrapper context.AssumeNullability fieldType
-                | x -> x.Name
-
-            let qualifiedGenericType = qualifiedPascalTypeName genericType
-
-            do! $"public class {pascalClassName}(): GraphQueryBuilder<{qualifiedGenericType}>(\"{camelTypeName}\")"
+            do! $"public class {toBuilderName (QueryBuilder type'.Name)}: GraphQueryBuilder<{genericTypeName}>"
 
             if isOperation then
                 do! ", IGraphOperationQueryBuilder"
@@ -58,17 +31,7 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let private writeSubQueryBuilderProperties pascalClassName context writer: ValueTask =
-        pipeWriter writer {
-            do! Indented + $$"""public {{pascalClassName}}QueryArgumentsBuilder Arguments { get; }"""
-            do! NewLine
-            do! Indented + $$"""public {{pascalClassName}}QueryFieldsBuilder Fields { get; }"""
-            do! NewLine
-            do! Indented + $$"""public {{pascalClassName}}QueryUnionsBuilder Unions { get; }"""
-            do! NewLine
-        }
-
-    let writeOperationTypeProperty (operationType: OperationType) (_: IParsedContext) writer: ValueTask =
+    let private writeOperationTypeProperty (operationType: OperationType) (_: IParsedContext) writer: ValueTask =
         pipeWriter writer {
             do! Indented + "public OperationType OperationType { get; } = "
             match operationType with
@@ -78,38 +41,67 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
+    let private writeSubQueryBuilderProperties (type': VisitedTypes) (_: IParsedContext) writer: ValueTask =
+        pipeWriter writer {
+            if ArgumentsBuilderWriter.CanAddArguments type' then
+                do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
+                do! NewLine
+            if UnionsBuilderWriter.CanAddUnions type' then
+                do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.FieldsBuilder type'.Name)}} Fields { get; }"""
+                do! NewLine
+            if FieldsBuilderWriter.CanAddFields type' then
+                do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.UnionsBuilder type'.Name)}} Unions { get; }"""
+                do! NewLine
+        }
+
+    let private writeConstructor (type': VisitedTypes) (_: IParsedContext) writer: ValueTask =
+        pipeWriter writer {
+            let camelTypeName = toCasing Camel type'.Name
+
+            do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(): base("{camelTypeName}")"""
+            do! NewLine + "{"
+
+            if ArgumentsBuilderWriter.CanAddArguments type' then
+                do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
+                do! NewLine
+
+            if UnionsBuilderWriter.CanAddUnions type' then
+                do! DoubleIndented + $$"""Fields = new {{toBuilderName (FieldsBuilder type'.Name)}}(Query);"""
+                do! NewLine
+            if FieldsBuilderWriter.CanAddFields type' then
+                do! DoubleIndented + $$"""Unios = new {{toBuilderName (UnionsBuilder type'.Name)}}(Query);"""
+                do! NewLine
+
+            do! NewLine + "}"
+            do! NewLine
+        }
+
     let writeQueryBuilder context (type': VisitedTypes) (operationType: OperationType option) writer: ValueTask =
         if type'.IsEnum || type'.IsInputObject then
             failwithf $"The {type'.GetType().Name} type is not supported."
 
         let fieldsBuilder = FieldsBuilderWriter(type', context)
         let argumentsBuilder = ArgumentsBuilderWriter(type', context)
+        let unionsBuilder = UnionsBuilderWriter(type', context)
 
         pipeWriter writer {
-            let pascalClassName = toCasing Pascal (type'.Name + "QueryBuilder")
-
             yield! writeDeprecationAttribute Outdented type'.Deprecation
-            yield! writeQueryBuilderConstructor pascalClassName operationType.IsSome type' context
+            yield! writeClassNameAndInheritedType operationType.IsSome type' context
             do! "{"
             do! NewLine
 
             if operationType.IsSome then
                 yield! writeOperationTypeProperty operationType.Value context
 
-            yield! writeSubQueryBuilderProperties pascalClassName context
+            yield! writeSubQueryBuilderProperties type' context
+            yield! writeConstructor type' context
 
-            // if canAddFields type' then
-            //     yield! writeQueryBuilderAddFieldMethods pascalClassName type' context
-            //
-            // if canAddArguments type' then
-            //     yield! writeQueryBuilderAddArgumentMethods pascalClassName type' context
-
-            do! NewLine
             do! "}"
             do! NewLine
 
             yield! fieldsBuilder.WriteToPipewriter
             yield! argumentsBuilder.WriteToPipewriter
+            yield! unionsBuilder.WriteToPipewriter
         }
 
     let private writeNamespaceAndUsings writer: ValueTask =

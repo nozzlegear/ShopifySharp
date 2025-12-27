@@ -1,25 +1,15 @@
 namespace ShopifySharp.GraphQL.Parser
 
-open System.IO.Pipelines
 open System.Threading.Tasks
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let pascalTypeName = toCasing Pascal type'.Name
-    let pascalClassName = toCasing Pascal (type'.Name + "QueryArgumentsBuilder")
-    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{pascalTypeName}}>"""
-
-    let canAddArguments (type': VisitedTypes) =
-        match type' with
-        | VisitedTypes.Class _ -> true
-        | Interface _ -> false
-        | InputObject _-> true
-        | UnionType _-> false
-        | Enum _ -> false
-        | Operation operation ->
-            // Only generate ArgumentsBuilder if the operation actually has arguments
-            operation.Arguments.Length > 0
+    let pascalClassName = toBuilderName (ArgumentBuilder type'.Name)
+    let genericType = toGenericType type' context.AssumeNullability
+    let queryType =
+        $$"""IQuery<ShopifySharp.GraphQL.{{genericType}}>"""
 
     let writeAddArgumentMethods writer: ValueTask =
         let arguments =
@@ -45,7 +35,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! DoubleIndented + $"(\"{argument.Name}\", {camelArgumentName});"
+                do! DoubleIndented + $"Query.AddArgument(\"{argument.Name}\", {camelArgumentName});"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -65,16 +55,30 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
         }
 
+    static member CanAddArguments (type': VisitedTypes) =
+        match type' with
+        | VisitedTypes.Class _ -> true
+        | Interface _ -> false
+        | InputObject _-> true
+        | UnionType _-> false
+        | Enum _ -> false
+        | Operation operation ->
+            // Only generate ArgumentsBuilder if the operation actually has arguments
+            operation.Arguments.Length > 0
+
     member _.WriteToPipewriter writer: ValueTask =
-        pipeWriter writer {
-            do! $$"""public sealed class {{pascalClassName}}"""
-            do! NewLine
-            do! "{"
-            do! NewLine
-            do! Indented + $$"""private {{queryType}} Query { get; }"""
-            do! NewLine + NewLine
-            yield! writeConstructor
-            do! NewLine + NewLine
-            yield! writeAddArgumentMethods
-            do! "}"
-        }
+        if not (ArgumentsBuilderWriter.CanAddArguments type') then
+            ValueTask.CompletedTask
+        else
+            pipeWriter writer {
+                do! $$"""public sealed class {{pascalClassName}}"""
+                do! NewLine
+                do! "{"
+                do! NewLine
+                do! Indented + $$"""private {{queryType}} Query { get; }"""
+                do! NewLine + NewLine
+                yield! writeConstructor
+                do! NewLine + NewLine
+                yield! writeAddArgumentMethods
+                do! "}"
+            }
