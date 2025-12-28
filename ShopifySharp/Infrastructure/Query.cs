@@ -13,6 +13,8 @@ namespace ShopifySharp.Infrastructure;
 
 public interface IQuery
 {
+    QueryOptions Options { get; }
+
     /// <summary>Gets the query name.</summary>
     string Name { get; }
 
@@ -43,11 +45,10 @@ public interface IQuery<TSource> : IQuery
 
 public class Query<TSource> : IQuery<TSource>
 {
-    protected readonly QueryOptions Options;
-
     /// <summary>Gets the query string builder.</summary>
     protected IQueryStringBuilder QueryStringBuilder { get; } = new QueryStringBuilder();
 
+    public QueryOptions Options { get; }
     public string Name { get; }
     public string? AliasName { get; private set; }
     public List<object?> SelectList { get; private set; } = [];
