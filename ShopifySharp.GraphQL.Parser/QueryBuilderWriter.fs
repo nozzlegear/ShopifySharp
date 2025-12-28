@@ -46,30 +46,34 @@ module rec QueryBuilderWriter =
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
-            if UnionsBuilderWriter.CanAddUnions type' then
+            if FieldsBuilderWriter.CanAddFields type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.FieldsBuilder type'.Name)}} Fields { get; }"""
                 do! NewLine
-            if FieldsBuilderWriter.CanAddFields type' then
+            if UnionsBuilderWriter.CanAddUnions type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.UnionsBuilder type'.Name)}} Unions { get; }"""
                 do! NewLine
         }
 
-    let private writeConstructor (type': VisitedTypes) (_: IParsedContext) writer: ValueTask =
-        pipeWriter writer {
-            let camelTypeName = toCasing Camel type'.Name
+    let private writeConstructor (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
+        let genericTypeName =
+            toGenericType type' context.AssumeNullability
+            |> qualifiedPascalTypeName
+        let queryType = $$"""Query<ShopifySharp.GraphQL.{{genericTypeName}}>"""
 
-            do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(): base("{camelTypeName}")"""
+        pipeWriter writer {
+            do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(string name): base(new {queryType}(name))"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
                 do! NewLine
 
-            if UnionsBuilderWriter.CanAddUnions type' then
+            if FieldsBuilderWriter.CanAddFields type' then
                 do! DoubleIndented + $$"""Fields = new {{toBuilderName (FieldsBuilder type'.Name)}}(Query);"""
                 do! NewLine
-            if FieldsBuilderWriter.CanAddFields type' then
-                do! DoubleIndented + $$"""Unios = new {{toBuilderName (UnionsBuilder type'.Name)}}(Query);"""
+
+            if UnionsBuilderWriter.CanAddUnions type' then
+                do! DoubleIndented + $$"""Unions = new {{toBuilderName (UnionsBuilder type'.Name)}}(Query);"""
                 do! NewLine
 
             do! NewLine + "}"
@@ -133,6 +137,19 @@ module rec QueryBuilderWriter =
     let writeQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
         let parsedContext = context :> IParsedContext
 
+        let tryMapQueryBuilder node =
+            pipeWriter writer {
+                match AstNodeMapper.tryMap context node with
+                | None ->
+                    printfn $"No mapping for type %A{node.GetType()}"
+                | Some (VisitedTypes.InputObject _)
+                | Some (VisitedTypes.Enum _) ->
+                    // InputObjects and Enums do not need a QueryBuilder and are not supported
+                    ()
+                | Some mappedType ->
+                    writeQueryBuilder context mappedType None
+            }
+
         pipeWriter writer {
             // Always write the namespace and usings at the very top of the document
             yield! writeNamespaceAndUsings
@@ -152,14 +169,9 @@ module rec QueryBuilderWriter =
                     for field in objDef.Fields do
                         let operation = AstNodeMapper.mapRootFieldDefinition context operationType field
                         yield! writeQueryBuilder context (VisitedTypes.Operation operation) (Some operationType)
+
+                    if operationType = OperationType.Query then
+                        do! tryMapQueryBuilder node
                 | _ ->
-                    match AstNodeMapper.tryMap context node with
-                    | None ->
-                        printfn $"No mapping for type %A{node.GetType()}"
-                    | Some (VisitedTypes.InputObject _)
-                    | Some (VisitedTypes.Enum _) ->
-                        // InputObjects and Enums do not need a QueryBuilder and are not supported
-                        ()
-                    | Some mappedType ->
-                        yield! writeQueryBuilder context mappedType None
+                    do! tryMapQueryBuilder node
         }
