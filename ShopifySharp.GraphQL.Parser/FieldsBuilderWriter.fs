@@ -31,7 +31,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     if namedType.IsInterface
                     then toCasing Pascal $"I{graphObjectTypeName}"
                     else qualifiedPascalTypeName graphObjectTypeName
-                let queryBuilderName = $"{toCasing Pascal graphObjectTypeName}QueryBuilder"
+                let queryBuilderName = toBuilderName (QueryBuilder graphObjectTypeName)
 
                 // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 

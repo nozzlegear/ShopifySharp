@@ -5,11 +5,11 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let pascalTypeName = toCasing Pascal type'.Name
     let pascalClassName = toBuilderName (ArgumentBuilder type'.Name)
-    let genericType = toGenericType type' context.AssumeNullability
-    let queryType =
-        $$"""IQuery<ShopifySharp.GraphQL.{{genericType}}>"""
+    let genericTypeName =
+        toGenericType type' context.AssumeNullability
+        |> qualifiedPascalTypeName
+    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{genericTypeName}}>"""
 
     let writeAddArgumentMethods writer: ValueTask =
         let arguments =
