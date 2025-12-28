@@ -39,7 +39,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! TripleIndented + $"AddField<{pascalTypeName}, {queryBuilderName}>(\"{camelFieldName}\", build);"
+                do! TripleIndented + $"_query.AddField<{pascalTypeName}, {queryBuilderName}>(\"{camelFieldName}\", build);"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -53,7 +53,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! DoubleIndented + $"AddField(\"{camelFieldName}\");"
+                do! DoubleIndented + $"_query.AddField(\"{camelFieldName}\");"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -120,7 +120,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + "Query = query;"
+            do! DoubleIndented + "_query = query;"
             do! NewLine
             do! Indented + "}"
             do! NewLine
@@ -145,7 +145,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! "{"
                 do! NewLine
-                do! Indented + $$"""private {{queryType}} Query { get; }"""
+                do! Indented + $$"""private readonly {{queryType}} _query;"""
                 do! NewLine + NewLine
                 yield! writeConstructor
                 do! NewLine + NewLine
