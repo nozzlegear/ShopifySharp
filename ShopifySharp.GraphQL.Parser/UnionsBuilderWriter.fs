@@ -5,9 +5,11 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let pascalTypeName = toCasing Pascal type'.Name
     let pascalClassName = toBuilderName (UnionsBuilder type'.Name)
-    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{pascalTypeName}}>"""
+    let genericTypeName =
+        toGenericType type' context.AssumeNullability
+        |> qualifiedPascalTypeName
+    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{genericTypeName}}>"""
 
     let writeUnionCaseJoin (pascalParentClassName: string) (unionCaseName: string) (fieldName: string) (_: IParsedContext) writer: ValueTask =
         pipeWriter writer {
