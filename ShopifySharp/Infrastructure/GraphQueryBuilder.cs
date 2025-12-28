@@ -3,7 +3,6 @@
 /// Modifications copyright (c) 2025 Nozzlegear Software
 /// Licensed under MIT License - see attributions.md
 #nullable enable
-using System;
 using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
@@ -20,6 +19,13 @@ public abstract class GraphQueryBuilder<T>
         Name = name;
         QueryOptions = queryOptions ?? new QueryOptions();
         Query = new Query<T>(name, QueryOptions);
+    }
+
+    protected GraphQueryBuilder(IQuery<T> query)
+    {
+        Name = query.Name;
+        QueryOptions = query.Options;
+        Query = query;
     }
 
     public string Build() => Query.Build();
