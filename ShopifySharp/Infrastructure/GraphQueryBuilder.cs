@@ -29,6 +29,8 @@ public abstract class GraphQueryBuilder<T>
     }
 
     public string Build() => Query.Build();
+
+    public void Alias(string alias) => Query.Alias(alias);
 }
 
 // public sealed class OrderQueryArgumentsBuilder(IQuery<ShopifySharp.GraphQL.Order> query)
