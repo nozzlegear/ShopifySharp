@@ -101,7 +101,6 @@ type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         | VisitedTypes.Class _ -> true
         | Interface _ -> true
         | InputObject _-> false
-        | Operation _-> false
         | UnionType _-> true
         | Enum _ -> false
 
