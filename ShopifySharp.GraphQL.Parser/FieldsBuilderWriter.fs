@@ -1,6 +1,7 @@
 namespace ShopifySharp.GraphQL.Parser
 
 open System.Threading.Tasks
+open ShopifySharp.GraphQL.Parser
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
