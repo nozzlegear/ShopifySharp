@@ -103,6 +103,10 @@ type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         | InputObject _-> false
         | UnionType _-> true
         | Enum _ -> false
+        | Operation operation->
+            match operation.ReturnType with
+            | ReturnType.FieldType _ -> false
+            | ReturnType.VisitedType type' -> UnionsBuilderWriter.CanAddUnions type'
 
     member _.WriteToPipewriter writer: ValueTask =
         if not (UnionsBuilderWriter.CanAddUnions type') then
