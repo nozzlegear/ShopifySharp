@@ -7,7 +7,7 @@ namespace ShopifySharp.GraphQL;
 using System;
 using System.Collections.Generic;
 
-public interface IConnection
+public interface IConnection : IGraphQLObject
 {
     PageInfo? pageInfo { get; }
     int? totalCount { get; }

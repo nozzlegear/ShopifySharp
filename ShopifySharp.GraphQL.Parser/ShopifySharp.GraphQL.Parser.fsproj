@@ -8,9 +8,17 @@
 
     <ItemGroup>
         <Compile Include="Domain.fs" />
+        <Compile Include="Reserved.fs" />
         <Compile Include="PipeWriterComputationBuilder.fs" />
+        <Compile Include="AstNodeMapper.fs" />
+        <Compile Include="Utils.fs" />
+        <Compile Include="FileSystem.fs" />
+        <Compile Include="ArgumentsBuilderWriter.fs" />
+        <Compile Include="UnionsBuilderWriter.fs" />
+        <Compile Include="FieldsBuilderWriter.fs" />
+        <Compile Include="QueryBuilderWriter.fs" />
         <Compile Include="Visitor.fs" />
-        <Compile Include="Writer.fs" />
+        <Compile Include="VisitedTypeWriter.fs" />
         <Compile Include="Parser.fs" />
     </ItemGroup>
     <ItemGroup>

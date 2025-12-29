@@ -82,6 +82,7 @@ type ParserTests() =
             | VisitedTypes.Enum e -> e.Name
             | VisitedTypes.InputObject io -> io.Name
             | VisitedTypes.UnionType u -> u.Name
+            | Operation o -> o.Name
         )
         %typeNames.Should().Contain("User")
         %typeNames.Should().Contain("UserStatus")
@@ -114,6 +115,7 @@ type ParserTests() =
             | VisitedTypes.Enum e -> e.Name
             | VisitedTypes.InputObject io -> io.Name
             | VisitedTypes.UnionType u -> u.Name
+            | VisitedTypes.Operation o -> o.Name
         )
         
         %typeNames.Should().Contain("INode")

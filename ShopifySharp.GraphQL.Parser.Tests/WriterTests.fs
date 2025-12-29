@@ -7,13 +7,21 @@ open Faqt
 open Faqt.Operators
 open Xunit
 open ShopifySharp.GraphQL.Parser
-open ShopifySharp.GraphQL.Parser.Writer
+open ShopifySharp.GraphQL.Parser.VisitedTypeWriter
 
 type WriterTests() =
+    let schema = """
+        type TestType {
+            id: ID!
+            name: String
+        }
+    """
+    let document = GraphQLParser.Parser.Parse(schema)
 
     let createTestContext casing assumeNullability =
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(casing, assumeNullability, cancellationToken)
+
+        let context = ParserContext(casing, assumeNullability, document, cancellationToken)
         
         // Add some test types
         let testClass = VisitedTypes.Class {
@@ -186,7 +194,7 @@ type WriterTests() =
         let tempFile = Path.GetTempFileName()
         let destination = SingleFile tempFile
         let cancellationToken = CancellationToken.None
-        let context = ParserContext(Pascal, false, cancellationToken)
+        let context = ParserContext(Pascal, false, document, cancellationToken)
         
         try
             // Act
@@ -263,7 +271,7 @@ type WriterTests() =
         let tempFile = Path.GetTempFileName()
         let destination = SingleFile tempFile
         let cancellationTokenSource = new CancellationTokenSource()
-        let context = ParserContext(Pascal, false, cancellationTokenSource.Token)
+        let context = ParserContext(Pascal, false, document, cancellationTokenSource.Token)
         cancellationTokenSource.Cancel()
         
         try

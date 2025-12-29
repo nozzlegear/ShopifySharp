@@ -1,0 +1,1 @@
+﻿shop{createdAt name updatedAt}
