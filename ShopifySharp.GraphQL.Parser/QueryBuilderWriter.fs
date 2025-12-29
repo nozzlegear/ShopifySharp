@@ -58,9 +58,18 @@ module rec QueryBuilderWriter =
         let genericTypeName =
             toGenericType type' context.AssumeNullability
             |> qualifiedPascalTypeName
-        let queryType = $$"""Query<ShopifySharp.GraphQL.{{genericTypeName}}>"""
+        let queryType =
+            $$"""Query<ShopifySharp.GraphQL.{{genericTypeName}}>"""
+        let defaultQueryName =
+            match type' with
+            | VisitedTypes.Operation operation -> operation.Name
+            | _ -> type'.Name
 
         pipeWriter writer {
+            do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(): this("{toCasing Camel defaultQueryName}")"""
+            do! NewLine + "{}"
+            do! NewLine + NewLine
+
             do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(string name): base(new {queryType}(name))"""
             do! NewLine + "{"
 
