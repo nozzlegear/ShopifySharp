@@ -56,7 +56,17 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         }
 
     static member CanAddArguments (type': VisitedTypes) =
-        type'.IsOperation
+        // TODO: improve this by checking if the type actually has unions available
+        match type' with
+        | VisitedTypes.Class _ -> true
+        | Interface _ -> false
+        | InputObject _-> true
+        | UnionType _-> false
+        | Enum _ -> false
+        | Operation operation->
+            match operation.ReturnType with
+            | ReturnType.FieldType _ -> true
+            | ReturnType.VisitedType type' -> ArgumentsBuilderWriter.CanAddArguments type'
 
     member _.WriteToPipewriter writer: ValueTask =
         if not (ArgumentsBuilderWriter.CanAddArguments type') then
