@@ -96,6 +96,7 @@ type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         }
 
     static member CanAddUnions type' =
+        // TODO: improve this by checking if the type actually has unions available
         match type' with
         | VisitedTypes.Class _ -> true
         | Interface _ -> true
