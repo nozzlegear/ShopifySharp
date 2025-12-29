@@ -128,6 +128,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         }
 
     static member CanAddFields type' =
+        // TODO: improve this by checking if the type actually has fields available
         match type' with
         | VisitedTypes.Class _ -> true
         | VisitedTypes.Interface _ -> true
