@@ -135,8 +135,10 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         | VisitedTypes.Enum _ -> false
         | VisitedTypes.InputObject _ -> true
         | VisitedTypes.UnionType _ -> false
-        | VisitedTypes.Operation operation when operation.ReturnType.IsFieldType -> true
-        | VisitedTypes.Operation _ -> false
+        | VisitedTypes.Operation operation ->
+            match operation.ReturnType with
+            | ReturnType.FieldType _ -> true
+            | ReturnType.VisitedType type' -> FieldsBuilderWriter.CanAddFields type'
 
     member _.WriteToPipewriter writer: ValueTask =
         if not (FieldsBuilderWriter.CanAddFields type') then
