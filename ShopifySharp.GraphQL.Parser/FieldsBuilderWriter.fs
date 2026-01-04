@@ -10,7 +10,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let genericTypeName =
         toGenericType type' context.AssumeNullability
         |> qualifiedPascalTypeName
-    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{genericTypeName}}>"""
+    let queryType = $$"""IQuery<{{genericTypeName}}>"""
 
     let writeQueryBuilderAddFieldMethod (fieldName: string)
                                         (fieldType: FieldType)
@@ -36,12 +36,16 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
                 yield! writeDeprecationAttribute Indented None
-                do! Indented + $"public {pascalClassName} {pascalFieldName}(Func<{queryBuilderName}, {queryBuilderName}> build)"
+                do! Indented + $"public {pascalClassName} {pascalFieldName}(Action<{queryBuilderName}> build)"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! TripleIndented + $"_query.AddField<{pascalTypeName}, {queryBuilderName}>(\"{camelFieldName}\", build);"
+                do! TripleIndented + $"var queryBuilder = new {queryBuilderName}(\"{camelFieldName}\");"
+                do! NewLine + NewLine
+                do! TripleIndented + "build.Invoke(queryBuilder);"
                 do! NewLine
+                do! TripleIndented + $"_query.AddField<{pascalTypeName}>(queryBuilder.Query);"
+                do! NewLine + NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
                 do! DoubleIndented + "}"
