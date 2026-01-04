@@ -59,7 +59,7 @@ module rec QueryBuilderWriter =
             toGenericType type' context.AssumeNullability
             |> qualifiedPascalTypeName
         let queryType =
-            $$"""Query<ShopifySharp.GraphQL.{{genericTypeName}}>"""
+            $$"""Query<{{genericTypeName}}>"""
         let defaultQueryName =
             match type' with
             | VisitedTypes.Operation operation -> operation.Name
@@ -146,7 +146,7 @@ module rec QueryBuilderWriter =
     let writeQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
         let parsedContext = context :> IParsedContext
 
-        let tryMapQueryBuilder node =
+        let tryMapQueryBuilder node writer: ValueTask =
             pipeWriter writer {
                 match AstNodeMapper.tryMap context node with
                 | None ->
@@ -156,7 +156,7 @@ module rec QueryBuilderWriter =
                     // InputObjects and Enums do not need a QueryBuilder and are not supported
                     ()
                 | Some mappedType ->
-                    writeQueryBuilder context mappedType None
+                    yield! writeQueryBuilder context mappedType None
             }
 
         pipeWriter writer {
@@ -180,7 +180,7 @@ module rec QueryBuilderWriter =
                         yield! writeQueryBuilder context (VisitedTypes.Operation operation) (Some operationType)
 
                     if operationType = OperationType.Query then
-                        do! tryMapQueryBuilder node
+                        yield! tryMapQueryBuilder node
                 | _ ->
-                    do! tryMapQueryBuilder node
+                    yield! tryMapQueryBuilder node
         }

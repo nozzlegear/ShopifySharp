@@ -9,7 +9,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let genericTypeName =
         toGenericType type' context.AssumeNullability
         |> qualifiedPascalTypeName
-    let queryType = $$"""IQuery<ShopifySharp.GraphQL.{{genericTypeName}}>"""
+    let queryType = $$"""IQuery<{{genericTypeName}}>"""
 
     let writeAddArgumentMethods writer: ValueTask =
         let arguments =
@@ -35,7 +35,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! DoubleIndented + $"Query.AddArgument(\"{argument.Name}\", {camelArgumentName});"
+                do! TripleIndented + $"_query.AddArgument(\"{argument.Name}\", {camelArgumentName});"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -49,7 +49,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + "Query = query;"
+            do! DoubleIndented + "_query = query;"
             do! NewLine
             do! Indented + "}"
             do! NewLine
@@ -57,9 +57,9 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     static member CanAddArguments (type': VisitedTypes) =
         match type' with
-        | VisitedTypes.Class _ -> true
+        | VisitedTypes.Class _ -> false
         | Interface _ -> false
-        | InputObject _-> true
+        | InputObject _-> false
         | UnionType _-> false
         | Enum _ -> false
         | Operation operation ->
@@ -75,7 +75,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! "{"
                 do! NewLine
-                do! Indented + $$"""private {{queryType}} Query { get; }"""
+                do! Indented + $$"""private readonly {{queryType}} _query;"""
                 do! NewLine + NewLine
                 yield! writeConstructor
                 do! NewLine + NewLine
