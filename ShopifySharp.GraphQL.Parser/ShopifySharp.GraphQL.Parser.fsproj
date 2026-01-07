@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
@@ -14,6 +14,7 @@
         <Compile Include="Utils.fs" />
         <Compile Include="FileSystem.fs" />
         <Compile Include="ArgumentsBuilderWriter.fs" />
+        <Compile Include="UnionFieldsBuilderWriter.fs" />
         <Compile Include="UnionsBuilderWriter.fs" />
         <Compile Include="FieldsBuilderWriter.fs" />
         <Compile Include="QueryBuilderWriter.fs" />
