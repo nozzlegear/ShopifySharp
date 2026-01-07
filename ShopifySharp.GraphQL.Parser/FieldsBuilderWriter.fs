@@ -6,7 +6,7 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let pascalClassName = toBuilderName (FieldsBuilder type'.Name)
+    let builderClassName = toBuilderName (FieldsBuilder type'.Name)
     let genericTypeName =
         toGenericType type' context.AssumeNullability
         |> qualifiedPascalTypeName
@@ -36,7 +36,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
                 yield! writeDeprecationAttribute Indented None
-                do! Indented + $"public {pascalClassName} {pascalFieldName}(Action<{queryBuilderName}> build)"
+                do! Indented + $"public {builderClassName} {pascalFieldName}(Action<{queryBuilderName}> build)"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
@@ -54,7 +54,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
 
                 yield! writeDeprecationAttribute Indented deprecationWarning
-                do! Indented + $"public {pascalClassName} {pascalFieldName}()"
+                do! Indented + $"public {builderClassName} {pascalFieldName}()"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
@@ -69,7 +69,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let writeAddFieldMethods writer: ValueTask =
         let writeAddReturnValue (_: FieldType): ValueTask =
             pipeWriter writer {
-                do! Indented + $"public {pascalClassName} ReturnValue()"
+                do! Indented + $"public {builderClassName} ReturnValue()"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
@@ -121,7 +121,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     let writeConstructor writer: ValueTask =
         pipeWriter writer {
-            do! Indented + $$"""public {{pascalClassName}}({{queryType}} query)"""
+            do! Indented + $$"""public {{ builderClassName }}({{queryType}} query)"""
             do! NewLine
             do! Indented + "{"
             do! NewLine
@@ -129,6 +129,27 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
             do! Indented + "}"
             do! NewLine
+        }
+
+    let writeUnionCaseBuilderMethods (builders: UnionCasesBuilderWriter array) writer: ValueTask =
+        pipeWriter writer {
+            // Iterate over the union case builders and write their methods on this field builder
+            for builder in builders do
+                yield! writeDeprecationAttribute Indented builder.DeprecationWarning
+                do! Indented + $$"""public {{builderClassName}} {{builder.PascalFieldName}}(Action<{{builder.BuilderClassName}}> build)"""
+                do! NewLine
+                do! Indented + "{"
+                do! NewLine
+                do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}("{{builder.CamelFieldName}}");"""
+                do! NewLine
+                do! DoubleIndented + "build.Invoke(unionBuilder);"
+                do! NewLine
+                do! DoubleIndented + "_query.AddField(unionBuilder.Query);"
+                do! NewLine
+                do! DoubleIndented + "return this;"
+                do! NewLine
+                do! Indented + "}"
+                do! NewLine + NewLine
         }
 
     static member CanAddFields type' =
@@ -144,12 +165,12 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             | ReturnType.FieldType _ -> true
             | ReturnType.VisitedType type' -> FieldsBuilderWriter.CanAddFields type'
 
-    member _.WriteToPipewriter writer: ValueTask =
-        if not (FieldsBuilderWriter.CanAddFields type') then
+    member _.WriteToPipewriter (unionFieldBuilders: UnionCasesBuilderWriter array) writer: ValueTask =
+        if not (FieldsBuilderWriter.CanAddFields type') && not (UnionsBuilderWriter.CanAddUnions type') then
             ValueTask.CompletedTask
         else
             pipeWriter writer {
-                do! $$"""public sealed class {{pascalClassName}}"""
+                do! $$"""public sealed class {{ builderClassName }}"""
                 do! NewLine
                 do! "{"
                 do! NewLine
@@ -158,5 +179,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 yield! writeConstructor
                 do! NewLine + NewLine
                 yield! writeAddFieldMethods
+                do! NewLine + NewLine
+                yield! writeUnionCaseBuilderMethods unionFieldBuilders
                 do! "}"
             }

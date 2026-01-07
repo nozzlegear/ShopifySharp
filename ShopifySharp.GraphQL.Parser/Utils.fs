@@ -33,6 +33,7 @@ module Utils =
         | ArgumentBuilder str -> toCasing Pascal $"{str}ArgumentsBuilder"
         | FieldsBuilder str -> toCasing Pascal $"{str}FieldsBuilder"
         | UnionsBuilder str -> toCasing Pascal $"{str}UnionsBuilder"
+        | UnionCasesBuilder str -> toCasing Pascal $"{str}UnionCasesBuilder"
 
     let toGenericType type' assumeNullability =
         match type' with
