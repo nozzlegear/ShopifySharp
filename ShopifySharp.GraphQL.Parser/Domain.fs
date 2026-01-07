@@ -31,6 +31,7 @@ type QueryBuilderTypes =
     | ArgumentBuilder of str: string
     | FieldsBuilder of str: string
     | UnionsBuilder of str: string
+    | UnionCasesBuilder of str: string
 
 type FieldTypeCollectionHandling
     = UnwrapCollection

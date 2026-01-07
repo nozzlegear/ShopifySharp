@@ -46,12 +46,12 @@ module rec QueryBuilderWriter =
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
-            if FieldsBuilderWriter.CanAddFields type' then
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.FieldsBuilder type'.Name)}} Fields { get; }"""
                 do! NewLine
-            if UnionsBuilderWriter.CanAddUnions type' then
-                do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.UnionsBuilder type'.Name)}} Unions { get; }"""
-                do! NewLine
+            // if UnionsBuilderWriter.CanAddUnions type' then
+            //     do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.UnionsBuilder type'.Name)}} Unions { get; }"""
+            //     do! NewLine
         }
 
     let private writeConstructor (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
@@ -77,13 +77,13 @@ module rec QueryBuilderWriter =
                 do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
                 do! NewLine
 
-            if FieldsBuilderWriter.CanAddFields type' then
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
                 do! DoubleIndented + $$"""Fields = new {{toBuilderName (FieldsBuilder type'.Name)}}(Query);"""
                 do! NewLine
 
-            if UnionsBuilderWriter.CanAddUnions type' then
-                do! DoubleIndented + $$"""Unions = new {{toBuilderName (UnionsBuilder type'.Name)}}(Query);"""
-                do! NewLine
+            // if UnionsBuilderWriter.CanAddUnions type' then
+            //     do! DoubleIndented + $$"""Unions = new {{toBuilderName (UnionsBuilder type'.Name)}}(Query);"""
+            //     do! NewLine
 
             do! NewLine + "}"
             do! NewLine
@@ -112,7 +112,7 @@ module rec QueryBuilderWriter =
             do! "}"
             do! NewLine
 
-            yield! fieldsBuilder.WriteToPipewriter
+            yield! fieldsBuilder.WriteToPipewriter unionsBuilder.UnionFieldBuilders
             yield! argumentsBuilder.WriteToPipewriter
             yield! unionsBuilder.WriteToPipewriter
         }
