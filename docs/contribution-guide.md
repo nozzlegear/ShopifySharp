@@ -101,17 +101,17 @@ Once you've got the env file configured, you'll be ready to run the tests. Most 
 If you've got a ton of time on your hands, you could run all tests at once with the following command:
 
 ```sh
-dotnet test --framework net8.0 ShopifySharp.Tests
+dotnet test --framework net10.0 ShopifySharp.Tests
 ```
 
-That command will run all of the tests in the solution using the `net8.0` (.NET 8) framework. It can take upwards of 15 minutes to run the entire suite, and it's likely that things will break due to rate limits. ShopifySharp's automated tests actually run each test category one at a time, rather than the entire suite all at once. 
+That command will run all of the tests in the solution using the `net10.0` (.NET 8) framework. It can take upwards of 15 minutes to run the entire suite, and it's likely that things will break due to rate limits. ShopifySharp's automated tests actually run each test category one at a time, rather than the entire suite all at once. 
 
 ### Running tests for specific categories/services
 
 Every test file in the _ShopifySharp.Tests_ folder has its own category. For example, tests for the order service use the `Order` category. We use xUnit as our test runner, which means you can run all the tests in just one category using this command:
 
 ```sh
-dotnet test --framework net8.0 --filter "Category=Order"
+dotnet test --framework net10.0 --filter "Category=Order"
 ```
 
 It's generally recommended that you run one single test category for whatever you're testing, rather than running the entire ShopifySharp suite of tests all at once.
