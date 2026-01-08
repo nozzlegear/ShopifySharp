@@ -140,9 +140,11 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(_query, "{{builder.CamelFieldName}}");"""
+                do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}("{{builder.CamelFieldName}}");"""
                 do! NewLine
                 do! DoubleIndented + "build.Invoke(unionBuilder);"
+                do! NewLine
+                do! DoubleIndented + "_query.AddField(unionBuilder.Query);"
                 do! NewLine
                 do! DoubleIndented + "return this;"
                 do! NewLine

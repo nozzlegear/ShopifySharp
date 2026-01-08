@@ -12,10 +12,6 @@ type UnionCasesBuilderWriter(
     context: IParsedContext
 ) =
     let builderClassName = toBuilderName (UnionCasesBuilder fieldName)
-    let genericTypeName =
-        toGenericType parentType context.AssumeNullability
-        |> qualifiedPascalTypeName
-    let queryType = $$"""IQuery<{{genericTypeName}}>"""
 
     let writeOnUnionCaseMethod (unionCaseName: string) writer: ValueTask =
         let pascalUnionCaseName = toCasing Pascal unionCaseName
@@ -30,7 +26,7 @@ type UnionCasesBuilderWriter(
             do! NewLine
             do! DoubleIndented + "build(queryBuilder);"
             do! NewLine
-            do! DoubleIndented + $"_query.AddUnionCase<{pascalUnionCaseName}>(_fieldName, queryBuilder.Query);"
+            do! DoubleIndented + $"_query.AddField<{pascalUnionCaseName}>(queryBuilder.Query);"
             do! NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
@@ -49,17 +45,15 @@ type UnionCasesBuilderWriter(
             do! NewLine
             do! "{"
             do! NewLine
-            do! Indented + $"private readonly {queryType} _query;"
-            do! NewLine
-            do! Indented + "private readonly string _fieldName;"
+            do! Indented + "private readonly IQuery<object> _query;"
             do! NewLine + NewLine
-            do! Indented + $"public {builderClassName}({queryType} query, string fieldName)"
+            do! Indented + $"public {builderClassName}(string fieldName)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + "_query = query;"
+            do! DoubleIndented + "_query = new Query<object>(fieldName);"
             do! NewLine
-            do! DoubleIndented + "_fieldName = fieldName;"
+            do! DoubleIndented + "_query.AddField(\"__typename\");"
             do! NewLine
             do! Indented + "}"
             do! NewLine + NewLine
@@ -68,5 +62,7 @@ type UnionCasesBuilderWriter(
                 yield! writeOnUnionCaseMethod unionCaseName
                 do! NewLine
 
+            do! Indented + "public IQuery<object> Query => _query;"
+            do! NewLine
             do! "}"
         }
