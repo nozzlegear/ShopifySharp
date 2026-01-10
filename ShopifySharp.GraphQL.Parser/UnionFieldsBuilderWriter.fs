@@ -18,7 +18,7 @@ type UnionCasesBuilderWriter(
         let unionCaseQueryBuilderName = $"{pascalUnionCaseName}QueryBuilder"
 
         pipeWriter writer {
-            do! Indented + $"public {builderClassName} On{pascalUnionCaseName}(Func<{unionCaseQueryBuilderName}, {unionCaseQueryBuilderName}> build)"
+            do! Indented + $"public {builderClassName} On{pascalUnionCaseName}(Action<{unionCaseQueryBuilderName}> build)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
