@@ -38,8 +38,14 @@ type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         fields
         |> Array.choose (fun field ->
             match AstNodeMapper.unwrapFieldType field.ValueType with
-            | FieldValueType.GraphObjectType (NamedType.UnionType (_, unionCaseNames)) ->
-                Some (UnionCasesBuilderWriter(type', field.Name, unionCaseNames, field.Deprecation, context))
+            | FieldValueType.GraphObjectType (NamedType.UnionType (unionTypeName, unionCaseNames)) ->
+                // Look up the actual union type instead of using the parent type
+                match context.TryFindGraphObjectType unionTypeName with
+                | Some unionType ->
+                    Some (UnionCasesBuilderWriter(unionType, field.Name, unionCaseNames, field.Deprecation, context))
+                | None ->
+                    // Union type must be found - fail if it's not in the context
+                    failwith $"Union type '{unionTypeName}' not found in parsed context for field '{field.Name}' in type '{type'.Name}'"
             | _ -> None)
 
     let unionFieldBuilders =
