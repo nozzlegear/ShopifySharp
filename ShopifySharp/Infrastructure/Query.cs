@@ -28,19 +28,31 @@ public interface IQuery
     string Build();
 }
 
-public interface IQuery<TSource> : IQuery
+public interface IArgumentsBuilder<out TQuery>
+{
+    TQuery AddArgument(string key, object? value);
+    TQuery AddArguments(Dictionary<string, object?> arguments);
+    TQuery AddArguments<TArguments>(TArguments arguments) where TArguments : class;
+}
+
+public interface IFieldsBuilder<out TQuery>
+{
+    TQuery AddField(string field);
+    TQuery AddField<TSubSource>(IQuery<TSubSource> build)
+        where TSubSource : class?;
+}
+
+public interface IUnionCaseBuilder<out TQuery>
+{
+    TQuery AddUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
+        where TUnionType : class?;
+}
+
+public interface IQuery<TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>, IUnionCaseBuilder<IQuery<TSource>>
 {
     List<object?> SelectList { get; }
     Dictionary<string, object?> Arguments { get; }
     IQuery<TSource> Alias(string alias);
-    IQuery<TSource> AddField(string field);
-    IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build)
-        where TSubSource : class?;
-    IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> union)
-        where TUnionType : class?;
-    IQuery<TSource> AddArgument(string key, object? value);
-    IQuery<TSource> AddArguments(Dictionary<string, object?> arguments);
-    IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class;
 }
 
 public class Query<TSource> : IQuery<TSource>
@@ -51,8 +63,8 @@ public class Query<TSource> : IQuery<TSource>
     public QueryOptions Options { get; }
     public string Name { get; }
     public string? AliasName { get; private set; }
-    public List<object?> SelectList { get; private set; } = [];
-    public Dictionary<string, object?> Arguments { get; private set; } = [];
+    public List<object?> SelectList { get; } = [];
+    public Dictionary<string, object?> Arguments { get; } = [];
 
     public Query(string name, QueryOptions? options = null)
     {
@@ -99,13 +111,14 @@ public class Query<TSource> : IQuery<TSource>
         where TUnionType : class?
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
-        RequiredArgument.NotNull(union, nameof(union));
+        RequiredArgument.NotNull(unionCaseQuery, nameof(unionCaseQuery));
 
         var fieldQuery = new Query<object>(field, Options);
-        fieldQuery.SelectList.Add(union);
-        // Ensure we also select the __typename, which is required for deserializing union cases
-        fieldQuery.SelectList.Add("__typename");
-
+        fieldQuery.SelectList.AddRange([
+            // Ensure we also select the __typename, which is required for deserializing union cases
+            "__typename",
+            unionCaseQuery
+        ]);
         SelectList.Add(fieldQuery);
 
         return this;
@@ -139,4 +152,38 @@ public class Query<TSource> : IQuery<TSource>
             ? Options.Formatter.Invoke(property)
             : property.Name;
     }
+}
+
+public abstract class FieldsBuilderBase<TSource>(IQuery<TSource> query): IFieldsBuilder<IQuery<TSource>>
+{
+    protected readonly IQuery<TSource> Query = query;
+
+    public IQuery<TSource> AddField(string field) =>
+        Query.AddField(field);
+
+    public IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build) where TSubSource : class? =>
+        Query.AddField(build);
+}
+
+public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArgumentsBuilder<IQuery<TSource>>
+{
+    protected readonly IQuery<TSource> Query = query;
+
+    public IQuery<TSource> AddArgument(string key, object? value) =>
+        Query.AddArgument(key, value);
+
+    public IQuery<TSource> AddArguments(Dictionary<string, object?> arguments) =>
+        Query.AddArguments(arguments);
+
+    public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class =>
+        Query.AddArguments<TArguments>(arguments);
+}
+
+public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
+{
+    protected readonly IQuery<TSource> Query = query;
+
+    public IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
+        where TUnionType : class? =>
+        Query.AddUnionCase(field, unionCaseQuery);
 }
