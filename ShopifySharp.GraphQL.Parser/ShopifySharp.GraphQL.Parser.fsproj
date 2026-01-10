@@ -14,7 +14,7 @@
         <Compile Include="Utils.fs" />
         <Compile Include="FileSystem.fs" />
         <Compile Include="ArgumentsBuilderWriter.fs" />
-        <Compile Include="UnionFieldsBuilderWriter.fs" />
+        <Compile Include="UnionCasesBuilderWriter.fs" />
         <Compile Include="UnionsBuilderWriter.fs" />
         <Compile Include="FieldsBuilderWriter.fs" />
         <Compile Include="QueryBuilderWriter.fs" />
