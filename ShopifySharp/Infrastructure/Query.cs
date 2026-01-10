@@ -40,6 +40,10 @@ public interface IFieldsBuilder<out TQuery>
     TQuery AddField(string field);
     TQuery AddField<TSubSource>(IQuery<TSubSource> build)
         where TSubSource : class?;
+    // TODO: the IQuery here just gets merged with the IFieldsBuilder's own IQuery SelectList, which should put the queries
+    //       on the same level.
+    TQuery AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
+        where TUnionCase : class?;
 }
 
 public interface IUnionCaseBuilder<out TQuery>
@@ -107,7 +111,18 @@ public class Query<TSource> : IQuery<TSource>
         return this;
     }
 
-    public IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> union)
+    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
+    {
+        RequiredArgument.NotNull(unionCaseQuery, nameof(unionCaseQuery));
+
+        // Ensure we also select the __typename, which is required for deserializing union cases
+        unionCaseQuery.SelectList.Add("__typename");
+        SelectList.Add(unionCaseQuery);
+
+        return this;
+    }
+
+    public IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
         where TUnionType : class?
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
@@ -163,6 +178,9 @@ public abstract class FieldsBuilderBase<TSource>(IQuery<TSource> query): IFields
 
     public IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build) where TSubSource : class? =>
         Query.AddField(build);
+
+    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class? =>
+        Query.AddUnionCase(unionCaseQuery);
 }
 
 public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArgumentsBuilder<IQuery<TSource>>
@@ -176,7 +194,7 @@ public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArg
         Query.AddArguments(arguments);
 
     public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class =>
-        Query.AddArguments<TArguments>(arguments);
+        Query.AddArguments(arguments);
 }
 
 public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
