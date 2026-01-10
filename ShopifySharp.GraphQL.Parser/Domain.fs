@@ -254,7 +254,7 @@ type ParserContext(casingType, assumeNullability, document, ct) =
 
         member _.TryFindGraphObjectType graphObjectTypeName: VisitedTypes option =
             visitedTypes
-            |> Seq.tryFind (fun namedType -> string namedType = graphObjectTypeName)
+            |> Seq.tryFind (fun namedType -> namedType.Name = graphObjectTypeName)
 
         member this.GetInterfaceImplementationTypeNames interfaceName =
             interfaceRelationships
