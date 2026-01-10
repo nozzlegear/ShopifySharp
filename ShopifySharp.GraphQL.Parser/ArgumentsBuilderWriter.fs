@@ -35,7 +35,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! TripleIndented + $"_query.AddArgument(\"{argument.Name}\", {camelArgumentName});"
+                do! TripleIndented + $$"""base.Query.AddArgument("{{argument.Name}}", {{camelArgumentName}});"""
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -45,11 +45,9 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     let writeConstructor writer: ValueTask =
         pipeWriter writer {
-            do! Indented + $$"""public {{pascalClassName}}({{queryType}} query)"""
+            do! Indented + $$"""public {{pascalClassName}}({{queryType}} query) : base(query)"""
             do! NewLine
             do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "_query = query;"
             do! NewLine
             do! Indented + "}"
             do! NewLine
@@ -71,12 +69,10 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             ValueTask.CompletedTask
         else
             pipeWriter writer {
-                do! $$"""public sealed class {{pascalClassName}}"""
+                do! $$"""public sealed class {{pascalClassName}} : ArgumentsBuilderBase<{{genericTypeName}}>"""
                 do! NewLine
                 do! "{"
                 do! NewLine
-                do! Indented + $$"""private readonly {{queryType}} _query;"""
-                do! NewLine + NewLine
                 yield! writeConstructor
                 do! NewLine + NewLine
                 yield! writeAddArgumentMethods
