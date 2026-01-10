@@ -16,8 +16,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_WhenAliasIsSet_ShouldBuildQueryWithAlias()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
         sut.Alias("someAlias");
 
         // Act
@@ -33,8 +33,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_WhenFieldIsAdded_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
 
         // Act
         var result = sut.Build();
@@ -47,10 +47,25 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_WhenMultipleFieldsAreAdded_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
-        sut.AddFieldName();
-        sut.AddFieldUpdatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
+        sut.Fields.Bar();
+
+        // Act
+        var result = sut.Build();
+
+        // Assert
+        await Verify(result, _verifySettings);
+    }
+
+    [Fact]
+    public async Task QueryBuilder_MultipleFieldCalls_ShouldChainTogetherFluently()
+    {
+        // Setup
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields
+            .CreatedAt()
+            .Bar();
 
         // Act
         var result = sut.Build();
@@ -63,9 +78,9 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_WhenCustomFieldsAreAdded_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
-        sut.AddField("fooField");
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
+        sut.Fields.AddField("fooField");
 
         // Act
         var result = sut.Build();
@@ -78,18 +93,18 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_WhenComplexFieldsAreAdded_ShouldBuildQueryWithSubquery()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
-        sut.AddFieldBillingAddress(x =>
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
+        sut.Fields.BillingAddress(x =>
         {
-            x.AddFieldAddress1();
-            x.AddFieldAddress2();
-            x.AddFieldCity();
-            x.AddFieldZip();
-            x.AddFieldCompany();
-            x.AddFieldProvince();
-            x.AddFieldCountryCodeV2();
-            return x;
+            x.Fields
+                .Address1()
+                .Address2()
+                .City()
+                .Zip()
+                .Company()
+                .Province()
+                .CountryCodeV2();
         });
 
         // Act
@@ -107,8 +122,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_AddArgument_WhenPrimitiveArgumentsAreAdded_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
         sut.AddArgument("foo", "bar");
         sut.AddArgument("bat", "baz");
 
@@ -123,8 +138,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_AddArgument_WhenPrimitiveArgumentsAreAddedOfAnyType_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
         sut.AddArgument("foo", 3);
         sut.AddArgument("bar", true);
         sut.AddArgument("baz", false);
@@ -145,8 +160,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_AddArguments_WhenPrimitiveArgumentsAreAdded_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
         sut.AddArguments(new Dictionary<string, object>
         {
             { "foo", "bar" },
@@ -164,8 +179,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     public async Task QueryBuilder_AddArguments_WhenPrimitiveArgumentsAreAddedOfAnyType_ShouldBuild()
     {
         // Setup
-        var sut = new ShopQueryBuilder();
-        sut.AddFieldCreatedAt();
+        var sut = new CustomThingQueryBuilder();
+        sut.Fields.CreatedAt();
         sut.AddArguments(new Dictionary<string, object>
         {
             { "foo", 3 },
@@ -190,8 +205,8 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     {
         // Setup
         var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
-        sut.AddFieldCode();
-        sut.AddUnionCaseValue((MoneyV2QueryBuilder x) => x.AddFieldAmount());
+        sut.Fields.Code();
+        sut.AddUnionCaseValue((MoneyV2QueryBuilder x) => x.Fields.Amount());
 
         // Act
         var result = sut.Build();
@@ -211,17 +226,13 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     {
         // Setup
         var sut = new MetafieldRelationQueryBuilder();
-        sut.AddUnionCaseTarget((GenericFileQueryBuilder builder) =>
+        sut.Fields
+            .Name()
+            .Namespace();
+        sut.Fields.Referencer(builder =>
         {
-            builder.AddFieldAlt();
-            builder.AddFieldMimeType();
-            return builder;
-        });
-        sut.AddUnionCaseTarget((VideoQueryBuilder builder) =>
-        {
-            builder.AddFieldDuration();
-            builder.AddFieldStatus();
-            return builder;
+            builder.OnArticle(article => article.Fields.Id());
+            builder.OnBlog(blog => blog.Fields.Tags());
         });
 
         // Act
@@ -236,9 +247,13 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     {
         // Setup
         var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
-        sut.AddFieldCode();
-        sut.AddUnionCaseValue((MoneyV2QueryBuilder x) => x.AddFieldAmount());
-        sut.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myCustomThing", "DineroV2", x => x.AddFoo());
+        sut.Fields.Code();
+        sut.Fields.Value(builder =>
+            {
+                builder.OnSubscriptionDiscountFixedAmountValue(fixedAmount => fixedAmount.Fields.Amount(money => money.Fields.Amount()));
+                sut.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myCustomThing", "DineroV2", x => x.AddFoo());
+            }
+        );
 
         // Act
         var result = sut.Build();
@@ -252,7 +267,7 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
     {
         // Setup
         var sut = new CalculatedDiscountCodeApplicationQueryBuilder();
-        sut.AddFieldCode();
+        sut.Fields.Code();
         sut.AddUnionCase<CustomThing, CustomThingQueryBuilder>("myCustomThing", "DineroV2", builder =>
         {
             builder.AddFoo();
@@ -273,14 +288,60 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
 
     #endregion
 
-    public class CustomThingQueryBuilder() : GraphQueryBuilder<CustomThing>("customThing")
+    public class CustomThingQueryBuilder : GraphQueryBuilder<CustomThing>
     {
-        public CustomThingQueryBuilder AddFoo()
+        public readonly CustomThingArgumentsBuilder Arguments;
+        public readonly CustomThingFieldsBuilder Fields;
+        public readonly CustomThingUnionCasesBuilder Unions;
+
+        public CustomThingQueryBuilder(): base("customThing")
         {
-            AddField("foo");
+            Arguments = new CustomThingArgumentsBuilder(Query);
+            Fields = new CustomThingFieldsBuilder(Query);
+            Unions = new CustomThingUnionCasesBuilder(Query);
+        }
+    }
+
+    public class CustomThingArgumentsBuilder(IQuery<CustomThing> query)
+        : ArgumentsBuilderBase<CustomThing>(query)
+    {
+        public CustomThingArgumentsBuilder Foo(string value)
+        {
+            Query.AddArgument("foo", value);
             return this;
         }
     }
 
-    public class CustomThing : IGraphQLUnionCase, IGraphQLObject;
+    public class CustomThingFieldsBuilder(IQuery<CustomThing> query)
+        : FieldsBuilderBase<CustomThing>(query)
+    {
+        public CustomThingFieldsBuilder CreatedAt()
+        {
+            Query.AddField("createdAt");
+            return this;
+        }
+
+        public CustomThingFieldsBuilder Bar()
+        {
+            Query.AddField("bar");
+            return this;
+        }
+    }
+
+    public class CustomThingUnionCasesBuilder(IQuery<CustomThing> query)
+        : UnionCaseBuilderBase<CustomThing>(query)
+    {
+        public CustomThingUnionCasesBuilder OnCustomBaz(Action<CustomBazQueryBuilder> build)
+        {
+            var queryBuilder = new CustomBazQueryBuilder("... on CustomBaz");
+            Query.AddUnionCase("bar", queryBuilder.Query);
+            return this;
+        }
+    }
+
+    public class CustomThing : IGraphQLObject;
+
+    public class CustomBaz : IGraphQLUnionCase, IGraphQLObject;
+
+    public class CustomBazQueryBuilder(string name) : GraphQueryBuilder<CustomBaz>(new Query<CustomBaz>(name));
 }
