@@ -44,7 +44,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine + NewLine
                 do! TripleIndented + "build.Invoke(queryBuilder);"
                 do! NewLine
-                do! TripleIndented + $"_query.AddField<{pascalTypeName}>(queryBuilder.Query);"
+                do! TripleIndented + $"base.Query.AddField<{pascalTypeName}>(queryBuilder.Query);"
                 do! NewLine + NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -58,7 +58,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! DoubleIndented + $"_query.AddField(\"{camelFieldName}\");"
+                do! DoubleIndented + $"base.Query.AddField(\"{camelFieldName}\");"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -121,11 +121,9 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     let writeConstructor writer: ValueTask =
         pipeWriter writer {
-            do! Indented + $$"""public {{ builderClassName }}({{queryType}} query)"""
+            do! Indented + $"public {builderClassName}({queryType} query): base(query)"
             do! NewLine
             do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "_query = query;"
             do! NewLine
             do! Indented + "}"
             do! NewLine
@@ -140,11 +138,13 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}("{{builder.CamelFieldName}}");"""
+                do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.Query.Options);"""
+                do! NewLine
+                do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
                 do! NewLine
                 do! DoubleIndented + "build.Invoke(unionBuilder);"
                 do! NewLine
-                do! DoubleIndented + "_query.AddField(unionBuilder.Query);"
+                do! DoubleIndented + "base.Query.AddUnionCase(query);"
                 do! NewLine
                 do! DoubleIndented + "return this;"
                 do! NewLine
@@ -170,12 +170,9 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             ValueTask.CompletedTask
         else
             pipeWriter writer {
-                do! $$"""public sealed class {{ builderClassName }}"""
+                do! $"public sealed class {builderClassName} : FieldsBuilderBase<{genericTypeName}>"
                 do! NewLine
                 do! "{"
-                do! NewLine
-                do! Indented + $$"""private readonly {{queryType}} _query;"""
-                do! NewLine + NewLine
                 yield! writeConstructor
                 do! NewLine + NewLine
                 yield! writeAddFieldMethods
