@@ -32,7 +32,6 @@ public interface IArgumentsBuilder<out TQuery>
 {
     TQuery AddArgument(string key, object? value);
     TQuery AddArguments(Dictionary<string, object?> arguments);
-    TQuery AddArguments<TArguments>(TArguments arguments) where TArguments : class;
 }
 
 public interface IFieldsBuilder<out TQuery>
@@ -191,9 +190,6 @@ public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArg
         Query.AddArgument(key, value);
 
     public IQuery<TSource> AddArguments(Dictionary<string, object?> arguments) =>
-        Query.AddArguments(arguments);
-
-    public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class =>
         Query.AddArguments(arguments);
 }
 
