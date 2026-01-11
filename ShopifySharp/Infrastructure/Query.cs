@@ -32,7 +32,6 @@ public interface IArgumentsBuilder<out TQuery>
 {
     TQuery AddArgument(string key, object? value);
     TQuery AddArguments(Dictionary<string, object?> arguments);
-    TQuery AddArguments<TArguments>(TArguments arguments) where TArguments : class;
 }
 
 public interface IFieldsBuilder<out TQuery>
@@ -201,25 +200,6 @@ public class Query<TSource> : IQuery<TSource>
         // Query.AddUnionCase(fieldName, builder.Query);
     }
 
-    public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class
-    {
-        RequiredArgument.NotNull(arguments, nameof(arguments));
-
-        IEnumerable<PropertyInfo> properties = arguments
-            .GetType()
-            .GetProperties()
-            .Where(property => property.GetValue(arguments) != null)
-            .OrderBy(property => property.Name);
-        foreach (var property in properties)
-        {
-            Arguments.Add(
-                GetPropertyName(property),
-                property.GetValue(arguments));
-        }
-
-        return this;
-    }
-
     private string GetPropertyName(PropertyInfo property)
     {
         // var thing = new Query<ShopifyProtectOrderSummary>("thing");
@@ -255,9 +235,6 @@ public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArg
         Query.AddArgument(key, value);
 
     public IQuery<TSource> AddArguments(Dictionary<string, object?> arguments) =>
-        Query.AddArguments(arguments);
-
-    public IQuery<TSource> AddArguments<TArguments>(TArguments arguments) where TArguments : class =>
         Query.AddArguments(arguments);
 }
 
