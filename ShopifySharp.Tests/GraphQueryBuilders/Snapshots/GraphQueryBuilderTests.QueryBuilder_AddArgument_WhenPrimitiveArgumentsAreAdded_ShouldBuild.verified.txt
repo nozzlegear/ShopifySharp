@@ -1,0 +1,1 @@
+﻿shop(foo:"bar",bat:"baz"){createdAt}
