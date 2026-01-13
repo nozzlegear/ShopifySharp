@@ -59,8 +59,14 @@ module Utils =
     /// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
     /// </summary>
     let sanitizeFieldOrOperationName (parentType: NamedType) (fieldName: string): string =
+        // Protected members from base builder classes that would cause collisions
+        let builderBaseMembers = Set.ofList ["Query"; "Build"; "Alias"; "Arguments"; "Name"]
+
         if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
             // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
+            fieldName + "_"
+        elif Set.contains (toCasing Pascal fieldName) builderBaseMembers then
+            // Collision with GraphQueryBuilder or builder base class properties/methods
             fieldName + "_"
         elif Set.contains fieldName Reserved.csharpKeywords then
             "@" + fieldName

@@ -16,8 +16,9 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                                         (fieldType: FieldType)
                                         (deprecationWarning: string option)
                                         writer =
-        let pascalFieldName = toCasing Pascal fieldName
-        let camelFieldName = toCasing Camel fieldName
+        let sanitizedFieldName = sanitizeFieldOrOperationName (NamedType.Class type'.Name) fieldName
+        let pascalFieldName = toCasing Pascal sanitizedFieldName
+        let camelFieldName = toCasing Camel fieldName  // Use original fieldName for GraphQL
 
         pipeWriter writer {
             match AstNodeMapper.unwrapFieldType fieldType with
@@ -44,7 +45,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine + NewLine
                 do! TripleIndented + "build.Invoke(queryBuilder);"
                 do! NewLine
-                do! TripleIndented + $"base.Query.AddField<{pascalTypeName}>(queryBuilder.Query);"
+                do! TripleIndented + $"Query = Query.AddField<{pascalTypeName}>(queryBuilder.Query);"
                 do! NewLine + NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -58,7 +59,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! DoubleIndented + $"base.Query.AddField(\"{camelFieldName}\");"
+                do! TripleIndented + $"Query = base.Query.AddField(\"{camelFieldName}\");"
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -144,7 +145,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "build.Invoke(unionBuilder);"
                 do! NewLine
-                do! DoubleIndented + "base.Query.AddUnionCase(query);"
+                do! DoubleIndented + "Query = base.Query.AddUnionCase(query);"
                 do! NewLine
                 do! DoubleIndented + "return this;"
                 do! NewLine
