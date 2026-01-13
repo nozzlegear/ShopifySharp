@@ -28,7 +28,22 @@ public abstract class GraphQueryBuilder<T>
         Query = query;
     }
 
-    public string Build() => Query.Build();
+    public string Build()
+    {
+        var queryContent = Query.Build();
+
+        // If this is a top-level operation builder, wrap it with the operation type
+        if (this is IGraphOperationQueryBuilder operationBuilder)
+        {
+            var operationType = operationBuilder.OperationType == OperationType.Query
+                ? "query"
+                : "mutation";
+            return $"{operationType} {{ {queryContent} }}";
+        }
+
+        // Nested builders or non-operation builders return unwrapped content
+        return queryContent;
+    }
 
     public void Alias(string alias) => Query.Alias(alias);
 }
