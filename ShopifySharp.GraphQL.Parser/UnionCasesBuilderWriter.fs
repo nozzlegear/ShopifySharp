@@ -29,7 +29,7 @@ type UnionCasesBuilderWriter(
             do! NewLine
             do! DoubleIndented + "build.Invoke(queryBuilder);"
             do! NewLine
-            do! DoubleIndented + $$"""base.Query.AddField(queryBuilder.Query);"""
+            do! DoubleIndented + $$"""Query = Query.AddField(queryBuilder.Query);"""
             do! NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
