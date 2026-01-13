@@ -23,7 +23,7 @@ module rec QueryBuilderWriter =
             |> qualifiedPascalTypeName
 
         pipeWriter writer {
-            do! $"public class {toBuilderName (QueryBuilder type'.Name)}: GraphQueryBuilder<{genericTypeName}>"
+            do! $"public sealed class {toBuilderName (QueryBuilder type'.Name)}: GraphQueryBuilder<{genericTypeName}>"
 
             if isOperation then
                 do! ", IGraphOperationQueryBuilder"
