@@ -67,5 +67,5 @@ let ParseAndWriteAsync (typesDestination: FileSystemDestination, servicesDestina
     ValueTask(task {
         let! context = parseAsync casing assumeNullability graphqlData cancellationToken
         do! parseAndWriteToFilesystem VisitedTypeWriter.writeVisitedTypesToPipe typesDestination context
-        do! parseAndWriteToFilesystem QueryBuilderWriter.writeQueryBuildersToPipe servicesDestination context
+        do! parseAndWriteToFilesystem QueryBuilderWriter.WriteQueryBuildersToPipe servicesDestination context
     })
