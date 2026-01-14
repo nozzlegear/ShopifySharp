@@ -45,7 +45,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine + NewLine
                 do! TripleIndented + "build.Invoke(queryBuilder);"
                 do! NewLine
-                do! TripleIndented + $"Query = Query.AddField<{pascalTypeName}>(queryBuilder.Query);"
+                do! TripleIndented + $"Query = base.Query.AddField<{pascalTypeName}>(queryBuilder.GetQuery());"
                 do! NewLine + NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
@@ -220,7 +220,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     do! NewLine + NewLine
                     do! DoubleIndented + "build.Invoke(queryBuilder);"
                     do! NewLine
-                    do! DoubleIndented + $"return new {queryBuilderClassName}(Query.AddField<{pascalTypeName}>(queryBuilder.Query));"
+                    do! DoubleIndented + $"return new {queryBuilderClassName}(base.Query.AddField<{pascalTypeName}>(queryBuilder.GetQuery()));"
                     do! NewLine
                     do! Indented + "}"
                     do! NewLine

@@ -12,7 +12,7 @@ public abstract class GraphQueryBuilder<T>
 {
     protected string Name { get; init; }
     protected QueryOptions QueryOptions { get; init; }
-    public IQuery<T> Query { get; init; }
+    protected IQuery<T> Query { get; init; }
 
     protected GraphQueryBuilder(string name, QueryOptions? queryOptions = null)
     {
@@ -27,6 +27,12 @@ public abstract class GraphQueryBuilder<T>
         QueryOptions = query.Options;
         Query = query;
     }
+
+    /// <summary>
+    /// Gets the underlying query. This method allows generated code to access the query
+    /// while preventing name collisions with GraphQL fields named "query".
+    /// </summary>
+    public IQuery<T> GetQuery() => Query;
 
     public string Build()
     {
