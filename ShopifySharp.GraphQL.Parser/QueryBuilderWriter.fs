@@ -12,6 +12,9 @@ module rec QueryBuilderWriter =
 
     let private canAddArguments (type': VisitedTypes) =
         type'.IsOperation
+    let builderClassName =
+        if type'.IsOperation then toBuilderName (OperationQueryBuilder type'.Name)
+        else toBuilderName (QueryBuilder type'.Name)
 
     let private writeClassNameAndInheritedType (isOperation: bool)
                                                (type': VisitedTypes)
@@ -23,7 +26,7 @@ module rec QueryBuilderWriter =
             |> qualifiedPascalTypeName
 
         pipeWriter writer {
-            do! $"public sealed class {toBuilderName (QueryBuilder type'.Name)}: GraphQueryBuilder<{genericTypeName}>"
+            do! $"public sealed class {builderClassName}: GraphQueryBuilder<{genericTypeName}>"
 
             if isOperation then
                 do! ", IGraphOperationQueryBuilder"
@@ -55,7 +58,6 @@ module rec QueryBuilderWriter =
             |> qualifiedPascalTypeName
         let queryType =
             $$"""Query<{{genericTypeName}}>"""
-        let builderName = toBuilderName (QueryBuilder type'.Name)
         let defaultQueryName =
             match type' with
             | VisitedTypes.Operation operation -> operation.Name
@@ -63,12 +65,12 @@ module rec QueryBuilderWriter =
 
         pipeWriter writer {
             // Public parameterless constructor
-            do! Indented + $"""public {builderName}(): this("{toCasing Camel defaultQueryName}")"""
+            do! Indented + $"""public {builderClassName}(): this("{toCasing Camel defaultQueryName}")"""
             do! NewLine + "{}"
             do! NewLine + NewLine
 
             // Public constructor with name
-            do! Indented + $"""public {builderName}(string name): base(new {queryType}(name))"""
+            do! Indented + $"""public {builderClassName}(string name): base(new {queryType}(name))"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
@@ -79,7 +81,7 @@ module rec QueryBuilderWriter =
             do! NewLine + NewLine
 
             // Private copy constructor for immutability
-            do! Indented + $"""private {builderName}(IQuery<{genericTypeName}> query): base(query)"""
+            do! Indented + $"""private {builderClassName}(IQuery<{genericTypeName}> query): base(query)"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
@@ -97,7 +99,6 @@ module rec QueryBuilderWriter =
         let fieldsBuilder = FieldsBuilderWriter(type', context)
         let argumentsBuilder = ArgumentsBuilderWriter(type', context)
         let unionsBuilder = UnionsBuilderWriter(type', context)
-        let builderName = toBuilderName (QueryBuilder type'.Name)
         let genericTypeName =
             toGenericType type' context.AssumeNullability
             |> qualifiedPascalTypeName
