@@ -181,3 +181,132 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 yield! writeUnionCaseBuilderMethods unionFieldBuilders
                 do! "}"
             }
+
+    // Static method to write field methods directly on QueryBuilder (for Phase 2)
+    static member writeFieldMethodsForQueryBuilder (type': VisitedTypes)
+                                                     (context: IParsedContext)
+                                                     (unionFieldBuilders: UnionCasesBuilderWriter array)
+                                                     (queryBuilderClassName: string)
+                                                     (genericTypeName: string)
+                                                     writer: ValueTask =
+        let writeQueryBuilderFieldMethod (fieldName: string)
+                                          (fieldType: FieldType)
+                                          (deprecationWarning: string option)
+                                          writer =
+            let sanitizedFieldName = sanitizeFieldOrOperationName (NamedType.Class type'.Name) fieldName
+            let pascalFieldName = toCasing Pascal sanitizedFieldName
+            let camelFieldName = toCasing Camel fieldName  // Use original fieldName for GraphQL
+
+            pipeWriter writer {
+                match AstNodeMapper.unwrapFieldType fieldType with
+                | FieldValueType.GraphObjectType (NamedType.UnionType _) ->
+                    // Handled by union case builder methods
+                    ()
+                | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName as namedType)
+                | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName as namedType)
+                | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName as namedType) ->
+                    let pascalTypeName =
+                        if namedType.IsInterface
+                        then toCasing Pascal $"I{graphObjectTypeName}"
+                        else qualifiedPascalTypeName graphObjectTypeName
+                    let nestedQueryBuilderName = toBuilderName (QueryBuilder graphObjectTypeName)
+
+                    yield! writeDeprecationAttribute Indented None
+                    do! Indented + $"public {queryBuilderClassName} {pascalFieldName}(Action<{nestedQueryBuilderName}> build)"
+                    do! NewLine
+                    do! Indented + "{"
+                    do! NewLine
+                    do! DoubleIndented + $"var queryBuilder = new {nestedQueryBuilderName}(\"{camelFieldName}\");"
+                    do! NewLine + NewLine
+                    do! DoubleIndented + "build.Invoke(queryBuilder);"
+                    do! NewLine
+                    do! DoubleIndented + $"return new {queryBuilderClassName}(Query.AddField<{pascalTypeName}>(queryBuilder.Query));"
+                    do! NewLine
+                    do! Indented + "}"
+                    do! NewLine
+                | _ ->
+                    yield! writeDeprecationAttribute Indented deprecationWarning
+                    do! Indented + $"public {queryBuilderClassName} {pascalFieldName}()"
+                    do! NewLine
+                    do! Indented + "{"
+                    do! NewLine
+                    do! DoubleIndented + $"return new {queryBuilderClassName}(base.Query.AddField(\"{camelFieldName}\"));"
+                    do! NewLine
+                    do! Indented + "}"
+                    do! NewLine
+            }
+
+        let writeUnionMethodsForQueryBuilder (builders: UnionCasesBuilderWriter array) writer: ValueTask =
+            pipeWriter writer {
+                for builder in builders do
+                    yield! writeDeprecationAttribute Indented builder.DeprecationWarning
+                    do! Indented + $$"""public {{queryBuilderClassName}} {{builder.PascalFieldName}}(Action<{{builder.BuilderClassName}}> build)"""
+                    do! NewLine
+                    do! Indented + "{"
+                    do! NewLine
+                    do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.Query.Options);"""
+                    do! NewLine
+                    do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
+                    do! NewLine
+                    do! DoubleIndented + "build.Invoke(unionBuilder);"
+                    do! NewLine
+                    do! DoubleIndented + $"return new {queryBuilderClassName}(base.Query.AddUnionCase(query));"
+                    do! NewLine
+                    do! Indented + "}"
+                    do! NewLine + NewLine
+            }
+
+        pipeWriter writer {
+            match type' with
+            | VisitedTypes.Operation operation ->
+                match operation.ReturnType with
+                | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)) ->
+                    let fieldType = FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)
+                    let fieldName = graphValueType.ToString()
+                    yield! writeQueryBuilderFieldMethod fieldName fieldType None
+                | ReturnType.FieldType fieldType ->
+                    // writeAddReturnValue
+                    do! Indented + $"public {queryBuilderClassName} ReturnValue()"
+                    do! NewLine
+                    do! Indented + "{"
+                    do! NewLine
+                    do! DoubleIndented + "// This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being included"
+                    do! NewLine
+                    do! DoubleIndented + "return this;"
+                    do! NewLine
+                    do! Indented + "}"
+                    do! NewLine
+                | ReturnType.VisitedType visitedType ->
+                    // writeFieldMethodsForType
+                    match visitedType with
+                    | VisitedTypes.UnionType _ ->
+                        ()
+                    | visitedType ->
+                        let fields =
+                            match visitedType with
+                            | VisitedTypes.Class class' -> class'.Fields
+                            | VisitedTypes.Interface interface' -> interface'.Fields
+                            | VisitedTypes.InputObject inputObject -> inputObject.Fields
+                            | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
+
+                        for field in fields do
+                            yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Deprecation
+            | visitedType ->
+                // writeFieldMethodsForType
+                match visitedType with
+                | VisitedTypes.UnionType _ ->
+                    ()
+                | visitedType ->
+                    let fields =
+                        match visitedType with
+                        | VisitedTypes.Class class' -> class'.Fields
+                        | VisitedTypes.Interface interface' -> interface'.Fields
+                        | VisitedTypes.InputObject inputObject -> inputObject.Fields
+                        | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
+
+                    for field in fields do
+                        yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Deprecation
+
+            // Add union case methods
+            yield! writeUnionMethodsForQueryBuilder unionFieldBuilders
+        }

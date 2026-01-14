@@ -46,12 +46,7 @@ module rec QueryBuilderWriter =
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
-                do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.FieldsBuilder type'.Name)}} Fields { get; }"""
-                do! NewLine
-            // if UnionsBuilderWriter.CanAddUnions type' then
-            //     do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.UnionsBuilder type'.Name)}} Unions { get; }"""
-            //     do! NewLine
+            // Fields property removed - field methods are now directly on QueryBuilder
         }
 
     let private writeConstructor (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
@@ -60,30 +55,36 @@ module rec QueryBuilderWriter =
             |> qualifiedPascalTypeName
         let queryType =
             $$"""Query<{{genericTypeName}}>"""
+        let builderName = toBuilderName (QueryBuilder type'.Name)
         let defaultQueryName =
             match type' with
             | VisitedTypes.Operation operation -> operation.Name
             | _ -> type'.Name
 
         pipeWriter writer {
-            do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(): this("{toCasing Camel defaultQueryName}")"""
+            // Public parameterless constructor
+            do! Indented + $"""public {builderName}(): this("{toCasing Camel defaultQueryName}")"""
             do! NewLine + "{}"
             do! NewLine + NewLine
 
-            do! Indented + $"""public {toBuilderName (QueryBuilder type'.Name)}(string name): base(new {queryType}(name))"""
+            // Public constructor with name
+            do! Indented + $"""public {builderName}(string name): base(new {queryType}(name))"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
                 do! NewLine
 
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
-                do! DoubleIndented + $$"""Fields = new {{toBuilderName (FieldsBuilder type'.Name)}}(Query);"""
-                do! NewLine
+            do! NewLine + "}"
+            do! NewLine + NewLine
 
-            // if UnionsBuilderWriter.CanAddUnions type' then
-            //     do! DoubleIndented + $$"""Unions = new {{toBuilderName (UnionsBuilder type'.Name)}}(Query);"""
-            //     do! NewLine
+            // Private copy constructor for immutability
+            do! Indented + $"""private {builderName}(IQuery<{genericTypeName}> query): base(query)"""
+            do! NewLine + "{"
+
+            if ArgumentsBuilderWriter.CanAddArguments type' then
+                do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
+                do! NewLine
 
             do! NewLine + "}"
             do! NewLine
@@ -96,6 +97,10 @@ module rec QueryBuilderWriter =
         let fieldsBuilder = FieldsBuilderWriter(type', context)
         let argumentsBuilder = ArgumentsBuilderWriter(type', context)
         let unionsBuilder = UnionsBuilderWriter(type', context)
+        let builderName = toBuilderName (QueryBuilder type'.Name)
+        let genericTypeName =
+            toGenericType type' context.AssumeNullability
+            |> qualifiedPascalTypeName
 
         pipeWriter writer {
             yield! writeDeprecationAttribute Outdented type'.Deprecation
@@ -109,10 +114,16 @@ module rec QueryBuilderWriter =
             yield! writeSubQueryBuilderProperties type' context
             yield! writeConstructor type' context
 
+            // Add field methods directly to QueryBuilder
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+                do! NewLine
+                // Generate field methods inline
+                yield! FieldsBuilderWriter.writeFieldMethodsForQueryBuilder type' context unionsBuilder.UnionFieldBuilders builderName genericTypeName
+
             do! "}"
             do! NewLine
 
-            yield! fieldsBuilder.WriteToPipewriter unionsBuilder.UnionFieldBuilders
+            // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
             yield! argumentsBuilder.WriteToPipewriter
             yield! unionsBuilder.WriteToPipewriter
         }

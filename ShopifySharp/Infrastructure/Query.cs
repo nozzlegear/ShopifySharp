@@ -174,29 +174,6 @@ public class Query<TSource> : IQuery<TSource>
     }
 }
 
-public abstract class FieldsBuilderBase<TSource>(IQuery<TSource> query): IFieldsBuilder<IQuery<TSource>>
-{
-    protected IQuery<TSource> Query = query;
-
-    public IQuery<TSource> AddField(string field)
-    {
-        Query = Query.AddField(field);
-        return Query;
-    }
-
-    public IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build) where TSubSource : class?
-    {
-        Query = Query.AddField(build);
-        return Query;
-    }
-
-    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
-    {
-        Query = Query.AddUnionCase(unionCaseQuery);
-        return Query;
-    }
-}
-
 public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArgumentsBuilder<IQuery<TSource>>
 {
     protected IQuery<TSource> Query = query;
