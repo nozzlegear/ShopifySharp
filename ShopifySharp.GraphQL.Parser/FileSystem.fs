@@ -25,6 +25,13 @@ module FileSystem =
             do! File.WriteAllTextAsync(filePath, fileText, cancellationToken)
         })
 
+    let private extractSubdirectoryFromNamespace (namespaceName: string): string =
+        // Map namespace suffix to subdirectory
+        // Operations go in QueryBuilders/Operations, all other QueryBuilders in QueryBuilders/Types
+        if namespaceName.Contains(".QueryBuilders.Operations") then "Operations"
+        elif namespaceName.Contains(".QueryBuilders.Types") then "Types"
+        else ""
+
     let private parseCsharpStringToGeneratedFiles (csharpCode: string) cancellationToken: ValueTask<GeneratedCsharpFile[]> =
         ValueTask<GeneratedCsharpFile[]>(task {
             let! csharpTree = CSharpSyntaxTree.ParseText(csharpCode).GetRootAsync(cancellationToken)
@@ -68,7 +75,15 @@ module FileSystem =
                                 .AddMembers(ns.WithMembers(SyntaxFactory.SingletonList<MemberDeclarationSyntax>(type')))
                                 .NormalizeWhitespace(eol = Environment.NewLine)
 
-                    { FileName = type'.Identifier.Text + ".generated.cs"
+                    let namespaceName = ns.Name.ToString()
+                    let subdirectory = extractSubdirectoryFromNamespace namespaceName
+                    let fileName =
+                        if subdirectory <> "" then
+                            Path.Join(subdirectory, type'.Identifier.Text + ".generated.cs")
+                        else
+                            type'.Identifier.Text + ".generated.cs"
+
+                    { FileName = fileName
                       FileText = unit.ToFullString() }
                 )
         })

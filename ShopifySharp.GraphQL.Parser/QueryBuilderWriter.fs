@@ -101,8 +101,12 @@ module rec QueryBuilderWriter =
         let genericTypeName =
             toGenericType type' context.AssumeNullability
             |> qualifiedPascalTypeName
+        let namespaceName = determineNamespace operationType.IsSome
 
         pipeWriter writer {
+            // Write namespace start for this builder
+            yield! writeNamespaceStart namespaceName
+
             yield! writeDeprecationAttribute Outdented type'.Deprecation
             yield! writeClassNameAndInheritedType operationType.IsSome type' context
             do! "{"
@@ -126,13 +130,33 @@ module rec QueryBuilderWriter =
             // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
             yield! argumentsBuilder.WriteToPipewriter
             yield! unionsBuilder.WriteToPipewriter
+
+            // Close namespace
+            yield! writeNamespaceEnd
         }
 
-    let private writeNamespaceAndUsings writer: ValueTask =
+    let private determineNamespace (isOperation: bool): string =
+        // Operations go in QueryBuilders.Operations namespace, everything else in QueryBuilders.Types
+        // ArgumentsBuilder and UnionCasesBuilder are written with their parent QueryBuilder
+        // so they'll be in the same namespace
+        if isOperation then
+            "ShopifySharp.GraphQL.Generated.QueryBuilders.Operations"
+        else
+            "ShopifySharp.GraphQL.Generated.QueryBuilders.Types"
+
+    let private writeNamespaceStart (namespaceName: string) writer: ValueTask =
         pipeWriter writer {
-            do! "#nullable enable"
+            do! $"namespace {namespaceName}"
             do! NewLine
-            do! "namespace ShopifySharp.Services.Generated;"
+            do! "{"
+            do! NewLine
+        }
+
+    let private writeUsingsOnce writer: ValueTask =
+        pipeWriter writer {
+            // Write using directives once at the top level
+            // FileSystem.fs will extract these and add them to each generated file
+            do! "#nullable enable"
             do! NewLine
             do! "using System;"
             do! NewLine
@@ -151,6 +175,18 @@ module rec QueryBuilderWriter =
             do! "using ShopifySharp.Infrastructure;"
             do! NewLine
             do! "using ShopifySharp.Infrastructure.Serialization.Json;"
+            do! NewLine
+            // Add using directives for generated namespaces so they can reference each other
+            do! "using " + determineNamespace true + ";"
+            do! NewLine
+            do! "using " + determineNamespace false + ";"
+            do! NewLine
+            do! NewLine
+        }
+
+    let private writeNamespaceEnd writer: ValueTask =
+        pipeWriter writer {
+            do! "}"
             do! NewLine
         }
 
@@ -171,8 +207,8 @@ module rec QueryBuilderWriter =
             }
 
         pipeWriter writer {
-            // Always write the namespace and usings at the very top of the document
-            yield! writeNamespaceAndUsings
+            // Write using directives once at the top - FileSystem will extract and reuse them
+            yield! writeUsingsOnce
 
             for node in parsedContext.Document.Definitions do
                 match node with
