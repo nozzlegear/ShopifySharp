@@ -30,6 +30,7 @@ module Utils =
 
     let toBuilderName = function
         | QueryBuilder str -> toCasing Pascal $"{str}QueryBuilder"
+        | OperationQueryBuilder str -> toCasing Pascal $"{str}OperationQueryBuilder"
         | ArgumentBuilder str -> toCasing Pascal $"{str}ArgumentsBuilder"
         | FieldsBuilder str -> toCasing Pascal $"{str}FieldsBuilder"
         | UnionsBuilder str -> toCasing Pascal $"{str}UnionsBuilder"
