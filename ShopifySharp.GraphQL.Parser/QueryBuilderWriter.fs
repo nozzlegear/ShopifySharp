@@ -6,35 +6,30 @@ open ShopifySharp.GraphQL.Parser
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open Utils
 
-module rec QueryBuilderWriter =
-    let [<Literal>] private QueryRootObjectName = "QueryRoot"
-    let [<Literal>] private MutationRootObjectName = "Mutation"
+type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
+    static let [<Literal>] QueryRootObjectName = "QueryRoot"
+    static let [<Literal>] MutationRootObjectName = "Mutation"
 
-    let private canAddArguments (type': VisitedTypes) =
-        type'.IsOperation
     let builderClassName =
         if type'.IsOperation then toBuilderName (OperationQueryBuilder type'.Name)
         else toBuilderName (QueryBuilder type'.Name)
+    let genericTypeName =
+        toGenericType type' context.AssumeNullability
+        |> qualifiedPascalTypeName
+    let queryType = $$"""IQuery<{{genericTypeName}}>"""
 
-    let private writeClassNameAndInheritedType (isOperation: bool)
-                                               (type': VisitedTypes)
-                                               (context: IParsedContext)
-                                               writer
-                                               : ValueTask =
-        let genericTypeName =
-            toGenericType type' context.AssumeNullability
-            |> qualifiedPascalTypeName
+    let writeClassNameAndInheritedType writer: ValueTask =
 
         pipeWriter writer {
             do! $"public sealed class {builderClassName}: GraphQueryBuilder<{genericTypeName}>"
 
-            if isOperation then
+            if type'.IsOperation then
                 do! ", IGraphOperationQueryBuilder"
 
             do! NewLine
         }
 
-    let private writeOperationTypeProperty (operationType: OperationType) (_: IParsedContext) writer: ValueTask =
+    let writeOperationTypeProperty (operationType: OperationType) writer: ValueTask =
         pipeWriter writer {
             do! Indented + "public OperationType OperationType { get; } = "
             match operationType with
@@ -44,18 +39,14 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let private writeSubQueryBuilderProperties (type': VisitedTypes) (_: IParsedContext) writer: ValueTask =
+    let writeSubQueryBuilderProperties writer: ValueTask =
         pipeWriter writer {
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
-            // Fields property removed - field methods are now directly on QueryBuilder
         }
 
-    let private writeConstructor (type': VisitedTypes) (context: IParsedContext) writer: ValueTask =
-        let genericTypeName =
-            toGenericType type' context.AssumeNullability
-            |> qualifiedPascalTypeName
+    let writeConstructor writer: ValueTask =
         let queryType =
             $$"""Query<{{genericTypeName}}>"""
         let defaultQueryName =
@@ -81,7 +72,7 @@ module rec QueryBuilderWriter =
             do! NewLine + NewLine
 
             // Private copy constructor for immutability
-            do! Indented + $"""private {builderClassName}(IQuery<{genericTypeName}> query): base(query)"""
+            do! Indented + $"""private {builderClassName}({queryType} query): base(query)"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
@@ -92,51 +83,21 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let writeQueryBuilder context (type': VisitedTypes) (operationType: OperationType option) writer: ValueTask =
-        if type'.IsEnum || type'.IsInputObject then
-            failwithf $"The {type'.GetType().Name} type is not supported."
-
-        let fieldsBuilder = FieldsBuilderWriter(type', context)
-        let argumentsBuilder = ArgumentsBuilderWriter(type', context)
-        let unionsBuilder = UnionsBuilderWriter(type', context)
-        let genericTypeName =
-            toGenericType type' context.AssumeNullability
-            |> qualifiedPascalTypeName
-        let namespaceName = determineNamespace operationType.IsSome
-
+    let writeNamespaceStart (namespaceName: string) writer: ValueTask =
         pipeWriter writer {
-            // Write namespace start for this builder
-            yield! writeNamespaceStart namespaceName
-
-            yield! writeDeprecationAttribute Outdented type'.Deprecation
-            yield! writeClassNameAndInheritedType operationType.IsSome type' context
+            do! $"namespace {namespaceName}"
+            do! NewLine
             do! "{"
             do! NewLine
-
-            if operationType.IsSome then
-                yield! writeOperationTypeProperty operationType.Value context
-
-            yield! writeSubQueryBuilderProperties type' context
-            yield! writeConstructor type' context
-
-            // Add field methods directly to QueryBuilder
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
-                do! NewLine
-                // Generate field methods inline
-                yield! FieldsBuilderWriter.writeFieldMethodsForQueryBuilder type' context unionsBuilder.UnionFieldBuilders builderName genericTypeName
-
-            do! "}"
-            do! NewLine
-
-            // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
-            yield! argumentsBuilder.WriteToPipewriter
-            yield! unionsBuilder.WriteToPipewriter
-
-            // Close namespace
-            yield! writeNamespaceEnd
         }
 
-    let private determineNamespace (isOperation: bool): string =
+    let writeNamespaceEnd writer: ValueTask =
+        pipeWriter writer {
+            do! "}"
+            do! NewLine
+        }
+
+    static let determineNamespace (isOperation: bool): string =
         // Operations go in QueryBuilders.Operations namespace, everything else in QueryBuilders.Types
         // ArgumentsBuilder and UnionCasesBuilder are written with their parent QueryBuilder
         // so they'll be in the same namespace
@@ -145,15 +106,7 @@ module rec QueryBuilderWriter =
         else
             "ShopifySharp.GraphQL.Generated.QueryBuilders.Types"
 
-    let private writeNamespaceStart (namespaceName: string) writer: ValueTask =
-        pipeWriter writer {
-            do! $"namespace {namespaceName}"
-            do! NewLine
-            do! "{"
-            do! NewLine
-        }
-
-    let private writeUsingsOnce writer: ValueTask =
+    static let writeUsingsOnce writer: ValueTask =
         pipeWriter writer {
             // Write using directives once at the top level
             // FileSystem.fs will extract these and add them to each generated file
@@ -185,13 +138,55 @@ module rec QueryBuilderWriter =
             do! NewLine
         }
 
-    let private writeNamespaceEnd writer: ValueTask =
+    member _.WriteToPipe writer: ValueTask =
+        if type'.IsEnum || type'.IsInputObject then
+            failwithf $"The {type'.GetType().Name} type is not supported."
+
+        let fieldsBuilder = FieldsBuilderWriter(type', context)
+        let argumentsBuilder = ArgumentsBuilderWriter(type', context)
+        let unionsBuilder = UnionsBuilderWriter(type', context)
+        let builderName = toBuilderName (QueryBuilder type'.Name)
+        let genericTypeName =
+            toGenericType type' context.AssumeNullability
+            |> qualifiedPascalTypeName
+        let namespaceName = determineNamespace type'.IsOperation
+
         pipeWriter writer {
+            // Write namespace start for this builder
+            yield! writeNamespaceStart namespaceName
+
+            yield! writeDeprecationAttribute Outdented type'.Deprecation
+            yield! writeClassNameAndInheritedType
+            do! "{"
+            do! NewLine
+
+            match type' with
+            | Operation operation ->
+                yield! writeOperationTypeProperty operation.Type
+            | _ ->
+                ()
+
+            yield! writeSubQueryBuilderProperties
+            yield! writeConstructor
+
+            // Add field methods directly to QueryBuilder
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+                do! NewLine
+                // Generate field methods inline
+                yield! FieldsBuilderWriter.writeFieldMethodsForQueryBuilder type' context unionsBuilder.UnionFieldBuilders builderName genericTypeName
+
             do! "}"
             do! NewLine
+
+            // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
+            yield! argumentsBuilder.WriteToPipewriter
+            yield! unionsBuilder.WriteToPipewriter
+
+            // Close namespace
+            yield! writeNamespaceEnd
         }
 
-    let writeQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
+    static member WriteQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
         let parsedContext = context :> IParsedContext
 
         let tryMapQueryBuilder node writer: ValueTask =
@@ -204,7 +199,8 @@ module rec QueryBuilderWriter =
                     // InputObjects and Enums do not need a QueryBuilder and are not supported
                     ()
                 | Some mappedType ->
-                    yield! writeQueryBuilder context mappedType None
+                    let queryBuilderWriter = QueryBuilderWriter(mappedType, parsedContext)
+                    yield! queryBuilderWriter.WriteToPipe
             }
 
         pipeWriter writer {
@@ -225,9 +221,13 @@ module rec QueryBuilderWriter =
                     // Each field in this object is an operation and should have a QueryBuilder
                     for field in objDef.Fields do
                         let operation = AstNodeMapper.mapRootFieldDefinition context operationType field
-                        yield! writeQueryBuilder context (VisitedTypes.Operation operation) (Some operationType)
+                        let queryBuilderWriter = QueryBuilderWriter(Operation operation, parsedContext)
+                        yield! queryBuilderWriter.WriteToPipe
 
+                    // If this is the QueryRoot operation, write it to the pipe as well (some users like to have the
+                    // QueryRoot available as a deserialization target)
                     if operationType = OperationType.Query then
+                        printf $"mapping querybuilder for operation {objDef.Name}"
                         yield! tryMapQueryBuilder node
                 | _ ->
                     yield! tryMapQueryBuilder node
