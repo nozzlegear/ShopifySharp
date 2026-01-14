@@ -178,6 +178,7 @@ public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArg
 {
     protected IQuery<TSource> Query = query;
 
+    // IArgumentsBuilder implementation (internal interface)
     public IQuery<TSource> AddArgument(string key, object? value)
     {
         Query = Query.AddArgument(key, value);
@@ -189,6 +190,10 @@ public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArg
         Query = Query.AddArguments(arguments);
         return Query;
     }
+
+    // Public API with WithArgument naming (generated code will use these)
+    public IQuery<TSource> WithArgument(string key, object? value) => AddArgument(key, value);
+    public IQuery<TSource> WithArguments(Dictionary<string, object?> arguments) => AddArguments(arguments);
 }
 
 public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
