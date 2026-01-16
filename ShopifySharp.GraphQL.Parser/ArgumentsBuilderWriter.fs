@@ -35,11 +35,12 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
-                do! TripleIndented + $$"""Query = base.Query.AddArgument("{{argument.Name}}", {{camelArgumentName}});"""
+                do! TripleIndented + $$"""Query = base.Query.WithArgument("{{argument.Name}}", {{camelArgumentName}});"""
                 do! NewLine
                 do! TripleIndented + "return this;"
                 do! NewLine
                 do! DoubleIndented + "}"
+                do! NewLine
                 do! NewLine
         }
 
