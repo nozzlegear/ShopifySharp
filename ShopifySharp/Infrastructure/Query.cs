@@ -46,7 +46,7 @@ public interface IFieldsBuilder<out TQuery> : IUnionCaseBuilder<TQuery>
         where TSubSource : class?;
 }
 
-public interface IQuery<TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>
+public interface IQuery<out TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>
 {
     List<object?> SelectList { get; }
     List<string, object?> Arguments { get; }
@@ -178,6 +178,8 @@ public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArg
 public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
 {
     protected IQuery<TSource> Query = query;
+
+    public IQuery<TSource> GetQuery() => Query;
 
     public IQuery<TSource> WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
     {

@@ -39,6 +39,7 @@ public abstract class GraphQueryBuilder<T>
         var queryContent = Query.Build();
 
         // If this is a top-level operation builder, wrap it with the operation type
+        // ReSharper disable once SuspiciousTypeConversion.Global
         if (this is IGraphOperationQueryBuilder operationBuilder)
         {
             var operationType = operationBuilder.OperationType == OperationType.Query
@@ -51,5 +52,5 @@ public abstract class GraphQueryBuilder<T>
         return queryContent;
     }
 
-    public void Alias(string alias) => Query.Alias(alias);
+    public void WithAlias(string alias) => Query.WithAlias(alias);
 }
