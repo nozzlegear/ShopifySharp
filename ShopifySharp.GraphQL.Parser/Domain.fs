@@ -30,8 +30,6 @@ type QueryBuilderTypes =
     | QueryBuilder of str: string
     | OperationQueryBuilder of str: string
     | ArgumentBuilder of str: string
-    | FieldsBuilder of str: string
-    | UnionsBuilder of str: string
     | UnionCasesBuilder of str: string
 
 type FieldTypeCollectionHandling
