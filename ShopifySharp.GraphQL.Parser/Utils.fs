@@ -22,6 +22,16 @@ module Utils =
         | Pascal -> Char.ToUpper(first).ToString() + rest
         | Camel -> Char.ToLower(first).ToString() + rest
 
+    /// Gets the namespace for query builders
+    let getQueryBuilderNamespace (isOperation: bool): string =
+        // Operations go in QueryBuilders.Operations namespace, everything else in QueryBuilders.Types
+        // ArgumentsBuilder and UnionCasesBuilder are written with their parent QueryBuilder
+        // so they'll be in the same namespace
+        if isOperation then
+            "ShopifySharp.GraphQL.Generated.QueryBuilders.Operations"
+        else
+            "ShopifySharp.GraphQL.Generated.QueryBuilders.Types"
+
     /// Fully qualify class names which might collide with System types
     let qualifiedPascalTypeName  className =
         match toCasing Pascal className with
@@ -32,9 +42,13 @@ module Utils =
         | QueryBuilder str -> toCasing Pascal $"{str}QueryBuilder"
         | OperationQueryBuilder str -> toCasing Pascal $"{str}OperationQueryBuilder"
         | ArgumentBuilder str -> toCasing Pascal $"{str}ArgumentsBuilder"
-        | FieldsBuilder str -> toCasing Pascal $"{str}FieldsBuilder"
-        | UnionsBuilder str -> toCasing Pascal $"{str}UnionsBuilder"
         | UnionCasesBuilder str -> toCasing Pascal $"{str}UnionCasesBuilder"
+
+    /// Fully qualifies builder class names which might collide with each other
+    let qualifiedBuilderTypeName = function
+        | QueryBuilder str -> toCasing Pascal $"{getQueryBuilderNamespace false}.{toBuilderName (QueryBuilder str)}"
+        | OperationQueryBuilder str -> toCasing Pascal $"{getQueryBuilderNamespace true}.{toBuilderName (OperationQueryBuilder str)}"
+        | x -> failwith $"Qualified builder type names are not implemented for builder type {x}"
 
     let toGenericType type' assumeNullability =
         match type' with
@@ -57,14 +71,15 @@ module Utils =
            .Replace("'", "", StringComparison.OrdinalIgnoreCase)
 
     /// <summary>
-    /// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>
+    /// Sanitizes the value, replacing reserved C# keywords with <c>$"@{value}"</c>, and any word that collides with
+    /// protected builder members with <c>$"{value}_"</c>.
     /// </summary>
     let sanitizeFieldOrOperationName (parentType: NamedType) (fieldName: string): string =
         // Public members from base builder classes that would cause collisions
         // Note: "Query" is protected and doesn't collide with public Query() methods
         let builderBaseMembers = Set.ofList ["Build"; "Alias"; "Arguments"; "Name"]
 
-        if fieldName.Equals(parentType.ToString(), StringComparison.OrdinalIgnoreCase) then
+        if fieldName.Equals(string parentType, StringComparison.OrdinalIgnoreCase) then
             // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
             fieldName + "_"
         elif Set.contains (toCasing Pascal fieldName) builderBaseMembers then
