@@ -5,25 +5,22 @@ open ShopifySharp.GraphQL.Parser
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
-type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let builderClassName = toBuilderName (FieldsBuilder type'.Name)
-    let genericTypeName =
-        toGenericType type' context.AssumeNullability
-        |> qualifiedPascalTypeName
-    let queryType = $$"""IQuery<{{genericTypeName}}>"""
+type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context: IParsedContext) =
 
-    let writeQueryBuilderAddFieldMethod (fieldName: string)
-                                        (fieldType: FieldType)
-                                        (deprecationWarning: string option)
-                                        writer =
-        let sanitizedFieldName = sanitizeFieldOrOperationName (NamedType.Class type'.Name) fieldName
-        let pascalFieldName = toCasing Pascal sanitizedFieldName
-        let camelFieldName = toCasing Camel fieldName  // Use original fieldName for GraphQL
+    let writeQueryBuilderFieldMethod (fieldName: string)
+                                     (fieldType: FieldType)
+                                     (deprecationWarning: string option)
+                                     writer =
+        let pascalFieldName =
+            toCasing Pascal fieldName
+            |> sanitizeFieldOrOperationName (NamedType.Class type'.Name)
+         // Use original field name for GraphQL
+        let camelFieldName = toCasing Camel fieldName
 
         pipeWriter writer {
             match AstNodeMapper.unwrapFieldType fieldType with
             | FieldValueType.GraphObjectType (NamedType.UnionType _) ->
-                // Handled by the UnionsBuilderWriter
+                // Handled by union case builder methods
                 ()
             | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName as namedType)
             | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName as namedType)
@@ -32,107 +29,101 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     if namedType.IsInterface
                     then toCasing Pascal $"I{graphObjectTypeName}"
                     else qualifiedPascalTypeName graphObjectTypeName
-                let queryBuilderName = toBuilderName (QueryBuilder graphObjectTypeName)
-
-                // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
+                let nestedQueryBuilderName =
+                    // Note: using QueryBuilder here ensures the OperationQueryBuilders are never unintentionally used in the AddField methods
+                    qualifiedBuilderTypeName (QueryBuilder graphObjectTypeName)
 
                 yield! writeDeprecationAttribute Indented None
-                do! Indented + $"public {builderClassName} {pascalFieldName}(Action<{queryBuilderName}> build)"
+                do! Indented + $"public {builderClassName} {pascalFieldName}(Action<{nestedQueryBuilderName}> build)"
                 do! NewLine
-                do! DoubleIndented + "{"
+                do! Indented + "{"
                 do! NewLine
-                do! TripleIndented + $"var queryBuilder = new {queryBuilderName}(\"{camelFieldName}\");"
+                do! DoubleIndented + $"var queryBuilder = new {nestedQueryBuilderName}(\"{camelFieldName}\");"
                 do! NewLine + NewLine
-                do! TripleIndented + "build.Invoke(queryBuilder);"
+                do! DoubleIndented + "build.Invoke(queryBuilder);"
                 do! NewLine
-                do! TripleIndented + $"Query = base.Query.AddField<{pascalTypeName}>(queryBuilder.GetQuery());"
-                do! NewLine + NewLine
-                do! TripleIndented + "return this;"
+                do! DoubleIndented + $"return new {builderClassName}(base.Query.AddField<{pascalTypeName}>(queryBuilder.GetQuery()));"
                 do! NewLine
-                do! DoubleIndented + "}"
+                do! Indented + "}"
                 do! NewLine
             | _ ->
-                // TODO: if this is a collection type (not fieldType.IsFieldValueType), use the AddField collection overload
-
                 yield! writeDeprecationAttribute Indented deprecationWarning
                 do! Indented + $"public {builderClassName} {pascalFieldName}()"
                 do! NewLine
-                do! DoubleIndented + "{"
+                do! Indented + "{"
                 do! NewLine
-                do! TripleIndented + $"Query = base.Query.AddField(\"{camelFieldName}\");"
+                do! DoubleIndented + $"return new {builderClassName}(base.Query.AddField(\"{camelFieldName}\"));"
                 do! NewLine
-                do! TripleIndented + "return this;"
-                do! NewLine
-                do! DoubleIndented + "}"
+                do! Indented + "}"
                 do! NewLine
         }
 
-    let writeAddFieldMethods writer: ValueTask =
-        let writeAddReturnValue (_: FieldType): ValueTask =
-            pipeWriter writer {
-                do! Indented + $"public {builderClassName} ReturnValue()"
-                do! NewLine
-                do! DoubleIndented + "{"
-                do! NewLine
-                do! DoubleIndented + "// This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being included"
-                do! NewLine
-                do! TripleIndented + "return this;"
-                do! NewLine
-                do! DoubleIndented + "}"
-                do! NewLine
-            }
-
-        let writeForVisitedType (visitedType: VisitedTypes): ValueTask =
-            pipeWriter writer {
-                match visitedType with
-                | VisitedTypes.UnionType _ ->
-                    // Handled by the UnionsBuilderWriter
-                    ()
-                | visitedType ->
-                    let fields =
-                        match visitedType with
-                        | VisitedTypes.Class class' ->
-                            class'.Fields
-                        | VisitedTypes.Interface interface' ->
-                            interface'.Fields
-                        | VisitedTypes.InputObject inputObject ->
-                            inputObject.Fields
-                        | _ ->
-                            failwith $"The VisitedType %A{visitedType.Name} is not supported here."
-
-                    for field in fields do
-                        yield! writeQueryBuilderAddFieldMethod field.Name field.ValueType field.Deprecation
-            }
+    let writeQueryBuilderCustomWithFieldMethods writer =
+        // TQuery WithField(string field)
+        //
+        // TQuery WithField<TSubSource>(IQuery<TSubSource> build)
+        //     where TSubSource : class?
+        //
+        // TQuery WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
+        //     where TUnionCase : class?
+        //
+        // TQuery WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
+        //     where TUnionType : class?;
 
         pipeWriter writer {
-            match type' with
-            | VisitedTypes.Operation operation ->
-                match operation.ReturnType with
-                | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)) ->
-                    let fieldType = FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)
-                    let fieldName = graphValueType.ToString()
-                    yield! writeQueryBuilderAddFieldMethod fieldName fieldType None
-                | ReturnType.FieldType fieldType ->
-                    do! writeAddReturnValue fieldType
-                | ReturnType.VisitedType visitedTypes ->
-                    do! writeForVisitedType visitedTypes
-            | visitedType ->
-                do! writeForVisitedType visitedType
-        }
-
-    let writeConstructor writer: ValueTask =
-        pipeWriter writer {
-            do! Indented + $"public {builderClassName}({queryType} query): base(query)"
+            do! Indented + $"public {builderClassName} WithField<TSubSource>(IQuery<TSubSource> subQuery) where TSubSource : class?"
             do! NewLine
             do! Indented + "{"
+            do! NewLine
+            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField<TSubSource>(subQuery));"
+            do! NewLine
+            do! Indented + "}"
+            do! NewLine + NewLine
+
+            do! Indented + $"public {builderClassName} WithField(string field)"
+            do! NewLine
+            do! Indented + "{"
+            do! NewLine
+            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField(field));"
+            do! NewLine
+            do! Indented + "}"
+            do! NewLine + NewLine
+
+            do! Indented + $"public {builderClassName} WithUnionCase(string field)"
+            do! NewLine
+            do! Indented + "{"
+            do! NewLine
+            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField(field));"
+            do! NewLine
+            do! Indented + "}"
+            do! NewLine + NewLine
+
+            do! Indented + $"public {builderClassName} WithField(string field)"
+            do! NewLine
+            do! Indented + "{"
+            do! NewLine
+            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField(field));"
+            do! NewLine
+            do! Indented + "}"
+            do! NewLine + NewLine
+        }
+
+    let writeQueryBuilderReturnValueMethod writer =
+        pipeWriter writer {
+            do! Indented + $"public {builderClassName} ReturnValue()"
+            do! NewLine
+            do! Indented + "{"
+            do! NewLine
+            do! DoubleIndented + "// This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being included"
+            do! NewLine
+            do! DoubleIndented + "return this;"
             do! NewLine
             do! Indented + "}"
             do! NewLine
         }
 
-    let writeUnionCaseBuilderMethods (builders: UnionCasesBuilderWriter array) writer: ValueTask =
+    let writeQueryBuilderUnionCaseMethods (builders: UnionCasesBuilderWriter array) writer: ValueTask =
         pipeWriter writer {
-            // Iterate over the union case builders and write their methods on this field builder
             for builder in builders do
                 yield! writeDeprecationAttribute Indented builder.DeprecationWarning
                 do! Indented + $$"""public {{builderClassName}} {{builder.PascalFieldName}}(Action<{{builder.BuilderClassName}}> build)"""
@@ -145,9 +136,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine
                 do! DoubleIndented + "build.Invoke(unionBuilder);"
                 do! NewLine
-                do! DoubleIndented + "Query = base.Query.AddUnionCase(query);"
-                do! NewLine
-                do! DoubleIndented + "return this;"
+                do! DoubleIndented + $"return new {builderClassName}(base.Query.AddUnionCase(query));"
                 do! NewLine
                 do! Indented + "}"
                 do! NewLine + NewLine
@@ -166,95 +155,9 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             | ReturnType.FieldType _ -> true
             | ReturnType.VisitedType type' -> FieldsBuilderWriter.CanAddFields type'
 
-    member _.WriteToPipewriter (unionFieldBuilders: UnionCasesBuilderWriter array) writer: ValueTask =
-        if not (FieldsBuilderWriter.CanAddFields type') && not (UnionsBuilderWriter.CanAddUnions type') then
-            ValueTask.CompletedTask
-        else
-            pipeWriter writer {
-                do! $"public sealed class {builderClassName} : FieldsBuilderBase<{genericTypeName}>"
-                do! NewLine
-                do! "{"
-                yield! writeConstructor
-                do! NewLine + NewLine
-                yield! writeAddFieldMethods
-                do! NewLine + NewLine
-                yield! writeUnionCaseBuilderMethods unionFieldBuilders
-                do! "}"
-            }
-
-    // Static method to write field methods directly on QueryBuilder (for Phase 2)
-    static member writeFieldMethodsForQueryBuilder (type': VisitedTypes)
-                                                     (context: IParsedContext)
-                                                     (unionFieldBuilders: UnionCasesBuilderWriter array)
-                                                     (queryBuilderClassName: string)
-                                                     (genericTypeName: string)
-                                                     writer: ValueTask =
-        let writeQueryBuilderFieldMethod (fieldName: string)
-                                          (fieldType: FieldType)
-                                          (deprecationWarning: string option)
-                                          writer =
-            let sanitizedFieldName = sanitizeFieldOrOperationName (NamedType.Class type'.Name) fieldName
-            let pascalFieldName = toCasing Pascal sanitizedFieldName
-            let camelFieldName = toCasing Camel fieldName  // Use original fieldName for GraphQL
-
-            pipeWriter writer {
-                match AstNodeMapper.unwrapFieldType fieldType with
-                | FieldValueType.GraphObjectType (NamedType.UnionType _) ->
-                    // Handled by union case builder methods
-                    ()
-                | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName as namedType)
-                | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName as namedType)
-                | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName as namedType) ->
-                    let pascalTypeName =
-                        if namedType.IsInterface
-                        then toCasing Pascal $"I{graphObjectTypeName}"
-                        else qualifiedPascalTypeName graphObjectTypeName
-                    let nestedQueryBuilderName = toBuilderName (QueryBuilder graphObjectTypeName)
-
-                    yield! writeDeprecationAttribute Indented None
-                    do! Indented + $"public {queryBuilderClassName} {pascalFieldName}(Action<{nestedQueryBuilderName}> build)"
-                    do! NewLine
-                    do! Indented + "{"
-                    do! NewLine
-                    do! DoubleIndented + $"var queryBuilder = new {nestedQueryBuilderName}(\"{camelFieldName}\");"
-                    do! NewLine + NewLine
-                    do! DoubleIndented + "build.Invoke(queryBuilder);"
-                    do! NewLine
-                    do! DoubleIndented + $"return new {queryBuilderClassName}(base.Query.AddField<{pascalTypeName}>(queryBuilder.GetQuery()));"
-                    do! NewLine
-                    do! Indented + "}"
-                    do! NewLine
-                | _ ->
-                    yield! writeDeprecationAttribute Indented deprecationWarning
-                    do! Indented + $"public {queryBuilderClassName} {pascalFieldName}()"
-                    do! NewLine
-                    do! Indented + "{"
-                    do! NewLine
-                    do! DoubleIndented + $"return new {queryBuilderClassName}(base.Query.AddField(\"{camelFieldName}\"));"
-                    do! NewLine
-                    do! Indented + "}"
-                    do! NewLine
-            }
-
-        let writeUnionMethodsForQueryBuilder (builders: UnionCasesBuilderWriter array) writer: ValueTask =
-            pipeWriter writer {
-                for builder in builders do
-                    yield! writeDeprecationAttribute Indented builder.DeprecationWarning
-                    do! Indented + $$"""public {{queryBuilderClassName}} {{builder.PascalFieldName}}(Action<{{builder.BuilderClassName}}> build)"""
-                    do! NewLine
-                    do! Indented + "{"
-                    do! NewLine
-                    do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.Query.Options);"""
-                    do! NewLine
-                    do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
-                    do! NewLine
-                    do! DoubleIndented + "build.Invoke(unionBuilder);"
-                    do! NewLine
-                    do! DoubleIndented + $"return new {queryBuilderClassName}(base.Query.AddUnionCase(query));"
-                    do! NewLine
-                    do! Indented + "}"
-                    do! NewLine + NewLine
-            }
+    /// Writes the field methods for the writer's type to the <paramref name="writer"/>
+    member _.WriteFieldMethodsForQueryBuilder (unionFieldBuilders: UnionCasesBuilderWriter array)
+                                              writer: ValueTask =
 
         pipeWriter writer {
             match type' with
@@ -264,22 +167,13 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     let fieldType = FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)
                     let fieldName = graphValueType.ToString()
                     yield! writeQueryBuilderFieldMethod fieldName fieldType None
-                | ReturnType.FieldType fieldType ->
-                    // writeAddReturnValue
-                    do! Indented + $"public {queryBuilderClassName} ReturnValue()"
-                    do! NewLine
-                    do! Indented + "{"
-                    do! NewLine
-                    do! DoubleIndented + "// This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being included"
-                    do! NewLine
-                    do! DoubleIndented + "return this;"
-                    do! NewLine
-                    do! Indented + "}"
-                    do! NewLine
+                | ReturnType.FieldType _ ->
+                    yield! writeQueryBuilderReturnValueMethod
                 | ReturnType.VisitedType visitedType ->
-                    // writeFieldMethodsForType
+                    // Write the field methods for this type
                     match visitedType with
                     | VisitedTypes.UnionType _ ->
+                        // Union cases will be added below
                         ()
                     | visitedType ->
                         let fields =
@@ -292,9 +186,9 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                         for field in fields do
                             yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Deprecation
             | visitedType ->
-                // writeFieldMethodsForType
                 match visitedType with
                 | VisitedTypes.UnionType _ ->
+                    // Union cases will be added below
                     ()
                 | visitedType ->
                     let fields =
@@ -308,5 +202,7 @@ type FieldsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                         yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Deprecation
 
             // Add union case methods
-            yield! writeUnionMethodsForQueryBuilder unionFieldBuilders
+            yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
+            // Add the custom WithField and WithUnionCase methods
+            yield! writeQueryBuilderCustomWithFieldMethods
         }
