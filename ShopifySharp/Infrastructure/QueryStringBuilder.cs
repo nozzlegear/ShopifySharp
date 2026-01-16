@@ -215,7 +215,7 @@ public class QueryStringBuilder : IQueryStringBuilder
     {
         RequiredArgument.NotNull(query, nameof(query));
 
-        foreach (KeyValuePair<string, object?> param in query.Arguments)
+        foreach (var param in query.Arguments)
         {
             QueryString.Append($"{param.Key}:{FormatQueryParam(param.Value)},");
         }
