@@ -23,6 +23,10 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         pipeWriter writer {
             do! $"public sealed class {builderClassName}: GraphQueryBuilder<{genericTypeName}>"
 
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+                // Use the builderClassName here, so that the IFieldsBuilder interface methods will return the builder class directly
+                do! $", IFieldsBuilder<{builderClassName}>"
+
             if type'.IsOperation then
                 do! ", IGraphOperationQueryBuilder"
 
