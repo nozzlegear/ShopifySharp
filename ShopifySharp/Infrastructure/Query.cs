@@ -5,10 +5,6 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Reflection;
-using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
@@ -31,30 +27,30 @@ public interface IQuery
 
 public interface IArgumentsBuilder<out TQuery>
 {
-    TQuery AddArgument(string key, object? value);
-    TQuery AddArguments(Dictionary<string, object?> arguments);
-}
-
-public interface IFieldsBuilder<out TQuery>
-{
-    TQuery AddField(string field);
-    TQuery AddField<TSubSource>(IQuery<TSubSource> build)
-        where TSubSource : class?;
-    TQuery AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
-        where TUnionCase : class?;
+    TQuery WithArgument(string key, object? value);
+    TQuery WithArguments(IDictionary<string, object?> arguments);
 }
 
 public interface IUnionCaseBuilder<out TQuery>
 {
-    TQuery AddUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
+    TQuery WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
+        where TUnionCase : class?;
+    TQuery WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
         where TUnionType : class?;
 }
 
-public interface IQuery<TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>, IUnionCaseBuilder<IQuery<TSource>>
+public interface IFieldsBuilder<out TQuery> : IUnionCaseBuilder<TQuery>
 {
-    ImmutableList<object?> SelectList { get; }
-    ImmutableDictionary<string, object?> Arguments { get; }
-    IQuery<TSource> Alias(string alias);
+    TQuery WithField(string field);
+    TQuery WithField<TSubSource>(IQuery<TSubSource> subQuery)
+        where TSubSource : class?;
+}
+
+public interface IQuery<TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>
+{
+    List<object?> SelectList { get; }
+    List<string, object?> Arguments { get; }
+    IQuery<TSource> WithAlias(string alias);
 }
 
 public class Query<TSource> : IQuery<TSource>
@@ -102,36 +98,36 @@ public class Query<TSource> : IQuery<TSource>
     }
 
 
-    public IQuery<TSource> Alias(string alias)
+    public IQuery<TSource> WithAlias(string alias)
     {
         RequiredArgument.NotNullOrEmpty(alias, nameof(alias));
         return new Query<TSource>(Name, Options, SelectList, Arguments, alias);
     }
 
-    public IQuery<TSource> AddField(string field)
+    public IQuery<TSource> WithField(string field)
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
         return new Query<TSource>(Name, Options, SelectList.Add(field), Arguments, AliasName);
     }
 
-    public IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> build)
+    public IQuery<TSource> WithField<TSubSource>(IQuery<TSubSource> subQuery)
         where TSubSource : class?
     {
-        RequiredArgument.NotNull(build, nameof(build));
-        return new Query<TSource>(Name, Options, SelectList.Add(build), Arguments, AliasName);
+        RequiredArgument.NotNull(subQuery, nameof(subQuery));
+        return new Query<TSource>(Name, Options, SelectList.Add(subQuery), Arguments, AliasName);
     }
 
-    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
+    public IQuery<TSource> WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
     {
         RequiredArgument.NotNull(unionCaseQuery, nameof(unionCaseQuery));
 
         // Ensure we also select the __typename, which is required for deserializing union cases
-        var updatedUnionQuery = unionCaseQuery.AddField("__typename");
+        var updatedUnionQuery = unionCaseQuery.WithField("__typename");
 
         return new Query<TSource>(Name, Options, SelectList.Add(updatedUnionQuery), Arguments, AliasName);
     }
 
-    public IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
+    public IQuery<TSource> WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
         where TUnionType : class?
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
@@ -140,19 +136,19 @@ public class Query<TSource> : IQuery<TSource>
         var fieldQuery = new Query<object>(field, Options);
         // Ensure we also select the __typename, which is required for deserializing union cases
         var updatedFieldQuery = fieldQuery
-            .AddField("__typename")
-            .AddField(unionCaseQuery);
+            .WithField("__typename")
+            .WithField(unionCaseQuery);
 
         return new Query<TSource>(Name, Options, SelectList.Add(updatedFieldQuery), Arguments, AliasName);
     }
 
-    public IQuery<TSource> AddArgument(string key, object? value)
+    public IQuery<TSource> WithArgument(string key, object? value)
     {
         RequiredArgument.NotNullOrEmpty(key, nameof(key));
         return new Query<TSource>(Name, Options, SelectList, Arguments.Add(key, value), AliasName);
     }
 
-    public IQuery<TSource> AddArguments(Dictionary<string, object?> arguments)
+    public IQuery<TSource> WithArguments(IDictionary<string, object?> arguments)
     {
         RequiredArgument.NotNull(arguments, nameof(arguments));
 
@@ -160,50 +156,39 @@ public class Query<TSource> : IQuery<TSource>
 
         return new Query<TSource>(Name, Options, SelectList, updatedArguments, AliasName);
     }
-
-    private string GetPropertyName(PropertyInfo property)
-    {
-        // var thing = new Query<ShopifyProtectOrderSummary>("thing");
-        // // TODO: how can we get intellisense on the string fields here? enums are obvious answer, and so are adding an
-        // //       individual method for each known field. but stringly typed definitions would be idea
-        // thing.AddField("boop");
-        //
-        return Options.Formatter is not null
-            ? Options.Formatter.Invoke(property)
-            : property.Name;
-    }
 }
 
 public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArgumentsBuilder<IQuery<TSource>>
 {
     protected IQuery<TSource> Query = query;
 
-    // IArgumentsBuilder implementation (internal interface)
-    public IQuery<TSource> AddArgument(string key, object? value)
+    public IQuery<TSource> WithArgument(string key, object? value)
     {
-        Query = Query.AddArgument(key, value);
+        Query = Query.WithArgument(key, value);
         return Query;
     }
 
-    public IQuery<TSource> AddArguments(Dictionary<string, object?> arguments)
+    public IQuery<TSource> WithArguments(IDictionary<string, object?> arguments)
     {
-        Query = Query.AddArguments(arguments);
+        Query = Query.WithArguments(arguments);
         return Query;
     }
-
-    // Public API with WithArgument naming (generated code will use these)
-    public IQuery<TSource> WithArgument(string key, object? value) => AddArgument(key, value);
-    public IQuery<TSource> WithArguments(Dictionary<string, object?> arguments) => AddArguments(arguments);
 }
 
 public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
 {
     protected IQuery<TSource> Query = query;
 
-    public IQuery<TSource> AddUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
+    public IQuery<TSource> WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
+    {
+        Query = Query.WithUnionCase(unionCaseQuery);
+        return Query;
+    }
+
+    public IQuery<TSource> WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
         where TUnionType : class?
     {
-        Query = Query.AddUnionCase(field, unionCaseQuery);
+        Query = Query.WithUnionCase(field, unionCaseQuery);
         return Query;
     }
 }
