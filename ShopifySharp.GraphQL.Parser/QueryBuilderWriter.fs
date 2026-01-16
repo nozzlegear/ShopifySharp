@@ -47,8 +47,6 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         }
 
     let writeConstructor writer: ValueTask =
-        let queryType =
-            $$"""Query<{{genericTypeName}}>"""
         let defaultQueryName =
             match type' with
             | VisitedTypes.Operation operation -> operation.Name
@@ -61,7 +59,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine + NewLine
 
             // Public constructor with name
-            do! Indented + $"""public {builderClassName}(string name): base(new {queryType}(name))"""
+            do! Indented + $"""public {builderClassName}(string name): base(new Query<{genericTypeName}>(name))"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
@@ -97,15 +95,6 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
         }
 
-    static let determineNamespace (isOperation: bool): string =
-        // Operations go in QueryBuilders.Operations namespace, everything else in QueryBuilders.Types
-        // ArgumentsBuilder and UnionCasesBuilder are written with their parent QueryBuilder
-        // so they'll be in the same namespace
-        if isOperation then
-            "ShopifySharp.GraphQL.Generated.QueryBuilders.Operations"
-        else
-            "ShopifySharp.GraphQL.Generated.QueryBuilders.Types"
-
     static let writeUsingsOnce writer: ValueTask =
         pipeWriter writer {
             // Write using directives once at the top level
@@ -131,9 +120,9 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! "using ShopifySharp.Infrastructure.Serialization.Json;"
             do! NewLine
             // Add using directives for generated namespaces so they can reference each other
-            do! "using " + determineNamespace true + ";"
+            do! "using " + getQueryBuilderNamespace true + ";"
             do! NewLine
-            do! "using " + determineNamespace false + ";"
+            do! "using " + getQueryBuilderNamespace false + ";"
             do! NewLine
             do! NewLine
         }
@@ -142,14 +131,9 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         if type'.IsEnum || type'.IsInputObject then
             failwithf $"The {type'.GetType().Name} type is not supported."
 
-        let fieldsBuilder = FieldsBuilderWriter(type', context)
         let argumentsBuilder = ArgumentsBuilderWriter(type', context)
         let unionsBuilder = UnionsBuilderWriter(type', context)
-        let builderName = toBuilderName (QueryBuilder type'.Name)
-        let genericTypeName =
-            toGenericType type' context.AssumeNullability
-            |> qualifiedPascalTypeName
-        let namespaceName = determineNamespace type'.IsOperation
+        let namespaceName = getQueryBuilderNamespace type'.IsOperation
 
         pipeWriter writer {
             // Write namespace start for this builder
@@ -173,7 +157,8 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
                 do! NewLine
                 // Generate field methods inline
-                yield! FieldsBuilderWriter.writeFieldMethodsForQueryBuilder type' context unionsBuilder.UnionFieldBuilders builderName genericTypeName
+                let fieldsWriter = FieldsBuilderWriter(type', builderClassName, context)
+                yield! fieldsWriter.WriteFieldMethodsForQueryBuilder unionsBuilder.UnionFieldBuilders
 
             do! "}"
             do! NewLine
@@ -227,7 +212,6 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     // If this is the QueryRoot operation, write it to the pipe as well (some users like to have the
                     // QueryRoot available as a deserialization target)
                     if operationType = OperationType.Query then
-                        printf $"mapping querybuilder for operation {objDef.Name}"
                         yield! tryMapQueryBuilder node
                 | _ ->
                     yield! tryMapQueryBuilder node

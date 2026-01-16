@@ -5,24 +5,6 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let pascalClassName = toBuilderName (UnionsBuilder type'.Name)
-    let genericTypeName =
-        toGenericType type' context.AssumeNullability
-        |> qualifiedPascalTypeName
-    let queryType = $$"""IQuery<{{genericTypeName}}>"""
-
-    let writeConstructor writer: ValueTask =
-        pipeWriter writer {
-            do! Indented + $$"""public {{pascalClassName}}({{queryType}} query)"""
-            do! NewLine
-            do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "_query = query;"
-            do! NewLine
-            do! Indented + "}"
-            do! NewLine
-        }
-
     let rec collectUnionFields (visitedType: VisitedTypes): UnionCasesBuilderWriter array =
         let fields =
             match visitedType with
