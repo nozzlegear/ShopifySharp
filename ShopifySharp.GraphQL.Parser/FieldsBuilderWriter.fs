@@ -34,15 +34,19 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                     qualifiedBuilderTypeName (QueryBuilder graphObjectTypeName)
 
                 yield! writeDeprecationAttribute Indented None
-                do! Indented + $"public {builderClassName} {pascalFieldName}(Func<{nestedQueryBuilderName}, {nestedQueryBuilderName}> build)"
+                do! Indented + $"public {builderClassName} {pascalFieldName}(Action<{nestedQueryBuilderName}> build)"
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $"var queryBuilder = new {nestedQueryBuilderName}(\"{camelFieldName}\");"
-                do! NewLine + NewLine
-                do! DoubleIndented + "queryBuilder = build.Invoke(queryBuilder);"
+                do! DoubleIndented + $"var query = new Query<{pascalTypeName}>(\"{camelFieldName}\");"
                 do! NewLine
-                do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField<{pascalTypeName}>(queryBuilder.GetQuery()));"
+                do! DoubleIndented + $"var queryBuilder = new {nestedQueryBuilderName}(query);"
+                do! NewLine + NewLine
+                do! DoubleIndented + "build.Invoke(queryBuilder);"
+                do! NewLine
+                do! DoubleIndented + $"base.Query.AddField<{pascalTypeName}>(query);"
+                do! NewLine + NewLine
+                do! DoubleIndented + "return this;"
                 do! NewLine
                 do! Indented + "}"
                 do! NewLine
@@ -52,57 +56,64 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField(\"{camelFieldName}\"));"
+                do! DoubleIndented + $"return new {builderClassName}(base.Query.AddField(\"{camelFieldName}\"));"
                 do! NewLine
                 do! Indented + "}"
                 do! NewLine
         }
 
-    let writeQueryBuilderCustomWithFieldMethods writer =
-        // TQuery WithField(string field)
+    let writeQueryBuilderCustomAddFieldMethods writer =
+        // TQuery AddField(string field)
         //
-        // TQuery WithField<TSubSource>(IQuery<TSubSource> build)
+        // TQuery AddField(IQuery subQuery);
+        //
+        // TQuery AddField<TSubSource>(IQuery<TSubSource> build)
         //     where TSubSource : class?
         //
-        // TQuery WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
+        // TQuery AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
         //     where TUnionCase : class?
-        //
-        // TQuery WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
-        //     where TUnionType : class?;
 
         pipeWriter writer {
-            do! Indented + $"public {builderClassName} WithField<TSubSource>(IQuery<TSubSource> subQuery) where TSubSource : class?"
+            do! Indented + $"public {builderClassName} AddField<TSubSource>(IQuery<TSubSource> subQuery) where TSubSource : class?"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField<TSubSource>(subQuery));"
+            do! DoubleIndented + "base.Query.AddField<TSubSource>(subQuery);"
+            do! NewLine
+            do! DoubleIndented + "return this;"
             do! NewLine
             do! Indented + "}"
             do! NewLine + NewLine
 
-            do! Indented + $"public {builderClassName} WithField(string field)"
+            do! Indented + $"public {builderClassName} AddField(IQuery subQuery)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithField(field));"
+            do! DoubleIndented + "base.Query.AddField(subQuery);"
+            do! NewLine
+            do! DoubleIndented + "return this;"
             do! NewLine
             do! Indented + "}"
             do! NewLine + NewLine
 
-            do! Indented + $"public {builderClassName} WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?"
+            do! Indented + $"public {builderClassName} AddField(string field)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithUnionCase<TUnionCase>(unionCaseQuery));"
+            do! DoubleIndented + "base.Query.AddField(field);"
+            do! NewLine
+            do! DoubleIndented + "return this;"
             do! NewLine
             do! Indented + "}"
             do! NewLine + NewLine
 
-            do! Indented + $"public {builderClassName} WithUnionCase<TUnionCase>(string field, IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?"
+            do! Indented + $"public {builderClassName} AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $"return new {builderClassName}(base.Query.WithUnionCase<TUnionCase>(field, unionCaseQuery));"
+            do! DoubleIndented + "base.Query.AddUnionCase<TUnionCase>(unionCaseQuery);"
+            do! NewLine
+            do! DoubleIndented + "return this;"
             do! NewLine
             do! Indented + "}"
             do! NewLine + NewLine
@@ -133,10 +144,12 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.Query.Options);"""
                 do! NewLine
                 do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
-                do! NewLine
+                do! NewLine + NewLine
                 do! DoubleIndented + "build.Invoke(unionBuilder);"
                 do! NewLine
-                do! DoubleIndented + $"return new {builderClassName}(base.Query.WithUnionCase(unionBuilder.GetQuery()));"
+                do! DoubleIndented + "base.Query.AddUnionCase(query);"
+                do! NewLine + NewLine
+                do! DoubleIndented + "return this;"
                 do! NewLine
                 do! Indented + "}"
                 do! NewLine + NewLine
@@ -203,6 +216,6 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
 
             // Add union case methods
             yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
-            // Add the custom WithField and WithUnionCase methods
-            yield! writeQueryBuilderCustomWithFieldMethods
+            // Add the custom AddField and AddUnionCase methods
+            yield! writeQueryBuilderCustomAddFieldMethods
         }
