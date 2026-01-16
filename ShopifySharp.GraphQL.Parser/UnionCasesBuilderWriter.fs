@@ -21,16 +21,18 @@ type UnionCasesBuilderWriter(
         let unionCaseQueryBuilderName = $"{pascalUnionCaseName}QueryBuilder"
 
         pipeWriter writer {
-            do! Indented + $"public {builderClassName} On{pascalUnionCaseName}(Func<{unionCaseQueryBuilderName}, {unionCaseQueryBuilderName}> build)"
+            do! Indented + $"public {builderClassName} On{pascalUnionCaseName}(Action<{unionCaseQueryBuilderName}> build)"
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + $$"""var queryBuilder = new {{unionCaseQueryBuilderName}}("... on {{pascalUnionCaseName}}");"""
+            do! DoubleIndented + $"var query = new Query<{pascalUnionCaseName}>(\"... on {pascalUnionCaseName}\");"
             do! NewLine
-            do! DoubleIndented + "queryBuilder = build.Invoke(queryBuilder);"
+            do! DoubleIndented + $$"""var queryBuilder = new {{unionCaseQueryBuilderName}}(query);"""
+            do! NewLine + NewLine
+            do! DoubleIndented + "build.Invoke(queryBuilder);"
             do! NewLine
-            do! DoubleIndented + $$"""Query = base.Query.WithField(queryBuilder.GetQuery());"""
-            do! NewLine
+            do! DoubleIndented + $$"""base.Query.AddField(query);"""
+            do! NewLine + NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
             do! Indented + "}"

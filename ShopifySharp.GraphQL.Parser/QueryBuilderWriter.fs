@@ -73,8 +73,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine + "}"
             do! NewLine + NewLine
 
-            // Private copy constructor for immutability
-            do! Indented + $"""private {builderClassName}({queryType} query): base(query)"""
+            do! Indented + $"""public {builderClassName}({queryType} query): base(query)"""
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
