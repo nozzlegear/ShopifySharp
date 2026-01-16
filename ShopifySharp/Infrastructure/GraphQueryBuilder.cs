@@ -10,29 +10,21 @@ namespace ShopifySharp.Infrastructure;
 public abstract class GraphQueryBuilder<T>
     where T: IGraphQLObject
 {
-    protected string Name { get; init; }
-    protected QueryOptions QueryOptions { get; init; }
-    protected IQuery<T> Query { get; init; }
+    protected IQuery<T> Query { get; }
+
+    public string Name => Query.Name;
+    // public QueryOptions Options => Query.Options;
+    // public string? AliasName => Query.AliasName;
 
     protected GraphQueryBuilder(string name, QueryOptions? queryOptions = null)
     {
-        Name = name;
-        QueryOptions = queryOptions ?? new QueryOptions();
-        Query = new Query<T>(name, QueryOptions);
+        Query = new Query<T>(name, queryOptions ?? new QueryOptions());
     }
 
     protected GraphQueryBuilder(IQuery<T> query)
     {
-        Name = query.Name;
-        QueryOptions = query.Options;
         Query = query;
     }
-
-    /// <summary>
-    /// Gets the underlying query. This method allows generated code to access the query
-    /// while preventing name collisions with GraphQL fields named "query".
-    /// </summary>
-    public IQuery<T> GetQuery() => Query;
 
     public string Build()
     {
