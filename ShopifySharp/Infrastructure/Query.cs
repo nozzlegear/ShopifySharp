@@ -27,29 +27,28 @@ public interface IQuery
 
 public interface IArgumentsBuilder<out TQuery>
 {
-    TQuery WithArgument(string key, object? value);
-    TQuery WithArguments(IDictionary<string, object?> arguments);
+    TQuery AddArgument(string key, object? value);
+    TQuery AddArguments(IDictionary<string, object?> arguments);
 }
 
 public interface IUnionCaseBuilder<out TQuery>
 {
-    TQuery WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
+    TQuery AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
         where TUnionCase : class?;
-    TQuery WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
-        where TUnionType : class?;
 }
 
 public interface IFieldsBuilder<out TQuery> : IUnionCaseBuilder<TQuery>
 {
-    TQuery WithField(string field);
-    TQuery WithField<TSubSource>(IQuery<TSubSource> subQuery)
+    TQuery AddField(string field);
+    TQuery AddField(IQuery subQuery);
+    TQuery AddField<TSubSource>(IQuery<TSubSource> subQuery)
         where TSubSource : class?;
 }
 
 public interface IQuery<out TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>
 {
     List<object?> SelectList { get; }
-    List<string, object?> Arguments { get; }
+    Dictionary<string, object?> Arguments { get; }
     IQuery<TSource> WithAlias(string alias);
 }
 
@@ -60,30 +59,17 @@ public class Query<TSource> : IQuery<TSource>
 
     public QueryOptions Options { get; }
     public string Name { get; }
-    public string? AliasName { get; private init; }
-    public ImmutableList<object?> SelectList { get; }
-    public ImmutableDictionary<string, object?> Arguments { get; }
+    public string? AliasName { get; protected set; }
+    public List<object?> SelectList { get; }
+    public Dictionary<string, object?> Arguments { get; }
 
     public Query(string name, QueryOptions? options = null)
     {
         RequiredArgument.NotNullOrEmpty(name, nameof(name));
         Name = name;
         Options = options ?? new QueryOptions();
-        SelectList = ImmutableList<object?>.Empty;
-        Arguments = ImmutableDictionary<string, object?>.Empty;
-    }
-
-    // Private copy constructor for creating new instances with modified state
-    private Query(string name, QueryOptions options,
-                  ImmutableList<object?> selectList,
-                  ImmutableDictionary<string, object?> arguments,
-                  string? aliasName)
-    {
-        Name = name;
-        Options = options;
-        SelectList = selectList;
-        Arguments = arguments;
-        AliasName = aliasName;
+        SelectList = [];
+        Arguments = [];
     }
 
     /// <summary>Builds the query.</summary>
@@ -92,105 +78,93 @@ public class Query<TSource> : IQuery<TSource>
     /// <exception cref="ArgumentException">Must have a one or more 'Select' fields in the Query</exception>
     public string Build()
     {
-        this.QueryStringBuilder.Clear();
-
-        return this.QueryStringBuilder.Build(this);
+        QueryStringBuilder.Clear();
+        return QueryStringBuilder.Build(this);
     }
 
 
     public IQuery<TSource> WithAlias(string alias)
     {
         RequiredArgument.NotNullOrEmpty(alias, nameof(alias));
-        return new Query<TSource>(Name, Options, SelectList, Arguments, alias);
+        AliasName = alias;
+        return this;
     }
 
-    public IQuery<TSource> WithField(string field)
+    public IQuery<TSource> AddField(string field)
     {
         RequiredArgument.NotNullOrEmpty(field, nameof(field));
-        return new Query<TSource>(Name, Options, SelectList.Add(field), Arguments, AliasName);
+        SelectList.Add(field);
+        return this;
     }
 
-    public IQuery<TSource> WithField<TSubSource>(IQuery<TSubSource> subQuery)
+    public IQuery<TSource> AddField(IQuery subQuery)
+    {
+        RequiredArgument.NotNull(subQuery, nameof(subQuery));
+        SelectList.Add(subQuery);
+        return this;
+    }
+
+    public IQuery<TSource> AddField<TSubSource>(IQuery<TSubSource> subQuery)
         where TSubSource : class?
     {
         RequiredArgument.NotNull(subQuery, nameof(subQuery));
-        return new Query<TSource>(Name, Options, SelectList.Add(subQuery), Arguments, AliasName);
+        SelectList.Add(subQuery);
+        return this;
     }
 
-    public IQuery<TSource> WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
+    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
     {
         RequiredArgument.NotNull(unionCaseQuery, nameof(unionCaseQuery));
 
         // Ensure we also select the __typename, which is required for deserializing union cases
-        var updatedUnionQuery = unionCaseQuery.WithField("__typename");
+        SelectList.Add(unionCaseQuery.AddField("__typename"));
 
-        return new Query<TSource>(Name, Options, SelectList.Add(updatedUnionQuery), Arguments, AliasName);
+        return this;
     }
 
-    public IQuery<TSource> WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
-        where TUnionType : class?
-    {
-        RequiredArgument.NotNullOrEmpty(field, nameof(field));
-        RequiredArgument.NotNull(unionCaseQuery, nameof(unionCaseQuery));
-
-        var fieldQuery = new Query<object>(field, Options);
-        // Ensure we also select the __typename, which is required for deserializing union cases
-        var updatedFieldQuery = fieldQuery
-            .WithField("__typename")
-            .WithField(unionCaseQuery);
-
-        return new Query<TSource>(Name, Options, SelectList.Add(updatedFieldQuery), Arguments, AliasName);
-    }
-
-    public IQuery<TSource> WithArgument(string key, object? value)
+    public IQuery<TSource> AddArgument(string key, object? value)
     {
         RequiredArgument.NotNullOrEmpty(key, nameof(key));
-        return new Query<TSource>(Name, Options, SelectList, Arguments.Add(key, value), AliasName);
+
+        Arguments.Add(key, value);
+
+        return this;
     }
 
-    public IQuery<TSource> WithArguments(IDictionary<string, object?> arguments)
+    public IQuery<TSource> AddArguments(IDictionary<string, object?> arguments)
     {
         RequiredArgument.NotNull(arguments, nameof(arguments));
 
-        var updatedArguments = Arguments.AddRange(arguments);
+        Arguments.AddRange(arguments);
 
-        return new Query<TSource>(Name, Options, SelectList, updatedArguments, AliasName);
+        return this;
     }
 }
 
 public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArgumentsBuilder<IQuery<TSource>>
 {
-    protected IQuery<TSource> Query = query;
+    protected readonly IQuery<TSource> Query = query;
 
-    public IQuery<TSource> WithArgument(string key, object? value)
+    public IQuery<TSource> AddArgument(string key, object? value)
     {
-        Query = Query.WithArgument(key, value);
+        Query.AddArgument(key, value);
         return Query;
     }
 
-    public IQuery<TSource> WithArguments(IDictionary<string, object?> arguments)
+    public IQuery<TSource> AddArguments(IDictionary<string, object?> arguments)
     {
-        Query = Query.WithArguments(arguments);
+        Query.AddArguments(arguments);
         return Query;
     }
 }
 
 public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
 {
-    protected IQuery<TSource> Query = query;
+    protected readonly IQuery<TSource> Query = query;
 
-    public IQuery<TSource> GetQuery() => Query;
-
-    public IQuery<TSource> WithUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
+    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
     {
-        Query = Query.WithUnionCase(unionCaseQuery);
-        return Query;
-    }
-
-    public IQuery<TSource> WithUnionCase<TUnionType>(string field, IQuery<TUnionType> unionCaseQuery)
-        where TUnionType : class?
-    {
-        Query = Query.WithUnionCase(field, unionCaseQuery);
+        Query.AddUnionCase(unionCaseQuery);
         return Query;
     }
 }
