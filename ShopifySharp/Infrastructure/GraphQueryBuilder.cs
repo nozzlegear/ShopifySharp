@@ -7,8 +7,9 @@ using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
-public abstract class GraphQueryBuilder<T>
+public abstract class GraphQueryBuilder<T, TSelf>
     where T: IGraphQLObject
+    where TSelf : GraphQueryBuilder<T, TSelf>
 {
     protected IQuery<T> Query { get; }
 
@@ -20,6 +21,8 @@ public abstract class GraphQueryBuilder<T>
     {
         Query = new Query<T>(name, queryOptions ?? new QueryOptions());
     }
+
+    protected abstract TSelf Self { get; }
 
     protected GraphQueryBuilder(IQuery<T> query)
     {
@@ -44,5 +47,9 @@ public abstract class GraphQueryBuilder<T>
         return queryContent;
     }
 
-    public void WithAlias(string alias) => Query.WithAlias(alias);
+    public TSelf WithAlias(string alias)
+    {
+        Query.WithAlias(alias);
+        return Self;
+    }
 }
