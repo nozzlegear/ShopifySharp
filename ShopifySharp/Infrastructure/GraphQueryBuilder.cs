@@ -13,15 +13,6 @@ public abstract class GraphQueryBuilder<T, TSelf>
 {
     protected IQuery<T> Query { get; }
 
-    public string Name => Query.Name;
-    // public QueryOptions Options => Query.Options;
-    // public string? AliasName => Query.AliasName;
-
-    protected GraphQueryBuilder(string name, QueryOptions? queryOptions = null)
-    {
-        Query = new Query<T>(name, queryOptions ?? new QueryOptions());
-    }
-
     protected abstract TSelf Self { get; }
 
     protected GraphQueryBuilder(IQuery<T> query)

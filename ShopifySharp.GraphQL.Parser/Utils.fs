@@ -77,7 +77,7 @@ module Utils =
     let sanitizeFieldOrOperationName (parentType: NamedType) (fieldName: string): string =
         // Public members from base builder classes that would cause collisions
         // Note: "Query" is protected and doesn't collide with public Query() methods
-        let builderBaseMembers = Set.ofList ["Build"; "Alias"; "Arguments"; "Name"]
+        let builderBaseMembers = Set.ofList ["Build"; "Arguments"]
 
         if fieldName.Equals(string parentType, StringComparison.OrdinalIgnoreCase) then
             // The C# compiler will not allow the @ prefix for members that have the same name as their enclosing type
