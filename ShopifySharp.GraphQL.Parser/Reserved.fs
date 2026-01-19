@@ -16,3 +16,8 @@ module Reserved =
         "from"; "get"; "global"; "group"; "into"; "join"; "let"; "nameof"; "orderby"; "partial";
         "remove"; "select"; "set"; "value"; "var"; "when"; "where"; "yield"
     ]
+
+    // Members from base builder classes that would cause collisions
+    let builderMemberKeywords = Set.ofList [
+        "Build"; "Arguments"
+    ]
