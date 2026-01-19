@@ -25,23 +25,23 @@ public interface IQuery
     string Build();
 }
 
-public interface IArgumentsBuilder<out TQuery>
+public interface IArgumentsBuilder<out TSelf> where TSelf : IArgumentsBuilder<TSelf>
 {
-    TQuery AddArgument(string key, object? value);
-    TQuery AddArguments(IDictionary<string, object?> arguments);
+    TSelf AddArgument(string key, object? value);
+    TSelf AddArguments(IDictionary<string, object?> arguments);
 }
 
-public interface IUnionCaseBuilder<out TQuery>
+public interface IUnionCaseBuilder<out TSelf> where TSelf : IUnionCaseBuilder<TSelf>
 {
-    TQuery AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
+    TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
         where TUnionCase : class?;
 }
 
-public interface IFieldsBuilder<out TQuery> : IUnionCaseBuilder<TQuery>
+public interface IFieldsBuilder<out TSelf> : IUnionCaseBuilder<TSelf> where TSelf : IFieldsBuilder<TSelf>
 {
-    TQuery AddField(string field);
-    TQuery AddField(IQuery subQuery);
-    TQuery AddField<TSubSource>(IQuery<TSubSource> subQuery)
+    TSelf AddField(string field);
+    TSelf AddField(IQuery subQuery);
+    TSelf AddField<TSubSource>(IQuery<TSubSource> subQuery)
         where TSubSource : class?;
 }
 
@@ -141,30 +141,36 @@ public class Query<TSource> : IQuery<TSource>
     }
 }
 
-public abstract class ArgumentsBuilderBase<TSource>(IQuery<TSource> query): IArgumentsBuilder<IQuery<TSource>>
+public abstract class ArgumentsBuilderBase<TSource, TSelf>(IQuery<TSource> query) : IArgumentsBuilder<TSelf>
+    where TSelf : IArgumentsBuilder<TSelf>
 {
     protected readonly IQuery<TSource> Query = query;
 
-    public IQuery<TSource> AddArgument(string key, object? value)
+    protected abstract TSelf Self { get; }
+
+    public TSelf AddArgument(string key, object? value)
     {
         Query.AddArgument(key, value);
-        return Query;
+        return Self;
     }
 
-    public IQuery<TSource> AddArguments(IDictionary<string, object?> arguments)
+    public TSelf AddArguments(IDictionary<string, object?> arguments)
     {
         Query.AddArguments(arguments);
-        return Query;
+        return Self;
     }
 }
 
-public abstract class UnionCaseBuilderBase<TSource>(IQuery<TSource> query): IUnionCaseBuilder<IQuery<TSource>>
+public abstract class UnionCaseBuilderBase<TSource, TSelf>(IQuery<TSource> query): IUnionCaseBuilder<TSelf>
+    where TSelf : IUnionCaseBuilder<TSelf>
 {
     protected readonly IQuery<TSource> Query = query;
 
-    public IQuery<TSource> AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
+    protected abstract TSelf Self { get; }
+
+    public TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
     {
         Query.AddUnionCase(unionCaseQuery);
-        return Query;
+        return Self;
     }
 }

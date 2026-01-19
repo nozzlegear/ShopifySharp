@@ -21,7 +21,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let writeClassNameAndInheritedType writer: ValueTask =
 
         pipeWriter writer {
-            do! $"public sealed class {builderClassName}: GraphQueryBuilder<{genericTypeName}>"
+            do! $"public sealed class {builderClassName}: GraphQueryBuilder<{genericTypeName}, {builderClassName}>"
 
             if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
                 // Use the builderClassName here, so that the IFieldsBuilder interface methods will return the builder class directly
@@ -48,6 +48,12 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             if ArgumentsBuilderWriter.CanAddArguments type' then
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
+        }
+
+    let writeOverrideProperties writer: ValueTask =
+        pipeWriter writer {
+            do! Indented + $"protected override {builderClassName} Self => this;"
+            do! NewLine
         }
 
     let writeConstructor writer: ValueTask =
@@ -154,6 +160,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 ()
 
             yield! writeSubQueryBuilderProperties
+            yield! writeOverrideProperties
             yield! writeConstructor
 
             // Add field methods directly to QueryBuilder

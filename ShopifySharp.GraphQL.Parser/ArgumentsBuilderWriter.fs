@@ -5,7 +5,7 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let pascalClassName = toBuilderName (ArgumentBuilder type'.Name)
+    let builderClassName = toBuilderName (ArgumentBuilder type'.Name)
     let genericTypeName =
         toGenericType type' context.AssumeNullability
         |> qualifiedPascalTypeName
@@ -19,7 +19,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
         pipeWriter writer {
             let sanitizeArgumentName casing argName =
-                sanitizeFieldOrOperationName (NamedType.Class pascalClassName) argName
+                sanitizeFieldOrOperationName (NamedType.Class builderClassName) argName
                 |> toCasing casing
 
             for argument in arguments do
@@ -31,7 +31,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     toCasing Pascal argument.Name
 
                 yield! writeDeprecationAttribute Indented argument.Deprecation
-                do! $"public {pascalClassName} AddArgument{pascalArgumentName}({valueType} {camelArgumentName})"
+                do! $"public {builderClassName} AddArgument{pascalArgumentName}({valueType} {camelArgumentName})"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
@@ -46,12 +46,18 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     let writeConstructor writer: ValueTask =
         pipeWriter writer {
-            do! Indented + $$"""public {{pascalClassName}}({{queryType}} query) : base(query)"""
+            do! Indented + $$"""public {{ builderClassName }}({{queryType}} query) : base(query)"""
             do! NewLine
             do! Indented + "{"
             do! NewLine
             do! Indented + "}"
             do! NewLine
+        }
+
+    let writeOverrideProperties writer: ValueTask =
+        pipeWriter writer {
+            do! Indented + $"protected override {builderClassName} Self => this;"
+            do! NewLine + NewLine
         }
 
     static member CanAddArguments (type': VisitedTypes) =
@@ -70,10 +76,11 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             ValueTask.CompletedTask
         else
             pipeWriter writer {
-                do! $$"""public sealed class {{pascalClassName}} : ArgumentsBuilderBase<{{genericTypeName}}>"""
+                do! $"""public sealed class { builderClassName } : ArgumentsBuilderBase<{genericTypeName}, {builderClassName}>"""
                 do! NewLine
                 do! "{"
                 do! NewLine
+                yield! writeOverrideProperties
                 yield! writeConstructor
                 do! NewLine + NewLine
                 yield! writeAddArgumentMethods

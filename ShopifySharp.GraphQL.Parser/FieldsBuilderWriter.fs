@@ -56,7 +56,9 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $"return new {builderClassName}(base.Query.AddField(\"{camelFieldName}\"));"
+                do! DoubleIndented + $"base.Query.AddField(\"{camelFieldName}\");"
+                do! NewLine
+                do! DoubleIndented + $"return this;"
                 do! NewLine
                 do! Indented + "}"
                 do! NewLine

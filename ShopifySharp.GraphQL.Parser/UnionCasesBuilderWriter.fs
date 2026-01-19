@@ -39,18 +39,8 @@ type UnionCasesBuilderWriter(
             do! NewLine
         }
 
-    member _.BuilderClassName = builderClassName
-    member _.CamelFieldName = toCasing Camel fieldName
-    member _.PascalFieldName = toCasing Pascal fieldName
-    member _.GenericTypeName = genericTypeName
-    member _.DeprecationWarning = deprecation
-
-    member _.WriteToPipewriter writer: ValueTask =
+    let writeConstructor writer: ValueTask =
         pipeWriter writer {
-            do! $"public sealed class {builderClassName} : UnionCaseBuilderBase<{genericTypeName}>"
-            do! NewLine
-            do! "{"
-            do! NewLine
             do! Indented + $$"""public {{builderClassName}}(string fieldName = "{{self.CamelFieldName}}") : this(new Query<{{genericTypeName}}>(fieldName))"""
             do! NewLine
             do! Indented + "{}"
@@ -59,6 +49,29 @@ type UnionCasesBuilderWriter(
             do! NewLine
             do! Indented + "{}"
             do! NewLine + NewLine
+        }
+
+    let writeOverrideProperties writer: ValueTask =
+        pipeWriter writer {
+            do! Indented + $"protected override {builderClassName} Self => this;"
+            do! NewLine + NewLine
+        }
+
+    member _.BuilderClassName = builderClassName
+    member _.CamelFieldName = toCasing Camel fieldName
+    member _.PascalFieldName = toCasing Pascal fieldName
+    member _.GenericTypeName = genericTypeName
+    member _.DeprecationWarning = deprecation
+
+    member _.WriteToPipewriter writer: ValueTask =
+        pipeWriter writer {
+            do! $"public sealed class {builderClassName} : UnionCaseBuilderBase<{genericTypeName}, {builderClassName}>"
+            do! NewLine
+            do! "{"
+            do! NewLine
+
+            yield! writeOverrideProperties
+            yield! writeConstructor
 
             for unionCaseName in unionCaseNames do
                 yield! writeOnUnionCaseMethod unionCaseName
