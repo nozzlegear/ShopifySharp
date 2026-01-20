@@ -25,6 +25,7 @@
     <None Include="../attributions.md" Pack="true" PackagePath="." />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
     <PackageReference Include="newtonsoft.json" />
