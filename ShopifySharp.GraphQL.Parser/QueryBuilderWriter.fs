@@ -21,9 +21,9 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let writeClassNameAndInheritedType writer: ValueTask =
         let baseBuilderClassName =
             if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
-                "FieldsQueryBuilder"
+                "FieldsQueryBuilderBase"
             else
-                "QueryBuilder"
+                "QueryBuilderBase"
 
         pipeWriter writer {
             do! $"public sealed class {builderClassName}: {baseBuilderClassName}<{genericTypeName}, {builderClassName}>"

@@ -35,14 +35,14 @@ public interface IArgumentsBuilder<out TSelf> where TSelf : IArgumentsBuilder<TS
 }
 
 [PublicAPI]
-public interface IUnionCaseBuilder<out TSelf> where TSelf : IUnionCaseBuilder<TSelf>
+public interface IUnionCasesBuilder<out TSelf> where TSelf : IUnionCasesBuilder<TSelf>
 {
     TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
         where TUnionCase : class?;
 }
 
 [PublicAPI]
-public interface IFieldsBuilder<out TSelf> : IUnionCaseBuilder<TSelf> where TSelf : IFieldsBuilder<TSelf>
+public interface IFieldsBuilder<out TSelf> : IUnionCasesBuilder<TSelf> where TSelf : IFieldsBuilder<TSelf>
 {
     TSelf AddField(string field);
     TSelf AddField(IQuery subQuery);
@@ -147,41 +147,5 @@ public class Query<TSource> : IQuery<TSource>
         Arguments.AddRange(arguments);
 
         return this;
-    }
-}
-
-[PublicAPI]
-public abstract class ArgumentsBuilderBase<TSource, TSelf>(IQuery<TSource> query) : IArgumentsBuilder<TSelf>
-    where TSelf : IArgumentsBuilder<TSelf>
-{
-    protected readonly IQuery<TSource> InnerQuery = query;
-
-    protected abstract TSelf Self { get; }
-
-    public TSelf AddArgument(string key, object? value)
-    {
-        InnerQuery.AddArgument(key, value);
-        return Self;
-    }
-
-    public TSelf AddArguments(IDictionary<string, object?> arguments)
-    {
-        InnerQuery.AddArguments(arguments);
-        return Self;
-    }
-}
-
-[PublicAPI]
-public abstract class UnionCaseBuilderBase<TSource, TSelf>(IQuery<TSource> query): IUnionCaseBuilder<TSelf>
-    where TSelf : IUnionCaseBuilder<TSelf>
-{
-    protected readonly IQuery<TSource> InnerQuery = query;
-
-    protected abstract TSelf Self { get; }
-
-    public TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
-    {
-        InnerQuery.AddUnionCase(unionCaseQuery);
-        return Self;
     }
 }

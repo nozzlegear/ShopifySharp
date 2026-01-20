@@ -65,7 +65,7 @@ type UnionCasesBuilderWriter(
 
     member _.WriteToPipewriter writer: ValueTask =
         pipeWriter writer {
-            do! $"public sealed class {builderClassName} : UnionCaseBuilderBase<{genericTypeName}, {builderClassName}>"
+            do! $"public sealed class {builderClassName} : UnionCasesBuilderBase<{genericTypeName}, {builderClassName}>"
             do! NewLine
             do! "{"
             do! NewLine
