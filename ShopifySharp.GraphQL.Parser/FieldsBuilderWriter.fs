@@ -64,63 +64,6 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine
         }
 
-    let writeQueryBuilderCustomAddFieldMethods writer =
-        // TQuery AddField(string field)
-        //
-        // TQuery AddField(IQuery subQuery);
-        //
-        // TQuery AddField<TSubSource>(IQuery<TSubSource> build)
-        //     where TSubSource : class?
-        //
-        // TQuery AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
-        //     where TUnionCase : class?
-
-        pipeWriter writer {
-            do! Indented + $"public {builderClassName} AddField<TSubSource>(IQuery<TSubSource> subQuery) where TSubSource : class?"
-            do! NewLine
-            do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "base.Query.AddField<TSubSource>(subQuery);"
-            do! NewLine
-            do! DoubleIndented + "return this;"
-            do! NewLine
-            do! Indented + "}"
-            do! NewLine + NewLine
-
-            do! Indented + $"public {builderClassName} AddField(IQuery subQuery)"
-            do! NewLine
-            do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "base.Query.AddField(subQuery);"
-            do! NewLine
-            do! DoubleIndented + "return this;"
-            do! NewLine
-            do! Indented + "}"
-            do! NewLine + NewLine
-
-            do! Indented + $"public {builderClassName} AddField(string field)"
-            do! NewLine
-            do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "base.Query.AddField(field);"
-            do! NewLine
-            do! DoubleIndented + "return this;"
-            do! NewLine
-            do! Indented + "}"
-            do! NewLine + NewLine
-
-            do! Indented + $"public {builderClassName} AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?"
-            do! NewLine
-            do! Indented + "{"
-            do! NewLine
-            do! DoubleIndented + "base.Query.AddUnionCase<TUnionCase>(unionCaseQuery);"
-            do! NewLine
-            do! DoubleIndented + "return this;"
-            do! NewLine
-            do! Indented + "}"
-            do! NewLine + NewLine
-        }
-
     let writeQueryBuilderReturnValueMethod writer =
         pipeWriter writer {
             do! Indented + $"public {builderClassName} ReturnValue()"
@@ -218,6 +161,4 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
 
             // Add union case methods
             yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
-            // Add the custom AddField and AddUnionCase methods
-            yield! writeQueryBuilderCustomAddFieldMethods
         }
