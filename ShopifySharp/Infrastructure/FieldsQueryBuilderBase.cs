@@ -5,11 +5,11 @@ using ShopifySharp.GraphQL;
 namespace ShopifySharp.Infrastructure;
 
 [PublicAPI]
-public abstract class FieldsQueryBuilder<T, TSelf> : QueryBuilder<T, TSelf>, IFieldsBuilder<TSelf>
+public abstract class FieldsQueryBuilderBase<T, TSelf> : QueryBuilderBase<T, TSelf>, IFieldsBuilder<TSelf>
     where T: IGraphQLObject
-    where TSelf : QueryBuilder<T, TSelf>, IFieldsBuilder<TSelf>
+    where TSelf : QueryBuilderBase<T, TSelf>, IFieldsBuilder<TSelf>
 {
-    protected FieldsQueryBuilder(IQuery<T> query) : base(query)
+    protected FieldsQueryBuilderBase(IQuery<T> query) : base(query)
     {
     }
 
