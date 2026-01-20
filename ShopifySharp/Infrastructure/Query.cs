@@ -61,6 +61,8 @@ public interface IQuery<out TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>
 [PublicAPI]
 public class Query<TSource> : IQuery<TSource>
 {
+    private const string PolymorphicDiscriminatorKey = "__typename";
+
     /// <summary>Gets the query string builder.</summary>
     protected IQueryStringBuilder QueryStringBuilder { get; } = new QueryStringBuilder();
 
@@ -88,7 +90,6 @@ public class Query<TSource> : IQuery<TSource>
         QueryStringBuilder.Clear();
         return QueryStringBuilder.Build(this);
     }
-
 
     public IQuery<TSource> WithAlias(string alias)
     {
@@ -123,8 +124,9 @@ public class Query<TSource> : IQuery<TSource>
     {
         RequiredArgument.NotNull(unionCaseQuery, nameof(unionCaseQuery));
 
-        // Ensure we also select the __typename, which is required for deserializing union cases
-        SelectList.Add(unionCaseQuery.AddField("__typename"));
+        // Ensure we also select the __typename polymorphic discriminator key, which is required for deserializing union cases
+        if (!unionCaseQuery.SelectList.Contains(PolymorphicDiscriminatorKey))
+            SelectList.Add(unionCaseQuery.AddField(PolymorphicDiscriminatorKey));
 
         return this;
     }
