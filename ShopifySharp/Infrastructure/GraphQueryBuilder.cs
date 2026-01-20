@@ -3,10 +3,12 @@
 /// Modifications copyright (c) 2025 Nozzlegear Software
 /// Licensed under MIT License - see attributions.md
 #nullable enable
+using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
+[PublicAPI]
 public abstract class GraphQueryBuilder<T, TSelf>
     where T: IGraphQLObject
     where TSelf : GraphQueryBuilder<T, TSelf>

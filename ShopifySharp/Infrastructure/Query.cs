@@ -5,9 +5,11 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace ShopifySharp.Infrastructure;
 
+[PublicAPI]
 public interface IQuery
 {
     QueryOptions Options { get; }
@@ -25,18 +27,21 @@ public interface IQuery
     string Build();
 }
 
+[PublicAPI]
 public interface IArgumentsBuilder<out TSelf> where TSelf : IArgumentsBuilder<TSelf>
 {
     TSelf AddArgument(string key, object? value);
     TSelf AddArguments(IDictionary<string, object?> arguments);
 }
 
+[PublicAPI]
 public interface IUnionCaseBuilder<out TSelf> where TSelf : IUnionCaseBuilder<TSelf>
 {
     TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
         where TUnionCase : class?;
 }
 
+[PublicAPI]
 public interface IFieldsBuilder<out TSelf> : IUnionCaseBuilder<TSelf> where TSelf : IFieldsBuilder<TSelf>
 {
     TSelf AddField(string field);
@@ -45,6 +50,7 @@ public interface IFieldsBuilder<out TSelf> : IUnionCaseBuilder<TSelf> where TSel
         where TSubSource : class?;
 }
 
+[PublicAPI]
 public interface IQuery<out TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>>, IFieldsBuilder<IQuery<TSource>>
 {
     List<object?> SelectList { get; }
@@ -52,6 +58,7 @@ public interface IQuery<out TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>
     IQuery<TSource> WithAlias(string alias);
 }
 
+[PublicAPI]
 public class Query<TSource> : IQuery<TSource>
 {
     /// <summary>Gets the query string builder.</summary>
@@ -141,6 +148,7 @@ public class Query<TSource> : IQuery<TSource>
     }
 }
 
+[PublicAPI]
 public abstract class ArgumentsBuilderBase<TSource, TSelf>(IQuery<TSource> query) : IArgumentsBuilder<TSelf>
     where TSelf : IArgumentsBuilder<TSelf>
 {
@@ -161,6 +169,7 @@ public abstract class ArgumentsBuilderBase<TSource, TSelf>(IQuery<TSource> query
     }
 }
 
+[PublicAPI]
 public abstract class UnionCaseBuilderBase<TSource, TSelf>(IQuery<TSource> query): IUnionCaseBuilder<TSelf>
     where TSelf : IUnionCaseBuilder<TSelf>
 {
