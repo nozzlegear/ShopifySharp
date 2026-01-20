@@ -21,7 +21,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let writeClassNameAndInheritedType writer: ValueTask =
 
         pipeWriter writer {
-            do! $"public sealed class {builderClassName}: GraphQueryBuilder<{genericTypeName}, {builderClassName}>"
+            do! $"public sealed class {builderClassName}: QueryBuilder<{genericTypeName}, {builderClassName}>"
 
             if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
                 // Use the builderClassName here, so that the IFieldsBuilder interface methods will return the builder class directly

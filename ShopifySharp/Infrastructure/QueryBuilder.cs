@@ -9,15 +9,15 @@ using ShopifySharp.GraphQL;
 namespace ShopifySharp.Infrastructure;
 
 [PublicAPI]
-public abstract class GraphQueryBuilder<T, TSelf>
+public abstract class QueryBuilder<T, TSelf>
     where T: IGraphQLObject
-    where TSelf : GraphQueryBuilder<T, TSelf>
+    where TSelf : QueryBuilder<T, TSelf>
 {
     protected IQuery<T> Query { get; }
 
     protected abstract TSelf Self { get; }
 
-    protected GraphQueryBuilder(IQuery<T> query)
+    protected QueryBuilder(IQuery<T> query)
     {
         Query = query;
     }
