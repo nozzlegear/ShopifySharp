@@ -19,13 +19,14 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let queryType = $$"""IQuery<{{genericTypeName}}>"""
 
     let writeClassNameAndInheritedType writer: ValueTask =
+        let baseBuilderClassName =
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+                "FieldsQueryBuilder"
+            else
+                "QueryBuilder"
 
         pipeWriter writer {
-            do! $"public sealed class {builderClassName}: QueryBuilder<{genericTypeName}, {builderClassName}>"
-
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
-                // Use the builderClassName here, so that the IFieldsBuilder interface methods will return the builder class directly
-                do! $", IFieldsBuilder<{builderClassName}>"
+            do! $"public sealed class {builderClassName}: {baseBuilderClassName}<{genericTypeName}, {builderClassName}>"
 
             if type'.IsOperation then
                 do! ", IGraphOperationQueryBuilder"
@@ -169,6 +170,8 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 // Generate field methods inline
                 let fieldsWriter = FieldsBuilderWriter(type', builderClassName, context)
                 yield! fieldsWriter.WriteFieldMethodsForQueryBuilder unionsBuilder.UnionFieldBuilders
+            else
+                printfn $"Type {type'.Name} does not support fields."
 
             do! "}"
             do! NewLine
