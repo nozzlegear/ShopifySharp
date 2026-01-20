@@ -154,19 +154,19 @@ public class Query<TSource> : IQuery<TSource>
 public abstract class ArgumentsBuilderBase<TSource, TSelf>(IQuery<TSource> query) : IArgumentsBuilder<TSelf>
     where TSelf : IArgumentsBuilder<TSelf>
 {
-    protected readonly IQuery<TSource> Query = query;
+    protected readonly IQuery<TSource> InnerQuery = query;
 
     protected abstract TSelf Self { get; }
 
     public TSelf AddArgument(string key, object? value)
     {
-        Query.AddArgument(key, value);
+        InnerQuery.AddArgument(key, value);
         return Self;
     }
 
     public TSelf AddArguments(IDictionary<string, object?> arguments)
     {
-        Query.AddArguments(arguments);
+        InnerQuery.AddArguments(arguments);
         return Self;
     }
 }
@@ -175,13 +175,13 @@ public abstract class ArgumentsBuilderBase<TSource, TSelf>(IQuery<TSource> query
 public abstract class UnionCaseBuilderBase<TSource, TSelf>(IQuery<TSource> query): IUnionCaseBuilder<TSelf>
     where TSelf : IUnionCaseBuilder<TSelf>
 {
-    protected readonly IQuery<TSource> Query = query;
+    protected readonly IQuery<TSource> InnerQuery = query;
 
     protected abstract TSelf Self { get; }
 
     public TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery) where TUnionCase : class?
     {
-        Query.AddUnionCase(unionCaseQuery);
+        InnerQuery.AddUnionCase(unionCaseQuery);
         return Self;
     }
 }

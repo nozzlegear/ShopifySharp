@@ -13,18 +13,18 @@ public abstract class QueryBuilder<T, TSelf>
     where T: IGraphQLObject
     where TSelf : QueryBuilder<T, TSelf>
 {
-    protected IQuery<T> Query { get; }
+    protected IQuery<T> InnerQuery { get; }
 
     protected abstract TSelf Self { get; }
 
     protected QueryBuilder(IQuery<T> query)
     {
-        Query = query;
+        InnerQuery = query;
     }
 
     public string Build()
     {
-        var queryContent = Query.Build();
+        var queryContent = InnerQuery.Build();
 
         // If this is a top-level operation builder, wrap it with the operation type
         // ReSharper disable once SuspiciousTypeConversion.Global
@@ -42,7 +42,7 @@ public abstract class QueryBuilder<T, TSelf>
 
     public TSelf WithAlias(string alias)
     {
-        Query.WithAlias(alias);
+        InnerQuery.WithAlias(alias);
         return Self;
     }
 }
