@@ -31,7 +31,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     toCasing Pascal argument.Name
 
                 yield! writeDeprecationAttribute Indented argument.Deprecation
-                do! $"public {builderClassName} AddArgument{pascalArgumentName}({valueType} {camelArgumentName})"
+                do! $"public {builderClassName} {pascalArgumentName}({valueType} {camelArgumentName})"
                 do! NewLine
                 do! DoubleIndented + "{"
                 do! NewLine
