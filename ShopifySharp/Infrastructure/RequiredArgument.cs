@@ -40,7 +40,7 @@ internal static class RequiredArgument
     {
         NotNull(param, paramName);
 
-        if (param.Length == 0)
+        if (param!.Length == 0)
         {
             throw new ArgumentException("Value cannot be empty.", paramName);
         }

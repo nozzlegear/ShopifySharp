@@ -257,13 +257,13 @@ public class QueryStringBuilder : IQueryStringBuilder
     /// <summary>Convert object into dictionary.</summary>
     /// <param name="object">The object.</param>
     /// <returns>The object as dictionary.</returns>
-    private Dictionary<string, object> ObjectToDictionary(object @object) =>
+    private Dictionary<string, object?> ObjectToDictionary(object @object) =>
         @object
             .GetType()
             .GetProperties()
             .Where(property => property.GetValue(@object) != null)
             .Select(property =>
-                new KeyValuePair<string, object>(
+                new KeyValuePair<string, object?>(
                     Formatter is not null ? Formatter.Invoke(property) : property.Name,
                     property.GetValue(@object)))
             .OrderBy(property => property.Key)
