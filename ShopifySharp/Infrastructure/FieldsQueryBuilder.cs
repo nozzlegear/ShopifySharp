@@ -16,26 +16,26 @@ public abstract class FieldsQueryBuilder<T, TSelf> : QueryBuilder<T, TSelf>, IFi
     public TSelf AddField<TSubSource>(IQuery<TSubSource> subQuery)
         where TSubSource : class?
     {
-        Query.AddField(subQuery);
+        InnerQuery.AddField(subQuery);
         return Self;
     }
 
     public TSelf AddField(IQuery subQuery)
     {
-        Query.AddField(subQuery);
+        InnerQuery.AddField(subQuery);
         return Self;
     }
 
     public TSelf AddField(string field)
     {
-        Query.AddField(field);
+        InnerQuery.AddField(field);
         return Self;
     }
 
     public TSelf AddUnionCase<TUnionCase>(IQuery<TUnionCase> unionCaseQuery)
         where TUnionCase : class?
     {
-        Query.AddUnionCase(unionCaseQuery);
+        InnerQuery.AddUnionCase(unionCaseQuery);
         return Self;
     }
 }

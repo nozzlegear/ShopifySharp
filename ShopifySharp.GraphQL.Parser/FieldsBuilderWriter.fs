@@ -44,7 +44,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine + NewLine
                 do! DoubleIndented + "build.Invoke(queryBuilder);"
                 do! NewLine
-                do! DoubleIndented + $"base.Query.AddField<{pascalTypeName}>(query);"
+                do! DoubleIndented + $"base.InnerQuery.AddField<{pascalTypeName}>(query);"
                 do! NewLine + NewLine
                 do! DoubleIndented + "return this;"
                 do! NewLine
@@ -56,7 +56,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $"base.Query.AddField(\"{camelFieldName}\");"
+                do! DoubleIndented + $"base.InnerQuery.AddField(\"{camelFieldName}\");"
                 do! NewLine
                 do! DoubleIndented + $"return this;"
                 do! NewLine
@@ -70,7 +70,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
             do! NewLine
             do! Indented + "{"
             do! NewLine
-            do! DoubleIndented + "// This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being included"
+            do! DoubleIndented + "// This method is a no-op – the value will be included automatically by virtue of this QueryBuilder being used in a query"
             do! NewLine
             do! DoubleIndented + "return this;"
             do! NewLine
@@ -86,13 +86,13 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.Query.Options);"""
+                do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.InnerQuery.Options);"""
                 do! NewLine
                 do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
                 do! NewLine + NewLine
                 do! DoubleIndented + "build.Invoke(unionBuilder);"
                 do! NewLine
-                do! DoubleIndented + "base.Query.AddUnionCase(query);"
+                do! DoubleIndented + "base.InnerQuery.AddUnionCase(query);"
                 do! NewLine + NewLine
                 do! DoubleIndented + "return this;"
                 do! NewLine

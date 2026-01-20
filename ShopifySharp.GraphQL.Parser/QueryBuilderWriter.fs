@@ -74,7 +74,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
-                do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
+                do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.InnerQuery);"""
                 do! NewLine
 
             do! NewLine + "}"
@@ -84,7 +84,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' then
-                do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.Query);"""
+                do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.InnerQuery);"""
                 do! NewLine
 
             do! NewLine + "}"
