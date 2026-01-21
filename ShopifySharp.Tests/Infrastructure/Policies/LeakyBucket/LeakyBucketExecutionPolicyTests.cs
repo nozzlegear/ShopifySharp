@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
 using JetBrains.Annotations;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests.Infrastructure.Policies.LeakyBucket;
@@ -136,7 +130,11 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
   }
 }
 ";
-            await Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await _graphService.PostAsync(query, queryCost)));
+            await Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await _graphService.PostAsync(new GraphRequest
+            {
+                Query = query,
+                EstimatedQueryCost = queryCost
+            })));
         }
         catch (ShopifyRateLimitException)
         {
@@ -210,8 +208,8 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
         await Assert.ThrowsAnyAsync<Exception>(async () =>
         {
             _graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-            string query = "!#@$%$#%";
-            await _graphService.PostAsync(query, 1);
+            const string query = "!#@$%$#%";
+            await _graphService.PostAsync(new GraphRequest{ Query = query, EstimatedQueryCost = 1 });
         });
     }
 
@@ -242,7 +240,7 @@ public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
   }
 }
 ";
-            await _graphService.PostAsync(query, 1);
+            await _graphService.PostAsync(new GraphRequest { Query = query, EstimatedQueryCost = 1 });
         });
     }
 }
