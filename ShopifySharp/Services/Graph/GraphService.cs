@@ -11,7 +11,9 @@ using ShopifySharp.Infrastructure.Serialization.Http;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;
 using ShopifySharp.Extensions;
+using ShopifySharp.GraphQL;
 using JsonException = System.Text.Json.JsonException;
+using Serializer = ShopifySharp.Infrastructure.Serializer;
 
 // ReSharper disable once CheckNamespace
 namespace ShopifySharp;
@@ -154,6 +156,21 @@ public class GraphService : ShopifyService, IGraphService
     public virtual async Task<GraphResult> PostAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
         return await SendAsync(graphRequest, cancellationToken);
+    }
+
+    public virtual async Task<GraphResult<T>> PostAsync<T, TResult>(GraphRequest<TResult> graphRequest, CancellationToken cancellationToken = default)
+        where TResult : IGraphQLObject
+    {
+        RequiredArgument.NotNull(graphRequest, nameof(graphRequest));
+        RequiredArgument.NotNull(graphRequest.Query, nameof(graphRequest.Query));
+
+        return await PostAsync<T>(new GraphRequest
+        {
+            Query = graphRequest.Query!.Build(),
+            EstimatedQueryCost = graphRequest.EstimatedQueryCost,
+            UserErrorHandling = graphRequest.UserErrorHandling,
+            Variables = null,
+        }, cancellationToken);
     }
 
     /// <summary>
