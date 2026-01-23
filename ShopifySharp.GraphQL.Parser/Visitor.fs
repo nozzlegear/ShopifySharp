@@ -1,5 +1,6 @@
 namespace ShopifySharp.GraphQL.Parser
 
+open System
 open System.Diagnostics.CodeAnalysis
 open System.Threading.Tasks
 open GraphQLParser.AST
@@ -33,7 +34,17 @@ type Visitor() =
             VisitedTypes.Class class'
             |> context.SetVisitedType
 
-            class'.InheritedTypeNames
+            // Use original GraphQL interface names (without "I" prefix) to match lookup keys
+            // in VisitedTypeWriter.fs when generating [JsonDerivedType] attributes
+            let originalInterfaceNames =
+                if isNull objectTypeDefinition.Interfaces then
+                    Array.empty
+                else
+                    objectTypeDefinition.Interfaces.Items
+                    |> Array.ofSeq
+                    |> Array.map _.Name.StringValue
+
+            originalInterfaceNames
             |> context.AddInterfaceRelationship class'.Name
 
             NamedType.Class class'.Name
