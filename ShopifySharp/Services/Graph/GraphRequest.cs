@@ -32,7 +32,7 @@ public class GraphRequest
 [PublicAPI]
 public class GraphRequest<TResult> where TResult : IGraphQLObject
 {
-    public IQuery<TResult>? Query { get; set; }
+    public IGraphOperationQueryBuilder<TResult>? Query { get; set; }
 
     /// <summary>
     /// What you estimate this query will cost. Use this value to provide an estimated query cost to any <see cref="IRequestExecutionPolicy" />, to avoid sending a request that will be throttled. This value can be found in the query response data at <c>extensions.cost.requestedQueryCost</c>.
