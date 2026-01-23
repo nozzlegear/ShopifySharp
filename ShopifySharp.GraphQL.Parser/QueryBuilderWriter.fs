@@ -29,7 +29,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! $"public sealed class {builderClassName}: {baseBuilderClassName}<{genericTypeName}, {builderClassName}>"
 
             if type'.IsOperation then
-                do! ", IGraphOperationQueryBuilder"
+                do! $", IGraphOperationQueryBuilder<{genericTypeName}>"
 
             do! NewLine
         }

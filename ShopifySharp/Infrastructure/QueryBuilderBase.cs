@@ -28,7 +28,7 @@ public abstract class QueryBuilderBase<T, TSelf>
 
         // If this is a top-level operation builder, wrap it with the operation type
         // ReSharper disable once SuspiciousTypeConversion.Global
-        if (this is IGraphOperationQueryBuilder operationBuilder)
+        if (this is IGraphOperationQueryBuilder<T> operationBuilder)
         {
             var operationType = operationBuilder.OperationType == OperationType.Query
                 ? "query"

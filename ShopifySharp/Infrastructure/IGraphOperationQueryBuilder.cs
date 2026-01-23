@@ -1,9 +1,12 @@
 #nullable enable
+using System;
 using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;
 
-public interface IGraphOperationQueryBuilder
+// ReSharper disable once UnusedTypeParameter
+public interface IGraphOperationQueryBuilder<TResult> where TResult : IGraphQLObject
 {
     OperationType OperationType { get; }
+    string Build();
 }
