@@ -158,8 +158,8 @@ public class GraphService : ShopifyService, IGraphService
         return await SendAsync(graphRequest, cancellationToken);
     }
 
-    public virtual async Task<GraphResult<T>> PostAsync<T, TResult>(GraphRequest<TResult> graphRequest, CancellationToken cancellationToken = default)
-        where TResult : IGraphQLObject
+    public virtual async Task<GraphResult<T>> PostAsync<T>(GraphRequest<T> graphRequest, CancellationToken cancellationToken = default)
+        where T : IGraphQLObject
     {
         RequiredArgument.NotNull(graphRequest, nameof(graphRequest));
         RequiredArgument.NotNull(graphRequest.Query, nameof(graphRequest.Query));
