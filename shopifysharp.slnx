@@ -1,0 +1,36 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/scripts/">
+    <File Path=".github/scripts/build.fish" />
+    <File Path=".github/scripts/bump-version.fish" />
+    <File Path=".github/scripts/generate_factories.fish" />
+    <File Path=".github/scripts/test-dnf.ps1" />
+    <File Path=".github/scripts/test.fish" />
+    <File Path=".github/scripts/utils.fish" />
+  </Folder>
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/build-and-test.yml" />
+    <File Path=".github/workflows/generate-graphql-types.yml" />
+    <File Path=".github/workflows/release.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+    <File Path="docs/contribution-guide.md" />
+    <File Path="graphql.config.yml" />
+    <File Path="graphql.schema.json" />
+    <File Path="LICENSE" />
+    <File Path="readme.md" />
+  </Folder>
+  <Project Path="ShopifySharp.Extensions.DependencyInjection.Tests/ShopifySharp.Extensions.DependencyInjection.Tests.csproj" />
+  <Project Path="ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" />
+  <Project Path="ShopifySharp.GraphQL.Parser.CLI/ShopifySharp.GraphQL.Parser.CLI.csproj" />
+  <Project Path="ShopifySharp.GraphQL.Parser/ShopifySharp.GraphQL.Parser.fsproj" />
+  <Project Path="ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj" />
+  <Project Path="ShopifySharp.Tests/ShopifySharp.Tests.csproj" />
+  <Project Path="ShopifySharp/ShopifySharp.csproj" />
+</Solution>

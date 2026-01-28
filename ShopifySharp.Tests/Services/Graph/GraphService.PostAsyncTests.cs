@@ -11,6 +11,9 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;
 using ShopifySharp.Tests.TestClasses;
@@ -928,226 +931,256 @@ public class GraphServicePostAsyncTests
 
     #endregion
 
-    [Fact]
-    public async Task PostAsync_DeprecatedMethod_ShouldDeserializeDateStringsProperly()
+    #region PostAsync<T>(GraphRequest<T>, CancellationToken)
+
+    [Theory(DisplayName = "PostAsync<T>(GraphRequest<T>, CancellationToken) should throw if the GraphRequest or GraphRequest.Query are null")]
+    [CombinatorialData]
+    public async Task PostAsync_WithGenericGraphRequest_WhenGraphRequestOrGraphRequestQueryAreNull_ShouldThrow(bool graphRequestIsNull)
     {
         // Setup
-        var response = Utils.MakeRequestResult(ResponseJson);
-
-        A.CallTo(_policy)
-            .WithReturnType<Task<RequestResult<string>>>()
-            .Returns(response);
+        var graphRequest = graphRequestIsNull ? null : new GraphRequest<ShopQueryResponse> { Query = null };
 
         // Act
-        var result = await _sut.PostAsync(QueryJson);
+        var act = async () => await _sut.PostAsync(graphRequest!);
 
         // Assert
-        AssertResults(result);
-    }
+        var parameterName = graphRequestIsNull ? "graphRequest" : "Query";
 
-    [Fact]
-    public async Task PostAsync_DeprecatedMethodWithJTokenParameter_ShouldThrowWhenJTokenIsNull()
-    {
-        // Setup
-        JToken? input = null;
-
-        // Act
-        var act = () => _sut.PostAsync(input!);
-
-        // Assert
         await act.Should()
-            .ThrowExactlyAsync<ArgumentNullException>()
-            .WithParameterName("body");
+            .ThrowAsync<ArgumentNullException>()
+            .WithParameterName(parameterName);
     }
 
-    [Theory]
-    [InlineData("{}", JTokenType.Null)]
-    [InlineData("""{"query": null}""", JTokenType.Null)]
-    [InlineData("""{"query": []}""", JTokenType.Array)]
-    [InlineData("""{"query": {}}""", JTokenType.Object)]
-    [InlineData("""{"query": true}""", JTokenType.Boolean)]
-    [InlineData("""{"query": false}""", JTokenType.Boolean)]
-    [InlineData("""{"query": 123}""", JTokenType.Integer)]
-    public async Task PostAsync_DeprecatedMethodWithJTokenParameter_ShouldThrowWhenJTokenDoesNotContainAValidQueryElement(string jsonValue, JTokenType tokenType)
+    [Fact(DisplayName = "PostAsync<T>(GraphRequest<T>, CancellationToken) should call Build() on the query builder and deserialize the data object to the desired type")]
+    public async Task PostAsync_WithGenericGraphRequest_ShouldCallBuildOnTheQueryBuilderAndDeserializeTheDataObjectToTheDesiredType()
     {
         // Setup
-        var input = JToken.Parse(jsonValue);
-
-        // Act
-        var act = () => _sut.PostAsync(input);
-
-        // Assert
-        await act.Should()
-            .ThrowAsync<ArgumentException>()
-            .WithMessage($"The type of the required `query` property should be String, but it was {tokenType}*")
-            .WithParameterName("body");
-    }
-
-    [Theory]
-    [InlineData("""{"foo": "bar"}""")]
-    [InlineData("{}")]
-    [InlineData("null")]
-    public async Task PostAsync_DeprecatedMethodWithJTokenParameter_ShouldNotThrowWhenJTokenContainsNullOrEmptyVariablesElement(string variablesJson)
-    {
-        // Setup
-        var inputJson =
+        const string expectedName = "some-expected-shop-name";
+        const string expectedId = "gid://shopify/Shop/12345";
+        const string responseJson =
             $$"""
               {
-                "query": "some-query",
-                "variables": {{variablesJson}}
+                  "data": {
+                      "shop": {
+                          "name": "{{expectedName}}",
+                          "id": "{{expectedId}}"
+                      }
+                  }
               }
               """;
+        const string expectedRequestId = "some-expected-request-id";
+        var queryBuilder = A.Fake<IGraphOperationQueryBuilder<ShopQueryResponse>>();
+        var graphRequest = new GraphRequest<ShopQueryResponse> { Query = queryBuilder };
 
+        A.CallTo(() => queryBuilder.Build())
+            .Returns("query { shop { name id } }");
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
-            .Throws<TestException>();
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = () => _sut.PostAsync(inputJson);
+        var result = await _sut.PostAsync(graphRequest);
 
         // Assert
-        await act.Should().ThrowAsync<TestException>();
+        result.Data.Should().NotBeNull();
+        result.Data.Shop.Should().NotBeNull();
+        result.Data.Shop!.name.Should().Be(expectedName);
+        result.Data.Shop!.id.Should().Be(expectedId);
+        result.RequestId.Should().Be(expectedRequestId);
+
+        A.CallTo(() => queryBuilder.Build()).MustHaveHappenedOnceExactly();
     }
 
-    [Fact]
-    public async Task PostAsync_DeprecatedMethodWithJTokenParameter_ShouldDeserializeDateStringsProperly()
+    [Fact(DisplayName = "PostAsync<T>(GraphRequest<T>, CancellationToken) should deserialize the graph extensions object along with the data object")]
+    public async Task PostAsync_WithGenericGraphRequest_ShouldDeserializeTheGraphExtensionsObjectAlongWithTheDataObject()
     {
         // Setup
-        var response = Utils.MakeRequestResult(ResponseJson);
+        const int expectedRequestedQueryCost = 5;
+        const int expectedActualQueryCost = 4;
+        const double expectedMaximumAvailable = 2000.0;
+        const double expectedCurrentlyAvailable = 1996;
+        const double expectedRestoreRate = 100.0;
+        var responseJson =
+            //lang=json
+            $$"""
+              {
+                  "data": {
+                      "shop": {
+                          "name": "some-shop-name"
+                      }
+                  },
+                  "extensions": {
+                      "cost": {
+                          "requestedQueryCost": {{expectedRequestedQueryCost}},
+                          "actualQueryCost": {{expectedActualQueryCost}},
+                          "throttleStatus": {
+                              "maximumAvailable": {{expectedMaximumAvailable}},
+                              "currentlyAvailable": {{expectedCurrentlyAvailable}},
+                              "restoreRate": {{expectedRestoreRate}}
+                          }
+                      }
+                  }
+              }
+              """;
+        const string expectedRequestId = "some-expected-request-id";
+        var queryBuilder = A.Fake<IGraphOperationQueryBuilder<ShopQueryResponse>>();
+        var graphRequest = new GraphRequest<ShopQueryResponse> { Query = queryBuilder };
+        var expectedExtensions = new GraphExtensions
+        {
+            Cost = new GraphRequestCostExtension
+            {
+                ActualQueryCost = expectedActualQueryCost,
+                RequestedQueryCost = expectedRequestedQueryCost,
+                ThrottleStatus = new GraphRequestCostThrottleStatusExtension
+                {
+                    RestoreRate = expectedRestoreRate,
+                    CurrentlyAvailable = expectedCurrentlyAvailable,
+                    MaximumAvailable = expectedMaximumAvailable
+                }
+            }
+        };
 
+        A.CallTo(() => queryBuilder.Build())
+            .Returns("query { shop { name } }");
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
-            .Returns(response);
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var result = await _sut.PostAsync(InputJson);
+        var act = async () => await _sut.PostAsync(graphRequest);
 
         // Assert
-        AssertResults(result);
+        await act.Should()
+            .NotThrowAsync();
+
+        var result = await act();
+        result.Data.Should().NotBeNull();
+        result.Extensions.Should().NotBeNull().And.BeEquivalentTo(expectedExtensions);
     }
 
-    [Theory(DisplayName = "PostAsync (deprecated methods), when using each policy, should deserialize the response to a JToken")]
+    [Theory(DisplayName = "PostAsync<T>(GraphRequest<T>, CancellationToken) should throw when the root \"data\" property contains user errors and the GraphRequest is configured to throw")]
     [CombinatorialData]
-    public async Task PostAsync_DeprecatedMethods_WhenUsingEachPolicy_ShouldDeserializeResponseToExpectedResult(
-        [CombinatorialMemberData(nameof(MakeFakedExecutionPoliciesList), null)] IRequestExecutionPolicy policy,
-        bool withVariables
-    )
-    {
-        // Setup
-        var response = Utils.MakeRequestResult(ResponseJson);
-
-        _sut.SetExecutionPolicy(policy);
-        A.CallTo(policy)
-            .WithReturnType<Task<RequestResult<string>>>()
-            .Returns(response);
-
-        // Act
-        JToken result;
-
-        if (withVariables)
-            result = await _sut.PostAsync(JToken.Parse(InputJson));
-        else
-            result = await _sut.PostAsync(QueryJson);
-
-        // Assert
-        AssertResults(result);
-    }
-
-    [Theory]
-    [CombinatorialData]
-    public async Task PostAsync_DeprecatedMethods_WhenResponseContainsUserErrors_ShouldThrowShopifyGraphUserErrorsException(
-        bool withVariables
+    public async Task PostAsync_WithGenericGraphRequest_WhenTheRootDataPropertyContainsUserErrorsAndTheGraphRequestIsConfiguredToThrow_ShouldThrow(
+        GraphRequestUserErrorHandling userErrorHandling
     )
     {
         // Setup
         const string responseJson =
-          """
-          {
-            "data" : {
-              "orders" : {
-                "userErrors": [{ "code": "foo", "message": "bar" }]
-              }
+            """
+            {
+                "data": {
+                    "shop": {
+                        "name": "some-shop-name",
+                        "userErrors": [{ "code": "foo", "message": "bar" }]
+                    }
+                }
             }
-          }
-          """;
-        var response = Utils.MakeRequestResult(responseJson);
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var queryBuilder = A.Fake<IGraphOperationQueryBuilder<ShopQueryResponse>>();
+        var graphRequest = new GraphRequest<ShopQueryResponse>
+        {
+            Query = queryBuilder,
+            UserErrorHandling = userErrorHandling
+        };
 
+        A.CallTo(() => queryBuilder.Build())
+            .Returns("query { shop { name } }");
         A.CallTo(_policy)
             .WithReturnType<Task<RequestResult<string>>>()
-            .Returns(response);
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        Func<Task<JToken>> result;
-
-        if (withVariables)
-        {
-            JToken parsedToken = JToken.Parse(InputJson);
-            result = () => _sut.PostAsync(parsedToken);
-        }
-        else
-            result = () => _sut.PostAsync(QueryJson);
+        var act = async () => await _sut.PostAsync(graphRequest);
 
         // Assert
-        await result.Should()
-            .ThrowExactlyAsync<ShopifyGraphUserErrorsException>()
-            .WithMessage("foo: bar");
+        if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
+            await act.Should()
+                .ThrowAsync<ShopifyGraphUserErrorsException>()
+                .Where(x => x.RequestId == expectedRequestId);
+        else
+            await act.Should().NotThrowAsync();
     }
 
-    [Fact(DisplayName = "Lists orders using the GraphService")]
-    public async Task PostAsync_DeprecatedMethods_ShouldListOrders()
+    [Fact(DisplayName = "PostAsync<T>(GraphRequest<T>, CancellationToken) should throw a ShopifyJsonParseException when given invalid JSON")]
+    public async Task PostAsync_WithGenericGraphRequest_WhenGivenInvalidJson_ShouldThrowAShopifyJsonParseException()
     {
         // Setup
-        const string query = @"
-              query listOrdersWithTag($limit: Int!) {
-                orders(first: $limit) {
-                  pageInfo {
-                    hasNextPage
-                    hasPreviousPage
-                  }
-                  edges {
-                    cursor
-                    node {
-                      id
-                      name
-                      tags
+        const string responseJson =
+            """
+            {
+                "data": {
+                    "shop": {
+                        "name": this is an invalid json string
                     }
-                  }
                 }
-              }
-            ";
-        var variables = new Dictionary<string, object>
-        {
-            { "limit", 10 }
-        };
-        var serializerSettings = Serializer.CreateNewtonsoftSettings();
-        var serializer = NewtonsoftSerializer.Create(serializerSettings);
-        var requestBody =  JToken.FromObject(new
-        {
-            // ReSharper disable twice RedundantAnonymousTypePropertyName
-            query = query,
-            variables = variables
-        }, serializer);
+            }
+            """;
+        const string expectedRequestId = "some-expected-request-id";
+        var queryBuilder = A.Fake<IGraphOperationQueryBuilder<ShopQueryResponse>>();
+        var graphRequest = new GraphRequest<ShopQueryResponse> { Query = queryBuilder };
 
-        // This is an integration test, so use a real execution policy
-        _sut.SetExecutionPolicy(new DefaultRequestExecutionPolicy());
+        A.CallTo(() => queryBuilder.Build())
+            .Returns("query { shop { name } }");
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var jToken = await _sut.PostAsync(requestBody);
-        var listResult = jToken["orders"]?.ToObject<GraphListOrdersResult>();
+        var act = async () => await _sut.PostAsync(graphRequest);
 
         // Assert
-        listResult.Should().NotBeNull();
-        listResult?.PageInfo.Should().NotBeNull();
-        listResult?.Edges.Should().NotBeNullOrEmpty();
-        listResult?.Edges.Should().AllSatisfy(edge =>
-        {
-            edge.Cursor.Should().NotBeNullOrWhiteSpace();
-            edge.Node.Should().NotBeNull();
-            edge.Node.Id.Should().NotBeNullOrWhiteSpace();
-            edge.Node.Name.Should().NotBeNullOrWhiteSpace();
-            edge.Node.Tags.Should().NotBeNull();
-        });
+        var exn = await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>();
+        exn.Which
+            .RequestId.Should().Be(expectedRequestId);
+        exn.Which
+            .JsonPropertyName.Should().Be("$.");
+        exn.WithInnerException(typeof(JsonException))
+            .Which.As<JsonException>()
+            .Path.Should().BeNull(exn.Which.JsonPropertyName);
     }
+
+    [Theory(DisplayName = "PostAsync<T>(GraphRequest<T>, CancellationToken) should throw a ShopifyJsonParseException when the data object is null, missing or does not match the expected primitive type")]
+    [InlineData(""" "data": null """, JsonValueKind.Null)]
+    [InlineData(""" "data": true """, JsonValueKind.True)]
+    [InlineData(""" "data": false """, JsonValueKind.False)]
+    [InlineData(""" "data": "some string" """, JsonValueKind.String)]
+    [InlineData(""" "data": 123 """, JsonValueKind.Number)]
+    [InlineData(""" "data": ["an array"] """, JsonValueKind.Array)]
+    [InlineData("", JsonValueKind.Undefined)]
+    public async Task PostAsync_WithGenericGraphRequest_WhenTheDataObjectIsNullOrMissingOrDoesNotMatchTheExpectedPrimitiveType_ShouldThrowAShopifyJsonParseException(
+        string dataJson,
+        JsonValueKind jsonValueKind
+    )
+    {
+        // Setup
+        var responseJson = $$""" { {{dataJson}} } """;
+        const string expectedRequestId = "some-expected-request-id";
+        var queryBuilder = A.Fake<IGraphOperationQueryBuilder<ShopQueryResponse>>();
+        var graphRequest = new GraphRequest<ShopQueryResponse> { Query = queryBuilder };
+
+        A.CallTo(() => queryBuilder.Build())
+            .Returns("query { shop { name } }");
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
+
+        // Act
+        var act = async () => await _sut.PostAsync(graphRequest);
+
+        // Assert
+        var exn = await act.Should()
+            .ThrowAsync<ShopifyJsonParseException>()
+            .WithMessage(jsonValueKind == JsonValueKind.Undefined
+                ? "The JSON response from Shopify does not contain the expected 'data' property."
+                : $"The JSON response from Shopify contains an invalid 'data' property of type '{jsonValueKind}', but a property of type 'Object' is required.");
+        exn.And.JsonPropertyName.Should().Be("data");
+        exn.And.RequestId.Should().Be(expectedRequestId);
+        exn.And.InnerException.Should().BeNull();
+    }
+
+    #endregion
 
     /// <summary>
     /// Asserts that the results of the deprecated PostAsync methods match what is expected.
@@ -1247,5 +1280,16 @@ public class GraphServicePostAsyncTests
         /// Value is the invalid type.
         /// </summary>
         public T? Value { get; set; }
+    }
+
+    /// <summary>
+    /// A wrapper type for deserializing GraphQL responses that return a <see cref="ShopifySharp.GraphQL.Shop"/> in a "shop" property.
+    /// This wraps the generated Shop type to match the JSON structure: {"data": {"shop": {...}}}
+    /// </summary>
+    [Serializable]
+    public class ShopQueryResponse : IGraphQLObject
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("shop")]
+        public ShopifySharp.GraphQL.Shop? Shop { get; set; }
     }
 }

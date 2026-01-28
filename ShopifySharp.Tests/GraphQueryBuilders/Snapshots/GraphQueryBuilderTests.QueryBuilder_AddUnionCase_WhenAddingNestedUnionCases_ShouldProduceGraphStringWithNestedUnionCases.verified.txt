@@ -1,0 +1,1 @@
+﻿metafield{jsonValue createdAt reference{... on Customer{id ... on some-custom-union-type{some-sub-field-name __typename}} __typename}}
