@@ -27,11 +27,23 @@ public class GraphRequest
     /// Tells the service whether it should throw an exception or not when it detects a `userErrors` list containing at least one error.
     /// </summary>
     public GraphRequestUserErrorHandling UserErrorHandling { get; set; } = GraphRequestUserErrorHandling.Throw;
+
+    public static GraphRequest<TResult> FromQueryBuilder<TResult>(IGraphOperationQueryBuilder<TResult> query)
+        where TResult : IGraphQLObject => new(query);
 }
 
 [PublicAPI]
-public class GraphRequest<TResult> where TResult : IGraphQLObject
+ public class GraphRequest<TResult> where TResult : IGraphQLObject
 {
+    public GraphRequest()
+    {
+    }
+
+    public GraphRequest(IGraphOperationQueryBuilder<TResult> query)
+    {
+        Query = query;
+    }
+
     public IGraphOperationQueryBuilder<TResult>? Query { get; set; }
 
     /// <summary>
