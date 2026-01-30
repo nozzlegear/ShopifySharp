@@ -25,7 +25,7 @@ module AstNodeMapper =
         | FieldValueType.Float -> "float"
         | FieldValueType.Boolean -> "bool"
         | FieldValueType.String -> "string"
-        | FieldValueType.DateTime -> "DateTime"
+        | FieldValueType.DateTimeOffset -> "DateTimeOffset"
         | FieldValueType.DateOnly -> "DateOnly"
         | FieldValueType.TimeSpan -> "TimeSpan"
         | FieldValueType.GraphObjectType (NamedType.Interface graphInterfaceName) ->
@@ -118,7 +118,7 @@ module AstNodeMapper =
         "Money", FieldValueType.Decimal
         "Decimal", FieldValueType.Decimal
         "Float", FieldValueType.Decimal
-        "DateTime", FieldValueType.DateTime // GraphQL DateTimes are always UTC
+        "DateTime", FieldValueType.DateTimeOffset // GraphQL DateTimes are always UTC
         "Date", FieldValueType.DateOnly
         "UtcOffset", FieldValueType.TimeSpan
         "URL", FieldValueType.String

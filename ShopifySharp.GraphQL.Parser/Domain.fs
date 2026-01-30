@@ -71,7 +71,7 @@ type FieldValueType =
     | Float
     | Boolean
     | String
-    | DateTime
+    | DateTimeOffset
     | DateOnly
     | TimeSpan
     | GraphObjectType of graphObjectType: NamedType
