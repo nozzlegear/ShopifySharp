@@ -4,6 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+#if NET6_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -24,17 +27,17 @@ namespace ShopifySharp;
 public class GraphService : ShopifyService, IGraphService
 {
     private const string DataPropertyName = "data";
+    private const string RootPath = "$.";
 
     private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly IJsonSerializer _jsonSerializer;
-    private readonly string? _apiVersion;
 
-    public override string APIVersion => _apiVersion ?? base.APIVersion;
+    public override string APIVersion => field ?? base.APIVersion;
 
     internal GraphService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider, string? apiVersion = null)
         : base(shopifyApiCredentials, serviceProvider)
     {
-        _apiVersion = apiVersion;
+        APIVersion = apiVersion;
         (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(serviceProvider);
     }
 
@@ -44,7 +47,7 @@ public class GraphService : ShopifyService, IGraphService
         IShopifyDomainUtility? shopifyDomainUtility = null
     ) : base(shopifyApiCredentials, shopifyDomainUtility)
     {
-        _apiVersion = apiVersion;
+        APIVersion = apiVersion;
         (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
@@ -54,7 +57,7 @@ public class GraphService : ShopifyService, IGraphService
         string? apiVersion = null
     ) : base(myShopifyUrl, shopAccessToken)
     {
-        _apiVersion = apiVersion;
+        APIVersion = apiVersion;
         (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
@@ -64,7 +67,7 @@ public class GraphService : ShopifyService, IGraphService
         IShopifyDomainUtility shopifyDomainUtility
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
-        _apiVersion = null;
+        APIVersion = null;
         (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
@@ -164,7 +167,6 @@ public class GraphService : ShopifyService, IGraphService
     /// <exception cref="ShopifyJsonParseException">Thrown when the json serializer fails to parse data while checking for errors, or while parsing the json document itself.</exception>
     protected async Task<GraphResult> SendAsync(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
-        const string rootPath = "$.";
         var requestUri = BuildRequestUri("graphql.json");
         using var requestContent = _httpContentSerializer.SerializeGraphRequest(requestUri, graphRequest);
         var result = await ExecuteRequestCoreAsync(requestUri, HttpMethod.Post, requestContent, null, graphRequest.EstimatedQueryCost, cancellationToken);
@@ -176,33 +178,16 @@ public class GraphService : ShopifyService, IGraphService
         {
             jsonDocument = _jsonSerializer.Parse(result.RawResult);
         }
-        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported"))
+        catch (NotSupportedException exn) when (IsDeserializationTypeException(exn))
         {
-            var offendingPath = exn.GetOffendingPathFromMessage();
-            throw new ShopifyUnsupportedTypeDeserializationException(
-                rootType: typeof(IJsonElement),
-                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
-                offendingType: exn.GetOffendingTypeFromMessage(),
-                requestId: requestId,
-                innerException: exn
-            );
+            RethrowDeserializationException(exn, typeof(IJsonElement), requestId);
+            throw; // Unreachable, but keeps the compiler happy
         }
-        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("The JSON payload for polymorphic interface or abstract type") && exn.Message.ContainsIgnoreCase("must specify a type discriminator."))
-        {
-            var offendingPath = exn.GetOffendingPathFromMessage();
-            throw new ShopifyUnspecifiedTypeDiscriminatorException(
-                rootType: typeof(IJsonElement),
-                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
-                offendingType: exn.GetOffendingTypeFromMessage(),
-                requestId: requestId,
-                innerException: exn
-            );
-        }
-        catch (Exception ex)  when (ex is not ShopifyJsonParseException)
+        catch (Exception ex) when (ex is not ShopifyJsonParseException)
         {
             throw new ShopifyJsonParseException(
                 "Failed to parse Shopify's response into a JSON document. Check the inner exception for more details.",
-                jsonPropertyName: (ex is JsonException jxn ? jxn.Path : null) ?? rootPath,
+                jsonPropertyName: GetJsonPathOrDefault(ex, RootPath),
                 requestId: requestId,
                 innerException: ex);
         }
@@ -220,7 +205,7 @@ public class GraphService : ShopifyService, IGraphService
             jsonDocument.Dispose();
             throw new ShopifyJsonParseException(
                 "An exception was thrown while checking the json document for errors returned by Shopify. Check the inner exception for more details.",
-                jsonPropertyName: (exn is JsonException jxn ? jxn.Path : null) ?? rootPath,
+                jsonPropertyName: GetJsonPathOrDefault(exn, RootPath),
                 requestId: requestId,
                 innerException: exn);
         }
@@ -240,25 +225,46 @@ public class GraphService : ShopifyService, IGraphService
     private bool TryParseUserErrors(IJsonElement jsonProperty, string? requestId, out IReadOnlyList<GraphUserError> userErrors)
     {
         const string userErrorsPropertyName = "userErrors";
-        const string userErrorsPropertyPath = $"$.{userErrorsPropertyName}";
         userErrors = [];
 
-        if (!jsonProperty.TryGetProperty(userErrorsPropertyName, out var userErrorsProperty))
+        if (!TryGetNonEmptyArrayProperty(jsonProperty, userErrorsPropertyName, requestId, out var userErrorsProperty))
             return false;
 
-        if (userErrorsProperty.ValueType != JsonValueType.Array)
-            throw new ShopifyJsonParseException(
-                $"Failed to parse {userErrorsPropertyName} property, expected {JsonValueType.Array} but got {userErrorsProperty.ValueType}.",
-                jsonPropertyName: userErrorsPropertyPath,
-                requestId: requestId);
-
-        if (userErrorsProperty.GetArrayLength() == 0)
-            return false;
-
-        userErrors = _jsonSerializer.Deserialize<IReadOnlyList<GraphUserError>>(userErrorsProperty) ?? [];
+        userErrors = _jsonSerializer.Deserialize<IReadOnlyList<GraphUserError>>(userErrorsProperty!) ?? [];
 
         return userErrors.Count > 0;
     }
+
+    private static bool TryGetNonEmptyArrayProperty(
+        IJsonElement element,
+        string propertyName,
+        string? requestId,
+        #if NET6_0_OR_GREATER
+        [NotNullWhen(true)]
+        #endif
+        out IJsonElement? arrayElement
+    )
+    {
+        arrayElement = null;
+
+        if (!element.TryGetProperty(propertyName, out var prop))
+            return false;
+
+        if (prop.ValueType != JsonValueType.Array)
+            throw new ShopifyJsonParseException(
+                $"Failed to parse {propertyName} property, expected {JsonValueType.Array} but got {prop.ValueType}.",
+                $"{RootPath}{propertyName}",
+                requestId);
+
+        if (prop.GetArrayLength() == 0)
+            return false;
+
+        arrayElement = prop;
+        return true;
+    }
+
+    private static string GetJsonPathOrDefault(Exception exn, string defaultPath) =>
+        (exn as JsonException)?.Path ?? defaultPath;
 
     /// <summary>
     /// Gets the <paramref name="jsonDocument"/>'s <c>data</c> node. Throws a <see cref="ShopifyJsonParseException"/>
@@ -285,6 +291,25 @@ public class GraphService : ShopifyService, IGraphService
         return dataElement;
     }
 
+    private static void RethrowDeserializationException(NotSupportedException exn, Type rootType, string? requestId)
+    {
+        var offendingPath = exn.GetOffendingPathFromMessage();
+        var jsonPath = offendingPath is null or "$" ? DataPropertyName : offendingPath;
+        var offendingType = exn.GetOffendingTypeFromMessage();
+
+        if (exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported"))
+            throw new ShopifyUnsupportedTypeDeserializationException(rootType, jsonPath, offendingType, requestId, exn);
+
+        if (exn.Message.StartsWithIgnoreCase("The JSON payload for polymorphic interface or abstract type")
+            && exn.Message.ContainsIgnoreCase("must specify a type discriminator."))
+            throw new ShopifyUnspecifiedTypeDiscriminatorException(rootType, jsonPath, offendingType, requestId, exn);
+    }
+
+    private static bool IsDeserializationTypeException(NotSupportedException exn) =>
+        exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported") ||
+        (exn.Message.StartsWithIgnoreCase("The JSON payload for polymorphic interface or abstract type")
+         && exn.Message.ContainsIgnoreCase("must specify a type discriminator."));
+
     private async Task<object> DeserializeJsonElementToTypeAsync(IJsonElement jsonElement, Type resultType, string? requestId, CancellationToken cancellationToken = default)
     {
         object? data;
@@ -293,29 +318,12 @@ public class GraphService : ShopifyService, IGraphService
         {
             data = await _jsonSerializer.DeserializeAsync(jsonElement, resultType, cancellationToken);
         }
-        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("Deserialization of interface or abstract types is not supported"))
+        catch (NotSupportedException exn) when (IsDeserializationTypeException(exn))
         {
-            var offendingPath = exn.GetOffendingPathFromMessage();
-            throw new ShopifyUnsupportedTypeDeserializationException(
-                rootType: resultType,
-                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
-                offendingType: exn.GetOffendingTypeFromMessage(),
-                requestId: requestId,
-                innerException: exn
-            );
+            RethrowDeserializationException(exn, resultType, requestId);
+            throw; // Unreachable, but keeps the compiler happy
         }
-        catch (NotSupportedException exn) when (exn.Message.StartsWithIgnoreCase("The JSON payload for polymorphic interface or abstract type") && exn.Message.ContainsIgnoreCase("must specify a type discriminator."))
-        {
-            var offendingPath = exn.GetOffendingPathFromMessage();
-            throw new ShopifyUnspecifiedTypeDiscriminatorException(
-                rootType: resultType,
-                jsonPath: offendingPath is null or "$" ? DataPropertyName : offendingPath,
-                offendingType: exn.GetOffendingTypeFromMessage(),
-                requestId: requestId,
-                innerException: exn
-            );
-        }
-        catch (Exception exn)  when (exn is not ShopifyJsonParseException)
+        catch (Exception exn) when (exn is not ShopifyJsonParseException)
         {
             throw new ShopifyJsonParseException(
                 $"The json serializer threw a {exn.GetType().FullName} exception when deserializing the '{DataPropertyName}' property into a {resultType.FullName}. Check the inner exception for more details.",
@@ -364,21 +372,11 @@ public class GraphService : ShopifyService, IGraphService
     protected void ThrowIfResponseContainsGraphRequestErrors(IJsonElement jsonElement, string? requestId)
     {
         const string propertyName = "errors";
-        const string propertyPath = $"$.{propertyName}";
 
-        if (!jsonElement.TryGetProperty(propertyName, out var jsonProperty))
+        if (!TryGetNonEmptyArrayProperty(jsonElement, propertyName, requestId, out var jsonProperty))
             return;
 
-        if (jsonProperty.ValueType != JsonValueType.Array)
-            throw new ShopifyJsonParseException(
-                $"Failed to parse {propertyName} property, expected {JsonValueType.Array} but got {jsonProperty.ValueType}.",
-                jsonPropertyName: propertyPath,
-                requestId: requestId);
-
-        if (jsonProperty.GetArrayLength() == 0)
-            return;
-
-        throw new ShopifyGraphErrorsException(_jsonSerializer.Deserialize<IReadOnlyList<GraphError>>(jsonProperty) ?? [], requestId);
+        throw new ShopifyGraphErrorsException(_jsonSerializer.Deserialize<IReadOnlyList<GraphError>>(jsonProperty!) ?? [], requestId);
     }
 
     protected async ValueTask<GraphExtensions?> ParseGraphExtensionsAsync(
@@ -387,7 +385,7 @@ public class GraphService : ShopifyService, IGraphService
         CancellationToken cancellationToken = default)
     {
         const string extensionsPropertyName = "extensions";
-        const string extensionsPropertyPath = $"$.{extensionsPropertyName}";
+        const string extensionsPropertyPath = $"{RootPath}{extensionsPropertyName}";
 
         if (!jsonElement.TryGetProperty(extensionsPropertyName, out var extensions))
             return null;
@@ -412,7 +410,7 @@ public class GraphService : ShopifyService, IGraphService
         {
             throw new ShopifyJsonParseException(
                 $"Failed to parse the '{extensionsPropertyName}' property into a {nameof(GraphExtensions)} object. Check the inner exception for more details.",
-                jsonPropertyName: (exn is JsonException jxn ? jxn.Path : null) ?? extensionsPropertyPath,
+                jsonPropertyName: GetJsonPathOrDefault(exn, extensionsPropertyPath),
                 requestId,
                 exn);
         }
