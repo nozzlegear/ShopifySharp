@@ -1,25 +1,13 @@
 #pragma warning disable CS0618 // Type or member is obsolete
 #nullable enable
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using FakeItEasy;
 using FakeItEasy.Configuration;
-using FluentAssertions;
 using JetBrains.Annotations;
-using Newtonsoft.Json.Linq;
-using ShopifySharp.GraphQL;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;
 using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Tests.Utilities;
-using Xunit;
-using NewtonsoftSerializer = Newtonsoft.Json.JsonSerializer;
 using Serializer = ShopifySharp.Infrastructure.Serializer;
 
 namespace ShopifySharp.Tests.Services.Graph;
@@ -30,58 +18,6 @@ public class GraphServicePostAsyncTests
     private static readonly DateTimeOffset ExpectedDate = DateTimeOffset.Parse(ExpectedDateStr);
 
     private const string ExpectedDateStr = "2024-11-20T01:05:03Z";
-    private const string ResponseJson =
-        $$"""
-        {
-          "data" : {
-            "orders" : {
-              "edges" : [ {
-                "node" : {
-                  "updatedAt" : "{{ExpectedDateStr}}"
-                }
-              } ]
-            }
-          },
-          "extensions" : {
-            "cost" : {
-              "requestedQueryCost" : 3,
-              "actualQueryCost" : 3,
-              "throttleStatus" : {
-                "maximumAvailable" : 2000.0,
-                "currentlyAvailable" : 1997,
-                "restoreRate" : 100.0
-              }
-            }
-          }
-        }
-        """;
-    private const string QueryJson =
-        """
-        {
-           orders(first: 1, query: "id: 123456") {
-               edges {
-                   node {
-                       updatedAt
-                   }
-               }
-           }
-        }
-        """;
-    private const string ExpectedQuery = "some-expected-query";
-    private const string ExpectedVariableKey1 = "foo";
-    private const string ExpectedVariableKey2 = "baz";
-    private const string ExpectedVariableValue1 = "bar";
-    private const string ExpectedVariableValue2 = "true";
-    private const string InputJson =
-        $$"""
-          {
-            "query": "{{ExpectedQuery}}",
-            "variables": {
-              "{{ExpectedVariableKey1}}": "{{ExpectedVariableValue1}}",
-              "{{ExpectedVariableKey2}}": {{ExpectedVariableValue2}}
-            }
-          }
-          """;
 
     private readonly IRequestExecutionPolicy _policy = A.Fake<IRequestExecutionPolicy>();
     private readonly IJsonSerializer _jsonSerializer = A.Fake<IJsonSerializer>(x => x.Wrapping(new SystemJsonSerializer(Serializer.GraphSerializerOptions)));
@@ -989,7 +925,7 @@ public class GraphServicePostAsyncTests
         result.Data.Should().NotBeNull();
         result.Data.Should().NotBeNull();
         result.Data.name.Should().Be(expectedName);
-        result.Data!.id.Should().Be(expectedId);
+        result.Data.id.Should().Be(expectedId);
         result.RequestId.Should().Be(expectedRequestId);
 
         A.CallTo(() => queryBuilder.Build()).MustHaveHappenedOnceExactly();
@@ -1345,6 +1281,7 @@ public class GraphServicePostAsyncTests
             .Throws<OperationCanceledException>();
 
         // Act
+        // ReSharper disable once AccessToDisposedClosure
         var act = async () => await _sut.PostAsync(graphRequest, cts.Token);
 
         // Assert
@@ -1352,28 +1289,6 @@ public class GraphServicePostAsyncTests
     }
 
     #endregion
-
-    /// <summary>
-    /// Asserts that the results of the deprecated PostAsync methods match what is expected.
-    /// </summary>
-    private static void AssertResults(JToken result)
-    {
-        var order = result["orders"]?["edges"]?.First?["node"];
-
-        order.Should().NotBeNull();
-
-        order!.ToObject<TestGraphQlOrderWithString>()
-            .Should()
-            .BeEquivalentTo(new TestGraphQlOrderWithString { UpdatedAt = ExpectedDateStr });
-
-        order.ToObject<TestGraphQlOrderWithDateTimeOffset>()
-            .Should()
-            .BeEquivalentTo(new TestGraphQlOrderWithDateTimeOffset { UpdatedAt = ExpectedDate });
-
-        order.ToObject<TestGraphQlOrderWithDateTime>()
-            .Should()
-            .BeEquivalentTo(new TestGraphQlOrderWithDateTime { UpdatedAt = ExpectedDate.DateTime });
-    }
 
     [Serializable]
     public class TestGraphQlOrderWithString
@@ -1424,16 +1339,10 @@ public class GraphServicePostAsyncTests
         public virtual ITestBaz? Foo { get; set; }
     }
 
-    public record TestFoo(ITestBaz? Foo) : TestFooBase;
-
     public interface ITestBaz
     {
         string? Baz { get; }
     }
-
-    public abstract record TestBazBase(string? Baz) : ITestBaz;
-
-    public record TestBaz(string? Baz) : ITestBaz;
 
     public interface IInvalidDeserializationTestInterface
     {
