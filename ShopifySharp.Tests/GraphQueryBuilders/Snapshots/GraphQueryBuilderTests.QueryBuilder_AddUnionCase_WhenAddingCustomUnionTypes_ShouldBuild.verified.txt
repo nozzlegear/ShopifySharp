@@ -1,0 +1,1 @@
+﻿customThing{createdAt ... on some-custom-union-type{some-sub-field-name __typename}}

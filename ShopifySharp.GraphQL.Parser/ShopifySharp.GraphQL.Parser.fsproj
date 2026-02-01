@@ -1,16 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <Compile Include="Domain.fs" />
+        <Compile Include="Reserved.fs" />
         <Compile Include="PipeWriterComputationBuilder.fs" />
+        <Compile Include="AstNodeMapper.fs" />
+        <Compile Include="Utils.fs" />
+        <Compile Include="FileSystem.fs" />
+        <Compile Include="ArgumentsBuilderWriter.fs" />
+        <Compile Include="UnionCasesBuilderWriter.fs" />
+        <Compile Include="UnionsBuilderWriter.fs" />
+        <Compile Include="FieldsBuilderWriter.fs" />
+        <Compile Include="QueryBuilderWriter.fs" />
         <Compile Include="Visitor.fs" />
-        <Compile Include="Writer.fs" />
+        <Compile Include="VisitedTypeWriter.fs" />
         <Compile Include="Parser.fs" />
     </ItemGroup>
     <ItemGroup>

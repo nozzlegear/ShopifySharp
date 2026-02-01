@@ -33,9 +33,9 @@ public class GenerateGraphQlSchemaTest
             { "Color", "string" },
             { "BigInt", "long" },
         };
-        string csharpCode = await new GraphQLTypeGenerator().GenerateTypesAsync("ShopifySharp.GraphQL", scalarNameToTypeName, async query =>
+        var csharpCode = await new GraphQLTypeGenerator().GenerateTypesAsync("ShopifySharp.GraphQL", scalarNameToTypeName, async query =>
         {
-            var res = await new GraphService(Utils.Credentials).PostAsync(query);
+            var res = await new GraphService(Utils.Credentials).PostAsync(new GraphRequest{ Query = query });
             var doc = JsonDocument.Parse(res.ToString());
             return doc;
         });
