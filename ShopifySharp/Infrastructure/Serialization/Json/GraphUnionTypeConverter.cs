@@ -75,15 +75,15 @@ internal class GraphUnionTypeConverter<TUnion> : JsonConverter<TUnion>
         return (TUnion)constructor.Invoke([concreteObject]);
     }
 
-    public override void Write(Utf8JsonWriter writer, TUnion? value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter jsonWriter, TUnion? value, JsonSerializerOptions options)
     {
+        var writer = new SystemJsonWriter(jsonWriter);
+
         if (value == null)
         {
             writer.WriteNullValue();
             return;
         }
-
-        var serializer = ResolveSerializer(options);
 
         // Get the Value property from the wrapper and serialize it
         var valueProperty = value.GetType().GetProperty("Value");
@@ -92,14 +92,24 @@ internal class GraphUnionTypeConverter<TUnion> : JsonConverter<TUnion>
             var wrappedValue = valueProperty.GetValue(value);
             if (wrappedValue != null)
             {
-                serializer.Serialize(wrappedValue);
-                //JsonSerializer.Serialize(writer, wrappedValue, options);
+                // Create a new options instance without this converter to avoid infinite recursion
+                var newOptions = new JsonSerializerOptions(options);
+                var convertersToRemove = newOptions.Converters
+                    .Where(c => c.GetType().IsGenericType &&
+                        c.GetType().GetGenericTypeDefinition() == typeof(GraphUnionTypeConverter<>))
+                    .ToList();
+
+                foreach (var converter in convertersToRemove)
+                    newOptions.Converters.Remove(converter);
+
+                // Serialize the wrapped value using the new options
+                var serializer = ResolveSerializer(newOptions);
+                serializer.Serialize(writer, wrappedValue, wrappedValue.GetType());
                 return;
             }
         }
 
-        // Fallback to direct serialization
-        //JsonSerializer.Serialize(writer, value, value.GetType(), options);
-        serializer.Serialize(value);
+        // If Value is null or doesn't exist, write null
+        writer.WriteNullValue();
     }
 }
