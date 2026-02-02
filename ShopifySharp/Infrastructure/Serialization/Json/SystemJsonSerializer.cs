@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace ShopifySharp.Infrastructure.Serialization.Json;
 
@@ -12,6 +13,9 @@ internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerial
 {
     private static SystemJsonElement Guard(IJsonElement element) =>
         element as SystemJsonElement ?? throw new ArgumentException($"Expected a {nameof(SystemJsonElement)} but got {element.GetType().FullName}.", nameof(element));
+
+    private static SystemJsonWriter Guard(IJsonWriter writer) =>
+        writer as SystemJsonWriter ?? throw new ArgumentException($"Expected a {nameof(SystemJsonWriter)} but got {writer.GetType().FullName}.", nameof(writer));
 
     private static MemoryStream ToStream(IJsonElement value)
     {
@@ -30,6 +34,12 @@ internal class SystemJsonSerializer(JsonSerializerOptions options) : IJsonSerial
 
     public string Serialize<T>(T item) =>
         JsonSerializer.Serialize(item, options);
+
+    public void Serialize(IJsonWriter writer,
+        object? value,
+        [MeansImplicitUse(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature, ImplicitUseTargetFlags.WithMembers)]
+        Type inputType) =>
+        JsonSerializer.Serialize(Guard(writer).Writer, value, inputType, options);
 
     public async ValueTask SerializeAsync<T>(Stream target, T item, CancellationToken cancellationToken = default)
     {

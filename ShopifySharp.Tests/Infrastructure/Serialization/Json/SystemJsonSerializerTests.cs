@@ -92,7 +92,84 @@ public class SystemJsonSerializerTests
         json.Should().Be(expectedJson);
     }
 
-    #endregion
+    #endregion Serialize(IJsonWriter, object?, Type)
+
+    [Fact]
+    public void Serialize_IJsonWriter_WhenTheJsonWriterIsNotASystemJsonWriter_ShouldThrowArgumentException()
+    {
+        // Setup
+        const string expectedFooValue = "some-expected-foo-value";
+        const string expectedBarValue = "some-expected-bar-value";
+        var item = new SystemJsonTestObject { Foo = expectedFooValue, Bar = expectedBarValue };
+        var writer = A.Fake<IJsonWriter>();
+
+        // Act
+        var act = () => _sut.Serialize(writer, item, typeof(SystemJsonTestObject));
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage($"Expected a {nameof(SystemJsonWriter)} but got *")
+            .WithParameterName("writer");
+    }
+
+    [Fact]
+    public async Task Serialize_IJsonWriter_ShouldSerializeTheObjectToJson()
+    {
+        // Setup
+        const string expectedFooValue = "some-expected-foo-value";
+        const string expectedBarValue = "some-expected-bar-value";
+        const string expectedJson = $$"""{"foo":"{{expectedFooValue}}","bar":"{{expectedBarValue}}"}""";
+        var item = new SystemJsonTestObject { Foo = expectedFooValue, Bar = expectedBarValue };
+
+#if NET8_0_OR_GREATER
+        await using var stream = new MemoryStream();
+        await using var baseWriter = new Utf8JsonWriter(stream);
+#else
+        using var stream = new MemoryStream();
+        using var baseWriter = new Utf8JsonWriter(stream);
+#endif
+        var writer = new SystemJsonWriter(baseWriter);
+
+        // Act
+        _sut.Serialize(writer, item, typeof(SystemJsonTestObject));
+        await baseWriter.FlushAsync();
+
+        // Assert
+        stream.Position = 0;
+        using var streamReader = new StreamReader(stream);
+        var json = await streamReader.ReadToEndAsync();
+
+        json.Should().Be(expectedJson);
+    }
+
+    [Fact]
+    public async Task Serialize_IJsonWriter_WhenBarIsNull_ShouldSerializeTheObjectToJsonAndExcludeTheBarProperty()
+    {
+        // Setup
+        const string expectedFooValue = "some-expected-foo-value";
+        const string expectedJson = $$"""{"foo":"{{expectedFooValue}}"}""";
+        var item = new SystemJsonTestObject { Foo = expectedFooValue, Bar = null };
+
+#if NET8_0_OR_GREATER
+        await using var stream = new MemoryStream();
+        await using var baseWriter = new Utf8JsonWriter(stream);
+#else
+        using var stream = new MemoryStream();
+        using var baseWriter = new Utf8JsonWriter(stream);
+#endif
+        var writer = new SystemJsonWriter(baseWriter);
+
+        // Act
+        _sut.Serialize(writer, item, typeof(SystemJsonTestObject));
+        await baseWriter.FlushAsync();
+
+        // Assert
+        stream.Position = 0;
+        using var streamReader = new StreamReader(stream);
+        var json = await streamReader.ReadToEndAsync();
+
+        json.Should().Be(expectedJson);
+    }
 
     #region ValueTask SerializeAsync<T>(Stream target, T item)
 
