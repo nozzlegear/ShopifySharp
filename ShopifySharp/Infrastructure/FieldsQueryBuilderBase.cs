@@ -5,14 +5,10 @@ using ShopifySharp.GraphQL;
 namespace ShopifySharp.Infrastructure;
 
 [PublicAPI]
-public abstract class FieldsQueryBuilderBase<T, TSelf> : QueryBuilderBase<T, TSelf>, IFieldsBuilder<TSelf>, IQuery
+public abstract class FieldsQueryBuilderBase<T, TSelf> : QueryBuilderBase<T, TSelf>, IFieldsBuilder<TSelf>
     where T: IGraphQLObject
     where TSelf : QueryBuilderBase<T, TSelf>, IFieldsBuilder<TSelf>
 {
-    public QueryOptions Options => InnerQuery.Options;
-    public string Name => InnerQuery.Name;
-    public string? AliasName => InnerQuery.AliasName;
-
     protected FieldsQueryBuilderBase(IQuery<T> query) : base(query)
     {
     }

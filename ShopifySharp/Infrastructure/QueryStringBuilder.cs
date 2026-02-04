@@ -55,7 +55,7 @@ public class QueryStringBuilder : IQueryStringBuilder
             QueryString.Append($"{query.AliasName}:");
         }
 
-        QueryString.Append(query.Name);
+        QueryString.Append(query.QueryName);
 
         if (query.Arguments.Count > 0)
         {

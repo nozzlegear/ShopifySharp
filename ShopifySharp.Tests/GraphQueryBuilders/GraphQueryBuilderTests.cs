@@ -44,34 +44,29 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
 
     #region FieldBuilderBase
 
-    [Fact(DisplayName = "FieldBuilderBase: Accessing the Options, Name or AliasName fields should return the InnerQuery field values instead")]
+    [Fact(DisplayName = "FieldBuilderBase: Accessing the QueryName or AliasName fields should return the InnerQuery field values instead")]
     [SuppressMessage("ReSharper", "UnusedVariable")]
-    public void FieldBuilderBase_WhenAccessing_Options_Name_Or_AliasName_Fields_ShouldReturnInnerQueryFieldsInstead()
+    public void FieldBuilderBase_WhenAccessing_QueryName_Or_AliasName_Fields_ShouldReturnInnerQueryFieldsInstead()
     {
         // Setup
-        const string name = "some-name";
+        const string queryName = "some-query-name";
         const string aliasName = "some-alias-name";
-        var options = new QueryOptions();
         var query = A.Fake<IQuery<IHasMetafields>>(x => x.Strict());
 
-        A.CallTo(() => query.Options).Returns(options);
-        A.CallTo(() => query.Name).Returns(name);
+        A.CallTo(() => query.QueryName).Returns(queryName);
         A.CallTo(() => query.AliasName).Returns(aliasName);
 
         var sut = new HasMetafieldsQueryBuilder(query);
 
         // Act
         var a = sut.AliasName;
-        var b = sut.Name;
-        var c = sut.Options;
+        var b = sut.QueryName;
 
         // Assert
         sut.AliasName.Should().Be(aliasName);
-        sut.Name.Should().Be(name);
-        sut.Options.Should().Be(options);
+        sut.QueryName.Should().Be(queryName);
 
-        A.CallTo(() => query.Options).MustHaveHappenedTwiceExactly();
-        A.CallTo(() => query.Name).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => query.QueryName).MustHaveHappenedTwiceExactly();
         A.CallTo(() => query.AliasName).MustHaveHappenedTwiceExactly();
     }
 
@@ -161,7 +156,7 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
         const string customFieldName1 = "some-custom-field-name-1";
 
         var myQuery = A.Fake<IQuery>();
-        A.CallTo(() => myQuery.Name).Returns(customFieldName1);
+        A.CallTo(() => myQuery.QueryName).Returns(customFieldName1);
         A.CallTo(() => myQuery.AliasName).Returns(null);
         A.CallTo(() => myQuery.Build()).Returns(customFieldName1);
 

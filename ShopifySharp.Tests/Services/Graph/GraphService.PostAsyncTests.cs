@@ -908,7 +908,7 @@ public class GraphServicePostAsyncTests
         var queryBuilder = A.Fake<IGraphOperationQueryBuilder<GraphQL.Shop>>();
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -980,7 +980,7 @@ public class GraphServicePostAsyncTests
             }
         };
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -1025,7 +1025,7 @@ public class GraphServicePostAsyncTests
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
         graphRequest.UserErrorHandling = userErrorHandling;
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -1065,7 +1065,7 @@ public class GraphServicePostAsyncTests
         var queryBuilder = A.Fake<IGraphOperationQueryBuilder<GraphQL.Shop>>();
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -1109,7 +1109,7 @@ public class GraphServicePostAsyncTests
         var queryBuilder = A.Fake<IGraphOperationQueryBuilder<GraphQL.Shop>>();
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -1155,7 +1155,7 @@ public class GraphServicePostAsyncTests
         var queryBuilder = A.Fake<IGraphOperationQueryBuilder<GraphQL.Shop>>();
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(expectedAliasName);
@@ -1195,7 +1195,7 @@ public class GraphServicePostAsyncTests
         var queryBuilder = A.Fake<IGraphOperationQueryBuilder<GraphQL.Shop>>();
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns(expectedPropertyKey);
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -1239,7 +1239,7 @@ public class GraphServicePostAsyncTests
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
         graphRequest.EstimatedQueryCost = estimatedQueryCost;
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);
@@ -1270,7 +1270,7 @@ public class GraphServicePostAsyncTests
         var queryBuilder = A.Fake<IGraphOperationQueryBuilder<GraphQL.Shop>>();
         var graphRequest = GraphRequest.FromQueryBuilder(queryBuilder);
 
-        A.CallTo(() => queryBuilder.Name)
+        A.CallTo(() => queryBuilder.QueryName)
             .Returns("shop");
         A.CallTo(() => queryBuilder.AliasName)
             .Returns(null);

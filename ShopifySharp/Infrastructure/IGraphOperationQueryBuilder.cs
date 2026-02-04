@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using ShopifySharp.GraphQL;
 
 namespace ShopifySharp.Infrastructure;

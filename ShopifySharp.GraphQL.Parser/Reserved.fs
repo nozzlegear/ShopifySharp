@@ -19,5 +19,5 @@ module Reserved =
 
     // Members from base builder classes that would cause collisions
     let builderMemberKeywords = Set.ofList [
-        "Build"; "Arguments"
+        "Build"; "Arguments"; "QueryName"; "AliasName"
     ]

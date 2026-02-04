@@ -20,7 +20,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("testQuery");
+        A.CallTo(() => query.QueryName).Returns("testQuery");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns([]);
@@ -37,7 +37,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("testQuery");
+        A.CallTo(() => query.QueryName).Returns("testQuery");
         A.CallTo(() => query.AliasName).Returns("myAlias");
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns([]);
@@ -54,7 +54,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("testQuery");
+        A.CallTo(() => query.QueryName).Returns("testQuery");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns(new Dictionary<string, object?> { ["id"] = "123" });
         A.CallTo(() => query.SelectList).Returns([]);
@@ -71,7 +71,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("testQuery");
+        A.CallTo(() => query.QueryName).Returns("testQuery");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns(["id", "name"]);
@@ -88,7 +88,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("product");
+        A.CallTo(() => query.QueryName).Returns("product");
         A.CallTo(() => query.AliasName).Returns("myProduct");
         A.CallTo(() => query.Arguments).Returns(new Dictionary<string, object?> { ["id"] = "gid://123" });
         A.CallTo(() => query.SelectList).Returns(["id", "title"]);
@@ -105,14 +105,14 @@ public class QueryStringBuilderTests
     {
         // Setup
         var nestedQuery = A.Fake<IQuery<TestNestedObject>>();
-        A.CallTo(() => nestedQuery.Name).Returns("nested");
+        A.CallTo(() => nestedQuery.QueryName).Returns("nested");
         A.CallTo(() => nestedQuery.AliasName).Returns(string.Empty);
         A.CallTo(() => nestedQuery.Arguments).Returns([]);
         A.CallTo(() => nestedQuery.SelectList).Returns(["nestedId"]);
         A.CallTo(() => nestedQuery.Build()).Returns("nested{nestedId}");
 
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("parent");
+        A.CallTo(() => query.QueryName).Returns("parent");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns(["id", nestedQuery]);
@@ -129,7 +129,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("test");
+        A.CallTo(() => query.QueryName).Returns("test");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns([]);
@@ -147,7 +147,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("test");
+        A.CallTo(() => query.QueryName).Returns("test");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns([]);
@@ -998,7 +998,7 @@ public class QueryStringBuilderTests
     {
         // Setup
         var query = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query.Name).Returns("first");
+        A.CallTo(() => query.QueryName).Returns("first");
         A.CallTo(() => query.AliasName).Returns(string.Empty);
         A.CallTo(() => query.Arguments).Returns([]);
         A.CallTo(() => query.SelectList).Returns([]);
@@ -1006,7 +1006,7 @@ public class QueryStringBuilderTests
         _sut.Build(query);
 
         var query2 = A.Fake<IQuery<TestObject>>();
-        A.CallTo(() => query2.Name).Returns("second");
+        A.CallTo(() => query2.QueryName).Returns("second");
         A.CallTo(() => query2.AliasName).Returns(string.Empty);
         A.CallTo(() => query2.Arguments).Returns([]);
         A.CallTo(() => query2.SelectList).Returns([]);

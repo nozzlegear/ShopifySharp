@@ -132,7 +132,7 @@ public class GraphService : ShopifyService, IGraphService
             Variables = null,
         }, cancellationToken);
         var dataElement = GetJsonDataElementOrThrow(response.Json, response.RequestId);
-        var propertyKey = graphRequest.Query!.AliasName ?? graphRequest.Query.Name;
+        var propertyKey = graphRequest.Query!.AliasName ?? graphRequest.Query.QueryName;
 
         try
         {

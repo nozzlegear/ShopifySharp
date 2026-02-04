@@ -15,7 +15,7 @@ public interface IQuery
     QueryOptions Options { get; }
 
     /// <summary>Gets the query name.</summary>
-    string Name { get; }
+    string QueryName { get; }
 
     /// <summary>Gets the alias name.</summary>
     string? AliasName { get; }
@@ -67,7 +67,7 @@ public class Query<TSource> : IQuery<TSource>
     protected IQueryStringBuilder QueryStringBuilder { get; } = new QueryStringBuilder();
 
     public QueryOptions Options { get; }
-    public string Name { get; }
+    public string QueryName { get; }
     public string? AliasName { get; protected set; }
     public List<object?> SelectList { get; }
     public Dictionary<string, object?> Arguments { get; }
@@ -75,8 +75,8 @@ public class Query<TSource> : IQuery<TSource>
     public Query(string name, QueryOptions? options = null)
     {
         RequiredArgument.NotNullOrEmpty(name, nameof(name));
-        Name = name;
         Options = options ?? new QueryOptions();
+        QueryName = name;
         SelectList = [];
         Arguments = [];
     }
