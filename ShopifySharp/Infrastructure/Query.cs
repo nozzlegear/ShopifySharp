@@ -12,8 +12,6 @@ namespace ShopifySharp.Infrastructure;
 [PublicAPI]
 public interface IQuery
 {
-    QueryOptions Options { get; }
-
     /// <summary>Gets the query name.</summary>
     string QueryName { get; }
 
@@ -66,16 +64,14 @@ public class Query<TSource> : IQuery<TSource>
     /// <summary>Gets the query string builder.</summary>
     protected IQueryStringBuilder QueryStringBuilder { get; } = new QueryStringBuilder();
 
-    public QueryOptions Options { get; }
     public string QueryName { get; }
     public string? AliasName { get; protected set; }
     public List<object?> SelectList { get; }
     public Dictionary<string, object?> Arguments { get; }
 
-    public Query(string name, QueryOptions? options = null)
+    public Query(string name)
     {
         RequiredArgument.NotNullOrEmpty(name, nameof(name));
-        Options = options ?? new QueryOptions();
         QueryName = name;
         SelectList = [];
         Arguments = [];

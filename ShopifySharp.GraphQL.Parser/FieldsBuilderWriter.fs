@@ -86,7 +86,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine
                 do! Indented + "{"
                 do! NewLine
-                do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}", base.InnerQuery.Options);"""
+                do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}");"""
                 do! NewLine
                 do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
                 do! NewLine + NewLine
