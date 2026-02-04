@@ -40,7 +40,7 @@ public class QueryBuilderTests(VerifyFixture verifyFixture, GraphServiceFixture 
     {
         // Setup
         var query = new ShopOperationQueryBuilder()
-            .WithAlias("foo")
+            .SetAlias("foo")
             .Name()
             .CreatedAt()
             .Id();

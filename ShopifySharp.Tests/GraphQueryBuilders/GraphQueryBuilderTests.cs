@@ -33,7 +33,7 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
         // Setup
         var sut = new MetafieldQueryBuilder();
         sut.CreatedAt();
-        sut.WithAlias("someAlias");
+        sut.SetAlias("someAlias");
 
         // Act
         var result = sut.Build();

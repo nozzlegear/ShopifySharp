@@ -55,7 +55,7 @@ public interface IQuery<out TSource> : IQuery, IArgumentsBuilder<IQuery<TSource>
 {
     List<object?> SelectList { get; }
     Dictionary<string, object?> Arguments { get; }
-    IQuery<TSource> WithAlias(string alias);
+    IQuery<TSource> SetAlias(string alias);
 }
 
 [PublicAPI]
@@ -91,7 +91,7 @@ public class Query<TSource> : IQuery<TSource>
         return QueryStringBuilder.Build(this);
     }
 
-    public IQuery<TSource> WithAlias(string alias)
+    public IQuery<TSource> SetAlias(string alias)
     {
         RequiredArgument.NotNullOrEmpty(alias, nameof(alias));
         AliasName = alias;

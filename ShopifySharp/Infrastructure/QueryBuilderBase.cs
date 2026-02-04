@@ -43,9 +43,9 @@ public abstract class QueryBuilderBase<T, TSelf> : IQuery
         return queryContent;
     }
 
-    public TSelf WithAlias(string alias)
+    public TSelf SetAlias(string alias)
     {
-        InnerQuery.WithAlias(alias);
+        InnerQuery.SetAlias(alias);
         return Self;
     }
 }
