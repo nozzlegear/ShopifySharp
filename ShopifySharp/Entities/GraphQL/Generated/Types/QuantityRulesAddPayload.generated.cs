@@ -1,0 +1,27 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Return type for `quantityRulesAdd` mutation.
+/// </summary>
+public record QuantityRulesAddPayload : IGraphQLObject
+{
+    /// <summary>
+    /// The list of quantity rules that were added to or updated in the price list.
+    /// </summary>
+    [JsonPropertyName("quantityRules")]
+    public ICollection<QuantityRule>? quantityRules { get; set; } = null;
+
+    /// <summary>
+    /// The list of errors that occurred from executing the mutation.
+    /// </summary>
+    [JsonPropertyName("userErrors")]
+    public ICollection<QuantityRuleUserError>? userErrors { get; set; } = null;
+}

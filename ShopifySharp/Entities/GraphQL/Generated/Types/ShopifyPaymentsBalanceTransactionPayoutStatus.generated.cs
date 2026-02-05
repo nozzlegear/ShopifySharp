@@ -1,0 +1,24 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The payout status of the balance transaction.
+/// </summary>
+public enum ShopifyPaymentsBalanceTransactionPayoutStatus
+{
+    SCHEDULED,
+    [Obsolete("Use `SCHEDULED` instead.")]
+    IN_TRANSIT,
+    PAID,
+    FAILED,
+    CANCELED,
+    PENDING,
+    ACTION_REQUIRED,
+}

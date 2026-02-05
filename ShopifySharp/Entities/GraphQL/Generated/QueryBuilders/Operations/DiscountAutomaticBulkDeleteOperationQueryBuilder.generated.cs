@@ -1,0 +1,54 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+{
+    public sealed class DiscountAutomaticBulkDeleteOperationQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticBulkDeletePayload, DiscountAutomaticBulkDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountAutomaticBulkDeletePayload>
+    {
+        public OperationType OperationType { get; } = OperationType.Mutation;
+        public DiscountAutomaticBulkDeleteArgumentsBuilder Arguments { get; }
+        protected override DiscountAutomaticBulkDeleteOperationQueryBuilder Self => this;
+
+        public DiscountAutomaticBulkDeleteOperationQueryBuilder() : this("discountAutomaticBulkDelete")
+        {
+        }
+
+        public DiscountAutomaticBulkDeleteOperationQueryBuilder(string name) : base(new Query<DiscountAutomaticBulkDeletePayload>(name))
+        {
+            Arguments = new DiscountAutomaticBulkDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountAutomaticBulkDeleteOperationQueryBuilder(IQuery<DiscountAutomaticBulkDeletePayload> query) : base(query)
+        {
+            Arguments = new DiscountAutomaticBulkDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountAutomaticBulkDeleteOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder> build)
+        {
+            var query = new Query<Job>("job");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Job>(query);
+            return this;
+        }
+
+        public DiscountAutomaticBulkDeleteOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountUserErrorQueryBuilder> build)
+        {
+            var query = new Query<DiscountUserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountUserErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<DiscountUserError>(query);
+            return this;
+        }
+    }
+}

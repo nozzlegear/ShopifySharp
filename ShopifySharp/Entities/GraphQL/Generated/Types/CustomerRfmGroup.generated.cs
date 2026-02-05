@@ -1,0 +1,27 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The RFM (Recency, Frequency, Monetary) group for a customer.
+/// </summary>
+public enum CustomerRfmGroup
+{
+    CHAMPIONS,
+    LOYAL,
+    ACTIVE,
+    NEW,
+    PROMISING,
+    NEEDS_ATTENTION,
+    ALMOST_LOST,
+    PREVIOUSLY_LOYAL,
+    AT_RISK,
+    DORMANT,
+    PROSPECTS,
+}

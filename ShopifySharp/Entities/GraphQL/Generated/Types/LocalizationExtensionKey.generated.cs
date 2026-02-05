@@ -1,0 +1,53 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The key of a localization extension.
+/// </summary>
+public enum LocalizationExtensionKey
+{
+    TAX_CREDENTIAL_BR,
+    SHIPPING_CREDENTIAL_BR,
+    TAX_CREDENTIAL_CL,
+    SHIPPING_CREDENTIAL_CL,
+    SHIPPING_CREDENTIAL_CN,
+    TAX_CREDENTIAL_CO,
+    TAX_CREDENTIAL_TYPE_CO,
+    SHIPPING_CREDENTIAL_CO,
+    SHIPPING_CREDENTIAL_TYPE_CO,
+    TAX_CREDENTIAL_CR,
+    SHIPPING_CREDENTIAL_CR,
+    TAX_CREDENTIAL_EC,
+    SHIPPING_CREDENTIAL_EC,
+    TAX_CREDENTIAL_GT,
+    SHIPPING_CREDENTIAL_GT,
+    TAX_CREDENTIAL_ID,
+    SHIPPING_CREDENTIAL_ID,
+    TAX_CREDENTIAL_IT,
+    TAX_EMAIL_IT,
+    TAX_CREDENTIAL_MY,
+    SHIPPING_CREDENTIAL_MY,
+    SHIPPING_CREDENTIAL_MX,
+    TAX_CREDENTIAL_MX,
+    TAX_CREDENTIAL_TYPE_MX,
+    TAX_CREDENTIAL_USE_MX,
+    TAX_CREDENTIAL_PY,
+    SHIPPING_CREDENTIAL_PY,
+    TAX_CREDENTIAL_PE,
+    SHIPPING_CREDENTIAL_PE,
+    TAX_CREDENTIAL_PT,
+    SHIPPING_CREDENTIAL_PT,
+    SHIPPING_CREDENTIAL_KR,
+    TAX_CREDENTIAL_ES,
+    SHIPPING_CREDENTIAL_ES,
+    SHIPPING_CREDENTIAL_TW,
+    TAX_CREDENTIAL_TR,
+    SHIPPING_CREDENTIAL_TR,
+}

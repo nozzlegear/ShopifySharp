@@ -1,0 +1,59 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+{
+    public sealed class OrderEditUpdateDiscountPayloadQueryBuilder : FieldsQueryBuilderBase<OrderEditUpdateDiscountPayload, OrderEditUpdateDiscountPayloadQueryBuilder>
+    {
+        protected override OrderEditUpdateDiscountPayloadQueryBuilder Self => this;
+
+        public OrderEditUpdateDiscountPayloadQueryBuilder() : this("orderEditUpdateDiscountPayload")
+        {
+        }
+
+        public OrderEditUpdateDiscountPayloadQueryBuilder(string name) : base(new Query<OrderEditUpdateDiscountPayload>(name))
+        {
+        }
+
+        public OrderEditUpdateDiscountPayloadQueryBuilder(IQuery<OrderEditUpdateDiscountPayload> query) : base(query)
+        {
+        }
+
+        public OrderEditUpdateDiscountPayloadQueryBuilder CalculatedOrder(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CalculatedOrderQueryBuilder> build)
+        {
+            var query = new Query<CalculatedOrder>("calculatedOrder");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CalculatedOrderQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CalculatedOrder>(query);
+            return this;
+        }
+
+        public OrderEditUpdateDiscountPayloadQueryBuilder OrderEditSession(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderEditSessionQueryBuilder> build)
+        {
+            var query = new Query<OrderEditSession>("orderEditSession");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderEditSessionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderEditSession>(query);
+            return this;
+        }
+
+        public OrderEditUpdateDiscountPayloadQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderEditUpdateDiscountUserErrorQueryBuilder> build)
+        {
+            var query = new Query<OrderEditUpdateDiscountUserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderEditUpdateDiscountUserErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderEditUpdateDiscountUserError>(query);
+            return this;
+        }
+    }
+}
