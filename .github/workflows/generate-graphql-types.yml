@@ -36,7 +36,7 @@ jobs:
 
     - name: Download GraphQL schema
       run: |
-        dotnet run --no-build \
+        dotnet run --no-build --configuration Release \
           --project ShopifySharp.GraphQL.Parser.CLI/ShopifySharp.GraphQL.Parser.CLI.csproj \
           -- \
           download \

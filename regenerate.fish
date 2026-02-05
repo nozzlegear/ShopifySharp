@@ -6,7 +6,7 @@ or return 1
 
 rm -r ShopifySharp/Entities/GraphQL/Generated
 
-dotnet run --project ShopifySharp.GraphQL.Parser.CLI -- \
+dotnet run --no-build --configuration Release --project ShopifySharp.GraphQL.Parser.CLI -- \
     generate \
     --nullable true \
     --casing camel \
