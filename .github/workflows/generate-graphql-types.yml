@@ -45,18 +45,14 @@ jobs:
           --domain "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}" \
           --token "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}"
 
-    - name: Clean output directory
-      run: rm -rf ShopifySharp/Entities/GraphQL/Generated/*
+    - name: Convert JSON schema to GraphQL
+      run: npx -- graphql-json-to-sdl@0.5.0 "${{ github.event.inputs.schema_version }}.schema.json" graphql.schema.graphql
 
-    - name: Generate types from new schema
-      run: |
-        dotnet run --no-build \
-          --project ShopifySharp.GraphQL.Parser.CLI \
-          -- \
-          generate \
-          --casing camel \
-          -o ShopifySharp/Entities/GraphQL/Generated \
-          "${{ github.event.inputs.schema_version }}.schema.json"
+    - name: Clean output directory
+      run: fish -c ./clean.fish
+
+    - name: Regenerate types from new schema
+      run: fish -c ./regenerate.fish
 
     - name: Create pull request
       env:
