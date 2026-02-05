@@ -18,7 +18,7 @@
     <PackageProjectUrl>https://github.com/nozzlegear/shopifysharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
     <PackageTags>Shopify;Ecommerce;Rest;Graphql</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="../readme.md" Pack="true" PackagePath="." />
