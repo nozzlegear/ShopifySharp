@@ -5,7 +5,7 @@ echo "Using $(fish --version)"
 set diTestProject "ShopifySharp.Extensions.DependencyInjection.Tests/ShopifySharp.Extensions.DependencyInjection.Tests.csproj"
 set integrationTestProject "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
 
-set netNine "net9.0"
+set integrationFramework "net10.0"
 
 # Load utility functions
 set utilsFilePath (dirname (status --current-filename))"/utils.fish"
@@ -24,7 +24,7 @@ echo "Testing integration project."
 buildProject "$integrationTestProject"; or exit 1;
 executeTests \
     "ShopifySharp.Integration.Tests" \
-    "$netNine" \
+    "$integrationFramework" \
     "$integrationTestProject"
 success "Integration tests succeeded."
 
