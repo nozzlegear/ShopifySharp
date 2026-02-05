@@ -1,0 +1,34 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Possible error codes that can be returned by `LocationDeactivateUserError`.
+/// </summary>
+public enum LocationDeactivateUserErrorCode
+{
+    LOCATION_NOT_FOUND,
+    PERMANENTLY_BLOCKED_FROM_DEACTIVATION_ERROR,
+    TEMPORARILY_BLOCKED_FROM_DEACTIVATION_ERROR,
+    HAS_ACTIVE_RETAIL_SUBSCRIPTIONS,
+    DESTINATION_LOCATION_IS_THE_SAME_LOCATION,
+    DESTINATION_LOCATION_NOT_FOUND_OR_INACTIVE,
+    DESTINATION_LOCATION_NOT_SHOPIFY_MANAGED,
+    HAS_ACTIVE_INVENTORY_ERROR,
+    HAS_FULFILLMENT_ORDERS_ERROR,
+    HAS_INCOMING_FROM_EXTERNAL_DOCUMENT_SOURCES,
+    HAS_INCOMING_MOVEMENTS_ERROR,
+    HAS_OPEN_PURCHASE_ORDERS_ERROR,
+    FAILED_TO_RELOCATE_ACTIVE_INVENTORIES,
+    FAILED_TO_RELOCATE_OPEN_PURCHASE_ORDERS,
+    FAILED_TO_RELOCATE_INCOMING_MOVEMENTS,
+    CANNOT_DISABLE_ONLINE_ORDER_FULFILLMENT,
+    IDEMPOTENCY_CONCURRENT_REQUEST,
+    IDEMPOTENCY_KEY_PARAMETER_MISMATCH,
+}

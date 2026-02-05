@@ -1,0 +1,27 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The statistics of a given attribute.
+/// </summary>
+public record SegmentAttributeStatistics : IGraphQLObject
+{
+    /// <summary>
+    /// The average of a given attribute.
+    /// </summary>
+    [JsonPropertyName("average")]
+    public decimal? average { get; set; } = null;
+
+    /// <summary>
+    /// The sum of a given attribute.
+    /// </summary>
+    [JsonPropertyName("sum")]
+    public decimal? sum { get; set; } = null;
+}

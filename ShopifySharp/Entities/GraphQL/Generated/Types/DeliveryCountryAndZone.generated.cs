@@ -1,0 +1,27 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The country details and the associated shipping zone.
+/// </summary>
+public record DeliveryCountryAndZone : IGraphQLObject
+{
+    /// <summary>
+    /// The country details.
+    /// </summary>
+    [JsonPropertyName("country")]
+    public DeliveryCountry? country { get; set; } = null;
+
+    /// <summary>
+    /// The name of the shipping zone.
+    /// </summary>
+    [JsonPropertyName("zone")]
+    public string? zone { get; set; } = null;
+}

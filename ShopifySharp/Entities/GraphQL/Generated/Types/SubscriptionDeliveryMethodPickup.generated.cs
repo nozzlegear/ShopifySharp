@@ -1,0 +1,21 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// A delivery method with a pickup option.
+/// </summary>
+public record SubscriptionDeliveryMethodPickup : IGraphQLUnionCase, IGraphQLObject
+{
+    /// <summary>
+    /// The details of the pickup delivery method to use.
+    /// </summary>
+    [JsonPropertyName("pickupOption")]
+    public SubscriptionDeliveryMethodPickupOption? pickupOption { get; set; } = null;
+}

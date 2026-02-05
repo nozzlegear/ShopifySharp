@@ -1,0 +1,21 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Represents the base64 encoded body of a theme file.
+/// </summary>
+public record OnlineStoreThemeFileBodyBase64 : IGraphQLUnionCase, IGraphQLObject
+{
+    /// <summary>
+    /// The body of the theme file, base64 encoded.
+    /// </summary>
+    [JsonPropertyName("contentBase64")]
+    public string? contentBase64 { get; set; } = null;
+}
