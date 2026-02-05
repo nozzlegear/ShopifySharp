@@ -1,0 +1,30 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// A calculated return fee.
+/// </summary>
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(CalculatedRestockingFee), typeDiscriminator: "CalculatedRestockingFee")]
+[JsonDerivedType(typeof(CalculatedReturnShippingFee), typeDiscriminator: "CalculatedReturnShippingFee")]
+public interface ICalculatedReturnFee : IGraphQLObject
+{
+    /// <summary>
+    /// The calculated amount of the return fee, in shop and presentment currencies.
+    /// </summary>
+    [JsonPropertyName("amountSet")]
+    public MoneyBag? amountSet { get; set; }
+
+    /// <summary>
+    /// A globally-unique ID.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string? id { get; set; }
+}

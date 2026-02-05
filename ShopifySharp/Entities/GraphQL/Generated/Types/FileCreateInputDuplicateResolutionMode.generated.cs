@@ -1,0 +1,19 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The input fields for handling if filename is already in use.
+/// </summary>
+public enum FileCreateInputDuplicateResolutionMode
+{
+    APPEND_UUID,
+    RAISE_ERROR,
+    REPLACE,
+}

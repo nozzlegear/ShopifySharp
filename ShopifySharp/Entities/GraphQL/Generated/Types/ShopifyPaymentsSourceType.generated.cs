@@ -1,0 +1,23 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The possible source types for a balance transaction.
+/// </summary>
+public enum ShopifyPaymentsSourceType
+{
+    ADJUSTMENT_REVERSAL,
+    CHARGE,
+    REFUND,
+    SYSTEM_ADJUSTMENT,
+    DISPUTE,
+    ADJUSTMENT,
+    TRANSFER,
+}

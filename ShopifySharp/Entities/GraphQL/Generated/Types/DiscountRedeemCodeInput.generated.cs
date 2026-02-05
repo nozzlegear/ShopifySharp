@@ -1,0 +1,21 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The input fields for the redeem code to attach to a discount.
+/// </summary>
+public record DiscountRedeemCodeInput : GraphQLInputObject<DiscountRedeemCodeInput>
+{
+    /// <summary>
+    /// The code that a customer can use at checkout to receive the associated discount.
+    /// </summary>
+    [JsonPropertyName("code")]
+    public string? code { get; set; } = null;
+}

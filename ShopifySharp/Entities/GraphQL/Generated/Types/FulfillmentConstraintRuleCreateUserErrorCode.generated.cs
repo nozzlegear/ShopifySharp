@@ -1,0 +1,25 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Possible error codes that can be returned by `FulfillmentConstraintRuleCreateUserError`.
+/// </summary>
+public enum FulfillmentConstraintRuleCreateUserErrorCode
+{
+    INPUT_INVALID,
+    FUNCTION_NOT_FOUND,
+    FUNCTION_ALREADY_REGISTERED,
+    FUNCTION_DOES_NOT_IMPLEMENT,
+    CUSTOM_APP_FUNCTION_NOT_ELIGIBLE,
+    FUNCTION_PENDING_DELETION,
+    MULTIPLE_FUNCTION_IDENTIFIERS,
+    MISSING_FUNCTION_IDENTIFIER,
+    MAXIMUM_FULFILLMENT_CONSTRAINT_RULES_REACHED,
+}

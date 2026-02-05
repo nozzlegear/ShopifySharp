@@ -1,0 +1,30 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+{
+    public sealed class FulfillmentEventCreateArgumentsBuilder : ArgumentsBuilderBase<FulfillmentEventCreatePayload, FulfillmentEventCreateArgumentsBuilder>
+    {
+        protected override FulfillmentEventCreateArgumentsBuilder Self => this;
+
+        public FulfillmentEventCreateArgumentsBuilder(IQuery<FulfillmentEventCreatePayload> query) : base(query)
+        {
+        }
+
+        public FulfillmentEventCreateArgumentsBuilder FulfillmentEvent(FulfillmentEventInput? fulfillmentEvent)
+        {
+            base.InnerQuery.AddArgument("fulfillmentEvent", fulfillmentEvent);
+            return this;
+        }
+    }
+}

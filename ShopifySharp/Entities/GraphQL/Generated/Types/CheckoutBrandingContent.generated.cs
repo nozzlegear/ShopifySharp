@@ -1,0 +1,21 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// The content container customizations.
+/// </summary>
+public record CheckoutBrandingContent : IGraphQLObject
+{
+    /// <summary>
+    /// The content container's divider style and visibility.
+    /// </summary>
+    [JsonPropertyName("divider")]
+    public CheckoutBrandingContainerDivider? divider { get; set; } = null;
+}
