@@ -5,14 +5,6 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/.github/" />
-  <Folder Name="/.github/scripts/">
-    <File Path=".github/scripts/build.fish" />
-    <File Path=".github/scripts/bump-version.fish" />
-    <File Path=".github/scripts/generate_factories.fish" />
-    <File Path=".github/scripts/test-dnf.ps1" />
-    <File Path=".github/scripts/test.fish" />
-    <File Path=".github/scripts/utils.fish" />
-  </Folder>
   <Folder Name="/.github/workflows/">
     <File Path=".github/workflows/build-and-test.yml" />
     <File Path=".github/workflows/generate-graphql-types.yml" />
@@ -23,6 +15,7 @@
     <File Path="docs/contribution-guide.md" />
     <File Path="graphql.config.yml" />
     <File Path="graphql.schema.json" />
+    <File Path="justfile" />
     <File Path="LICENSE" />
     <File Path="readme.md" />
   </Folder>
