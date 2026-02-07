@@ -98,8 +98,12 @@ create-graphql-pr token graphqlSchemaFile:
 
     echo "Creating branch: $branch_name"
 
-    git config --local user.email "action@github.com"
-    git config --local user.name "GitHub Action"
+    # Only set git config in CI environments
+    if [ -n "${GITHUB_ACTIONS:-}" ]; then
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    fi
+
     git switch -C "$branch_name"
     git add ShopifySharp/Entities/GraphQL/Generated/ "{{graphqlSchemaFile}}"
     git add "{{graphqlSchemaFile}}"
