@@ -28,9 +28,9 @@ jobs:
           10.0.x
 
     - name: Setup justfile
-      uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3.0.0
+      uses: taiki-e/install-action@f176c07a0a40cbfdd08ee9aa8bf1655701d11e69 # v2.67.25
       with:
-        just-version: '1.46.0'
+        tool: just@1.46.0
 
     - name: Restore dependencies
       run: dotnet restore
