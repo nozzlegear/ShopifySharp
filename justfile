@@ -134,16 +134,13 @@ create-graphql-pr token graphqlSchemaFile:
 
 # Build and pack projects for prerelease and release
 [group("build")]
-[script]
 @build-and-pack runNumber outputDir:
-    revision="b{{runNumber}}"
-
-    echo "Building and packing projects with revision: $revision"
+    echo "Building and packing projects with revision: {{runNumber}}"
     echo "Output directory: {{outputDir}}"
 
     # TODO: only pack projects that have git changes? (Only if this is running in a workflow.)
-    _buildAndPack "ShopifySharp/ShopifySharp.csproj" "$revision" "{{outputDir}}"
-    _buildAndPack "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" "$revision" "{{outputDir}}"
+    just _buildAndPack "ShopifySharp/ShopifySharp.csproj" "b{{runNumber}}" "{{outputDir}}"
+    just _buildAndPack "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" "b{{runNumber}}" "{{outputDir}}"
 
 # Run .NET Framework unit tests
 [group("test")]
