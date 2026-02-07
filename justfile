@@ -27,12 +27,14 @@ _buildCliProject:
 _buildAndPack project revision outputDir:
     dotnet pack \
         -c "{{config}}" \
-        --version-suffix "$revision" \
+        --version-suffix "{{revision}}" \
         -o "{{outputDir}}" \
+        --verbosity "{{verbosity}}" \
         "{{project}}"
     dotnet pack \
         -c "{{config}}" \
         -o "{{outputDir}}" \
+        --verbosity "{{verbosity}}" \
         "{{project}}"
 
 # Clean generated files
@@ -133,11 +135,11 @@ create-graphql-pr token graphqlSchemaFile:
 # Build and pack projects for prerelease and release
 [group("build")]
 [script]
-build-and-pack runNumber outputDir:
+@build-and-pack runNumber outputDir:
     revision="b{{runNumber}}"
 
-    @echo "Building and packing projects with revision: $revision"
-    @echo "Output directory: {{outputDir}}"
+    echo "Building and packing projects with revision: $revision"
+    echo "Output directory: {{outputDir}}"
 
     # TODO: only pack projects that have git changes? (Only if this is running in a workflow.)
     _buildAndPack "ShopifySharp/ShopifySharp.csproj" "$revision" "{{outputDir}}"
