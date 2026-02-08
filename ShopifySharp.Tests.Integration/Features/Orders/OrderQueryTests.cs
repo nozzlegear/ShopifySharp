@@ -106,7 +106,7 @@ public class OrderQueryTests(VerifyFixture verifyFixture, GraphServiceFixture gr
         result.Data.Order?.customer?.id.Should().NotBeNullOrEmpty();
     }
 
-    [Fact(Skip = "Requires fix for .AsCustomer() method.")]
+    [Fact]
     public void MetafieldReferenceDeserialization_WithCustomerType_ShouldSucceed()
     {
         // This test directly verifies that JSON containing a Customer can be deserialized as MetafieldReference
