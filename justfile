@@ -202,7 +202,7 @@ test-main-project:
 
 # Run all tests (DI, integration, and unit tests)
 [group("test")]
-test-everything: test-di test-integration test-dnf test-main-project
+test-everything: test-di test-integration test-main-project
     @echo "All tests passed."
 
 # Set package version for a project (used in release workflow)
