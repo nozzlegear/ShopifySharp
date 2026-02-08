@@ -49,8 +49,8 @@ jobs:
         name: artifacts
         if-no-files-found: error
         path: |
-          "${{ env.ARTIFACTS_DIR }}/*.nupkg"
-          "${{ env.ARTIFACTS_DIR }}/*.snupkg"
+          ${{ env.ARTIFACTS_DIR }}/*.nupkg
+          ${{ env.ARTIFACTS_DIR }}/*.snupkg
 
   test-windows:
     name: "Unit tests (.NET Framework)"
@@ -166,7 +166,7 @@ jobs:
       uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
       with:
         name: artifacts
-        path: "${{ env.ARTIFACTS_DIR }}"
+        path: ${{ env.ARTIFACTS_DIR }}
 
     - name: List files in artifacts folder
       run: ls "${{ env.ARTIFACTS_DIR }}"

@@ -56,15 +56,15 @@ jobs:
         name: artifacts
         if-no-files-found: error
         path: |
-          "${{ env.ARTIFACTS_DIR }}/ShopifySharp.${{ inputs.package_version }}.nupkg"
-          "${{ env.ARTIFACTS_DIR }}/ShopifySharp.${{ inputs.package_version }}.snupkg"
-          "${{ env.ARTIFACTS_DIR }}/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.nupkg"
-          "${{ env.ARTIFACTS_DIR }}/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.snupkg"
+          ${{ env.ARTIFACTS_DIR }}/ShopifySharp.${{ inputs.package_version }}.nupkg
+          ${{ env.ARTIFACTS_DIR }}/ShopifySharp.${{ inputs.package_version }}.snupkg
+          ${{ env.ARTIFACTS_DIR }}/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.nupkg
+          ${{ env.ARTIFACTS_DIR }}/ShopifySharp.Extensions.DependencyInjection.${{ inputs.package_version }}.snupkg
 
     - name: Commit package version change
       uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
       with:
-        add: "${{ inputs.package_id }}/${{ inputs.package_id }}.csproj"
+        add: ${{ inputs.package_id }}/${{ inputs.package_id }}.csproj
         commit: --signoff
         message: "Bump version to ${{ inputs.package_version }}"
         pathspec_error_handling: exitAtEnd
@@ -83,5 +83,5 @@ jobs:
         draft: true
         title: "${{ inputs.package_id }} ${{ inputs.package_version }}"
         files: |
-          "${{ env.ARTIFACTS_DIR }}/${{ inputs.package_id }}.${{ inputs.package_version }}.nupkg"
-          "${{ env.ARTIFACTS_DIR }}/${{ inputs.package_id }}.${{ inputs.package_version }}.snupkg"
+          ${{ env.ARTIFACTS_DIR }}/${{ inputs.package_id }}.${{ inputs.package_version }}.nupkg
+          ${{ env.ARTIFACTS_DIR }}/${{ inputs.package_id }}.${{ inputs.package_version }}.snupkg
