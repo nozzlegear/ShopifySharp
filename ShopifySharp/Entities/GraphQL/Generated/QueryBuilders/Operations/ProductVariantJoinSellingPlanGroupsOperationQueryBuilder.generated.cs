@@ -1,0 +1,54 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+{
+    public sealed class ProductVariantJoinSellingPlanGroupsOperationQueryBuilder : FieldsQueryBuilderBase<ProductVariantJoinSellingPlanGroupsPayload, ProductVariantJoinSellingPlanGroupsOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductVariantJoinSellingPlanGroupsPayload>
+    {
+        public OperationType OperationType { get; } = OperationType.Mutation;
+        public ProductVariantJoinSellingPlanGroupsArgumentsBuilder Arguments { get; }
+        protected override ProductVariantJoinSellingPlanGroupsOperationQueryBuilder Self => this;
+
+        public ProductVariantJoinSellingPlanGroupsOperationQueryBuilder() : this("productVariantJoinSellingPlanGroups")
+        {
+        }
+
+        public ProductVariantJoinSellingPlanGroupsOperationQueryBuilder(string name) : base(new Query<ProductVariantJoinSellingPlanGroupsPayload>(name))
+        {
+            Arguments = new ProductVariantJoinSellingPlanGroupsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductVariantJoinSellingPlanGroupsOperationQueryBuilder(IQuery<ProductVariantJoinSellingPlanGroupsPayload> query) : base(query)
+        {
+            Arguments = new ProductVariantJoinSellingPlanGroupsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductVariantJoinSellingPlanGroupsOperationQueryBuilder ProductVariant(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantQueryBuilder> build)
+        {
+            var query = new Query<ProductVariant>("productVariant");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ProductVariant>(query);
+            return this;
+        }
+
+        public ProductVariantJoinSellingPlanGroupsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanGroupUserErrorQueryBuilder> build)
+        {
+            var query = new Query<SellingPlanGroupUserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanGroupUserErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<SellingPlanGroupUserError>(query);
+            return this;
+        }
+    }
+}

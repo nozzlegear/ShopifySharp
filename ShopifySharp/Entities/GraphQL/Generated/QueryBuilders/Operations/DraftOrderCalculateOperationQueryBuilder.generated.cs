@@ -1,0 +1,54 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+{
+    public sealed class DraftOrderCalculateOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderCalculatePayload, DraftOrderCalculateOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderCalculatePayload>
+    {
+        public OperationType OperationType { get; } = OperationType.Mutation;
+        public DraftOrderCalculateArgumentsBuilder Arguments { get; }
+        protected override DraftOrderCalculateOperationQueryBuilder Self => this;
+
+        public DraftOrderCalculateOperationQueryBuilder() : this("draftOrderCalculate")
+        {
+        }
+
+        public DraftOrderCalculateOperationQueryBuilder(string name) : base(new Query<DraftOrderCalculatePayload>(name))
+        {
+            Arguments = new DraftOrderCalculateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderCalculateOperationQueryBuilder(IQuery<DraftOrderCalculatePayload> query) : base(query)
+        {
+            Arguments = new DraftOrderCalculateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderCalculateOperationQueryBuilder CalculatedDraftOrder(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CalculatedDraftOrderQueryBuilder> build)
+        {
+            var query = new Query<CalculatedDraftOrder>("calculatedDraftOrder");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CalculatedDraftOrderQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CalculatedDraftOrder>(query);
+            return this;
+        }
+
+        public DraftOrderCalculateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        {
+            var query = new Query<UserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<UserError>(query);
+            return this;
+        }
+    }
+}

@@ -1,0 +1,50 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+{
+    public sealed class ReturnUserErrorQueryBuilder : FieldsQueryBuilderBase<ReturnUserError, ReturnUserErrorQueryBuilder>
+    {
+        protected override ReturnUserErrorQueryBuilder Self => this;
+
+        public ReturnUserErrorQueryBuilder() : this("returnUserError")
+        {
+        }
+
+        public ReturnUserErrorQueryBuilder(string name) : base(new Query<ReturnUserError>(name))
+        {
+        }
+
+        public ReturnUserErrorQueryBuilder(IQuery<ReturnUserError> query) : base(query)
+        {
+        }
+
+        public ReturnUserErrorQueryBuilder Code()
+        {
+            base.InnerQuery.AddField("code");
+            return this;
+        }
+
+        public ReturnUserErrorQueryBuilder Field()
+        {
+            base.InnerQuery.AddField("field");
+            return this;
+        }
+
+        public ReturnUserErrorQueryBuilder Message()
+        {
+            base.InnerQuery.AddField("message");
+            return this;
+        }
+    }
+}
