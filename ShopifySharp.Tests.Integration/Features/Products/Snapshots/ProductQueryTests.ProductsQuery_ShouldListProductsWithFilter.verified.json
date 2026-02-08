@@ -67,7 +67,7 @@
               }
             ]
           },
-          "createdAt": "DateTime_1",
+          "createdAt": "DateTimeOffset_1",
           "handle": "Guid_1",
           "id": "{Scrubbed}",
           "legacyResourceId": "{Scrubbed}",
@@ -86,7 +86,7 @@
           },
           "productType": "Foobars",
           "title": "Shopify Prime Test Product",
-          "updatedAt": "DateTime_2",
+          "updatedAt": "DateTimeOffset_2",
           "variants": {
             "edges": [
               {
@@ -168,7 +168,7 @@
               }
             ]
           },
-          "createdAt": "DateTime_3",
+          "createdAt": "DateTimeOffset_3",
           "handle": "Guid_2",
           "id": "{Scrubbed}",
           "legacyResourceId": "{Scrubbed}",
@@ -187,7 +187,7 @@
           },
           "productType": "Foobars",
           "title": "Shopify Prime Test Product",
-          "updatedAt": "DateTime_2",
+          "updatedAt": "DateTimeOffset_2",
           "variants": {
             "edges": [
               {
@@ -269,7 +269,7 @@
               }
             ]
           },
-          "createdAt": "DateTime_4",
+          "createdAt": "DateTimeOffset_4",
           "handle": "Guid_3",
           "id": "{Scrubbed}",
           "legacyResourceId": "{Scrubbed}",
@@ -288,7 +288,7 @@
           },
           "productType": "Snowboard",
           "title": "Burton Custom Freestlye 151",
-          "updatedAt": "DateTime_5",
+          "updatedAt": "DateTimeOffset_5",
           "variants": {
             "edges": [
               {

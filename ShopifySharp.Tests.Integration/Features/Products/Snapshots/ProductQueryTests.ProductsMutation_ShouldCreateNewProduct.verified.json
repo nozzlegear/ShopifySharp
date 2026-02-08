@@ -10,6 +10,12 @@
       "Id": "{Scrubbed}",
       "Values": [
         "Default Title"
+      ],
+      "OptionValues": [
+        {
+          "Id": "{Scrubbed}",
+          "Name": "Default Title"
+        }
       ]
     }
   ],

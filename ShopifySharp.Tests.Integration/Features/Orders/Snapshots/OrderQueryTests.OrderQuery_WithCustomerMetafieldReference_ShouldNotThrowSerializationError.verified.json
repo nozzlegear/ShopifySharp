@@ -1,7 +1,7 @@
 ﻿{
   "Order": {
     "billingAddress": "{Scrubbed}",
-    "createdAt": "DateTime_1",
+    "createdAt": "DateTimeOffset_1",
     "customer": {
       "id": "{Scrubbed}",
       "legacyResourceId": "{Scrubbed}"
@@ -10,7 +10,7 @@
     "id": "{Scrubbed}",
     "legacyResourceId": "{Scrubbed}",
     "name": "#1001",
-    "processedAt": "DateTime_1",
+    "processedAt": "DateTimeOffset_1",
     "shippingAddress": "{Scrubbed}",
     "shippingLine": {
       "id": "{Scrubbed}",
