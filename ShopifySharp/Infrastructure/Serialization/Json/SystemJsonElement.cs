@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Linq;
 using System.Text.Json;
 
 namespace ShopifySharp.Infrastructure.Serialization.Json;
@@ -37,6 +38,27 @@ internal class SystemJsonElement(JsonElement element, JsonDocument? document = n
 
     public IJsonElement GetProperty(string propertyName) =>
         new SystemJsonElement(element.GetProperty(propertyName), document);
+
+    public bool TryGetPropertyCaseInsensitive(string propertyName, out IJsonElement result)
+    {
+        if (ValueType != JsonValueType.Object)
+            throw new InvalidOperationException($"Expected {nameof(ValueType)} to be {nameof(JsonValueType.Object)}, but it was {ValueType}.");
+
+        // Check if there's an exact match first (fast path)
+        if (TryGetProperty(propertyName, out result))
+            return true;
+
+        // Next, try a case-insensitive search on the object's properties
+        foreach (var property in element.EnumerateObject().Where(property => property.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)))
+        {
+            result = new SystemJsonElement(property.Value, document);
+            return true;
+        }
+
+        // Property doesn't exist
+        result = null!;
+        return false;
+    }
 
     public IJsonObjectEnumerator EnumerateObject() =>
         new SystemJsonObjectEnumerator(element.EnumerateObject());

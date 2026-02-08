@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
-using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure.Serialization.Json;
 
@@ -125,6 +121,118 @@ public class SystemJsonElementTests
         result.Should().BeTrue();
         child.ValueType.Should().Be(JsonValueType.Number);
         child.GetRawObject().Should().BeOfType<JsonElement>().Which.GetInt32().Should().Be(123);
+    }
+
+    #endregion
+
+    #region bool TryGetPropertyCaseInsensitive(string propertyName, out IJsonElement result)
+
+    [Theory]
+    [InlineData(" null ", JsonValueType.Null, true)]
+    [InlineData(" true ", JsonValueType.True, true)]
+    [InlineData(" false ", JsonValueType.False, true)]
+    [InlineData(""" "some string" """, JsonValueType.String, true)]
+    [InlineData(" 123 ", JsonValueType.Number, true)]
+    [InlineData(""" ["an array"] """, JsonValueType.Array, true)]
+    [InlineData(""" {"foo":"bar"} """, JsonValueType.Object, false)]
+    public void TryGetPropertyCaseInsensitive_ShouldThrowForAnyValueTypeThatIsNotObject(string json, JsonValueType jsonValueType, bool shouldThrow)
+    {
+        // Setup
+        var doc = JsonDocument.Parse(json);
+        var node = new SystemJsonElement(doc);
+
+        // Act
+        var act = () => node.TryGetPropertyCaseInsensitive("foo", out _);
+
+        // Assert
+        if (shouldThrow)
+        {
+            act.Should().Throw<InvalidOperationException>()
+                .WithMessage($"Expected * to be Object, but it was {jsonValueType}.");
+        }
+        else
+        {
+            act.Should().NotThrow("objects should pass");
+        }
+    }
+
+    [Theory]
+    [InlineData("bulkOperation", "bulkOperation", true, "exact match uses fast path")]
+    [InlineData("bulkOperation", "BulkOperation", true, "PascalCase finds camelCase (GraphQL common case)")]
+    [InlineData("shop", "SHOP", true, "uppercase finds lowercase")]
+    [InlineData("PRODUCT", "product", true, "lowercase finds uppercase")]
+    [InlineData("MyCustomProperty", "mycustomproperty", true, "all lowercase finds mixed case")]
+    [InlineData("foo", "nonExistent", false, "non-existent property returns false")]
+    [InlineData("", "anyProperty", false, "empty object returns false")]
+    public void TryGetPropertyCaseInsensitive_WithVariousCases_ReturnsExpectedResult(
+        string jsonPropertyName,
+        string searchPropertyName,
+        bool shouldFind,
+        string because)
+    {
+        // Setup
+        var json = string.IsNullOrEmpty(jsonPropertyName)
+            ? "{}"
+            : $$"""{"{{jsonPropertyName}}":"test-value"}""";
+        var doc = JsonDocument.Parse(json);
+        var node = new SystemJsonElement(doc);
+
+        // Act
+        var result = node.TryGetPropertyCaseInsensitive(searchPropertyName, out var child);
+
+        // Assert
+        result.Should().Be(shouldFind, because);
+        if (shouldFind)
+        {
+            child.Should().NotBeNull();
+            child.ValueType.Should().Be(JsonValueType.String);
+        }
+        else
+        {
+            child.Should().BeNull();
+        }
+    }
+
+    [Fact]
+    public void TryGetPropertyCaseInsensitive_WhenMultiplePropertiesExist_ShouldMatchCorrectProperty()
+    {
+        // Setup
+        var doc = JsonDocument.Parse("""{"bulkOperation":{"id":"123"},"shop":{"name":"Store"},"product":{"title":"Item"}}""");
+        var node = new SystemJsonElement(doc);
+
+        // Act
+        // Search for properties with different cases
+        var resultBulk = node.TryGetPropertyCaseInsensitive("BulkOperation", out var childBulk);
+        var resultShop = node.TryGetPropertyCaseInsensitive("SHOP", out var childShop);
+        var resultProduct = node.TryGetPropertyCaseInsensitive("Product", out var childProduct);
+
+        // Assert
+        resultBulk.Should().BeTrue();
+        childBulk.GetProperty("id").GetRawObject().Should().BeOfType<JsonElement>().Which.GetString().Should().Be("123");
+
+        resultShop.Should().BeTrue();
+        childShop.GetProperty("name").GetRawObject().Should().BeOfType<JsonElement>().Which.GetString().Should().Be("Store");
+
+        resultProduct.Should().BeTrue();
+        childProduct.GetProperty("title").GetRawObject().Should().BeOfType<JsonElement>().Which.GetString().Should().Be("Item");
+    }
+
+    [Fact]
+    public void TryGetPropertyCaseInsensitive_ShouldPreferExactMatchOverCaseInsensitiveMatch()
+    {
+        // Setup
+        // document has both "product" and "Product" properties (should never happen but technically possible)
+        var doc = JsonDocument.Parse("""{"product":"lowercase","Product":"PascalCase"}""");
+        var node = new SystemJsonElement(doc);
+
+        // Act
+        // Search for exact "product" - should get exact match via fast path
+        var result = node.TryGetPropertyCaseInsensitive("product", out var child);
+
+        // Assert
+        result.Should().BeTrue();
+        child.GetRawObject().Should().BeOfType<JsonElement>().Which.GetString().Should().Be("lowercase",
+            "exact match should be preferred over case-insensitive match");
     }
 
     #endregion

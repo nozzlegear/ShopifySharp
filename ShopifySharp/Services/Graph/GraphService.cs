@@ -86,6 +86,7 @@ public class GraphService : ShopifyService, IGraphService
         System.Text.Json.JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
     }
 
+    /// <inheritdoc/>
     public virtual async Task<GraphResult<T>> PostAsync<T>(GraphRequest graphRequest, CancellationToken cancellationToken = default)
     {
         var returnType = typeof(T);
@@ -103,6 +104,10 @@ public class GraphService : ShopifyService, IGraphService
     {
         using var response = await SendAsync(graphRequest, cancellationToken);
         var dataElement = GetJsonDataElementOrThrow(response.Json, response.RequestId);
+
+        // Smart deserialization: Try to unwrap single-property responses
+        dataElement = TryUnwrapSinglePropertyResponse(dataElement, resultType);
+
         var data = await DeserializeJsonElementToTypeAsync(dataElement, resultType, response.RequestId, cancellationToken);
 
         return new GraphResult<object>
@@ -265,6 +270,27 @@ public class GraphService : ShopifyService, IGraphService
 
     private static string GetJsonPathOrDefault(Exception exn, string defaultPath) =>
         (exn as JsonException)?.Path ?? defaultPath;
+
+    /// <summary>
+    /// Attempts to unwrap single-property responses that match the target type name.
+    /// This allows direct deserialization without wrapper classes for single-object queries.
+    /// </summary>
+    /// <param name="dataElement">The 'data' element from the GraphQL response</param>
+    /// <param name="resultType">The target type for deserialization</param>
+    /// <returns>Unwrapped element if single property matches type name, otherwise the original element</returns>
+    private static IJsonElement TryUnwrapSinglePropertyResponse(IJsonElement dataElement, Type resultType)
+    {
+        // Only attempt unwrapping if data has exactly one property
+        if (dataElement.GetPropertyCount() != 1)
+            return dataElement;
+
+        // Try to find a property matching the type name (case insensitive)
+        if (dataElement.TryGetPropertyCaseInsensitive(resultType.Name, out var unwrappedElement))
+            return unwrappedElement;
+
+        // No match found, return original element (may be using the wrapper pattern)
+        return dataElement;
+    }
 
     /// <summary>
     /// Gets the <paramref name="jsonDocument"/>'s <c>data</c> node. Throws a <see cref="ShopifyJsonParseException"/>

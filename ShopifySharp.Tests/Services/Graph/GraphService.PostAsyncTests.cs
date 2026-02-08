@@ -435,6 +435,7 @@ public class GraphServicePostAsyncTests
         JsonValueKind jsonValueKind
     )
     {
+        // Setup
         var responseJson = $$""" { {{dataJson}} } """;
         const string expectedRequestId = "some-expected-request-id";
         var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
@@ -455,6 +456,125 @@ public class GraphServicePostAsyncTests
         exn.And.JsonPropertyName.Should().Be("data");
         exn.And.RequestId.Should().Be(expectedRequestId);
         exn.And.InnerException.Should().BeNull();
+    }
+
+    [Fact(DisplayName = "PostAsync<T> should unwrap single property responses matching the type name without a wrapper class")]
+    public async Task PostAsync_T_WithSinglePropertyMatchingTypeName_ShouldUnwrapAutomatically()
+    {
+        // Setup
+        const string responseJson = """
+        {
+            "data": {
+                "bulkOperation": {
+                    "id": "gid://shopify/BulkOperation/123",
+                    "status": "COMPLETED"
+                }
+            }
+        }
+        """;
+
+        var graphRequest = new GraphRequest { Query = "query { bulkOperation(id: $id) { id status } }" };
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson));
+
+        // Act
+        var result = await _sut.PostAsync<BulkOperation>(graphRequest);
+
+        // Assert
+        result.Data.Should().NotBeNull();
+        result.Data.Id.Should().Be("gid://shopify/BulkOperation/123");
+        result.Data.Status.Should().Be("COMPLETED");
+    }
+
+    [Fact(DisplayName = "PostAsync<T> should unwrap result and handle case-insensitive property name matching")]
+    public async Task PostAsync_T_WhenPropertyNameDiffersByCase_ShouldStillUnwrap()
+    {
+        // Setup
+        // GraphQL returns camelCase "bulkOperation", C# type is PascalCase "BulkOperation"
+        const string responseJson = """
+        {
+            "data": {
+                "bulkOperation": {
+                    "id": "test-123",
+                    "status": "RUNNING"
+                }
+            }
+        }
+        """;
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson));
+
+        // Act
+        var result = await _sut.PostAsync<BulkOperation>(new GraphRequest { Query = "..." });
+
+        // Assert
+        result.Data.Should().NotBeNull();
+        result.Data.Id.Should().Be("test-123");
+    }
+
+    [Fact(DisplayName = "PostAsync<T> should not unwrap when property name doesn't match type (backwards compat)")]
+    public async Task PostAsync_T_WithWrapperClass_ShouldNotUnwrap()
+    {
+        // Setup
+        const string responseJson = """
+        {
+            "data": {
+                "bulkOperation": {
+                    "id": "gid://shopify/BulkOperation/456",
+                    "status": "COMPLETED"
+                }
+            }
+        }
+        """;
+
+        var graphRequest = new GraphRequest { Query = "query { bulkOperation(id: $id) { id status } }" };
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson));
+
+        // Act
+        // Using a wrapper class even though the query contains a single property
+        var result = await _sut.PostAsync<BulkOperationWrapper>(graphRequest);
+
+        // Assert
+        // Should deserialize to the wrapper type
+        result.Data.Should().NotBeNull();
+        result.Data.BulkOperation.Should().NotBeNull();
+        result.Data.BulkOperation!.Id.Should().Be("gid://shopify/BulkOperation/456");
+    }
+
+    [Fact(DisplayName = "PostAsync<T> should not unwrap when response has multiple properties")]
+    public async Task PostAsync_T_WithMultipleProperties_ShouldNotUnwrap()
+    {
+        // Setup
+        const string responseJson = """
+        {
+            "data": {
+                "bulkOperation": { "id": "123" },
+                "shop": { "name": "Test Shop" }
+            }
+        }
+        """;
+
+        A.CallTo(_policy)
+            .WithReturnType<Task<RequestResult<string>>>()
+            .Returns(Utils.MakeRequestResult(responseJson));
+
+        // Act
+        // Deserialize using a wrapper class because the query contains more than one property
+        var graphRequest = new GraphRequest { Query = "query { bulkOperation { id } shop { name } }" };
+        var result = await _sut.PostAsync<MultiWrapper>(graphRequest);
+
+        // Assert
+        // Should deserialize to the wrapper class
+        result.Data.Should().NotBeNull();
+        result.Data.BulkOperation.Should().NotBeNull();
+        result.Data.BulkOperation!.Id.Should().Be("123");
     }
 
     #endregion
@@ -1361,4 +1481,22 @@ public class GraphServicePostAsyncTests
         /// </summary>
         public T? Value { get; set; }
     }
+
+    public class BulkOperation
+    {
+        public string? Id { get; set; }
+        public string? Status { get; set; }
+    }
+
+    public class BulkOperationWrapper
+    {
+        public BulkOperation? BulkOperation { get; set; }
+    }
+
+    public class MultiWrapper
+    {
+        public BulkOperation? BulkOperation { get; set; }
+        public GraphQL.Shop? Shop { get; set; }
+    }
+
 }

@@ -13,6 +13,8 @@ public interface IJsonElement : IDisposable
 
     IJsonElement GetProperty(string propertyName);
 
+    bool TryGetPropertyCaseInsensitive(string propertyName, out IJsonElement result);
+
     IJsonObjectEnumerator EnumerateObject();
 
     string GetRawText();
