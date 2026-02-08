@@ -32,7 +32,7 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     public async Task Deletes_Addresses()
     {
         var created = await Fixture.Create(Fixture.RandomStreetAddress(), true);
-        bool threw = false;
+        var threw = false;
 
         try
         {
@@ -76,15 +76,13 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     [Fact]
     public async Task Updates_Addresss()
     {
-        string firstName = "Jane";
-        string lastName = "Doe";
-        string fullName = "Jane Doe";
+        const string firstName = "Jane";
+        const string lastName = "Doe";
         var created = await Fixture.Create(Fixture.RandomStreetAddress());
-        long id = created.Id.Value;
+        var id = created.Id.Value;
 
         created.FirstName = firstName;
         created.LastName = lastName;
-        created.Name = fullName;
         created.Id = null;
 
         var updated = await Fixture.Service.UpdateAsync(Fixture.CustomerId.Value, id, created);
