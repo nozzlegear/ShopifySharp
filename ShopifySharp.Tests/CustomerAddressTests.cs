@@ -83,6 +83,7 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
 
         created.FirstName = firstName;
         created.LastName = lastName;
+        created.Name = null;
         created.Id = null;
 
         var updated = await Fixture.Service.UpdateAsync(Fixture.CustomerId.Value, id, created);
