@@ -76,11 +76,13 @@ public class Address: ShopifyObject
     [JsonProperty("longitude")]
     public decimal? Longitude { get; set; }
 
+#nullable enable
     /// <summary>
     /// The name.
     /// </summary>
-    [JsonProperty("name")]
-    public string Name { get; set; }
+    [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Name { get; set; }
+#nullable disable
 
     /// <summary>
     /// The phone number.
