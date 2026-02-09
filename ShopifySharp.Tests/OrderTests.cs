@@ -235,7 +235,8 @@ public class OrderTestsFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+        // Retry on any rate limit failure (creating orders is heavily rate limited on test stores)
+        Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(retryOnlyIfLeakyBucketFull: false));
 
         // Create an order for count, list, get, etc. orders.
         await Create();

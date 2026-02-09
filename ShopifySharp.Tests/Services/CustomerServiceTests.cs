@@ -283,7 +283,8 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        var policy = new LeakyBucketExecutionPolicy();
+        // Retry on any rate limit failure (creating orders is heavily rate limited on test stores)
+        var policy = new LeakyBucketExecutionPolicy(retryOnlyIfLeakyBucketFull: false);
         Service.SetExecutionPolicy(policy);
         OrderService.SetExecutionPolicy(policy);
 
