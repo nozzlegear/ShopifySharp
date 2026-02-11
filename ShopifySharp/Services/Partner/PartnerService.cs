@@ -22,26 +22,32 @@ public class PartnerService : ShopifyService, IPartnerService
     #nullable enable
 
     private readonly long _organizationId;
-    private readonly string? _apiVersion;
 
-    public override string APIVersion => _apiVersion ?? base.APIVersion;
+    private readonly IShopifyApiVersion? _shopifyApiVersion;
+    public override string APIVersion => _shopifyApiVersion?.Version ?? base.APIVersion;
 
-    public PartnerService(long organizationId, string accessToken, string? apiVersion = null) : base("partners.shopify.com", accessToken)
+    public PartnerService(long organizationId, string accessToken, string? apiVersion = null)
+        : base("partners.shopify.com", accessToken)
     {
         _organizationId = organizationId;
-        _apiVersion = apiVersion;
+        _shopifyApiVersion = apiVersion is not null
+            ? new CustomShopifyApiVersion(apiVersion)
+            : InitializeDependencies(null);
     }
 
-    public PartnerService(long organizationId, string accessToken, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", accessToken, shopifyDomainUtility)
+    public PartnerService(long organizationId, string accessToken, IShopifyDomainUtility? shopifyDomainUtility)
+        : base("partners.shopify.com", accessToken, shopifyDomainUtility)
     {
         _organizationId = organizationId;
-        _apiVersion = null;
+        _shopifyApiVersion = InitializeDependencies(null);
     }
 
-    public PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IShopifyDomainUtility? shopifyDomainUtility) : base("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken, shopifyDomainUtility)
+    public PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IShopifyDomainUtility? shopifyDomainUtility)
+        : base("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken, shopifyDomainUtility)
     {
         _organizationId = shopifyPartnerApiCredentials.PartnerOrganizationId;
-        _apiVersion = null;
+        _shopifyApiVersion = InitializeDependencies(null);
+    }
 
     internal PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IServiceProvider serviceProvider)
         : base(new ShopifyApiCredentials("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken), serviceProvider)
@@ -50,6 +56,9 @@ public class PartnerService : ShopifyService, IPartnerService
         _shopifyApiVersion = InitializeDependencies(serviceProvider);
     }
 
+    private static IShopifyApiVersion? InitializeDependencies(IServiceProvider? serviceProvider)
+    {
+        return InternalServiceResolver.GetService<IShopifyApiVersion>(serviceProvider);
     }
 
     #nullable disable

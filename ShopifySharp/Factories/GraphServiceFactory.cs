@@ -40,7 +40,9 @@ public class GraphServiceFactory : IGraphServiceFactory
     /// <inheritDoc />
     public virtual IGraphService Create(ShopifyApiCredentials credentials)
     {
-        IGraphService service = new GraphService(credentials, null, _shopifyDomainUtility);
+        IGraphService service = _serviceProvider is not null
+            ? new GraphService(credentials, _serviceProvider)
+            : new GraphService(credentials, DefaultShopifyApiVersion.DefaultVersion, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

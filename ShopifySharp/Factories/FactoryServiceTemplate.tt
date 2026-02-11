@@ -70,7 +70,9 @@ public class <#= TypeName #>Factory : I<#= TypeName #>Factory
     {
 <# } #>
 <# if (TypeName == "GraphService") { #>
-        I<#= TypeName #> service = new <#= TypeName #>(credentials, null, _shopifyDomainUtility);
+        I<#= TypeName #> service = _serviceProvider is not null
+            ? new <#= TypeName #>(credentials, _serviceProvider)
+            : new <#= TypeName #>(credentials, DefaultShopifyApiVersion.DefaultVersion, _shopifyDomainUtility);
 <# } else { #>
         I<#= TypeName #> service = _serviceProvider is not null
             ? new <#= TypeName #>(credentials, _serviceProvider)

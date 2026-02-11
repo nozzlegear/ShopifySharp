@@ -32,13 +32,13 @@ public class GraphService : ShopifyService, IGraphService
     private readonly IHttpContentSerializer _httpContentSerializer;
     private readonly IJsonSerializer _jsonSerializer;
 
-    public override string APIVersion => field ?? base.APIVersion;
+    private readonly IShopifyApiVersion _shopifyApiVersion;
+    public override string APIVersion => field ?? _shopifyApiVersion.Version;
 
-    internal GraphService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider, string? apiVersion = null)
+    internal GraphService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
         : base(shopifyApiCredentials, serviceProvider)
     {
-        APIVersion = apiVersion;
-        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(serviceProvider);
+        (_httpContentSerializer, _jsonSerializer, _shopifyApiVersion) = InitializeDependencies(serviceProvider);
     }
 
     public GraphService(
@@ -47,8 +47,8 @@ public class GraphService : ShopifyService, IGraphService
         IShopifyDomainUtility? shopifyDomainUtility = null
     ) : base(shopifyApiCredentials, shopifyDomainUtility)
     {
+        (_httpContentSerializer, _jsonSerializer, _shopifyApiVersion) = InitializeDependencies(null);
         APIVersion = apiVersion;
-        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
     public GraphService(
@@ -57,8 +57,8 @@ public class GraphService : ShopifyService, IGraphService
         string? apiVersion = null
     ) : base(myShopifyUrl, shopAccessToken)
     {
+        (_httpContentSerializer, _jsonSerializer, _shopifyApiVersion) = InitializeDependencies(null);
         APIVersion = apiVersion;
-        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
     }
 
     public GraphService(
@@ -67,11 +67,10 @@ public class GraphService : ShopifyService, IGraphService
         IShopifyDomainUtility shopifyDomainUtility
     ) : base(myShopifyUrl, shopAccessToken, shopifyDomainUtility)
     {
-        APIVersion = null;
-        (_httpContentSerializer, _jsonSerializer) = InitializeDependencies(null);
+        (_httpContentSerializer, _jsonSerializer, _shopifyApiVersion) = InitializeDependencies(null);
     }
 
-    private static (IHttpContentSerializer, IJsonSerializer) InitializeDependencies(IServiceProvider? serviceProvider)
+    private static (IHttpContentSerializer, IJsonSerializer, IShopifyApiVersion) InitializeDependencies(IServiceProvider? serviceProvider)
     {
         var httpContentSerializer = InternalServiceResolver.GetServiceOrDefault<IHttpContentSerializer>(
             serviceProvider,
@@ -79,9 +78,14 @@ public class GraphService : ShopifyService, IGraphService
         );
         var jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
             serviceProvider,
-            () => new SystemJsonSerializer(GetJsonSerializerOptions()));
+            () => new SystemJsonSerializer(GetJsonSerializerOptions())
+        );
+        var shopifyApiVersion = InternalServiceResolver.GetServiceOrDefault<IShopifyApiVersion>(
+            serviceProvider,
+            () => new DefaultShopifyApiVersion()
+        );
 
-        return (httpContentSerializer, jsonSerializer);
+        return (httpContentSerializer, jsonSerializer, shopifyApiVersion);
 
         System.Text.Json.JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
     }
