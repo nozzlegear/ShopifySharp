@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IRecurringChargeServiceFactory : IServiceFactory<IRecurringChargeService>;
 
+[PublicAPI]
 public class RecurringChargeServiceFactory : IRecurringChargeServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class RecurringChargeServiceFactory : IRecurringChargeServiceFactory
     /// <inheritDoc />
     public virtual IRecurringChargeService Create(ShopifyApiCredentials credentials)
     {
-        IRecurringChargeService service = new RecurringChargeService(credentials, _shopifyDomainUtility);
+        IRecurringChargeService service = _serviceProvider is not null
+            ? new RecurringChargeService(credentials, _serviceProvider)
+            : new RecurringChargeService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

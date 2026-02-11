@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -23,6 +24,7 @@ public class OrderService : ShopifyService, IOrderService
     public OrderService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
     #nullable enable
     internal OrderService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal OrderService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
 
     internal OrderService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}

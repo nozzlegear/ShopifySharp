@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Lists;
@@ -22,6 +23,7 @@ public class PageService : ShopifyService, IPageService
     public PageService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
     #nullable enable
     internal PageService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal PageService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
     internal PageService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  

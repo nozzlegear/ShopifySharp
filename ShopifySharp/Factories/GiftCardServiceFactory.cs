@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IGiftCardServiceFactory : IServiceFactory<IGiftCardService>;
 
+[PublicAPI]
 public class GiftCardServiceFactory : IGiftCardServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class GiftCardServiceFactory : IGiftCardServiceFactory
     /// <inheritDoc />
     public virtual IGiftCardService Create(ShopifyApiCredentials credentials)
     {
-        IGiftCardService service = new GiftCardService(credentials, _shopifyDomainUtility);
+        IGiftCardService service = _serviceProvider is not null
+            ? new GiftCardService(credentials, _serviceProvider)
+            : new GiftCardService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

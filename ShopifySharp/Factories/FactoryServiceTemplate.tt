@@ -7,6 +7,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -14,6 +15,7 @@ using ShopifySharp.Infrastructure;
 namespace ShopifySharp.Factories;
 
 <# if (TypeName == "PartnerService") { #>
+[PublicAPI]
 public interface IPartnerServiceFactory
 {
     /// Creates a new instance of the <see cref="IPartnerService" /> with the given credentials.
@@ -29,6 +31,7 @@ public interface IPartnerServiceFactory
 public interface I<#= TypeName #>Factory : IServiceFactory<I<#= TypeName #>>;
 <# } #>
 
+[PublicAPI]
 public class <#= TypeName #>Factory : I<#= TypeName #>Factory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -69,7 +72,9 @@ public class <#= TypeName #>Factory : I<#= TypeName #>Factory
 <# if (TypeName == "GraphService") { #>
         I<#= TypeName #> service = new <#= TypeName #>(credentials, null, _shopifyDomainUtility);
 <# } else { #>
-        I<#= TypeName #> service = new <#= TypeName #>(credentials, _shopifyDomainUtility);
+        I<#= TypeName #> service = _serviceProvider is not null
+            ? new <#= TypeName #>(credentials, _serviceProvider)
+            : new <#= TypeName #>(credentials, _shopifyDomainUtility);
 <# } #>
 
         if (_requestExecutionPolicy is not null)

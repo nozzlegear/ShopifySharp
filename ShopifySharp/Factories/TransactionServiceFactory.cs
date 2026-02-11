@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ITransactionServiceFactory : IServiceFactory<ITransactionService>;
 
+[PublicAPI]
 public class TransactionServiceFactory : ITransactionServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class TransactionServiceFactory : ITransactionServiceFactory
     /// <inheritDoc />
     public virtual ITransactionService Create(ShopifyApiCredentials credentials)
     {
-        ITransactionService service = new TransactionService(credentials, _shopifyDomainUtility);
+        ITransactionService service = _serviceProvider is not null
+            ? new TransactionService(credentials, _serviceProvider)
+            : new TransactionService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

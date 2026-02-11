@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ILocationServiceFactory : IServiceFactory<ILocationService>;
 
+[PublicAPI]
 public class LocationServiceFactory : ILocationServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class LocationServiceFactory : ILocationServiceFactory
     /// <inheritDoc />
     public virtual ILocationService Create(ShopifyApiCredentials credentials)
     {
-        ILocationService service = new LocationService(credentials, _shopifyDomainUtility);
+        ILocationService service = _serviceProvider is not null
+            ? new LocationService(credentials, _serviceProvider)
+            : new LocationService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

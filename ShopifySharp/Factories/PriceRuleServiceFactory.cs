@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IPriceRuleServiceFactory : IServiceFactory<IPriceRuleService>;
 
+[PublicAPI]
 public class PriceRuleServiceFactory : IPriceRuleServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class PriceRuleServiceFactory : IPriceRuleServiceFactory
     /// <inheritDoc />
     public virtual IPriceRuleService Create(ShopifyApiCredentials credentials)
     {
-        IPriceRuleService service = new PriceRuleService(credentials, _shopifyDomainUtility);
+        IPriceRuleService service = _serviceProvider is not null
+            ? new PriceRuleService(credentials, _serviceProvider)
+            : new PriceRuleService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

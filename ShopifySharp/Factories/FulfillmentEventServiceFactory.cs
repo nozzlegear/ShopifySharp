@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IFulfillmentEventServiceFactory : IServiceFactory<IFulfillmentEventService>;
 
+[PublicAPI]
 public class FulfillmentEventServiceFactory : IFulfillmentEventServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class FulfillmentEventServiceFactory : IFulfillmentEventServiceFactory
     /// <inheritDoc />
     public virtual IFulfillmentEventService Create(ShopifyApiCredentials credentials)
     {
-        IFulfillmentEventService service = new FulfillmentEventService(credentials, _shopifyDomainUtility);
+        IFulfillmentEventService service = _serviceProvider is not null
+            ? new FulfillmentEventService(credentials, _serviceProvider)
+            : new FulfillmentEventService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICarrierServiceFactory : IServiceFactory<ICarrierService>;
 
+[PublicAPI]
 public class CarrierServiceFactory : ICarrierServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class CarrierServiceFactory : ICarrierServiceFactory
     /// <inheritDoc />
     public virtual ICarrierService Create(ShopifyApiCredentials credentials)
     {
-        ICarrierService service = new CarrierService(credentials, _shopifyDomainUtility);
+        ICarrierService service = _serviceProvider is not null
+            ? new CarrierService(credentials, _serviceProvider)
+            : new CarrierService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Infrastructure;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ public class FulfillmentRequestService : ShopifyService, IFulfillmentRequestServ
     public FulfillmentRequestService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
     #nullable enable
     internal FulfillmentRequestService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal FulfillmentRequestService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
     internal FulfillmentRequestService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  

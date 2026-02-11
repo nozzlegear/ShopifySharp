@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IApplicationCreditServiceFactory : IServiceFactory<IApplicationCreditService>;
 
+[PublicAPI]
 public class ApplicationCreditServiceFactory : IApplicationCreditServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class ApplicationCreditServiceFactory : IApplicationCreditServiceFactory
     /// <inheritDoc />
     public virtual IApplicationCreditService Create(ShopifyApiCredentials credentials)
     {
-        IApplicationCreditService service = new ApplicationCreditService(credentials, _shopifyDomainUtility);
+        IApplicationCreditService service = _serviceProvider is not null
+            ? new ApplicationCreditService(credentials, _serviceProvider)
+            : new ApplicationCreditService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

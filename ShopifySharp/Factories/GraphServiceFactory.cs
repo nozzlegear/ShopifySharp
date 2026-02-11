@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IGraphServiceFactory : IServiceFactory<IGraphService>;
 
+[PublicAPI]
 public class GraphServiceFactory : IGraphServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;

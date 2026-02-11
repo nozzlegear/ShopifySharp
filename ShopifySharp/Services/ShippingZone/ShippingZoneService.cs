@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Filters;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -21,6 +22,7 @@ public class ShippingZoneService : ShopifyService, IShippingZoneService
     public ShippingZoneService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
     #nullable enable
     internal ShippingZoneService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal ShippingZoneService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
     internal ShippingZoneService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  

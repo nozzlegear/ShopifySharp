@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -16,6 +17,7 @@ public class StorefrontAccessTokenService : ShopifyService, IStorefrontAccessTok
     public StorefrontAccessTokenService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
     #nullable enable
     internal StorefrontAccessTokenService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal StorefrontAccessTokenService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
     internal StorefrontAccessTokenService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  

@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICancellationRequestServiceFactory : IServiceFactory<ICancellationRequestService>;
 
+[PublicAPI]
 public class CancellationRequestServiceFactory : ICancellationRequestServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class CancellationRequestServiceFactory : ICancellationRequestServiceFact
     /// <inheritDoc />
     public virtual ICancellationRequestService Create(ShopifyApiCredentials credentials)
     {
-        ICancellationRequestService service = new CancellationRequestService(credentials, _shopifyDomainUtility);
+        ICancellationRequestService service = _serviceProvider is not null
+            ? new CancellationRequestService(credentials, _serviceProvider)
+            : new CancellationRequestService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

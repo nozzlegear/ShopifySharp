@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICountryServiceFactory : IServiceFactory<ICountryService>;
 
+[PublicAPI]
 public class CountryServiceFactory : ICountryServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class CountryServiceFactory : ICountryServiceFactory
     /// <inheritDoc />
     public virtual ICountryService Create(ShopifyApiCredentials credentials)
     {
-        ICountryService service = new CountryService(credentials, _shopifyDomainUtility);
+        ICountryService service = _serviceProvider is not null
+            ? new CountryService(credentials, _serviceProvider)
+            : new CountryService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

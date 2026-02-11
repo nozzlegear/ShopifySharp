@@ -3,16 +3,16 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
-[Obsolete("Shopify has deprecated the REST API for product variants. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product variants via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductVariantServiceFactory : IServiceFactory<IProductVariantService>;
 
-[Obsolete("Shopify has deprecated the REST API for product variants. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product variants via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
+[PublicAPI]
 public class ProductVariantServiceFactory : IProductVariantServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -40,7 +40,9 @@ public class ProductVariantServiceFactory : IProductVariantServiceFactory
     /// <inheritDoc />
     public virtual IProductVariantService Create(ShopifyApiCredentials credentials)
     {
-        IProductVariantService service = new ProductVariantService(credentials, _shopifyDomainUtility);
+        IProductVariantService service = _serviceProvider is not null
+            ? new ProductVariantService(credentials, _serviceProvider)
+            : new ProductVariantService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

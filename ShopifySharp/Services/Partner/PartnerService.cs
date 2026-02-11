@@ -42,6 +42,14 @@ public class PartnerService : ShopifyService, IPartnerService
     {
         _organizationId = shopifyPartnerApiCredentials.PartnerOrganizationId;
         _apiVersion = null;
+
+    internal PartnerService(ShopifyPartnerApiCredentials shopifyPartnerApiCredentials, IServiceProvider serviceProvider)
+        : base(new ShopifyApiCredentials("partners.shopify.com", shopifyPartnerApiCredentials.AccessToken), serviceProvider)
+    {
+        _organizationId = shopifyPartnerApiCredentials.PartnerOrganizationId;
+        _shopifyApiVersion = InitializeDependencies(serviceProvider);
+    }
+
     }
 
     #nullable disable

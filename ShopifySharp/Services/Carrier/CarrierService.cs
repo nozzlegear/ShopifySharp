@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Infrastructure;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -21,6 +22,7 @@ public class CarrierService : ShopifyService, ICarrierService
     public CarrierService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }        
     #nullable enable
     internal CarrierService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal CarrierService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
     internal CarrierService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  

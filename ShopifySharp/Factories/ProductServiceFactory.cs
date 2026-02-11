@@ -3,16 +3,16 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
-[Obsolete("Shopify has deprecated the REST API for products. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage products via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductServiceFactory : IServiceFactory<IProductService>;
 
-[Obsolete("Shopify has deprecated the REST API for products. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage products via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
+[PublicAPI]
 public class ProductServiceFactory : IProductServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -40,7 +40,9 @@ public class ProductServiceFactory : IProductServiceFactory
     /// <inheritDoc />
     public virtual IProductService Create(ShopifyApiCredentials credentials)
     {
-        IProductService service = new ProductService(credentials, _shopifyDomainUtility);
+        IProductService service = _serviceProvider is not null
+            ? new ProductService(credentials, _serviceProvider)
+            : new ProductService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

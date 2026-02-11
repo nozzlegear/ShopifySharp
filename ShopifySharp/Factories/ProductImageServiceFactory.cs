@@ -3,16 +3,16 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
-[Obsolete("Shopify has deprecated the REST API for product images. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product images via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
 public interface IProductImageServiceFactory : IServiceFactory<IProductImageService>;
 
-[Obsolete("Shopify has deprecated the REST API for product images. This service is deprecated and will be removed in a future version of ShopifySharp. Use ShopifySharp's GraphService to manage product images via the GraphQL API, and check https://github.com/nozzlegear/shopifysharp for a migration guide.")]
+[PublicAPI]
 public class ProductImageServiceFactory : IProductImageServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -40,7 +40,9 @@ public class ProductImageServiceFactory : IProductImageServiceFactory
     /// <inheritDoc />
     public virtual IProductImageService Create(ShopifyApiCredentials credentials)
     {
-        IProductImageService service = new ProductImageService(credentials, _shopifyDomainUtility);
+        IProductImageService service = _serviceProvider is not null
+            ? new ProductImageService(credentials, _serviceProvider)
+            : new ProductImageService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

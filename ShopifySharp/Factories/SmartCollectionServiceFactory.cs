@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ISmartCollectionServiceFactory : IServiceFactory<ISmartCollectionService>;
 
+[PublicAPI]
 public class SmartCollectionServiceFactory : ISmartCollectionServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class SmartCollectionServiceFactory : ISmartCollectionServiceFactory
     /// <inheritDoc />
     public virtual ISmartCollectionService Create(ShopifyApiCredentials credentials)
     {
-        ISmartCollectionService service = new SmartCollectionService(credentials, _shopifyDomainUtility);
+        ISmartCollectionService service = _serviceProvider is not null
+            ? new SmartCollectionService(credentials, _serviceProvider)
+            : new SmartCollectionService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

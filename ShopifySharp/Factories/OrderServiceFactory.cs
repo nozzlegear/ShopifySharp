@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IOrderServiceFactory : IServiceFactory<IOrderService>;
 
+[PublicAPI]
 public class OrderServiceFactory : IOrderServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class OrderServiceFactory : IOrderServiceFactory
     /// <inheritDoc />
     public virtual IOrderService Create(ShopifyApiCredentials credentials)
     {
-        IOrderService service = new OrderService(credentials, _shopifyDomainUtility);
+        IOrderService service = _serviceProvider is not null
+            ? new OrderService(credentials, _serviceProvider)
+            : new OrderService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

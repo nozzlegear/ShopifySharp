@@ -3,12 +3,14 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
 
 namespace ShopifySharp.Factories;
 
+[PublicAPI]
 public interface IPartnerServiceFactory
 {
     /// Creates a new instance of the <see cref="IPartnerService" /> with the given credentials.
@@ -21,6 +23,7 @@ public interface IPartnerServiceFactory
     IPartnerService Create(ShopifyPartnerApiCredentials credentials);
 }
 
+[PublicAPI]
 public class PartnerServiceFactory : IPartnerServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -48,7 +51,9 @@ public class PartnerServiceFactory : IPartnerServiceFactory
     /// <inheritDoc />
     public virtual IPartnerService Create(ShopifyPartnerApiCredentials credentials)
     {
-        IPartnerService service = new PartnerService(credentials, _shopifyDomainUtility);
+        IPartnerService service = _serviceProvider is not null
+            ? new PartnerService(credentials, _serviceProvider)
+            : new PartnerService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

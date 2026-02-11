@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface ICheckoutServiceFactory : IServiceFactory<ICheckoutService>;
 
+[PublicAPI]
 public class CheckoutServiceFactory : ICheckoutServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class CheckoutServiceFactory : ICheckoutServiceFactory
     /// <inheritDoc />
     public virtual ICheckoutService Create(ShopifyApiCredentials credentials)
     {
-        ICheckoutService service = new CheckoutService(credentials, _shopifyDomainUtility);
+        ICheckoutService service = _serviceProvider is not null
+            ? new CheckoutService(credentials, _serviceProvider)
+            : new CheckoutService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

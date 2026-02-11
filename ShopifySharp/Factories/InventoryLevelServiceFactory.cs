@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IInventoryLevelServiceFactory : IServiceFactory<IInventoryLevelService>;
 
+[PublicAPI]
 public class InventoryLevelServiceFactory : IInventoryLevelServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class InventoryLevelServiceFactory : IInventoryLevelServiceFactory
     /// <inheritDoc />
     public virtual IInventoryLevelService Create(ShopifyApiCredentials credentials)
     {
-        IInventoryLevelService service = new InventoryLevelService(credentials, _shopifyDomainUtility);
+        IInventoryLevelService service = _serviceProvider is not null
+            ? new InventoryLevelService(credentials, _serviceProvider)
+            : new InventoryLevelService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);

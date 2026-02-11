@@ -1,3 +1,4 @@
+using System;
 using ShopifySharp.Infrastructure;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ public class CancellationRequestService : ShopifyService, ICancellationRequestSe
     public CancellationRequestService(string myShopifyUrl, string shopAccessToken) : base(myShopifyUrl, shopAccessToken) { }
     #nullable enable
     internal CancellationRequestService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? shopifyDomainUtility = null) : base(shopifyApiCredentials, shopifyDomainUtility) {}
+    internal CancellationRequestService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider) : base(shopifyApiCredentials, serviceProvider) {}
     #nullable restore
     internal CancellationRequestService(string shopDomain, string accessToken, IShopifyDomainUtility shopifyDomainUtility) : base(shopDomain, accessToken, shopifyDomainUtility) {}
  

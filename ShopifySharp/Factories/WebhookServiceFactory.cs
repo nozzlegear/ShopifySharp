@@ -3,6 +3,7 @@
 // This class is auto-generated from a template. Please do not edit it or change it directly.
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Credentials;
 using ShopifySharp.Utilities;
 using ShopifySharp.Infrastructure;
@@ -11,6 +12,7 @@ namespace ShopifySharp.Factories;
 
 public interface IWebhookServiceFactory : IServiceFactory<IWebhookService>;
 
+[PublicAPI]
 public class WebhookServiceFactory : IWebhookServiceFactory
 {
     private readonly IShopifyDomainUtility? _shopifyDomainUtility;
@@ -38,7 +40,9 @@ public class WebhookServiceFactory : IWebhookServiceFactory
     /// <inheritDoc />
     public virtual IWebhookService Create(ShopifyApiCredentials credentials)
     {
-        IWebhookService service = new WebhookService(credentials, _shopifyDomainUtility);
+        IWebhookService service = _serviceProvider is not null
+            ? new WebhookService(credentials, _serviceProvider)
+            : new WebhookService(credentials, _shopifyDomainUtility);
 
         if (_requestExecutionPolicy is not null)
             service.SetExecutionPolicy(_requestExecutionPolicy);
