@@ -1,5 +1,8 @@
 using System.Reflection;
 using FakeItEasy;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Http;
+using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Extensions.DependencyInjection.Tests;
@@ -43,9 +46,11 @@ public class FactoryServiceTests
         var serviceInterfaceType = typeof(IPartnerService);
         var sut = A.Fake<IServiceProvider>(x => x.Strict());
         var getDomainServiceCall = A.CallTo(() => sut.GetService(typeof(IShopifyDomainUtility)));
+        var getShopifyApiVersionCall = A.CallTo(() => sut.GetService(typeof(IShopifyApiVersion)));
         var getExecutionPolicyCall = A.CallTo(() => sut.GetService(typeof(IRequestExecutionPolicy)));
 
         getDomainServiceCall.Returns(A.Dummy<IShopifyDomainUtility>());
+        getShopifyApiVersionCall.Returns(A.Dummy<IShopifyApiVersion>());
         getExecutionPolicyCall.Returns(A.Dummy<IRequestExecutionPolicy>());
 
         // Act
@@ -53,7 +58,7 @@ public class FactoryServiceTests
         {
             var factory = Activator.CreateInstance(factoryServiceType, sut) as IPartnerServiceFactory;
             factory.Should().BeOfType(factoryServiceType);
-            return factory!.Create(_partnerCredentials);
+            return factory.Create(_partnerCredentials);
         };
 
         // Assert
@@ -63,6 +68,7 @@ public class FactoryServiceTests
             .Should()
             .BeAssignableTo(serviceInterfaceType, "created service should implement the interface");
         getDomainServiceCall.MustHaveHappened();
+        getShopifyApiVersionCall.MustHaveHappened();
         getExecutionPolicyCall.MustHaveHappened();
     }
 
@@ -76,16 +82,22 @@ public class FactoryServiceTests
         var sut = A.Fake<IServiceProvider>(x => x.Strict());
         var getDomainServiceCall = A.CallTo(() => sut.GetService(typeof(IShopifyDomainUtility)));
         var getExecutionPolicyCall = A.CallTo(() => sut.GetService(typeof(IRequestExecutionPolicy)));
+        var getShopifyApiVersionCall = A.CallTo(() => sut.GetService(typeof(IShopifyApiVersion)));
+        var getGraphContentSerializerCall = A.CallTo(() => sut.GetService(typeof(IHttpContentSerializer)));
+        var getJsonSerializerCall = A.CallTo(() => sut.GetService(typeof(IJsonSerializer)));
 
         getDomainServiceCall.Returns(A.Dummy<IShopifyDomainUtility>());
         getExecutionPolicyCall.Returns(A.Dummy<IRequestExecutionPolicy>());
+        getShopifyApiVersionCall.Returns(A.Dummy<IShopifyApiVersion>());
+        getGraphContentSerializerCall.Returns(A.Dummy<IHttpContentSerializer>());
+        getJsonSerializerCall.Returns(A.Dummy<IJsonSerializer>());
 
         // Act
         var act = () =>
         {
             var factory = Activator.CreateInstance(factoryServiceType, sut) as IServiceFactory<IShopifyService>;
             factory.Should().BeOfType(factoryServiceType);
-            return factory!.Create(_credentials);
+            return factory.Create(_credentials);
         };
 
         // Assert
@@ -96,6 +108,11 @@ public class FactoryServiceTests
             .BeAssignableTo(serviceInterfaceType, "created service should implement the interface");
         getDomainServiceCall.MustHaveHappened();
         getExecutionPolicyCall.MustHaveHappened();
+        getShopifyApiVersionCall.MustHaveHappened();
+        // This should only be called by the GraphService
+        getGraphContentSerializerCall.MustHaveHappenedOnceOrLess();
+        // This will be called twice when testing the ShopPlanService (once by the service, once by the GraphService it extends)
+        getJsonSerializerCall.MustHaveHappenedTwiceOrLess();
     }
 
     [Fact]
