@@ -28,9 +28,8 @@ public class InventoryLevelServiceFactory : IInventoryLevelServiceFactory
 
     public InventoryLevelServiceFactory(IServiceProvider serviceProvider)
     {
-        _shopifyDomainUtility = InternalServiceResolver.GetService<IShopifyDomainUtility>(serviceProvider);
-        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
         _serviceProvider = serviceProvider;
+        _requestExecutionPolicy = InternalServiceResolver.GetService<IRequestExecutionPolicy>(serviceProvider);
     }
 
     /// <inheritDoc />
