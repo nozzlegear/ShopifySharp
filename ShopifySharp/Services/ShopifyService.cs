@@ -1,4 +1,5 @@
-﻿// ReSharper disable InconsistentNaming
+﻿#nullable enable
+// ReSharper disable InconsistentNaming
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,9 @@ public abstract class ShopifyService : IShopifyService
 {
     public const string REQUEST_HEADER_ACCESS_TOKEN = "X-Shopify-Access-Token";
 
-#nullable enable
+    private readonly IShopifyApiVersion? _shopifyApiVersion;
 
-    public virtual string APIVersion => "2025-07";
+    public virtual string APIVersion => _shopifyApiVersion?.Version ?? DefaultShopifyApiVersion.DefaultVersion;
     public virtual bool SupportsAPIVersioning => true;
 
     protected Uri _ShopUri { get; set; }
@@ -35,7 +36,8 @@ public abstract class ShopifyService : IShopifyService
 
     protected ShopifyService(string shopDomain, string accessToken, IShopifyDomainUtility? domainUtility = null)
     {
-        domainUtility ??= new ShopifyDomainUtility();
+        (domainUtility, _shopifyApiVersion) = InitializeDependencies(domainUtility, null);
+
         _ShopUri = domainUtility.BuildShopDomainUri(shopDomain);
         _AccessToken = accessToken;
         _Client = _HttpClientFactory.CreateClient();
@@ -44,7 +46,8 @@ public abstract class ShopifyService : IShopifyService
 
     protected ShopifyService(ShopifyApiCredentials shopifyApiCredentials, IShopifyDomainUtility? domainUtility)
     {
-        domainUtility ??= new ShopifyDomainUtility();
+        (domainUtility, _shopifyApiVersion) = InitializeDependencies(domainUtility, null);
+
         _ShopUri = domainUtility.BuildShopDomainUri(shopifyApiCredentials.ShopDomain);
         _AccessToken = shopifyApiCredentials.AccessToken;
         _Client = _HttpClientFactory.CreateClient();
@@ -60,13 +63,22 @@ public abstract class ShopifyService : IShopifyService
     /// </remarks>
     internal ShopifyService(ShopifyApiCredentials shopifyApiCredentials, IServiceProvider serviceProvider)
     {
-        var domainUtility = InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(serviceProvider, () => new ShopifyDomainUtility());
+        (var domainUtility, _shopifyApiVersion) = InitializeDependencies(null, serviceProvider);
+
         _ShopUri = domainUtility.BuildShopDomainUri(shopifyApiCredentials.ShopDomain);
         _AccessToken = shopifyApiCredentials.AccessToken;
         // TODO: get the client factory from the service provider
         _Client = _HttpClientFactory.CreateClient();
         // TODO: get the execution policy from the service provider
         _ExecutionPolicy = _GlobalExecutionPolicy;
+    }
+
+    private static (IShopifyDomainUtility, IShopifyApiVersion?) InitializeDependencies(IShopifyDomainUtility? domainUtility, IServiceProvider? serviceProvider)
+    {
+        domainUtility ??= InternalServiceResolver.GetServiceOrDefault<IShopifyDomainUtility>(serviceProvider,
+            () => new ShopifyDomainUtility());
+        var shopifyApiVersion = InternalServiceResolver.GetService<IShopifyApiVersion>(serviceProvider);
+        return (domainUtility, shopifyApiVersion);
     }
 
 #nullable disable
