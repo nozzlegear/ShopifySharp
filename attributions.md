@@ -1,14 +1,13 @@
 # Third-Party Attributions
 
-## [graphql-query-builder-dotnet](https://github.com/charlesdevandiere/graphql-query-builder-dotnet)
+## [graphql-query-builder-dotnet by Charles de Vandière](https://github.com/charlesdevandiere/graphql-query-builder-dotnet)
 
 **Files**:
 
-- ShopifySharp/Infrastructure/GraphQueryBuilder.cs
-- ShopifySharp/Infrastructure/Query.cs
-- ShopifySharp/Infrastructure/QueryOptions.cs
-- ShopifySharp/Infrastructure/QueryStringBuilder.cs
-- ShopifySharp/Infrastructure/RequiredArgument.cs
+- [ShopifySharp/GraphQL/QueryBuilders/Query.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/Query.cs)
+- [ShopifySharp/GraphQL/QueryBuilders/QueryBuilderBase.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/QueryBuilderBase.cs)
+- [ShopifySharp/GraphQL/QueryBuilders/QueryStringBuilder.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/QueryStringBuilder.cs)
+- [ShopifySharp/Infrastructure/RequiredArgument.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/Infrastructure/RequiredArgument.cs)
 
 **License**:
 
