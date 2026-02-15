@@ -189,6 +189,32 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     static member WriteQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
         let parsedContext = context :> IParsedContext
 
+        // Step 1: Collect all operations
+        let operations: Operation list =
+            parsedContext.Document.Definitions
+            |> Seq.collect (function
+            | :? GraphQLObjectTypeDefinition as objDef when
+                objDef.Name.StringValue = QueryRootObjectName || objDef.Name.StringValue = MutationRootObjectName ->
+
+                let operationType =
+                    match objDef.Name.StringValue with
+                    | "QueryRoot" -> OperationType.Query
+                    | "Mutation" -> OperationType.Mutation
+                    | value -> failwith $"{value} is not a supported operation type"
+
+                // Collect each operation
+                objDef.Fields
+                |> Seq.map (AstNodeMapper.mapRootFieldDefinition context operationType)
+            | _ ->
+                []
+            )
+            |>  List.ofSeq
+
+        printfn $"Collected {operations.Length} operations for reachability analysis"
+
+        // Step 2: Use the ReachabilityAnalyzer to map the types that are reachable from the collectd operations
+        let reachabilityTracker = ReachabilityAnalyzer.analyzeReachabilityFromOperations operations parsedContext
+
         let tryMapQueryBuilder node writer: ValueTask =
             pipeWriter writer {
                 match AstNodeMapper.tryMap context node with
@@ -199,16 +225,21 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     // InputObjects and Enums do not need a QueryBuilder and are not supported
                     ()
                 | Some mappedType ->
-                    // Skip Payload types - they're never instantiated (operations inherit from them directly)
-                    if not (mappedType.Name.EndsWith("Payload")) then
+                    if mappedType.Name.EndsWith("Payload") then
+                        // Payload types do not need a query builder (it doesn't make sense to
+                        // create a graphql string representation of the input data being sent
+                        // to Shopify, we use "real" .NET types for that)
+                        ()
+                    elif not (reachabilityTracker.Contains(mappedType.Name)) then
+                        // Skip types that are not reachable from any operation
+                        ()
+                    else
                         let queryBuilderWriter = QueryBuilderWriter(mappedType, parsedContext)
                         yield! queryBuilderWriter.WriteToPipe
-                    else
-                        printfn $"Skipping Payload type: {mappedType.Name}"
             }
 
         pipeWriter writer {
-            // Write using directives once at the top - FileSystem will extract and reuse them
+            // Write using directives once at the top; the FileSystem module will extract and reuse them
             yield! writeUsingsOnce
 
             for node in parsedContext.Document.Definitions do
@@ -222,7 +253,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                         | "Mutation" -> OperationType.Mutation
                         | value -> failwith $"{value} is not a supported operation type"
 
-                    // Each field in this object is an operation and should have a QueryBuilder
+                    // Each field in this object is an operation and will always be generated regardless of reachability
                     for field in objDef.Fields do
                         let operation = AstNodeMapper.mapRootFieldDefinition context operationType field
                         let queryBuilderWriter = QueryBuilderWriter(Operation operation, parsedContext)

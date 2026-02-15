@@ -12,6 +12,7 @@
         <Compile Include="PipeWriterComputationBuilder.fs" />
         <Compile Include="AstNodeMapper.fs" />
         <Compile Include="Utils.fs" />
+        <Compile Include="ReachabilityAnalyzer.fs" />
         <Compile Include="FileSystem.fs" />
         <Compile Include="ArgumentsBuilderWriter.fs" />
         <Compile Include="UnionCasesBuilderWriter.fs" />
