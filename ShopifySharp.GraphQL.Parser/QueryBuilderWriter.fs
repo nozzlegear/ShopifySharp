@@ -199,8 +199,12 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                     // InputObjects and Enums do not need a QueryBuilder and are not supported
                     ()
                 | Some mappedType ->
-                    let queryBuilderWriter = QueryBuilderWriter(mappedType, parsedContext)
-                    yield! queryBuilderWriter.WriteToPipe
+                    // Skip Payload types - they're never instantiated (operations inherit from them directly)
+                    if not (mappedType.Name.EndsWith("Payload")) then
+                        let queryBuilderWriter = QueryBuilderWriter(mappedType, parsedContext)
+                        yield! queryBuilderWriter.WriteToPipe
+                    else
+                        printfn $"Skipping Payload type: {mappedType.Name}"
             }
 
         pipeWriter writer {
