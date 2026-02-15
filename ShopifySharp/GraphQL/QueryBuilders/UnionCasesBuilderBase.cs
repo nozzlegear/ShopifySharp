@@ -1,7 +1,7 @@
 #nullable enable
 using JetBrains.Annotations;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp.GraphQL.QueryBuilders;
 
 [PublicAPI]
 public abstract class UnionCasesBuilderBase<TSource, TSelf>(IQuery<TSource> query): IUnionCasesBuilder<TSelf>

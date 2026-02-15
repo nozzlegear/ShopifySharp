@@ -6,7 +6,7 @@
 using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp.GraphQL.QueryBuilders;
 
 [PublicAPI]
 public abstract class QueryBuilderBase<T, TSelf> : IQuery

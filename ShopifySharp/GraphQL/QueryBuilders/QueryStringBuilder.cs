@@ -11,8 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ShopifySharp.Infrastructure;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp.GraphQL.QueryBuilders;
 
 /// <summary>The GraphQL query builder interface.</summary>
 public interface IQueryStringBuilder

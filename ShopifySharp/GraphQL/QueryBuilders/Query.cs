@@ -6,8 +6,9 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using ShopifySharp.Infrastructure;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp.GraphQL.QueryBuilders;
 
 [PublicAPI]
 public interface IQuery

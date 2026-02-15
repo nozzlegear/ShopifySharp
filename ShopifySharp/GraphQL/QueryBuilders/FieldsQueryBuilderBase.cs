@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp.GraphQL.QueryBuilders;
 
 [PublicAPI]
 public abstract class FieldsQueryBuilderBase<T, TSelf> : QueryBuilderBase<T, TSelf>, IFieldsBuilder<TSelf>

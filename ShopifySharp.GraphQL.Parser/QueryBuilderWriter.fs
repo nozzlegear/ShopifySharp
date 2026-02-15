@@ -125,6 +125,8 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
             do! "using ShopifySharp.GraphQL;"
             do! NewLine
+            do! "using ShopifySharp.GraphQL.QueryBuilders;"
+            do! NewLine
             do! "using ShopifySharp.Infrastructure;"
             do! NewLine
             do! "using ShopifySharp.Infrastructure.Serialization.Json;"

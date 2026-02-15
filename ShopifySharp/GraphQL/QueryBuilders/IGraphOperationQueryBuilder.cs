@@ -1,7 +1,7 @@
 #nullable enable
 using ShopifySharp.GraphQL;
 
-namespace ShopifySharp.Infrastructure;
+namespace ShopifySharp.GraphQL.QueryBuilders;
 
 // ReSharper disable once UnusedTypeParameter
 public interface IGraphOperationQueryBuilder<TResult> : IQuery
