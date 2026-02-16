@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
 using ShopifySharp.Infrastructure;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Services.Graph;
 
 namespace ShopifySharp;

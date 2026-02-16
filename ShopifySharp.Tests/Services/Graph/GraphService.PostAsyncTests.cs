@@ -3,6 +3,7 @@
 using System.Text.Json;
 using FakeItEasy.Configuration;
 using JetBrains.Annotations;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;

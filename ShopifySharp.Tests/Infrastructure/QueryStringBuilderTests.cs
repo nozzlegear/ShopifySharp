@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using JetBrains.Annotations;
-using ShopifySharp.Infrastructure;
+using ShopifySharp.GraphQL.QueryBuilders;
 
 namespace ShopifySharp.Tests.Infrastructure;
 

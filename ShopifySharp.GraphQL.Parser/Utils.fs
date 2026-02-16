@@ -28,9 +28,9 @@ module Utils =
         // ArgumentsBuilder and UnionCasesBuilder are written with their parent QueryBuilder
         // so they'll be in the same namespace
         if isOperation then
-            "ShopifySharp.GraphQL.Generated.QueryBuilders.Operations"
+            "ShopifySharp.GraphQL.QueryBuilders.Operations"
         else
-            "ShopifySharp.GraphQL.Generated.QueryBuilders.Types"
+            "ShopifySharp.GraphQL.QueryBuilders.Types"
 
     /// Fully qualify class names which might collide with System types
     let qualifiedPascalTypeName  className =

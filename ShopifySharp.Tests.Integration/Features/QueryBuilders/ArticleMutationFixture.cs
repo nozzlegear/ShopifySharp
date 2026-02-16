@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShopifySharp.Extensions.DependencyInjection;
 using ShopifySharp.Factories;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
 
 namespace ShopifySharp.Tests.Integration.Features.QueryBuilders;
 

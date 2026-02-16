@@ -1,9 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
-using ShopifySharp.Infrastructure;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
 using ShopifySharp.Tests.Fixtures;
 
 namespace ShopifySharp.Tests.GraphQueryBuilders;

@@ -1,5 +1,5 @@
 using ShopifySharp.GraphQL;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
 
 namespace ShopifySharp.Tests.Integration.Features.QueryBuilders;
 

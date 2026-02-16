@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using ShopifySharp.GraphQL;
-using ShopifySharp.Infrastructure;
+using ShopifySharp.GraphQL.QueryBuilders;
 
 namespace ShopifySharp.Tests.GraphQueryBuilders;
 
