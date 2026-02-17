@@ -4,6 +4,8 @@
 cli_project := "ShopifySharp.GraphQL.Parser.CLI"
 # Path to the generated GraphQL entitites folder
 graph_entities := "ShopifySharp/Entities/GraphQL/Generated"
+# Space-separated list of class names that test the GraphQL query builders
+query_builder_tests := "ProductQueryTests QueryBuilderMutationTests GraphHttpContentSerializerTests GraphQueryBuilderTests GraphUnionTypeConverterTests UnionCasesBuilderBaseTests"
 # Build configuration
 config := "Release"
 # Dotnet verbosity
@@ -11,6 +13,7 @@ verbosity := "minimal"
 # Test frameworks
 netCoreApp := "net10.0"
 netFramework := "net472"
+
 
 default:
     just --list
@@ -187,6 +190,37 @@ test-integration:
         "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
     @echo ""
     @echo "Integration tests passed."
+
+[private]
+_test-query-builder-integrations:
+    dotnet test \
+        -c "{{config}}" \
+        -f "{{netCoreApp}}" \
+        --verbosity "{{verbosity}}" \
+        --logger "trx;LogFileName=ShopifySharp.GraphQL.QueryBuilders.Integrations.Tests.trx" \
+        --results-directory "TestResults" \
+        --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}" \
+        "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
+
+# Run tests on the GraphQL query builders.
+[group("test")]
+[arg("skipIntegrationTests", long="skip-integration-tests", value="true")]
+test-query-builders skipIntegrationTests="false":
+    @echo "Testing GraphQL query builders..."
+
+    dotnet test \
+        -c "{{config}}" \
+        -f "{{netCoreApp}}" \
+        --verbosity "{{verbosity}}" \
+        --logger "trx;LogFileName=ShopifySharp.GraphQL.QueryBuilders.Tests.trx" \
+        --results-directory "TestResults" \
+        --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}" \
+        "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+
+    {{ if skipIntegrationTests != "true" { "just _test-query-builder-integrations" } else { "" } }}
+
+    @echo ""
+    @echo "Query builder tests passed."
 
 # Run unit tests on the main ShopifySharp project.
 [group("test")]
