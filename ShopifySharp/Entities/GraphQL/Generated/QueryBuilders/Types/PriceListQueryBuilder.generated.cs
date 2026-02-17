@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class PriceListQueryBuilder : FieldsQueryBuilderBase<PriceList, PriceListQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public PriceListQueryBuilder Catalog(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CatalogQueryBuilder> build)
+        public PriceListQueryBuilder Catalog(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)
         {
             var query = new Query<ICatalog>("catalog");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CatalogQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ICatalog>(query);
             return this;
@@ -62,28 +63,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public PriceListQueryBuilder Parent(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListParentQueryBuilder> build)
+        public PriceListQueryBuilder Parent(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListParentQueryBuilder> build)
         {
             var query = new Query<PriceListParent>("parent");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListParentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PriceListParentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PriceListParent>(query);
             return this;
         }
 
-        public PriceListQueryBuilder Prices(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListPriceConnectionQueryBuilder> build)
+        public PriceListQueryBuilder Prices(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceConnectionQueryBuilder> build)
         {
             var query = new Query<PriceListPriceConnection>("prices");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListPriceConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PriceListPriceConnection>(query);
             return this;
         }
 
-        public PriceListQueryBuilder QuantityRules(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.QuantityRuleConnectionQueryBuilder> build)
+        public PriceListQueryBuilder QuantityRules(Action<ShopifySharp.GraphQL.QueryBuilders.Types.QuantityRuleConnectionQueryBuilder> build)
         {
             var query = new Query<QuantityRuleConnection>("quantityRules");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.QuantityRuleConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.QuantityRuleConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<QuantityRuleConnection>(query);
             return this;

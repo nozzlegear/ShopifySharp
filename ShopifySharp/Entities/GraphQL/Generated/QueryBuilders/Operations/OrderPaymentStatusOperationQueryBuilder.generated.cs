@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class OrderPaymentStatusOperationQueryBuilder : FieldsQueryBuilderBase<OrderPaymentStatus, OrderPaymentStatusOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderPaymentStatus>
     {
@@ -51,10 +52,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public OrderPaymentStatusOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderTransactionQueryBuilder> build)
+        public OrderPaymentStatusOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionQueryBuilder> build)
         {
             var query = new Query<OrderTransaction>("transactions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderTransactionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderTransaction>(query);
             return this;

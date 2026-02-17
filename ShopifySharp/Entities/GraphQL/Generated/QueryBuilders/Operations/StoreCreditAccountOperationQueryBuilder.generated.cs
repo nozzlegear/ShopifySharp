@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class StoreCreditAccountOperationQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccount, StoreCreditAccountOperationQueryBuilder>, IGraphOperationQueryBuilder<StoreCreditAccount>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new StoreCreditAccountArgumentsBuilder(base.InnerQuery);
         }
 
-        public StoreCreditAccountOperationQueryBuilder Balance(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public StoreCreditAccountOperationQueryBuilder Balance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("balance");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
@@ -48,19 +49,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public StoreCreditAccountOperationQueryBuilder Owner(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder> build)
+        public StoreCreditAccountOperationQueryBuilder Owner(Action<ShopifySharp.GraphQL.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder> build)
         {
             var query = new Query<IHasStoreCreditAccounts>("owner");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<IHasStoreCreditAccounts>(query);
             return this;
         }
 
-        public StoreCreditAccountOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder> build)
+        public StoreCreditAccountOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder> build)
         {
             var query = new Query<StoreCreditAccountTransactionConnection>("transactions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StoreCreditAccountTransactionConnection>(query);
             return this;

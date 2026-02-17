@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ShopPolicyUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ShopPolicyUpdatePayload, ShopPolicyUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopPolicyUpdatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ShopPolicyUpdateArgumentsBuilder(base.InnerQuery);
         }
 
-        public ShopPolicyUpdateOperationQueryBuilder ShopPolicy(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopPolicyQueryBuilder> build)
+        public ShopPolicyUpdateOperationQueryBuilder ShopPolicy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopPolicyQueryBuilder> build)
         {
             var query = new Query<ShopPolicy>("shopPolicy");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopPolicyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopPolicyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopPolicy>(query);
             return this;
         }
 
-        public ShopPolicyUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopPolicyUserErrorQueryBuilder> build)
+        public ShopPolicyUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopPolicyUserErrorQueryBuilder> build)
         {
             var query = new Query<ShopPolicyUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopPolicyUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopPolicyUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopPolicyUserError>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class CustomerSegmentMembersQueryCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSegmentMembersQueryCreatePayload, CustomerSegmentMembersQueryCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSegmentMembersQueryCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new CustomerSegmentMembersQueryCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public CustomerSegmentMembersQueryCreateOperationQueryBuilder CustomerSegmentMembersQuery(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerSegmentMembersQueryQueryBuilder> build)
+        public CustomerSegmentMembersQueryCreateOperationQueryBuilder CustomerSegmentMembersQuery(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerSegmentMembersQueryQueryBuilder> build)
         {
             var query = new Query<CustomerSegmentMembersQuery>("customerSegmentMembersQuery");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerSegmentMembersQueryQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerSegmentMembersQueryQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerSegmentMembersQuery>(query);
             return this;
         }
 
-        public CustomerSegmentMembersQueryCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerSegmentMembersQueryUserErrorQueryBuilder> build)
+        public CustomerSegmentMembersQueryCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerSegmentMembersQueryUserErrorQueryBuilder> build)
         {
             var query = new Query<CustomerSegmentMembersQueryUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerSegmentMembersQueryUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerSegmentMembersQueryUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerSegmentMembersQueryUserError>(query);
             return this;

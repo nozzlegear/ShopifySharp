@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class MetafieldDefinitionTypeQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionType, MetafieldDefinitionTypeQueryBuilder>
     {
@@ -41,10 +42,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MetafieldDefinitionTypeQueryBuilder SupportedValidations(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionSupportedValidationQueryBuilder> build)
+        public MetafieldDefinitionTypeQueryBuilder SupportedValidations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionSupportedValidationQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionSupportedValidation>("supportedValidations");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionSupportedValidationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionSupportedValidationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionSupportedValidation>(query);
             return this;

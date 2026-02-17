@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class DiscountAutomaticAppCreateOperationQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticAppCreatePayload, DiscountAutomaticAppCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountAutomaticAppCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new DiscountAutomaticAppCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public DiscountAutomaticAppCreateOperationQueryBuilder AutomaticAppDiscount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountAutomaticAppQueryBuilder> build)
+        public DiscountAutomaticAppCreateOperationQueryBuilder AutomaticAppDiscount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAutomaticAppQueryBuilder> build)
         {
             var query = new Query<DiscountAutomaticApp>("automaticAppDiscount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountAutomaticAppQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAutomaticAppQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountAutomaticApp>(query);
             return this;
         }
 
-        public DiscountAutomaticAppCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountUserErrorQueryBuilder> build)
+        public DiscountAutomaticAppCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountUserErrorQueryBuilder> build)
         {
             var query = new Query<DiscountUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountUserError>(query);
             return this;

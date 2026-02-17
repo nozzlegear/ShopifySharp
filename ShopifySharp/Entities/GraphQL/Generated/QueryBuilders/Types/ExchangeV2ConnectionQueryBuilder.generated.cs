@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ExchangeV2ConnectionQueryBuilder : FieldsQueryBuilderBase<ExchangeV2Connection, ExchangeV2ConnectionQueryBuilder>
     {
@@ -29,28 +30,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public ExchangeV2ConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ExchangeV2EdgeQueryBuilder> build)
+        public ExchangeV2ConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeV2EdgeQueryBuilder> build)
         {
             var query = new Query<ExchangeV2Edge>("edges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ExchangeV2EdgeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeV2EdgeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ExchangeV2Edge>(query);
             return this;
         }
 
-        public ExchangeV2ConnectionQueryBuilder Nodes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ExchangeV2QueryBuilder> build)
+        public ExchangeV2ConnectionQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeV2QueryBuilder> build)
         {
             var query = new Query<ExchangeV2>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ExchangeV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ExchangeV2>(query);
             return this;
         }
 
-        public ExchangeV2ConnectionQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder> build)
+        public ExchangeV2ConnectionQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
             return this;

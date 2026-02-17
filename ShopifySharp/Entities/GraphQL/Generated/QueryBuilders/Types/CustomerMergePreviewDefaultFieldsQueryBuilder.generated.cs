@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CustomerMergePreviewDefaultFieldsQueryBuilder : FieldsQueryBuilderBase<CustomerMergePreviewDefaultFields, CustomerMergePreviewDefaultFieldsQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder Addresses(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MailingAddressConnectionQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder Addresses(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressConnectionQueryBuilder> build)
         {
             var query = new Query<MailingAddressConnection>("addresses");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MailingAddressConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MailingAddressConnection>(query);
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder DefaultAddress(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MailingAddressQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder DefaultAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder> build)
         {
             var query = new Query<MailingAddress>("defaultAddress");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MailingAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MailingAddress>(query);
             return this;
@@ -53,10 +54,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder DiscountNodes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountNodeConnectionQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder DiscountNodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountNodeConnectionQueryBuilder> build)
         {
             var query = new Query<DiscountNodeConnection>("discountNodes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountNodeConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountNodeConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountNodeConnection>(query);
             return this;
@@ -74,19 +75,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder DraftOrders(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderConnectionQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder DraftOrders(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderConnectionQueryBuilder> build)
         {
             var query = new Query<DraftOrderConnection>("draftOrders");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DraftOrderConnection>(query);
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder Email(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerEmailAddressQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder Email(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerEmailAddressQueryBuilder> build)
         {
             var query = new Query<CustomerEmailAddress>("email");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerEmailAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerEmailAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerEmailAddress>(query);
             return this;
@@ -104,10 +105,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder GiftCards(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardConnectionQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder GiftCards(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardConnectionQueryBuilder> build)
         {
             var query = new Query<GiftCardConnection>("giftCards");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<GiftCardConnection>(query);
             return this;
@@ -137,19 +138,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder Orders(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderConnectionQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder Orders(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderConnectionQueryBuilder> build)
         {
             var query = new Query<OrderConnection>("orders");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderConnection>(query);
             return this;
         }
 
-        public CustomerMergePreviewDefaultFieldsQueryBuilder PhoneNumber(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPhoneNumberQueryBuilder> build)
+        public CustomerMergePreviewDefaultFieldsQueryBuilder PhoneNumber(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPhoneNumberQueryBuilder> build)
         {
             var query = new Query<CustomerPhoneNumber>("phoneNumber");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPhoneNumberQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPhoneNumberQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerPhoneNumber>(query);
             return this;

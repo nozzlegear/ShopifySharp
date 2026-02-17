@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class InventoryShipmentCreateInTransitOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipmentCreateInTransitPayload, InventoryShipmentCreateInTransitOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipmentCreateInTransitPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new InventoryShipmentCreateInTransitArgumentsBuilder(base.InnerQuery);
         }
 
-        public InventoryShipmentCreateInTransitOperationQueryBuilder InventoryShipment(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentQueryBuilder> build)
+        public InventoryShipmentCreateInTransitOperationQueryBuilder InventoryShipment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder> build)
         {
             var query = new Query<InventoryShipment>("inventoryShipment");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipment>(query);
             return this;
         }
 
-        public InventoryShipmentCreateInTransitOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentCreateInTransitUserErrorQueryBuilder> build)
+        public InventoryShipmentCreateInTransitOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentCreateInTransitUserErrorQueryBuilder> build)
         {
             var query = new Query<InventoryShipmentCreateInTransitUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentCreateInTransitUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentCreateInTransitUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipmentCreateInTransitUserError>(query);
             return this;

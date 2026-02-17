@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class GiftCardConfigurationOperationQueryBuilder : FieldsQueryBuilderBase<GiftCardConfiguration, GiftCardConfigurationOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCardConfiguration>
     {
@@ -30,19 +31,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
         {
         }
 
-        public GiftCardConfigurationOperationQueryBuilder IssueLimit(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public GiftCardConfigurationOperationQueryBuilder IssueLimit(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("issueLimit");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
         }
 
-        public GiftCardConfigurationOperationQueryBuilder PurchaseLimit(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public GiftCardConfigurationOperationQueryBuilder PurchaseLimit(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("purchaseLimit");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;

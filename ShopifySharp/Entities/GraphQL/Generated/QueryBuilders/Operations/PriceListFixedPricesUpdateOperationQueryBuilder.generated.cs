@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class PriceListFixedPricesUpdateOperationQueryBuilder : FieldsQueryBuilderBase<PriceListFixedPricesUpdatePayload, PriceListFixedPricesUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListFixedPricesUpdatePayload>
     {
@@ -39,28 +40,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public PriceListFixedPricesUpdateOperationQueryBuilder PriceList(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListQueryBuilder> build)
+        public PriceListFixedPricesUpdateOperationQueryBuilder PriceList(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListQueryBuilder> build)
         {
             var query = new Query<PriceList>("priceList");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PriceListQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PriceList>(query);
             return this;
         }
 
-        public PriceListFixedPricesUpdateOperationQueryBuilder PricesAdded(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListPriceQueryBuilder> build)
+        public PriceListFixedPricesUpdateOperationQueryBuilder PricesAdded(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceQueryBuilder> build)
         {
             var query = new Query<PriceListPrice>("pricesAdded");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListPriceQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PriceListPrice>(query);
             return this;
         }
 
-        public PriceListFixedPricesUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListPriceUserErrorQueryBuilder> build)
+        public PriceListFixedPricesUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceUserErrorQueryBuilder> build)
         {
             var query = new Query<PriceListPriceUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PriceListPriceUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PriceListPriceUserError>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class DraftOrdersOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderConnection, DraftOrdersOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderConnection>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new DraftOrdersArgumentsBuilder(base.InnerQuery);
         }
 
-        public DraftOrdersOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderEdgeQueryBuilder> build)
+        public DraftOrdersOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderEdgeQueryBuilder> build)
         {
             var query = new Query<DraftOrderEdge>("edges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderEdgeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderEdgeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DraftOrderEdge>(query);
             return this;
         }
 
-        public DraftOrdersOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderQueryBuilder> build)
+        public DraftOrdersOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderQueryBuilder> build)
         {
             var query = new Query<DraftOrder>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DraftOrder>(query);
             return this;
         }
 
-        public DraftOrdersOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder> build)
+        public DraftOrdersOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
             return this;

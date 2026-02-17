@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class InventoryShipmentEdgeQueryBuilder : FieldsQueryBuilderBase<InventoryShipmentEdge, InventoryShipmentEdgeQueryBuilder>
     {
@@ -35,10 +36,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public InventoryShipmentEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentQueryBuilder> build)
+        public InventoryShipmentEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder> build)
         {
             var query = new Query<InventoryShipment>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipment>(query);
             return this;

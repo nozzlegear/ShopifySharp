@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class GiftCardOperationQueryBuilder : FieldsQueryBuilderBase<GiftCard, GiftCardOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCard>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new GiftCardArgumentsBuilder(base.InnerQuery);
         }
 
-        public GiftCardOperationQueryBuilder Balance(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public GiftCardOperationQueryBuilder Balance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("balance");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public GiftCardOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder> build)
+        public GiftCardOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("customer");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Customer>(query);
             return this;
@@ -81,10 +82,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public GiftCardOperationQueryBuilder InitialValue(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public GiftCardOperationQueryBuilder InitialValue(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("initialValue");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
@@ -108,19 +109,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public GiftCardOperationQueryBuilder Order(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder> build)
+        public GiftCardOperationQueryBuilder Order(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)
         {
             var query = new Query<Order>("order");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Order>(query);
             return this;
         }
 
-        public GiftCardOperationQueryBuilder RecipientAttributes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardRecipientQueryBuilder> build)
+        public GiftCardOperationQueryBuilder RecipientAttributes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardRecipientQueryBuilder> build)
         {
             var query = new Query<GiftCardRecipient>("recipientAttributes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardRecipientQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardRecipientQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<GiftCardRecipient>(query);
             return this;
@@ -132,10 +133,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public GiftCardOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardTransactionConnectionQueryBuilder> build)
+        public GiftCardOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardTransactionConnectionQueryBuilder> build)
         {
             var query = new Query<GiftCardTransactionConnection>("transactions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardTransactionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardTransactionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<GiftCardTransactionConnection>(query);
             return this;

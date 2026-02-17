@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class MarketingActivityOperationQueryBuilder : FieldsQueryBuilderBase<MarketingActivity, MarketingActivityOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingActivity>
     {
@@ -39,37 +40,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public MarketingActivityOperationQueryBuilder AdSpend(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public MarketingActivityOperationQueryBuilder AdSpend(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("adSpend");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
         }
 
-        public MarketingActivityOperationQueryBuilder App(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder> build)
+        public MarketingActivityOperationQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("app");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<App>(query);
             return this;
         }
 
-        public MarketingActivityOperationQueryBuilder AppErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingActivityExtensionAppErrorsQueryBuilder> build)
+        public MarketingActivityOperationQueryBuilder AppErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingActivityExtensionAppErrorsQueryBuilder> build)
         {
             var query = new Query<MarketingActivityExtensionAppErrors>("appErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingActivityExtensionAppErrorsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketingActivityExtensionAppErrorsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketingActivityExtensionAppErrors>(query);
             return this;
         }
 
-        public MarketingActivityOperationQueryBuilder Budget(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingBudgetQueryBuilder> build)
+        public MarketingActivityOperationQueryBuilder Budget(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingBudgetQueryBuilder> build)
         {
             var query = new Query<MarketingBudget>("budget");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingBudgetQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketingBudgetQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketingBudget>(query);
             return this;
@@ -124,10 +125,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public MarketingActivityOperationQueryBuilder MarketingEvent(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingEventQueryBuilder> build)
+        public MarketingActivityOperationQueryBuilder MarketingEvent(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingEventQueryBuilder> build)
         {
             var query = new Query<MarketingEvent>("marketingEvent");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingEventQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketingEventQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketingEvent>(query);
             return this;
@@ -212,10 +213,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public MarketingActivityOperationQueryBuilder UtmParameters(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UTMParametersQueryBuilder> build)
+        public MarketingActivityOperationQueryBuilder UtmParameters(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UTMParametersQueryBuilder> build)
         {
             var query = new Query<UTMParameters>("utmParameters");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UTMParametersQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UTMParametersQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UTMParameters>(query);
             return this;

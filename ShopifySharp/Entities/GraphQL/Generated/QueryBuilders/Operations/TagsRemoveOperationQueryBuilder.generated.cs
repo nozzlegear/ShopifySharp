@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class TagsRemoveOperationQueryBuilder : FieldsQueryBuilderBase<TagsRemovePayload, TagsRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<TagsRemovePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new TagsRemoveArgumentsBuilder(base.InnerQuery);
         }
 
-        public TagsRemoveOperationQueryBuilder Node(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.NodeQueryBuilder> build)
+        public TagsRemoveOperationQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder> build)
         {
             var query = new Query<INode>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.NodeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<INode>(query);
             return this;
         }
 
-        public TagsRemoveOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        public TagsRemoveOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
             var query = new Query<UserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UserError>(query);
             return this;

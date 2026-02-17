@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SubscriptionBillingAttemptQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingAttempt, SubscriptionBillingAttemptQueryBuilder>
     {
@@ -74,10 +75,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public SubscriptionBillingAttemptQueryBuilder Order(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder> build)
+        public SubscriptionBillingAttemptQueryBuilder Order(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)
         {
             var query = new Query<Order>("order");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Order>(query);
             return this;
@@ -101,10 +102,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public SubscriptionBillingAttemptQueryBuilder ProcessingError(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder> build)
+        public SubscriptionBillingAttemptQueryBuilder ProcessingError(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder> build)
         {
             var query = new Query<ISubscriptionBillingAttemptProcessingError>("processingError");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ISubscriptionBillingAttemptProcessingError>(query);
             return this;
@@ -123,19 +124,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public SubscriptionBillingAttemptQueryBuilder SubscriptionContract(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionContractQueryBuilder> build)
+        public SubscriptionBillingAttemptQueryBuilder SubscriptionContract(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionContractQueryBuilder> build)
         {
             var query = new Query<SubscriptionContract>("subscriptionContract");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionContractQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionContractQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionContract>(query);
             return this;
         }
 
-        public SubscriptionBillingAttemptQueryBuilder Transactions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
+        public SubscriptionBillingAttemptQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
         {
             var query = new Query<OrderTransactionConnection>("transactions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderTransactionConnection>(query);
             return this;

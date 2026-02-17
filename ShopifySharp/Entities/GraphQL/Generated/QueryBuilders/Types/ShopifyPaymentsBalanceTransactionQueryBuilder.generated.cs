@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ShopifyPaymentsBalanceTransactionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsBalanceTransaction, ShopifyPaymentsBalanceTransactionQueryBuilder>
     {
@@ -35,46 +36,46 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ShopifyPaymentsBalanceTransactionQueryBuilder AdjustmentsOrders(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsAdjustmentOrderQueryBuilder> build)
+        public ShopifyPaymentsBalanceTransactionQueryBuilder AdjustmentsOrders(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsAdjustmentOrderQueryBuilder> build)
         {
             var query = new Query<ShopifyPaymentsAdjustmentOrder>("adjustmentsOrders");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsAdjustmentOrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsAdjustmentOrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyPaymentsAdjustmentOrder>(query);
             return this;
         }
 
-        public ShopifyPaymentsBalanceTransactionQueryBuilder Amount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public ShopifyPaymentsBalanceTransactionQueryBuilder Amount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("amount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
         }
 
-        public ShopifyPaymentsBalanceTransactionQueryBuilder AssociatedOrder(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsAssociatedOrderQueryBuilder> build)
+        public ShopifyPaymentsBalanceTransactionQueryBuilder AssociatedOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsAssociatedOrderQueryBuilder> build)
         {
             var query = new Query<ShopifyPaymentsAssociatedOrder>("associatedOrder");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsAssociatedOrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsAssociatedOrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyPaymentsAssociatedOrder>(query);
             return this;
         }
 
-        public ShopifyPaymentsBalanceTransactionQueryBuilder AssociatedPayout(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsBalanceTransactionAssociatedPayoutQueryBuilder> build)
+        public ShopifyPaymentsBalanceTransactionQueryBuilder AssociatedPayout(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsBalanceTransactionAssociatedPayoutQueryBuilder> build)
         {
             var query = new Query<ShopifyPaymentsBalanceTransactionAssociatedPayout>("associatedPayout");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsBalanceTransactionAssociatedPayoutQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsBalanceTransactionAssociatedPayoutQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyPaymentsBalanceTransactionAssociatedPayout>(query);
             return this;
         }
 
-        public ShopifyPaymentsBalanceTransactionQueryBuilder Fee(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public ShopifyPaymentsBalanceTransactionQueryBuilder Fee(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("fee");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
@@ -86,10 +87,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ShopifyPaymentsBalanceTransactionQueryBuilder Net(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public ShopifyPaymentsBalanceTransactionQueryBuilder Net(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("net");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ProductsOperationQueryBuilder : FieldsQueryBuilderBase<ProductConnection, ProductsOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductConnection>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ProductsArgumentsBuilder(base.InnerQuery);
         }
 
-        public ProductsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductEdgeQueryBuilder> build)
+        public ProductsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductEdgeQueryBuilder> build)
         {
             var query = new Query<ProductEdge>("edges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductEdgeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductEdgeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductEdge>(query);
             return this;
         }
 
-        public ProductsOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductQueryBuilder> build)
+        public ProductsOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)
         {
             var query = new Query<Product>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Product>(query);
             return this;
         }
 
-        public ProductsOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder> build)
+        public ProductsOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
             return this;

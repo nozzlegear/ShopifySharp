@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class MetafieldDefinitionsOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionConnection, MetafieldDefinitionsOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionConnection>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new MetafieldDefinitionsArgumentsBuilder(base.InnerQuery);
         }
 
-        public MetafieldDefinitionsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionEdgeQueryBuilder> build)
+        public MetafieldDefinitionsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionEdgeQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionEdge>("edges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionEdgeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionEdgeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionEdge>(query);
             return this;
         }
 
-        public MetafieldDefinitionsOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)
+        public MetafieldDefinitionsOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinition>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinition>(query);
             return this;
         }
 
-        public MetafieldDefinitionsOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder> build)
+        public MetafieldDefinitionsOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PageInfoQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
             return this;

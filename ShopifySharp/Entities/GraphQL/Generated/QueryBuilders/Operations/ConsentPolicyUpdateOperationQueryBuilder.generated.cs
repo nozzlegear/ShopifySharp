@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ConsentPolicyUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ConsentPolicyUpdatePayload, ConsentPolicyUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ConsentPolicyUpdatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ConsentPolicyUpdateArgumentsBuilder(base.InnerQuery);
         }
 
-        public ConsentPolicyUpdateOperationQueryBuilder UpdatedPolicies(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ConsentPolicyQueryBuilder> build)
+        public ConsentPolicyUpdateOperationQueryBuilder UpdatedPolicies(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ConsentPolicyQueryBuilder> build)
         {
             var query = new Query<ConsentPolicy>("updatedPolicies");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ConsentPolicyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ConsentPolicyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ConsentPolicy>(query);
             return this;
         }
 
-        public ConsentPolicyUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ConsentPolicyErrorQueryBuilder> build)
+        public ConsentPolicyUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ConsentPolicyErrorQueryBuilder> build)
         {
             var query = new Query<ConsentPolicyError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ConsentPolicyErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ConsentPolicyErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ConsentPolicyError>(query);
             return this;

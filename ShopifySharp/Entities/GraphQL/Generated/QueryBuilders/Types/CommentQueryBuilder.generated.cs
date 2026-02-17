@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CommentQueryBuilder : FieldsQueryBuilderBase<Comment, CommentQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CommentQueryBuilder Article(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ArticleQueryBuilder> build)
+        public CommentQueryBuilder Article(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ArticleQueryBuilder> build)
         {
             var query = new Query<Article>("article");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ArticleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ArticleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Article>(query);
             return this;
         }
 
-        public CommentQueryBuilder Author(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CommentAuthorQueryBuilder> build)
+        public CommentQueryBuilder Author(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CommentAuthorQueryBuilder> build)
         {
             var query = new Query<CommentAuthor>("author");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CommentAuthorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CommentAuthorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CommentAuthor>(query);
             return this;
@@ -65,10 +66,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CommentQueryBuilder Events(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.EventConnectionQueryBuilder> build)
+        public CommentQueryBuilder Events(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder> build)
         {
             var query = new Query<EventConnection>("events");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.EventConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<EventConnection>(query);
             return this;

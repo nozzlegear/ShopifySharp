@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class LocationActivateOperationQueryBuilder : FieldsQueryBuilderBase<LocationActivatePayload, LocationActivateOperationQueryBuilder>, IGraphOperationQueryBuilder<LocationActivatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new LocationActivateArgumentsBuilder(base.InnerQuery);
         }
 
-        public LocationActivateOperationQueryBuilder Location(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationQueryBuilder> build)
+        public LocationActivateOperationQueryBuilder Location(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder> build)
         {
             var query = new Query<Location>("location");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Location>(query);
             return this;
         }
 
-        public LocationActivateOperationQueryBuilder LocationActivateUserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationActivateUserErrorQueryBuilder> build)
+        public LocationActivateOperationQueryBuilder LocationActivateUserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationActivateUserErrorQueryBuilder> build)
         {
             var query = new Query<LocationActivateUserError>("locationActivateUserErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationActivateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationActivateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LocationActivateUserError>(query);
             return this;

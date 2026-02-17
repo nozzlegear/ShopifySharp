@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CalculatedDraftOrderQueryBuilder : FieldsQueryBuilderBase<CalculatedDraftOrder, CalculatedDraftOrderQueryBuilder>
     {
@@ -35,10 +36,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder Alerts(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourceAlertQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder Alerts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourceAlertQueryBuilder> build)
         {
             var query = new Query<ResourceAlert>("alerts");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourceAlertQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourceAlertQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourceAlert>(query);
             return this;
@@ -56,19 +57,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder AppliedDiscount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderAppliedDiscountQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder AppliedDiscount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderAppliedDiscountQueryBuilder> build)
         {
             var query = new Query<DraftOrderAppliedDiscount>("appliedDiscount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderAppliedDiscountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderAppliedDiscountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DraftOrderAppliedDiscount>(query);
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder AvailableShippingRates(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShippingRateQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder AvailableShippingRates(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingRateQueryBuilder> build)
         {
             var query = new Query<ShippingRate>("availableShippingRates");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShippingRateQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShippingRateQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShippingRate>(query);
             return this;
@@ -86,10 +87,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder Customer(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("customer");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Customer>(query);
             return this;
@@ -101,19 +102,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder LineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CalculatedDraftOrderLineItemQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder LineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedDraftOrderLineItemQueryBuilder> build)
         {
             var query = new Query<CalculatedDraftOrderLineItem>("lineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CalculatedDraftOrderLineItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedDraftOrderLineItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CalculatedDraftOrderLineItem>(query);
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder LineItemsSubtotalPrice(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder LineItemsSubtotalPrice(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("lineItemsSubtotalPrice");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -139,10 +140,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder PlatformDiscounts(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderPlatformDiscountQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder PlatformDiscounts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderPlatformDiscountQueryBuilder> build)
         {
             var query = new Query<DraftOrderPlatformDiscount>("platformDiscounts");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderPlatformDiscountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderPlatformDiscountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DraftOrderPlatformDiscount>(query);
             return this;
@@ -154,10 +155,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder ShippingLine(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShippingLineQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder ShippingLine(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineQueryBuilder> build)
         {
             var query = new Query<ShippingLine>("shippingLine");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShippingLineQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShippingLine>(query);
             return this;
@@ -170,10 +171,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder SubtotalPriceSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder SubtotalPriceSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("subtotalPriceSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -185,28 +186,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder TaxLines(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxLineQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder TaxLines(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxLineQueryBuilder> build)
         {
             var query = new Query<TaxLine>("taxLines");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxLineQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxLineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<TaxLine>(query);
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder TotalDiscountsSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder TotalDiscountsSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("totalDiscountsSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder TotalLineItemsPriceSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder TotalLineItemsPriceSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("totalLineItemsPriceSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -219,10 +220,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder TotalPriceSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder TotalPriceSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("totalPriceSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -241,10 +242,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder TotalShippingPriceSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder TotalShippingPriceSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("totalShippingPriceSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -257,10 +258,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder TotalTaxSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder TotalTaxSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("totalTaxSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -272,10 +273,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder Warnings(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderWarningQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder Warnings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderWarningQueryBuilder> build)
         {
             var query = new Query<IDraftOrderWarning>("warnings");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DraftOrderWarningQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderWarningQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<IDraftOrderWarning>(query);
             return this;

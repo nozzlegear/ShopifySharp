@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class MarketingEngagementCreateOperationQueryBuilder : FieldsQueryBuilderBase<MarketingEngagementCreatePayload, MarketingEngagementCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingEngagementCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new MarketingEngagementCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public MarketingEngagementCreateOperationQueryBuilder MarketingEngagement(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingEngagementQueryBuilder> build)
+        public MarketingEngagementCreateOperationQueryBuilder MarketingEngagement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingEngagementQueryBuilder> build)
         {
             var query = new Query<MarketingEngagement>("marketingEngagement");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingEngagementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketingEngagementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketingEngagement>(query);
             return this;
         }
 
-        public MarketingEngagementCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingActivityUserErrorQueryBuilder> build)
+        public MarketingEngagementCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingActivityUserErrorQueryBuilder> build)
         {
             var query = new Query<MarketingActivityUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingActivityUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketingActivityUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketingActivityUserError>(query);
             return this;

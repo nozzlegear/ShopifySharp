@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class OrderCreateMandatePaymentOperationQueryBuilder : FieldsQueryBuilderBase<OrderCreateMandatePaymentPayload, OrderCreateMandatePaymentOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderCreateMandatePaymentPayload>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new OrderCreateMandatePaymentArgumentsBuilder(base.InnerQuery);
         }
 
-        public OrderCreateMandatePaymentOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder> build)
+        public OrderCreateMandatePaymentOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)
         {
             var query = new Query<Job>("job");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Job>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public OrderCreateMandatePaymentOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderCreateMandatePaymentUserErrorQueryBuilder> build)
+        public OrderCreateMandatePaymentOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderCreateMandatePaymentUserErrorQueryBuilder> build)
         {
             var query = new Query<OrderCreateMandatePaymentUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderCreateMandatePaymentUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderCreateMandatePaymentUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderCreateMandatePaymentUserError>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class OrderRiskAssessmentQueryBuilder : FieldsQueryBuilderBase<OrderRiskAssessment, OrderRiskAssessmentQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public OrderRiskAssessmentQueryBuilder Facts(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.RiskFactQueryBuilder> build)
+        public OrderRiskAssessmentQueryBuilder Facts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RiskFactQueryBuilder> build)
         {
             var query = new Query<RiskFact>("facts");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.RiskFactQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.RiskFactQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<RiskFact>(query);
             return this;
         }
 
-        public OrderRiskAssessmentQueryBuilder Provider(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder> build)
+        public OrderRiskAssessmentQueryBuilder Provider(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("provider");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<App>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class TaxonomyChoiceListAttributeQueryBuilder : FieldsQueryBuilderBase<TaxonomyChoiceListAttribute, TaxonomyChoiceListAttributeQueryBuilder>
     {
@@ -41,10 +42,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public TaxonomyChoiceListAttributeQueryBuilder Values(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxonomyValueConnectionQueryBuilder> build)
+        public TaxonomyChoiceListAttributeQueryBuilder Values(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyValueConnectionQueryBuilder> build)
         {
             var query = new Query<TaxonomyValueConnection>("values");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxonomyValueConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyValueConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<TaxonomyValueConnection>(query);
             return this;

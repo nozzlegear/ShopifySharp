@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `stagedUploadsCreate` instead.")]
     public sealed class StagedUploadTargetsGenerateOperationQueryBuilder : FieldsQueryBuilderBase<StagedUploadTargetsGeneratePayload, StagedUploadTargetsGenerateOperationQueryBuilder>, IGraphOperationQueryBuilder<StagedUploadTargetsGeneratePayload>
@@ -34,19 +35,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new StagedUploadTargetsGenerateArgumentsBuilder(base.InnerQuery);
         }
 
-        public StagedUploadTargetsGenerateOperationQueryBuilder Urls(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StagedUploadTargetQueryBuilder> build)
+        public StagedUploadTargetsGenerateOperationQueryBuilder Urls(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StagedUploadTargetQueryBuilder> build)
         {
             var query = new Query<StagedUploadTarget>("urls");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StagedUploadTargetQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StagedUploadTargetQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StagedUploadTarget>(query);
             return this;
         }
 
-        public StagedUploadTargetsGenerateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        public StagedUploadTargetsGenerateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
             var query = new Query<UserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UserError>(query);
             return this;

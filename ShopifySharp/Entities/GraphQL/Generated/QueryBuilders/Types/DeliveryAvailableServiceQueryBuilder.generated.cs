@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class DeliveryAvailableServiceQueryBuilder : FieldsQueryBuilderBase<DeliveryAvailableService, DeliveryAvailableServiceQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public DeliveryAvailableServiceQueryBuilder Countries(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryCountryCodesOrRestOfWorldQueryBuilder> build)
+        public DeliveryAvailableServiceQueryBuilder Countries(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryCodesOrRestOfWorldQueryBuilder> build)
         {
             var query = new Query<DeliveryCountryCodesOrRestOfWorld>("countries");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryCountryCodesOrRestOfWorldQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryCodesOrRestOfWorldQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryCountryCodesOrRestOfWorld>(query);
             return this;

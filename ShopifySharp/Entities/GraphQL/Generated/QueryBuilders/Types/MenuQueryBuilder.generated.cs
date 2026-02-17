@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class MenuQueryBuilder : FieldsQueryBuilderBase<Menu, MenuQueryBuilder>
     {
@@ -47,10 +48,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MenuQueryBuilder Items(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MenuItemQueryBuilder> build)
+        public MenuQueryBuilder Items(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MenuItemQueryBuilder> build)
         {
             var query = new Query<MenuItem>("items");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MenuItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MenuItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MenuItem>(query);
             return this;
@@ -62,10 +63,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MenuQueryBuilder Translations(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder> build)
+        public MenuQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
         {
             var query = new Query<Translation>("translations");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Translation>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `locationsAvailableForDeliveryProfilesConnection` instead.")]
     public sealed class LocationsAvailableForDeliveryProfilesOperationQueryBuilder : FieldsQueryBuilderBase<Location, LocationsAvailableForDeliveryProfilesOperationQueryBuilder>, IGraphOperationQueryBuilder<Location>
@@ -37,10 +38,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder Address(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationAddressQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder Address(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationAddressQueryBuilder> build)
         {
             var query = new Query<LocationAddress>("address");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LocationAddress>(query);
             return this;
@@ -76,10 +77,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder FulfillmentService(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentServiceQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder FulfillmentService(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentServiceQueryBuilder> build)
         {
             var query = new Query<FulfillmentService>("fulfillmentService");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentServiceQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentServiceQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentService>(query);
             return this;
@@ -109,19 +110,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder InventoryLevel(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryLevelQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder InventoryLevel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryLevelQueryBuilder> build)
         {
             var query = new Query<InventoryLevel>("inventoryLevel");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryLevelQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryLevelQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryLevel>(query);
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder InventoryLevels(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryLevelConnectionQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder InventoryLevels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryLevelConnectionQueryBuilder> build)
         {
             var query = new Query<InventoryLevelConnection>("inventoryLevels");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryLevelConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryLevelConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryLevelConnection>(query);
             return this;
@@ -152,37 +153,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder LocalPickupSettingsV2(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryLocalPickupSettingsQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder LocalPickupSettingsV2(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocalPickupSettingsQueryBuilder> build)
         {
             var query = new Query<DeliveryLocalPickupSettings>("localPickupSettingsV2");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryLocalPickupSettingsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocalPickupSettingsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryLocalPickupSettings>(query);
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder Metafield(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder Metafield(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder> build)
         {
             var query = new Query<Metafield>("metafield");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Metafield>(query);
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder MetafieldDefinitions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder MetafieldDefinitions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionConnection>("metafieldDefinitions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionConnection>(query);
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder Metafields(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder Metafields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
         {
             var query = new Query<MetafieldConnection>("metafields");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldConnection>(query);
             return this;
@@ -200,10 +201,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder SuggestedAddresses(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationSuggestedAddressQueryBuilder> build)
+        public LocationsAvailableForDeliveryProfilesOperationQueryBuilder SuggestedAddresses(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationSuggestedAddressQueryBuilder> build)
         {
             var query = new Query<LocationSuggestedAddress>("suggestedAddresses");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationSuggestedAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationSuggestedAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LocationSuggestedAddress>(query);
             return this;

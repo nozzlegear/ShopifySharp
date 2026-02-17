@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SubscriptionDeliveryMethodShippingQueryBuilder : FieldsQueryBuilderBase<SubscriptionDeliveryMethodShipping, SubscriptionDeliveryMethodShippingQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public SubscriptionDeliveryMethodShippingQueryBuilder Address(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MailingAddressQueryBuilder> build)
+        public SubscriptionDeliveryMethodShippingQueryBuilder Address(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder> build)
         {
             var query = new Query<MailingAddress>("address");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MailingAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MailingAddress>(query);
             return this;
         }
 
-        public SubscriptionDeliveryMethodShippingQueryBuilder ShippingOption(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDeliveryMethodShippingOptionQueryBuilder> build)
+        public SubscriptionDeliveryMethodShippingQueryBuilder ShippingOption(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodShippingOptionQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryMethodShippingOption>("shippingOption");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDeliveryMethodShippingOptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodShippingOptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDeliveryMethodShippingOption>(query);
             return this;

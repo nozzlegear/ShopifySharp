@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class FulfillmentOrderSplitOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderSplitPayload, FulfillmentOrderSplitOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderSplitPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new FulfillmentOrderSplitArgumentsBuilder(base.InnerQuery);
         }
 
-        public FulfillmentOrderSplitOperationQueryBuilder FulfillmentOrderSplits(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderSplitResultQueryBuilder> build)
+        public FulfillmentOrderSplitOperationQueryBuilder FulfillmentOrderSplits(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderSplitResultQueryBuilder> build)
         {
             var query = new Query<FulfillmentOrderSplitResult>("fulfillmentOrderSplits");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderSplitResultQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderSplitResultQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentOrderSplitResult>(query);
             return this;
         }
 
-        public FulfillmentOrderSplitOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderSplitUserErrorQueryBuilder> build)
+        public FulfillmentOrderSplitOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderSplitUserErrorQueryBuilder> build)
         {
             var query = new Query<FulfillmentOrderSplitUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderSplitUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderSplitUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentOrderSplitUserError>(query);
             return this;

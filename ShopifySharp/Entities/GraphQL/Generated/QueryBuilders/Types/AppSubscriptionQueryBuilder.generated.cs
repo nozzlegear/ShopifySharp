@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class AppSubscriptionQueryBuilder : FieldsQueryBuilderBase<AppSubscription, AppSubscriptionQueryBuilder>
     {
@@ -47,10 +48,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public AppSubscriptionQueryBuilder LineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppSubscriptionLineItemQueryBuilder> build)
+        public AppSubscriptionQueryBuilder LineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionLineItemQueryBuilder> build)
         {
             var query = new Query<AppSubscriptionLineItem>("lineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppSubscriptionLineItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionLineItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AppSubscriptionLineItem>(query);
             return this;

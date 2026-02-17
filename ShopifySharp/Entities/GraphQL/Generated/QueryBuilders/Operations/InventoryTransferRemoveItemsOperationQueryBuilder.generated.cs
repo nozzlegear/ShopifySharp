@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class InventoryTransferRemoveItemsOperationQueryBuilder : FieldsQueryBuilderBase<InventoryTransferRemoveItemsPayload, InventoryTransferRemoveItemsOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryTransferRemoveItemsPayload>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new InventoryTransferRemoveItemsArgumentsBuilder(base.InnerQuery);
         }
 
-        public InventoryTransferRemoveItemsOperationQueryBuilder InventoryTransfer(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferQueryBuilder> build)
+        public InventoryTransferRemoveItemsOperationQueryBuilder InventoryTransfer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferQueryBuilder> build)
         {
             var query = new Query<InventoryTransfer>("inventoryTransfer");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryTransfer>(query);
             return this;
         }
 
-        public InventoryTransferRemoveItemsOperationQueryBuilder RemovedQuantities(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferLineItemUpdateQueryBuilder> build)
+        public InventoryTransferRemoveItemsOperationQueryBuilder RemovedQuantities(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferLineItemUpdateQueryBuilder> build)
         {
             var query = new Query<InventoryTransferLineItemUpdate>("removedQuantities");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferLineItemUpdateQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferLineItemUpdateQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryTransferLineItemUpdate>(query);
             return this;
         }
 
-        public InventoryTransferRemoveItemsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferRemoveItemsUserErrorQueryBuilder> build)
+        public InventoryTransferRemoveItemsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferRemoveItemsUserErrorQueryBuilder> build)
         {
             var query = new Query<InventoryTransferRemoveItemsUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferRemoveItemsUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferRemoveItemsUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryTransferRemoveItemsUserError>(query);
             return this;

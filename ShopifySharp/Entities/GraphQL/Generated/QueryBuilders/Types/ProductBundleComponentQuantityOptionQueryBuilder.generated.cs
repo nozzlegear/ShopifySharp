@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ProductBundleComponentQuantityOptionQueryBuilder : FieldsQueryBuilderBase<ProductBundleComponentQuantityOption, ProductBundleComponentQuantityOptionQueryBuilder>
     {
@@ -35,19 +36,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ProductBundleComponentQuantityOptionQueryBuilder ParentOption(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder> build)
+        public ProductBundleComponentQuantityOptionQueryBuilder ParentOption(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder> build)
         {
             var query = new Query<ProductOption>("parentOption");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductOption>(query);
             return this;
         }
 
-        public ProductBundleComponentQuantityOptionQueryBuilder Values(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductBundleComponentQuantityOptionValueQueryBuilder> build)
+        public ProductBundleComponentQuantityOptionQueryBuilder Values(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentQuantityOptionValueQueryBuilder> build)
         {
             var query = new Query<ProductBundleComponentQuantityOptionValue>("values");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductBundleComponentQuantityOptionValueQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentQuantityOptionValueQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductBundleComponentQuantityOptionValue>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class GiftCardSendNotificationToCustomerOperationQueryBuilder : FieldsQueryBuilderBase<GiftCardSendNotificationToCustomerPayload, GiftCardSendNotificationToCustomerOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCardSendNotificationToCustomerPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new GiftCardSendNotificationToCustomerArgumentsBuilder(base.InnerQuery);
         }
 
-        public GiftCardSendNotificationToCustomerOperationQueryBuilder GiftCard(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardQueryBuilder> build)
+        public GiftCardSendNotificationToCustomerOperationQueryBuilder GiftCard(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardQueryBuilder> build)
         {
             var query = new Query<GiftCard>("giftCard");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<GiftCard>(query);
             return this;
         }
 
-        public GiftCardSendNotificationToCustomerOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardSendNotificationToCustomerUserErrorQueryBuilder> build)
+        public GiftCardSendNotificationToCustomerOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardSendNotificationToCustomerUserErrorQueryBuilder> build)
         {
             var query = new Query<GiftCardSendNotificationToCustomerUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.GiftCardSendNotificationToCustomerUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardSendNotificationToCustomerUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<GiftCardSendNotificationToCustomerUserError>(query);
             return this;

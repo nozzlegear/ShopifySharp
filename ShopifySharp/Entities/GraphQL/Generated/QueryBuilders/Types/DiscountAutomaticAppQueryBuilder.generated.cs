@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class DiscountAutomaticAppQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticApp, DiscountAutomaticAppQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public DiscountAutomaticAppQueryBuilder AppDiscountType(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppDiscountTypeQueryBuilder> build)
+        public DiscountAutomaticAppQueryBuilder AppDiscountType(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppDiscountTypeQueryBuilder> build)
         {
             var query = new Query<AppDiscountType>("appDiscountType");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppDiscountTypeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppDiscountTypeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AppDiscountType>(query);
             return this;
@@ -56,10 +57,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountAutomaticAppQueryBuilder CombinesWith(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCombinesWithQueryBuilder> build)
+        public DiscountAutomaticAppQueryBuilder CombinesWith(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCombinesWithQueryBuilder> build)
         {
             var query = new Query<DiscountCombinesWith>("combinesWith");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCombinesWithQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCombinesWithQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCombinesWith>(query);
             return this;
@@ -96,10 +97,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountAutomaticAppQueryBuilder ErrorHistory(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FunctionsErrorHistoryQueryBuilder> build)
+        public DiscountAutomaticAppQueryBuilder ErrorHistory(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FunctionsErrorHistoryQueryBuilder> build)
         {
             var query = new Query<FunctionsErrorHistory>("errorHistory");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FunctionsErrorHistoryQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FunctionsErrorHistoryQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FunctionsErrorHistory>(query);
             return this;

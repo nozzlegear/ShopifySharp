@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class InventoryLevelOperationQueryBuilder : FieldsQueryBuilderBase<InventoryLevel, InventoryLevelOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryLevel>
     {
@@ -57,37 +58,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public InventoryLevelOperationQueryBuilder Item(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryItemQueryBuilder> build)
+        public InventoryLevelOperationQueryBuilder Item(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryItemQueryBuilder> build)
         {
             var query = new Query<InventoryItem>("item");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryItem>(query);
             return this;
         }
 
-        public InventoryLevelOperationQueryBuilder Location(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationQueryBuilder> build)
+        public InventoryLevelOperationQueryBuilder Location(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder> build)
         {
             var query = new Query<Location>("location");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LocationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Location>(query);
             return this;
         }
 
-        public InventoryLevelOperationQueryBuilder Quantities(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryQuantityQueryBuilder> build)
+        public InventoryLevelOperationQueryBuilder Quantities(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryQuantityQueryBuilder> build)
         {
             var query = new Query<InventoryQuantity>("quantities");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryQuantityQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryQuantityQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryQuantity>(query);
             return this;
         }
 
-        public InventoryLevelOperationQueryBuilder ScheduledChanges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryScheduledChangeConnectionQueryBuilder> build)
+        public InventoryLevelOperationQueryBuilder ScheduledChanges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryScheduledChangeConnectionQueryBuilder> build)
         {
             var query = new Query<InventoryScheduledChangeConnection>("scheduledChanges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryScheduledChangeConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryScheduledChangeConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryScheduledChangeConnection>(query);
             return this;

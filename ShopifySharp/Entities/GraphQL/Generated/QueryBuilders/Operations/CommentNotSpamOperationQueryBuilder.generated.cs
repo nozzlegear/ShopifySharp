@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class CommentNotSpamOperationQueryBuilder : FieldsQueryBuilderBase<CommentNotSpamPayload, CommentNotSpamOperationQueryBuilder>, IGraphOperationQueryBuilder<CommentNotSpamPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new CommentNotSpamArgumentsBuilder(base.InnerQuery);
         }
 
-        public CommentNotSpamOperationQueryBuilder Comment(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CommentQueryBuilder> build)
+        public CommentNotSpamOperationQueryBuilder Comment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CommentQueryBuilder> build)
         {
             var query = new Query<Comment>("comment");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CommentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CommentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Comment>(query);
             return this;
         }
 
-        public CommentNotSpamOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CommentNotSpamUserErrorQueryBuilder> build)
+        public CommentNotSpamOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CommentNotSpamUserErrorQueryBuilder> build)
         {
             var query = new Query<CommentNotSpamUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CommentNotSpamUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CommentNotSpamUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CommentNotSpamUserError>(query);
             return this;

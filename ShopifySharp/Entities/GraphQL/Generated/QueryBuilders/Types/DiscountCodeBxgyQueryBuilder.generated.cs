@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class DiscountCodeBxgyQueryBuilder : FieldsQueryBuilderBase<DiscountCodeBxgy, DiscountCodeBxgyQueryBuilder>
     {
@@ -41,28 +42,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder Codes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountRedeemCodeConnectionQueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder Codes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeConnectionQueryBuilder> build)
         {
             var query = new Query<DiscountRedeemCodeConnection>("codes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountRedeemCodeConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountRedeemCodeConnection>(query);
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder CodesCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder CodesCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("codesCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder CombinesWith(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCombinesWithQueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder CombinesWith(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCombinesWithQueryBuilder> build)
         {
             var query = new Query<DiscountCombinesWith>("combinesWith");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCombinesWithQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCombinesWithQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCombinesWith>(query);
             return this;
@@ -74,19 +75,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder CustomerBuys(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder CustomerBuys(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder> build)
         {
             var query = new Query<DiscountCustomerBuys>("customerBuys");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCustomerBuys>(query);
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder CustomerGets(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder CustomerGets(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder> build)
         {
             var query = new Query<DiscountCustomerGets>("customerGets");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCustomerGets>(query);
             return this;
@@ -117,10 +118,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder ShareableUrls(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountShareableUrlQueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder ShareableUrls(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountShareableUrlQueryBuilder> build)
         {
             var query = new Query<DiscountShareableUrl>("shareableUrls");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountShareableUrlQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountShareableUrlQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountShareableUrl>(query);
             return this;
@@ -150,10 +151,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountCodeBxgyQueryBuilder TotalSales(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public DiscountCodeBxgyQueryBuilder TotalSales(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("totalSales");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;

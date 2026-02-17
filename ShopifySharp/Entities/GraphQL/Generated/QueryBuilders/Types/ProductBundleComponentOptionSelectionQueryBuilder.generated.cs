@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ProductBundleComponentOptionSelectionQueryBuilder : FieldsQueryBuilderBase<ProductBundleComponentOptionSelection, ProductBundleComponentOptionSelectionQueryBuilder>
     {
@@ -29,28 +30,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public ProductBundleComponentOptionSelectionQueryBuilder ComponentOption(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder> build)
+        public ProductBundleComponentOptionSelectionQueryBuilder ComponentOption(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder> build)
         {
             var query = new Query<ProductOption>("componentOption");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductOption>(query);
             return this;
         }
 
-        public ProductBundleComponentOptionSelectionQueryBuilder ParentOption(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder> build)
+        public ProductBundleComponentOptionSelectionQueryBuilder ParentOption(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder> build)
         {
             var query = new Query<ProductOption>("parentOption");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductOption>(query);
             return this;
         }
 
-        public ProductBundleComponentOptionSelectionQueryBuilder Values(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductBundleComponentOptionSelectionValueQueryBuilder> build)
+        public ProductBundleComponentOptionSelectionQueryBuilder Values(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentOptionSelectionValueQueryBuilder> build)
         {
             var query = new Query<ProductBundleComponentOptionSelectionValue>("values");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductBundleComponentOptionSelectionValueQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentOptionSelectionValueQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductBundleComponentOptionSelectionValue>(query);
             return this;

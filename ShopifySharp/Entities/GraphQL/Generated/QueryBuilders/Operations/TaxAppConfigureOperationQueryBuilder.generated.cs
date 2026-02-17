@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class TaxAppConfigureOperationQueryBuilder : FieldsQueryBuilderBase<TaxAppConfigurePayload, TaxAppConfigureOperationQueryBuilder>, IGraphOperationQueryBuilder<TaxAppConfigurePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new TaxAppConfigureArgumentsBuilder(base.InnerQuery);
         }
 
-        public TaxAppConfigureOperationQueryBuilder TaxAppConfiguration(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxAppConfigurationQueryBuilder> build)
+        public TaxAppConfigureOperationQueryBuilder TaxAppConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxAppConfigurationQueryBuilder> build)
         {
             var query = new Query<TaxAppConfiguration>("taxAppConfiguration");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxAppConfigurationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxAppConfigurationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<TaxAppConfiguration>(query);
             return this;
         }
 
-        public TaxAppConfigureOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxAppConfigureUserErrorQueryBuilder> build)
+        public TaxAppConfigureOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxAppConfigureUserErrorQueryBuilder> build)
         {
             var query = new Query<TaxAppConfigureUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxAppConfigureUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxAppConfigureUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<TaxAppConfigureUserError>(query);
             return this;

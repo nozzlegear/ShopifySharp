@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SearchResultQueryBuilder : FieldsQueryBuilderBase<SearchResult, SearchResultQueryBuilder>
     {
@@ -35,19 +36,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public SearchResultQueryBuilder Image(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder> build)
+        public SearchResultQueryBuilder Image(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder> build)
         {
             var query = new Query<Image>("image");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Image>(query);
             return this;
         }
 
-        public SearchResultQueryBuilder Reference(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.NodeQueryBuilder> build)
+        public SearchResultQueryBuilder Reference(Action<ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder> build)
         {
             var query = new Query<INode>("reference");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.NodeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<INode>(query);
             return this;

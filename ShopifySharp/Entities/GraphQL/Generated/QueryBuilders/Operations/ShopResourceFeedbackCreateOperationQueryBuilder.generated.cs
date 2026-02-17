@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ShopResourceFeedbackCreateOperationQueryBuilder : FieldsQueryBuilderBase<ShopResourceFeedbackCreatePayload, ShopResourceFeedbackCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopResourceFeedbackCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ShopResourceFeedbackCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public ShopResourceFeedbackCreateOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppFeedbackQueryBuilder> build)
+        public ShopResourceFeedbackCreateOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppFeedbackQueryBuilder> build)
         {
             var query = new Query<AppFeedback>("feedback");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppFeedbackQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppFeedbackQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AppFeedback>(query);
             return this;
         }
 
-        public ShopResourceFeedbackCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopResourceFeedbackCreateUserErrorQueryBuilder> build)
+        public ShopResourceFeedbackCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopResourceFeedbackCreateUserErrorQueryBuilder> build)
         {
             var query = new Query<ShopResourceFeedbackCreateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopResourceFeedbackCreateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopResourceFeedbackCreateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopResourceFeedbackCreateUserError>(query);
             return this;

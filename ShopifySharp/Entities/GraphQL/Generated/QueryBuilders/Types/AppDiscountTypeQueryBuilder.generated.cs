@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class AppDiscountTypeQueryBuilder : FieldsQueryBuilderBase<AppDiscountType, AppDiscountTypeQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public AppDiscountTypeQueryBuilder App(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder> build)
+        public AppDiscountTypeQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("app");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<App>(query);
             return this;
         }
 
-        public AppDiscountTypeQueryBuilder AppBridge(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FunctionsAppBridgeQueryBuilder> build)
+        public AppDiscountTypeQueryBuilder AppBridge(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FunctionsAppBridgeQueryBuilder> build)
         {
             var query = new Query<FunctionsAppBridge>("appBridge");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FunctionsAppBridgeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FunctionsAppBridgeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FunctionsAppBridge>(query);
             return this;

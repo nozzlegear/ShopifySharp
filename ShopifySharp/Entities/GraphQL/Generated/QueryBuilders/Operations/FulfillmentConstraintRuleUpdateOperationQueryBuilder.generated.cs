@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class FulfillmentConstraintRuleUpdateOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentConstraintRuleUpdatePayload, FulfillmentConstraintRuleUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentConstraintRuleUpdatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new FulfillmentConstraintRuleUpdateArgumentsBuilder(base.InnerQuery);
         }
 
-        public FulfillmentConstraintRuleUpdateOperationQueryBuilder FulfillmentConstraintRule(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentConstraintRuleQueryBuilder> build)
+        public FulfillmentConstraintRuleUpdateOperationQueryBuilder FulfillmentConstraintRule(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentConstraintRuleQueryBuilder> build)
         {
             var query = new Query<FulfillmentConstraintRule>("fulfillmentConstraintRule");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentConstraintRuleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentConstraintRuleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentConstraintRule>(query);
             return this;
         }
 
-        public FulfillmentConstraintRuleUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentConstraintRuleUpdateUserErrorQueryBuilder> build)
+        public FulfillmentConstraintRuleUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentConstraintRuleUpdateUserErrorQueryBuilder> build)
         {
             var query = new Query<FulfillmentConstraintRuleUpdateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentConstraintRuleUpdateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentConstraintRuleUpdateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentConstraintRuleUpdateUserError>(query);
             return this;

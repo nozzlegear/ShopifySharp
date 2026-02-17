@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class InventoryShipmentOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipment, InventoryShipmentOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipment>
     {
@@ -57,19 +58,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public InventoryShipmentOperationQueryBuilder LineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentLineItemConnectionQueryBuilder> build)
+        public InventoryShipmentOperationQueryBuilder LineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentLineItemConnectionQueryBuilder> build)
         {
             var query = new Query<InventoryShipmentLineItemConnection>("lineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentLineItemConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentLineItemConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipmentLineItemConnection>(query);
             return this;
         }
 
-        public InventoryShipmentOperationQueryBuilder LineItemsCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public InventoryShipmentOperationQueryBuilder LineItemsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("lineItemsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
@@ -111,10 +112,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public InventoryShipmentOperationQueryBuilder Tracking(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentTrackingQueryBuilder> build)
+        public InventoryShipmentOperationQueryBuilder Tracking(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentTrackingQueryBuilder> build)
         {
             var query = new Query<InventoryShipmentTracking>("tracking");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryShipmentTrackingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentTrackingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipmentTracking>(query);
             return this;

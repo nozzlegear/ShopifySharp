@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class FinancialSummaryDiscountAllocationQueryBuilder : FieldsQueryBuilderBase<FinancialSummaryDiscountAllocation, FinancialSummaryDiscountAllocationQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public FinancialSummaryDiscountAllocationQueryBuilder ApproximateAllocatedAmountPerItem(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public FinancialSummaryDiscountAllocationQueryBuilder ApproximateAllocatedAmountPerItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("approximateAllocatedAmountPerItem");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
         }
 
-        public FinancialSummaryDiscountAllocationQueryBuilder DiscountApplication(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FinancialSummaryDiscountApplicationQueryBuilder> build)
+        public FinancialSummaryDiscountAllocationQueryBuilder DiscountApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FinancialSummaryDiscountApplicationQueryBuilder> build)
         {
             var query = new Query<FinancialSummaryDiscountApplication>("discountApplication");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FinancialSummaryDiscountApplicationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FinancialSummaryDiscountApplicationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FinancialSummaryDiscountApplication>(query);
             return this;

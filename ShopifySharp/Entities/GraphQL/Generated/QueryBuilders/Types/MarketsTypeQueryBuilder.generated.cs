@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class MarketsTypeQueryBuilder : FieldsQueryBuilderBase<MarketsType, MarketsTypeQueryBuilder>
     {
@@ -29,37 +30,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public MarketsTypeQueryBuilder B2b(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsB2BEntitlementQueryBuilder> build)
+        public MarketsTypeQueryBuilder B2b(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketsB2BEntitlementQueryBuilder> build)
         {
             var query = new Query<MarketsB2BEntitlement>("b2b");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsB2BEntitlementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketsB2BEntitlementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketsB2BEntitlement>(query);
             return this;
         }
 
-        public MarketsTypeQueryBuilder Regions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsRegionsEntitlementQueryBuilder> build)
+        public MarketsTypeQueryBuilder Regions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketsRegionsEntitlementQueryBuilder> build)
         {
             var query = new Query<MarketsRegionsEntitlement>("regions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsRegionsEntitlementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketsRegionsEntitlementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketsRegionsEntitlement>(query);
             return this;
         }
 
-        public MarketsTypeQueryBuilder Retail(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsRetailEntitlementQueryBuilder> build)
+        public MarketsTypeQueryBuilder Retail(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketsRetailEntitlementQueryBuilder> build)
         {
             var query = new Query<MarketsRetailEntitlement>("retail");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsRetailEntitlementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketsRetailEntitlementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketsRetailEntitlement>(query);
             return this;
         }
 
-        public MarketsTypeQueryBuilder Themes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsThemesEntitlementQueryBuilder> build)
+        public MarketsTypeQueryBuilder Themes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketsThemesEntitlementQueryBuilder> build)
         {
             var query = new Query<MarketsThemesEntitlement>("themes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsThemesEntitlementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketsThemesEntitlementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketsThemesEntitlement>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class MetafieldsDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldsDeletePayload, MetafieldsDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldsDeletePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new MetafieldsDeleteArgumentsBuilder(base.InnerQuery);
         }
 
-        public MetafieldsDeleteOperationQueryBuilder DeletedMetafields(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldIdentifierQueryBuilder> build)
+        public MetafieldsDeleteOperationQueryBuilder DeletedMetafields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldIdentifierQueryBuilder> build)
         {
             var query = new Query<MetafieldIdentifier>("deletedMetafields");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldIdentifierQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldIdentifierQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldIdentifier>(query);
             return this;
         }
 
-        public MetafieldsDeleteOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        public MetafieldsDeleteOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
             var query = new Query<UserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UserError>(query);
             return this;

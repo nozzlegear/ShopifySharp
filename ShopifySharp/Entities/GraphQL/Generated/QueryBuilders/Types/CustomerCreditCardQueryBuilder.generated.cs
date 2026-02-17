@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CustomerCreditCardQueryBuilder : FieldsQueryBuilderBase<CustomerCreditCard, CustomerCreditCardQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CustomerCreditCardQueryBuilder BillingAddress(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerCreditCardBillingAddressQueryBuilder> build)
+        public CustomerCreditCardQueryBuilder BillingAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerCreditCardBillingAddressQueryBuilder> build)
         {
             var query = new Query<CustomerCreditCardBillingAddress>("billingAddress");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerCreditCardBillingAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerCreditCardBillingAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerCreditCardBillingAddress>(query);
             return this;

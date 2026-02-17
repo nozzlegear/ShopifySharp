@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class WebhookSubscriptionOperationQueryBuilder : FieldsQueryBuilderBase<WebhookSubscription, WebhookSubscriptionOperationQueryBuilder>, IGraphOperationQueryBuilder<WebhookSubscription>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new WebhookSubscriptionArgumentsBuilder(base.InnerQuery);
         }
 
-        public WebhookSubscriptionOperationQueryBuilder ApiVersion(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ApiVersionQueryBuilder> build)
+        public WebhookSubscriptionOperationQueryBuilder ApiVersion(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ApiVersionQueryBuilder> build)
         {
             var query = new Query<ApiVersion>("apiVersion");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ApiVersionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ApiVersionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ApiVersion>(query);
             return this;
@@ -91,10 +92,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public WebhookSubscriptionOperationQueryBuilder Metafields(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.WebhookSubscriptionMetafieldIdentifierQueryBuilder> build)
+        public WebhookSubscriptionOperationQueryBuilder Metafields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WebhookSubscriptionMetafieldIdentifierQueryBuilder> build)
         {
             var query = new Query<WebhookSubscriptionMetafieldIdentifier>("metafields");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.WebhookSubscriptionMetafieldIdentifierQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WebhookSubscriptionMetafieldIdentifierQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<WebhookSubscriptionMetafieldIdentifier>(query);
             return this;

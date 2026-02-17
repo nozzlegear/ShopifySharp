@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class MarketsRegionsEntitlementQueryBuilder : FieldsQueryBuilderBase<MarketsRegionsEntitlement, MarketsRegionsEntitlementQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public MarketsRegionsEntitlementQueryBuilder Catalogs(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsCatalogsEntitlementQueryBuilder> build)
+        public MarketsRegionsEntitlementQueryBuilder Catalogs(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketsCatalogsEntitlementQueryBuilder> build)
         {
             var query = new Query<MarketsCatalogsEntitlement>("catalogs");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketsCatalogsEntitlementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketsCatalogsEntitlementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketsCatalogsEntitlement>(query);
             return this;

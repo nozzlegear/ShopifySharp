@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ProductOptionValueQueryBuilder : FieldsQueryBuilderBase<ProductOptionValue, ProductOptionValueQueryBuilder>
     {
@@ -53,19 +54,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ProductOptionValueQueryBuilder Swatch(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionValueSwatchQueryBuilder> build)
+        public ProductOptionValueQueryBuilder Swatch(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionValueSwatchQueryBuilder> build)
         {
             var query = new Query<ProductOptionValueSwatch>("swatch");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionValueSwatchQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionValueSwatchQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductOptionValueSwatch>(query);
             return this;
         }
 
-        public ProductOptionValueQueryBuilder Translations(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder> build)
+        public ProductOptionValueQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
         {
             var query = new Query<Translation>("translations");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Translation>(query);
             return this;

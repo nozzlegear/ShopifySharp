@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ShopifyqlQueryOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyqlQueryResponse, ShopifyqlQueryOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyqlQueryResponse>
     {
@@ -39,10 +40,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ShopifyqlQueryOperationQueryBuilder TableData(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyqlTableDataQueryBuilder> build)
+        public ShopifyqlQueryOperationQueryBuilder TableData(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyqlTableDataQueryBuilder> build)
         {
             var query = new Query<ShopifyqlTableData>("tableData");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyqlTableDataQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyqlTableDataQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyqlTableData>(query);
             return this;

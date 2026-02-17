@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class MediaImageQueryBuilder : FieldsQueryBuilderBase<MediaImage, MediaImageQueryBuilder>
     {
@@ -41,10 +42,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MediaImageQueryBuilder FileErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FileErrorQueryBuilder> build)
+        public MediaImageQueryBuilder FileErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileErrorQueryBuilder> build)
         {
             var query = new Query<FileError>("fileErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FileErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FileErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FileError>(query);
             return this;
@@ -62,10 +63,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MediaImageQueryBuilder Image(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder> build)
+        public MediaImageQueryBuilder Image(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder> build)
         {
             var query = new Query<Image>("image");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Image>(query);
             return this;
@@ -77,37 +78,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MediaImageQueryBuilder MediaErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaErrorQueryBuilder> build)
+        public MediaImageQueryBuilder MediaErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaErrorQueryBuilder> build)
         {
             var query = new Query<MediaError>("mediaErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MediaError>(query);
             return this;
         }
 
-        public MediaImageQueryBuilder MediaWarnings(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaWarningQueryBuilder> build)
+        public MediaImageQueryBuilder MediaWarnings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaWarningQueryBuilder> build)
         {
             var query = new Query<MediaWarning>("mediaWarnings");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaWarningQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaWarningQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MediaWarning>(query);
             return this;
         }
 
-        public MediaImageQueryBuilder Metafield(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldQueryBuilder> build)
+        public MediaImageQueryBuilder Metafield(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder> build)
         {
             var query = new Query<Metafield>("metafield");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Metafield>(query);
             return this;
         }
 
-        public MediaImageQueryBuilder Metafields(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
+        public MediaImageQueryBuilder Metafields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
         {
             var query = new Query<MetafieldConnection>("metafields");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldConnection>(query);
             return this;
@@ -119,19 +120,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MediaImageQueryBuilder OriginalSource(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaImageOriginalSourceQueryBuilder> build)
+        public MediaImageQueryBuilder OriginalSource(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaImageOriginalSourceQueryBuilder> build)
         {
             var query = new Query<MediaImageOriginalSource>("originalSource");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaImageOriginalSourceQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaImageOriginalSourceQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MediaImageOriginalSource>(query);
             return this;
         }
 
-        public MediaImageQueryBuilder Preview(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaPreviewImageQueryBuilder> build)
+        public MediaImageQueryBuilder Preview(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaPreviewImageQueryBuilder> build)
         {
             var query = new Query<MediaPreviewImage>("preview");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaPreviewImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaPreviewImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MediaPreviewImage>(query);
             return this;
@@ -143,10 +144,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MediaImageQueryBuilder Translations(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder> build)
+        public MediaImageQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
         {
             var query = new Query<Translation>("translations");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Translation>(query);
             return this;

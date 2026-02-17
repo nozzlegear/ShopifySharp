@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ReturnLineItemTypeEdgeQueryBuilder : FieldsQueryBuilderBase<ReturnLineItemTypeEdge, ReturnLineItemTypeEdgeQueryBuilder>
     {
@@ -35,10 +36,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ReturnLineItemTypeEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder> build)
+        public ReturnLineItemTypeEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder> build)
         {
             var query = new Query<IReturnLineItemType>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<IReturnLineItemType>(query);
             return this;

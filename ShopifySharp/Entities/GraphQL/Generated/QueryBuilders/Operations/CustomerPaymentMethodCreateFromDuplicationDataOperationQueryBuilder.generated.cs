@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodCreateFromDuplicationDataPayload, CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodCreateFromDuplicationDataPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new CustomerPaymentMethodCreateFromDuplicationDataArgumentsBuilder(base.InnerQuery);
         }
 
-        public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)
+        public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)
         {
             var query = new Query<CustomerPaymentMethod>("customerPaymentMethod");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerPaymentMethod>(query);
             return this;
         }
 
-        public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodCreateFromDuplicationDataUserErrorQueryBuilder> build)
+        public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodCreateFromDuplicationDataUserErrorQueryBuilder> build)
         {
             var query = new Query<CustomerPaymentMethodCreateFromDuplicationDataUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodCreateFromDuplicationDataUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodCreateFromDuplicationDataUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerPaymentMethodCreateFromDuplicationDataUserError>(query);
             return this;

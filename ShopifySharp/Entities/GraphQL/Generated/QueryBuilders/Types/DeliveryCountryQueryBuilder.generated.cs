@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class DeliveryCountryQueryBuilder : FieldsQueryBuilderBase<DeliveryCountry, DeliveryCountryQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public DeliveryCountryQueryBuilder Code(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryCountryCodeOrRestOfWorldQueryBuilder> build)
+        public DeliveryCountryQueryBuilder Code(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryCodeOrRestOfWorldQueryBuilder> build)
         {
             var query = new Query<DeliveryCountryCodeOrRestOfWorld>("code");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryCountryCodeOrRestOfWorldQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryCodeOrRestOfWorldQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryCountryCodeOrRestOfWorld>(query);
             return this;
@@ -50,10 +51,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DeliveryCountryQueryBuilder Provinces(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryProvinceQueryBuilder> build)
+        public DeliveryCountryQueryBuilder Provinces(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryProvinceQueryBuilder> build)
         {
             var query = new Query<DeliveryProvince>("provinces");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryProvinceQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryProvinceQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryProvince>(query);
             return this;

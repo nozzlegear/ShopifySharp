@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class FulfillmentOrderLineItemQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderLineItem, FulfillmentOrderLineItemQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public FulfillmentOrderLineItemQueryBuilder FinancialSummaries(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderLineItemFinancialSummaryQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder FinancialSummaries(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderLineItemFinancialSummaryQueryBuilder> build)
         {
             var query = new Query<FulfillmentOrderLineItemFinancialSummary>("financialSummaries");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderLineItemFinancialSummaryQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderLineItemFinancialSummaryQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentOrderLineItemFinancialSummary>(query);
             return this;
@@ -44,10 +45,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public FulfillmentOrderLineItemQueryBuilder Image(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder Image(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder> build)
         {
             var query = new Query<Image>("image");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Image>(query);
             return this;
@@ -59,19 +60,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public FulfillmentOrderLineItemQueryBuilder LineItem(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LineItemQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder LineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LineItemQueryBuilder> build)
         {
             var query = new Query<LineItem>("lineItem");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.LineItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LineItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LineItem>(query);
             return this;
         }
 
-        public FulfillmentOrderLineItemQueryBuilder OriginalUnitPriceSet(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder OriginalUnitPriceSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
         {
             var query = new Query<MoneyBag>("originalUnitPriceSet");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
@@ -107,10 +108,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public FulfillmentOrderLineItemQueryBuilder Variant(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder Variant(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder> build)
         {
             var query = new Query<ProductVariant>("variant");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductVariant>(query);
             return this;
@@ -128,19 +129,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public FulfillmentOrderLineItemQueryBuilder Warnings(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderLineItemWarningQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder Warnings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderLineItemWarningQueryBuilder> build)
         {
             var query = new Query<FulfillmentOrderLineItemWarning>("warnings");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderLineItemWarningQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderLineItemWarningQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentOrderLineItemWarning>(query);
             return this;
         }
 
-        public FulfillmentOrderLineItemQueryBuilder Weight(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.WeightQueryBuilder> build)
+        public FulfillmentOrderLineItemQueryBuilder Weight(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder> build)
         {
             var query = new Query<Weight>("weight");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.WeightQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Weight>(query);
             return this;

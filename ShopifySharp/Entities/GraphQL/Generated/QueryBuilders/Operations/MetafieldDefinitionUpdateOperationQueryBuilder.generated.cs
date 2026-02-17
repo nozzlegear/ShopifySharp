@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class MetafieldDefinitionUpdateOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionUpdatePayload, MetafieldDefinitionUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionUpdatePayload>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new MetafieldDefinitionUpdateArgumentsBuilder(base.InnerQuery);
         }
 
-        public MetafieldDefinitionUpdateOperationQueryBuilder UpdatedDefinition(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)
+        public MetafieldDefinitionUpdateOperationQueryBuilder UpdatedDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinition>("updatedDefinition");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinition>(query);
             return this;
         }
 
-        public MetafieldDefinitionUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionUpdateUserErrorQueryBuilder> build)
+        public MetafieldDefinitionUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionUpdateUserErrorQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionUpdateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionUpdateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionUpdateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionUpdateUserError>(query);
             return this;
         }
 
-        public MetafieldDefinitionUpdateOperationQueryBuilder ValidationJob(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder> build)
+        public MetafieldDefinitionUpdateOperationQueryBuilder ValidationJob(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)
         {
             var query = new Query<Job>("validationJob");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Job>(query);
             return this;

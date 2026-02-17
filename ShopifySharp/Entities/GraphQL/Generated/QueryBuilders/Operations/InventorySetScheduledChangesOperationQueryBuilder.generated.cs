@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Scheduled changes will be phased out in a future version.")]
     public sealed class InventorySetScheduledChangesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetScheduledChangesPayload, InventorySetScheduledChangesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetScheduledChangesPayload>
@@ -34,19 +35,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new InventorySetScheduledChangesArgumentsBuilder(base.InnerQuery);
         }
 
-        public InventorySetScheduledChangesOperationQueryBuilder ScheduledChanges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryScheduledChangeQueryBuilder> build)
+        public InventorySetScheduledChangesOperationQueryBuilder ScheduledChanges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryScheduledChangeQueryBuilder> build)
         {
             var query = new Query<InventoryScheduledChange>("scheduledChanges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryScheduledChangeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryScheduledChangeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryScheduledChange>(query);
             return this;
         }
 
-        public InventorySetScheduledChangesOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventorySetScheduledChangesUserErrorQueryBuilder> build)
+        public InventorySetScheduledChangesOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventorySetScheduledChangesUserErrorQueryBuilder> build)
         {
             var query = new Query<InventorySetScheduledChangesUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventorySetScheduledChangesUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventorySetScheduledChangesUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventorySetScheduledChangesUserError>(query);
             return this;

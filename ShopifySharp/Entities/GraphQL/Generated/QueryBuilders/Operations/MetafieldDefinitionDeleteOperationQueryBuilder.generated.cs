@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class MetafieldDefinitionDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionDeletePayload, MetafieldDefinitionDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionDeletePayload>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new MetafieldDefinitionDeleteArgumentsBuilder(base.InnerQuery);
         }
 
-        public MetafieldDefinitionDeleteOperationQueryBuilder DeletedDefinition(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionIdentifierQueryBuilder> build)
+        public MetafieldDefinitionDeleteOperationQueryBuilder DeletedDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionIdentifierQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionIdentifier>("deletedDefinition");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionIdentifierQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionIdentifierQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionIdentifier>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public MetafieldDefinitionDeleteOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionDeleteUserErrorQueryBuilder> build)
+        public MetafieldDefinitionDeleteOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionDeleteUserErrorQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionDeleteUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionDeleteUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionDeleteUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionDeleteUserError>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class UrlRedirectImportCreateOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectImportCreatePayload, UrlRedirectImportCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectImportCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new UrlRedirectImportCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public UrlRedirectImportCreateOperationQueryBuilder UrlRedirectImport(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UrlRedirectImportQueryBuilder> build)
+        public UrlRedirectImportCreateOperationQueryBuilder UrlRedirectImport(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UrlRedirectImportQueryBuilder> build)
         {
             var query = new Query<UrlRedirectImport>("urlRedirectImport");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UrlRedirectImportQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UrlRedirectImportQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UrlRedirectImport>(query);
             return this;
         }
 
-        public UrlRedirectImportCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UrlRedirectImportUserErrorQueryBuilder> build)
+        public UrlRedirectImportCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UrlRedirectImportUserErrorQueryBuilder> build)
         {
             var query = new Query<UrlRedirectImportUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UrlRedirectImportUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UrlRedirectImportUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UrlRedirectImportUserError>(query);
             return this;

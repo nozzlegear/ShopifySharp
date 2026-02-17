@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class DeliveryProfileLocationGroupQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileLocationGroup, DeliveryProfileLocationGroupQueryBuilder>
     {
@@ -29,28 +30,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public DeliveryProfileLocationGroupQueryBuilder CountriesInAnyZone(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryCountryAndZoneQueryBuilder> build)
+        public DeliveryProfileLocationGroupQueryBuilder CountriesInAnyZone(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryAndZoneQueryBuilder> build)
         {
             var query = new Query<DeliveryCountryAndZone>("countriesInAnyZone");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryCountryAndZoneQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryAndZoneQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryCountryAndZone>(query);
             return this;
         }
 
-        public DeliveryProfileLocationGroupQueryBuilder LocationGroup(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryLocationGroupQueryBuilder> build)
+        public DeliveryProfileLocationGroupQueryBuilder LocationGroup(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocationGroupQueryBuilder> build)
         {
             var query = new Query<DeliveryLocationGroup>("locationGroup");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryLocationGroupQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocationGroupQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryLocationGroup>(query);
             return this;
         }
 
-        public DeliveryProfileLocationGroupQueryBuilder LocationGroupZones(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryLocationGroupZoneConnectionQueryBuilder> build)
+        public DeliveryProfileLocationGroupQueryBuilder LocationGroupZones(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocationGroupZoneConnectionQueryBuilder> build)
         {
             var query = new Query<DeliveryLocationGroupZoneConnection>("locationGroupZones");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DeliveryLocationGroupZoneConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocationGroupZoneConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DeliveryLocationGroupZoneConnection>(query);
             return this;

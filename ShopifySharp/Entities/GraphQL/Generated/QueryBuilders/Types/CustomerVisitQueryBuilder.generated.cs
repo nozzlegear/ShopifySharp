@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CustomerVisitQueryBuilder : FieldsQueryBuilderBase<CustomerVisit, CustomerVisitQueryBuilder>
     {
@@ -47,10 +48,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerVisitQueryBuilder MarketingEvent(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingEventQueryBuilder> build)
+        public CustomerVisitQueryBuilder MarketingEvent(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingEventQueryBuilder> build)
         {
             var query = new Query<MarketingEvent>("marketingEvent");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketingEventQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketingEventQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketingEvent>(query);
             return this;
@@ -98,10 +99,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerVisitQueryBuilder UtmParameters(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UTMParametersQueryBuilder> build)
+        public CustomerVisitQueryBuilder UtmParameters(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UTMParametersQueryBuilder> build)
         {
             var query = new Query<UTMParameters>("utmParameters");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UTMParametersQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UTMParametersQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UTMParameters>(query);
             return this;

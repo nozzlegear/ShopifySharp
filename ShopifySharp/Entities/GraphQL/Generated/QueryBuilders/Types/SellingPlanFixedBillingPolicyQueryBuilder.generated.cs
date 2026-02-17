@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SellingPlanFixedBillingPolicyQueryBuilder : FieldsQueryBuilderBase<SellingPlanFixedBillingPolicy, SellingPlanFixedBillingPolicyQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public SellingPlanFixedBillingPolicyQueryBuilder CheckoutCharge(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanCheckoutChargeQueryBuilder> build)
+        public SellingPlanFixedBillingPolicyQueryBuilder CheckoutCharge(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanCheckoutChargeQueryBuilder> build)
         {
             var query = new Query<SellingPlanCheckoutCharge>("checkoutCharge");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanCheckoutChargeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanCheckoutChargeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SellingPlanCheckoutCharge>(query);
             return this;

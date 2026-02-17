@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CollectionOperationsQueryBuilder : FieldsQueryBuilderBase<CollectionOperations, CollectionOperationsQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CollectionOperationsQueryBuilder Duplicate(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CollectionDuplicateOperationQueryBuilder> build)
+        public CollectionOperationsQueryBuilder Duplicate(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionDuplicateOperationQueryBuilder> build)
         {
             var query = new Query<CollectionDuplicateOperation>("duplicate");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CollectionDuplicateOperationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionDuplicateOperationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CollectionDuplicateOperation>(query);
             return this;

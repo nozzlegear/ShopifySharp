@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class StagedMediaUploadTargetQueryBuilder : FieldsQueryBuilderBase<StagedMediaUploadTarget, StagedMediaUploadTargetQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public StagedMediaUploadTargetQueryBuilder Parameters(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StagedUploadParameterQueryBuilder> build)
+        public StagedMediaUploadTargetQueryBuilder Parameters(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StagedUploadParameterQueryBuilder> build)
         {
             var query = new Query<StagedUploadParameter>("parameters");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StagedUploadParameterQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StagedUploadParameterQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StagedUploadParameter>(query);
             return this;

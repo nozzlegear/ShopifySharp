@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ReturnOperationQueryBuilder : FieldsQueryBuilderBase<Return, ReturnOperationQueryBuilder>, IGraphOperationQueryBuilder<Return>
     {
@@ -45,19 +46,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnOperationQueryBuilder Decline(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnDeclineQueryBuilder> build)
+        public ReturnOperationQueryBuilder Decline(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnDeclineQueryBuilder> build)
         {
             var query = new Query<ReturnDecline>("decline");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnDeclineQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnDeclineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReturnDecline>(query);
             return this;
         }
 
-        public ReturnOperationQueryBuilder ExchangeLineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ExchangeLineItemConnectionQueryBuilder> build)
+        public ReturnOperationQueryBuilder ExchangeLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeLineItemConnectionQueryBuilder> build)
         {
             var query = new Query<ExchangeLineItemConnection>("exchangeLineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ExchangeLineItemConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeLineItemConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ExchangeLineItemConnection>(query);
             return this;
@@ -75,19 +76,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnOperationQueryBuilder Order(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder> build)
+        public ReturnOperationQueryBuilder Order(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)
         {
             var query = new Query<Order>("order");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Order>(query);
             return this;
         }
 
-        public ReturnOperationQueryBuilder Refunds(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.RefundConnectionQueryBuilder> build)
+        public ReturnOperationQueryBuilder Refunds(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RefundConnectionQueryBuilder> build)
         {
             var query = new Query<RefundConnection>("refunds");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.RefundConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.RefundConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<RefundConnection>(query);
             return this;
@@ -99,37 +100,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnOperationQueryBuilder ReturnLineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnLineItemTypeConnectionQueryBuilder> build)
+        public ReturnOperationQueryBuilder ReturnLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeConnectionQueryBuilder> build)
         {
             var query = new Query<ReturnLineItemTypeConnection>("returnLineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnLineItemTypeConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReturnLineItemTypeConnection>(query);
             return this;
         }
 
-        public ReturnOperationQueryBuilder ReturnShippingFees(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnShippingFeeQueryBuilder> build)
+        public ReturnOperationQueryBuilder ReturnShippingFees(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnShippingFeeQueryBuilder> build)
         {
             var query = new Query<ReturnShippingFee>("returnShippingFees");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnShippingFeeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnShippingFeeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReturnShippingFee>(query);
             return this;
         }
 
-        public ReturnOperationQueryBuilder ReverseFulfillmentOrders(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderConnectionQueryBuilder> build)
+        public ReturnOperationQueryBuilder ReverseFulfillmentOrders(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderConnectionQueryBuilder> build)
         {
             var query = new Query<ReverseFulfillmentOrderConnection>("reverseFulfillmentOrders");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseFulfillmentOrderConnection>(query);
             return this;
         }
 
-        public ReturnOperationQueryBuilder StaffMember(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StaffMemberQueryBuilder> build)
+        public ReturnOperationQueryBuilder StaffMember(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder> build)
         {
             var query = new Query<StaffMember>("staffMember");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StaffMemberQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StaffMember>(query);
             return this;
@@ -141,19 +142,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnOperationQueryBuilder SuggestedFinancialOutcome(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SuggestedReturnFinancialOutcomeQueryBuilder> build)
+        public ReturnOperationQueryBuilder SuggestedFinancialOutcome(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedReturnFinancialOutcomeQueryBuilder> build)
         {
             var query = new Query<SuggestedReturnFinancialOutcome>("suggestedFinancialOutcome");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SuggestedReturnFinancialOutcomeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedReturnFinancialOutcomeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SuggestedReturnFinancialOutcome>(query);
             return this;
         }
 
-        public ReturnOperationQueryBuilder SuggestedRefund(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SuggestedReturnRefundQueryBuilder> build)
+        public ReturnOperationQueryBuilder SuggestedRefund(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedReturnRefundQueryBuilder> build)
         {
             var query = new Query<SuggestedReturnRefund>("suggestedRefund");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SuggestedReturnRefundQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedReturnRefundQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SuggestedReturnRefund>(query);
             return this;
@@ -165,10 +166,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
+        public ReturnOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
         {
             var query = new Query<OrderTransactionConnection>("transactions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderTransactionConnection>(query);
             return this;

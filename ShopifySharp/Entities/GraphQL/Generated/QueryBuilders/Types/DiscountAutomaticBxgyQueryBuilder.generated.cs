@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class DiscountAutomaticBxgyQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticBxgy, DiscountAutomaticBxgyQueryBuilder>
     {
@@ -35,10 +36,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountAutomaticBxgyQueryBuilder CombinesWith(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCombinesWithQueryBuilder> build)
+        public DiscountAutomaticBxgyQueryBuilder CombinesWith(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCombinesWithQueryBuilder> build)
         {
             var query = new Query<DiscountCombinesWith>("combinesWith");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCombinesWithQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCombinesWithQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCombinesWith>(query);
             return this;
@@ -50,19 +51,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountAutomaticBxgyQueryBuilder CustomerBuys(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder> build)
+        public DiscountAutomaticBxgyQueryBuilder CustomerBuys(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder> build)
         {
             var query = new Query<DiscountCustomerBuys>("customerBuys");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerBuysQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCustomerBuys>(query);
             return this;
         }
 
-        public DiscountAutomaticBxgyQueryBuilder CustomerGets(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder> build)
+        public DiscountAutomaticBxgyQueryBuilder CustomerGets(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder> build)
         {
             var query = new Query<DiscountCustomerGets>("customerGets");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerGetsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCustomerGets>(query);
             return this;
@@ -87,10 +88,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public DiscountAutomaticBxgyQueryBuilder Events(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.EventConnectionQueryBuilder> build)
+        public DiscountAutomaticBxgyQueryBuilder Events(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder> build)
         {
             var query = new Query<EventConnection>("events");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.EventConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<EventConnection>(query);
             return this;

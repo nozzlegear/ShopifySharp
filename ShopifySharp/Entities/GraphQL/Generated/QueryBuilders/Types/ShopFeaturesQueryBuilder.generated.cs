@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ShopFeaturesQueryBuilder : FieldsQueryBuilderBase<ShopFeatures, ShopFeaturesQueryBuilder>
     {
@@ -41,10 +42,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ShopFeaturesQueryBuilder Bundles(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.BundlesFeatureQueryBuilder> build)
+        public ShopFeaturesQueryBuilder Bundles(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BundlesFeatureQueryBuilder> build)
         {
             var query = new Query<BundlesFeature>("bundles");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.BundlesFeatureQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.BundlesFeatureQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<BundlesFeature>(query);
             return this;
@@ -63,10 +64,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ShopFeaturesQueryBuilder CartTransform(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CartTransformFeatureQueryBuilder> build)
+        public ShopFeaturesQueryBuilder CartTransform(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformFeatureQueryBuilder> build)
         {
             var query = new Query<CartTransformFeature>("cartTransform");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CartTransformFeatureQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformFeatureQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CartTransformFeature>(query);
             return this;

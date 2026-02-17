@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class BusinessEntityQueryBuilder : FieldsQueryBuilderBase<BusinessEntity, BusinessEntityQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public BusinessEntityQueryBuilder Address(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.BusinessEntityAddressQueryBuilder> build)
+        public BusinessEntityQueryBuilder Address(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BusinessEntityAddressQueryBuilder> build)
         {
             var query = new Query<BusinessEntityAddress>("address");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.BusinessEntityAddressQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.BusinessEntityAddressQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<BusinessEntityAddress>(query);
             return this;
@@ -68,10 +69,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public BusinessEntityQueryBuilder ShopifyPaymentsAccount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsAccountQueryBuilder> build)
+        public BusinessEntityQueryBuilder ShopifyPaymentsAccount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsAccountQueryBuilder> build)
         {
             var query = new Query<ShopifyPaymentsAccount>("shopifyPaymentsAccount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsAccountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsAccountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyPaymentsAccount>(query);
             return this;

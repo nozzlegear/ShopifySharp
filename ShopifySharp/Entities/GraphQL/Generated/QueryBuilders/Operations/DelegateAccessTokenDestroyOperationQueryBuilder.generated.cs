@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class DelegateAccessTokenDestroyOperationQueryBuilder : FieldsQueryBuilderBase<DelegateAccessTokenDestroyPayload, DelegateAccessTokenDestroyOperationQueryBuilder>, IGraphOperationQueryBuilder<DelegateAccessTokenDestroyPayload>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new DelegateAccessTokenDestroyArgumentsBuilder(base.InnerQuery);
         }
 
-        public DelegateAccessTokenDestroyOperationQueryBuilder Shop(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopQueryBuilder> build)
+        public DelegateAccessTokenDestroyOperationQueryBuilder Shop(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopQueryBuilder> build)
         {
             var query = new Query<Shop>("shop");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Shop>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public DelegateAccessTokenDestroyOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DelegateAccessTokenDestroyUserErrorQueryBuilder> build)
+        public DelegateAccessTokenDestroyOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DelegateAccessTokenDestroyUserErrorQueryBuilder> build)
         {
             var query = new Query<DelegateAccessTokenDestroyUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DelegateAccessTokenDestroyUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DelegateAccessTokenDestroyUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DelegateAccessTokenDestroyUserError>(query);
             return this;

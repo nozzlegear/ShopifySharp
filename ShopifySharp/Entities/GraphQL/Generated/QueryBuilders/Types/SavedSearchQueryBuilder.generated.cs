@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SavedSearchQueryBuilder : FieldsQueryBuilderBase<SavedSearch, SavedSearchQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public SavedSearchQueryBuilder Filters(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SearchFilterQueryBuilder> build)
+        public SavedSearchQueryBuilder Filters(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SearchFilterQueryBuilder> build)
         {
             var query = new Query<SearchFilter>("filters");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SearchFilterQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SearchFilterQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SearchFilter>(query);
             return this;

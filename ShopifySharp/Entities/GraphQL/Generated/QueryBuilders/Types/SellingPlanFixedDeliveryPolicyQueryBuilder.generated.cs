@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SellingPlanFixedDeliveryPolicyQueryBuilder : FieldsQueryBuilderBase<SellingPlanFixedDeliveryPolicy, SellingPlanFixedDeliveryPolicyQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public SellingPlanFixedDeliveryPolicyQueryBuilder Anchors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanAnchorQueryBuilder> build)
+        public SellingPlanFixedDeliveryPolicyQueryBuilder Anchors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanAnchorQueryBuilder> build)
         {
             var query = new Query<SellingPlanAnchor>("anchors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanAnchorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanAnchorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SellingPlanAnchor>(query);
             return this;

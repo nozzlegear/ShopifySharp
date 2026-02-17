@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CheckoutBrandingContentQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingContent, CheckoutBrandingContentQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CheckoutBrandingContentQueryBuilder Divider(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingContainerDividerQueryBuilder> build)
+        public CheckoutBrandingContentQueryBuilder Divider(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingContainerDividerQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingContainerDivider>("divider");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingContainerDividerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingContainerDividerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingContainerDivider>(query);
             return this;

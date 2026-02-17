@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload, CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new CustomerPaymentMethodPaypalBillingAgreementUpdateArgumentsBuilder(base.InnerQuery);
         }
 
-        public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)
+        public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)
         {
             var query = new Query<CustomerPaymentMethod>("customerPaymentMethod");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerPaymentMethod>(query);
             return this;
         }
 
-        public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodUserErrorQueryBuilder> build)
+        public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodUserErrorQueryBuilder> build)
         {
             var query = new Query<CustomerPaymentMethodUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerPaymentMethodUserError>(query);
             return this;

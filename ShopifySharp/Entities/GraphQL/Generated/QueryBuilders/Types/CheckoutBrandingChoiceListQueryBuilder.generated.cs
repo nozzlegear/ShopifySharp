@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CheckoutBrandingChoiceListQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingChoiceList, CheckoutBrandingChoiceListQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CheckoutBrandingChoiceListQueryBuilder Group(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingChoiceListGroupQueryBuilder> build)
+        public CheckoutBrandingChoiceListQueryBuilder Group(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingChoiceListGroupQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingChoiceListGroup>("group");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingChoiceListGroupQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingChoiceListGroupQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingChoiceListGroup>(query);
             return this;

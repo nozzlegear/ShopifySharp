@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ReverseFulfillmentOrderLineItemQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrderLineItem, ReverseFulfillmentOrderLineItemQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public ReverseFulfillmentOrderLineItemQueryBuilder Dispositions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderDispositionQueryBuilder> build)
+        public ReverseFulfillmentOrderLineItemQueryBuilder Dispositions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderDispositionQueryBuilder> build)
         {
             var query = new Query<ReverseFulfillmentOrderDisposition>("dispositions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderDispositionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderDispositionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseFulfillmentOrderDisposition>(query);
             return this;
         }
 
-        public ReverseFulfillmentOrderLineItemQueryBuilder FulfillmentLineItem(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentLineItemQueryBuilder> build)
+        public ReverseFulfillmentOrderLineItemQueryBuilder FulfillmentLineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentLineItemQueryBuilder> build)
         {
             var query = new Query<FulfillmentLineItem>("fulfillmentLineItem");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentLineItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentLineItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentLineItem>(query);
             return this;

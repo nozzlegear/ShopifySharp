@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class AbandonmentUpdateActivitiesDeliveryStatusesOperationQueryBuilder : FieldsQueryBuilderBase<AbandonmentUpdateActivitiesDeliveryStatusesPayload, AbandonmentUpdateActivitiesDeliveryStatusesOperationQueryBuilder>, IGraphOperationQueryBuilder<AbandonmentUpdateActivitiesDeliveryStatusesPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new AbandonmentUpdateActivitiesDeliveryStatusesArgumentsBuilder(base.InnerQuery);
         }
 
-        public AbandonmentUpdateActivitiesDeliveryStatusesOperationQueryBuilder Abandonment(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AbandonmentQueryBuilder> build)
+        public AbandonmentUpdateActivitiesDeliveryStatusesOperationQueryBuilder Abandonment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonmentQueryBuilder> build)
         {
             var query = new Query<Abandonment>("abandonment");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AbandonmentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AbandonmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Abandonment>(query);
             return this;
         }
 
-        public AbandonmentUpdateActivitiesDeliveryStatusesOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AbandonmentUpdateActivitiesDeliveryStatusesUserErrorQueryBuilder> build)
+        public AbandonmentUpdateActivitiesDeliveryStatusesOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonmentUpdateActivitiesDeliveryStatusesUserErrorQueryBuilder> build)
         {
             var query = new Query<AbandonmentUpdateActivitiesDeliveryStatusesUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AbandonmentUpdateActivitiesDeliveryStatusesUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AbandonmentUpdateActivitiesDeliveryStatusesUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AbandonmentUpdateActivitiesDeliveryStatusesUserError>(query);
             return this;

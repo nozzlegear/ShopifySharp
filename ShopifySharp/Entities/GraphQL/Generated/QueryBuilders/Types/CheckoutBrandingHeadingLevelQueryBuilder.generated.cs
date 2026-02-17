@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CheckoutBrandingHeadingLevelQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingHeadingLevel, CheckoutBrandingHeadingLevelQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CheckoutBrandingHeadingLevelQueryBuilder Typography(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingTypographyStyleQueryBuilder> build)
+        public CheckoutBrandingHeadingLevelQueryBuilder Typography(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingTypographyStyleQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingTypographyStyle>("typography");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingTypographyStyleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingTypographyStyleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingTypographyStyle>(query);
             return this;

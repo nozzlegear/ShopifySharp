@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload, ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ShopifyPaymentsPayoutAlternateCurrencyCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder Payout(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsToolingProviderPayoutQueryBuilder> build)
+        public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder Payout(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsToolingProviderPayoutQueryBuilder> build)
         {
             var query = new Query<ShopifyPaymentsToolingProviderPayout>("payout");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsToolingProviderPayoutQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsToolingProviderPayoutQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyPaymentsToolingProviderPayout>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsPayoutAlternateCurrencyCreateUserErrorQueryBuilder> build)
+        public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsPayoutAlternateCurrencyCreateUserErrorQueryBuilder> build)
         {
             var query = new Query<ShopifyPaymentsPayoutAlternateCurrencyCreateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopifyPaymentsPayoutAlternateCurrencyCreateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsPayoutAlternateCurrencyCreateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifyPaymentsPayoutAlternateCurrencyCreateUserError>(query);
             return this;

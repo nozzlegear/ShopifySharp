@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CheckoutBrandingHeaderQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingHeader, CheckoutBrandingHeaderQueryBuilder>
     {
@@ -35,19 +36,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CheckoutBrandingHeaderQueryBuilder Banner(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingImageQueryBuilder> build)
+        public CheckoutBrandingHeaderQueryBuilder Banner(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingImageQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingImage>("banner");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingImage>(query);
             return this;
         }
 
-        public CheckoutBrandingHeaderQueryBuilder CartLink(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingHeaderCartLinkQueryBuilder> build)
+        public CheckoutBrandingHeaderQueryBuilder CartLink(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingHeaderCartLinkQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingHeaderCartLink>("cartLink");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingHeaderCartLinkQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingHeaderCartLinkQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingHeaderCartLink>(query);
             return this;
@@ -65,10 +66,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CheckoutBrandingHeaderQueryBuilder Logo(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingLogoQueryBuilder> build)
+        public CheckoutBrandingHeaderQueryBuilder Logo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingLogoQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingLogo>("logo");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingLogoQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingLogoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingLogo>(query);
             return this;

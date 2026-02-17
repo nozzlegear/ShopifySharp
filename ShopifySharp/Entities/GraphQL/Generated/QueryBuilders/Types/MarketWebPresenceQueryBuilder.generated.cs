@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class MarketWebPresenceQueryBuilder : FieldsQueryBuilderBase<MarketWebPresence, MarketWebPresenceQueryBuilder>
     {
@@ -29,28 +30,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public MarketWebPresenceQueryBuilder AlternateLocales(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopLocaleQueryBuilder> build)
+        public MarketWebPresenceQueryBuilder AlternateLocales(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopLocaleQueryBuilder> build)
         {
             var query = new Query<ShopLocale>("alternateLocales");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopLocaleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopLocaleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopLocale>(query);
             return this;
         }
 
-        public MarketWebPresenceQueryBuilder DefaultLocale(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopLocaleQueryBuilder> build)
+        public MarketWebPresenceQueryBuilder DefaultLocale(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopLocaleQueryBuilder> build)
         {
             var query = new Query<ShopLocale>("defaultLocale");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ShopLocaleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopLocaleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopLocale>(query);
             return this;
         }
 
-        public MarketWebPresenceQueryBuilder Domain(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DomainQueryBuilder> build)
+        public MarketWebPresenceQueryBuilder Domain(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DomainQueryBuilder> build)
         {
             var query = new Query<Domain>("domain");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DomainQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DomainQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Domain>(query);
             return this;
@@ -62,28 +63,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public MarketWebPresenceQueryBuilder Market(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketQueryBuilder> build)
+        public MarketWebPresenceQueryBuilder Market(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketQueryBuilder> build)
         {
             var query = new Query<Market>("market");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Market>(query);
             return this;
         }
 
-        public MarketWebPresenceQueryBuilder Markets(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketConnectionQueryBuilder> build)
+        public MarketWebPresenceQueryBuilder Markets(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketConnectionQueryBuilder> build)
         {
             var query = new Query<MarketConnection>("markets");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketConnection>(query);
             return this;
         }
 
-        public MarketWebPresenceQueryBuilder RootUrls(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketWebPresenceRootUrlQueryBuilder> build)
+        public MarketWebPresenceQueryBuilder RootUrls(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketWebPresenceRootUrlQueryBuilder> build)
         {
             var query = new Query<MarketWebPresenceRootUrl>("rootUrls");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MarketWebPresenceRootUrlQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketWebPresenceRootUrlQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MarketWebPresenceRootUrl>(query);
             return this;

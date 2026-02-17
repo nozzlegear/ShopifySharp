@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class InventoryPropertiesOperationQueryBuilder : FieldsQueryBuilderBase<InventoryProperties, InventoryPropertiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryProperties>
     {
@@ -30,10 +31,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
         {
         }
 
-        public InventoryPropertiesOperationQueryBuilder QuantityNames(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryQuantityNameQueryBuilder> build)
+        public InventoryPropertiesOperationQueryBuilder QuantityNames(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryQuantityNameQueryBuilder> build)
         {
             var query = new Query<InventoryQuantityName>("quantityNames");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryQuantityNameQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryQuantityNameQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryQuantityName>(query);
             return this;

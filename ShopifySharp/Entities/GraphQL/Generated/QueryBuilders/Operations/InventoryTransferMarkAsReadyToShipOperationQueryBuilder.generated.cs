@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class InventoryTransferMarkAsReadyToShipOperationQueryBuilder : FieldsQueryBuilderBase<InventoryTransferMarkAsReadyToShipPayload, InventoryTransferMarkAsReadyToShipOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryTransferMarkAsReadyToShipPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new InventoryTransferMarkAsReadyToShipArgumentsBuilder(base.InnerQuery);
         }
 
-        public InventoryTransferMarkAsReadyToShipOperationQueryBuilder InventoryTransfer(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferQueryBuilder> build)
+        public InventoryTransferMarkAsReadyToShipOperationQueryBuilder InventoryTransfer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferQueryBuilder> build)
         {
             var query = new Query<InventoryTransfer>("inventoryTransfer");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryTransfer>(query);
             return this;
         }
 
-        public InventoryTransferMarkAsReadyToShipOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferMarkAsReadyToShipUserErrorQueryBuilder> build)
+        public InventoryTransferMarkAsReadyToShipOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferMarkAsReadyToShipUserErrorQueryBuilder> build)
         {
             var query = new Query<InventoryTransferMarkAsReadyToShipUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.InventoryTransferMarkAsReadyToShipUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferMarkAsReadyToShipUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryTransferMarkAsReadyToShipUserError>(query);
             return this;

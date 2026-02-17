@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ProductContextualPricingQueryBuilder : FieldsQueryBuilderBase<ProductContextualPricing, ProductContextualPricingQueryBuilder>
     {
@@ -35,28 +36,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ProductContextualPricingQueryBuilder MaxVariantPricing(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder> build)
+        public ProductContextualPricingQueryBuilder MaxVariantPricing(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder> build)
         {
             var query = new Query<ProductVariantContextualPricing>("maxVariantPricing");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductVariantContextualPricing>(query);
             return this;
         }
 
-        public ProductContextualPricingQueryBuilder MinVariantPricing(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder> build)
+        public ProductContextualPricingQueryBuilder MinVariantPricing(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder> build)
         {
             var query = new Query<ProductVariantContextualPricing>("minVariantPricing");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantContextualPricingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductVariantContextualPricing>(query);
             return this;
         }
 
-        public ProductContextualPricingQueryBuilder PriceRange(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder> build)
+        public ProductContextualPricingQueryBuilder PriceRange(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder> build)
         {
             var query = new Query<ProductPriceRangeV2>("priceRange");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductPriceRangeV2>(query);
             return this;

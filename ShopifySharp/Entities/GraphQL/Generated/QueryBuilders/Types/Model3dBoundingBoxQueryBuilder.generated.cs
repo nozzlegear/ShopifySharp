@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class Model3dBoundingBoxQueryBuilder : FieldsQueryBuilderBase<Model3dBoundingBox, Model3dBoundingBoxQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public Model3dBoundingBoxQueryBuilder Size(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.Vector3QueryBuilder> build)
+        public Model3dBoundingBoxQueryBuilder Size(Action<ShopifySharp.GraphQL.QueryBuilders.Types.Vector3QueryBuilder> build)
         {
             var query = new Query<Vector3>("size");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.Vector3QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.Vector3QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Vector3>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class AppSubscriptionTrialExtendOperationQueryBuilder : FieldsQueryBuilderBase<AppSubscriptionTrialExtendPayload, AppSubscriptionTrialExtendOperationQueryBuilder>, IGraphOperationQueryBuilder<AppSubscriptionTrialExtendPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new AppSubscriptionTrialExtendArgumentsBuilder(base.InnerQuery);
         }
 
-        public AppSubscriptionTrialExtendOperationQueryBuilder AppSubscription(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppSubscriptionQueryBuilder> build)
+        public AppSubscriptionTrialExtendOperationQueryBuilder AppSubscription(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionQueryBuilder> build)
         {
             var query = new Query<AppSubscription>("appSubscription");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppSubscriptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AppSubscription>(query);
             return this;
         }
 
-        public AppSubscriptionTrialExtendOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppSubscriptionTrialExtendUserErrorQueryBuilder> build)
+        public AppSubscriptionTrialExtendOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionTrialExtendUserErrorQueryBuilder> build)
         {
             var query = new Query<AppSubscriptionTrialExtendUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppSubscriptionTrialExtendUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionTrialExtendUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AppSubscriptionTrialExtendUserError>(query);
             return this;

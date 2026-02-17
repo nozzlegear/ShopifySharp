@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class FulfillmentOrderMergeOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderMergePayload, FulfillmentOrderMergeOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderMergePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new FulfillmentOrderMergeArgumentsBuilder(base.InnerQuery);
         }
 
-        public FulfillmentOrderMergeOperationQueryBuilder FulfillmentOrderMerges(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderMergeResultQueryBuilder> build)
+        public FulfillmentOrderMergeOperationQueryBuilder FulfillmentOrderMerges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMergeResultQueryBuilder> build)
         {
             var query = new Query<FulfillmentOrderMergeResult>("fulfillmentOrderMerges");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderMergeResultQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMergeResultQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentOrderMergeResult>(query);
             return this;
         }
 
-        public FulfillmentOrderMergeOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderMergeUserErrorQueryBuilder> build)
+        public FulfillmentOrderMergeOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMergeUserErrorQueryBuilder> build)
         {
             var query = new Query<FulfillmentOrderMergeUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentOrderMergeUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMergeUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<FulfillmentOrderMergeUserError>(query);
             return this;

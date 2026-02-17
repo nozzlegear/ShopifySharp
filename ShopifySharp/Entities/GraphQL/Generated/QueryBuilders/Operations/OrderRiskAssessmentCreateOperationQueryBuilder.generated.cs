@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class OrderRiskAssessmentCreateOperationQueryBuilder : FieldsQueryBuilderBase<OrderRiskAssessmentCreatePayload, OrderRiskAssessmentCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderRiskAssessmentCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new OrderRiskAssessmentCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public OrderRiskAssessmentCreateOperationQueryBuilder OrderRiskAssessment(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderRiskAssessmentQueryBuilder> build)
+        public OrderRiskAssessmentCreateOperationQueryBuilder OrderRiskAssessment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderRiskAssessmentQueryBuilder> build)
         {
             var query = new Query<OrderRiskAssessment>("orderRiskAssessment");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderRiskAssessmentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderRiskAssessmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderRiskAssessment>(query);
             return this;
         }
 
-        public OrderRiskAssessmentCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderRiskAssessmentCreateUserErrorQueryBuilder> build)
+        public OrderRiskAssessmentCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderRiskAssessmentCreateUserErrorQueryBuilder> build)
         {
             var query = new Query<OrderRiskAssessmentCreateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderRiskAssessmentCreateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderRiskAssessmentCreateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderRiskAssessmentCreateUserError>(query);
             return this;

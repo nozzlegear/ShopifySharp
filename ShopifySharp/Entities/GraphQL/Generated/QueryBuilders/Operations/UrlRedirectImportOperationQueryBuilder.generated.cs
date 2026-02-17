@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class UrlRedirectImportOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectImport, UrlRedirectImportOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectImport>
     {
@@ -69,10 +70,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public UrlRedirectImportOperationQueryBuilder PreviewRedirects(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UrlRedirectImportPreviewQueryBuilder> build)
+        public UrlRedirectImportOperationQueryBuilder PreviewRedirects(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UrlRedirectImportPreviewQueryBuilder> build)
         {
             var query = new Query<UrlRedirectImportPreview>("previewRedirects");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.UrlRedirectImportPreviewQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UrlRedirectImportPreviewQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UrlRedirectImportPreview>(query);
             return this;

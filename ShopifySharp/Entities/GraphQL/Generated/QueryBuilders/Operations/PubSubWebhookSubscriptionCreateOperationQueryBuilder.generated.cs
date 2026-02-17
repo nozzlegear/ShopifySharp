@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `webhookSubscriptionCreate` instead.")]
     public sealed class PubSubWebhookSubscriptionCreateOperationQueryBuilder : FieldsQueryBuilderBase<PubSubWebhookSubscriptionCreatePayload, PubSubWebhookSubscriptionCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<PubSubWebhookSubscriptionCreatePayload>
@@ -34,19 +35,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new PubSubWebhookSubscriptionCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public PubSubWebhookSubscriptionCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PubSubWebhookSubscriptionCreateUserErrorQueryBuilder> build)
+        public PubSubWebhookSubscriptionCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PubSubWebhookSubscriptionCreateUserErrorQueryBuilder> build)
         {
             var query = new Query<PubSubWebhookSubscriptionCreateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PubSubWebhookSubscriptionCreateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PubSubWebhookSubscriptionCreateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PubSubWebhookSubscriptionCreateUserError>(query);
             return this;
         }
 
-        public PubSubWebhookSubscriptionCreateOperationQueryBuilder WebhookSubscription(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.WebhookSubscriptionQueryBuilder> build)
+        public PubSubWebhookSubscriptionCreateOperationQueryBuilder WebhookSubscription(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WebhookSubscriptionQueryBuilder> build)
         {
             var query = new Query<WebhookSubscription>("webhookSubscription");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.WebhookSubscriptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WebhookSubscriptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<WebhookSubscription>(query);
             return this;

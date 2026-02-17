@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ProductByIdentifierOperationQueryBuilder : FieldsQueryBuilderBase<Product, ProductByIdentifierOperationQueryBuilder>, IGraphOperationQueryBuilder<Product>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ProductByIdentifierArgumentsBuilder(base.InnerQuery);
         }
 
-        public ProductByIdentifierOperationQueryBuilder AvailablePublicationsCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder AvailablePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("availablePublicationsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
@@ -49,46 +50,46 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder BundleComponents(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductBundleComponentConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder BundleComponents(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentConnectionQueryBuilder> build)
         {
             var query = new Query<ProductBundleComponentConnection>("bundleComponents");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductBundleComponentConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductBundleComponentConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder BundleConsolidatedOptions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder BundleConsolidatedOptions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder> build)
         {
             var query = new Query<ComponentizedProductsBundleConsolidatedOption>("bundleConsolidatedOptions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ComponentizedProductsBundleConsolidatedOption>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Category(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxonomyCategoryQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Category(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyCategoryQueryBuilder> build)
         {
             var query = new Query<TaxonomyCategory>("category");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TaxonomyCategoryQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyCategoryQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<TaxonomyCategory>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Collections(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CollectionConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Collections(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionConnectionQueryBuilder> build)
         {
             var query = new Query<CollectionConnection>("collections");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CollectionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CollectionConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder CombinedListing(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CombinedListingQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder CombinedListing(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CombinedListingQueryBuilder> build)
         {
             var query = new Query<CombinedListing>("combinedListing");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CombinedListingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CombinedListingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CombinedListing>(query);
             return this;
@@ -100,19 +101,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder CompareAtPriceRange(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductCompareAtPriceRangeQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder CompareAtPriceRange(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductCompareAtPriceRangeQueryBuilder> build)
         {
             var query = new Query<ProductCompareAtPriceRange>("compareAtPriceRange");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductCompareAtPriceRangeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductCompareAtPriceRangeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductCompareAtPriceRange>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ContextualPricing(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductContextualPricingQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ContextualPricing(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductContextualPricingQueryBuilder> build)
         {
             var query = new Query<ProductContextualPricing>("contextualPricing");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductContextualPricingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductContextualPricingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductContextualPricing>(query);
             return this;
@@ -156,37 +157,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Events(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.EventConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Events(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder> build)
         {
             var query = new Query<EventConnection>("events");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.EventConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<EventConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder FeaturedImage(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder FeaturedImage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder> build)
         {
             var query = new Query<Image>("featuredImage");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Image>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder FeaturedMedia(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder FeaturedMedia(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder> build)
         {
             var query = new Query<IMedia>("featuredMedia");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<IMedia>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourceFeedbackQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourceFeedbackQueryBuilder> build)
         {
             var query = new Query<ResourceFeedback>("feedback");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourceFeedbackQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourceFeedbackQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourceFeedback>(query);
             return this;
@@ -228,10 +229,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Images(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Images(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageConnectionQueryBuilder> build)
         {
             var query = new Query<ImageConnection>("images");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ImageConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ImageConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ImageConnection>(query);
             return this;
@@ -255,46 +256,46 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Media(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Media(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaConnectionQueryBuilder> build)
         {
             var query = new Query<MediaConnection>("media");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MediaConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MediaConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder MediaCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder MediaCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("mediaCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Metafield(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Metafield(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder> build)
         {
             var query = new Query<Metafield>("metafield");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Metafield>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder MetafieldDefinitions(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder MetafieldDefinitions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder> build)
         {
             var query = new Query<MetafieldDefinitionConnection>("metafieldDefinitions");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldDefinitionConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Metafields(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Metafields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
         {
             var query = new Query<MetafieldConnection>("metafields");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldConnection>(query);
             return this;
@@ -312,73 +313,73 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Options(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Options(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder> build)
         {
             var query = new Query<ProductOption>("options");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductOptionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductOptionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductOption>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder PriceRange(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPriceRangeQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder PriceRange(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductPriceRangeQueryBuilder> build)
         {
             var query = new Query<ProductPriceRange>("priceRange");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPriceRangeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductPriceRangeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductPriceRange>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder PriceRangeV2(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder PriceRangeV2(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder> build)
         {
             var query = new Query<ProductPriceRangeV2>("priceRangeV2");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductPriceRangeV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductPriceRangeV2>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ProductCategory(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductCategoryQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ProductCategory(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductCategoryQueryBuilder> build)
         {
             var query = new Query<ProductCategory>("productCategory");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductCategoryQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductCategoryQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductCategory>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ProductComponents(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductComponentTypeConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ProductComponents(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductComponentTypeConnectionQueryBuilder> build)
         {
             var query = new Query<ProductComponentTypeConnection>("productComponents");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductComponentTypeConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductComponentTypeConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductComponentTypeConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ProductComponentsCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ProductComponentsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("productComponentsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ProductParents(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ProductParents(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductConnectionQueryBuilder> build)
         {
             var query = new Query<ProductConnection>("productParents");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ProductPublications(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ProductPublications(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder> build)
         {
             var query = new Query<ProductPublicationConnection>("productPublications");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductPublicationConnection>(query);
             return this;
@@ -397,10 +398,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Publications(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Publications(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder> build)
         {
             var query = new Query<ProductPublicationConnection>("publications");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductPublicationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductPublicationConnection>(query);
             return this;
@@ -450,46 +451,46 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ResourcePublicationOnCurrentPublication(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourcePublicationV2QueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ResourcePublicationOnCurrentPublication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationV2QueryBuilder> build)
         {
             var query = new Query<ResourcePublicationV2>("resourcePublicationOnCurrentPublication");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourcePublicationV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourcePublicationV2>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ResourcePublications(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourcePublicationConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ResourcePublications(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationConnectionQueryBuilder> build)
         {
             var query = new Query<ResourcePublicationConnection>("resourcePublications");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourcePublicationConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourcePublicationConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ResourcePublicationsCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ResourcePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("resourcePublicationsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder ResourcePublicationsV2(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourcePublicationV2ConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder ResourcePublicationsV2(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationV2ConnectionQueryBuilder> build)
         {
             var query = new Query<ResourcePublicationV2Connection>("resourcePublicationsV2");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ResourcePublicationV2ConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationV2ConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourcePublicationV2Connection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder RestrictedForResource(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.RestrictedForResourceQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder RestrictedForResource(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RestrictedForResourceQueryBuilder> build)
         {
             var query = new Query<RestrictedForResource>("restrictedForResource");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.RestrictedForResourceQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.RestrictedForResourceQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<RestrictedForResource>(query);
             return this;
@@ -502,37 +503,37 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder SellingPlanGroups(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanGroupConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder SellingPlanGroups(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanGroupConnectionQueryBuilder> build)
         {
             var query = new Query<SellingPlanGroupConnection>("sellingPlanGroups");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SellingPlanGroupConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanGroupConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SellingPlanGroupConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder SellingPlanGroupsCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder SellingPlanGroupsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("sellingPlanGroupsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Seo(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SEOQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Seo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SEOQueryBuilder> build)
         {
             var query = new Query<SEO>("seo");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SEOQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SEOQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SEO>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder StandardizedProductType(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StandardizedProductTypeQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder StandardizedProductType(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StandardizedProductTypeQueryBuilder> build)
         {
             var query = new Query<StandardizedProductType>("standardizedProductType");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StandardizedProductTypeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StandardizedProductTypeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StandardizedProductType>(query);
             return this;
@@ -588,28 +589,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Translations(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
         {
             var query = new Query<Translation>("translations");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.TranslationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Translation>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder UnpublishedChannels(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder UnpublishedChannels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
         {
             var query = new Query<ChannelConnection>("unpublishedChannels");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ChannelConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder UnpublishedPublications(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PublicationConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder UnpublishedPublications(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublicationConnectionQueryBuilder> build)
         {
             var query = new Query<PublicationConnection>("unpublishedPublications");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.PublicationConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PublicationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PublicationConnection>(query);
             return this;
@@ -621,19 +622,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder Variants(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder Variants(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
         {
             var query = new Query<ProductVariantConnection>("variants");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductVariantConnection>(query);
             return this;
         }
 
-        public ProductByIdentifierOperationQueryBuilder VariantsCount(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder> build)
+        public ProductByIdentifierOperationQueryBuilder VariantsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("variantsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
             return this;

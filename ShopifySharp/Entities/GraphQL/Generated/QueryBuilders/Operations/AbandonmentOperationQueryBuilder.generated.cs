@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class AbandonmentOperationQueryBuilder : FieldsQueryBuilderBase<Abandonment, AbandonmentOperationQueryBuilder>, IGraphOperationQueryBuilder<Abandonment>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new AbandonmentArgumentsBuilder(base.InnerQuery);
         }
 
-        public AbandonmentOperationQueryBuilder AbandonedCheckoutPayload(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AbandonedCheckoutQueryBuilder> build)
+        public AbandonmentOperationQueryBuilder AbandonedCheckoutPayload(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonedCheckoutQueryBuilder> build)
         {
             var query = new Query<AbandonedCheckout>("abandonedCheckoutPayload");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AbandonedCheckoutQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AbandonedCheckoutQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<AbandonedCheckout>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public AbandonmentOperationQueryBuilder App(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder> build)
+        public AbandonmentOperationQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("app");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AppQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<App>(query);
             return this;
@@ -69,10 +70,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public AbandonmentOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder> build)
+        public AbandonmentOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("customer");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Customer>(query);
             return this;
@@ -180,19 +181,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public AbandonmentOperationQueryBuilder ProductsAddedToCart(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder> build)
+        public AbandonmentOperationQueryBuilder ProductsAddedToCart(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder> build)
         {
             var query = new Query<CustomerVisitProductInfoConnection>("productsAddedToCart");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerVisitProductInfoConnection>(query);
             return this;
         }
 
-        public AbandonmentOperationQueryBuilder ProductsViewed(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder> build)
+        public AbandonmentOperationQueryBuilder ProductsViewed(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder> build)
         {
             var query = new Query<CustomerVisitProductInfoConnection>("productsViewed");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitProductInfoConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerVisitProductInfoConnection>(query);
             return this;

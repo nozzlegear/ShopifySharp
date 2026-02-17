@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ReverseFulfillmentOrderQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrder, ReverseFulfillmentOrderQueryBuilder>
     {
@@ -35,28 +36,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ReverseFulfillmentOrderQueryBuilder LineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderLineItemConnectionQueryBuilder> build)
+        public ReverseFulfillmentOrderQueryBuilder LineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderLineItemConnectionQueryBuilder> build)
         {
             var query = new Query<ReverseFulfillmentOrderLineItemConnection>("lineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderLineItemConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderLineItemConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseFulfillmentOrderLineItemConnection>(query);
             return this;
         }
 
-        public ReverseFulfillmentOrderQueryBuilder Order(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder> build)
+        public ReverseFulfillmentOrderQueryBuilder Order(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)
         {
             var query = new Query<Order>("order");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Order>(query);
             return this;
         }
 
-        public ReverseFulfillmentOrderQueryBuilder ReverseDeliveries(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseDeliveryConnectionQueryBuilder> build)
+        public ReverseFulfillmentOrderQueryBuilder ReverseDeliveries(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryConnectionQueryBuilder> build)
         {
             var query = new Query<ReverseDeliveryConnection>("reverseDeliveries");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseDeliveryConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseDeliveryConnection>(query);
             return this;
@@ -68,10 +69,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public ReverseFulfillmentOrderQueryBuilder ThirdPartyConfirmation(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderThirdPartyConfirmationQueryBuilder> build)
+        public ReverseFulfillmentOrderQueryBuilder ThirdPartyConfirmation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderThirdPartyConfirmationQueryBuilder> build)
         {
             var query = new Query<ReverseFulfillmentOrderThirdPartyConfirmation>("thirdPartyConfirmation");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseFulfillmentOrderThirdPartyConfirmationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderThirdPartyConfirmationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseFulfillmentOrderThirdPartyConfirmation>(query);
             return this;

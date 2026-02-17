@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class CheckoutBrandingUpsertOperationQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingUpsertPayload, CheckoutBrandingUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<CheckoutBrandingUpsertPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new CheckoutBrandingUpsertArgumentsBuilder(base.InnerQuery);
         }
 
-        public CheckoutBrandingUpsertOperationQueryBuilder CheckoutBranding(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingQueryBuilder> build)
+        public CheckoutBrandingUpsertOperationQueryBuilder CheckoutBranding(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingQueryBuilder> build)
         {
             var query = new Query<CheckoutBranding>("checkoutBranding");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBranding>(query);
             return this;
         }
 
-        public CheckoutBrandingUpsertOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingUpsertUserErrorQueryBuilder> build)
+        public CheckoutBrandingUpsertOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingUpsertUserErrorQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingUpsertUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingUpsertUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingUpsertUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingUpsertUserError>(query);
             return this;

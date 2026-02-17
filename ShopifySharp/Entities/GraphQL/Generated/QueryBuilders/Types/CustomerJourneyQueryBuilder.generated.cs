@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CustomerJourneyQueryBuilder : FieldsQueryBuilderBase<CustomerJourney, CustomerJourneyQueryBuilder>
     {
@@ -41,28 +42,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
             return this;
         }
 
-        public CustomerJourneyQueryBuilder FirstVisit(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitQueryBuilder> build)
+        public CustomerJourneyQueryBuilder FirstVisit(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitQueryBuilder> build)
         {
             var query = new Query<CustomerVisit>("firstVisit");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerVisit>(query);
             return this;
         }
 
-        public CustomerJourneyQueryBuilder LastVisit(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitQueryBuilder> build)
+        public CustomerJourneyQueryBuilder LastVisit(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitQueryBuilder> build)
         {
             var query = new Query<CustomerVisit>("lastVisit");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerVisitQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerVisit>(query);
             return this;
         }
 
-        public CustomerJourneyQueryBuilder Moments(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerMomentQueryBuilder> build)
+        public CustomerJourneyQueryBuilder Moments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMomentQueryBuilder> build)
         {
             var query = new Query<ICustomerMoment>("moments");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerMomentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMomentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ICustomerMoment>(query);
             return this;

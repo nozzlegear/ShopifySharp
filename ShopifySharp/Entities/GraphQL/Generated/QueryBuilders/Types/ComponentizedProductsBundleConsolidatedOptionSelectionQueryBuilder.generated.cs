@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ComponentizedProductsBundleConsolidatedOptionSelectionQueryBuilder : FieldsQueryBuilderBase<ComponentizedProductsBundleConsolidatedOptionSelection, ComponentizedProductsBundleConsolidatedOptionSelectionQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public ComponentizedProductsBundleConsolidatedOptionSelectionQueryBuilder Components(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionSelectionComponentQueryBuilder> build)
+        public ComponentizedProductsBundleConsolidatedOptionSelectionQueryBuilder Components(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionSelectionComponentQueryBuilder> build)
         {
             var query = new Query<ComponentizedProductsBundleConsolidatedOptionSelectionComponent>("components");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionSelectionComponentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionSelectionComponentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ComponentizedProductsBundleConsolidatedOptionSelectionComponent>(query);
             return this;

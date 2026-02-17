@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class SubscriptionDraftOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionDraft, SubscriptionDraftOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionDraft>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new SubscriptionDraftArgumentsBuilder(base.InnerQuery);
         }
 
-        public SubscriptionDraftOperationQueryBuilder BillingCycle(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingCycleQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder BillingCycle(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleQueryBuilder> build)
         {
             var query = new Query<SubscriptionBillingCycle>("billingCycle");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingCycleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionBillingCycle>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder BillingPolicy(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingPolicyQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder BillingPolicy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingPolicyQueryBuilder> build)
         {
             var query = new Query<SubscriptionBillingPolicy>("billingPolicy");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingPolicyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingPolicyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionBillingPolicy>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder ConcatenatedBillingCycles(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingCycleConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder ConcatenatedBillingCycles(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionBillingCycleConnection>("concatenatedBillingCycles");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionBillingCycleConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionBillingCycleConnection>(query);
             return this;
@@ -66,82 +67,82 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder CustomAttributes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AttributeQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder CustomAttributes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AttributeQueryBuilder> build)
         {
             var query = new Query<ShopifySharp.GraphQL.Attribute>("customAttributes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.AttributeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AttributeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ShopifySharp.GraphQL.Attribute>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("customer");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Customer>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)
         {
             var query = new Query<CustomerPaymentMethod>("customerPaymentMethod");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CustomerPaymentMethod>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder DeliveryPolicy(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDeliveryPolicyQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder DeliveryPolicy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryPolicyQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryPolicy>("deliveryPolicy");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDeliveryPolicyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryPolicyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDeliveryPolicy>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder DeliveryPrice(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder DeliveryPrice(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("deliveryPrice");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder Discounts(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder Discounts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionDiscountConnection>("discounts");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDiscountConnection>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder DiscountsAdded(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder DiscountsAdded(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionDiscountConnection>("discountsAdded");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDiscountConnection>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder DiscountsRemoved(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder DiscountsRemoved(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionDiscountConnection>("discountsRemoved");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDiscountConnection>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder DiscountsUpdated(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder DiscountsUpdated(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionDiscountConnection>("discountsUpdated");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDiscountConnection>(query);
             return this;
@@ -153,28 +154,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder Lines(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder Lines(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionLineConnection>("lines");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionLineConnection>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder LinesAdded(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder LinesAdded(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionLineConnection>("linesAdded");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionLineConnection>(query);
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder LinesRemoved(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder LinesRemoved(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder> build)
         {
             var query = new Query<SubscriptionLineConnection>("linesRemoved");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionLineConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionLineConnection>(query);
             return this;
@@ -192,10 +193,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public SubscriptionDraftOperationQueryBuilder OriginalContract(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionContractQueryBuilder> build)
+        public SubscriptionDraftOperationQueryBuilder OriginalContract(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionContractQueryBuilder> build)
         {
             var query = new Query<SubscriptionContract>("originalContract");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionContractQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionContractQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionContract>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class StoreCreditAccountCreditOperationQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccountCreditPayload, StoreCreditAccountCreditOperationQueryBuilder>, IGraphOperationQueryBuilder<StoreCreditAccountCreditPayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new StoreCreditAccountCreditArgumentsBuilder(base.InnerQuery);
         }
 
-        public StoreCreditAccountCreditOperationQueryBuilder StoreCreditAccountTransaction(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder> build)
+        public StoreCreditAccountCreditOperationQueryBuilder StoreCreditAccountTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder> build)
         {
             var query = new Query<StoreCreditAccountCreditTransaction>("storeCreditAccountTransaction");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StoreCreditAccountCreditTransaction>(query);
             return this;
         }
 
-        public StoreCreditAccountCreditOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StoreCreditAccountCreditUserErrorQueryBuilder> build)
+        public StoreCreditAccountCreditOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditUserErrorQueryBuilder> build)
         {
             var query = new Query<StoreCreditAccountCreditUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.StoreCreditAccountCreditUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StoreCreditAccountCreditUserError>(query);
             return this;

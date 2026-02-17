@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class ReverseDeliveryShippingDeliverableQueryBuilder : FieldsQueryBuilderBase<ReverseDeliveryShippingDeliverable, ReverseDeliveryShippingDeliverableQueryBuilder>
     {
@@ -29,19 +30,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public ReverseDeliveryShippingDeliverableQueryBuilder Label(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseDeliveryLabelV2QueryBuilder> build)
+        public ReverseDeliveryShippingDeliverableQueryBuilder Label(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryLabelV2QueryBuilder> build)
         {
             var query = new Query<ReverseDeliveryLabelV2>("label");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseDeliveryLabelV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryLabelV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseDeliveryLabelV2>(query);
             return this;
         }
 
-        public ReverseDeliveryShippingDeliverableQueryBuilder Tracking(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseDeliveryTrackingV2QueryBuilder> build)
+        public ReverseDeliveryShippingDeliverableQueryBuilder Tracking(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryTrackingV2QueryBuilder> build)
         {
             var query = new Query<ReverseDeliveryTrackingV2>("tracking");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReverseDeliveryTrackingV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryTrackingV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReverseDeliveryTrackingV2>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class BulkProductResourceFeedbackCreateOperationQueryBuilder : FieldsQueryBuilderBase<BulkProductResourceFeedbackCreatePayload, BulkProductResourceFeedbackCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkProductResourceFeedbackCreatePayload>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new BulkProductResourceFeedbackCreateArgumentsBuilder(base.InnerQuery);
         }
 
-        public BulkProductResourceFeedbackCreateOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductResourceFeedbackQueryBuilder> build)
+        public BulkProductResourceFeedbackCreateOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductResourceFeedbackQueryBuilder> build)
         {
             var query = new Query<ProductResourceFeedback>("feedback");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ProductResourceFeedbackQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductResourceFeedbackQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductResourceFeedback>(query);
             return this;
         }
 
-        public BulkProductResourceFeedbackCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.BulkProductResourceFeedbackCreateUserErrorQueryBuilder> build)
+        public BulkProductResourceFeedbackCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BulkProductResourceFeedbackCreateUserErrorQueryBuilder> build)
         {
             var query = new Query<BulkProductResourceFeedbackCreateUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.BulkProductResourceFeedbackCreateUserErrorQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.BulkProductResourceFeedbackCreateUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<BulkProductResourceFeedbackCreateUserError>(query);
             return this;

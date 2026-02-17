@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ThemeFilesUpsertOperationQueryBuilder : FieldsQueryBuilderBase<ThemeFilesUpsertPayload, ThemeFilesUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeFilesUpsertPayload>
     {
@@ -33,28 +34,28 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ThemeFilesUpsertArgumentsBuilder(base.InnerQuery);
         }
 
-        public ThemeFilesUpsertOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder> build)
+        public ThemeFilesUpsertOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)
         {
             var query = new Query<Job>("job");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.JobQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Job>(query);
             return this;
         }
 
-        public ThemeFilesUpsertOperationQueryBuilder UpsertedThemeFiles(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OnlineStoreThemeFileOperationResultQueryBuilder> build)
+        public ThemeFilesUpsertOperationQueryBuilder UpsertedThemeFiles(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileOperationResultQueryBuilder> build)
         {
             var query = new Query<OnlineStoreThemeFileOperationResult>("upsertedThemeFiles");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OnlineStoreThemeFileOperationResultQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileOperationResultQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OnlineStoreThemeFileOperationResult>(query);
             return this;
         }
 
-        public ThemeFilesUpsertOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OnlineStoreThemeFilesUserErrorsQueryBuilder> build)
+        public ThemeFilesUpsertOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFilesUserErrorsQueryBuilder> build)
         {
             var query = new Query<OnlineStoreThemeFilesUserErrors>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.OnlineStoreThemeFilesUserErrorsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFilesUserErrorsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OnlineStoreThemeFilesUserErrors>(query);
             return this;

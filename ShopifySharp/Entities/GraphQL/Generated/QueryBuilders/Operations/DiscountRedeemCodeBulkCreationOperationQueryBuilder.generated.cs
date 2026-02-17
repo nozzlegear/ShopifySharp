@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class DiscountRedeemCodeBulkCreationOperationQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeBulkCreation, DiscountRedeemCodeBulkCreationOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountRedeemCodeBulkCreation>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new DiscountRedeemCodeBulkCreationArgumentsBuilder(base.InnerQuery);
         }
 
-        public DiscountRedeemCodeBulkCreationOperationQueryBuilder Codes(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountRedeemCodeBulkCreationCodeConnectionQueryBuilder> build)
+        public DiscountRedeemCodeBulkCreationOperationQueryBuilder Codes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeBulkCreationCodeConnectionQueryBuilder> build)
         {
             var query = new Query<DiscountRedeemCodeBulkCreationCodeConnection>("codes");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountRedeemCodeBulkCreationCodeConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeBulkCreationCodeConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountRedeemCodeBulkCreationCodeConnection>(query);
             return this;
@@ -54,10 +55,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public DiscountRedeemCodeBulkCreationOperationQueryBuilder DiscountCode(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCodeNodeQueryBuilder> build)
+        public DiscountRedeemCodeBulkCreationOperationQueryBuilder DiscountCode(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeNodeQueryBuilder> build)
         {
             var query = new Query<DiscountCodeNode>("discountCode");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.DiscountCodeNodeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeNodeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DiscountCodeNode>(query);
             return this;

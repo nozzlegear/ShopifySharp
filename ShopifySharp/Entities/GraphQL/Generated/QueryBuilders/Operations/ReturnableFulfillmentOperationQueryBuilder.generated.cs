@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class ReturnableFulfillmentOperationQueryBuilder : FieldsQueryBuilderBase<ReturnableFulfillment, ReturnableFulfillmentOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnableFulfillment>
     {
@@ -33,10 +34,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new ReturnableFulfillmentArgumentsBuilder(base.InnerQuery);
         }
 
-        public ReturnableFulfillmentOperationQueryBuilder Fulfillment(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentQueryBuilder> build)
+        public ReturnableFulfillmentOperationQueryBuilder Fulfillment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentQueryBuilder> build)
         {
             var query = new Query<Fulfillment>("fulfillment");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.FulfillmentQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Fulfillment>(query);
             return this;
@@ -48,10 +49,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnableFulfillmentOperationQueryBuilder ReturnableFulfillmentLineItems(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnableFulfillmentLineItemConnectionQueryBuilder> build)
+        public ReturnableFulfillmentOperationQueryBuilder ReturnableFulfillmentLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnableFulfillmentLineItemConnectionQueryBuilder> build)
         {
             var query = new Query<ReturnableFulfillmentLineItemConnection>("returnableFulfillmentLineItems");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.ReturnableFulfillmentLineItemConnectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnableFulfillmentLineItemConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ReturnableFulfillmentLineItemConnection>(query);
             return this;

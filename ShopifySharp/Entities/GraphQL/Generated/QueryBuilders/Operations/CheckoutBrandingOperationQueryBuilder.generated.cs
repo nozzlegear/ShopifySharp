@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
+namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     public sealed class CheckoutBrandingOperationQueryBuilder : FieldsQueryBuilderBase<CheckoutBranding, CheckoutBrandingOperationQueryBuilder>, IGraphOperationQueryBuilder<CheckoutBranding>
     {
@@ -33,19 +34,19 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Operations
             Arguments = new CheckoutBrandingArgumentsBuilder(base.InnerQuery);
         }
 
-        public CheckoutBrandingOperationQueryBuilder Customizations(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingCustomizationsQueryBuilder> build)
+        public CheckoutBrandingOperationQueryBuilder Customizations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingCustomizationsQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingCustomizations>("customizations");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingCustomizationsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingCustomizationsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingCustomizations>(query);
             return this;
         }
 
-        public CheckoutBrandingOperationQueryBuilder DesignSystem(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingDesignSystemQueryBuilder> build)
+        public CheckoutBrandingOperationQueryBuilder DesignSystem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingDesignSystemQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingDesignSystem>("designSystem");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingDesignSystemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingDesignSystemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingDesignSystem>(query);
             return this;

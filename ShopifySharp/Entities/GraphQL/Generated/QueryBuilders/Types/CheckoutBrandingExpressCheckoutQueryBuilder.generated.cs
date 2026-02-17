@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class CheckoutBrandingExpressCheckoutQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingExpressCheckout, CheckoutBrandingExpressCheckoutQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public CheckoutBrandingExpressCheckoutQueryBuilder Button(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingExpressCheckoutButtonQueryBuilder> build)
+        public CheckoutBrandingExpressCheckoutQueryBuilder Button(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingExpressCheckoutButtonQueryBuilder> build)
         {
             var query = new Query<CheckoutBrandingExpressCheckoutButton>("button");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.CheckoutBrandingExpressCheckoutButtonQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingExpressCheckoutButtonQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CheckoutBrandingExpressCheckoutButton>(query);
             return this;

@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ShopifySharp.Credentials;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Operations;
-using ShopifySharp.GraphQL.Generated.QueryBuilders.Types;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
 
-namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
     public sealed class SubscriptionManualDiscountQueryBuilder : FieldsQueryBuilderBase<SubscriptionManualDiscount, SubscriptionManualDiscountQueryBuilder>
     {
@@ -29,10 +30,10 @@ namespace ShopifySharp.GraphQL.Generated.QueryBuilders.Types
         {
         }
 
-        public SubscriptionManualDiscountQueryBuilder EntitledLines(Action<ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountEntitledLinesQueryBuilder> build)
+        public SubscriptionManualDiscountQueryBuilder EntitledLines(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountEntitledLinesQueryBuilder> build)
         {
             var query = new Query<SubscriptionDiscountEntitledLines>("entitledLines");
-            var queryBuilder = new ShopifySharp.GraphQL.Generated.QueryBuilders.Types.SubscriptionDiscountEntitledLinesQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountEntitledLinesQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SubscriptionDiscountEntitledLines>(query);
             return this;
