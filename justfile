@@ -49,8 +49,9 @@ clean:
 
 # Regenerates GraphQL types from the graphql.schema.graphql file
 [group("graphql")]
-regenerate: clean _cleanGraphEntities _buildCliProject
-    dotnet run --no-build \
+[arg("build", long="build", value="true")]
+regenerate build="false": clean _cleanGraphEntities _buildCliProject
+    dotnet run {{if build != "true" {"--no-build"} else { "" } }} \
         --configuration Release \
         --project "{{cli_project}}" \
         -- \
