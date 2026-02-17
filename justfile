@@ -37,6 +37,10 @@ _buildAndPack project revision outputDir:
         --verbosity "{{verbosity}}" \
         "{{project}}"
 
+[private]
+_cleanGraphEntities:
+    rm -r "{{graph_entities}}"
+
 # Clean generated files
 [group("graphql")]
 clean:
@@ -45,9 +49,7 @@ clean:
 
 # Regenerates GraphQL types from the graphql.schema.graphql file
 [group("graphql")]
-regenerate: clean _buildCliProject
-    rm -r "{{graph_entities}}"
-
+regenerate: clean _cleanGraphEntities _buildCliProject
     dotnet run --no-build \
         --configuration Release \
         --project "{{cli_project}}" \
