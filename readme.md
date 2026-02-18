@@ -45,25 +45,26 @@ ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp
 
 # Shopify API version support
 
-Shopify has begun versioning their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
+Shopify versions their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
 
-| ShopifySharp version | Shopify API version |
-|----------------------|---------------------|
-| 4.x and below        | None, unsupported   |
-| 5.0.0 - 5.5.0        | 2019-10             |
-| 5.6.0 - 5.7.0        | 2020-07             |
-| 5.8.0 - 5.10.0       | 2020-10             |
-| 5.11.0 - 5.13.1      | 2021-07             |
-| 5.14.0 - 5.15.0      | 2021-10             |
-| 5.16.0 - 5.18.11     | 2022-04             |
-| 5.19.0 - 5.19.1      | 2022-07             |
-| 6.0.1 - 6.2.0        | 2023-01             |
-| 6.3.0 - 6.12.2       | 2023-07             |
-| 6.13.0 - 6.14.1      | 2024-01             |
-| 6.15.0 - 6.17.0      | 2024-04             |
-| 6.18.0 - 6.19.0      | 2024-07             |
-| 6.20.0 - 6.25.2      | 2024-10             |
-| 6.25.3 and above.    | 2025-07             |
+| ShopifySharp version  | Shopify API version |
+|-----------------------|---------------------|
+| **6.26.0 and above.** | 2026-01             |
+| 6.25.3 - 6.25.4       | 2025-07             |
+| 6.20.0 - 6.25.2       | 2024-10             |
+| 6.18.0 - 6.19.0       | 2024-07             |
+| 6.15.0 - 6.17.0       | 2024-04             |
+| 6.13.0 - 6.14.1       | 2024-01             |
+| 6.3.0 - 6.12.2        | 2023-07             |
+| 6.0.1 - 6.2.0         | 2023-01             |
+| 5.19.0 - 5.19.1       | 2022-07             |
+| 5.16.0 - 5.18.11      | 2022-04             |
+| 5.14.0 - 5.15.0       | 2021-10             |
+| 5.11.0 - 5.13.1       | 2021-07             |
+| 5.8.0 - 5.10.0        | 2020-10             |
+| 5.6.0 - 5.7.0         | 2020-07             |
+| 5.0.0 - 5.5.0         | 2019-10             |
+| 4.x and below         | None, unsupported   |
 
 The oldest version of .NET Framework we can support is [whichever version is supported by .NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions).
 
