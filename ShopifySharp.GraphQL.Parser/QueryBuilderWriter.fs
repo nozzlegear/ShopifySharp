@@ -46,7 +46,8 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     let writeSubQueryBuilderProperties writer: ValueTask =
         pipeWriter writer {
-            if ArgumentsBuilderWriter.CanAddArguments type' then
+            if ArgumentsBuilderWriter.CanAddArguments type' context then
+                // Generate typed ArgumentsBuilder property
                 do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
         }
@@ -73,7 +74,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! Indented + $"""public {builderClassName}(string name): base(new Query<{genericTypeName}>(name))"""
             do! NewLine + "{"
 
-            if ArgumentsBuilderWriter.CanAddArguments type' then
+            if ArgumentsBuilderWriter.CanAddArguments type' context then
                 do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.InnerQuery);"""
                 do! NewLine
 
@@ -83,7 +84,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! Indented + $"""public {builderClassName}({queryType} query): base(query)"""
             do! NewLine + "{"
 
-            if ArgumentsBuilderWriter.CanAddArguments type' then
+            if ArgumentsBuilderWriter.CanAddArguments type' context then
                 do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.InnerQuery);"""
                 do! NewLine
 

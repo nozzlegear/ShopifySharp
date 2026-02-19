@@ -1,6 +1,7 @@
 namespace ShopifySharp.GraphQL.Parser
 
 open System.Threading.Tasks
+open ShopifySharp.GraphQL.Parser
 open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
@@ -12,10 +13,7 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let queryType = $$"""IQuery<{{genericTypeName}}>"""
 
     let writeAddArgumentMethods writer: ValueTask =
-        let arguments =
-            match type' with
-            | Operation operation -> operation.Arguments
-            | _ -> failwith $"Type {type'.Name} does not support adding QueryBuilder arguments."
+        let arguments = ArgumentsBuilderWriter.CollectArgumentsForType type' context
 
         pipeWriter writer {
             let sanitizeArgumentName casing argName =
@@ -60,21 +58,71 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine + NewLine
         }
 
-    static member CanAddArguments (type': VisitedTypes) =
+    /// Collects all unique arguments from fields that use this type as a return type.
+    /// For operations, returns the operation's arguments directly.
+    static member private CollectArgumentsForType (type': VisitedTypes) (context: IParsedContext) : FieldOrOperationArgument[] =
         match type' with
-        | VisitedTypes.Class _ -> false
-        | Interface _ -> false
-        | InputObject _-> false
-        | UnionType _-> false
-        | Enum _ -> false
         | Operation operation ->
-            // Only generate ArgumentsBuilder if the operation actually has arguments
-            operation.Arguments.Length > 0
+            // Operations have their own arguments
+            operation.Arguments
+        | _ ->
+            // For other types, collect arguments from all fields that return this type
+            let rec getReturnTypeName (fieldType: FieldType) =
+                match AstNodeMapper.unwrapFieldType fieldType with
+                | FieldValueType.GraphObjectType namedType -> Some namedType.Name
+                | _ -> None
+
+            let collectFieldArguments (fields: Field[]): FieldOrOperationArgument[] =
+                fields
+                |> Array.filter (fun field ->
+                    match getReturnTypeName field.ValueType with
+                    | Some name -> name = type'.Name && field.Arguments.Length > 0
+                    | None -> false
+                )
+                |> Array.collect (fun field -> field.Arguments)
+
+            // Grab the arguments from all types
+            context.GetVisitedTypes()
+            |> Array.collect (fun visitedType ->
+                match visitedType with
+                | VisitedTypes.Class class' -> collectFieldArguments class'.Fields
+                | VisitedTypes.Interface interface' -> collectFieldArguments interface'.Fields
+                | _ -> Array.empty
+            )
+            // Remove duplicates by argument name
+            |> Array.distinctBy (fun arg -> arg.Name)
+
+    /// Checks if a type name is used as a return type for any field that has arguments.
+    /// If true, the query builder for this type should have a `.Arguments` property.
+    static member HasFieldsWithArguments (typeName: string) (context: IParsedContext) =
+        let rec getReturnTypeName (fieldType: FieldType) =
+            match AstNodeMapper.unwrapFieldType fieldType with
+            | FieldValueType.GraphObjectType namedType -> Some namedType.Name
+            | _ -> None
+
+        let checkFields (fields: Field[]) =
+            fields
+            |> Array.exists (fun field ->
+                match getReturnTypeName field.ValueType with
+                | Some name -> name = typeName && field.Arguments.Length > 0
+                | None -> false
+            )
+
+        // Check all types in the context for fields that return this type with arguments
+        context.GetVisitedTypes()
+        |> Array.exists (fun visitedType ->
+            match visitedType with
+            | VisitedTypes.Class class' -> checkFields class'.Fields
+            | VisitedTypes.Interface interface' -> checkFields interface'.Fields
+            | _ -> false
+        )
+
+    static member CanAddArguments (type': VisitedTypes) (context: IParsedContext) =
+        let arguments = ArgumentsBuilderWriter.CollectArgumentsForType type' context
+        arguments.Length > 0
 
     member _.WriteToPipewriter writer: ValueTask =
-        if not (ArgumentsBuilderWriter.CanAddArguments type') then
-            ValueTask.CompletedTask
-        else
+        if ArgumentsBuilderWriter.CanAddArguments type' context then
             pipeWriter writer {
                 do! $"""public sealed class { builderClassName } : ArgumentsBuilderBase<{genericTypeName}, {builderClassName}>"""
                 do! NewLine
@@ -86,3 +134,5 @@ type ArgumentsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 yield! writeAddArgumentMethods
                 do! "}"
             }
+        else
+            ValueTask.CompletedTask
