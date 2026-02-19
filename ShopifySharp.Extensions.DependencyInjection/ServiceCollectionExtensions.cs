@@ -5,6 +5,7 @@ using ShopifySharp.Factories;
 using ShopifySharp.Utilities;
 using System.Reflection;
 using System.Linq;
+using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -156,6 +157,23 @@ public static class ServiceCollectionExtensions
                 .AddShopifySharpRequestExecutionPolicy<T>(lifetime: lifetime)
                 .AddShopifySharpUtilities(lifetime: lifetime)
                 .AddShopifySharpServiceFactories(lifetime: lifetime);
+        }
+
+        /// <summary>
+        /// Overrides the default Shopify API version used by all ShopifySharp services
+        /// created via DI. The default version for this release of ShopifySharp is
+        /// <see cref="DefaultShopifyApiVersion.DefaultVersion"/>.
+        /// <para>
+        /// This is intended only as an escape hatch, for example, to use a newer API version
+        /// before ShopifySharp officially adopts it. If you're pinning to an older version,
+        /// be aware that Shopify sunsets old API versions and may stop accepting requests
+        /// against them.
+        /// </para>
+        /// </summary>
+        public IServiceCollection AddShopifySharpApiVersionOverride(CustomShopifyApiVersion version, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        {
+            services.Replace(new ServiceDescriptor(typeof(IShopifyApiVersion), _ => version, lifetime));
+            return services;
         }
 
         /// <summary>
