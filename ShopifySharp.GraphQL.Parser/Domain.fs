@@ -203,6 +203,7 @@ type IParsedContext =
     abstract member GetInterfaceImplementationTypeNames: interfaceName: string -> string[]
     abstract member TryFindGraphObjectType: graphObjectTypeName: string -> VisitedTypes option
     abstract member TryFindDocumentNode: name: ROM -> ASTNode option
+    abstract member GetVisitedTypes: unit -> VisitedTypes[]
 
 type ParserContext(casingType, assumeNullability, document, ct) =
     let visitedTypes: HashSet<VisitedTypes> = HashSet()
@@ -268,6 +269,9 @@ type ParserContext(casingType, assumeNullability, document, ct) =
                 | _ -> false
             )
             Option.ofObj item
+
+        member this.GetVisitedTypes () =
+            Array.ofSeq visitedTypes
 
     interface IASTVisitorContext with
         member _.CancellationToken = ct
