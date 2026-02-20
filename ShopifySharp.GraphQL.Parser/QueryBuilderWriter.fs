@@ -31,6 +31,10 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             if type'.IsOperation then
                 do! $", IGraphOperationQueryBuilder<{genericTypeName}>"
 
+            if ArgumentsBuilderWriter.CanAddArguments type' context then
+                let argBuilderName = toBuilderName (ArgumentBuilder type'.Name)
+                do! $", IHasArguments<{argBuilderName}>"
+
             do! NewLine
         }
 
@@ -47,8 +51,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
     let writeSubQueryBuilderProperties writer: ValueTask =
         pipeWriter writer {
             if ArgumentsBuilderWriter.CanAddArguments type' context then
-                // Generate typed ArgumentsBuilder property
-                do! Indented + $$"""public {{ toBuilderName (QueryBuilderTypes.ArgumentBuilder type'.Name)}} Arguments { get; }"""
+                do! Indented + $$"""public {{ toBuilderName (ArgumentBuilder type'.Name)}} Arguments { get; }"""
                 do! NewLine
         }
 
@@ -75,6 +78,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine + "{"
 
             if ArgumentsBuilderWriter.CanAddArguments type' context then
+                do! NewLine
                 do! DoubleIndented + $$"""Arguments = new {{toBuilderName (ArgumentBuilder type'.Name)}}(base.InnerQuery);"""
                 do! NewLine
 
@@ -140,6 +144,94 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
         }
 
+    // TODO: move this to the FieldsBuilderWriter
+    let writeFieldSpecificQueryBuilderWrapper (fieldInfo: FieldArgumentsBuilderInfo) writer: ValueTask =
+        // Generate a standalone QueryBuilder for this field: {ParentType}{PascalField}QueryBuilder
+        // This is a complete QueryBuilder that inherits directly from FieldsQueryBuilderBase,
+        // NOT from the base type's QueryBuilder. This allows all generated classes to be sealed.
+        let pascalParentType = toCasing Pascal fieldInfo.ParentTypeName
+        let pascalFieldName = toCasing Pascal fieldInfo.FieldName
+        let wrapperClassName = $"{pascalParentType}{pascalFieldName}QueryBuilder"
+        let argBuilderClassName = $"{pascalParentType}{pascalFieldName}ArgumentsBuilder"
+
+        // The base query builder and field builder classes both require
+        // non-nullable reference types for the T parameter
+        let unwrappedFieldValueType = AstNodeMapper.unwrapFieldType fieldInfo.ReturnType
+        let nonNullableTypeName =
+            AstNodeMapper.mapValueTypeToString unwrappedFieldValueType
+            |> qualifiedPascalTypeName
+        let queryType = $"IQuery<{nonNullableTypeName}>"
+
+        // Look up the return type to get its fields
+        let baseTypeName =
+            match unwrappedFieldValueType with
+            | FieldValueType.GraphObjectType namedType -> namedType.Name
+            | _ -> failwith "Field return type must be a GraphObjectType"
+
+        // Look up the return type to get its fields
+        let returnType = context.TryFindGraphObjectType baseTypeName
+
+        ValueTask(task {
+            do! pipeWriter writer {
+                do! $"public sealed class {wrapperClassName} : FieldsQueryBuilderBase<{nonNullableTypeName}, {wrapperClassName}>, IHasArguments<{argBuilderClassName}>"
+                do! NewLine
+                do! "{"
+                do! NewLine
+
+                // Arguments property
+                do! Indented + $"public {argBuilderClassName} Arguments {{ get; }}"
+                do! NewLine + NewLine
+
+                // Self property override
+                do! Indented + $"protected override {wrapperClassName} Self => this;"
+                do! NewLine + NewLine
+
+                // Constructor that takes a query name
+                do! Indented + $"public {wrapperClassName}(string name) : base(new Query<{nonNullableTypeName}>(name))"
+                do! NewLine
+                do! Indented + "{"
+                do! NewLine
+                do! DoubleIndented + $"Arguments = new {argBuilderClassName}(base.InnerQuery);"
+                do! NewLine
+                do! Indented + "}"
+                do! NewLine + NewLine
+
+                // Constructor that takes an IQuery (for internal use)
+                do! Indented + $"public {wrapperClassName}({queryType} query) : base(query)"
+                do! NewLine
+                do! Indented + "{"
+                do! NewLine
+                do! DoubleIndented + $"Arguments = new {argBuilderClassName}(base.InnerQuery);"
+                do! NewLine
+                do! Indented + "}"
+                do! NewLine + NewLine
+
+                // Add instance SetArguments method for fluent configuration API
+                yield! writeArgumentsMethod wrapperClassName argBuilderClassName
+
+                do! NewLine
+            }
+
+            // Generate field methods for the return type
+            match returnType with
+            | Some visitedType ->
+                let fieldsWriter = FieldsBuilderWriter(visitedType, wrapperClassName, context)
+                let unionsWriter = UnionsBuilderWriter(visitedType, context)
+
+                if FieldsBuilderWriter.CanAddFields visitedType || UnionsBuilderWriter.CanAddUnions visitedType then
+                    // Generate field methods but ignore the returned FieldArgumentsBuilderInfo
+                    // (nested wrappers are already generated from the base type's generation)
+                    let! _ = fieldsWriter.WriteFieldMethodsForQueryBuilder unionsWriter.UnionFieldBuilders writer
+                    ()
+            | None ->
+                printfn $"Warning: Could not find return type {baseTypeName} for field-specific QueryBuilder {wrapperClassName}"
+
+            do! pipeWriter writer {
+                do! "}"
+                do! NewLine + NewLine
+            }
+        })
+
     member _.WriteToPipe writer: ValueTask =
         if type'.IsEnum || type'.IsInputObject then
             failwithf $"The {type'.GetType().Name} type is not supported."
@@ -148,44 +240,62 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         let unionsBuilder = UnionsBuilderWriter(type', context)
         let namespaceName = getQueryBuilderNamespace type'.IsOperation
 
-        pipeWriter writer {
-            // Write namespace start for this builder
-            yield! writeNamespaceStart namespaceName
+        ValueTask(task {
+            let fieldsWriter = FieldsBuilderWriter(type', builderClassName, context)
 
-            yield! writeDeprecationAttribute Outdented type'.Deprecation
-            yield! writeClassNameAndInheritedType
-            do! "{"
-            do! NewLine
+            // First, write the main QueryBuilder class
+            do! pipeWriter writer {
+                // Write namespace start for this builder
+                yield! writeNamespaceStart namespaceName
 
-            match type' with
-            | Operation operation ->
-                yield! writeOperationTypeProperty operation.Type
-            | _ ->
-                ()
-
-            yield! writeSubQueryBuilderProperties
-            yield! writeOverrideProperties
-            yield! writeConstructor
-
-            // Add field methods directly to QueryBuilder
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+                yield! writeDeprecationAttribute Outdented type'.Deprecation
+                yield! writeClassNameAndInheritedType
+                do! "{"
                 do! NewLine
-                // Generate field methods inline
-                let fieldsWriter = FieldsBuilderWriter(type', builderClassName, context)
-                yield! fieldsWriter.WriteFieldMethodsForQueryBuilder unionsBuilder.UnionFieldBuilders
-            else
-                printfn $"Type {type'.Name} does not support fields."
 
-            do! "}"
-            do! NewLine
+                match type' with
+                | Operation operation ->
+                    yield! writeOperationTypeProperty operation.Type
+                | _ ->
+                    ()
 
-            // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
-            yield! argumentsBuilder.WriteToPipewriter
-            yield! unionsBuilder.WriteToPipewriter
+                yield! writeSubQueryBuilderProperties
+                yield! writeOverrideProperties
+                yield! writeConstructor
 
-            // Close namespace
-            yield! writeNamespaceEnd
-        }
+                do! NewLine
+            }
+
+            // Add field methods directly to QueryBuilder and collect field-specific ArgumentsBuilder info
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+                do! fieldsWriter.WriteFieldMethodsForQueryBuilder unionsBuilder.UnionFieldBuilders writer
+
+            let mappedFieldArgumentsInfo = FieldsBuilderWriter.MapFieldArgumentsToArgumentBuildersInfo type'
+
+            do! pipeWriter writer {
+                do! "}"
+                do! NewLine
+
+                // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
+                yield! argumentsBuilder.WriteToPipewriter
+                yield! unionsBuilder.WriteToPipewriter
+
+                // Generate field-specific ArgumentsBuilders and QueryBuilders only for non-Operation types
+                // Operations already have their own unique query builders, so we don't need field-specific ones
+                if not type'.IsOperation then
+                    // Generate field-specific ArgumentsBuilders for fields with arguments
+                    for fieldArgs in mappedFieldArgumentsInfo do
+                        let builder = ArgumentsBuilderWriter(fieldArgs, context)
+                        yield! builder.WriteToPipewriter
+
+                    // Generate wrapper QueryBuilders for fields with arguments
+                    for fieldArgBuilder in mappedFieldArgumentsInfo do
+                        yield! writeFieldSpecificQueryBuilderWrapper fieldArgBuilder
+
+                // Close namespace
+                yield! writeNamespaceEnd
+            }
+        })
 
     static member WriteQueryBuildersToPipe (context: ParserContext) writer: ValueTask =
         let parsedContext = context :> IParsedContext

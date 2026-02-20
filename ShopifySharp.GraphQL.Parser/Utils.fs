@@ -42,13 +42,12 @@ module Utils =
         | QueryBuilder str -> toCasing Pascal $"{str}QueryBuilder"
         | OperationQueryBuilder str -> toCasing Pascal $"{str}OperationQueryBuilder"
         | ArgumentBuilder str -> toCasing Pascal $"{str}ArgumentsBuilder"
+        | FieldsArgumentBuilder (parentTypeName, fieldName) -> $"{toCasing Pascal parentTypeName}{toCasing Pascal fieldName}ArgumentsBuilder"
         | UnionCasesBuilder str -> toCasing Pascal $"{str}UnionCasesBuilder"
 
     /// Fully qualifies builder class names which might collide with each other
-    let qualifiedBuilderTypeName = function
-        | QueryBuilder str -> toCasing Pascal $"{getQueryBuilderNamespace false}.{toBuilderName (QueryBuilder str)}"
-        | OperationQueryBuilder str -> toCasing Pascal $"{getQueryBuilderNamespace true}.{toBuilderName (OperationQueryBuilder str)}"
-        | x -> failwith $"Qualified builder type names are not implemented for builder type {x}"
+    let qualifiedBuilderTypeName (builderType: QueryBuilderTypes) =
+        $"{getQueryBuilderNamespace builderType.IsOperationQueryBuilder}.{toBuilderName builderType}"
 
     let toGenericType type' assumeNullability =
         match type' with
