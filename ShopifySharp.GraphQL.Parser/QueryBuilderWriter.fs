@@ -96,6 +96,20 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             do! NewLine
         }
 
+    let writeSetArgumentsMethod (builderClass: string) (argumentsBuilderClass: string) writer: ValueTask =
+        pipeWriter writer {
+            do! Indented + $"public {builderClass} SetArguments(Action<{argumentsBuilderClass}> configure)"
+            do! NewLine
+            do! Indented + "{"
+            do! NewLine
+            do! DoubleIndented + "configure(this.Arguments);"
+            do! NewLine
+            do! DoubleIndented + "return this;"
+            do! NewLine
+            do! Indented + "}"
+            do! NewLine
+        }
+
     let writeNamespaceStart (namespaceName: string) writer: ValueTask =
         pipeWriter writer {
             do! $"namespace {namespaceName}"
@@ -207,7 +221,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! NewLine + NewLine
 
                 // Add instance SetArguments method for fluent configuration API
-                yield! writeArgumentsMethod wrapperClassName argBuilderClassName
+                yield! writeSetArgumentsMethod wrapperClassName argBuilderClassName
 
                 do! NewLine
             }
@@ -262,6 +276,11 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 yield! writeSubQueryBuilderProperties
                 yield! writeOverrideProperties
                 yield! writeConstructor
+
+                // Add instance SetArguments method for fluent configuration API
+                if ArgumentsBuilderWriter.CanAddArguments type' context then
+                    let argBuilderName = toBuilderName (ArgumentBuilder type'.Name)
+                    yield! writeSetArgumentsMethod builderClassName argBuilderName
 
                 do! NewLine
             }
