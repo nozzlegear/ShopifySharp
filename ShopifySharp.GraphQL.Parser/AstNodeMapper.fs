@@ -39,6 +39,17 @@ module AstNodeMapper =
         | NonNullableType valueType -> unwrapFieldType valueType
         | CollectionType collectionType -> unwrapFieldType collectionType
 
+    let rec unwrapFieldsFromVisitedType = function
+        | VisitedTypes.Operation operation ->
+            match operation.ReturnType with
+            | ReturnType.VisitedType visitedType -> unwrapFieldsFromVisitedType visitedType
+            | ReturnType.FieldType _ -> Array.empty
+        | VisitedTypes.Class class' -> class'.Fields
+        | VisitedTypes.Interface interface' -> interface'.Fields
+        | VisitedTypes.InputObject input -> input.Fields
+        | VisitedTypes.UnionType union -> Array.collect unwrapFieldsFromVisitedType union.Cases
+        | _ -> Array.empty
+
     /// Maps a field type to a string representation.
     let rec mapFieldTypeToString assumeNullability (valueType: FieldType) (collectionHandling: FieldTypeCollectionHandling) =
         let maybeWriteNullability isNullable fieldStr =

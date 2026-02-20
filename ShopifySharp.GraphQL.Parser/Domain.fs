@@ -26,12 +26,6 @@ type Indentation
     static member (+) (x: Indentation, y: Indentation) =
         x.ToString() + y.ToString()
 
-type QueryBuilderTypes =
-    | QueryBuilder of str: string
-    | OperationQueryBuilder of str: string
-    | ArgumentBuilder of str: string
-    | UnionCasesBuilder of str: string
-
 type FieldTypeCollectionHandling
     = UnwrapCollection
     | KeepCollection
@@ -107,6 +101,12 @@ type Field =
       Deprecation: string option
       Arguments: FieldOrOperationArgument[]
       ValueType: FieldType }
+
+type FieldArgumentsBuilderInfo =
+    { ParentTypeName: string
+      FieldName: string
+      Arguments: FieldOrOperationArgument[]
+      ReturnType: FieldType }
 
 type Interface =
     { Name: string
@@ -193,6 +193,13 @@ and VisitedTypes =
         | VisitedTypes.InputObject inputObject -> inputObject.Deprecation
         | VisitedTypes.UnionType unionType -> unionType.Deprecation
         | VisitedTypes.Operation operation -> operation.Deprecation
+
+type QueryBuilderTypes =
+    | QueryBuilder of str: string
+    | OperationQueryBuilder of str: string
+    | ArgumentBuilder of str: string
+    | FieldsArgumentBuilder of parentTypeName: string * fieldName: string
+    | UnionCasesBuilder of str: string
 
 type IParsedContext =
     abstract member CasingType: Casing with get

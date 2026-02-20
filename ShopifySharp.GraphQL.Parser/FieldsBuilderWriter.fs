@@ -9,6 +9,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
 
     let writeQueryBuilderFieldMethod (fieldName: string)
                                      (fieldType: FieldType)
+                                     (fieldArguments: FieldOrOperationArgument[])
                                      (deprecationWarning: string option)
                                      writer =
         let pascalFieldName =
@@ -29,8 +30,16 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                     if namedType.IsInterface
                     then toCasing Pascal $"I{graphObjectTypeName}"
                     else qualifiedPascalTypeName graphObjectTypeName
+
                 let nestedQueryBuilderName =
-                    // Note: using QueryBuilder here ensures the OperationQueryBuilders are never unintentionally used in the AddField methods
+                    // If this field has arguments, use the field-specific wrapper query builder
+                    if fieldArguments.Length > 0 then
+                        // Use wrapper QueryBuilder: {ParentType}{PascalField}QueryBuilder
+                        printfn $"FIELD_WITH_ARGS: {type'.Name}.{fieldName} -> {graphObjectTypeName} (args: {fieldArguments.Length})"
+
+                        // let builderName = toBuilderName (FieldsArgumentBuilder (type'.Name, fieldName))
+                        // // Qualify with namespace (use same namespace as parent type)
+                        // $"{getQueryBuilderNamespace type'.IsOperation}.{builderName}"
                     qualifiedBuilderTypeName (QueryBuilder graphObjectTypeName)
 
                 yield! writeDeprecationAttribute Indented None
@@ -113,10 +122,39 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
             | ReturnType.FieldType _ -> true
             | ReturnType.VisitedType type' -> FieldsBuilderWriter.CanAddFields type'
 
-    /// Writes the field methods for the writer's type to the <paramref name="writer"/>
-    member _.WriteFieldMethodsForQueryBuilder (unionFieldBuilders: UnionCasesBuilderWriter array)
-                                              writer: ValueTask =
+    /// Collects field-specific argument builder info.
+    static member MapFieldArgumentsToArgumentBuildersInfo type': FieldArgumentsBuilderInfo[] =
+        AstNodeMapper.unwrapFieldsFromVisitedType type'
+        |> Array.choose (fun field ->
+            if field.Arguments.Length = 0 then
+                None
+            else
+                match AstNodeMapper.unwrapFieldType field.ValueType with
+                | FieldValueType.GraphObjectType _ ->
+                    // TODO: confirm that we get the operation's name as parent here, not the field's parent type
+                    Some { ParentTypeName = type'.Name
+                           FieldName = field.Name
+                           Arguments = field.Arguments
+                           ReturnType = field.ValueType }
+                | _ ->
+                    None
+        )
+        // Collect field-specific argument builder info for operation fields with arguments
+        // Use the operation's name as parent, not the visited type's name
+        // if field.Arguments.Length > 0 then
+        //     match AstNodeMapper.unwrapFieldType field.ValueType with
+        //     | FieldValueType.GraphObjectType _ ->
+        //         fieldArgumentsBuilders.Add {
+        //             ParentTypeName = operation.Name
+        //             FieldName = field.Name
+        //             Arguments = field.Arguments
+        //             ReturnType = field.ValueType
+        //         }
+        //     | _ -> ()
 
+    /// Writes the field methods for the writer's type to the <paramref name="writer"/> and returns a list of
+    /// <see cref="FieldArgumentsBuilderInfo" /> for fields that have arguments.
+    member _.WriteFieldMethodsForQueryBuilder (unionFieldBuilders: UnionCasesBuilderWriter array) writer: ValueTask =
         pipeWriter writer {
             match type' with
             | VisitedTypes.Operation operation ->
@@ -124,7 +162,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)) ->
                     let fieldType = FieldType.ValueType (FieldValueType.GraphObjectType graphValueType)
                     let fieldName = graphValueType.ToString()
-                    yield! writeQueryBuilderFieldMethod fieldName fieldType None
+                    yield! writeQueryBuilderFieldMethod fieldName fieldType Array.empty None
                 | ReturnType.FieldType _ ->
                     yield! writeQueryBuilderReturnValueMethod
                 | ReturnType.VisitedType visitedType ->
@@ -142,7 +180,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                             | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
 
                         for field in fields do
-                            yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Deprecation
+                            yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
             | visitedType ->
                 match visitedType with
                 | VisitedTypes.UnionType _ ->
@@ -157,7 +195,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                         | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
 
                     for field in fields do
-                        yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Deprecation
+                        yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
 
             // Add union case methods
             yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
