@@ -263,7 +263,13 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         result.Data.Result.Product.Should().NotBeNull();
 
         var product = result.Data.Result.Product;
-        await Verify(product, _verifySettings);
+
+        // Sometimes Shopify returns the OptionValues after creating a product, and sometimes they don't.
+        // Add extra rules to Verify to ignore the OptionValues just for this test.
+        var verifySettings = new VerifySettings(_verifySettings);
+        verifySettings.IgnoreMember<Features.Products.Models.ProductOption>(x => x.OptionValues);
+
+        await Verify(product, verifySettings);
     }
 
     [Fact]
