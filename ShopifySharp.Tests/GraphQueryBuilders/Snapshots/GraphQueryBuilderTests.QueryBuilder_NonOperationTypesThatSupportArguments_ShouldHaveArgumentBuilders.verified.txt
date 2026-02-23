@@ -1,0 +1,1 @@
+﻿company{contacts(first:5){nodes{customer{id}}}}

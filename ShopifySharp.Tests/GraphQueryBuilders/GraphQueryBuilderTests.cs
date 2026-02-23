@@ -251,6 +251,108 @@ public class GraphQueryBuilderTests(VerifyFixture verifyFixture): IClassFixture<
         await Verify(result, _verifySettings);
     }
 
+    [Fact(DisplayName = "When using a non-operation type that supports arguments, the query builder should still be generated with an ArgumentsBuilder")]
+    public async Task QueryBuilder_NonOperationTypesThatSupportArguments_ShouldHaveArgumentBuilders()
+    {
+        // This tests the fix for https://github.com/nozzlegear/shopifysharp/issues/1236 wherein types that aren't top-level
+        // queries or mutations but still support arguments were not being generated with an ArgumentsBuilder
+        // Setup
+        var sut = new CompanyQueryBuilder();
+        var control = new CompanyQueryBuilder();
+
+        // This is the control, what the user was using before (manually constructing the contact argument)
+        control.AddField(new CompanyContactConnectionQueryBuilder("contacts(first:5)")
+            .Nodes(contact => contact
+                .Customer(customer => customer
+                    .Id())));
+
+        // Act
+        var graphqlString = sut.Contacts(contacts =>
+        {
+            // This should compile
+            contacts.Arguments.First(5);
+            contacts.Nodes(contact => contact
+                .Customer(customer => customer
+                    .Id()));
+        })
+        .Build();
+
+        // Assert
+        graphqlString.Should().Contain("contacts(first:5)");
+        graphqlString.Should().Be(control.Build());
+        await Verify(graphqlString, _verifySettings);
+    }
+
+    [Fact(DisplayName = "SetArguments method provides a fluent configuration API")]
+    public async Task QueryBuilder_SetArguments_ShouldProvideAFluentConfigurationAPI()
+    {
+        // Setup
+        // An operation query builder
+        var operationBuilder = new ArticleTagsOperationQueryBuilder()
+            .ReturnValue()
+            .SetArguments(args => args.Limit(10));
+        // A type query builder
+        var fieldBuilder = new CompanyQueryBuilder()
+            .Contacts(contacts => contacts
+                .SetArguments(args => args.First(5))
+                .Nodes(contact => contact.Customer(customer => customer.Id())));
+
+        // Act
+        var operationQuery = operationBuilder.Build();
+        var fieldQuery = fieldBuilder.Build();
+
+        // Assert
+        operationQuery.Should().Contain("articleTags(limit:10)");
+        fieldQuery.Should().Contain("contacts(first:5)");
+
+        await Verify(new { operationQuery, fieldQuery }, _verifySettings);
+    }
+
+    [Fact(DisplayName = "SetArguments method and Arguments property produce the same queries")]
+    public async Task QueryBuilder_SetArguments_PropertyAndMethodProduceTheSameQueries()
+    {
+        // Setup
+        var propertyStyleBuilder = new ArticleTagsOperationQueryBuilder().ReturnValue();
+        propertyStyleBuilder.Arguments.Limit(10);
+
+        var methodStyleBuilder = new ArticleTagsOperationQueryBuilder()
+            .ReturnValue()
+            .SetArguments(args => args.Limit(10));
+
+        // Act
+        var propertyQuery = propertyStyleBuilder.Build();
+        var methodQuery = methodStyleBuilder.Build();
+
+        // Assert
+        // They should both produce identical queries
+        propertyQuery.Should().Be(methodQuery);
+        propertyQuery.Should().Contain("articleTags(limit:10)");
+
+        await Verify(new { propertyQuery, methodQuery }, _verifySettings);
+    }
+
+    [Fact(DisplayName = "SetArguments method and Arguments property can coexist and modify the same builder")]
+    public async Task QueryBuilder_SetArguments_PropertyAndMethodCoexist_And_ModifyTheSameBuilder()
+    {
+        // This tests that the property-based arguments builder and the method-based builder are working on the same underlying arguments builder
+
+        // Setup
+        var builder = new ArticleTagsOperationQueryBuilder()
+            .ReturnValue()
+            .SetArguments(args => args.Limit(10));
+        builder.Arguments.Sort(ArticleTagSort.POPULAR);
+        builder.SetArguments(args => args.AddArgument("foo", "bar"));
+
+        // Act
+        var builderQuery = builder.Build();
+
+        // Assert
+        // Switching between the method builder and the property builder should only modify the underlying builder's arguments
+        builderQuery.Should().Contain("articleTags(limit:10,sort:POPULAR,foo:\"bar\")");
+
+        await Verify(builderQuery, _verifySettings);
+    }
+
     #endregion
 
     #region Unions

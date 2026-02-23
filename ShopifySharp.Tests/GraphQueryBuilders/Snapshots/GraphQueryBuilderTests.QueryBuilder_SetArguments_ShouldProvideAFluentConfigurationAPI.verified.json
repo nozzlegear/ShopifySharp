@@ -1,0 +1,4 @@
+﻿{
+  "operationQuery": "query { articleTags(limit:10) }",
+  "fieldQuery": "company{contacts(first:5){nodes{customer{id}}}}"
+}
