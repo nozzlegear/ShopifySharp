@@ -1,0 +1,4 @@
+﻿{
+  "propertyQuery": "query { articleTags(limit:10) }",
+  "methodQuery": "query { articleTags(limit:10) }"
+}
