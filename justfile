@@ -5,7 +5,7 @@ cli_project := "ShopifySharp.GraphQL.Parser.CLI"
 # Path to the generated GraphQL entitites folder
 graph_entities := "ShopifySharp/Entities/GraphQL/Generated"
 # Space-separated list of class names that test the GraphQL query builders
-query_builder_tests := "ProductQueryTests QueryBuilderMutationTests GraphHttpContentSerializerTests GraphQueryBuilderTests GraphUnionTypeConverterTests UnionCasesBuilderBaseTests"
+query_builder_tests := "ProductQueryTests QueryBuilderTests QueryBuilderMutationTests GraphHttpContentSerializerTests GraphQueryBuilderTests GraphUnionTypeConverterTests UnionCasesBuilderBaseTests"
 # Build configuration
 config := "Release"
 # Dotnet verbosity
