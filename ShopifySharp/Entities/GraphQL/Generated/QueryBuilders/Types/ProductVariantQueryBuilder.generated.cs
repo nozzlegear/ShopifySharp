@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductVariantQueryBuilder : FieldsQueryBuilderBase<ProductVariant, ProductVariantQueryBuilder>
+    public sealed class ProductVariantQueryBuilder : FieldsQueryBuilderBase<ProductVariant, ProductVariantQueryBuilder>, IHasArguments<ProductVariantArgumentsBuilder>
     {
+        public ProductVariantArgumentsBuilder Arguments { get; }
         protected override ProductVariantQueryBuilder Self => this;
 
         public ProductVariantQueryBuilder() : this("productVariant")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductVariantQueryBuilder(string name) : base(new Query<ProductVariant>(name))
         {
+            Arguments = new ProductVariantArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductVariantQueryBuilder(IQuery<ProductVariant> query) : base(query)
         {
+            Arguments = new ProductVariantArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductVariantQueryBuilder SetArguments(Action<ProductVariantArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductVariantQueryBuilder AvailableForSale()

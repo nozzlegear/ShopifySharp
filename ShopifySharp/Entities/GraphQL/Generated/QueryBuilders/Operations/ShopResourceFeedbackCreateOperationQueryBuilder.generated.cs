@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ShopResourceFeedbackCreateOperationQueryBuilder : FieldsQueryBuilderBase<ShopResourceFeedbackCreatePayload, ShopResourceFeedbackCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopResourceFeedbackCreatePayload>
+    public sealed class ShopResourceFeedbackCreateOperationQueryBuilder : FieldsQueryBuilderBase<ShopResourceFeedbackCreatePayload, ShopResourceFeedbackCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopResourceFeedbackCreatePayload>, IHasArguments<ShopResourceFeedbackCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ShopResourceFeedbackCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ShopResourceFeedbackCreateOperationQueryBuilder(IQuery<ShopResourceFeedbackCreatePayload> query) : base(query)
         {
             Arguments = new ShopResourceFeedbackCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopResourceFeedbackCreateOperationQueryBuilder SetArguments(Action<ShopResourceFeedbackCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopResourceFeedbackCreateOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppFeedbackQueryBuilder> build)

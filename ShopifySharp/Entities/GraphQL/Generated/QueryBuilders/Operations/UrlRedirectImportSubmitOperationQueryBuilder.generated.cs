@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class UrlRedirectImportSubmitOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectImportSubmitPayload, UrlRedirectImportSubmitOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectImportSubmitPayload>
+    public sealed class UrlRedirectImportSubmitOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectImportSubmitPayload, UrlRedirectImportSubmitOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectImportSubmitPayload>, IHasArguments<UrlRedirectImportSubmitArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public UrlRedirectImportSubmitArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public UrlRedirectImportSubmitOperationQueryBuilder(IQuery<UrlRedirectImportSubmitPayload> query) : base(query)
         {
             Arguments = new UrlRedirectImportSubmitArgumentsBuilder(base.InnerQuery);
+        }
+
+        public UrlRedirectImportSubmitOperationQueryBuilder SetArguments(Action<UrlRedirectImportSubmitArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public UrlRedirectImportSubmitOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)

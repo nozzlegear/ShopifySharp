@@ -26,15 +26,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public PaymentInstrumentUnionCasesBuilder OnBankAccount(Action<BankAccountQueryBuilder> build)
-        {
-            var query = new Query<BankAccount>("... on BankAccount");
-            var queryBuilder = new BankAccountQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField(query);
-            return this;
-        }
-
         public PaymentInstrumentUnionCasesBuilder OnVaultCreditCard(Action<VaultCreditCardQueryBuilder> build)
         {
             var query = new Query<VaultCreditCard>("... on VaultCreditCard");

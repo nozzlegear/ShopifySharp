@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `webhookSubscriptionUpdate` instead.")]
-    public sealed class PubSubWebhookSubscriptionUpdateOperationQueryBuilder : FieldsQueryBuilderBase<PubSubWebhookSubscriptionUpdatePayload, PubSubWebhookSubscriptionUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<PubSubWebhookSubscriptionUpdatePayload>
+    public sealed class PubSubWebhookSubscriptionUpdateOperationQueryBuilder : FieldsQueryBuilderBase<PubSubWebhookSubscriptionUpdatePayload, PubSubWebhookSubscriptionUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<PubSubWebhookSubscriptionUpdatePayload>, IHasArguments<PubSubWebhookSubscriptionUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PubSubWebhookSubscriptionUpdateArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PubSubWebhookSubscriptionUpdateOperationQueryBuilder(IQuery<PubSubWebhookSubscriptionUpdatePayload> query) : base(query)
         {
             Arguments = new PubSubWebhookSubscriptionUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PubSubWebhookSubscriptionUpdateOperationQueryBuilder SetArguments(Action<PubSubWebhookSubscriptionUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PubSubWebhookSubscriptionUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PubSubWebhookSubscriptionUpdateUserErrorQueryBuilder> build)

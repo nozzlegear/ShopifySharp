@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductLeaveSellingPlanGroupsOperationQueryBuilder : FieldsQueryBuilderBase<ProductLeaveSellingPlanGroupsPayload, ProductLeaveSellingPlanGroupsOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductLeaveSellingPlanGroupsPayload>
+    public sealed class ProductLeaveSellingPlanGroupsOperationQueryBuilder : FieldsQueryBuilderBase<ProductLeaveSellingPlanGroupsPayload, ProductLeaveSellingPlanGroupsOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductLeaveSellingPlanGroupsPayload>, IHasArguments<ProductLeaveSellingPlanGroupsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductLeaveSellingPlanGroupsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductLeaveSellingPlanGroupsOperationQueryBuilder(IQuery<ProductLeaveSellingPlanGroupsPayload> query) : base(query)
         {
             Arguments = new ProductLeaveSellingPlanGroupsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductLeaveSellingPlanGroupsOperationQueryBuilder SetArguments(Action<ProductLeaveSellingPlanGroupsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductLeaveSellingPlanGroupsOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

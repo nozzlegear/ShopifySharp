@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OrderTransactionQueryBuilder : FieldsQueryBuilderBase<OrderTransaction, OrderTransactionQueryBuilder>
+    public sealed class OrderTransactionQueryBuilder : FieldsQueryBuilderBase<OrderTransaction, OrderTransactionQueryBuilder>, IHasArguments<OrderTransactionArgumentsBuilder>
     {
+        public OrderTransactionArgumentsBuilder Arguments { get; }
         protected override OrderTransactionQueryBuilder Self => this;
 
         public OrderTransactionQueryBuilder() : this("orderTransaction")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OrderTransactionQueryBuilder(string name) : base(new Query<OrderTransaction>(name))
         {
+            Arguments = new OrderTransactionArgumentsBuilder(base.InnerQuery);
         }
 
         public OrderTransactionQueryBuilder(IQuery<OrderTransaction> query) : base(query)
         {
+            Arguments = new OrderTransactionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderTransactionQueryBuilder SetArguments(Action<OrderTransactionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderTransactionQueryBuilder AccountNumber()
@@ -70,7 +79,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Use `paymentId` instead.")]
         public OrderTransactionQueryBuilder AuthorizationCode()
         {
             base.InnerQuery.AddField("authorizationCode");

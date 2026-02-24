@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class WebhookSubscriptionOperationQueryBuilder : FieldsQueryBuilderBase<WebhookSubscription, WebhookSubscriptionOperationQueryBuilder>, IGraphOperationQueryBuilder<WebhookSubscription>
+    public sealed class WebhookSubscriptionOperationQueryBuilder : FieldsQueryBuilderBase<WebhookSubscription, WebhookSubscriptionOperationQueryBuilder>, IGraphOperationQueryBuilder<WebhookSubscription>, IHasArguments<WebhookSubscriptionArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public WebhookSubscriptionArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebhookSubscriptionOperationQueryBuilder(IQuery<WebhookSubscription> query) : base(query)
         {
             Arguments = new WebhookSubscriptionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebhookSubscriptionOperationQueryBuilder SetArguments(Action<WebhookSubscriptionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebhookSubscriptionOperationQueryBuilder ApiVersion(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ApiVersionQueryBuilder> build)
@@ -110,12 +116,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebhookSubscriptionOperationQueryBuilder UpdatedAt()
         {
             base.InnerQuery.AddField("updatedAt");
-            return this;
-        }
-
-        public WebhookSubscriptionOperationQueryBuilder Uri()
-        {
-            base.InnerQuery.AddField("uri");
             return this;
         }
 

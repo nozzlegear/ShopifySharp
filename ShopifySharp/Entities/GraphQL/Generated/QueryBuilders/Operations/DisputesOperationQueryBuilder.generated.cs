@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DisputesOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeConnection, DisputesOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsDisputeConnection>
+    public sealed class DisputesOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeConnection, DisputesOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsDisputeConnection>, IHasArguments<DisputesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DisputesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DisputesOperationQueryBuilder(IQuery<ShopifyPaymentsDisputeConnection> query) : base(query)
         {
             Arguments = new DisputesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DisputesOperationQueryBuilder SetArguments(Action<DisputesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DisputesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEdgeQueryBuilder> build)

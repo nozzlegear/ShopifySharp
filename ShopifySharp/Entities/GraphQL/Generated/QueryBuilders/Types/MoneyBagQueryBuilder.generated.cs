@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MoneyBagQueryBuilder : FieldsQueryBuilderBase<MoneyBag, MoneyBagQueryBuilder>
+    public sealed class MoneyBagQueryBuilder : FieldsQueryBuilderBase<MoneyBag, MoneyBagQueryBuilder>, IHasArguments<MoneyBagArgumentsBuilder>
     {
+        public MoneyBagArgumentsBuilder Arguments { get; }
         protected override MoneyBagQueryBuilder Self => this;
 
         public MoneyBagQueryBuilder() : this("moneyBag")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MoneyBagQueryBuilder(string name) : base(new Query<MoneyBag>(name))
         {
+            Arguments = new MoneyBagArgumentsBuilder(base.InnerQuery);
         }
 
         public MoneyBagQueryBuilder(IQuery<MoneyBag> query) : base(query)
         {
+            Arguments = new MoneyBagArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MoneyBagQueryBuilder SetArguments(Action<MoneyBagArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MoneyBagQueryBuilder PresentmentMoney(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)

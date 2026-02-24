@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DataSaleOptOutOperationQueryBuilder : FieldsQueryBuilderBase<DataSaleOptOutPayload, DataSaleOptOutOperationQueryBuilder>, IGraphOperationQueryBuilder<DataSaleOptOutPayload>
+    public sealed class DataSaleOptOutOperationQueryBuilder : FieldsQueryBuilderBase<DataSaleOptOutPayload, DataSaleOptOutOperationQueryBuilder>, IGraphOperationQueryBuilder<DataSaleOptOutPayload>, IHasArguments<DataSaleOptOutArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DataSaleOptOutArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DataSaleOptOutOperationQueryBuilder(IQuery<DataSaleOptOutPayload> query) : base(query)
         {
             Arguments = new DataSaleOptOutArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DataSaleOptOutOperationQueryBuilder SetArguments(Action<DataSaleOptOutArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DataSaleOptOutOperationQueryBuilder CustomerId()

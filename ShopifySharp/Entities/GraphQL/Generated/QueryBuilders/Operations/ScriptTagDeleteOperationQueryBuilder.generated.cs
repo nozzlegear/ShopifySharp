@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ScriptTagDeleteOperationQueryBuilder : FieldsQueryBuilderBase<ScriptTagDeletePayload, ScriptTagDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<ScriptTagDeletePayload>
+    public sealed class ScriptTagDeleteOperationQueryBuilder : FieldsQueryBuilderBase<ScriptTagDeletePayload, ScriptTagDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<ScriptTagDeletePayload>, IHasArguments<ScriptTagDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ScriptTagDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ScriptTagDeleteOperationQueryBuilder(IQuery<ScriptTagDeletePayload> query) : base(query)
         {
             Arguments = new ScriptTagDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ScriptTagDeleteOperationQueryBuilder SetArguments(Action<ScriptTagDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ScriptTagDeleteOperationQueryBuilder DeletedScriptTagId()

@@ -14,8 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    [Obsolete("Use `discountNodes` instead.")]
-    public sealed class AutomaticDiscountNodesOperationQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticNodeConnection, AutomaticDiscountNodesOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountAutomaticNodeConnection>
+    public sealed class AutomaticDiscountNodesOperationQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticNodeConnection, AutomaticDiscountNodesOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountAutomaticNodeConnection>, IHasArguments<AutomaticDiscountNodesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public AutomaticDiscountNodesArgumentsBuilder Arguments { get; }
@@ -33,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public AutomaticDiscountNodesOperationQueryBuilder(IQuery<DiscountAutomaticNodeConnection> query) : base(query)
         {
             Arguments = new AutomaticDiscountNodesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AutomaticDiscountNodesOperationQueryBuilder SetArguments(Action<AutomaticDiscountNodesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AutomaticDiscountNodesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAutomaticNodeEdgeQueryBuilder> build)

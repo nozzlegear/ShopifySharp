@@ -9,10 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Information about the shop's customer account-related settings. Includes the
-/// [customer account version](https://shopify.dev/docs/api/admin-graphql/latest/objects/CustomerAccountsV2#field-CustomerAccountsV2.fields.customerAccountsVersion)
-/// which indicates whether the merchant is using new customer accounts or legacy
-/// customer accounts, along with other account configuration such as login requirements.
+/// Information about the shop's customer accounts.
 /// </summary>
 public record CustomerAccountsV2 : IGraphQLObject
 {

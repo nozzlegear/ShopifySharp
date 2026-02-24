@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DraftOrderCalculateOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderCalculatePayload, DraftOrderCalculateOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderCalculatePayload>
+    public sealed class DraftOrderCalculateOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderCalculatePayload, DraftOrderCalculateOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderCalculatePayload>, IHasArguments<DraftOrderCalculateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DraftOrderCalculateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DraftOrderCalculateOperationQueryBuilder(IQuery<DraftOrderCalculatePayload> query) : base(query)
         {
             Arguments = new DraftOrderCalculateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderCalculateOperationQueryBuilder SetArguments(Action<DraftOrderCalculateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrderCalculateOperationQueryBuilder CalculatedDraftOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedDraftOrderQueryBuilder> build)

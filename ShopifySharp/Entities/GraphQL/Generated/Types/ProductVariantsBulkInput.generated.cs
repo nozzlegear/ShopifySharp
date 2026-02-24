@@ -82,12 +82,6 @@ public record ProductVariantsBulkInput : GraphQLInputObject<ProductVariantsBulkI
     public decimal? price { get; set; } = null;
 
     /// <summary>
-    /// Adjust inventory quantities with deltas.
-    /// </summary>
-    [JsonPropertyName("quantityAdjustments")]
-    public ICollection<InventoryAdjustmentInput>? quantityAdjustments { get; set; } = null;
-
-    /// <summary>
     /// Whether a product variant requires components. The default value is `false`.
     /// If `true`, then the product variant can only be purchased as a parent bundle with components and it will be
     /// omitted from channels that don't support bundles.

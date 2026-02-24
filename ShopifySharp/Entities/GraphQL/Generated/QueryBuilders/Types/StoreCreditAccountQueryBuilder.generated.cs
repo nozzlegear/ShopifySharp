@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class StoreCreditAccountQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccount, StoreCreditAccountQueryBuilder>
+    public sealed class StoreCreditAccountQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccount, StoreCreditAccountQueryBuilder>, IHasArguments<StoreCreditAccountArgumentsBuilder>
     {
+        public StoreCreditAccountArgumentsBuilder Arguments { get; }
         protected override StoreCreditAccountQueryBuilder Self => this;
 
         public StoreCreditAccountQueryBuilder() : this("storeCreditAccount")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public StoreCreditAccountQueryBuilder(string name) : base(new Query<StoreCreditAccount>(name))
         {
+            Arguments = new StoreCreditAccountArgumentsBuilder(base.InnerQuery);
         }
 
         public StoreCreditAccountQueryBuilder(IQuery<StoreCreditAccount> query) : base(query)
         {
+            Arguments = new StoreCreditAccountArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StoreCreditAccountQueryBuilder SetArguments(Action<StoreCreditAccountArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StoreCreditAccountQueryBuilder Balance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)

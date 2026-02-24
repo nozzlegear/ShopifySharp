@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ReverseFulfillmentOrderLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrderLineItemConnection, ReverseFulfillmentOrderLineItemConnectionQueryBuilder>
+    public sealed class ReverseFulfillmentOrderLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrderLineItemConnection, ReverseFulfillmentOrderLineItemConnectionQueryBuilder>, IHasArguments<ReverseFulfillmentOrderLineItemConnectionArgumentsBuilder>
     {
+        public ReverseFulfillmentOrderLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override ReverseFulfillmentOrderLineItemConnectionQueryBuilder Self => this;
 
         public ReverseFulfillmentOrderLineItemConnectionQueryBuilder() : this("reverseFulfillmentOrderLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ReverseFulfillmentOrderLineItemConnectionQueryBuilder(string name) : base(new Query<ReverseFulfillmentOrderLineItemConnection>(name))
         {
+            Arguments = new ReverseFulfillmentOrderLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ReverseFulfillmentOrderLineItemConnectionQueryBuilder(IQuery<ReverseFulfillmentOrderLineItemConnection> query) : base(query)
         {
+            Arguments = new ReverseFulfillmentOrderLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReverseFulfillmentOrderLineItemConnectionQueryBuilder SetArguments(Action<ReverseFulfillmentOrderLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReverseFulfillmentOrderLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderLineItemEdgeQueryBuilder> build)

@@ -21,5 +21,4 @@ public enum InventoryShipmentMarkInTransitUserErrorCode
     INVALID_QUANTITY,
     ITEMS_EMPTY,
     LOCATION_NOT_ACTIVE,
-    ACTIVATION_FAILED,
 }

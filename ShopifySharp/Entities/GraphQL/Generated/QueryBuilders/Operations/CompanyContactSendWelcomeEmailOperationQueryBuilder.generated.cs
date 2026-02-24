@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyContactSendWelcomeEmailOperationQueryBuilder : FieldsQueryBuilderBase<CompanyContactSendWelcomeEmailPayload, CompanyContactSendWelcomeEmailOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyContactSendWelcomeEmailPayload>
+    public sealed class CompanyContactSendWelcomeEmailOperationQueryBuilder : FieldsQueryBuilderBase<CompanyContactSendWelcomeEmailPayload, CompanyContactSendWelcomeEmailOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyContactSendWelcomeEmailPayload>, IHasArguments<CompanyContactSendWelcomeEmailArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyContactSendWelcomeEmailArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyContactSendWelcomeEmailOperationQueryBuilder(IQuery<CompanyContactSendWelcomeEmailPayload> query) : base(query)
         {
             Arguments = new CompanyContactSendWelcomeEmailArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyContactSendWelcomeEmailOperationQueryBuilder SetArguments(Action<CompanyContactSendWelcomeEmailArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyContactSendWelcomeEmailOperationQueryBuilder CompanyContact(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyContactQueryBuilder> build)

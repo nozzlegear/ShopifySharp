@@ -21,12 +21,6 @@ public record OrderEditRemoveShippingLinePayload : IGraphQLObject
     public CalculatedOrder? calculatedOrder { get; set; } = null;
 
     /// <summary>
-    /// The order edit session with the edits applied but not saved.
-    /// </summary>
-    [JsonPropertyName("orderEditSession")]
-    public OrderEditSession? orderEditSession { get; set; } = null;
-
-    /// <summary>
     /// The list of errors that occurred from executing the mutation.
     /// </summary>
     [JsonPropertyName("userErrors")]

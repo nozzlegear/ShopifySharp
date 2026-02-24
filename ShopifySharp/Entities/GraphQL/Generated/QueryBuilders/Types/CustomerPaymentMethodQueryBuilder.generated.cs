@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerPaymentMethodQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethod, CustomerPaymentMethodQueryBuilder>
+    public sealed class CustomerPaymentMethodQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethod, CustomerPaymentMethodQueryBuilder>, IHasArguments<CustomerPaymentMethodArgumentsBuilder>
     {
+        public CustomerPaymentMethodArgumentsBuilder Arguments { get; }
         protected override CustomerPaymentMethodQueryBuilder Self => this;
 
         public CustomerPaymentMethodQueryBuilder() : this("customerPaymentMethod")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerPaymentMethodQueryBuilder(string name) : base(new Query<CustomerPaymentMethod>(name))
         {
+            Arguments = new CustomerPaymentMethodArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerPaymentMethodQueryBuilder(IQuery<CustomerPaymentMethod> query) : base(query)
         {
+            Arguments = new CustomerPaymentMethodArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodQueryBuilder SetArguments(Action<CustomerPaymentMethodArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
@@ -42,15 +51,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public CustomerPaymentMethodQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");
-            return this;
-        }
-
-        public CustomerPaymentMethodQueryBuilder Mandates(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaymentMandateResourceConnectionQueryBuilder> build)
-        {
-            var query = new Query<PaymentMandateResourceConnection>("mandates");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PaymentMandateResourceConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<PaymentMandateResourceConnection>(query);
             return this;
         }
 

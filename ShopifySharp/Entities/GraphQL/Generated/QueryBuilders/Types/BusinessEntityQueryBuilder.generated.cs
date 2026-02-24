@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class BusinessEntityQueryBuilder : FieldsQueryBuilderBase<BusinessEntity, BusinessEntityQueryBuilder>
+    public sealed class BusinessEntityQueryBuilder : FieldsQueryBuilderBase<BusinessEntity, BusinessEntityQueryBuilder>, IHasArguments<BusinessEntityArgumentsBuilder>
     {
+        public BusinessEntityArgumentsBuilder Arguments { get; }
         protected override BusinessEntityQueryBuilder Self => this;
 
         public BusinessEntityQueryBuilder() : this("businessEntity")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public BusinessEntityQueryBuilder(string name) : base(new Query<BusinessEntity>(name))
         {
+            Arguments = new BusinessEntityArgumentsBuilder(base.InnerQuery);
         }
 
         public BusinessEntityQueryBuilder(IQuery<BusinessEntity> query) : base(query)
         {
+            Arguments = new BusinessEntityArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BusinessEntityQueryBuilder SetArguments(Action<BusinessEntityArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BusinessEntityQueryBuilder Address(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BusinessEntityAddressQueryBuilder> build)

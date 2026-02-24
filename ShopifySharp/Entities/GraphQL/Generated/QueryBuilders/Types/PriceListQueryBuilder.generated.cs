@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PriceListQueryBuilder : FieldsQueryBuilderBase<PriceList, PriceListQueryBuilder>
+    public sealed class PriceListQueryBuilder : FieldsQueryBuilderBase<PriceList, PriceListQueryBuilder>, IHasArguments<PriceListArgumentsBuilder>
     {
+        public PriceListArgumentsBuilder Arguments { get; }
         protected override PriceListQueryBuilder Self => this;
 
         public PriceListQueryBuilder() : this("priceList")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PriceListQueryBuilder(string name) : base(new Query<PriceList>(name))
         {
+            Arguments = new PriceListArgumentsBuilder(base.InnerQuery);
         }
 
         public PriceListQueryBuilder(IQuery<PriceList> query) : base(query)
         {
+            Arguments = new PriceListArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PriceListQueryBuilder SetArguments(Action<PriceListArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PriceListQueryBuilder Catalog(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)

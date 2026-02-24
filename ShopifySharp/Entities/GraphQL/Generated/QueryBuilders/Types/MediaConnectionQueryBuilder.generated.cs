@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MediaConnectionQueryBuilder : FieldsQueryBuilderBase<MediaConnection, MediaConnectionQueryBuilder>
+    public sealed class MediaConnectionQueryBuilder : FieldsQueryBuilderBase<MediaConnection, MediaConnectionQueryBuilder>, IHasArguments<MediaConnectionArgumentsBuilder>
     {
+        public MediaConnectionArgumentsBuilder Arguments { get; }
         protected override MediaConnectionQueryBuilder Self => this;
 
         public MediaConnectionQueryBuilder() : this("mediaConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MediaConnectionQueryBuilder(string name) : base(new Query<MediaConnection>(name))
         {
+            Arguments = new MediaConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MediaConnectionQueryBuilder(IQuery<MediaConnection> query) : base(query)
         {
+            Arguments = new MediaConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MediaConnectionQueryBuilder SetArguments(Action<MediaConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MediaConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaEdgeQueryBuilder> build)

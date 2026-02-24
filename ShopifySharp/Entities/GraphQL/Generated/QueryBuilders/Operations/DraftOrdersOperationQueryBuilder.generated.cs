@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DraftOrdersOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderConnection, DraftOrdersOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderConnection>
+    public sealed class DraftOrdersOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderConnection, DraftOrdersOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderConnection>, IHasArguments<DraftOrdersArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DraftOrdersArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DraftOrdersOperationQueryBuilder(IQuery<DraftOrderConnection> query) : base(query)
         {
             Arguments = new DraftOrdersArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrdersOperationQueryBuilder SetArguments(Action<DraftOrdersArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrdersOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderEdgeQueryBuilder> build)

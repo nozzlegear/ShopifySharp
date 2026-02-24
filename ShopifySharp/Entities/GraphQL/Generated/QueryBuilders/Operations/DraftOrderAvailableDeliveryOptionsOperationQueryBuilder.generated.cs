@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DraftOrderAvailableDeliveryOptionsOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderAvailableDeliveryOptions, DraftOrderAvailableDeliveryOptionsOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderAvailableDeliveryOptions>
+    public sealed class DraftOrderAvailableDeliveryOptionsOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderAvailableDeliveryOptions, DraftOrderAvailableDeliveryOptionsOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderAvailableDeliveryOptions>, IHasArguments<DraftOrderAvailableDeliveryOptionsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DraftOrderAvailableDeliveryOptionsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DraftOrderAvailableDeliveryOptionsOperationQueryBuilder(IQuery<DraftOrderAvailableDeliveryOptions> query) : base(query)
         {
             Arguments = new DraftOrderAvailableDeliveryOptionsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderAvailableDeliveryOptionsOperationQueryBuilder SetArguments(Action<DraftOrderAvailableDeliveryOptionsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrderAvailableDeliveryOptionsOperationQueryBuilder AvailableLocalDeliveryRates(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderShippingRateQueryBuilder> build)

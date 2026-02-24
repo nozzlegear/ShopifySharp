@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DraftOrderInvoicePreviewOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderInvoicePreviewPayload, DraftOrderInvoicePreviewOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderInvoicePreviewPayload>
+    public sealed class DraftOrderInvoicePreviewOperationQueryBuilder : FieldsQueryBuilderBase<DraftOrderInvoicePreviewPayload, DraftOrderInvoicePreviewOperationQueryBuilder>, IGraphOperationQueryBuilder<DraftOrderInvoicePreviewPayload>, IHasArguments<DraftOrderInvoicePreviewArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DraftOrderInvoicePreviewArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DraftOrderInvoicePreviewOperationQueryBuilder(IQuery<DraftOrderInvoicePreviewPayload> query) : base(query)
         {
             Arguments = new DraftOrderInvoicePreviewArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderInvoicePreviewOperationQueryBuilder SetArguments(Action<DraftOrderInvoicePreviewArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrderInvoicePreviewOperationQueryBuilder PreviewHtml()

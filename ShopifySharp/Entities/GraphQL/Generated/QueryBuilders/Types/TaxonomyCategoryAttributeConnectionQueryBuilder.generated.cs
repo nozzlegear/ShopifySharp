@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class TaxonomyCategoryAttributeConnectionQueryBuilder : FieldsQueryBuilderBase<TaxonomyCategoryAttributeConnection, TaxonomyCategoryAttributeConnectionQueryBuilder>
+    public sealed class TaxonomyCategoryAttributeConnectionQueryBuilder : FieldsQueryBuilderBase<TaxonomyCategoryAttributeConnection, TaxonomyCategoryAttributeConnectionQueryBuilder>, IHasArguments<TaxonomyCategoryAttributeConnectionArgumentsBuilder>
     {
+        public TaxonomyCategoryAttributeConnectionArgumentsBuilder Arguments { get; }
         protected override TaxonomyCategoryAttributeConnectionQueryBuilder Self => this;
 
         public TaxonomyCategoryAttributeConnectionQueryBuilder() : this("taxonomyCategoryAttributeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public TaxonomyCategoryAttributeConnectionQueryBuilder(string name) : base(new Query<TaxonomyCategoryAttributeConnection>(name))
         {
+            Arguments = new TaxonomyCategoryAttributeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public TaxonomyCategoryAttributeConnectionQueryBuilder(IQuery<TaxonomyCategoryAttributeConnection> query) : base(query)
         {
+            Arguments = new TaxonomyCategoryAttributeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TaxonomyCategoryAttributeConnectionQueryBuilder SetArguments(Action<TaxonomyCategoryAttributeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TaxonomyCategoryAttributeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyCategoryAttributeEdgeQueryBuilder> build)

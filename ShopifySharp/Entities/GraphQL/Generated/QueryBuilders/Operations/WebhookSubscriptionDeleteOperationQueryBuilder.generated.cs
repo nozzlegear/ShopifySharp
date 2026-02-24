@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class WebhookSubscriptionDeleteOperationQueryBuilder : FieldsQueryBuilderBase<WebhookSubscriptionDeletePayload, WebhookSubscriptionDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<WebhookSubscriptionDeletePayload>
+    public sealed class WebhookSubscriptionDeleteOperationQueryBuilder : FieldsQueryBuilderBase<WebhookSubscriptionDeletePayload, WebhookSubscriptionDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<WebhookSubscriptionDeletePayload>, IHasArguments<WebhookSubscriptionDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public WebhookSubscriptionDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebhookSubscriptionDeleteOperationQueryBuilder(IQuery<WebhookSubscriptionDeletePayload> query) : base(query)
         {
             Arguments = new WebhookSubscriptionDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebhookSubscriptionDeleteOperationQueryBuilder SetArguments(Action<WebhookSubscriptionDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebhookSubscriptionDeleteOperationQueryBuilder DeletedWebhookSubscriptionId()

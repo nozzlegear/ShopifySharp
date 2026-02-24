@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SegmentCreateOperationQueryBuilder : FieldsQueryBuilderBase<SegmentCreatePayload, SegmentCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<SegmentCreatePayload>
+    public sealed class SegmentCreateOperationQueryBuilder : FieldsQueryBuilderBase<SegmentCreatePayload, SegmentCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<SegmentCreatePayload>, IHasArguments<SegmentCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SegmentCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SegmentCreateOperationQueryBuilder(IQuery<SegmentCreatePayload> query) : base(query)
         {
             Arguments = new SegmentCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SegmentCreateOperationQueryBuilder SetArguments(Action<SegmentCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SegmentCreateOperationQueryBuilder Segment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SegmentQueryBuilder> build)

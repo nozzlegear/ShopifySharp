@@ -14,7 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record ProductBundleUpdatePayload : IGraphQLObject
 {
     /// <summary>
-    /// The asynchronous ProductBundleOperation updating the product bundle or componentized product.
+    /// The asynchronous ProductBundleOperation updating the componentized product.
     /// </summary>
     [JsonPropertyName("productBundleOperation")]
     public ProductBundleOperation? productBundleOperation { get; set; } = null;

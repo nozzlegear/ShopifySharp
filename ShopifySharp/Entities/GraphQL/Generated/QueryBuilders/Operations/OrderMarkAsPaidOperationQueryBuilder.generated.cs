@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderMarkAsPaidOperationQueryBuilder : FieldsQueryBuilderBase<OrderMarkAsPaidPayload, OrderMarkAsPaidOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderMarkAsPaidPayload>
+    public sealed class OrderMarkAsPaidOperationQueryBuilder : FieldsQueryBuilderBase<OrderMarkAsPaidPayload, OrderMarkAsPaidOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderMarkAsPaidPayload>, IHasArguments<OrderMarkAsPaidArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderMarkAsPaidArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public OrderMarkAsPaidOperationQueryBuilder(IQuery<OrderMarkAsPaidPayload> query) : base(query)
         {
             Arguments = new OrderMarkAsPaidArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderMarkAsPaidOperationQueryBuilder SetArguments(Action<OrderMarkAsPaidArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderMarkAsPaidOperationQueryBuilder Order(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)

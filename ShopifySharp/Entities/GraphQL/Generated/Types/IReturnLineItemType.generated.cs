@@ -62,14 +62,7 @@ public interface IReturnLineItemType : IGraphQLObject
     /// The reason for returning the item.
     /// </summary>
     [JsonPropertyName("returnReason")]
-    [Obsolete("Use `returnReasonDefinition` instead. This field will be removed in the future.")]
     public ReturnReason? returnReason { get; set; }
-
-    /// <summary>
-    /// The standardized reason for why the item is being returned.
-    /// </summary>
-    [JsonPropertyName("returnReasonDefinition")]
-    public ReturnReasonDefinition? returnReasonDefinition { get; set; }
 
     /// <summary>
     /// Additional information about the reason for the return. Maximum length: 255 characters.

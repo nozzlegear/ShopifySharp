@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SegmentAttributeStatisticsQueryBuilder : FieldsQueryBuilderBase<SegmentAttributeStatistics, SegmentAttributeStatisticsQueryBuilder>
+    public sealed class SegmentAttributeStatisticsQueryBuilder : FieldsQueryBuilderBase<SegmentAttributeStatistics, SegmentAttributeStatisticsQueryBuilder>, IHasArguments<SegmentAttributeStatisticsArgumentsBuilder>
     {
+        public SegmentAttributeStatisticsArgumentsBuilder Arguments { get; }
         protected override SegmentAttributeStatisticsQueryBuilder Self => this;
 
         public SegmentAttributeStatisticsQueryBuilder() : this("segmentAttributeStatistics")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SegmentAttributeStatisticsQueryBuilder(string name) : base(new Query<SegmentAttributeStatistics>(name))
         {
+            Arguments = new SegmentAttributeStatisticsArgumentsBuilder(base.InnerQuery);
         }
 
         public SegmentAttributeStatisticsQueryBuilder(IQuery<SegmentAttributeStatistics> query) : base(query)
         {
+            Arguments = new SegmentAttributeStatisticsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SegmentAttributeStatisticsQueryBuilder SetArguments(Action<SegmentAttributeStatisticsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SegmentAttributeStatisticsQueryBuilder Average()

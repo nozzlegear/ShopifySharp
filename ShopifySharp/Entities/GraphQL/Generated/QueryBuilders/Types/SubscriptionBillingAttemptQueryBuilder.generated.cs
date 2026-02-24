@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SubscriptionBillingAttemptQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingAttempt, SubscriptionBillingAttemptQueryBuilder>
+    public sealed class SubscriptionBillingAttemptQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingAttempt, SubscriptionBillingAttemptQueryBuilder>, IHasArguments<SubscriptionBillingAttemptArgumentsBuilder>
     {
+        public SubscriptionBillingAttemptArgumentsBuilder Arguments { get; }
         protected override SubscriptionBillingAttemptQueryBuilder Self => this;
 
         public SubscriptionBillingAttemptQueryBuilder() : this("subscriptionBillingAttempt")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SubscriptionBillingAttemptQueryBuilder(string name) : base(new Query<SubscriptionBillingAttempt>(name))
         {
+            Arguments = new SubscriptionBillingAttemptArgumentsBuilder(base.InnerQuery);
         }
 
         public SubscriptionBillingAttemptQueryBuilder(IQuery<SubscriptionBillingAttempt> query) : base(query)
         {
+            Arguments = new SubscriptionBillingAttemptArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingAttemptQueryBuilder SetArguments(Action<SubscriptionBillingAttemptArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingAttemptQueryBuilder CompletedAt()
@@ -42,14 +51,14 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Use `state` instead.")]
+        [Obsolete("Use `processingError.code` instead to get the errorCode")]
         public SubscriptionBillingAttemptQueryBuilder ErrorCode()
         {
             base.InnerQuery.AddField("errorCode");
             return this;
         }
 
-        [Obsolete("Use `state` instead.")]
+        [Obsolete("Use `processingError.message` instead to get the errorMessage")]
         public SubscriptionBillingAttemptQueryBuilder ErrorMessage()
         {
             base.InnerQuery.AddField("errorMessage");
@@ -68,7 +77,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptQueryBuilder NextActionUrl()
         {
             base.InnerQuery.AddField("nextActionUrl");
@@ -111,7 +119,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptQueryBuilder Ready()
         {
             base.InnerQuery.AddField("ready");

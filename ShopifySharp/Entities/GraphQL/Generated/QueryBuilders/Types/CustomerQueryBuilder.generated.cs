@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerQueryBuilder : FieldsQueryBuilderBase<Customer, CustomerQueryBuilder>
+    public sealed class CustomerQueryBuilder : FieldsQueryBuilderBase<Customer, CustomerQueryBuilder>, IHasArguments<CustomerArgumentsBuilder>
     {
+        public CustomerArgumentsBuilder Arguments { get; }
         protected override CustomerQueryBuilder Self => this;
 
         public CustomerQueryBuilder() : this("customer")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerQueryBuilder(string name) : base(new Query<Customer>(name))
         {
+            Arguments = new CustomerArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerQueryBuilder(IQuery<Customer> query) : base(query)
         {
+            Arguments = new CustomerArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerQueryBuilder SetArguments(Action<CustomerArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerQueryBuilder Addresses(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder> build)

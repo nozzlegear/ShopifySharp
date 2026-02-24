@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ValidationUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ValidationUpdatePayload, ValidationUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ValidationUpdatePayload>
+    public sealed class ValidationUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ValidationUpdatePayload, ValidationUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ValidationUpdatePayload>, IHasArguments<ValidationUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ValidationUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ValidationUpdateOperationQueryBuilder(IQuery<ValidationUpdatePayload> query) : base(query)
         {
             Arguments = new ValidationUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ValidationUpdateOperationQueryBuilder SetArguments(Action<ValidationUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ValidationUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ValidationUserErrorQueryBuilder> build)

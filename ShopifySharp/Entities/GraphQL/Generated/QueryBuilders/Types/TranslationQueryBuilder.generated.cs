@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class TranslationQueryBuilder : FieldsQueryBuilderBase<Translation, TranslationQueryBuilder>
+    public sealed class TranslationQueryBuilder : FieldsQueryBuilderBase<Translation, TranslationQueryBuilder>, IHasArguments<TranslationArgumentsBuilder>
     {
+        public TranslationArgumentsBuilder Arguments { get; }
         protected override TranslationQueryBuilder Self => this;
 
         public TranslationQueryBuilder() : this("translation")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public TranslationQueryBuilder(string name) : base(new Query<Translation>(name))
         {
+            Arguments = new TranslationArgumentsBuilder(base.InnerQuery);
         }
 
         public TranslationQueryBuilder(IQuery<Translation> query) : base(query)
         {
+            Arguments = new TranslationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TranslationQueryBuilder SetArguments(Action<TranslationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TranslationQueryBuilder Key()

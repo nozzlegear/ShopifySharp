@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class UrlRedirectSavedSearchesOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchConnection, UrlRedirectSavedSearchesOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchConnection>
+    public sealed class UrlRedirectSavedSearchesOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchConnection, UrlRedirectSavedSearchesOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchConnection>, IHasArguments<UrlRedirectSavedSearchesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public UrlRedirectSavedSearchesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public UrlRedirectSavedSearchesOperationQueryBuilder(IQuery<SavedSearchConnection> query) : base(query)
         {
             Arguments = new UrlRedirectSavedSearchesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public UrlRedirectSavedSearchesOperationQueryBuilder SetArguments(Action<UrlRedirectSavedSearchesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public UrlRedirectSavedSearchesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SavedSearchEdgeQueryBuilder> build)

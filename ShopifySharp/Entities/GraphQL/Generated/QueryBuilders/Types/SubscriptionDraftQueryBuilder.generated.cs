@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SubscriptionDraftQueryBuilder : FieldsQueryBuilderBase<SubscriptionDraft, SubscriptionDraftQueryBuilder>
+    public sealed class SubscriptionDraftQueryBuilder : FieldsQueryBuilderBase<SubscriptionDraft, SubscriptionDraftQueryBuilder>, IHasArguments<SubscriptionDraftArgumentsBuilder>
     {
+        public SubscriptionDraftArgumentsBuilder Arguments { get; }
         protected override SubscriptionDraftQueryBuilder Self => this;
 
         public SubscriptionDraftQueryBuilder() : this("subscriptionDraft")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SubscriptionDraftQueryBuilder(string name) : base(new Query<SubscriptionDraft>(name))
         {
+            Arguments = new SubscriptionDraftArgumentsBuilder(base.InnerQuery);
         }
 
         public SubscriptionDraftQueryBuilder(IQuery<SubscriptionDraft> query) : base(query)
         {
+            Arguments = new SubscriptionDraftArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionDraftQueryBuilder SetArguments(Action<SubscriptionDraftArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionDraftQueryBuilder BillingCycle(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleQueryBuilder> build)

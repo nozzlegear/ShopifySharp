@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodSendUpdateEmailPayload, CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodSendUpdateEmailPayload>
+    public sealed class CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodSendUpdateEmailPayload, CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodSendUpdateEmailPayload>, IHasArguments<CustomerPaymentMethodSendUpdateEmailArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodSendUpdateEmailArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder(IQuery<CustomerPaymentMethodSendUpdateEmailPayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodSendUpdateEmailArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodSendUpdateEmailArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodSendUpdateEmailOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)

@@ -1,0 +1,37 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class DeliveryPromiseParticipantOwnerTranslationsArgumentsBuilder : ArgumentsBuilderBase<Translation?, DeliveryPromiseParticipantOwnerTranslationsArgumentsBuilder>
+    {
+        protected override DeliveryPromiseParticipantOwnerTranslationsArgumentsBuilder Self => this;
+
+        public DeliveryPromiseParticipantOwnerTranslationsArgumentsBuilder(IQuery<Translation?> query) : base(query)
+        {
+        }
+
+        public DeliveryPromiseParticipantOwnerTranslationsArgumentsBuilder Locale(string? locale)
+        {
+            base.InnerQuery.AddArgument("locale", locale);
+            return this;
+        }
+
+        public DeliveryPromiseParticipantOwnerTranslationsArgumentsBuilder MarketId(string? marketId)
+        {
+            base.InnerQuery.AddArgument("marketId", marketId);
+            return this;
+        }
+    }
+}

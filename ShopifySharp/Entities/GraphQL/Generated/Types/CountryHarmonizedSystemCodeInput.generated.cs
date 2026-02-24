@@ -14,8 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record CountryHarmonizedSystemCodeInput : GraphQLInputObject<CountryHarmonizedSystemCodeInput>
 {
     /// <summary>
-    /// The ISO 3166-1 alpha-2 country code for the country that issued the specified
-    /// harmonized system code. Represents global harmonized system code when set to null.
+    /// The ISO 3166-1 alpha-2 country code for the country that issued the specified harmonized system code.
     /// </summary>
     [JsonPropertyName("countryCode")]
     public CountryCode? countryCode { get; set; } = null;

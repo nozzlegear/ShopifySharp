@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MetaobjectDefinitionCreateOperationQueryBuilder : FieldsQueryBuilderBase<MetaobjectDefinitionCreatePayload, MetaobjectDefinitionCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MetaobjectDefinitionCreatePayload>
+    public sealed class MetaobjectDefinitionCreateOperationQueryBuilder : FieldsQueryBuilderBase<MetaobjectDefinitionCreatePayload, MetaobjectDefinitionCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MetaobjectDefinitionCreatePayload>, IHasArguments<MetaobjectDefinitionCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MetaobjectDefinitionCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MetaobjectDefinitionCreateOperationQueryBuilder(IQuery<MetaobjectDefinitionCreatePayload> query) : base(query)
         {
             Arguments = new MetaobjectDefinitionCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetaobjectDefinitionCreateOperationQueryBuilder SetArguments(Action<MetaobjectDefinitionCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetaobjectDefinitionCreateOperationQueryBuilder MetaobjectDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectDefinitionQueryBuilder> build)

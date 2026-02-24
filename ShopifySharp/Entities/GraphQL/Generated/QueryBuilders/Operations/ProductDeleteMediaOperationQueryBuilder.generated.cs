@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `fileUpdate` instead.")]
-    public sealed class ProductDeleteMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductDeleteMediaPayload, ProductDeleteMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductDeleteMediaPayload>
+    public sealed class ProductDeleteMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductDeleteMediaPayload, ProductDeleteMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductDeleteMediaPayload>, IHasArguments<ProductDeleteMediaArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductDeleteMediaArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductDeleteMediaOperationQueryBuilder(IQuery<ProductDeleteMediaPayload> query) : base(query)
         {
             Arguments = new ProductDeleteMediaArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductDeleteMediaOperationQueryBuilder SetArguments(Action<ProductDeleteMediaArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductDeleteMediaOperationQueryBuilder DeletedMediaIds()

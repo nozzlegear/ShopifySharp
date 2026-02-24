@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class AbandonmentByAbandonedCheckoutIdOperationQueryBuilder : FieldsQueryBuilderBase<Abandonment, AbandonmentByAbandonedCheckoutIdOperationQueryBuilder>, IGraphOperationQueryBuilder<Abandonment>
+    public sealed class AbandonmentByAbandonedCheckoutIdOperationQueryBuilder : FieldsQueryBuilderBase<Abandonment, AbandonmentByAbandonedCheckoutIdOperationQueryBuilder>, IGraphOperationQueryBuilder<Abandonment>, IHasArguments<AbandonmentByAbandonedCheckoutIdArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public AbandonmentByAbandonedCheckoutIdArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public AbandonmentByAbandonedCheckoutIdOperationQueryBuilder(IQuery<Abandonment> query) : base(query)
         {
             Arguments = new AbandonmentByAbandonedCheckoutIdArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AbandonmentByAbandonedCheckoutIdOperationQueryBuilder SetArguments(Action<AbandonmentByAbandonedCheckoutIdArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AbandonmentByAbandonedCheckoutIdOperationQueryBuilder AbandonedCheckoutPayload(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonedCheckoutQueryBuilder> build)

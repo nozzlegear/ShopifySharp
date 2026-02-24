@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ThemesOperationQueryBuilder : FieldsQueryBuilderBase<OnlineStoreThemeConnection, ThemesOperationQueryBuilder>, IGraphOperationQueryBuilder<OnlineStoreThemeConnection>
+    public sealed class ThemesOperationQueryBuilder : FieldsQueryBuilderBase<OnlineStoreThemeConnection, ThemesOperationQueryBuilder>, IGraphOperationQueryBuilder<OnlineStoreThemeConnection>, IHasArguments<ThemesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ThemesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ThemesOperationQueryBuilder(IQuery<OnlineStoreThemeConnection> query) : base(query)
         {
             Arguments = new ThemesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ThemesOperationQueryBuilder SetArguments(Action<ThemesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ThemesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnOperationQueryBuilder : FieldsQueryBuilderBase<Return, ReturnOperationQueryBuilder>, IGraphOperationQueryBuilder<Return>
+    public sealed class ReturnOperationQueryBuilder : FieldsQueryBuilderBase<Return, ReturnOperationQueryBuilder>, IGraphOperationQueryBuilder<Return>, IHasArguments<ReturnArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ReturnArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnOperationQueryBuilder(IQuery<Return> query) : base(query)
         {
             Arguments = new ReturnArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnOperationQueryBuilder SetArguments(Action<ReturnArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnOperationQueryBuilder ClosedAt()
@@ -127,15 +133,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public ReturnOperationQueryBuilder StaffMember(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder> build)
-        {
-            var query = new Query<StaffMember>("staffMember");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<StaffMember>(query);
-            return this;
-        }
-
         public ReturnOperationQueryBuilder Status()
         {
             base.InnerQuery.AddField("status");
@@ -163,15 +160,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnOperationQueryBuilder TotalQuantity()
         {
             base.InnerQuery.AddField("totalQuantity");
-            return this;
-        }
-
-        public ReturnOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
-        {
-            var query = new Query<OrderTransactionConnection>("transactions");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<OrderTransactionConnection>(query);
             return this;
         }
     }

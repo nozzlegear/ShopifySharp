@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyPaymentsPayoutConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsPayoutConnection, ShopifyPaymentsPayoutConnectionQueryBuilder>
+    public sealed class ShopifyPaymentsPayoutConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsPayoutConnection, ShopifyPaymentsPayoutConnectionQueryBuilder>, IHasArguments<ShopifyPaymentsPayoutConnectionArgumentsBuilder>
     {
+        public ShopifyPaymentsPayoutConnectionArgumentsBuilder Arguments { get; }
         protected override ShopifyPaymentsPayoutConnectionQueryBuilder Self => this;
 
         public ShopifyPaymentsPayoutConnectionQueryBuilder() : this("shopifyPaymentsPayoutConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyPaymentsPayoutConnectionQueryBuilder(string name) : base(new Query<ShopifyPaymentsPayoutConnection>(name))
         {
+            Arguments = new ShopifyPaymentsPayoutConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyPaymentsPayoutConnectionQueryBuilder(IQuery<ShopifyPaymentsPayoutConnection> query) : base(query)
         {
+            Arguments = new ShopifyPaymentsPayoutConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsPayoutConnectionQueryBuilder SetArguments(Action<ShopifyPaymentsPayoutConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsPayoutConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsPayoutEdgeQueryBuilder> build)

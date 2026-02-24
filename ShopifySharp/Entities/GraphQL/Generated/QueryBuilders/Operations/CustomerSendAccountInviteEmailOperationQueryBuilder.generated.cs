@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerSendAccountInviteEmailOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSendAccountInviteEmailPayload, CustomerSendAccountInviteEmailOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSendAccountInviteEmailPayload>
+    public sealed class CustomerSendAccountInviteEmailOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSendAccountInviteEmailPayload, CustomerSendAccountInviteEmailOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSendAccountInviteEmailPayload>, IHasArguments<CustomerSendAccountInviteEmailArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerSendAccountInviteEmailArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerSendAccountInviteEmailOperationQueryBuilder(IQuery<CustomerSendAccountInviteEmailPayload> query) : base(query)
         {
             Arguments = new CustomerSendAccountInviteEmailArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerSendAccountInviteEmailOperationQueryBuilder SetArguments(Action<CustomerSendAccountInviteEmailArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerSendAccountInviteEmailOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)

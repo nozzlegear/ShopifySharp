@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerSegmentMembershipOperationQueryBuilder : FieldsQueryBuilderBase<SegmentMembershipResponse, CustomerSegmentMembershipOperationQueryBuilder>, IGraphOperationQueryBuilder<SegmentMembershipResponse>
+    public sealed class CustomerSegmentMembershipOperationQueryBuilder : FieldsQueryBuilderBase<SegmentMembershipResponse, CustomerSegmentMembershipOperationQueryBuilder>, IGraphOperationQueryBuilder<SegmentMembershipResponse>, IHasArguments<CustomerSegmentMembershipArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CustomerSegmentMembershipArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerSegmentMembershipOperationQueryBuilder(IQuery<SegmentMembershipResponse> query) : base(query)
         {
             Arguments = new CustomerSegmentMembershipArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerSegmentMembershipOperationQueryBuilder SetArguments(Action<CustomerSegmentMembershipArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerSegmentMembershipOperationQueryBuilder Memberships(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SegmentMembershipQueryBuilder> build)

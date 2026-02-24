@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class StaffMemberConnectionQueryBuilder : FieldsQueryBuilderBase<StaffMemberConnection, StaffMemberConnectionQueryBuilder>
+    public sealed class StaffMemberConnectionQueryBuilder : FieldsQueryBuilderBase<StaffMemberConnection, StaffMemberConnectionQueryBuilder>, IHasArguments<StaffMemberConnectionArgumentsBuilder>
     {
+        public StaffMemberConnectionArgumentsBuilder Arguments { get; }
         protected override StaffMemberConnectionQueryBuilder Self => this;
 
         public StaffMemberConnectionQueryBuilder() : this("staffMemberConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public StaffMemberConnectionQueryBuilder(string name) : base(new Query<StaffMemberConnection>(name))
         {
+            Arguments = new StaffMemberConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public StaffMemberConnectionQueryBuilder(IQuery<StaffMemberConnection> query) : base(query)
         {
+            Arguments = new StaffMemberConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StaffMemberConnectionQueryBuilder SetArguments(Action<StaffMemberConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StaffMemberConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberEdgeQueryBuilder> build)

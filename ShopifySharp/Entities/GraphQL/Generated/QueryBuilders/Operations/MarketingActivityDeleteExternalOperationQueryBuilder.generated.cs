@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MarketingActivityDeleteExternalOperationQueryBuilder : FieldsQueryBuilderBase<MarketingActivityDeleteExternalPayload, MarketingActivityDeleteExternalOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingActivityDeleteExternalPayload>
+    public sealed class MarketingActivityDeleteExternalOperationQueryBuilder : FieldsQueryBuilderBase<MarketingActivityDeleteExternalPayload, MarketingActivityDeleteExternalOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingActivityDeleteExternalPayload>, IHasArguments<MarketingActivityDeleteExternalArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketingActivityDeleteExternalArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketingActivityDeleteExternalOperationQueryBuilder(IQuery<MarketingActivityDeleteExternalPayload> query) : base(query)
         {
             Arguments = new MarketingActivityDeleteExternalArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketingActivityDeleteExternalOperationQueryBuilder SetArguments(Action<MarketingActivityDeleteExternalArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketingActivityDeleteExternalOperationQueryBuilder DeletedMarketingActivityId()

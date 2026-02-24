@@ -1,0 +1,149 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class QueryRootPageQueryBuilder : FieldsQueryBuilderBase<Page, QueryRootPageQueryBuilder>, IHasArguments<QueryRootPageArgumentsBuilder>
+    {
+        public QueryRootPageArgumentsBuilder Arguments { get; }
+        protected override QueryRootPageQueryBuilder Self => this;
+
+        public QueryRootPageQueryBuilder(string name) : base(new Query<Page>(name))
+        {
+            Arguments = new QueryRootPageArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QueryRootPageQueryBuilder(IQuery<Page> query) : base(query)
+        {
+            Arguments = new QueryRootPageArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QueryRootPageQueryBuilder SetArguments(Action<QueryRootPageArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Body()
+        {
+            base.InnerQuery.AddField("body");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder BodySummary()
+        {
+            base.InnerQuery.AddField("bodySummary");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder CreatedAt()
+        {
+            base.InnerQuery.AddField("createdAt");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder DefaultCursor()
+        {
+            base.InnerQuery.AddField("defaultCursor");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Events(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder> build)
+        {
+            var query = new Query<EventConnection>("events");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<EventConnection>(query);
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Handle()
+        {
+            base.InnerQuery.AddField("handle");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Id()
+        {
+            base.InnerQuery.AddField("id");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder IsPublished()
+        {
+            base.InnerQuery.AddField("isPublished");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Metafield(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder> build)
+        {
+            var query = new Query<Metafield>("metafield");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Metafield>(query);
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder MetafieldDefinitions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder> build)
+        {
+            var query = new Query<MetafieldDefinitionConnection>("metafieldDefinitions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetafieldDefinitionConnection>(query);
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Metafields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder> build)
+        {
+            var query = new Query<MetafieldConnection>("metafields");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetafieldConnection>(query);
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder PublishedAt()
+        {
+            base.InnerQuery.AddField("publishedAt");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder TemplateSuffix()
+        {
+            base.InnerQuery.AddField("templateSuffix");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Title()
+        {
+            base.InnerQuery.AddField("title");
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
+        {
+            var query = new Query<Translation>("translations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Translation>(query);
+            return this;
+        }
+
+        public QueryRootPageQueryBuilder UpdatedAt()
+        {
+            base.InnerQuery.AddField("updatedAt");
+            return this;
+        }
+    }
+}

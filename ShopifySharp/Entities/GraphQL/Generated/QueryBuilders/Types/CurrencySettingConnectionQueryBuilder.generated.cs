@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CurrencySettingConnectionQueryBuilder : FieldsQueryBuilderBase<CurrencySettingConnection, CurrencySettingConnectionQueryBuilder>
+    public sealed class CurrencySettingConnectionQueryBuilder : FieldsQueryBuilderBase<CurrencySettingConnection, CurrencySettingConnectionQueryBuilder>, IHasArguments<CurrencySettingConnectionArgumentsBuilder>
     {
+        public CurrencySettingConnectionArgumentsBuilder Arguments { get; }
         protected override CurrencySettingConnectionQueryBuilder Self => this;
 
         public CurrencySettingConnectionQueryBuilder() : this("currencySettingConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CurrencySettingConnectionQueryBuilder(string name) : base(new Query<CurrencySettingConnection>(name))
         {
+            Arguments = new CurrencySettingConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CurrencySettingConnectionQueryBuilder(IQuery<CurrencySettingConnection> query) : base(query)
         {
+            Arguments = new CurrencySettingConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CurrencySettingConnectionQueryBuilder SetArguments(Action<CurrencySettingConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CurrencySettingConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CurrencySettingEdgeQueryBuilder> build)

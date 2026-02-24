@@ -14,13 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record PriceListProductPriceInput : GraphQLInputObject<PriceListProductPriceInput>
 {
     /// <summary>
-    /// Specifies the compare-at price and currency to apply to the product's variants on the price list.
-    /// </summary>
-    [JsonPropertyName("compareAtPrice")]
-    public MoneyInput? compareAtPrice { get; set; } = null;
-
-    /// <summary>
-    /// Specifies the price and currency to apply to the product's variants on the price list.
+    /// The price of the product to use for all variants with its currency.
     /// </summary>
     [JsonPropertyName("price")]
     public MoneyInput? price { get; set; } = null;

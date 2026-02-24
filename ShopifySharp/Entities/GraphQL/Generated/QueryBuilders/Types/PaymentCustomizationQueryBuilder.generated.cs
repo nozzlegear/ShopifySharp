@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PaymentCustomizationQueryBuilder : FieldsQueryBuilderBase<PaymentCustomization, PaymentCustomizationQueryBuilder>
+    public sealed class PaymentCustomizationQueryBuilder : FieldsQueryBuilderBase<PaymentCustomization, PaymentCustomizationQueryBuilder>, IHasArguments<PaymentCustomizationArgumentsBuilder>
     {
+        public PaymentCustomizationArgumentsBuilder Arguments { get; }
         protected override PaymentCustomizationQueryBuilder Self => this;
 
         public PaymentCustomizationQueryBuilder() : this("paymentCustomization")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PaymentCustomizationQueryBuilder(string name) : base(new Query<PaymentCustomization>(name))
         {
+            Arguments = new PaymentCustomizationArgumentsBuilder(base.InnerQuery);
         }
 
         public PaymentCustomizationQueryBuilder(IQuery<PaymentCustomization> query) : base(query)
         {
+            Arguments = new PaymentCustomizationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PaymentCustomizationQueryBuilder SetArguments(Action<PaymentCustomizationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PaymentCustomizationQueryBuilder Enabled()

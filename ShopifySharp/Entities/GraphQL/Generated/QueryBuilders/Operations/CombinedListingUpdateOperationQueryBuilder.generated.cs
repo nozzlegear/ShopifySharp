@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CombinedListingUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CombinedListingUpdatePayload, CombinedListingUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CombinedListingUpdatePayload>
+    public sealed class CombinedListingUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CombinedListingUpdatePayload, CombinedListingUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CombinedListingUpdatePayload>, IHasArguments<CombinedListingUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CombinedListingUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CombinedListingUpdateOperationQueryBuilder(IQuery<CombinedListingUpdatePayload> query) : base(query)
         {
             Arguments = new CombinedListingUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CombinedListingUpdateOperationQueryBuilder SetArguments(Action<CombinedListingUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CombinedListingUpdateOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

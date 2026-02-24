@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A shipping option associated with order delivery that includes pricing and service information.
+/// A shipping rate is an additional cost added to the cost of the products that were ordered.
 /// </summary>
 public record ShippingRate : IGraphQLObject
 {

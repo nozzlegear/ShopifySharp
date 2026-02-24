@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CatalogConnectionQueryBuilder : FieldsQueryBuilderBase<CatalogConnection, CatalogConnectionQueryBuilder>
+    public sealed class CatalogConnectionQueryBuilder : FieldsQueryBuilderBase<CatalogConnection, CatalogConnectionQueryBuilder>, IHasArguments<CatalogConnectionArgumentsBuilder>
     {
+        public CatalogConnectionArgumentsBuilder Arguments { get; }
         protected override CatalogConnectionQueryBuilder Self => this;
 
         public CatalogConnectionQueryBuilder() : this("catalogConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CatalogConnectionQueryBuilder(string name) : base(new Query<CatalogConnection>(name))
         {
+            Arguments = new CatalogConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CatalogConnectionQueryBuilder(IQuery<CatalogConnection> query) : base(query)
         {
+            Arguments = new CatalogConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CatalogConnectionQueryBuilder SetArguments(Action<CatalogConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CatalogConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DisputeEvidenceOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeEvidence, DisputeEvidenceOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsDisputeEvidence>
+    public sealed class DisputeEvidenceOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeEvidence, DisputeEvidenceOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsDisputeEvidence>, IHasArguments<DisputeEvidenceArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DisputeEvidenceArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DisputeEvidenceOperationQueryBuilder(IQuery<ShopifyPaymentsDisputeEvidence> query) : base(query)
         {
             Arguments = new DisputeEvidenceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DisputeEvidenceOperationQueryBuilder SetArguments(Action<DisputeEvidenceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DisputeEvidenceOperationQueryBuilder AccessActivityLog()

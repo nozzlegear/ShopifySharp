@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CollectionSavedSearchesOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchConnection, CollectionSavedSearchesOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchConnection>
+    public sealed class CollectionSavedSearchesOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchConnection, CollectionSavedSearchesOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchConnection>, IHasArguments<CollectionSavedSearchesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CollectionSavedSearchesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CollectionSavedSearchesOperationQueryBuilder(IQuery<SavedSearchConnection> query) : base(query)
         {
             Arguments = new CollectionSavedSearchesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CollectionSavedSearchesOperationQueryBuilder SetArguments(Action<CollectionSavedSearchesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CollectionSavedSearchesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SavedSearchEdgeQueryBuilder> build)

@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `companyLocationTaxSettingsUpdate` instead.")]
-    public sealed class CompanyLocationCreateTaxRegistrationOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationCreateTaxRegistrationPayload, CompanyLocationCreateTaxRegistrationOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationCreateTaxRegistrationPayload>
+    public sealed class CompanyLocationCreateTaxRegistrationOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationCreateTaxRegistrationPayload, CompanyLocationCreateTaxRegistrationOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationCreateTaxRegistrationPayload>, IHasArguments<CompanyLocationCreateTaxRegistrationArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyLocationCreateTaxRegistrationArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyLocationCreateTaxRegistrationOperationQueryBuilder(IQuery<CompanyLocationCreateTaxRegistrationPayload> query) : base(query)
         {
             Arguments = new CompanyLocationCreateTaxRegistrationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationCreateTaxRegistrationOperationQueryBuilder SetArguments(Action<CompanyLocationCreateTaxRegistrationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationCreateTaxRegistrationOperationQueryBuilder CompanyLocation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationQueryBuilder> build)

@@ -126,15 +126,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public AbandonedCheckoutLineItemQueryBuilder ParentRelationship(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonedCheckoutLineItemParentRelationshipQueryBuilder> build)
-        {
-            var query = new Query<AbandonedCheckoutLineItemParentRelationship>("parentRelationship");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AbandonedCheckoutLineItemParentRelationshipQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<AbandonedCheckoutLineItemParentRelationship>(query);
-            return this;
-        }
-
         public AbandonedCheckoutLineItemQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)
         {
             var query = new Query<Product>("product");

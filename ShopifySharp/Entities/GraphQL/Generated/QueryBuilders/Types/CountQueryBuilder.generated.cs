@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CountQueryBuilder : FieldsQueryBuilderBase<Count, CountQueryBuilder>
+    public sealed class CountQueryBuilder : FieldsQueryBuilderBase<Count, CountQueryBuilder>, IHasArguments<CountArgumentsBuilder>
     {
+        public CountArgumentsBuilder Arguments { get; }
         protected override CountQueryBuilder Self => this;
 
         public CountQueryBuilder() : this("count")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CountQueryBuilder(string name) : base(new Query<Count>(name))
         {
+            Arguments = new CountArgumentsBuilder(base.InnerQuery);
         }
 
         public CountQueryBuilder(IQuery<Count> query) : base(query)
         {
+            Arguments = new CountArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CountQueryBuilder SetArguments(Action<CountArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CountQueryBuilder Count_()

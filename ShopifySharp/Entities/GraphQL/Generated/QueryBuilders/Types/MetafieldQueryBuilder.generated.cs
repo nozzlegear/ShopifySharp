@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MetafieldQueryBuilder : FieldsQueryBuilderBase<Metafield, MetafieldQueryBuilder>
+    public sealed class MetafieldQueryBuilder : FieldsQueryBuilderBase<Metafield, MetafieldQueryBuilder>, IHasArguments<MetafieldArgumentsBuilder>
     {
+        public MetafieldArgumentsBuilder Arguments { get; }
         protected override MetafieldQueryBuilder Self => this;
 
         public MetafieldQueryBuilder() : this("metafield")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MetafieldQueryBuilder(string name) : base(new Query<Metafield>(name))
         {
+            Arguments = new MetafieldArgumentsBuilder(base.InnerQuery);
         }
 
         public MetafieldQueryBuilder(IQuery<Metafield> query) : base(query)
         {
+            Arguments = new MetafieldArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetafieldQueryBuilder SetArguments(Action<MetafieldArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetafieldQueryBuilder CompareDigest()

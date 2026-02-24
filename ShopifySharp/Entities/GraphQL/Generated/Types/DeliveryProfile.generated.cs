@@ -9,16 +9,9 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A shipping profile that defines shipping rates for specific
-/// [`Product`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Product) objects and [`ProductVariant`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant)
-/// objects. Delivery profiles determine which products can ship from which
-/// [`Location`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Location)
-/// objects to which zones, and at what rates.
-/// Profiles can associate with [`SellingPlanGroup`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SellingPlanGroup)
-/// objects to provide custom shipping rules for subscriptions, such as free
-/// shipping or restricted delivery zones. The default profile applies to all
-/// products that aren't assigned to other profiles.
-/// Learn more about [building delivery profiles](https://shopify.dev/apps/build/purchase-options/deferred/delivery-and-deferment/build-delivery-profiles).
+/// A shipping profile. In Shopify, a shipping profile is a set of shipping rates
+/// scoped to a set of products or variants that can be shipped from selected
+/// locations to zones. Learn more about [building with delivery profiles](https://shopify.dev/apps/build/purchase-options/deferred/delivery-and-deferment/build-delivery-profiles).
 /// </summary>
 public record DeliveryProfile : IGraphQLObject, INode
 {
@@ -44,7 +37,6 @@ public record DeliveryProfile : IGraphQLObject, INode
     /// Whether this shop has enabled legacy compatibility mode for delivery profiles.
     /// </summary>
     [JsonPropertyName("legacyMode")]
-    [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
     public bool? legacyMode { get; set; } = null;
 
     /// <summary>
@@ -107,12 +99,6 @@ public record DeliveryProfile : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("unassignedLocationsPaginated")]
     public LocationConnection? unassignedLocationsPaginated { get; set; } = null;
-
-    /// <summary>
-    /// The version of the delivery profile.
-    /// </summary>
-    [JsonPropertyName("version")]
-    public int? version { get; set; } = null;
 
     /// <summary>
     /// The number of countries with active rates to deliver to.

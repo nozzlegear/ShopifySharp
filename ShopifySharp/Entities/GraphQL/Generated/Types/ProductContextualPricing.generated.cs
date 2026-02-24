@@ -9,10 +9,10 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The price of a [product](https://shopify.dev/docs/api/admin-graphql/latest/objects/Product)
-/// in a specific country. Shows the minimum and maximum variant prices through the
-/// price range and the count of fixed quantity rules that apply to the product's
-/// variants in the given pricing context.
+/// The price of a product in a specific country.
+/// Prices vary between countries.
+/// Refer to [Product](https://shopify.dev/docs/api/admin-graphql/latest/queries/product?example=Get+the+price+range+for+a+product+for+buyers+from+Canada)
+/// for more information on how to use this object.
 /// </summary>
 public record ProductContextualPricing : IGraphQLObject
 {

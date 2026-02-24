@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SubscriptionBillingCycleEditDeleteOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleEditDeletePayload, SubscriptionBillingCycleEditDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleEditDeletePayload>
+    public sealed class SubscriptionBillingCycleEditDeleteOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleEditDeletePayload, SubscriptionBillingCycleEditDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleEditDeletePayload>, IHasArguments<SubscriptionBillingCycleEditDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SubscriptionBillingCycleEditDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionBillingCycleEditDeleteOperationQueryBuilder(IQuery<SubscriptionBillingCycleEditDeletePayload> query) : base(query)
         {
             Arguments = new SubscriptionBillingCycleEditDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingCycleEditDeleteOperationQueryBuilder SetArguments(Action<SubscriptionBillingCycleEditDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingCycleEditDeleteOperationQueryBuilder BillingCycles(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleQueryBuilder> build)

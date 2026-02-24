@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyPaymentsBankAccountConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsBankAccountConnection, ShopifyPaymentsBankAccountConnectionQueryBuilder>
+    public sealed class ShopifyPaymentsBankAccountConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsBankAccountConnection, ShopifyPaymentsBankAccountConnectionQueryBuilder>, IHasArguments<ShopifyPaymentsBankAccountConnectionArgumentsBuilder>
     {
+        public ShopifyPaymentsBankAccountConnectionArgumentsBuilder Arguments { get; }
         protected override ShopifyPaymentsBankAccountConnectionQueryBuilder Self => this;
 
         public ShopifyPaymentsBankAccountConnectionQueryBuilder() : this("shopifyPaymentsBankAccountConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyPaymentsBankAccountConnectionQueryBuilder(string name) : base(new Query<ShopifyPaymentsBankAccountConnection>(name))
         {
+            Arguments = new ShopifyPaymentsBankAccountConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyPaymentsBankAccountConnectionQueryBuilder(IQuery<ShopifyPaymentsBankAccountConnection> query) : base(query)
         {
+            Arguments = new ShopifyPaymentsBankAccountConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsBankAccountConnectionQueryBuilder SetArguments(Action<ShopifyPaymentsBankAccountConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsBankAccountConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsBankAccountEdgeQueryBuilder> build)

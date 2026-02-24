@@ -9,15 +9,11 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A shipment of one or more items from an
-/// [`Order`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order). Tracks which
-/// [`LineItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/LineItem)
-/// objects ship, their quantities, and the shipment's tracking information.
-/// Includes tracking details such as the carrier, tracking numbers, and URLs. The
-/// fulfillment connects to both the original order and any associated [`FulfillmentOrder`](https://shopify.dev/docs/api/admin-graphql/latest/objects/FulfillmentOrder) objects. [`FulfillmentEvent`](https://shopify.dev/docs/api/admin-graphql/latest/objects/FulfillmentEvent)
-/// objects record milestones throughout the shipment lifecycle, from creation
-/// through delivery.
-/// Multiple fulfillments can exist for a single order when items either ship separately or from different locations.
+/// Represents a fulfillment.
+/// In Shopify, a fulfillment represents a shipment of one or more items in an order.
+/// When an order has been completely fulfilled, it means that all the items that are included
+/// in the order have been sent to the customer.
+/// There can be more than one fulfillment for an order.
 /// </summary>
 public record Fulfillment : IGraphQLObject, ILegacyInteroperability, INode
 {

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class BulkOperationRunMutationOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperationRunMutationPayload, BulkOperationRunMutationOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkOperationRunMutationPayload>
+    public sealed class BulkOperationRunMutationOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperationRunMutationPayload, BulkOperationRunMutationOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkOperationRunMutationPayload>, IHasArguments<BulkOperationRunMutationArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public BulkOperationRunMutationArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public BulkOperationRunMutationOperationQueryBuilder(IQuery<BulkOperationRunMutationPayload> query) : base(query)
         {
             Arguments = new BulkOperationRunMutationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BulkOperationRunMutationOperationQueryBuilder SetArguments(Action<BulkOperationRunMutationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BulkOperationRunMutationOperationQueryBuilder BulkOperation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BulkOperationQueryBuilder> build)

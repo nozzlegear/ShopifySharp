@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodRemoteCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodRemoteCreatePayload, CustomerPaymentMethodRemoteCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodRemoteCreatePayload>
+    public sealed class CustomerPaymentMethodRemoteCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodRemoteCreatePayload, CustomerPaymentMethodRemoteCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodRemoteCreatePayload>, IHasArguments<CustomerPaymentMethodRemoteCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodRemoteCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodRemoteCreateOperationQueryBuilder(IQuery<CustomerPaymentMethodRemoteCreatePayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodRemoteCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodRemoteCreateOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodRemoteCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodRemoteCreateOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)

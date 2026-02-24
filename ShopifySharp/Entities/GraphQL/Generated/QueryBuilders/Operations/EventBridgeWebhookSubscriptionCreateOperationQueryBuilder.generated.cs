@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `webhookSubscriptionCreate` instead.")]
-    public sealed class EventBridgeWebhookSubscriptionCreateOperationQueryBuilder : FieldsQueryBuilderBase<EventBridgeWebhookSubscriptionCreatePayload, EventBridgeWebhookSubscriptionCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<EventBridgeWebhookSubscriptionCreatePayload>
+    public sealed class EventBridgeWebhookSubscriptionCreateOperationQueryBuilder : FieldsQueryBuilderBase<EventBridgeWebhookSubscriptionCreatePayload, EventBridgeWebhookSubscriptionCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<EventBridgeWebhookSubscriptionCreatePayload>, IHasArguments<EventBridgeWebhookSubscriptionCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public EventBridgeWebhookSubscriptionCreateArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public EventBridgeWebhookSubscriptionCreateOperationQueryBuilder(IQuery<EventBridgeWebhookSubscriptionCreatePayload> query) : base(query)
         {
             Arguments = new EventBridgeWebhookSubscriptionCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public EventBridgeWebhookSubscriptionCreateOperationQueryBuilder SetArguments(Action<EventBridgeWebhookSubscriptionCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public EventBridgeWebhookSubscriptionCreateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)

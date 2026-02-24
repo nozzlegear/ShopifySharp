@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class StaffMemberQueryBuilder : FieldsQueryBuilderBase<StaffMember, StaffMemberQueryBuilder>
+    public sealed class StaffMemberQueryBuilder : FieldsQueryBuilderBase<StaffMember, StaffMemberQueryBuilder>, IHasArguments<StaffMemberArgumentsBuilder>
     {
+        public StaffMemberArgumentsBuilder Arguments { get; }
         protected override StaffMemberQueryBuilder Self => this;
 
         public StaffMemberQueryBuilder() : this("staffMember")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public StaffMemberQueryBuilder(string name) : base(new Query<StaffMember>(name))
         {
+            Arguments = new StaffMemberArgumentsBuilder(base.InnerQuery);
         }
 
         public StaffMemberQueryBuilder(IQuery<StaffMember> query) : base(query)
         {
+            Arguments = new StaffMemberArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StaffMemberQueryBuilder SetArguments(Action<StaffMemberArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StaffMemberQueryBuilder AccountType()

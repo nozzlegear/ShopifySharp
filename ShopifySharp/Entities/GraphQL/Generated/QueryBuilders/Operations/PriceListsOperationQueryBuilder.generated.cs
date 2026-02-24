@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PriceListsOperationQueryBuilder : FieldsQueryBuilderBase<PriceListConnection, PriceListsOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListConnection>
+    public sealed class PriceListsOperationQueryBuilder : FieldsQueryBuilderBase<PriceListConnection, PriceListsOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListConnection>, IHasArguments<PriceListsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public PriceListsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PriceListsOperationQueryBuilder(IQuery<PriceListConnection> query) : base(query)
         {
             Arguments = new PriceListsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PriceListsOperationQueryBuilder SetArguments(Action<PriceListsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PriceListsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnCreateOperationQueryBuilder : FieldsQueryBuilderBase<ReturnCreatePayload, ReturnCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnCreatePayload>
+    public sealed class ReturnCreateOperationQueryBuilder : FieldsQueryBuilderBase<ReturnCreatePayload, ReturnCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnCreatePayload>, IHasArguments<ReturnCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReturnCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnCreateOperationQueryBuilder(IQuery<ReturnCreatePayload> query) : base(query)
         {
             Arguments = new ReturnCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnCreateOperationQueryBuilder SetArguments(Action<ReturnCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnCreateOperationQueryBuilder Return(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CollectionReorderProductsOperationQueryBuilder : FieldsQueryBuilderBase<CollectionReorderProductsPayload, CollectionReorderProductsOperationQueryBuilder>, IGraphOperationQueryBuilder<CollectionReorderProductsPayload>
+    public sealed class CollectionReorderProductsOperationQueryBuilder : FieldsQueryBuilderBase<CollectionReorderProductsPayload, CollectionReorderProductsOperationQueryBuilder>, IGraphOperationQueryBuilder<CollectionReorderProductsPayload>, IHasArguments<CollectionReorderProductsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CollectionReorderProductsArgumentsBuilder Arguments { get; }
@@ -34,6 +34,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new CollectionReorderProductsArgumentsBuilder(base.InnerQuery);
         }
 
+        public CollectionReorderProductsOperationQueryBuilder SetArguments(Action<CollectionReorderProductsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public CollectionReorderProductsOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)
         {
             var query = new Query<Job>("job");
@@ -43,12 +49,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public CollectionReorderProductsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionReorderProductsUserErrorQueryBuilder> build)
+        public CollectionReorderProductsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
-            var query = new Query<CollectionReorderProductsUserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionReorderProductsUserErrorQueryBuilder(query);
+            var query = new Query<UserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<CollectionReorderProductsUserError>(query);
+            base.InnerQuery.AddField<UserError>(query);
             return this;
         }
     }

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SellingPlanGroupCreateOperationQueryBuilder : FieldsQueryBuilderBase<SellingPlanGroupCreatePayload, SellingPlanGroupCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<SellingPlanGroupCreatePayload>
+    public sealed class SellingPlanGroupCreateOperationQueryBuilder : FieldsQueryBuilderBase<SellingPlanGroupCreatePayload, SellingPlanGroupCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<SellingPlanGroupCreatePayload>, IHasArguments<SellingPlanGroupCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SellingPlanGroupCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SellingPlanGroupCreateOperationQueryBuilder(IQuery<SellingPlanGroupCreatePayload> query) : base(query)
         {
             Arguments = new SellingPlanGroupCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SellingPlanGroupCreateOperationQueryBuilder SetArguments(Action<SellingPlanGroupCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SellingPlanGroupCreateOperationQueryBuilder SellingPlanGroup(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanGroupQueryBuilder> build)

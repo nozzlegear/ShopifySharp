@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ThemeFilesCopyOperationQueryBuilder : FieldsQueryBuilderBase<ThemeFilesCopyPayload, ThemeFilesCopyOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeFilesCopyPayload>
+    public sealed class ThemeFilesCopyOperationQueryBuilder : FieldsQueryBuilderBase<ThemeFilesCopyPayload, ThemeFilesCopyOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeFilesCopyPayload>, IHasArguments<ThemeFilesCopyArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ThemeFilesCopyArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ThemeFilesCopyOperationQueryBuilder(IQuery<ThemeFilesCopyPayload> query) : base(query)
         {
             Arguments = new ThemeFilesCopyArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ThemeFilesCopyOperationQueryBuilder SetArguments(Action<ThemeFilesCopyArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ThemeFilesCopyOperationQueryBuilder CopiedThemeFiles(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileOperationResultQueryBuilder> build)

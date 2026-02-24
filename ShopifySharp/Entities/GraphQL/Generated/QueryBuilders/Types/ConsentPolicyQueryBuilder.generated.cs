@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ConsentPolicyQueryBuilder : FieldsQueryBuilderBase<ConsentPolicy, ConsentPolicyQueryBuilder>
+    public sealed class ConsentPolicyQueryBuilder : FieldsQueryBuilderBase<ConsentPolicy, ConsentPolicyQueryBuilder>, IHasArguments<ConsentPolicyArgumentsBuilder>
     {
+        public ConsentPolicyArgumentsBuilder Arguments { get; }
         protected override ConsentPolicyQueryBuilder Self => this;
 
         public ConsentPolicyQueryBuilder() : this("consentPolicy")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ConsentPolicyQueryBuilder(string name) : base(new Query<ConsentPolicy>(name))
         {
+            Arguments = new ConsentPolicyArgumentsBuilder(base.InnerQuery);
         }
 
         public ConsentPolicyQueryBuilder(IQuery<ConsentPolicy> query) : base(query)
         {
+            Arguments = new ConsentPolicyArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ConsentPolicyQueryBuilder SetArguments(Action<ConsentPolicyArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ConsentPolicyQueryBuilder ConsentRequired()

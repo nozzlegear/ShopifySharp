@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class GiftCardQueryBuilder : FieldsQueryBuilderBase<GiftCard, GiftCardQueryBuilder>
+    public sealed class GiftCardQueryBuilder : FieldsQueryBuilderBase<GiftCard, GiftCardQueryBuilder>, IHasArguments<GiftCardArgumentsBuilder>
     {
+        public GiftCardArgumentsBuilder Arguments { get; }
         protected override GiftCardQueryBuilder Self => this;
 
         public GiftCardQueryBuilder() : this("giftCard")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public GiftCardQueryBuilder(string name) : base(new Query<GiftCard>(name))
         {
+            Arguments = new GiftCardArgumentsBuilder(base.InnerQuery);
         }
 
         public GiftCardQueryBuilder(IQuery<GiftCard> query) : base(query)
         {
+            Arguments = new GiftCardArgumentsBuilder(base.InnerQuery);
+        }
+
+        public GiftCardQueryBuilder SetArguments(Action<GiftCardArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public GiftCardQueryBuilder Balance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)

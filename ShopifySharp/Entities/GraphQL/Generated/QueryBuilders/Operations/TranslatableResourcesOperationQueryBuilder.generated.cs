@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class TranslatableResourcesOperationQueryBuilder : FieldsQueryBuilderBase<TranslatableResourceConnection, TranslatableResourcesOperationQueryBuilder>, IGraphOperationQueryBuilder<TranslatableResourceConnection>
+    public sealed class TranslatableResourcesOperationQueryBuilder : FieldsQueryBuilderBase<TranslatableResourceConnection, TranslatableResourcesOperationQueryBuilder>, IGraphOperationQueryBuilder<TranslatableResourceConnection>, IHasArguments<TranslatableResourcesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public TranslatableResourcesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public TranslatableResourcesOperationQueryBuilder(IQuery<TranslatableResourceConnection> query) : base(query)
         {
             Arguments = new TranslatableResourcesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TranslatableResourcesOperationQueryBuilder SetArguments(Action<TranslatableResourcesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TranslatableResourcesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslatableResourceEdgeQueryBuilder> build)

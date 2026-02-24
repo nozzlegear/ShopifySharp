@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MetaobjectFieldQueryBuilder : FieldsQueryBuilderBase<MetaobjectField, MetaobjectFieldQueryBuilder>
+    public sealed class MetaobjectFieldQueryBuilder : FieldsQueryBuilderBase<MetaobjectField, MetaobjectFieldQueryBuilder>, IHasArguments<MetaobjectFieldArgumentsBuilder>
     {
+        public MetaobjectFieldArgumentsBuilder Arguments { get; }
         protected override MetaobjectFieldQueryBuilder Self => this;
 
         public MetaobjectFieldQueryBuilder() : this("metaobjectField")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MetaobjectFieldQueryBuilder(string name) : base(new Query<MetaobjectField>(name))
         {
+            Arguments = new MetaobjectFieldArgumentsBuilder(base.InnerQuery);
         }
 
         public MetaobjectFieldQueryBuilder(IQuery<MetaobjectField> query) : base(query)
         {
+            Arguments = new MetaobjectFieldArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetaobjectFieldQueryBuilder SetArguments(Action<MetaobjectFieldArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetaobjectFieldQueryBuilder Definition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectFieldDefinitionQueryBuilder> build)

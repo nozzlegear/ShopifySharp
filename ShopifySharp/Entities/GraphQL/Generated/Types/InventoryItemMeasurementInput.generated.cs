@@ -14,12 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryItemMeasurementInput : GraphQLInputObject<InventoryItemMeasurementInput>
 {
     /// <summary>
-    /// Shipping package associated with inventory item.
-    /// </summary>
-    [JsonPropertyName("shippingPackageId")]
-    public string? shippingPackageId { get; set; } = null;
-
-    /// <summary>
     /// The weight of the inventory item.
     /// </summary>
     [JsonPropertyName("weight")]

@@ -52,13 +52,6 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     public DiscountCombinesWithInput? combinesWith { get; set; } = null;
 
     /// <summary>
-    /// The context defining which buyers can use the discount.
-    /// You can target specific customer IDs, customer segments, or make the discount available to all buyers.
-    /// </summary>
-    [JsonPropertyName("context")]
-    public DiscountContextInput? context { get; set; } = null;
-
-    /// <summary>
     /// Determines which discount effects the discount can apply.
     /// </summary>
     [JsonPropertyName("discountClasses")]
@@ -72,10 +65,11 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     public DateTimeOffset? endsAt { get; set; } = null;
 
     /// <summary>
-    /// The handle of the function providing the discount.
+    /// The [function ID](https://shopify.dev/docs/apps/build/functions/input-output/metafields-for-input-queries) associated with the app extension that's providing the [discount
+    /// type](https://help.shopify.com/manual/discounts/discount-types).
     /// </summary>
-    [JsonPropertyName("functionHandle")]
-    public string? functionHandle { get; set; } = null;
+    [JsonPropertyName("functionId")]
+    public string? functionId { get; set; } = null;
 
     /// <summary>
     /// Additional metafields to associate to the discount.

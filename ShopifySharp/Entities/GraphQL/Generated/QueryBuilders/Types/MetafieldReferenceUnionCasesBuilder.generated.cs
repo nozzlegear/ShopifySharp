@@ -26,15 +26,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnArticle(Action<ArticleQueryBuilder> build)
-        {
-            var query = new Query<Article>("... on Article");
-            var queryBuilder = new ArticleQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField(query);
-            return this;
-        }
-
         public MetafieldReferenceUnionCasesBuilder OnCollection(Action<CollectionQueryBuilder> build)
         {
             var query = new Query<Collection>("... on Collection");

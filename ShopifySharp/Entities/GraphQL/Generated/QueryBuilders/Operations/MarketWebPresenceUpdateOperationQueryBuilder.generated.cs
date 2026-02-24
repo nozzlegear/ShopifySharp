@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `webPresenceUpdate` instead.")]
-    public sealed class MarketWebPresenceUpdateOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceUpdatePayload, MarketWebPresenceUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceUpdatePayload>
+    public sealed class MarketWebPresenceUpdateOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceUpdatePayload, MarketWebPresenceUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceUpdatePayload>, IHasArguments<MarketWebPresenceUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketWebPresenceUpdateArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketWebPresenceUpdateOperationQueryBuilder(IQuery<MarketWebPresenceUpdatePayload> query) : base(query)
         {
             Arguments = new MarketWebPresenceUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketWebPresenceUpdateOperationQueryBuilder SetArguments(Action<MarketWebPresenceUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketWebPresenceUpdateOperationQueryBuilder Market(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketQueryBuilder> build)

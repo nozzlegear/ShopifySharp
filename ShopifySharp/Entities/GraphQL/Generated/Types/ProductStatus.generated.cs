@@ -16,5 +16,4 @@ public enum ProductStatus
     ACTIVE,
     ARCHIVED,
     DRAFT,
-    UNLISTED,
 }

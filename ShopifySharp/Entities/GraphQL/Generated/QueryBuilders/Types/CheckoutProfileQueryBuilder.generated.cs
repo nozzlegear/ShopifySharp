@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CheckoutProfileQueryBuilder : FieldsQueryBuilderBase<CheckoutProfile, CheckoutProfileQueryBuilder>
+    public sealed class CheckoutProfileQueryBuilder : FieldsQueryBuilderBase<CheckoutProfile, CheckoutProfileQueryBuilder>, IHasArguments<CheckoutProfileArgumentsBuilder>
     {
+        public CheckoutProfileArgumentsBuilder Arguments { get; }
         protected override CheckoutProfileQueryBuilder Self => this;
 
         public CheckoutProfileQueryBuilder() : this("checkoutProfile")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CheckoutProfileQueryBuilder(string name) : base(new Query<CheckoutProfile>(name))
         {
+            Arguments = new CheckoutProfileArgumentsBuilder(base.InnerQuery);
         }
 
         public CheckoutProfileQueryBuilder(IQuery<CheckoutProfile> query) : base(query)
         {
+            Arguments = new CheckoutProfileArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CheckoutProfileQueryBuilder SetArguments(Action<CheckoutProfileArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CheckoutProfileQueryBuilder CreatedAt()

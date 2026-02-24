@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class BulkProductResourceFeedbackCreateOperationQueryBuilder : FieldsQueryBuilderBase<BulkProductResourceFeedbackCreatePayload, BulkProductResourceFeedbackCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkProductResourceFeedbackCreatePayload>
+    public sealed class BulkProductResourceFeedbackCreateOperationQueryBuilder : FieldsQueryBuilderBase<BulkProductResourceFeedbackCreatePayload, BulkProductResourceFeedbackCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkProductResourceFeedbackCreatePayload>, IHasArguments<BulkProductResourceFeedbackCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public BulkProductResourceFeedbackCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public BulkProductResourceFeedbackCreateOperationQueryBuilder(IQuery<BulkProductResourceFeedbackCreatePayload> query) : base(query)
         {
             Arguments = new BulkProductResourceFeedbackCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BulkProductResourceFeedbackCreateOperationQueryBuilder SetArguments(Action<BulkProductResourceFeedbackCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BulkProductResourceFeedbackCreateOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductResourceFeedbackQueryBuilder> build)

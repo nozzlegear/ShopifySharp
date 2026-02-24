@@ -9,13 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A delivered order that's eligible to be returned to the merchant. Provides the
-/// items from completed fulfillments that customers can select when initiating a return.
-/// Use returnable fulfillments to determine which items are eligible for return
-/// before creating a
-/// [`Return`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Return) with the [`returnCreate`](https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnCreate)
-/// mutation. The line items show quantities that are available for return.
-/// Learn more about [building return management workflows](https://shopify.dev/docs/apps/build/orders-fulfillment/returns-apps/build-return-management).
+/// A returnable fulfillment, which is an order that has been delivered
+/// and is eligible to be returned to the merchant.
 /// </summary>
 public record ReturnableFulfillment : IGraphQLObject, INode
 {

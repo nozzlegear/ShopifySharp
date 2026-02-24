@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class TaxLineQueryBuilder : FieldsQueryBuilderBase<TaxLine, TaxLineQueryBuilder>
+    public sealed class TaxLineQueryBuilder : FieldsQueryBuilderBase<TaxLine, TaxLineQueryBuilder>, IHasArguments<TaxLineArgumentsBuilder>
     {
+        public TaxLineArgumentsBuilder Arguments { get; }
         protected override TaxLineQueryBuilder Self => this;
 
         public TaxLineQueryBuilder() : this("taxLine")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public TaxLineQueryBuilder(string name) : base(new Query<TaxLine>(name))
         {
+            Arguments = new TaxLineArgumentsBuilder(base.InnerQuery);
         }
 
         public TaxLineQueryBuilder(IQuery<TaxLine> query) : base(query)
         {
+            Arguments = new TaxLineArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TaxLineQueryBuilder SetArguments(Action<TaxLineArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TaxLineQueryBuilder ChannelLiable()

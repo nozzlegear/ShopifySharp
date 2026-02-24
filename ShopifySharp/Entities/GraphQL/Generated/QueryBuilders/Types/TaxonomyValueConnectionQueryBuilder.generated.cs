@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class TaxonomyValueConnectionQueryBuilder : FieldsQueryBuilderBase<TaxonomyValueConnection, TaxonomyValueConnectionQueryBuilder>
+    public sealed class TaxonomyValueConnectionQueryBuilder : FieldsQueryBuilderBase<TaxonomyValueConnection, TaxonomyValueConnectionQueryBuilder>, IHasArguments<TaxonomyValueConnectionArgumentsBuilder>
     {
+        public TaxonomyValueConnectionArgumentsBuilder Arguments { get; }
         protected override TaxonomyValueConnectionQueryBuilder Self => this;
 
         public TaxonomyValueConnectionQueryBuilder() : this("taxonomyValueConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public TaxonomyValueConnectionQueryBuilder(string name) : base(new Query<TaxonomyValueConnection>(name))
         {
+            Arguments = new TaxonomyValueConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public TaxonomyValueConnectionQueryBuilder(IQuery<TaxonomyValueConnection> query) : base(query)
         {
+            Arguments = new TaxonomyValueConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TaxonomyValueConnectionQueryBuilder SetArguments(Action<TaxonomyValueConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TaxonomyValueConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyValueEdgeQueryBuilder> build)

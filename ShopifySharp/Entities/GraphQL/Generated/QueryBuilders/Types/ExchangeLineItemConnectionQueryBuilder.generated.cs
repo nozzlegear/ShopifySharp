@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ExchangeLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<ExchangeLineItemConnection, ExchangeLineItemConnectionQueryBuilder>
+    public sealed class ExchangeLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<ExchangeLineItemConnection, ExchangeLineItemConnectionQueryBuilder>, IHasArguments<ExchangeLineItemConnectionArgumentsBuilder>
     {
+        public ExchangeLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override ExchangeLineItemConnectionQueryBuilder Self => this;
 
         public ExchangeLineItemConnectionQueryBuilder() : this("exchangeLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ExchangeLineItemConnectionQueryBuilder(string name) : base(new Query<ExchangeLineItemConnection>(name))
         {
+            Arguments = new ExchangeLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ExchangeLineItemConnectionQueryBuilder(IQuery<ExchangeLineItemConnection> query) : base(query)
         {
+            Arguments = new ExchangeLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ExchangeLineItemConnectionQueryBuilder SetArguments(Action<ExchangeLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ExchangeLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeLineItemEdgeQueryBuilder> build)

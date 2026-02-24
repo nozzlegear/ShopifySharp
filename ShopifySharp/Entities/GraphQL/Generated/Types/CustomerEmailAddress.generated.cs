@@ -9,12 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A customer's email address with marketing consent. This includes the email
-/// address, marketing subscription status, and opt-in level according to [M3AAWG best practices guidelines](https://www.m3aawg.org/news/updated-m3aawg-best-practices-for-senders-urge-opt-in-only-mailings-address-sender-transparency).
-/// It also provides the timestamp of when customers last updated marketing consent
-/// and URLs for unsubscribing from marketing emails or opting in or out of email
-/// open tracking. The [`sourceLocation`](https://shopify.dev/docs/api/admin-graphql/latest/objects/CustomerEmailAddress#field-CustomerEmailAddress.fields.sourceLocation)
-/// field indicates where the customer consented to receive marketing material.
+/// Represents an email address.
 /// </summary>
 public record CustomerEmailAddress : IGraphQLObject
 {

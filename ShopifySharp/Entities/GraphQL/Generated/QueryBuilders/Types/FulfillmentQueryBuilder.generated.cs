@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FulfillmentQueryBuilder : FieldsQueryBuilderBase<Fulfillment, FulfillmentQueryBuilder>
+    public sealed class FulfillmentQueryBuilder : FieldsQueryBuilderBase<Fulfillment, FulfillmentQueryBuilder>, IHasArguments<FulfillmentArgumentsBuilder>
     {
+        public FulfillmentArgumentsBuilder Arguments { get; }
         protected override FulfillmentQueryBuilder Self => this;
 
         public FulfillmentQueryBuilder() : this("fulfillment")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FulfillmentQueryBuilder(string name) : base(new Query<Fulfillment>(name))
         {
+            Arguments = new FulfillmentArgumentsBuilder(base.InnerQuery);
         }
 
         public FulfillmentQueryBuilder(IQuery<Fulfillment> query) : base(query)
         {
+            Arguments = new FulfillmentArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentQueryBuilder SetArguments(Action<FulfillmentArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentQueryBuilder CreatedAt()

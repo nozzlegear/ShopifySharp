@@ -9,24 +9,19 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Information about a customer of the shop, such as the customer's contact
-/// details, purchase history, and marketing preferences.
-/// Tracks the customer's total spending through the [`amountSpent`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Customer#field-amountSpent)
-/// field and provides access to associated data such as payment methods and
-/// subscription contracts.
-/// > Caution:
-/// > Only use this data if it's required for your app's functionality. Shopify will
-/// restrict [access to scopes](https://shopify.dev/api/usage/access-scopes) for
-/// apps that don't have a legitimate use for the associated data.
+/// Represents information about a customer of the shop, such as the customer's contact details, their order
+/// history, and whether they've agreed to receive marketing material by email.
+/// **Caution:** Only use this data if it's required for your app's functionality.
+/// Shopify will restrict [access to
+/// scopes](https://shopify.dev/api/usage/access-scopes) for apps that don't have a
+/// legitimate use for the associated data.
 /// </summary>
 public record Customer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasStoreCreditAccounts, ILegacyInteroperability, INode
 {
     /// <summary>
-    /// A list of addresses associated with the customer. Limited to 250 addresses.
-    /// Use `addressesV2` for paginated access to all addresses.
+    /// A list of addresses associated with the customer.
     /// </summary>
     [JsonPropertyName("addresses")]
-    [Obsolete("Limited to 250 addresses. Use `addressesV2` for paginated access to all addresses.")]
     public ICollection<MailingAddress>? addresses { get; set; } = null;
 
     /// <summary>

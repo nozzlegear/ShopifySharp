@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PointOfSaleDeviceOperationQueryBuilder : FieldsQueryBuilderBase<PointOfSaleDevice, PointOfSaleDeviceOperationQueryBuilder>, IGraphOperationQueryBuilder<PointOfSaleDevice>
+    public sealed class PointOfSaleDeviceOperationQueryBuilder : FieldsQueryBuilderBase<PointOfSaleDevice, PointOfSaleDeviceOperationQueryBuilder>, IGraphOperationQueryBuilder<PointOfSaleDevice>, IHasArguments<PointOfSaleDeviceArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public PointOfSaleDeviceArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PointOfSaleDeviceOperationQueryBuilder(IQuery<PointOfSaleDevice> query) : base(query)
         {
             Arguments = new PointOfSaleDeviceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PointOfSaleDeviceOperationQueryBuilder SetArguments(Action<PointOfSaleDeviceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PointOfSaleDeviceOperationQueryBuilder Id()

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeletionEventConnectionQueryBuilder : FieldsQueryBuilderBase<DeletionEventConnection, DeletionEventConnectionQueryBuilder>
+    public sealed class DeletionEventConnectionQueryBuilder : FieldsQueryBuilderBase<DeletionEventConnection, DeletionEventConnectionQueryBuilder>, IHasArguments<DeletionEventConnectionArgumentsBuilder>
     {
+        public DeletionEventConnectionArgumentsBuilder Arguments { get; }
         protected override DeletionEventConnectionQueryBuilder Self => this;
 
         public DeletionEventConnectionQueryBuilder() : this("deletionEventConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeletionEventConnectionQueryBuilder(string name) : base(new Query<DeletionEventConnection>(name))
         {
+            Arguments = new DeletionEventConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DeletionEventConnectionQueryBuilder(IQuery<DeletionEventConnection> query) : base(query)
         {
+            Arguments = new DeletionEventConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeletionEventConnectionQueryBuilder SetArguments(Action<DeletionEventConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeletionEventConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeletionEventEdgeQueryBuilder> build)

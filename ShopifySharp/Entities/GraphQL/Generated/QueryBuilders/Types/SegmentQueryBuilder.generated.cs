@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SegmentQueryBuilder : FieldsQueryBuilderBase<Segment, SegmentQueryBuilder>
+    public sealed class SegmentQueryBuilder : FieldsQueryBuilderBase<Segment, SegmentQueryBuilder>, IHasArguments<SegmentArgumentsBuilder>
     {
+        public SegmentArgumentsBuilder Arguments { get; }
         protected override SegmentQueryBuilder Self => this;
 
         public SegmentQueryBuilder() : this("segment")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SegmentQueryBuilder(string name) : base(new Query<Segment>(name))
         {
+            Arguments = new SegmentArgumentsBuilder(base.InnerQuery);
         }
 
         public SegmentQueryBuilder(IQuery<Segment> query) : base(query)
         {
+            Arguments = new SegmentArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SegmentQueryBuilder SetArguments(Action<SegmentArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SegmentQueryBuilder CreationDate()

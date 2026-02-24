@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DeliveryPromiseProviderUpsertOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseProviderUpsertPayload, DeliveryPromiseProviderUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryPromiseProviderUpsertPayload>
+    public sealed class DeliveryPromiseProviderUpsertOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseProviderUpsertPayload, DeliveryPromiseProviderUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryPromiseProviderUpsertPayload>, IHasArguments<DeliveryPromiseProviderUpsertArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DeliveryPromiseProviderUpsertArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DeliveryPromiseProviderUpsertOperationQueryBuilder(IQuery<DeliveryPromiseProviderUpsertPayload> query) : base(query)
         {
             Arguments = new DeliveryPromiseProviderUpsertArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryPromiseProviderUpsertOperationQueryBuilder SetArguments(Action<DeliveryPromiseProviderUpsertArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryPromiseProviderUpsertOperationQueryBuilder DeliveryPromiseProvider(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryPromiseProviderQueryBuilder> build)

@@ -14,12 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MetaobjectFieldDefinitionUpdateInput : GraphQLInputObject<MetaobjectFieldDefinitionUpdateInput>
 {
     /// <summary>
-    /// Capabilities configuration for this field.
-    /// </summary>
-    [JsonPropertyName("capabilities")]
-    public MetaobjectFieldDefinitionCapabilityCreateInput? capabilities { get; set; } = null;
-
-    /// <summary>
     /// An administrative description of the field.
     /// </summary>
     [JsonPropertyName("description")]

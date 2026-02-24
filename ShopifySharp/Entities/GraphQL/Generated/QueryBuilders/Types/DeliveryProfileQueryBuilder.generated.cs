@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryProfileQueryBuilder : FieldsQueryBuilderBase<DeliveryProfile, DeliveryProfileQueryBuilder>
+    public sealed class DeliveryProfileQueryBuilder : FieldsQueryBuilderBase<DeliveryProfile, DeliveryProfileQueryBuilder>, IHasArguments<DeliveryProfileArgumentsBuilder>
     {
+        public DeliveryProfileArgumentsBuilder Arguments { get; }
         protected override DeliveryProfileQueryBuilder Self => this;
 
         public DeliveryProfileQueryBuilder() : this("deliveryProfile")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryProfileQueryBuilder(string name) : base(new Query<DeliveryProfile>(name))
         {
+            Arguments = new DeliveryProfileArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryProfileQueryBuilder(IQuery<DeliveryProfile> query) : base(query)
         {
+            Arguments = new DeliveryProfileArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryProfileQueryBuilder SetArguments(Action<DeliveryProfileArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryProfileQueryBuilder ActiveMethodDefinitionsCount()
@@ -48,7 +57,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
         public DeliveryProfileQueryBuilder LegacyMode()
         {
             base.InnerQuery.AddField("legacyMode");
@@ -133,12 +141,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LocationConnection>(query);
-            return this;
-        }
-
-        public DeliveryProfileQueryBuilder Version()
-        {
-            base.InnerQuery.AddField("version");
             return this;
         }
 

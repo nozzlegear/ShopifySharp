@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ReverseDeliveryConnectionQueryBuilder : FieldsQueryBuilderBase<ReverseDeliveryConnection, ReverseDeliveryConnectionQueryBuilder>
+    public sealed class ReverseDeliveryConnectionQueryBuilder : FieldsQueryBuilderBase<ReverseDeliveryConnection, ReverseDeliveryConnectionQueryBuilder>, IHasArguments<ReverseDeliveryConnectionArgumentsBuilder>
     {
+        public ReverseDeliveryConnectionArgumentsBuilder Arguments { get; }
         protected override ReverseDeliveryConnectionQueryBuilder Self => this;
 
         public ReverseDeliveryConnectionQueryBuilder() : this("reverseDeliveryConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ReverseDeliveryConnectionQueryBuilder(string name) : base(new Query<ReverseDeliveryConnection>(name))
         {
+            Arguments = new ReverseDeliveryConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ReverseDeliveryConnectionQueryBuilder(IQuery<ReverseDeliveryConnection> query) : base(query)
         {
+            Arguments = new ReverseDeliveryConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReverseDeliveryConnectionQueryBuilder SetArguments(Action<ReverseDeliveryConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReverseDeliveryConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PaymentReminderSendOperationQueryBuilder : FieldsQueryBuilderBase<PaymentReminderSendPayload, PaymentReminderSendOperationQueryBuilder>, IGraphOperationQueryBuilder<PaymentReminderSendPayload>
+    public sealed class PaymentReminderSendOperationQueryBuilder : FieldsQueryBuilderBase<PaymentReminderSendPayload, PaymentReminderSendOperationQueryBuilder>, IGraphOperationQueryBuilder<PaymentReminderSendPayload>, IHasArguments<PaymentReminderSendArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PaymentReminderSendArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PaymentReminderSendOperationQueryBuilder(IQuery<PaymentReminderSendPayload> query) : base(query)
         {
             Arguments = new PaymentReminderSendArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PaymentReminderSendOperationQueryBuilder SetArguments(Action<PaymentReminderSendArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PaymentReminderSendOperationQueryBuilder Success()

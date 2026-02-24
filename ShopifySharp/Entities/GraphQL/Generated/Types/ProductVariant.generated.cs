@@ -100,7 +100,6 @@ public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IH
     /// The featured image for the variant.
     /// </summary>
     [JsonPropertyName("image")]
-    [Obsolete("Use `media` instead.")]
     public Image? image { get; set; } = null;
 
     /// <summary>

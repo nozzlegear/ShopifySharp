@@ -1,0 +1,43 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class OnlineStoreThemeFileConnectionArgumentsBuilder : ArgumentsBuilderBase<OnlineStoreThemeFileConnection, OnlineStoreThemeFileConnectionArgumentsBuilder>
+    {
+        protected override OnlineStoreThemeFileConnectionArgumentsBuilder Self => this;
+
+        public OnlineStoreThemeFileConnectionArgumentsBuilder(IQuery<OnlineStoreThemeFileConnection> query) : base(query)
+        {
+        }
+
+        public OnlineStoreThemeFileConnectionArgumentsBuilder After(string? after)
+        {
+            base.InnerQuery.AddArgument("after", after);
+            return this;
+        }
+
+        public OnlineStoreThemeFileConnectionArgumentsBuilder Filenames(ICollection<string>? filenames)
+        {
+            base.InnerQuery.AddArgument("filenames", filenames);
+            return this;
+        }
+
+        public OnlineStoreThemeFileConnectionArgumentsBuilder First(int? first)
+        {
+            base.InnerQuery.AddArgument("first", first);
+            return this;
+        }
+    }
+}

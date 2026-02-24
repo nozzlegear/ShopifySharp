@@ -9,16 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A refund amount that Shopify suggests based on the items, duties, and shipping
-/// costs that customers return. Provides a breakdown of all monetary values
-/// including subtotals, taxes, discounts, and the maximum refundable amount.
-/// The suggested refund includes [`RefundLineItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/RefundLineItem)
-/// objects to refund with their quantities and restock instructions, [`RefundDuty`](https://shopify.dev/docs/api/admin-graphql/latest/objects/RefundDuty)
-/// objects for duty reimbursements, and [`ShippingRefund`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShippingRefund)
-/// for shipping cost refunds. Provides [`SuggestedOrderTransaction`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SuggestedOrderTransaction)
-/// objects and the [`SuggestedRefundMethod`](https://shopify.dev/docs/api/admin-graphql/latest/interfaces/SuggestedRefundMethod)
-/// interface to process the refund through the appropriate gateways.
-/// Learn more about [previewing and refunding duties](https://shopify.dev/docs/apps/build/orders-fulfillment/returns-apps/view-and-refund-duties#step-3-preview-a-refund-that-includes-duties).
+/// Represents a refund suggested by Shopify based on the items being reimbursed.
+/// You can then use the suggested refund object to generate an actual refund.
 /// </summary>
 public record SuggestedRefund : IGraphQLObject
 {

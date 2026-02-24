@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class RestrictedForResourceQueryBuilder : FieldsQueryBuilderBase<RestrictedForResource, RestrictedForResourceQueryBuilder>
+    public sealed class RestrictedForResourceQueryBuilder : FieldsQueryBuilderBase<RestrictedForResource, RestrictedForResourceQueryBuilder>, IHasArguments<RestrictedForResourceArgumentsBuilder>
     {
+        public RestrictedForResourceArgumentsBuilder Arguments { get; }
         protected override RestrictedForResourceQueryBuilder Self => this;
 
         public RestrictedForResourceQueryBuilder() : this("restrictedForResource")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public RestrictedForResourceQueryBuilder(string name) : base(new Query<RestrictedForResource>(name))
         {
+            Arguments = new RestrictedForResourceArgumentsBuilder(base.InnerQuery);
         }
 
         public RestrictedForResourceQueryBuilder(IQuery<RestrictedForResource> query) : base(query)
         {
+            Arguments = new RestrictedForResourceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public RestrictedForResourceQueryBuilder SetArguments(Action<RestrictedForResourceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public RestrictedForResourceQueryBuilder Restricted()

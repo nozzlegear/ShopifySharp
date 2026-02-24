@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentTrackingInfoUpdateOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentTrackingInfoUpdatePayload, FulfillmentTrackingInfoUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentTrackingInfoUpdatePayload>
+    public sealed class FulfillmentTrackingInfoUpdateOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentTrackingInfoUpdatePayload, FulfillmentTrackingInfoUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentTrackingInfoUpdatePayload>, IHasArguments<FulfillmentTrackingInfoUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentTrackingInfoUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentTrackingInfoUpdateOperationQueryBuilder(IQuery<FulfillmentTrackingInfoUpdatePayload> query) : base(query)
         {
             Arguments = new FulfillmentTrackingInfoUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentTrackingInfoUpdateOperationQueryBuilder SetArguments(Action<FulfillmentTrackingInfoUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentTrackingInfoUpdateOperationQueryBuilder Fulfillment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentQueryBuilder> build)

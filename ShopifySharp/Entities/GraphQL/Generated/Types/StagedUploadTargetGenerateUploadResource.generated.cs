@@ -17,12 +17,10 @@ public enum StagedUploadTargetGenerateUploadResource
     FILE,
     IMAGE,
     MODEL_3D,
-    [Obsolete("Use IMAGE instead. This resource type will be removed in a future version.")]
     PRODUCT_IMAGE,
     SHOP_IMAGE,
     VIDEO,
     BULK_MUTATION_VARIABLES,
     RETURN_LABEL,
     URL_REDIRECT_IMPORT,
-    DISPUTE_FILE_UPLOAD,
 }

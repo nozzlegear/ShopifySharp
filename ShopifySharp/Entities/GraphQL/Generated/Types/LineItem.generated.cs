@@ -263,14 +263,6 @@ public record LineItem : IGraphQLObject, INode
     public StaffMember? staffMember { get; set; } = null;
 
     /// <summary>
-    /// Return reasons suggested based on the line item's product category in
-    /// Shopify's product taxonomy. Use [`returnReasonDefinitions`](https://shopify.dev/docs/api/admin-graphql/latest/queries/returnReasonDefinitions)
-    /// to access the full library of available reasons.
-    /// </summary>
-    [JsonPropertyName("suggestedReturnReasonDefinitions")]
-    public ReturnReasonDefinitionConnection? suggestedReturnReasonDefinitions { get; set; } = null;
-
-    /// <summary>
     /// Whether the variant is taxable.
     /// </summary>
     [JsonPropertyName("taxable")]

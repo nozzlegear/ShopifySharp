@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OrderQueryBuilder : FieldsQueryBuilderBase<Order, OrderQueryBuilder>
+    public sealed class OrderQueryBuilder : FieldsQueryBuilderBase<Order, OrderQueryBuilder>, IHasArguments<OrderArgumentsBuilder>
     {
+        public OrderArgumentsBuilder Arguments { get; }
         protected override OrderQueryBuilder Self => this;
 
         public OrderQueryBuilder() : this("order")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OrderQueryBuilder(string name) : base(new Query<Order>(name))
         {
+            Arguments = new OrderArgumentsBuilder(base.InnerQuery);
         }
 
         public OrderQueryBuilder(IQuery<Order> query) : base(query)
         {
+            Arguments = new OrderArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderQueryBuilder SetArguments(Action<OrderArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderQueryBuilder AdditionalFees(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AdditionalFeeQueryBuilder> build)
@@ -709,12 +718,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public OrderQueryBuilder ProcessedAt()
         {
             base.InnerQuery.AddField("processedAt");
-            return this;
-        }
-
-        public OrderQueryBuilder ProductNetwork()
-        {
-            base.InnerQuery.AddField("productNetwork");
             return this;
         }
 

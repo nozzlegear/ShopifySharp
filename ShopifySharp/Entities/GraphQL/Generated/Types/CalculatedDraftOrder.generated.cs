@@ -9,13 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Calculated pricing, taxes, and discounts for a [`DraftOrder`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DraftOrder).
-/// Includes the complete financial breakdown with line items, discounts, shipping
-/// costs, tax calculations, and totals in both shop and presentment currencies.
-/// Available [`ShippingRate`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShippingRate) options are included when a valid shipping address and line items are present.
-/// > Note:
-/// > Returns alerts and warnings when issues occur during calculation, such as
-/// insufficient inventory or incompatible discounts.
+/// The calculated fields for a draft order.
 /// </summary>
 public record CalculatedDraftOrder : IGraphQLObject
 {
@@ -90,7 +84,7 @@ public record CalculatedDraftOrder : IGraphQLObject
 
     /// <summary>
     /// A subtotal of the line items and corresponding discounts,
-    /// excluding shipping charges, shipping discounts, taxes, or order discounts.
+    /// excluding include shipping charges, shipping discounts, taxes, or order discounts.
     /// </summary>
     [JsonPropertyName("lineItemsSubtotalPrice")]
     public MoneyBag? lineItemsSubtotalPrice { get; set; } = null;
@@ -172,7 +166,7 @@ public record CalculatedDraftOrder : IGraphQLObject
     public MoneyBag? totalDiscountsSet { get; set; } = null;
 
     /// <summary>
-    /// Total price of line items, excluding discounts.
+    /// Total price of line items.
     /// </summary>
     [JsonPropertyName("totalLineItemsPriceSet")]
     public MoneyBag? totalLineItemsPriceSet { get; set; } = null;

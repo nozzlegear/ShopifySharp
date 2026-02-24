@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class BulkOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperation, BulkOperationQueryBuilder>
+    public sealed class BulkOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperation, BulkOperationQueryBuilder>, IHasArguments<BulkOperationArgumentsBuilder>
     {
+        public BulkOperationArgumentsBuilder Arguments { get; }
         protected override BulkOperationQueryBuilder Self => this;
 
         public BulkOperationQueryBuilder() : this("bulkOperation")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public BulkOperationQueryBuilder(string name) : base(new Query<BulkOperation>(name))
         {
+            Arguments = new BulkOperationArgumentsBuilder(base.InnerQuery);
         }
 
         public BulkOperationQueryBuilder(IQuery<BulkOperation> query) : base(query)
         {
+            Arguments = new BulkOperationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BulkOperationQueryBuilder SetArguments(Action<BulkOperationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BulkOperationQueryBuilder CompletedAt()

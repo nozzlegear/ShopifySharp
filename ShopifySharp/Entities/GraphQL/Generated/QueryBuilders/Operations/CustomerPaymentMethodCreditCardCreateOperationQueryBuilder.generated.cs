@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodCreditCardCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodCreditCardCreatePayload, CustomerPaymentMethodCreditCardCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodCreditCardCreatePayload>
+    public sealed class CustomerPaymentMethodCreditCardCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodCreditCardCreatePayload, CustomerPaymentMethodCreditCardCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodCreditCardCreatePayload>, IHasArguments<CustomerPaymentMethodCreditCardCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodCreditCardCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodCreditCardCreateOperationQueryBuilder(IQuery<CustomerPaymentMethodCreditCardCreatePayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodCreditCardCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodCreditCardCreateOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodCreditCardCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodCreditCardCreateOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)

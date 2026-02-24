@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class GiftCardSendNotificationToRecipientOperationQueryBuilder : FieldsQueryBuilderBase<GiftCardSendNotificationToRecipientPayload, GiftCardSendNotificationToRecipientOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCardSendNotificationToRecipientPayload>
+    public sealed class GiftCardSendNotificationToRecipientOperationQueryBuilder : FieldsQueryBuilderBase<GiftCardSendNotificationToRecipientPayload, GiftCardSendNotificationToRecipientOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCardSendNotificationToRecipientPayload>, IHasArguments<GiftCardSendNotificationToRecipientArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public GiftCardSendNotificationToRecipientArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public GiftCardSendNotificationToRecipientOperationQueryBuilder(IQuery<GiftCardSendNotificationToRecipientPayload> query) : base(query)
         {
             Arguments = new GiftCardSendNotificationToRecipientArgumentsBuilder(base.InnerQuery);
+        }
+
+        public GiftCardSendNotificationToRecipientOperationQueryBuilder SetArguments(Action<GiftCardSendNotificationToRecipientArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public GiftCardSendNotificationToRecipientOperationQueryBuilder GiftCard(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardQueryBuilder> build)

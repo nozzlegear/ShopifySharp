@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class StagedUploadsCreateOperationQueryBuilder : FieldsQueryBuilderBase<StagedUploadsCreatePayload, StagedUploadsCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<StagedUploadsCreatePayload>
+    public sealed class StagedUploadsCreateOperationQueryBuilder : FieldsQueryBuilderBase<StagedUploadsCreatePayload, StagedUploadsCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<StagedUploadsCreatePayload>, IHasArguments<StagedUploadsCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public StagedUploadsCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public StagedUploadsCreateOperationQueryBuilder(IQuery<StagedUploadsCreatePayload> query) : base(query)
         {
             Arguments = new StagedUploadsCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StagedUploadsCreateOperationQueryBuilder SetArguments(Action<StagedUploadsCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StagedUploadsCreateOperationQueryBuilder StagedTargets(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StagedMediaUploadTargetQueryBuilder> build)

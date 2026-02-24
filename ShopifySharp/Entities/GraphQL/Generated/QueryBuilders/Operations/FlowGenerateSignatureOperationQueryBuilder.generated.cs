@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FlowGenerateSignatureOperationQueryBuilder : FieldsQueryBuilderBase<FlowGenerateSignaturePayload, FlowGenerateSignatureOperationQueryBuilder>, IGraphOperationQueryBuilder<FlowGenerateSignaturePayload>
+    public sealed class FlowGenerateSignatureOperationQueryBuilder : FieldsQueryBuilderBase<FlowGenerateSignaturePayload, FlowGenerateSignatureOperationQueryBuilder>, IGraphOperationQueryBuilder<FlowGenerateSignaturePayload>, IHasArguments<FlowGenerateSignatureArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FlowGenerateSignatureArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FlowGenerateSignatureOperationQueryBuilder(IQuery<FlowGenerateSignaturePayload> query) : base(query)
         {
             Arguments = new FlowGenerateSignatureArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FlowGenerateSignatureOperationQueryBuilder SetArguments(Action<FlowGenerateSignatureArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FlowGenerateSignatureOperationQueryBuilder Payload()

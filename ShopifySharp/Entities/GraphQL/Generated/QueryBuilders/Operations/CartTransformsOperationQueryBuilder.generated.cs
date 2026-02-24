@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CartTransformsOperationQueryBuilder : FieldsQueryBuilderBase<CartTransformConnection, CartTransformsOperationQueryBuilder>, IGraphOperationQueryBuilder<CartTransformConnection>
+    public sealed class CartTransformsOperationQueryBuilder : FieldsQueryBuilderBase<CartTransformConnection, CartTransformsOperationQueryBuilder>, IGraphOperationQueryBuilder<CartTransformConnection>, IHasArguments<CartTransformsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CartTransformsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CartTransformsOperationQueryBuilder(IQuery<CartTransformConnection> query) : base(query)
         {
             Arguments = new CartTransformsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CartTransformsOperationQueryBuilder SetArguments(Action<CartTransformsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CartTransformsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformEdgeQueryBuilder> build)

@@ -12,10 +12,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// The input fields for creating or updating an
 /// [amount off discount](https://help.shopify.com/manual/discounts/discount-types/percentage-fixed-amount)
 /// that's automatically applied on a cart and at checkout.
-/// During creation the required fields are:
-///   - `customerGets`
-///   - `startsAt`
-///   - `title`
 /// </summary>
 public record DiscountAutomaticBasicInput : GraphQLInputObject<DiscountAutomaticBasicInput>
 {
@@ -27,14 +23,6 @@ public record DiscountAutomaticBasicInput : GraphQLInputObject<DiscountAutomatic
     /// </summary>
     [JsonPropertyName("combinesWith")]
     public DiscountCombinesWithInput? combinesWith { get; set; } = null;
-
-    /// <summary>
-    /// The context defining which buyers can use the discount.
-    /// You can target specific customer IDs, customer segments, or make the discount available to all buyers.
-    /// Discounts automatically apply on Point of Sale (POS) for Pro locations when the context is not set to ALL.
-    /// </summary>
-    [JsonPropertyName("context")]
-    public DiscountContextInput? context { get; set; } = null;
 
     /// <summary>
     /// Information about the qualifying items and their discount.

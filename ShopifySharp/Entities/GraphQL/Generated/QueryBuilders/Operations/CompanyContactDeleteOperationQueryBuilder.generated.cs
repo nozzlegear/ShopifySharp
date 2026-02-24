@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyContactDeleteOperationQueryBuilder : FieldsQueryBuilderBase<CompanyContactDeletePayload, CompanyContactDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyContactDeletePayload>
+    public sealed class CompanyContactDeleteOperationQueryBuilder : FieldsQueryBuilderBase<CompanyContactDeletePayload, CompanyContactDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyContactDeletePayload>, IHasArguments<CompanyContactDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyContactDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyContactDeleteOperationQueryBuilder(IQuery<CompanyContactDeletePayload> query) : base(query)
         {
             Arguments = new CompanyContactDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyContactDeleteOperationQueryBuilder SetArguments(Action<CompanyContactDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyContactDeleteOperationQueryBuilder DeletedCompanyContactId()

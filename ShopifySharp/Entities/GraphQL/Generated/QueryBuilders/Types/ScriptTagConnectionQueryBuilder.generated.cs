@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ScriptTagConnectionQueryBuilder : FieldsQueryBuilderBase<ScriptTagConnection, ScriptTagConnectionQueryBuilder>
+    public sealed class ScriptTagConnectionQueryBuilder : FieldsQueryBuilderBase<ScriptTagConnection, ScriptTagConnectionQueryBuilder>, IHasArguments<ScriptTagConnectionArgumentsBuilder>
     {
+        public ScriptTagConnectionArgumentsBuilder Arguments { get; }
         protected override ScriptTagConnectionQueryBuilder Self => this;
 
         public ScriptTagConnectionQueryBuilder() : this("scriptTagConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ScriptTagConnectionQueryBuilder(string name) : base(new Query<ScriptTagConnection>(name))
         {
+            Arguments = new ScriptTagConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ScriptTagConnectionQueryBuilder(IQuery<ScriptTagConnection> query) : base(query)
         {
+            Arguments = new ScriptTagConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ScriptTagConnectionQueryBuilder SetArguments(Action<ScriptTagConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ScriptTagConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ScriptTagEdgeQueryBuilder> build)

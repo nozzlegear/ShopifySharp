@@ -135,14 +135,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("updatedAt");
             return this;
         }
-
-        public DiscountAutomaticAppQueryBuilder Context(Action<DiscountContextUnionCasesBuilder> build)
-        {
-            var query = new Query<DiscountContext>("context");
-            var unionBuilder = new DiscountContextUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

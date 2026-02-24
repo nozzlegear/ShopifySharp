@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SellingPlanGroupRemoveProductVariantsOperationQueryBuilder : FieldsQueryBuilderBase<SellingPlanGroupRemoveProductVariantsPayload, SellingPlanGroupRemoveProductVariantsOperationQueryBuilder>, IGraphOperationQueryBuilder<SellingPlanGroupRemoveProductVariantsPayload>
+    public sealed class SellingPlanGroupRemoveProductVariantsOperationQueryBuilder : FieldsQueryBuilderBase<SellingPlanGroupRemoveProductVariantsPayload, SellingPlanGroupRemoveProductVariantsOperationQueryBuilder>, IGraphOperationQueryBuilder<SellingPlanGroupRemoveProductVariantsPayload>, IHasArguments<SellingPlanGroupRemoveProductVariantsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SellingPlanGroupRemoveProductVariantsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SellingPlanGroupRemoveProductVariantsOperationQueryBuilder(IQuery<SellingPlanGroupRemoveProductVariantsPayload> query) : base(query)
         {
             Arguments = new SellingPlanGroupRemoveProductVariantsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SellingPlanGroupRemoveProductVariantsOperationQueryBuilder SetArguments(Action<SellingPlanGroupRemoveProductVariantsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SellingPlanGroupRemoveProductVariantsOperationQueryBuilder RemovedProductVariantIds()

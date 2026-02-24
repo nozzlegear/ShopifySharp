@@ -9,14 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The central configuration and settings hub for a Shopify store. Access business
-/// information, operational preferences, feature availability, and store-wide
-/// settings that control how the shop operates.
-/// Includes core business details like the shop name, contact emails, billing
-/// address, and currency settings. The shop configuration determines customer
-/// account requirements, available sales channels, enabled features, payment
-/// settings, and policy documents. Also provides access to shop-level resources
-/// such as staff members, fulfillment services, navigation settings, and storefront access tokens.
+/// Represents a collection of general settings and information about the shop.
 /// </summary>
 public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode
 {
@@ -84,7 +77,6 @@ public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions
     /// The shop's billing address information.
     /// </summary>
     [JsonPropertyName("billingAddress")]
-    [Obsolete("Use `shopAddress` instead.")]
     public ShopAddress? billingAddress { get; set; } = null;
 
     /// <summary>
@@ -187,6 +179,13 @@ public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions
     [JsonPropertyName("domains")]
     [Obsolete("Use `domainsPaginated` instead.")]
     public ICollection<Domain>? domains { get; set; } = null;
+
+    /// <summary>
+    /// List of saved draft orders on the shop.
+    /// </summary>
+    [JsonPropertyName("draftOrders")]
+    [Obsolete("Use `QueryRoot.draftOrders` instead.")]
+    public DraftOrderConnection? draftOrders { get; set; } = null;
 
     /// <summary>
     /// A list of tags that have been added to draft orders.
@@ -446,12 +445,6 @@ public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions
     /// </summary>
     [JsonPropertyName("shipsToCountries")]
     public ICollection<CountryCode>? shipsToCountries { get; set; } = null;
-
-    /// <summary>
-    /// The shop's address information as it will appear to buyers.
-    /// </summary>
-    [JsonPropertyName("shopAddress")]
-    public ShopAddress? shopAddress { get; set; } = null;
 
     /// <summary>
     /// The name of the shop owner.

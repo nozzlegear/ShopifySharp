@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MetafieldConnectionQueryBuilder : FieldsQueryBuilderBase<MetafieldConnection, MetafieldConnectionQueryBuilder>
+    public sealed class MetafieldConnectionQueryBuilder : FieldsQueryBuilderBase<MetafieldConnection, MetafieldConnectionQueryBuilder>, IHasArguments<MetafieldConnectionArgumentsBuilder>
     {
+        public MetafieldConnectionArgumentsBuilder Arguments { get; }
         protected override MetafieldConnectionQueryBuilder Self => this;
 
         public MetafieldConnectionQueryBuilder() : this("metafieldConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MetafieldConnectionQueryBuilder(string name) : base(new Query<MetafieldConnection>(name))
         {
+            Arguments = new MetafieldConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MetafieldConnectionQueryBuilder(IQuery<MetafieldConnection> query) : base(query)
         {
+            Arguments = new MetafieldConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetafieldConnectionQueryBuilder SetArguments(Action<MetafieldConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetafieldConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldEdgeQueryBuilder> build)

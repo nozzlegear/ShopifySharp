@@ -15,5 +15,4 @@ public enum ProductVariantsBulkCreateStrategy
 {
     DEFAULT,
     REMOVE_STANDALONE_VARIANT,
-    PRESERVE_STANDALONE_VARIANT,
 }

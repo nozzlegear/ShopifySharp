@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MarketLocalizableResourceOperationQueryBuilder : FieldsQueryBuilderBase<MarketLocalizableResource, MarketLocalizableResourceOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketLocalizableResource>
+    public sealed class MarketLocalizableResourceOperationQueryBuilder : FieldsQueryBuilderBase<MarketLocalizableResource, MarketLocalizableResourceOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketLocalizableResource>, IHasArguments<MarketLocalizableResourceArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public MarketLocalizableResourceArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketLocalizableResourceOperationQueryBuilder(IQuery<MarketLocalizableResource> query) : base(query)
         {
             Arguments = new MarketLocalizableResourceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketLocalizableResourceOperationQueryBuilder SetArguments(Action<MarketLocalizableResourceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketLocalizableResourceOperationQueryBuilder MarketLocalizableContent(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketLocalizableContentQueryBuilder> build)

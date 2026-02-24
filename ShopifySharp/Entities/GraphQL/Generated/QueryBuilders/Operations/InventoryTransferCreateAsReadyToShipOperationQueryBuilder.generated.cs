@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryTransferCreateAsReadyToShipOperationQueryBuilder : FieldsQueryBuilderBase<InventoryTransferCreateAsReadyToShipPayload, InventoryTransferCreateAsReadyToShipOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryTransferCreateAsReadyToShipPayload>
+    public sealed class InventoryTransferCreateAsReadyToShipOperationQueryBuilder : FieldsQueryBuilderBase<InventoryTransferCreateAsReadyToShipPayload, InventoryTransferCreateAsReadyToShipOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryTransferCreateAsReadyToShipPayload>, IHasArguments<InventoryTransferCreateAsReadyToShipArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventoryTransferCreateAsReadyToShipArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryTransferCreateAsReadyToShipOperationQueryBuilder(IQuery<InventoryTransferCreateAsReadyToShipPayload> query) : base(query)
         {
             Arguments = new InventoryTransferCreateAsReadyToShipArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryTransferCreateAsReadyToShipOperationQueryBuilder SetArguments(Action<InventoryTransferCreateAsReadyToShipArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryTransferCreateAsReadyToShipOperationQueryBuilder InventoryTransfer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketCatalogConnectionQueryBuilder : FieldsQueryBuilderBase<MarketCatalogConnection, MarketCatalogConnectionQueryBuilder>
+    public sealed class MarketCatalogConnectionQueryBuilder : FieldsQueryBuilderBase<MarketCatalogConnection, MarketCatalogConnectionQueryBuilder>, IHasArguments<MarketCatalogConnectionArgumentsBuilder>
     {
+        public MarketCatalogConnectionArgumentsBuilder Arguments { get; }
         protected override MarketCatalogConnectionQueryBuilder Self => this;
 
         public MarketCatalogConnectionQueryBuilder() : this("marketCatalogConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketCatalogConnectionQueryBuilder(string name) : base(new Query<MarketCatalogConnection>(name))
         {
+            Arguments = new MarketCatalogConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketCatalogConnectionQueryBuilder(IQuery<MarketCatalogConnection> query) : base(query)
         {
+            Arguments = new MarketCatalogConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketCatalogConnectionQueryBuilder SetArguments(Action<MarketCatalogConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketCatalogConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketCatalogEdgeQueryBuilder> build)

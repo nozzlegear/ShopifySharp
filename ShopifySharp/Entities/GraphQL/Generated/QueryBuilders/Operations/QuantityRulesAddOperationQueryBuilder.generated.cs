@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class QuantityRulesAddOperationQueryBuilder : FieldsQueryBuilderBase<QuantityRulesAddPayload, QuantityRulesAddOperationQueryBuilder>, IGraphOperationQueryBuilder<QuantityRulesAddPayload>
+    public sealed class QuantityRulesAddOperationQueryBuilder : FieldsQueryBuilderBase<QuantityRulesAddPayload, QuantityRulesAddOperationQueryBuilder>, IGraphOperationQueryBuilder<QuantityRulesAddPayload>, IHasArguments<QuantityRulesAddArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public QuantityRulesAddArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public QuantityRulesAddOperationQueryBuilder(IQuery<QuantityRulesAddPayload> query) : base(query)
         {
             Arguments = new QuantityRulesAddArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QuantityRulesAddOperationQueryBuilder SetArguments(Action<QuantityRulesAddArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public QuantityRulesAddOperationQueryBuilder QuantityRules(Action<ShopifySharp.GraphQL.QueryBuilders.Types.QuantityRuleQueryBuilder> build)

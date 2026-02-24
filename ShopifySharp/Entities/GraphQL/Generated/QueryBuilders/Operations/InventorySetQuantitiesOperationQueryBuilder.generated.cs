@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventorySetQuantitiesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetQuantitiesPayload, InventorySetQuantitiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetQuantitiesPayload>
+    public sealed class InventorySetQuantitiesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetQuantitiesPayload, InventorySetQuantitiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetQuantitiesPayload>, IHasArguments<InventorySetQuantitiesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventorySetQuantitiesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventorySetQuantitiesOperationQueryBuilder(IQuery<InventorySetQuantitiesPayload> query) : base(query)
         {
             Arguments = new InventorySetQuantitiesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventorySetQuantitiesOperationQueryBuilder SetArguments(Action<InventorySetQuantitiesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventorySetQuantitiesOperationQueryBuilder InventoryAdjustmentGroup(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryAdjustmentGroupQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class LocationQueryBuilder : FieldsQueryBuilderBase<Location, LocationQueryBuilder>
+    public sealed class LocationQueryBuilder : FieldsQueryBuilderBase<Location, LocationQueryBuilder>, IHasArguments<LocationArgumentsBuilder>
     {
+        public LocationArgumentsBuilder Arguments { get; }
         protected override LocationQueryBuilder Self => this;
 
         public LocationQueryBuilder() : this("location")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public LocationQueryBuilder(string name) : base(new Query<Location>(name))
         {
+            Arguments = new LocationArgumentsBuilder(base.InnerQuery);
         }
 
         public LocationQueryBuilder(IQuery<Location> query) : base(query)
         {
+            Arguments = new LocationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public LocationQueryBuilder SetArguments(Action<LocationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public LocationQueryBuilder Activatable()

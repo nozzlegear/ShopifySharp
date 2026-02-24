@@ -12,7 +12,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// Metafields enable you to attach additional information to a Shopify resource, such
 /// as a [Product](https://shopify.dev/api/admin-graphql/latest/objects/product) or
 /// a [Collection](https://shopify.dev/api/admin-graphql/latest/objects/collection).
-/// For more information about where you can attach metafields refer to [HasMetafields](https://shopify.dev/api/admin-graphql/latest/interfaces/HasMetafields).
+/// For more information about where you can attach metafields refer to [HasMetafields](https://shopify.dev/api/admin/graphql/reference/common-objects/HasMetafields).
 /// Some examples of the data that metafields enable you to store are
 /// specifications, size charts, downloadable documents, release dates, images, or part numbers.
 /// Metafields are identified by an owner resource, namespace, and key. and store a
@@ -100,7 +100,7 @@ public record Metafield : IGraphQLObject, IHasCompareDigest, ILegacyInteroperabi
     public MetafieldReferenceConnection? references { get; set; } = null;
 
     /// <summary>
-    /// The type of data that's stored in the metafield.
+    /// The type of data that is stored in the metafield.
     /// Refer to the list of [supported types](https://shopify.dev/apps/metafields/types).
     /// </summary>
     [JsonPropertyName("type")]

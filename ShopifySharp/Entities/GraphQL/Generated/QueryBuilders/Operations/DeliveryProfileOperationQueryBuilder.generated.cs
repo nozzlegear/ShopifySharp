@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DeliveryProfileOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryProfile, DeliveryProfileOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryProfile>
+    public sealed class DeliveryProfileOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryProfile, DeliveryProfileOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryProfile>, IHasArguments<DeliveryProfileArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DeliveryProfileArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DeliveryProfileOperationQueryBuilder(IQuery<DeliveryProfile> query) : base(query)
         {
             Arguments = new DeliveryProfileArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryProfileOperationQueryBuilder SetArguments(Action<DeliveryProfileArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryProfileOperationQueryBuilder ActiveMethodDefinitionsCount()
@@ -52,7 +58,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
         public DeliveryProfileOperationQueryBuilder LegacyMode()
         {
             base.InnerQuery.AddField("legacyMode");
@@ -137,12 +142,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LocationConnection>(query);
-            return this;
-        }
-
-        public DeliveryProfileOperationQueryBuilder Version()
-        {
-            base.InnerQuery.AddField("version");
             return this;
         }
 

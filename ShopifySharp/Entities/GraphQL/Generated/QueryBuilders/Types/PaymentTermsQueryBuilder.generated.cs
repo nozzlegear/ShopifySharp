@@ -39,12 +39,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public PaymentTermsQueryBuilder Due()
-        {
-            base.InnerQuery.AddField("due");
-            return this;
-        }
-
         public PaymentTermsQueryBuilder DueInDays()
         {
             base.InnerQuery.AddField("dueInDays");

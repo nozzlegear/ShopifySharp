@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketRegionConnectionQueryBuilder : FieldsQueryBuilderBase<MarketRegionConnection, MarketRegionConnectionQueryBuilder>
+    public sealed class MarketRegionConnectionQueryBuilder : FieldsQueryBuilderBase<MarketRegionConnection, MarketRegionConnectionQueryBuilder>, IHasArguments<MarketRegionConnectionArgumentsBuilder>
     {
+        public MarketRegionConnectionArgumentsBuilder Arguments { get; }
         protected override MarketRegionConnectionQueryBuilder Self => this;
 
         public MarketRegionConnectionQueryBuilder() : this("marketRegionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketRegionConnectionQueryBuilder(string name) : base(new Query<MarketRegionConnection>(name))
         {
+            Arguments = new MarketRegionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketRegionConnectionQueryBuilder(IQuery<MarketRegionConnection> query) : base(query)
         {
+            Arguments = new MarketRegionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketRegionConnectionQueryBuilder SetArguments(Action<MarketRegionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketRegionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionEdgeQueryBuilder> build)

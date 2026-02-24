@@ -9,12 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A line item from an
-/// [`Order`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order)
-/// that's included in a [`Fulfillment`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Fulfillment).
-/// Links the fulfillment to specific items from the original order, tracking how
-/// many units were fulfilled.
-/// > Note: The discounted total excludes order-level discounts, showing only line-item specific discount amounts.
+/// Represents a line item from an order that's included in a fulfillment.
 /// </summary>
 public record FulfillmentLineItem : IGraphQLObject, INode
 {

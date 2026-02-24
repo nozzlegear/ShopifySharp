@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SubscriptionDeliveryOptionResultQueryBuilder : FieldsQueryBuilderBase<SubscriptionDeliveryOptionResult, SubscriptionDeliveryOptionResultQueryBuilder>
+    public sealed class SubscriptionDeliveryOptionResultQueryBuilder : FieldsQueryBuilderBase<SubscriptionDeliveryOptionResult, SubscriptionDeliveryOptionResultQueryBuilder>, IHasArguments<SubscriptionDeliveryOptionResultArgumentsBuilder>
     {
+        public SubscriptionDeliveryOptionResultArgumentsBuilder Arguments { get; }
         protected override SubscriptionDeliveryOptionResultQueryBuilder Self => this;
 
         public SubscriptionDeliveryOptionResultQueryBuilder() : this("subscriptionDeliveryOptionResult")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SubscriptionDeliveryOptionResultQueryBuilder(string name) : base(new Query<SubscriptionDeliveryOptionResult>(name))
         {
+            Arguments = new SubscriptionDeliveryOptionResultArgumentsBuilder(base.InnerQuery);
         }
 
         public SubscriptionDeliveryOptionResultQueryBuilder(IQuery<SubscriptionDeliveryOptionResult> query) : base(query)
         {
+            Arguments = new SubscriptionDeliveryOptionResultArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionDeliveryOptionResultQueryBuilder SetArguments(Action<SubscriptionDeliveryOptionResultArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionDeliveryOptionResultQueryBuilder SubscriptionDeliveryOptionResult(Action<SubscriptionDeliveryOptionResultUnionCasesBuilder> build)

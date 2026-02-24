@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnDeclineRequestOperationQueryBuilder : FieldsQueryBuilderBase<ReturnDeclineRequestPayload, ReturnDeclineRequestOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnDeclineRequestPayload>
+    public sealed class ReturnDeclineRequestOperationQueryBuilder : FieldsQueryBuilderBase<ReturnDeclineRequestPayload, ReturnDeclineRequestOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnDeclineRequestPayload>, IHasArguments<ReturnDeclineRequestArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReturnDeclineRequestArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnDeclineRequestOperationQueryBuilder(IQuery<ReturnDeclineRequestPayload> query) : base(query)
         {
             Arguments = new ReturnDeclineRequestArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnDeclineRequestOperationQueryBuilder SetArguments(Action<ReturnDeclineRequestArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnDeclineRequestOperationQueryBuilder Return(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnQueryBuilder> build)

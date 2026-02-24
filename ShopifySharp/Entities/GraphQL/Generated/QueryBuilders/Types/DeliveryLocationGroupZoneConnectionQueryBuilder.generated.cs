@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryLocationGroupZoneConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryLocationGroupZoneConnection, DeliveryLocationGroupZoneConnectionQueryBuilder>
+    public sealed class DeliveryLocationGroupZoneConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryLocationGroupZoneConnection, DeliveryLocationGroupZoneConnectionQueryBuilder>, IHasArguments<DeliveryLocationGroupZoneConnectionArgumentsBuilder>
     {
+        public DeliveryLocationGroupZoneConnectionArgumentsBuilder Arguments { get; }
         protected override DeliveryLocationGroupZoneConnectionQueryBuilder Self => this;
 
         public DeliveryLocationGroupZoneConnectionQueryBuilder() : this("deliveryLocationGroupZoneConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryLocationGroupZoneConnectionQueryBuilder(string name) : base(new Query<DeliveryLocationGroupZoneConnection>(name))
         {
+            Arguments = new DeliveryLocationGroupZoneConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryLocationGroupZoneConnectionQueryBuilder(IQuery<DeliveryLocationGroupZoneConnection> query) : base(query)
         {
+            Arguments = new DeliveryLocationGroupZoneConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryLocationGroupZoneConnectionQueryBuilder SetArguments(Action<DeliveryLocationGroupZoneConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryLocationGroupZoneConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocationGroupZoneEdgeQueryBuilder> build)

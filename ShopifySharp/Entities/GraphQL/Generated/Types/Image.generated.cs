@@ -11,7 +11,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// <summary>
 /// Represents an image resource.
 /// </summary>
-public record Image : IGraphQLObject, IHasMetafields, IHasPublishedTranslations
+public record Image : IGraphQLObject, IHasMetafields
 {
     /// <summary>
     /// A word or phrase to share the nature or contents of an image.
@@ -76,12 +76,6 @@ public record Image : IGraphQLObject, IHasMetafields, IHasPublishedTranslations
     [JsonPropertyName("transformedSrc")]
     [Obsolete("Use `url(transform:)` instead")]
     public string? transformedSrc { get; set; } = null;
-
-    /// <summary>
-    /// The published translations associated with the resource.
-    /// </summary>
-    [JsonPropertyName("translations")]
-    public ICollection<Translation>? translations { get; set; } = null;
 
     /// <summary>
     /// The location of the image as a URL.

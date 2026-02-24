@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DraftOrderAvailableDeliveryOptionsQueryBuilder : FieldsQueryBuilderBase<DraftOrderAvailableDeliveryOptions, DraftOrderAvailableDeliveryOptionsQueryBuilder>
+    public sealed class DraftOrderAvailableDeliveryOptionsQueryBuilder : FieldsQueryBuilderBase<DraftOrderAvailableDeliveryOptions, DraftOrderAvailableDeliveryOptionsQueryBuilder>, IHasArguments<DraftOrderAvailableDeliveryOptionsArgumentsBuilder>
     {
+        public DraftOrderAvailableDeliveryOptionsArgumentsBuilder Arguments { get; }
         protected override DraftOrderAvailableDeliveryOptionsQueryBuilder Self => this;
 
         public DraftOrderAvailableDeliveryOptionsQueryBuilder() : this("draftOrderAvailableDeliveryOptions")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DraftOrderAvailableDeliveryOptionsQueryBuilder(string name) : base(new Query<DraftOrderAvailableDeliveryOptions>(name))
         {
+            Arguments = new DraftOrderAvailableDeliveryOptionsArgumentsBuilder(base.InnerQuery);
         }
 
         public DraftOrderAvailableDeliveryOptionsQueryBuilder(IQuery<DraftOrderAvailableDeliveryOptions> query) : base(query)
         {
+            Arguments = new DraftOrderAvailableDeliveryOptionsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderAvailableDeliveryOptionsQueryBuilder SetArguments(Action<DraftOrderAvailableDeliveryOptionsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrderAvailableDeliveryOptionsQueryBuilder AvailableLocalDeliveryRates(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderShippingRateQueryBuilder> build)

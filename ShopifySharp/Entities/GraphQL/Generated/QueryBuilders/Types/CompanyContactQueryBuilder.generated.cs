@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CompanyContactQueryBuilder : FieldsQueryBuilderBase<CompanyContact, CompanyContactQueryBuilder>
+    public sealed class CompanyContactQueryBuilder : FieldsQueryBuilderBase<CompanyContact, CompanyContactQueryBuilder>, IHasArguments<CompanyContactArgumentsBuilder>
     {
+        public CompanyContactArgumentsBuilder Arguments { get; }
         protected override CompanyContactQueryBuilder Self => this;
 
         public CompanyContactQueryBuilder() : this("companyContact")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CompanyContactQueryBuilder(string name) : base(new Query<CompanyContact>(name))
         {
+            Arguments = new CompanyContactArgumentsBuilder(base.InnerQuery);
         }
 
         public CompanyContactQueryBuilder(IQuery<CompanyContact> query) : base(query)
         {
+            Arguments = new CompanyContactArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyContactQueryBuilder SetArguments(Action<CompanyContactArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyContactQueryBuilder Company(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyQueryBuilder> build)

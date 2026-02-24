@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyPaymentsBalanceTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsBalanceTransactionConnection, ShopifyPaymentsBalanceTransactionConnectionQueryBuilder>
+    public sealed class ShopifyPaymentsBalanceTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsBalanceTransactionConnection, ShopifyPaymentsBalanceTransactionConnectionQueryBuilder>, IHasArguments<ShopifyPaymentsBalanceTransactionConnectionArgumentsBuilder>
     {
+        public ShopifyPaymentsBalanceTransactionConnectionArgumentsBuilder Arguments { get; }
         protected override ShopifyPaymentsBalanceTransactionConnectionQueryBuilder Self => this;
 
         public ShopifyPaymentsBalanceTransactionConnectionQueryBuilder() : this("shopifyPaymentsBalanceTransactionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyPaymentsBalanceTransactionConnectionQueryBuilder(string name) : base(new Query<ShopifyPaymentsBalanceTransactionConnection>(name))
         {
+            Arguments = new ShopifyPaymentsBalanceTransactionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyPaymentsBalanceTransactionConnectionQueryBuilder(IQuery<ShopifyPaymentsBalanceTransactionConnection> query) : base(query)
         {
+            Arguments = new ShopifyPaymentsBalanceTransactionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsBalanceTransactionConnectionQueryBuilder SetArguments(Action<ShopifyPaymentsBalanceTransactionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsBalanceTransactionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsBalanceTransactionEdgeQueryBuilder> build)

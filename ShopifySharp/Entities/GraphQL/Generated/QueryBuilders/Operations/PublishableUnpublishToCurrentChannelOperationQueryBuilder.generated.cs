@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PublishableUnpublishToCurrentChannelOperationQueryBuilder : FieldsQueryBuilderBase<PublishableUnpublishToCurrentChannelPayload, PublishableUnpublishToCurrentChannelOperationQueryBuilder>, IGraphOperationQueryBuilder<PublishableUnpublishToCurrentChannelPayload>
+    public sealed class PublishableUnpublishToCurrentChannelOperationQueryBuilder : FieldsQueryBuilderBase<PublishableUnpublishToCurrentChannelPayload, PublishableUnpublishToCurrentChannelOperationQueryBuilder>, IGraphOperationQueryBuilder<PublishableUnpublishToCurrentChannelPayload>, IHasArguments<PublishableUnpublishToCurrentChannelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PublishableUnpublishToCurrentChannelArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PublishableUnpublishToCurrentChannelOperationQueryBuilder(IQuery<PublishableUnpublishToCurrentChannelPayload> query) : base(query)
         {
             Arguments = new PublishableUnpublishToCurrentChannelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PublishableUnpublishToCurrentChannelOperationQueryBuilder SetArguments(Action<PublishableUnpublishToCurrentChannelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PublishableUnpublishToCurrentChannelOperationQueryBuilder Publishable(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublishableQueryBuilder> build)

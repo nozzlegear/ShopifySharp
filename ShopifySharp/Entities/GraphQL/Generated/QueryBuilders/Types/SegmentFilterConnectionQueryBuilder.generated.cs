@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SegmentFilterConnectionQueryBuilder : FieldsQueryBuilderBase<SegmentFilterConnection, SegmentFilterConnectionQueryBuilder>
+    public sealed class SegmentFilterConnectionQueryBuilder : FieldsQueryBuilderBase<SegmentFilterConnection, SegmentFilterConnectionQueryBuilder>, IHasArguments<SegmentFilterConnectionArgumentsBuilder>
     {
+        public SegmentFilterConnectionArgumentsBuilder Arguments { get; }
         protected override SegmentFilterConnectionQueryBuilder Self => this;
 
         public SegmentFilterConnectionQueryBuilder() : this("segmentFilterConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SegmentFilterConnectionQueryBuilder(string name) : base(new Query<SegmentFilterConnection>(name))
         {
+            Arguments = new SegmentFilterConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SegmentFilterConnectionQueryBuilder(IQuery<SegmentFilterConnection> query) : base(query)
         {
+            Arguments = new SegmentFilterConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SegmentFilterConnectionQueryBuilder SetArguments(Action<SegmentFilterConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SegmentFilterConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SegmentFilterEdgeQueryBuilder> build)

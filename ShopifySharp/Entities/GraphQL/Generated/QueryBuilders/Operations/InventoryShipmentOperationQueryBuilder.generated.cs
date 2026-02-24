@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryShipmentOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipment, InventoryShipmentOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipment>
+    public sealed class InventoryShipmentOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipment, InventoryShipmentOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipment>, IHasArguments<InventoryShipmentArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public InventoryShipmentArgumentsBuilder Arguments { get; }
@@ -34,21 +34,9 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new InventoryShipmentArgumentsBuilder(base.InnerQuery);
         }
 
-        public InventoryShipmentOperationQueryBuilder DateCreated()
+        public InventoryShipmentOperationQueryBuilder SetArguments(Action<InventoryShipmentArgumentsBuilder> configure)
         {
-            base.InnerQuery.AddField("dateCreated");
-            return this;
-        }
-
-        public InventoryShipmentOperationQueryBuilder DateReceived()
-        {
-            base.InnerQuery.AddField("dateReceived");
-            return this;
-        }
-
-        public InventoryShipmentOperationQueryBuilder DateShipped()
-        {
-            base.InnerQuery.AddField("dateShipped");
+            configure(this.Arguments);
             return this;
         }
 

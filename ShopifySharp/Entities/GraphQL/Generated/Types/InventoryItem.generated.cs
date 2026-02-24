@@ -9,11 +9,9 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A [product variant's](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant) inventory information across all locations. The inventory item connects the
-/// product variant to its [inventory levels](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel)
-/// at different locations, tracking stock keeping unit (SKU), whether quantities
-/// are tracked, shipping requirements, and customs information for the product.
-/// Learn more about [inventory object relationships](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#inventory-object-relationships).
+/// Represents the goods available to be shipped to a customer.
+/// It holds essential information about the goods, including SKU and whether it is tracked.
+/// Learn [more about the relationships between inventory objects](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#inventory-object-relationships).
 /// </summary>
 public record InventoryItem : IGraphQLObject, ILegacyInteroperability, INode
 {
@@ -137,12 +135,5 @@ public record InventoryItem : IGraphQLObject, ILegacyInteroperability, INode
     /// The variant that owns this inventory item.
     /// </summary>
     [JsonPropertyName("variant")]
-    [Obsolete("Use `variants` instead.")]
     public ProductVariant? variant { get; set; } = null;
-
-    /// <summary>
-    /// A paginated list of the variants that reference this inventory item.
-    /// </summary>
-    [JsonPropertyName("variants")]
-    public ProductVariantConnection? variants { get; set; } = null;
 }

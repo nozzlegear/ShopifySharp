@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DisputeEvidenceUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DisputeEvidenceUpdatePayload, DisputeEvidenceUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DisputeEvidenceUpdatePayload>
+    public sealed class DisputeEvidenceUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DisputeEvidenceUpdatePayload, DisputeEvidenceUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DisputeEvidenceUpdatePayload>, IHasArguments<DisputeEvidenceUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DisputeEvidenceUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DisputeEvidenceUpdateOperationQueryBuilder(IQuery<DisputeEvidenceUpdatePayload> query) : base(query)
         {
             Arguments = new DisputeEvidenceUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DisputeEvidenceUpdateOperationQueryBuilder SetArguments(Action<DisputeEvidenceUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DisputeEvidenceUpdateOperationQueryBuilder DisputeEvidence(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder> build)

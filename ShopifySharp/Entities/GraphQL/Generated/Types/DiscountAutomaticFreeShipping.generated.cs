@@ -23,9 +23,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// > The [`DiscountCodeFreeShipping`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DiscountCodeFreeShipping)
 /// object has similar functionality to the `DiscountAutomaticFreeShipping` object, but customers need to enter a code to
 /// receive a discount.
-/// >
-/// > API versions prior to `2025-10` only return automatic discounts with `context`
-/// set to `all`, discounts with other values are filtered out.
 /// </summary>
 public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
 {
@@ -67,12 +64,6 @@ public record DiscountAutomaticFreeShipping : IGraphQLUnionCase, IGraphQLObject
     /// </summary>
     [JsonPropertyName("combinesWith")]
     public DiscountCombinesWith? combinesWith { get; set; } = null;
-
-    /// <summary>
-    /// The context defining which buyers can use the discount.
-    /// </summary>
-    [JsonPropertyName("context")]
-    public DiscountContext? context { get; set; } = null;
 
     /// <summary>
     /// The date and time when the discount was created.

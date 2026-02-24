@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryItemQueryBuilder : FieldsQueryBuilderBase<InventoryItem, InventoryItemQueryBuilder>
+    public sealed class InventoryItemQueryBuilder : FieldsQueryBuilderBase<InventoryItem, InventoryItemQueryBuilder>, IHasArguments<InventoryItemArgumentsBuilder>
     {
+        public InventoryItemArgumentsBuilder Arguments { get; }
         protected override InventoryItemQueryBuilder Self => this;
 
         public InventoryItemQueryBuilder() : this("inventoryItem")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryItemQueryBuilder(string name) : base(new Query<InventoryItem>(name))
         {
+            Arguments = new InventoryItemArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryItemQueryBuilder(IQuery<InventoryItem> query) : base(query)
         {
+            Arguments = new InventoryItemArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryItemQueryBuilder SetArguments(Action<InventoryItemArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryItemQueryBuilder CountryCodeOfOrigin()
@@ -171,15 +180,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductVariant>(query);
-            return this;
-        }
-
-        public InventoryItemQueryBuilder Variants(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
-        {
-            var query = new Query<ProductVariantConnection>("variants");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ProductVariantConnection>(query);
             return this;
         }
     }

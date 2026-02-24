@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderEditAddLineItemDiscountOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditAddLineItemDiscountPayload, OrderEditAddLineItemDiscountOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditAddLineItemDiscountPayload>
+    public sealed class OrderEditAddLineItemDiscountOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditAddLineItemDiscountPayload, OrderEditAddLineItemDiscountOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditAddLineItemDiscountPayload>, IHasArguments<OrderEditAddLineItemDiscountArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderEditAddLineItemDiscountArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public OrderEditAddLineItemDiscountOperationQueryBuilder(IQuery<OrderEditAddLineItemDiscountPayload> query) : base(query)
         {
             Arguments = new OrderEditAddLineItemDiscountArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderEditAddLineItemDiscountOperationQueryBuilder SetArguments(Action<OrderEditAddLineItemDiscountArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderEditAddLineItemDiscountOperationQueryBuilder AddedDiscountStagedChange(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddLineItemDiscountQueryBuilder> build)
@@ -58,15 +64,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedOrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CalculatedOrder>(query);
-            return this;
-        }
-
-        public OrderEditAddLineItemDiscountOperationQueryBuilder OrderEditSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder> build)
-        {
-            var query = new Query<OrderEditSession>("orderEditSession");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<OrderEditSession>(query);
             return this;
         }
 

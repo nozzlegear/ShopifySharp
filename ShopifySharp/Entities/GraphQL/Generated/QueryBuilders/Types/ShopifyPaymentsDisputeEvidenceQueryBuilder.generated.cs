@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyPaymentsDisputeEvidenceQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeEvidence, ShopifyPaymentsDisputeEvidenceQueryBuilder>
+    public sealed class ShopifyPaymentsDisputeEvidenceQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeEvidence, ShopifyPaymentsDisputeEvidenceQueryBuilder>, IHasArguments<ShopifyPaymentsDisputeEvidenceArgumentsBuilder>
     {
+        public ShopifyPaymentsDisputeEvidenceArgumentsBuilder Arguments { get; }
         protected override ShopifyPaymentsDisputeEvidenceQueryBuilder Self => this;
 
         public ShopifyPaymentsDisputeEvidenceQueryBuilder() : this("shopifyPaymentsDisputeEvidence")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyPaymentsDisputeEvidenceQueryBuilder(string name) : base(new Query<ShopifyPaymentsDisputeEvidence>(name))
         {
+            Arguments = new ShopifyPaymentsDisputeEvidenceArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyPaymentsDisputeEvidenceQueryBuilder(IQuery<ShopifyPaymentsDisputeEvidence> query) : base(query)
         {
+            Arguments = new ShopifyPaymentsDisputeEvidenceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsDisputeEvidenceQueryBuilder SetArguments(Action<ShopifyPaymentsDisputeEvidenceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsDisputeEvidenceQueryBuilder AccessActivityLog()

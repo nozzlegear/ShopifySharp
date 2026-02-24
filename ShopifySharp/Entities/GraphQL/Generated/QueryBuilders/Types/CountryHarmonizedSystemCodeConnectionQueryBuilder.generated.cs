@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CountryHarmonizedSystemCodeConnectionQueryBuilder : FieldsQueryBuilderBase<CountryHarmonizedSystemCodeConnection, CountryHarmonizedSystemCodeConnectionQueryBuilder>
+    public sealed class CountryHarmonizedSystemCodeConnectionQueryBuilder : FieldsQueryBuilderBase<CountryHarmonizedSystemCodeConnection, CountryHarmonizedSystemCodeConnectionQueryBuilder>, IHasArguments<CountryHarmonizedSystemCodeConnectionArgumentsBuilder>
     {
+        public CountryHarmonizedSystemCodeConnectionArgumentsBuilder Arguments { get; }
         protected override CountryHarmonizedSystemCodeConnectionQueryBuilder Self => this;
 
         public CountryHarmonizedSystemCodeConnectionQueryBuilder() : this("countryHarmonizedSystemCodeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CountryHarmonizedSystemCodeConnectionQueryBuilder(string name) : base(new Query<CountryHarmonizedSystemCodeConnection>(name))
         {
+            Arguments = new CountryHarmonizedSystemCodeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CountryHarmonizedSystemCodeConnectionQueryBuilder(IQuery<CountryHarmonizedSystemCodeConnection> query) : base(query)
         {
+            Arguments = new CountryHarmonizedSystemCodeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CountryHarmonizedSystemCodeConnectionQueryBuilder SetArguments(Action<CountryHarmonizedSystemCodeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CountryHarmonizedSystemCodeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountryHarmonizedSystemCodeEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ShopLocaleUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ShopLocaleUpdatePayload, ShopLocaleUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopLocaleUpdatePayload>
+    public sealed class ShopLocaleUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ShopLocaleUpdatePayload, ShopLocaleUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopLocaleUpdatePayload>, IHasArguments<ShopLocaleUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ShopLocaleUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ShopLocaleUpdateOperationQueryBuilder(IQuery<ShopLocaleUpdatePayload> query) : base(query)
         {
             Arguments = new ShopLocaleUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopLocaleUpdateOperationQueryBuilder SetArguments(Action<ShopLocaleUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopLocaleUpdateOperationQueryBuilder ShopLocale(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopLocaleQueryBuilder> build)

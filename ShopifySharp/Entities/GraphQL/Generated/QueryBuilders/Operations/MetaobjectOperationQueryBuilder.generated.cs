@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MetaobjectOperationQueryBuilder : FieldsQueryBuilderBase<Metaobject, MetaobjectOperationQueryBuilder>, IGraphOperationQueryBuilder<Metaobject>
+    public sealed class MetaobjectOperationQueryBuilder : FieldsQueryBuilderBase<Metaobject, MetaobjectOperationQueryBuilder>, IGraphOperationQueryBuilder<Metaobject>, IHasArguments<MetaobjectArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public MetaobjectArgumentsBuilder Arguments { get; }
@@ -34,18 +34,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new MetaobjectArgumentsBuilder(base.InnerQuery);
         }
 
+        public MetaobjectOperationQueryBuilder SetArguments(Action<MetaobjectArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public MetaobjectOperationQueryBuilder Capabilities(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectCapabilityDataQueryBuilder> build)
         {
             var query = new Query<MetaobjectCapabilityData>("capabilities");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectCapabilityDataQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetaobjectCapabilityData>(query);
-            return this;
-        }
-
-        public MetaobjectOperationQueryBuilder CreatedAt()
-        {
-            base.InnerQuery.AddField("createdAt");
             return this;
         }
 

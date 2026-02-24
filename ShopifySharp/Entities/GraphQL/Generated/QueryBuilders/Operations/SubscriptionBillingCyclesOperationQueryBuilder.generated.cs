@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SubscriptionBillingCyclesOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleConnection, SubscriptionBillingCyclesOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleConnection>
+    public sealed class SubscriptionBillingCyclesOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleConnection, SubscriptionBillingCyclesOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleConnection>, IHasArguments<SubscriptionBillingCyclesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public SubscriptionBillingCyclesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionBillingCyclesOperationQueryBuilder(IQuery<SubscriptionBillingCycleConnection> query) : base(query)
         {
             Arguments = new SubscriptionBillingCyclesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingCyclesOperationQueryBuilder SetArguments(Action<SubscriptionBillingCyclesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingCyclesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingCycleEdgeQueryBuilder> build)

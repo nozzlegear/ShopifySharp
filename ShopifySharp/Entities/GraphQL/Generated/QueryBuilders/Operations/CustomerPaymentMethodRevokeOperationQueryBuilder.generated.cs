@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodRevokeOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodRevokePayload, CustomerPaymentMethodRevokeOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodRevokePayload>
+    public sealed class CustomerPaymentMethodRevokeOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodRevokePayload, CustomerPaymentMethodRevokeOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodRevokePayload>, IHasArguments<CustomerPaymentMethodRevokeArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodRevokeArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodRevokeOperationQueryBuilder(IQuery<CustomerPaymentMethodRevokePayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodRevokeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodRevokeOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodRevokeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodRevokeOperationQueryBuilder RevokedCustomerPaymentMethodId()

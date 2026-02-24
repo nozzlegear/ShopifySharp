@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryCustomizationQueryBuilder : FieldsQueryBuilderBase<DeliveryCustomization, DeliveryCustomizationQueryBuilder>
+    public sealed class DeliveryCustomizationQueryBuilder : FieldsQueryBuilderBase<DeliveryCustomization, DeliveryCustomizationQueryBuilder>, IHasArguments<DeliveryCustomizationArgumentsBuilder>
     {
+        public DeliveryCustomizationArgumentsBuilder Arguments { get; }
         protected override DeliveryCustomizationQueryBuilder Self => this;
 
         public DeliveryCustomizationQueryBuilder() : this("deliveryCustomization")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryCustomizationQueryBuilder(string name) : base(new Query<DeliveryCustomization>(name))
         {
+            Arguments = new DeliveryCustomizationArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryCustomizationQueryBuilder(IQuery<DeliveryCustomization> query) : base(query)
         {
+            Arguments = new DeliveryCustomizationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryCustomizationQueryBuilder SetArguments(Action<DeliveryCustomizationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryCustomizationQueryBuilder Enabled()

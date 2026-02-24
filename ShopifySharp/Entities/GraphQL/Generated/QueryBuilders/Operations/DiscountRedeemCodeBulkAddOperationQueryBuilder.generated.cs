@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DiscountRedeemCodeBulkAddOperationQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeBulkAddPayload, DiscountRedeemCodeBulkAddOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountRedeemCodeBulkAddPayload>
+    public sealed class DiscountRedeemCodeBulkAddOperationQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeBulkAddPayload, DiscountRedeemCodeBulkAddOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountRedeemCodeBulkAddPayload>, IHasArguments<DiscountRedeemCodeBulkAddArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DiscountRedeemCodeBulkAddArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DiscountRedeemCodeBulkAddOperationQueryBuilder(IQuery<DiscountRedeemCodeBulkAddPayload> query) : base(query)
         {
             Arguments = new DiscountRedeemCodeBulkAddArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountRedeemCodeBulkAddOperationQueryBuilder SetArguments(Action<DiscountRedeemCodeBulkAddArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountRedeemCodeBulkAddOperationQueryBuilder BulkCreation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeBulkCreationQueryBuilder> build)

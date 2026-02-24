@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PublicationQueryBuilder : FieldsQueryBuilderBase<Publication, PublicationQueryBuilder>
+    public sealed class PublicationQueryBuilder : FieldsQueryBuilderBase<Publication, PublicationQueryBuilder>, IHasArguments<PublicationArgumentsBuilder>
     {
+        public PublicationArgumentsBuilder Arguments { get; }
         protected override PublicationQueryBuilder Self => this;
 
         public PublicationQueryBuilder() : this("publication")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PublicationQueryBuilder(string name) : base(new Query<Publication>(name))
         {
+            Arguments = new PublicationArgumentsBuilder(base.InnerQuery);
         }
 
         public PublicationQueryBuilder(IQuery<Publication> query) : base(query)
         {
+            Arguments = new PublicationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PublicationQueryBuilder SetArguments(Action<PublicationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PublicationQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
@@ -90,15 +99,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductConnection>(query);
-            return this;
-        }
-
-        public PublicationQueryBuilder IncludedProductsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
-        {
-            var query = new Query<Count>("includedProductsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<Count>(query);
             return this;
         }
 

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class UrlRedirectDeleteOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectDeletePayload, UrlRedirectDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectDeletePayload>
+    public sealed class UrlRedirectDeleteOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectDeletePayload, UrlRedirectDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectDeletePayload>, IHasArguments<UrlRedirectDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public UrlRedirectDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public UrlRedirectDeleteOperationQueryBuilder(IQuery<UrlRedirectDeletePayload> query) : base(query)
         {
             Arguments = new UrlRedirectDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public UrlRedirectDeleteOperationQueryBuilder SetArguments(Action<UrlRedirectDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public UrlRedirectDeleteOperationQueryBuilder DeletedUrlRedirectId()

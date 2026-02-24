@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodGetUpdateUrlPayload, CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodGetUpdateUrlPayload>
+    public sealed class CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodGetUpdateUrlPayload, CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodGetUpdateUrlPayload>, IHasArguments<CustomerPaymentMethodGetUpdateUrlArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodGetUpdateUrlArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder(IQuery<CustomerPaymentMethodGetUpdateUrlPayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodGetUpdateUrlArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodGetUpdateUrlArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodGetUpdateUrlOperationQueryBuilder UpdatePaymentMethodUrl()

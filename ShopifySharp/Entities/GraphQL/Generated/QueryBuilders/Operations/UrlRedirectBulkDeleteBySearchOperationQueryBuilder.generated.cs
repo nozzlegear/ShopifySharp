@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class UrlRedirectBulkDeleteBySearchOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectBulkDeleteBySearchPayload, UrlRedirectBulkDeleteBySearchOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectBulkDeleteBySearchPayload>
+    public sealed class UrlRedirectBulkDeleteBySearchOperationQueryBuilder : FieldsQueryBuilderBase<UrlRedirectBulkDeleteBySearchPayload, UrlRedirectBulkDeleteBySearchOperationQueryBuilder>, IGraphOperationQueryBuilder<UrlRedirectBulkDeleteBySearchPayload>, IHasArguments<UrlRedirectBulkDeleteBySearchArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public UrlRedirectBulkDeleteBySearchArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public UrlRedirectBulkDeleteBySearchOperationQueryBuilder(IQuery<UrlRedirectBulkDeleteBySearchPayload> query) : base(query)
         {
             Arguments = new UrlRedirectBulkDeleteBySearchArgumentsBuilder(base.InnerQuery);
+        }
+
+        public UrlRedirectBulkDeleteBySearchOperationQueryBuilder SetArguments(Action<UrlRedirectBulkDeleteBySearchArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public UrlRedirectBulkDeleteBySearchOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)

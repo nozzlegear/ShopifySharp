@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ImageConnectionQueryBuilder : FieldsQueryBuilderBase<ImageConnection, ImageConnectionQueryBuilder>
+    public sealed class ImageConnectionQueryBuilder : FieldsQueryBuilderBase<ImageConnection, ImageConnectionQueryBuilder>, IHasArguments<ImageConnectionArgumentsBuilder>
     {
+        public ImageConnectionArgumentsBuilder Arguments { get; }
         protected override ImageConnectionQueryBuilder Self => this;
 
         public ImageConnectionQueryBuilder() : this("imageConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ImageConnectionQueryBuilder(string name) : base(new Query<ImageConnection>(name))
         {
+            Arguments = new ImageConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ImageConnectionQueryBuilder(IQuery<ImageConnection> query) : base(query)
         {
+            Arguments = new ImageConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ImageConnectionQueryBuilder SetArguments(Action<ImageConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ImageConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageEdgeQueryBuilder> build)

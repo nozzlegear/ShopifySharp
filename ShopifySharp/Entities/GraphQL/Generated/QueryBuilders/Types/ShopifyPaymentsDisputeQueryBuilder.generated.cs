@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyPaymentsDisputeQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDispute, ShopifyPaymentsDisputeQueryBuilder>
+    public sealed class ShopifyPaymentsDisputeQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDispute, ShopifyPaymentsDisputeQueryBuilder>, IHasArguments<ShopifyPaymentsDisputeArgumentsBuilder>
     {
+        public ShopifyPaymentsDisputeArgumentsBuilder Arguments { get; }
         protected override ShopifyPaymentsDisputeQueryBuilder Self => this;
 
         public ShopifyPaymentsDisputeQueryBuilder() : this("shopifyPaymentsDispute")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyPaymentsDisputeQueryBuilder(string name) : base(new Query<ShopifyPaymentsDispute>(name))
         {
+            Arguments = new ShopifyPaymentsDisputeArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyPaymentsDisputeQueryBuilder(IQuery<ShopifyPaymentsDispute> query) : base(query)
         {
+            Arguments = new ShopifyPaymentsDisputeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsDisputeQueryBuilder SetArguments(Action<ShopifyPaymentsDisputeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsDisputeQueryBuilder Amount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
@@ -36,15 +45,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
-            return this;
-        }
-
-        public ShopifyPaymentsDisputeQueryBuilder DisputeEvidence(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder> build)
-        {
-            var query = new Query<ShopifyPaymentsDisputeEvidence>("disputeEvidence");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ShopifyPaymentsDisputeEvidence>(query);
             return this;
         }
 

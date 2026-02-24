@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class StorefrontAccessTokenConnectionQueryBuilder : FieldsQueryBuilderBase<StorefrontAccessTokenConnection, StorefrontAccessTokenConnectionQueryBuilder>
+    public sealed class StorefrontAccessTokenConnectionQueryBuilder : FieldsQueryBuilderBase<StorefrontAccessTokenConnection, StorefrontAccessTokenConnectionQueryBuilder>, IHasArguments<StorefrontAccessTokenConnectionArgumentsBuilder>
     {
+        public StorefrontAccessTokenConnectionArgumentsBuilder Arguments { get; }
         protected override StorefrontAccessTokenConnectionQueryBuilder Self => this;
 
         public StorefrontAccessTokenConnectionQueryBuilder() : this("storefrontAccessTokenConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public StorefrontAccessTokenConnectionQueryBuilder(string name) : base(new Query<StorefrontAccessTokenConnection>(name))
         {
+            Arguments = new StorefrontAccessTokenConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public StorefrontAccessTokenConnectionQueryBuilder(IQuery<StorefrontAccessTokenConnection> query) : base(query)
         {
+            Arguments = new StorefrontAccessTokenConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StorefrontAccessTokenConnectionQueryBuilder SetArguments(Action<StorefrontAccessTokenConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StorefrontAccessTokenConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StorefrontAccessTokenEdgeQueryBuilder> build)

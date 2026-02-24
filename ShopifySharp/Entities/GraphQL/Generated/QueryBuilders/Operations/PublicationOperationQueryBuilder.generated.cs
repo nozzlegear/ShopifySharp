@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PublicationOperationQueryBuilder : FieldsQueryBuilderBase<Publication, PublicationOperationQueryBuilder>, IGraphOperationQueryBuilder<Publication>
+    public sealed class PublicationOperationQueryBuilder : FieldsQueryBuilderBase<Publication, PublicationOperationQueryBuilder>, IGraphOperationQueryBuilder<Publication>, IHasArguments<PublicationArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public PublicationArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PublicationOperationQueryBuilder(IQuery<Publication> query) : base(query)
         {
             Arguments = new PublicationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PublicationOperationQueryBuilder SetArguments(Action<PublicationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PublicationOperationQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
@@ -94,15 +100,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductConnection>(query);
-            return this;
-        }
-
-        public PublicationOperationQueryBuilder IncludedProductsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
-        {
-            var query = new Query<Count>("includedProductsCount");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<Count>(query);
             return this;
         }
 

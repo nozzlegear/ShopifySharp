@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketWebPresenceConnectionQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceConnection, MarketWebPresenceConnectionQueryBuilder>
+    public sealed class MarketWebPresenceConnectionQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceConnection, MarketWebPresenceConnectionQueryBuilder>, IHasArguments<MarketWebPresenceConnectionArgumentsBuilder>
     {
+        public MarketWebPresenceConnectionArgumentsBuilder Arguments { get; }
         protected override MarketWebPresenceConnectionQueryBuilder Self => this;
 
         public MarketWebPresenceConnectionQueryBuilder() : this("marketWebPresenceConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketWebPresenceConnectionQueryBuilder(string name) : base(new Query<MarketWebPresenceConnection>(name))
         {
+            Arguments = new MarketWebPresenceConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketWebPresenceConnectionQueryBuilder(IQuery<MarketWebPresenceConnection> query) : base(query)
         {
+            Arguments = new MarketWebPresenceConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketWebPresenceConnectionQueryBuilder SetArguments(Action<MarketWebPresenceConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketWebPresenceConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketWebPresenceEdgeQueryBuilder> build)

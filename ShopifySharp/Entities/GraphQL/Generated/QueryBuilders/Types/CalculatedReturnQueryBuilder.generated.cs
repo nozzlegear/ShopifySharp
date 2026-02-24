@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CalculatedReturnQueryBuilder : FieldsQueryBuilderBase<CalculatedReturn, CalculatedReturnQueryBuilder>
+    public sealed class CalculatedReturnQueryBuilder : FieldsQueryBuilderBase<CalculatedReturn, CalculatedReturnQueryBuilder>, IHasArguments<CalculatedReturnArgumentsBuilder>
     {
+        public CalculatedReturnArgumentsBuilder Arguments { get; }
         protected override CalculatedReturnQueryBuilder Self => this;
 
         public CalculatedReturnQueryBuilder() : this("calculatedReturn")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CalculatedReturnQueryBuilder(string name) : base(new Query<CalculatedReturn>(name))
         {
+            Arguments = new CalculatedReturnArgumentsBuilder(base.InnerQuery);
         }
 
         public CalculatedReturnQueryBuilder(IQuery<CalculatedReturn> query) : base(query)
         {
+            Arguments = new CalculatedReturnArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CalculatedReturnQueryBuilder SetArguments(Action<CalculatedReturnArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CalculatedReturnQueryBuilder ExchangeLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedExchangeLineItemQueryBuilder> build)

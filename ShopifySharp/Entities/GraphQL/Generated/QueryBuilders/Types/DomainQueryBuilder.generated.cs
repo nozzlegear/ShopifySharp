@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DomainQueryBuilder : FieldsQueryBuilderBase<Domain, DomainQueryBuilder>
+    public sealed class DomainQueryBuilder : FieldsQueryBuilderBase<Domain, DomainQueryBuilder>, IHasArguments<DomainArgumentsBuilder>
     {
+        public DomainArgumentsBuilder Arguments { get; }
         protected override DomainQueryBuilder Self => this;
 
         public DomainQueryBuilder() : this("domain")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DomainQueryBuilder(string name) : base(new Query<Domain>(name))
         {
+            Arguments = new DomainArgumentsBuilder(base.InnerQuery);
         }
 
         public DomainQueryBuilder(IQuery<Domain> query) : base(query)
         {
+            Arguments = new DomainArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DomainQueryBuilder SetArguments(Action<DomainArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DomainQueryBuilder Host()

@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `inventorySetQuantities` to set on_hand or available quantites instead.")]
-    public sealed class InventorySetOnHandQuantitiesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetOnHandQuantitiesPayload, InventorySetOnHandQuantitiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetOnHandQuantitiesPayload>
+    public sealed class InventorySetOnHandQuantitiesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetOnHandQuantitiesPayload, InventorySetOnHandQuantitiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetOnHandQuantitiesPayload>, IHasArguments<InventorySetOnHandQuantitiesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventorySetOnHandQuantitiesArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventorySetOnHandQuantitiesOperationQueryBuilder(IQuery<InventorySetOnHandQuantitiesPayload> query) : base(query)
         {
             Arguments = new InventorySetOnHandQuantitiesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventorySetOnHandQuantitiesOperationQueryBuilder SetArguments(Action<InventorySetOnHandQuantitiesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventorySetOnHandQuantitiesOperationQueryBuilder InventoryAdjustmentGroup(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryAdjustmentGroupQueryBuilder> build)

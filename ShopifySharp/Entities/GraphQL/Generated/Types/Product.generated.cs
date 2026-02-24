@@ -48,12 +48,6 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     public ProductBundleComponentConnection? bundleComponents { get; set; } = null;
 
     /// <summary>
-    /// A list of consolidated options for a product in a bundle.
-    /// </summary>
-    [JsonPropertyName("bundleConsolidatedOptions")]
-    public ICollection<ComponentizedProductsBundleConsolidatedOption>? bundleConsolidatedOptions { get; set; } = null;
-
-    /// <summary>
     /// The category of a product
     /// from [Shopify's Standard Product Taxonomy](https://shopify.github.io/product-taxonomy/releases/unstable/?categoryId=sg-4-17-2-17).
     /// </summary>
@@ -594,7 +588,7 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
 
     /// <summary>
     /// A list of [variants](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant) associated with the product.
-    /// If querying a single product at the root, you can fetch up to 2048 variants.
+    /// If querying a single product at the root, you can fetch up to 2000 variants.
     /// </summary>
     [JsonPropertyName("variants")]
     public ProductVariantConnection? variants { get; set; } = null;

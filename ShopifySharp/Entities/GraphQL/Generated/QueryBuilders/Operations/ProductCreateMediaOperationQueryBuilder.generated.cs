@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `productUpdate` or `productSet` instead.")]
-    public sealed class ProductCreateMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductCreateMediaPayload, ProductCreateMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductCreateMediaPayload>
+    public sealed class ProductCreateMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductCreateMediaPayload, ProductCreateMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductCreateMediaPayload>, IHasArguments<ProductCreateMediaArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductCreateMediaArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductCreateMediaOperationQueryBuilder(IQuery<ProductCreateMediaPayload> query) : base(query)
         {
             Arguments = new ProductCreateMediaArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductCreateMediaOperationQueryBuilder SetArguments(Action<ProductCreateMediaArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductCreateMediaOperationQueryBuilder Media(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder> build)

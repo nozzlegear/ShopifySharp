@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnCloseOperationQueryBuilder : FieldsQueryBuilderBase<ReturnClosePayload, ReturnCloseOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnClosePayload>
+    public sealed class ReturnCloseOperationQueryBuilder : FieldsQueryBuilderBase<ReturnClosePayload, ReturnCloseOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnClosePayload>, IHasArguments<ReturnCloseArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReturnCloseArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnCloseOperationQueryBuilder(IQuery<ReturnClosePayload> query) : base(query)
         {
             Arguments = new ReturnCloseArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnCloseOperationQueryBuilder SetArguments(Action<ReturnCloseArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnCloseOperationQueryBuilder Return(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShippingLineConnectionQueryBuilder : FieldsQueryBuilderBase<ShippingLineConnection, ShippingLineConnectionQueryBuilder>
+    public sealed class ShippingLineConnectionQueryBuilder : FieldsQueryBuilderBase<ShippingLineConnection, ShippingLineConnectionQueryBuilder>, IHasArguments<ShippingLineConnectionArgumentsBuilder>
     {
+        public ShippingLineConnectionArgumentsBuilder Arguments { get; }
         protected override ShippingLineConnectionQueryBuilder Self => this;
 
         public ShippingLineConnectionQueryBuilder() : this("shippingLineConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShippingLineConnectionQueryBuilder(string name) : base(new Query<ShippingLineConnection>(name))
         {
+            Arguments = new ShippingLineConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShippingLineConnectionQueryBuilder(IQuery<ShippingLineConnection> query) : base(query)
         {
+            Arguments = new ShippingLineConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShippingLineConnectionQueryBuilder SetArguments(Action<ShippingLineConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShippingLineConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineEdgeQueryBuilder> build)

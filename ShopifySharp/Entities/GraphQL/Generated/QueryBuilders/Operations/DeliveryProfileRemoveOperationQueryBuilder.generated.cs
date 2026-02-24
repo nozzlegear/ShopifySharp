@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DeliveryProfileRemoveOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileRemovePayload, DeliveryProfileRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryProfileRemovePayload>
+    public sealed class DeliveryProfileRemoveOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileRemovePayload, DeliveryProfileRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryProfileRemovePayload>, IHasArguments<DeliveryProfileRemoveArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DeliveryProfileRemoveArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DeliveryProfileRemoveOperationQueryBuilder(IQuery<DeliveryProfileRemovePayload> query) : base(query)
         {
             Arguments = new DeliveryProfileRemoveArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryProfileRemoveOperationQueryBuilder SetArguments(Action<DeliveryProfileRemoveArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryProfileRemoveOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)

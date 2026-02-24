@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class StorefrontAccessTokenDeleteOperationQueryBuilder : FieldsQueryBuilderBase<StorefrontAccessTokenDeletePayload, StorefrontAccessTokenDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<StorefrontAccessTokenDeletePayload>
+    public sealed class StorefrontAccessTokenDeleteOperationQueryBuilder : FieldsQueryBuilderBase<StorefrontAccessTokenDeletePayload, StorefrontAccessTokenDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<StorefrontAccessTokenDeletePayload>, IHasArguments<StorefrontAccessTokenDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public StorefrontAccessTokenDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public StorefrontAccessTokenDeleteOperationQueryBuilder(IQuery<StorefrontAccessTokenDeletePayload> query) : base(query)
         {
             Arguments = new StorefrontAccessTokenDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StorefrontAccessTokenDeleteOperationQueryBuilder SetArguments(Action<StorefrontAccessTokenDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StorefrontAccessTokenDeleteOperationQueryBuilder DeletedStorefrontAccessTokenId()

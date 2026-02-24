@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class LocationLocalPickupEnableOperationQueryBuilder : FieldsQueryBuilderBase<LocationLocalPickupEnablePayload, LocationLocalPickupEnableOperationQueryBuilder>, IGraphOperationQueryBuilder<LocationLocalPickupEnablePayload>
+    public sealed class LocationLocalPickupEnableOperationQueryBuilder : FieldsQueryBuilderBase<LocationLocalPickupEnablePayload, LocationLocalPickupEnableOperationQueryBuilder>, IGraphOperationQueryBuilder<LocationLocalPickupEnablePayload>, IHasArguments<LocationLocalPickupEnableArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public LocationLocalPickupEnableArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public LocationLocalPickupEnableOperationQueryBuilder(IQuery<LocationLocalPickupEnablePayload> query) : base(query)
         {
             Arguments = new LocationLocalPickupEnableArgumentsBuilder(base.InnerQuery);
+        }
+
+        public LocationLocalPickupEnableOperationQueryBuilder SetArguments(Action<LocationLocalPickupEnableArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public LocationLocalPickupEnableOperationQueryBuilder LocalPickupSettings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryLocalPickupSettingsQueryBuilder> build)

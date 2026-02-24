@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketsResolvedValuesQueryBuilder : FieldsQueryBuilderBase<MarketsResolvedValues, MarketsResolvedValuesQueryBuilder>
+    public sealed class MarketsResolvedValuesQueryBuilder : FieldsQueryBuilderBase<MarketsResolvedValues, MarketsResolvedValuesQueryBuilder>, IHasArguments<MarketsResolvedValuesArgumentsBuilder>
     {
+        public MarketsResolvedValuesArgumentsBuilder Arguments { get; }
         protected override MarketsResolvedValuesQueryBuilder Self => this;
 
         public MarketsResolvedValuesQueryBuilder() : this("marketsResolvedValues")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketsResolvedValuesQueryBuilder(string name) : base(new Query<MarketsResolvedValues>(name))
         {
+            Arguments = new MarketsResolvedValuesArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketsResolvedValuesQueryBuilder(IQuery<MarketsResolvedValues> query) : base(query)
         {
+            Arguments = new MarketsResolvedValuesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketsResolvedValuesQueryBuilder SetArguments(Action<MarketsResolvedValuesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketsResolvedValuesQueryBuilder Catalogs(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketCatalogConnectionQueryBuilder> build)

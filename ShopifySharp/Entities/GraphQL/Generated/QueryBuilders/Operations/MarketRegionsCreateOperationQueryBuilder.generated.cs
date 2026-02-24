@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("This mutation is deprecated and will be removed in the future. Use `marketCreate` or `marketUpdate` instead.")]
-    public sealed class MarketRegionsCreateOperationQueryBuilder : FieldsQueryBuilderBase<MarketRegionsCreatePayload, MarketRegionsCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketRegionsCreatePayload>
+    public sealed class MarketRegionsCreateOperationQueryBuilder : FieldsQueryBuilderBase<MarketRegionsCreatePayload, MarketRegionsCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketRegionsCreatePayload>, IHasArguments<MarketRegionsCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketRegionsCreateArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketRegionsCreateOperationQueryBuilder(IQuery<MarketRegionsCreatePayload> query) : base(query)
         {
             Arguments = new MarketRegionsCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketRegionsCreateOperationQueryBuilder SetArguments(Action<MarketRegionsCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketRegionsCreateOperationQueryBuilder Market(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketQueryBuilder> build)

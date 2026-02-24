@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CompanyLocationQueryBuilder : FieldsQueryBuilderBase<CompanyLocation, CompanyLocationQueryBuilder>
+    public sealed class CompanyLocationQueryBuilder : FieldsQueryBuilderBase<CompanyLocation, CompanyLocationQueryBuilder>, IHasArguments<CompanyLocationArgumentsBuilder>
     {
+        public CompanyLocationArgumentsBuilder Arguments { get; }
         protected override CompanyLocationQueryBuilder Self => this;
 
         public CompanyLocationQueryBuilder() : this("companyLocation")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CompanyLocationQueryBuilder(string name) : base(new Query<CompanyLocation>(name))
         {
+            Arguments = new CompanyLocationArgumentsBuilder(base.InnerQuery);
         }
 
         public CompanyLocationQueryBuilder(IQuery<CompanyLocation> query) : base(query)
         {
+            Arguments = new CompanyLocationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationQueryBuilder SetArguments(Action<CompanyLocationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationQueryBuilder BillingAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyAddressQueryBuilder> build)
@@ -244,15 +253,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationStaffMemberAssignmentConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CompanyLocationStaffMemberAssignmentConnection>(query);
-            return this;
-        }
-
-        public CompanyLocationQueryBuilder StoreCreditAccounts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountConnectionQueryBuilder> build)
-        {
-            var query = new Query<StoreCreditAccountConnection>("storeCreditAccounts");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<StoreCreditAccountConnection>(query);
             return this;
         }
 

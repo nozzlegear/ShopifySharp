@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `publishableUnpublish` instead.")]
-    public sealed class ProductUnpublishOperationQueryBuilder : FieldsQueryBuilderBase<ProductUnpublishPayload, ProductUnpublishOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductUnpublishPayload>
+    public sealed class ProductUnpublishOperationQueryBuilder : FieldsQueryBuilderBase<ProductUnpublishPayload, ProductUnpublishOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductUnpublishPayload>, IHasArguments<ProductUnpublishArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductUnpublishArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductUnpublishOperationQueryBuilder(IQuery<ProductUnpublishPayload> query) : base(query)
         {
             Arguments = new ProductUnpublishArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductUnpublishOperationQueryBuilder SetArguments(Action<ProductUnpublishArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductUnpublishOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

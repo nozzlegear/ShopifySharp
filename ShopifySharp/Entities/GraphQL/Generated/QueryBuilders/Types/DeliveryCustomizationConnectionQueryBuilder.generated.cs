@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryCustomizationConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryCustomizationConnection, DeliveryCustomizationConnectionQueryBuilder>
+    public sealed class DeliveryCustomizationConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryCustomizationConnection, DeliveryCustomizationConnectionQueryBuilder>, IHasArguments<DeliveryCustomizationConnectionArgumentsBuilder>
     {
+        public DeliveryCustomizationConnectionArgumentsBuilder Arguments { get; }
         protected override DeliveryCustomizationConnectionQueryBuilder Self => this;
 
         public DeliveryCustomizationConnectionQueryBuilder() : this("deliveryCustomizationConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryCustomizationConnectionQueryBuilder(string name) : base(new Query<DeliveryCustomizationConnection>(name))
         {
+            Arguments = new DeliveryCustomizationConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryCustomizationConnectionQueryBuilder(IQuery<DeliveryCustomizationConnection> query) : base(query)
         {
+            Arguments = new DeliveryCustomizationConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryCustomizationConnectionQueryBuilder SetArguments(Action<DeliveryCustomizationConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryCustomizationConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCustomizationEdgeQueryBuilder> build)

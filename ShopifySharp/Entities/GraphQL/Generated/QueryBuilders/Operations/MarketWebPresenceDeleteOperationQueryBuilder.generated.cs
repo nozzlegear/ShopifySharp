@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `webPresenceDelete` instead.")]
-    public sealed class MarketWebPresenceDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceDeletePayload, MarketWebPresenceDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceDeletePayload>
+    public sealed class MarketWebPresenceDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceDeletePayload, MarketWebPresenceDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceDeletePayload>, IHasArguments<MarketWebPresenceDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketWebPresenceDeleteArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketWebPresenceDeleteOperationQueryBuilder(IQuery<MarketWebPresenceDeletePayload> query) : base(query)
         {
             Arguments = new MarketWebPresenceDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketWebPresenceDeleteOperationQueryBuilder SetArguments(Action<MarketWebPresenceDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketWebPresenceDeleteOperationQueryBuilder DeletedId()

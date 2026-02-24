@@ -21,9 +21,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// > The [`DiscountCodeApp`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DiscountCodeApp)
 /// object has similar functionality to the `DiscountAutomaticApp` object, with the exception that `DiscountCodeApp`
 /// stores information about discount codes that are managed by an app using Shopify Functions.
-/// >
-/// > API versions prior to `2025-10` only return automatic discounts with `context`
-/// set to `all`, discounts with other values are filtered out.
 /// </summary>
 public record DiscountAutomaticApp : IGraphQLUnionCase, IGraphQLObject
 {
@@ -75,12 +72,6 @@ public record DiscountAutomaticApp : IGraphQLUnionCase, IGraphQLObject
     /// </summary>
     [JsonPropertyName("combinesWith")]
     public DiscountCombinesWith? combinesWith { get; set; } = null;
-
-    /// <summary>
-    /// The context defining which buyers can use the discount.
-    /// </summary>
-    [JsonPropertyName("context")]
-    public DiscountContext? context { get; set; } = null;
 
     /// <summary>
     /// The date and time when the discount was created.

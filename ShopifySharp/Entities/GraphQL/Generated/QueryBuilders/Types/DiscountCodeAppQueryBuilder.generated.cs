@@ -190,15 +190,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public DiscountCodeAppQueryBuilder Context(Action<DiscountContextUnionCasesBuilder> build)
-        {
-            var query = new Query<DiscountContext>("context");
-            var unionBuilder = new DiscountContextUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
-
         [Obsolete("Use `context` instead.")]
         public DiscountCodeAppQueryBuilder CustomerSelection(Action<DiscountCustomerSelectionUnionCasesBuilder> build)
         {

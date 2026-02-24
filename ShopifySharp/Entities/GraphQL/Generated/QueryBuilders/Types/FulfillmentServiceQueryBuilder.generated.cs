@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FulfillmentServiceQueryBuilder : FieldsQueryBuilderBase<FulfillmentService, FulfillmentServiceQueryBuilder>
+    public sealed class FulfillmentServiceQueryBuilder : FieldsQueryBuilderBase<FulfillmentService, FulfillmentServiceQueryBuilder>, IHasArguments<FulfillmentServiceArgumentsBuilder>
     {
+        public FulfillmentServiceArgumentsBuilder Arguments { get; }
         protected override FulfillmentServiceQueryBuilder Self => this;
 
         public FulfillmentServiceQueryBuilder() : this("fulfillmentService")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FulfillmentServiceQueryBuilder(string name) : base(new Query<FulfillmentService>(name))
         {
+            Arguments = new FulfillmentServiceArgumentsBuilder(base.InnerQuery);
         }
 
         public FulfillmentServiceQueryBuilder(IQuery<FulfillmentService> query) : base(query)
         {
+            Arguments = new FulfillmentServiceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentServiceQueryBuilder SetArguments(Action<FulfillmentServiceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentServiceQueryBuilder CallbackUrl()
@@ -70,7 +79,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Fulfillment services are all migrating to permit SKU sharing. Setting permits SKU sharing to false [is no longer supported](https://shopify.dev/changelog/setting-permitsskusharing-argument-to-false-when-creating-a-fulfillment-service-returns-an-error). As of API version `2026-04` this field will be removed. ")]
         public FulfillmentServiceQueryBuilder PermitsSkuSharing()
         {
             base.InnerQuery.AddField("permitsSkuSharing");

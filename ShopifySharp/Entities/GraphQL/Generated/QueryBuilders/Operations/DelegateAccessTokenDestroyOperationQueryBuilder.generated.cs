@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DelegateAccessTokenDestroyOperationQueryBuilder : FieldsQueryBuilderBase<DelegateAccessTokenDestroyPayload, DelegateAccessTokenDestroyOperationQueryBuilder>, IGraphOperationQueryBuilder<DelegateAccessTokenDestroyPayload>
+    public sealed class DelegateAccessTokenDestroyOperationQueryBuilder : FieldsQueryBuilderBase<DelegateAccessTokenDestroyPayload, DelegateAccessTokenDestroyOperationQueryBuilder>, IGraphOperationQueryBuilder<DelegateAccessTokenDestroyPayload>, IHasArguments<DelegateAccessTokenDestroyArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DelegateAccessTokenDestroyArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DelegateAccessTokenDestroyOperationQueryBuilder(IQuery<DelegateAccessTokenDestroyPayload> query) : base(query)
         {
             Arguments = new DelegateAccessTokenDestroyArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DelegateAccessTokenDestroyOperationQueryBuilder SetArguments(Action<DelegateAccessTokenDestroyArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DelegateAccessTokenDestroyOperationQueryBuilder Shop(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopQueryBuilder> build)

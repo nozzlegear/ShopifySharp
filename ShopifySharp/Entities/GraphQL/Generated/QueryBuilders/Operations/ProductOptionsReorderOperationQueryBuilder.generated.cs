@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductOptionsReorderOperationQueryBuilder : FieldsQueryBuilderBase<ProductOptionsReorderPayload, ProductOptionsReorderOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductOptionsReorderPayload>
+    public sealed class ProductOptionsReorderOperationQueryBuilder : FieldsQueryBuilderBase<ProductOptionsReorderPayload, ProductOptionsReorderOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductOptionsReorderPayload>, IHasArguments<ProductOptionsReorderArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductOptionsReorderArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductOptionsReorderOperationQueryBuilder(IQuery<ProductOptionsReorderPayload> query) : base(query)
         {
             Arguments = new ProductOptionsReorderArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductOptionsReorderOperationQueryBuilder SetArguments(Action<ProductOptionsReorderArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductOptionsReorderOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

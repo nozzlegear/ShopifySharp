@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrderRescheduleOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderReschedulePayload, FulfillmentOrderRescheduleOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderReschedulePayload>
+    public sealed class FulfillmentOrderRescheduleOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderReschedulePayload, FulfillmentOrderRescheduleOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderReschedulePayload>, IHasArguments<FulfillmentOrderRescheduleArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrderRescheduleArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderRescheduleOperationQueryBuilder(IQuery<FulfillmentOrderReschedulePayload> query) : base(query)
         {
             Arguments = new FulfillmentOrderRescheduleArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderRescheduleOperationQueryBuilder SetArguments(Action<FulfillmentOrderRescheduleArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderRescheduleOperationQueryBuilder FulfillmentOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderQueryBuilder> build)

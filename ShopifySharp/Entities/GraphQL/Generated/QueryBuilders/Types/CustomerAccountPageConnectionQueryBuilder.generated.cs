@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerAccountPageConnectionQueryBuilder : FieldsQueryBuilderBase<CustomerAccountPageConnection, CustomerAccountPageConnectionQueryBuilder>
+    public sealed class CustomerAccountPageConnectionQueryBuilder : FieldsQueryBuilderBase<CustomerAccountPageConnection, CustomerAccountPageConnectionQueryBuilder>, IHasArguments<CustomerAccountPageConnectionArgumentsBuilder>
     {
+        public CustomerAccountPageConnectionArgumentsBuilder Arguments { get; }
         protected override CustomerAccountPageConnectionQueryBuilder Self => this;
 
         public CustomerAccountPageConnectionQueryBuilder() : this("customerAccountPageConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerAccountPageConnectionQueryBuilder(string name) : base(new Query<CustomerAccountPageConnection>(name))
         {
+            Arguments = new CustomerAccountPageConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerAccountPageConnectionQueryBuilder(IQuery<CustomerAccountPageConnection> query) : base(query)
         {
+            Arguments = new CustomerAccountPageConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerAccountPageConnectionQueryBuilder SetArguments(Action<CustomerAccountPageConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerAccountPageConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageEdgeQueryBuilder> build)

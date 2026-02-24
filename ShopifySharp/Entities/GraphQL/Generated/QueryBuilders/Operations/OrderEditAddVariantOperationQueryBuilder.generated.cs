@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderEditAddVariantOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditAddVariantPayload, OrderEditAddVariantOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditAddVariantPayload>
+    public sealed class OrderEditAddVariantOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditAddVariantPayload, OrderEditAddVariantOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditAddVariantPayload>, IHasArguments<OrderEditAddVariantArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderEditAddVariantArgumentsBuilder Arguments { get; }
@@ -34,6 +34,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new OrderEditAddVariantArgumentsBuilder(base.InnerQuery);
         }
 
+        public OrderEditAddVariantOperationQueryBuilder SetArguments(Action<OrderEditAddVariantArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public OrderEditAddVariantOperationQueryBuilder CalculatedLineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedLineItemQueryBuilder> build)
         {
             var query = new Query<CalculatedLineItem>("calculatedLineItem");
@@ -49,15 +55,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedOrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CalculatedOrder>(query);
-            return this;
-        }
-
-        public OrderEditAddVariantOperationQueryBuilder OrderEditSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder> build)
-        {
-            var query = new Query<OrderEditSession>("orderEditSession");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<OrderEditSession>(query);
             return this;
         }
 

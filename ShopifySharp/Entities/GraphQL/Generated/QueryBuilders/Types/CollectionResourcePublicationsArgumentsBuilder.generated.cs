@@ -1,0 +1,61 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class CollectionResourcePublicationsArgumentsBuilder : ArgumentsBuilderBase<ResourcePublicationConnection?, CollectionResourcePublicationsArgumentsBuilder>
+    {
+        protected override CollectionResourcePublicationsArgumentsBuilder Self => this;
+
+        public CollectionResourcePublicationsArgumentsBuilder(IQuery<ResourcePublicationConnection?> query) : base(query)
+        {
+        }
+
+        public CollectionResourcePublicationsArgumentsBuilder After(string? after)
+        {
+            base.InnerQuery.AddArgument("after", after);
+            return this;
+        }
+
+        public CollectionResourcePublicationsArgumentsBuilder Before(string? before)
+        {
+            base.InnerQuery.AddArgument("before", before);
+            return this;
+        }
+
+        public CollectionResourcePublicationsArgumentsBuilder First(int? first)
+        {
+            base.InnerQuery.AddArgument("first", first);
+            return this;
+        }
+
+        public CollectionResourcePublicationsArgumentsBuilder Last(int? last)
+        {
+            base.InnerQuery.AddArgument("last", last);
+            return this;
+        }
+
+        public CollectionResourcePublicationsArgumentsBuilder OnlyPublished(bool? onlyPublished)
+        {
+            base.InnerQuery.AddArgument("onlyPublished", onlyPublished);
+            return this;
+        }
+
+        public CollectionResourcePublicationsArgumentsBuilder Reverse(bool? reverse)
+        {
+            base.InnerQuery.AddArgument("reverse", reverse);
+            return this;
+        }
+    }
+}

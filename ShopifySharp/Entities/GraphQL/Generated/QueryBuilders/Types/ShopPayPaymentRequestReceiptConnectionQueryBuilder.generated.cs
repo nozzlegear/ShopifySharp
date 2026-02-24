@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopPayPaymentRequestReceiptConnectionQueryBuilder : FieldsQueryBuilderBase<ShopPayPaymentRequestReceiptConnection, ShopPayPaymentRequestReceiptConnectionQueryBuilder>
+    public sealed class ShopPayPaymentRequestReceiptConnectionQueryBuilder : FieldsQueryBuilderBase<ShopPayPaymentRequestReceiptConnection, ShopPayPaymentRequestReceiptConnectionQueryBuilder>, IHasArguments<ShopPayPaymentRequestReceiptConnectionArgumentsBuilder>
     {
+        public ShopPayPaymentRequestReceiptConnectionArgumentsBuilder Arguments { get; }
         protected override ShopPayPaymentRequestReceiptConnectionQueryBuilder Self => this;
 
         public ShopPayPaymentRequestReceiptConnectionQueryBuilder() : this("shopPayPaymentRequestReceiptConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopPayPaymentRequestReceiptConnectionQueryBuilder(string name) : base(new Query<ShopPayPaymentRequestReceiptConnection>(name))
         {
+            Arguments = new ShopPayPaymentRequestReceiptConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopPayPaymentRequestReceiptConnectionQueryBuilder(IQuery<ShopPayPaymentRequestReceiptConnection> query) : base(query)
         {
+            Arguments = new ShopPayPaymentRequestReceiptConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopPayPaymentRequestReceiptConnectionQueryBuilder SetArguments(Action<ShopPayPaymentRequestReceiptConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopPayPaymentRequestReceiptConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopPayPaymentRequestReceiptEdgeQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DiscountAutomaticQueryBuilder : FieldsQueryBuilderBase<DiscountAutomatic, DiscountAutomaticQueryBuilder>
+    public sealed class DiscountAutomaticQueryBuilder : FieldsQueryBuilderBase<DiscountAutomatic, DiscountAutomaticQueryBuilder>, IHasArguments<DiscountAutomaticArgumentsBuilder>
     {
+        public DiscountAutomaticArgumentsBuilder Arguments { get; }
         protected override DiscountAutomaticQueryBuilder Self => this;
 
         public DiscountAutomaticQueryBuilder() : this("discountAutomatic")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DiscountAutomaticQueryBuilder(string name) : base(new Query<DiscountAutomatic>(name))
         {
+            Arguments = new DiscountAutomaticArgumentsBuilder(base.InnerQuery);
         }
 
         public DiscountAutomaticQueryBuilder(IQuery<DiscountAutomatic> query) : base(query)
         {
+            Arguments = new DiscountAutomaticArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountAutomaticQueryBuilder SetArguments(Action<DiscountAutomaticArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountAutomaticQueryBuilder DiscountAutomatic(Action<DiscountAutomaticUnionCasesBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class WebPixelQueryBuilder : FieldsQueryBuilderBase<WebPixel, WebPixelQueryBuilder>
+    public sealed class WebPixelQueryBuilder : FieldsQueryBuilderBase<WebPixel, WebPixelQueryBuilder>, IHasArguments<WebPixelArgumentsBuilder>
     {
+        public WebPixelArgumentsBuilder Arguments { get; }
         protected override WebPixelQueryBuilder Self => this;
 
         public WebPixelQueryBuilder() : this("webPixel")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public WebPixelQueryBuilder(string name) : base(new Query<WebPixel>(name))
         {
+            Arguments = new WebPixelArgumentsBuilder(base.InnerQuery);
         }
 
         public WebPixelQueryBuilder(IQuery<WebPixel> query) : base(query)
         {
+            Arguments = new WebPixelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebPixelQueryBuilder SetArguments(Action<WebPixelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebPixelQueryBuilder Id()

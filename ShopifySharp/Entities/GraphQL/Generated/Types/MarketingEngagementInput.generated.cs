@@ -21,15 +21,6 @@ public record MarketingEngagementInput : GraphQLInputObject<MarketingEngagementI
     public MoneyInput? adSpend { get; set; } = null;
 
     /// <summary>
-    /// The number of all conversions from the marketing content. This field supports
-    /// ad platforms that track conversions beyond traditional sales metrics. All
-    /// conversions include both primary and secondary conversion goals as defined by
-    /// the ad platform, such as purchases, add-to-carts, page views, and sign-ups.
-    /// </summary>
-    [JsonPropertyName("allConversions")]
-    public decimal? allConversions { get; set; } = null;
-
-    /// <summary>
     /// The total number of interactions, such as a button press or a screen touch, that occurred on the marketing content.
     /// </summary>
     [JsonPropertyName("clicksCount")]
@@ -108,15 +99,6 @@ public record MarketingEngagementInput : GraphQLInputObject<MarketingEngagementI
     /// </summary>
     [JsonPropertyName("orders")]
     public decimal? orders { get; set; } = null;
-
-    /// <summary>
-    /// The number of primary conversions from the marketing content. This field
-    /// supports ad platforms that track conversions beyond traditional sales metrics.
-    /// Primary conversions represent the main conversion goal defined by the ad
-    /// platform, such as purchases, sign-ups, or add-to-carts.
-    /// </summary>
-    [JsonPropertyName("primaryConversions")]
-    public decimal? primaryConversions { get; set; } = null;
 
     /// <summary>
     /// The number of returning customers that have placed an order. Doesn't include

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductOptionQueryBuilder : FieldsQueryBuilderBase<ProductOption, ProductOptionQueryBuilder>
+    public sealed class ProductOptionQueryBuilder : FieldsQueryBuilderBase<ProductOption, ProductOptionQueryBuilder>, IHasArguments<ProductOptionArgumentsBuilder>
     {
+        public ProductOptionArgumentsBuilder Arguments { get; }
         protected override ProductOptionQueryBuilder Self => this;
 
         public ProductOptionQueryBuilder() : this("productOption")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductOptionQueryBuilder(string name) : base(new Query<ProductOption>(name))
         {
+            Arguments = new ProductOptionArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductOptionQueryBuilder(IQuery<ProductOption> query) : base(query)
         {
+            Arguments = new ProductOptionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductOptionQueryBuilder SetArguments(Action<ProductOptionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductOptionQueryBuilder Id()

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CartTransformConnectionQueryBuilder : FieldsQueryBuilderBase<CartTransformConnection, CartTransformConnectionQueryBuilder>
+    public sealed class CartTransformConnectionQueryBuilder : FieldsQueryBuilderBase<CartTransformConnection, CartTransformConnectionQueryBuilder>, IHasArguments<CartTransformConnectionArgumentsBuilder>
     {
+        public CartTransformConnectionArgumentsBuilder Arguments { get; }
         protected override CartTransformConnectionQueryBuilder Self => this;
 
         public CartTransformConnectionQueryBuilder() : this("cartTransformConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CartTransformConnectionQueryBuilder(string name) : base(new Query<CartTransformConnection>(name))
         {
+            Arguments = new CartTransformConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CartTransformConnectionQueryBuilder(IQuery<CartTransformConnection> query) : base(query)
         {
+            Arguments = new CartTransformConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CartTransformConnectionQueryBuilder SetArguments(Action<CartTransformConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CartTransformConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformEdgeQueryBuilder> build)

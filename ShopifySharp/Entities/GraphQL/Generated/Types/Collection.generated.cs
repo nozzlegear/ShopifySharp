@@ -39,14 +39,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode, IPublishable
 {
     /// <summary>
-    /// Collection duplicate operations involving this collection, either as a source
-    /// (copying products from this collection to another) or a target (copying
-    /// products to this collection from another).
-    /// </summary>
-    [JsonPropertyName("activeOperations")]
-    public CollectionOperations? activeOperations { get; set; } = null;
-
-    /// <summary>
     /// The number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
     /// that a resource is published to, without

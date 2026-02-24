@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AppRevenueAttributionRecordConnectionQueryBuilder : FieldsQueryBuilderBase<AppRevenueAttributionRecordConnection, AppRevenueAttributionRecordConnectionQueryBuilder>
+    public sealed class AppRevenueAttributionRecordConnectionQueryBuilder : FieldsQueryBuilderBase<AppRevenueAttributionRecordConnection, AppRevenueAttributionRecordConnectionQueryBuilder>, IHasArguments<AppRevenueAttributionRecordConnectionArgumentsBuilder>
     {
+        public AppRevenueAttributionRecordConnectionArgumentsBuilder Arguments { get; }
         protected override AppRevenueAttributionRecordConnectionQueryBuilder Self => this;
 
         public AppRevenueAttributionRecordConnectionQueryBuilder() : this("appRevenueAttributionRecordConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AppRevenueAttributionRecordConnectionQueryBuilder(string name) : base(new Query<AppRevenueAttributionRecordConnection>(name))
         {
+            Arguments = new AppRevenueAttributionRecordConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public AppRevenueAttributionRecordConnectionQueryBuilder(IQuery<AppRevenueAttributionRecordConnection> query) : base(query)
         {
+            Arguments = new AppRevenueAttributionRecordConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppRevenueAttributionRecordConnectionQueryBuilder SetArguments(Action<AppRevenueAttributionRecordConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppRevenueAttributionRecordConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppRevenueAttributionRecordEdgeQueryBuilder> build)

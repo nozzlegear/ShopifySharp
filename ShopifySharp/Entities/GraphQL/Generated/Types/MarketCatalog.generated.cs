@@ -9,17 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A catalog for managing product availability and pricing for specific
-/// [`Market`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Market)
-/// contexts. Each catalog links to one or more markets and defines what
-/// [`Product`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Product)
-/// objects customers see through its [`Publication`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-/// settings. The catalog can include a [`PriceList`](https://shopify.dev/docs/api/admin-graphql/latest/objects/PriceList)
-/// for market-specific pricing adjustments.
-/// Use catalogs to create distinct shopping experiences for different geographic regions or customer segments.
-/// Learn more about [building a
-/// catalog](https://shopify.dev/docs/apps/build/markets/build-catalog) and
-/// [managing markets](https://shopify.dev/docs/apps/build/markets).
+/// A list of products with publishing and pricing information associated with markets.
 /// </summary>
 public record MarketCatalog : IGraphQLObject, ICatalog, INode
 {

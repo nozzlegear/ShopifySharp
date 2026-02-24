@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductPublicationConnectionQueryBuilder : FieldsQueryBuilderBase<ProductPublicationConnection, ProductPublicationConnectionQueryBuilder>
+    public sealed class ProductPublicationConnectionQueryBuilder : FieldsQueryBuilderBase<ProductPublicationConnection, ProductPublicationConnectionQueryBuilder>, IHasArguments<ProductPublicationConnectionArgumentsBuilder>
     {
+        public ProductPublicationConnectionArgumentsBuilder Arguments { get; }
         protected override ProductPublicationConnectionQueryBuilder Self => this;
 
         public ProductPublicationConnectionQueryBuilder() : this("productPublicationConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductPublicationConnectionQueryBuilder(string name) : base(new Query<ProductPublicationConnection>(name))
         {
+            Arguments = new ProductPublicationConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductPublicationConnectionQueryBuilder(IQuery<ProductPublicationConnection> query) : base(query)
         {
+            Arguments = new ProductPublicationConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductPublicationConnectionQueryBuilder SetArguments(Action<ProductPublicationConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductPublicationConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductPublicationEdgeQueryBuilder> build)

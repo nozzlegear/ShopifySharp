@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryTransferConnectionQueryBuilder : FieldsQueryBuilderBase<InventoryTransferConnection, InventoryTransferConnectionQueryBuilder>
+    public sealed class InventoryTransferConnectionQueryBuilder : FieldsQueryBuilderBase<InventoryTransferConnection, InventoryTransferConnectionQueryBuilder>, IHasArguments<InventoryTransferConnectionArgumentsBuilder>
     {
+        public InventoryTransferConnectionArgumentsBuilder Arguments { get; }
         protected override InventoryTransferConnectionQueryBuilder Self => this;
 
         public InventoryTransferConnectionQueryBuilder() : this("inventoryTransferConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryTransferConnectionQueryBuilder(string name) : base(new Query<InventoryTransferConnection>(name))
         {
+            Arguments = new InventoryTransferConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryTransferConnectionQueryBuilder(IQuery<InventoryTransferConnection> query) : base(query)
         {
+            Arguments = new InventoryTransferConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryTransferConnectionQueryBuilder SetArguments(Action<InventoryTransferConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryTransferConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferEdgeQueryBuilder> build)

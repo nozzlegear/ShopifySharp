@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MenuOperationQueryBuilder : FieldsQueryBuilderBase<Menu, MenuOperationQueryBuilder>, IGraphOperationQueryBuilder<Menu>
+    public sealed class MenuOperationQueryBuilder : FieldsQueryBuilderBase<Menu, MenuOperationQueryBuilder>, IGraphOperationQueryBuilder<Menu>, IHasArguments<MenuArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public MenuArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MenuOperationQueryBuilder(IQuery<Menu> query) : base(query)
         {
             Arguments = new MenuArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MenuOperationQueryBuilder SetArguments(Action<MenuArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MenuOperationQueryBuilder Handle()

@@ -20,12 +20,6 @@ public record MetaobjectAccess : IGraphQLObject
     public MetaobjectAdminAccess? admin { get; set; } = null;
 
     /// <summary>
-    /// The access permitted on the Customer Account API.
-    /// </summary>
-    [JsonPropertyName("customerAccount")]
-    public MetaobjectCustomerAccountAccess? customerAccount { get; set; } = null;
-
-    /// <summary>
     /// The access permitted on the Storefront API.
     /// </summary>
     [JsonPropertyName("storefront")]

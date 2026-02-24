@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MenuItemQueryBuilder : FieldsQueryBuilderBase<MenuItem, MenuItemQueryBuilder>
+    public sealed class MenuItemQueryBuilder : FieldsQueryBuilderBase<MenuItem, MenuItemQueryBuilder>, IHasArguments<MenuItemArgumentsBuilder>
     {
+        public MenuItemArgumentsBuilder Arguments { get; }
         protected override MenuItemQueryBuilder Self => this;
 
         public MenuItemQueryBuilder() : this("menuItem")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MenuItemQueryBuilder(string name) : base(new Query<MenuItem>(name))
         {
+            Arguments = new MenuItemArgumentsBuilder(base.InnerQuery);
         }
 
         public MenuItemQueryBuilder(IQuery<MenuItem> query) : base(query)
         {
+            Arguments = new MenuItemArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MenuItemQueryBuilder SetArguments(Action<MenuItemArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MenuItemQueryBuilder Id()

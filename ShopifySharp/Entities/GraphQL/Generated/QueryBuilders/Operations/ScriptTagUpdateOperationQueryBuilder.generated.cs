@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ScriptTagUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ScriptTagUpdatePayload, ScriptTagUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ScriptTagUpdatePayload>
+    public sealed class ScriptTagUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ScriptTagUpdatePayload, ScriptTagUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ScriptTagUpdatePayload>, IHasArguments<ScriptTagUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ScriptTagUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ScriptTagUpdateOperationQueryBuilder(IQuery<ScriptTagUpdatePayload> query) : base(query)
         {
             Arguments = new ScriptTagUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ScriptTagUpdateOperationQueryBuilder SetArguments(Action<ScriptTagUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ScriptTagUpdateOperationQueryBuilder ScriptTag(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ScriptTagQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MenuUpdateOperationQueryBuilder : FieldsQueryBuilderBase<MenuUpdatePayload, MenuUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<MenuUpdatePayload>
+    public sealed class MenuUpdateOperationQueryBuilder : FieldsQueryBuilderBase<MenuUpdatePayload, MenuUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<MenuUpdatePayload>, IHasArguments<MenuUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MenuUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MenuUpdateOperationQueryBuilder(IQuery<MenuUpdatePayload> query) : base(query)
         {
             Arguments = new MenuUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MenuUpdateOperationQueryBuilder SetArguments(Action<MenuUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MenuUpdateOperationQueryBuilder Menu(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MenuQueryBuilder> build)

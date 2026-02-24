@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AbandonedCheckoutLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<AbandonedCheckoutLineItemConnection, AbandonedCheckoutLineItemConnectionQueryBuilder>
+    public sealed class AbandonedCheckoutLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<AbandonedCheckoutLineItemConnection, AbandonedCheckoutLineItemConnectionQueryBuilder>, IHasArguments<AbandonedCheckoutLineItemConnectionArgumentsBuilder>
     {
+        public AbandonedCheckoutLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override AbandonedCheckoutLineItemConnectionQueryBuilder Self => this;
 
         public AbandonedCheckoutLineItemConnectionQueryBuilder() : this("abandonedCheckoutLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AbandonedCheckoutLineItemConnectionQueryBuilder(string name) : base(new Query<AbandonedCheckoutLineItemConnection>(name))
         {
+            Arguments = new AbandonedCheckoutLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public AbandonedCheckoutLineItemConnectionQueryBuilder(IQuery<AbandonedCheckoutLineItemConnection> query) : base(query)
         {
+            Arguments = new AbandonedCheckoutLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AbandonedCheckoutLineItemConnectionQueryBuilder SetArguments(Action<AbandonedCheckoutLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AbandonedCheckoutLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonedCheckoutLineItemEdgeQueryBuilder> build)

@@ -84,12 +84,6 @@ public record Refund : IGraphQLObject, ILegacyInteroperability, INode
     public OrderAdjustmentConnection? orderAdjustments { get; set; } = null;
 
     /// <summary>
-    /// The date and time when the refund was processed.
-    /// </summary>
-    [JsonPropertyName("processedAt")]
-    public DateTimeOffset? processedAt { get; set; } = null;
-
-    /// <summary>
     /// The `RefundLineItem` resources attached to the refund.
     /// </summary>
     [JsonPropertyName("refundLineItems")]

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketingEventQueryBuilder : FieldsQueryBuilderBase<MarketingEvent, MarketingEventQueryBuilder>
+    public sealed class MarketingEventQueryBuilder : FieldsQueryBuilderBase<MarketingEvent, MarketingEventQueryBuilder>, IHasArguments<MarketingEventArgumentsBuilder>
     {
+        public MarketingEventArgumentsBuilder Arguments { get; }
         protected override MarketingEventQueryBuilder Self => this;
 
         public MarketingEventQueryBuilder() : this("marketingEvent")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketingEventQueryBuilder(string name) : base(new Query<MarketingEvent>(name))
         {
+            Arguments = new MarketingEventArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketingEventQueryBuilder(IQuery<MarketingEvent> query) : base(query)
         {
+            Arguments = new MarketingEventArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketingEventQueryBuilder SetArguments(Action<MarketingEventArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketingEventQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)

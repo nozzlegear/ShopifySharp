@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ChannelConnectionQueryBuilder : FieldsQueryBuilderBase<ChannelConnection, ChannelConnectionQueryBuilder>
+    public sealed class ChannelConnectionQueryBuilder : FieldsQueryBuilderBase<ChannelConnection, ChannelConnectionQueryBuilder>, IHasArguments<ChannelConnectionArgumentsBuilder>
     {
+        public ChannelConnectionArgumentsBuilder Arguments { get; }
         protected override ChannelConnectionQueryBuilder Self => this;
 
         public ChannelConnectionQueryBuilder() : this("channelConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ChannelConnectionQueryBuilder(string name) : base(new Query<ChannelConnection>(name))
         {
+            Arguments = new ChannelConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ChannelConnectionQueryBuilder(IQuery<ChannelConnection> query) : base(query)
         {
+            Arguments = new ChannelConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ChannelConnectionQueryBuilder SetArguments(Action<ChannelConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ChannelConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelEdgeQueryBuilder> build)

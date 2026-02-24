@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SubscriptionDiscountConnectionQueryBuilder : FieldsQueryBuilderBase<SubscriptionDiscountConnection, SubscriptionDiscountConnectionQueryBuilder>
+    public sealed class SubscriptionDiscountConnectionQueryBuilder : FieldsQueryBuilderBase<SubscriptionDiscountConnection, SubscriptionDiscountConnectionQueryBuilder>, IHasArguments<SubscriptionDiscountConnectionArgumentsBuilder>
     {
+        public SubscriptionDiscountConnectionArgumentsBuilder Arguments { get; }
         protected override SubscriptionDiscountConnectionQueryBuilder Self => this;
 
         public SubscriptionDiscountConnectionQueryBuilder() : this("subscriptionDiscountConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SubscriptionDiscountConnectionQueryBuilder(string name) : base(new Query<SubscriptionDiscountConnection>(name))
         {
+            Arguments = new SubscriptionDiscountConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SubscriptionDiscountConnectionQueryBuilder(IQuery<SubscriptionDiscountConnection> query) : base(query)
         {
+            Arguments = new SubscriptionDiscountConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionDiscountConnectionQueryBuilder SetArguments(Action<SubscriptionDiscountConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionDiscountConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDiscountEdgeQueryBuilder> build)

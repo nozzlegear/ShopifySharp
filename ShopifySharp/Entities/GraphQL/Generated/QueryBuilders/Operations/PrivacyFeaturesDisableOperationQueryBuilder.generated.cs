@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PrivacyFeaturesDisableOperationQueryBuilder : FieldsQueryBuilderBase<PrivacyFeaturesDisablePayload, PrivacyFeaturesDisableOperationQueryBuilder>, IGraphOperationQueryBuilder<PrivacyFeaturesDisablePayload>
+    public sealed class PrivacyFeaturesDisableOperationQueryBuilder : FieldsQueryBuilderBase<PrivacyFeaturesDisablePayload, PrivacyFeaturesDisableOperationQueryBuilder>, IGraphOperationQueryBuilder<PrivacyFeaturesDisablePayload>, IHasArguments<PrivacyFeaturesDisableArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PrivacyFeaturesDisableArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PrivacyFeaturesDisableOperationQueryBuilder(IQuery<PrivacyFeaturesDisablePayload> query) : base(query)
         {
             Arguments = new PrivacyFeaturesDisableArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PrivacyFeaturesDisableOperationQueryBuilder SetArguments(Action<PrivacyFeaturesDisableArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PrivacyFeaturesDisableOperationQueryBuilder FeaturesDisabled()

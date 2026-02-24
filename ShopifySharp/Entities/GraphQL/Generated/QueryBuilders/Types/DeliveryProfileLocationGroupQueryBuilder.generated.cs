@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryProfileLocationGroupQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileLocationGroup, DeliveryProfileLocationGroupQueryBuilder>
+    public sealed class DeliveryProfileLocationGroupQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileLocationGroup, DeliveryProfileLocationGroupQueryBuilder>, IHasArguments<DeliveryProfileLocationGroupArgumentsBuilder>
     {
+        public DeliveryProfileLocationGroupArgumentsBuilder Arguments { get; }
         protected override DeliveryProfileLocationGroupQueryBuilder Self => this;
 
         public DeliveryProfileLocationGroupQueryBuilder() : this("deliveryProfileLocationGroup")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryProfileLocationGroupQueryBuilder(string name) : base(new Query<DeliveryProfileLocationGroup>(name))
         {
+            Arguments = new DeliveryProfileLocationGroupArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryProfileLocationGroupQueryBuilder(IQuery<DeliveryProfileLocationGroup> query) : base(query)
         {
+            Arguments = new DeliveryProfileLocationGroupArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryProfileLocationGroupQueryBuilder SetArguments(Action<DeliveryProfileLocationGroupArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryProfileLocationGroupQueryBuilder CountriesInAnyZone(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryAndZoneQueryBuilder> build)

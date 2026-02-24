@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class UrlRedirectImportQueryBuilder : FieldsQueryBuilderBase<UrlRedirectImport, UrlRedirectImportQueryBuilder>
+    public sealed class UrlRedirectImportQueryBuilder : FieldsQueryBuilderBase<UrlRedirectImport, UrlRedirectImportQueryBuilder>, IHasArguments<UrlRedirectImportArgumentsBuilder>
     {
+        public UrlRedirectImportArgumentsBuilder Arguments { get; }
         protected override UrlRedirectImportQueryBuilder Self => this;
 
         public UrlRedirectImportQueryBuilder() : this("urlRedirectImport")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public UrlRedirectImportQueryBuilder(string name) : base(new Query<UrlRedirectImport>(name))
         {
+            Arguments = new UrlRedirectImportArgumentsBuilder(base.InnerQuery);
         }
 
         public UrlRedirectImportQueryBuilder(IQuery<UrlRedirectImport> query) : base(query)
         {
+            Arguments = new UrlRedirectImportArgumentsBuilder(base.InnerQuery);
+        }
+
+        public UrlRedirectImportQueryBuilder SetArguments(Action<UrlRedirectImportArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public UrlRedirectImportQueryBuilder Count()

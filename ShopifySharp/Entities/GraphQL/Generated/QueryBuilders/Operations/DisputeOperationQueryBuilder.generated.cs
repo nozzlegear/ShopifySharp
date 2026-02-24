@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DisputeOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDispute, DisputeOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsDispute>
+    public sealed class DisputeOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDispute, DisputeOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsDispute>, IHasArguments<DisputeArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DisputeArgumentsBuilder Arguments { get; }
@@ -34,21 +34,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new DisputeArgumentsBuilder(base.InnerQuery);
         }
 
+        public DisputeOperationQueryBuilder SetArguments(Action<DisputeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public DisputeOperationQueryBuilder Amount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("amount");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MoneyV2>(query);
-            return this;
-        }
-
-        public DisputeOperationQueryBuilder DisputeEvidence(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder> build)
-        {
-            var query = new Query<ShopifyPaymentsDisputeEvidence>("disputeEvidence");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ShopifyPaymentsDisputeEvidence>(query);
             return this;
         }
 

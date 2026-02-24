@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MetaobjectBulkDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MetaobjectBulkDeletePayload, MetaobjectBulkDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MetaobjectBulkDeletePayload>
+    public sealed class MetaobjectBulkDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MetaobjectBulkDeletePayload, MetaobjectBulkDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MetaobjectBulkDeletePayload>, IHasArguments<MetaobjectBulkDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MetaobjectBulkDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MetaobjectBulkDeleteOperationQueryBuilder(IQuery<MetaobjectBulkDeletePayload> query) : base(query)
         {
             Arguments = new MetaobjectBulkDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetaobjectBulkDeleteOperationQueryBuilder SetArguments(Action<MetaobjectBulkDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetaobjectBulkDeleteOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)

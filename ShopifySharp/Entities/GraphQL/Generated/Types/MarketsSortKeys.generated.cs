@@ -18,6 +18,5 @@ public enum MarketsSortKeys
     MARKET_CONDITION_TYPES,
     MARKET_TYPE,
     NAME,
-    STATUS,
     UPDATED_AT,
 }

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryDeactivateOperationQueryBuilder : FieldsQueryBuilderBase<InventoryDeactivatePayload, InventoryDeactivateOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryDeactivatePayload>
+    public sealed class InventoryDeactivateOperationQueryBuilder : FieldsQueryBuilderBase<InventoryDeactivatePayload, InventoryDeactivateOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryDeactivatePayload>, IHasArguments<InventoryDeactivateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventoryDeactivateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryDeactivateOperationQueryBuilder(IQuery<InventoryDeactivatePayload> query) : base(query)
         {
             Arguments = new InventoryDeactivateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryDeactivateOperationQueryBuilder SetArguments(Action<InventoryDeactivateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryDeactivateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)

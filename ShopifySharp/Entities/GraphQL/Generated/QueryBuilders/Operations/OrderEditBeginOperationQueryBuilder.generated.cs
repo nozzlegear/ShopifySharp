@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderEditBeginOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditBeginPayload, OrderEditBeginOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditBeginPayload>
+    public sealed class OrderEditBeginOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditBeginPayload, OrderEditBeginOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditBeginPayload>, IHasArguments<OrderEditBeginArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderEditBeginArgumentsBuilder Arguments { get; }
@@ -34,21 +34,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new OrderEditBeginArgumentsBuilder(base.InnerQuery);
         }
 
+        public OrderEditBeginOperationQueryBuilder SetArguments(Action<OrderEditBeginArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public OrderEditBeginOperationQueryBuilder CalculatedOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedOrderQueryBuilder> build)
         {
             var query = new Query<CalculatedOrder>("calculatedOrder");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedOrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CalculatedOrder>(query);
-            return this;
-        }
-
-        public OrderEditBeginOperationQueryBuilder OrderEditSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder> build)
-        {
-            var query = new Query<OrderEditSession>("orderEditSession");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<OrderEditSession>(query);
             return this;
         }
 

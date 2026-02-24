@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class WebPixelDeleteOperationQueryBuilder : FieldsQueryBuilderBase<WebPixelDeletePayload, WebPixelDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<WebPixelDeletePayload>
+    public sealed class WebPixelDeleteOperationQueryBuilder : FieldsQueryBuilderBase<WebPixelDeletePayload, WebPixelDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<WebPixelDeletePayload>, IHasArguments<WebPixelDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public WebPixelDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebPixelDeleteOperationQueryBuilder(IQuery<WebPixelDeletePayload> query) : base(query)
         {
             Arguments = new WebPixelDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebPixelDeleteOperationQueryBuilder SetArguments(Action<WebPixelDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebPixelDeleteOperationQueryBuilder DeletedWebPixelId()

@@ -14,7 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record ProductBundleCreatePayload : IGraphQLObject
 {
     /// <summary>
-    /// The asynchronous ProductBundleOperation creating the product bundle or componentized product.
+    /// The asynchronous ProductBundleOperation creating the componentized product.
     /// </summary>
     [JsonPropertyName("productBundleOperation")]
     public ProductBundleOperation? productBundleOperation { get; set; } = null;

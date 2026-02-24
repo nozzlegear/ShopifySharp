@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnCalculateOperationQueryBuilder : FieldsQueryBuilderBase<CalculatedReturn, ReturnCalculateOperationQueryBuilder>, IGraphOperationQueryBuilder<CalculatedReturn>
+    public sealed class ReturnCalculateOperationQueryBuilder : FieldsQueryBuilderBase<CalculatedReturn, ReturnCalculateOperationQueryBuilder>, IGraphOperationQueryBuilder<CalculatedReturn>, IHasArguments<ReturnCalculateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ReturnCalculateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnCalculateOperationQueryBuilder(IQuery<CalculatedReturn> query) : base(query)
         {
             Arguments = new ReturnCalculateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnCalculateOperationQueryBuilder SetArguments(Action<ReturnCalculateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnCalculateOperationQueryBuilder ExchangeLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedExchangeLineItemQueryBuilder> build)

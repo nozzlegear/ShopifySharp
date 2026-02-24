@@ -9,8 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The details of a specific product category within Shopify's [standardized product taxonomy](https://shopify.github.io/product-taxonomy/releases/unstable/?categoryId=sg-4-17-2-17).
-/// Provides access to the associated [`ProductTaxonomyNode`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductTaxonomyNode).
+/// The details of a specific product category within the [Shopify product taxonomy](https://shopify.github.io/product-taxonomy/releases/unstable/?categoryId=sg-4-17-2-17).
 /// </summary>
 public record ProductCategory : IGraphQLObject
 {

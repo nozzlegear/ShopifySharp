@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyFunctionQueryBuilder : FieldsQueryBuilderBase<ShopifyFunction, ShopifyFunctionQueryBuilder>
+    public sealed class ShopifyFunctionQueryBuilder : FieldsQueryBuilderBase<ShopifyFunction, ShopifyFunctionQueryBuilder>, IHasArguments<ShopifyFunctionArgumentsBuilder>
     {
+        public ShopifyFunctionArgumentsBuilder Arguments { get; }
         protected override ShopifyFunctionQueryBuilder Self => this;
 
         public ShopifyFunctionQueryBuilder() : this("shopifyFunction")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyFunctionQueryBuilder(string name) : base(new Query<ShopifyFunction>(name))
         {
+            Arguments = new ShopifyFunctionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyFunctionQueryBuilder(IQuery<ShopifyFunction> query) : base(query)
         {
+            Arguments = new ShopifyFunctionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyFunctionQueryBuilder SetArguments(Action<ShopifyFunctionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyFunctionQueryBuilder ApiType()
@@ -69,12 +78,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public ShopifyFunctionQueryBuilder Description()
         {
             base.InnerQuery.AddField("description");
-            return this;
-        }
-
-        public ShopifyFunctionQueryBuilder Handle()
-        {
-            base.InnerQuery.AddField("handle");
             return this;
         }
 

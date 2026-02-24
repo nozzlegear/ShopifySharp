@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PriceListFixedPricesDeleteOperationQueryBuilder : FieldsQueryBuilderBase<PriceListFixedPricesDeletePayload, PriceListFixedPricesDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListFixedPricesDeletePayload>
+    public sealed class PriceListFixedPricesDeleteOperationQueryBuilder : FieldsQueryBuilderBase<PriceListFixedPricesDeletePayload, PriceListFixedPricesDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListFixedPricesDeletePayload>, IHasArguments<PriceListFixedPricesDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PriceListFixedPricesDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PriceListFixedPricesDeleteOperationQueryBuilder(IQuery<PriceListFixedPricesDeletePayload> query) : base(query)
         {
             Arguments = new PriceListFixedPricesDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PriceListFixedPricesDeleteOperationQueryBuilder SetArguments(Action<PriceListFixedPricesDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PriceListFixedPricesDeleteOperationQueryBuilder DeletedFixedPriceVariantIds()

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SavedSearchDeleteOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchDeletePayload, SavedSearchDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchDeletePayload>
+    public sealed class SavedSearchDeleteOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchDeletePayload, SavedSearchDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchDeletePayload>, IHasArguments<SavedSearchDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SavedSearchDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SavedSearchDeleteOperationQueryBuilder(IQuery<SavedSearchDeletePayload> query) : base(query)
         {
             Arguments = new SavedSearchDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SavedSearchDeleteOperationQueryBuilder SetArguments(Action<SavedSearchDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SavedSearchDeleteOperationQueryBuilder DeletedSavedSearchId()

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CatalogContextUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CatalogContextUpdatePayload, CatalogContextUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CatalogContextUpdatePayload>
+    public sealed class CatalogContextUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CatalogContextUpdatePayload, CatalogContextUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CatalogContextUpdatePayload>, IHasArguments<CatalogContextUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CatalogContextUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CatalogContextUpdateOperationQueryBuilder(IQuery<CatalogContextUpdatePayload> query) : base(query)
         {
             Arguments = new CatalogContextUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CatalogContextUpdateOperationQueryBuilder SetArguments(Action<CatalogContextUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CatalogContextUpdateOperationQueryBuilder Catalog(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)

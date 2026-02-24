@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CommentConnectionQueryBuilder : FieldsQueryBuilderBase<CommentConnection, CommentConnectionQueryBuilder>
+    public sealed class CommentConnectionQueryBuilder : FieldsQueryBuilderBase<CommentConnection, CommentConnectionQueryBuilder>, IHasArguments<CommentConnectionArgumentsBuilder>
     {
+        public CommentConnectionArgumentsBuilder Arguments { get; }
         protected override CommentConnectionQueryBuilder Self => this;
 
         public CommentConnectionQueryBuilder() : this("commentConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CommentConnectionQueryBuilder(string name) : base(new Query<CommentConnection>(name))
         {
+            Arguments = new CommentConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CommentConnectionQueryBuilder(IQuery<CommentConnection> query) : base(query)
         {
+            Arguments = new CommentConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CommentConnectionQueryBuilder SetArguments(Action<CommentConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CommentConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CommentEdgeQueryBuilder> build)

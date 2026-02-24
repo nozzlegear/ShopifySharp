@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `returnProcess` instead.")]
-    public sealed class ReturnRefundOperationQueryBuilder : FieldsQueryBuilderBase<ReturnRefundPayload, ReturnRefundOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnRefundPayload>
+    public sealed class ReturnRefundOperationQueryBuilder : FieldsQueryBuilderBase<ReturnRefundPayload, ReturnRefundOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnRefundPayload>, IHasArguments<ReturnRefundArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReturnRefundArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnRefundOperationQueryBuilder(IQuery<ReturnRefundPayload> query) : base(query)
         {
             Arguments = new ReturnRefundArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnRefundOperationQueryBuilder SetArguments(Action<ReturnRefundArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnRefundOperationQueryBuilder Refund(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RefundQueryBuilder> build)

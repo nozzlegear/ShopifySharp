@@ -39,24 +39,9 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public PaymentScheduleQueryBuilder BalanceDue(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
-        {
-            var query = new Query<MoneyV2>("balanceDue");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<MoneyV2>(query);
-            return this;
-        }
-
         public PaymentScheduleQueryBuilder CompletedAt()
         {
             base.InnerQuery.AddField("completedAt");
-            return this;
-        }
-
-        public PaymentScheduleQueryBuilder Due()
-        {
-            base.InnerQuery.AddField("due");
             return this;
         }
 
@@ -84,15 +69,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PaymentTermsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PaymentTerms>(query);
-            return this;
-        }
-
-        public PaymentScheduleQueryBuilder TotalBalance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
-        {
-            var query = new Query<MoneyV2>("totalBalance");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<MoneyV2>(query);
             return this;
         }
     }

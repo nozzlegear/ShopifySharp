@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SegmentMigrationConnectionQueryBuilder : FieldsQueryBuilderBase<SegmentMigrationConnection, SegmentMigrationConnectionQueryBuilder>
+    public sealed class SegmentMigrationConnectionQueryBuilder : FieldsQueryBuilderBase<SegmentMigrationConnection, SegmentMigrationConnectionQueryBuilder>, IHasArguments<SegmentMigrationConnectionArgumentsBuilder>
     {
+        public SegmentMigrationConnectionArgumentsBuilder Arguments { get; }
         protected override SegmentMigrationConnectionQueryBuilder Self => this;
 
         public SegmentMigrationConnectionQueryBuilder() : this("segmentMigrationConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SegmentMigrationConnectionQueryBuilder(string name) : base(new Query<SegmentMigrationConnection>(name))
         {
+            Arguments = new SegmentMigrationConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SegmentMigrationConnectionQueryBuilder(IQuery<SegmentMigrationConnection> query) : base(query)
         {
+            Arguments = new SegmentMigrationConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SegmentMigrationConnectionQueryBuilder SetArguments(Action<SegmentMigrationConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SegmentMigrationConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SegmentMigrationEdgeQueryBuilder> build)

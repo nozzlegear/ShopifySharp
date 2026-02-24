@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DiscountAutomaticConnectionQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticConnection, DiscountAutomaticConnectionQueryBuilder>
+    public sealed class DiscountAutomaticConnectionQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticConnection, DiscountAutomaticConnectionQueryBuilder>, IHasArguments<DiscountAutomaticConnectionArgumentsBuilder>
     {
+        public DiscountAutomaticConnectionArgumentsBuilder Arguments { get; }
         protected override DiscountAutomaticConnectionQueryBuilder Self => this;
 
         public DiscountAutomaticConnectionQueryBuilder() : this("discountAutomaticConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DiscountAutomaticConnectionQueryBuilder(string name) : base(new Query<DiscountAutomaticConnection>(name))
         {
+            Arguments = new DiscountAutomaticConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DiscountAutomaticConnectionQueryBuilder(IQuery<DiscountAutomaticConnection> query) : base(query)
         {
+            Arguments = new DiscountAutomaticConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountAutomaticConnectionQueryBuilder SetArguments(Action<DiscountAutomaticConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountAutomaticConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAutomaticEdgeQueryBuilder> build)

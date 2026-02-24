@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductVariantContextualPricingQueryBuilder : FieldsQueryBuilderBase<ProductVariantContextualPricing, ProductVariantContextualPricingQueryBuilder>
+    public sealed class ProductVariantContextualPricingQueryBuilder : FieldsQueryBuilderBase<ProductVariantContextualPricing, ProductVariantContextualPricingQueryBuilder>, IHasArguments<ProductVariantContextualPricingArgumentsBuilder>
     {
+        public ProductVariantContextualPricingArgumentsBuilder Arguments { get; }
         protected override ProductVariantContextualPricingQueryBuilder Self => this;
 
         public ProductVariantContextualPricingQueryBuilder() : this("productVariantContextualPricing")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductVariantContextualPricingQueryBuilder(string name) : base(new Query<ProductVariantContextualPricing>(name))
         {
+            Arguments = new ProductVariantContextualPricingArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductVariantContextualPricingQueryBuilder(IQuery<ProductVariantContextualPricing> query) : base(query)
         {
+            Arguments = new ProductVariantContextualPricingArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductVariantContextualPricingQueryBuilder SetArguments(Action<ProductVariantContextualPricingArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductVariantContextualPricingQueryBuilder CompareAtPrice(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrdersSetFulfillmentDeadlinePayload, FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrdersSetFulfillmentDeadlinePayload>
+    public sealed class FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrdersSetFulfillmentDeadlinePayload, FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrdersSetFulfillmentDeadlinePayload>, IHasArguments<FulfillmentOrdersSetFulfillmentDeadlineArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrdersSetFulfillmentDeadlineArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder(IQuery<FulfillmentOrdersSetFulfillmentDeadlinePayload> query) : base(query)
         {
             Arguments = new FulfillmentOrdersSetFulfillmentDeadlineArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder SetArguments(Action<FulfillmentOrdersSetFulfillmentDeadlineArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrdersSetFulfillmentDeadlineOperationQueryBuilder Success()

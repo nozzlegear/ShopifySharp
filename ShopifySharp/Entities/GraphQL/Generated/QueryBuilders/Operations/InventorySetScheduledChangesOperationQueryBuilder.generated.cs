@@ -14,8 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    [Obsolete("Scheduled changes will be phased out in a future version.")]
-    public sealed class InventorySetScheduledChangesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetScheduledChangesPayload, InventorySetScheduledChangesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetScheduledChangesPayload>
+    public sealed class InventorySetScheduledChangesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetScheduledChangesPayload, InventorySetScheduledChangesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetScheduledChangesPayload>, IHasArguments<InventorySetScheduledChangesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventorySetScheduledChangesArgumentsBuilder Arguments { get; }
@@ -33,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventorySetScheduledChangesOperationQueryBuilder(IQuery<InventorySetScheduledChangesPayload> query) : base(query)
         {
             Arguments = new InventorySetScheduledChangesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventorySetScheduledChangesOperationQueryBuilder SetArguments(Action<InventorySetScheduledChangesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventorySetScheduledChangesOperationQueryBuilder ScheduledChanges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryScheduledChangeQueryBuilder> build)

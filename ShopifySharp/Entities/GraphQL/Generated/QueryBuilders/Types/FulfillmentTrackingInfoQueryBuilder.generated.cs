@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FulfillmentTrackingInfoQueryBuilder : FieldsQueryBuilderBase<FulfillmentTrackingInfo, FulfillmentTrackingInfoQueryBuilder>
+    public sealed class FulfillmentTrackingInfoQueryBuilder : FieldsQueryBuilderBase<FulfillmentTrackingInfo, FulfillmentTrackingInfoQueryBuilder>, IHasArguments<FulfillmentTrackingInfoArgumentsBuilder>
     {
+        public FulfillmentTrackingInfoArgumentsBuilder Arguments { get; }
         protected override FulfillmentTrackingInfoQueryBuilder Self => this;
 
         public FulfillmentTrackingInfoQueryBuilder() : this("fulfillmentTrackingInfo")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FulfillmentTrackingInfoQueryBuilder(string name) : base(new Query<FulfillmentTrackingInfo>(name))
         {
+            Arguments = new FulfillmentTrackingInfoArgumentsBuilder(base.InnerQuery);
         }
 
         public FulfillmentTrackingInfoQueryBuilder(IQuery<FulfillmentTrackingInfo> query) : base(query)
         {
+            Arguments = new FulfillmentTrackingInfoArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentTrackingInfoQueryBuilder SetArguments(Action<FulfillmentTrackingInfoArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentTrackingInfoQueryBuilder Company()

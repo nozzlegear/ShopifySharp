@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerVisitProductInfoConnectionQueryBuilder : FieldsQueryBuilderBase<CustomerVisitProductInfoConnection, CustomerVisitProductInfoConnectionQueryBuilder>
+    public sealed class CustomerVisitProductInfoConnectionQueryBuilder : FieldsQueryBuilderBase<CustomerVisitProductInfoConnection, CustomerVisitProductInfoConnectionQueryBuilder>, IHasArguments<CustomerVisitProductInfoConnectionArgumentsBuilder>
     {
+        public CustomerVisitProductInfoConnectionArgumentsBuilder Arguments { get; }
         protected override CustomerVisitProductInfoConnectionQueryBuilder Self => this;
 
         public CustomerVisitProductInfoConnectionQueryBuilder() : this("customerVisitProductInfoConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerVisitProductInfoConnectionQueryBuilder(string name) : base(new Query<CustomerVisitProductInfoConnection>(name))
         {
+            Arguments = new CustomerVisitProductInfoConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerVisitProductInfoConnectionQueryBuilder(IQuery<CustomerVisitProductInfoConnection> query) : base(query)
         {
+            Arguments = new CustomerVisitProductInfoConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerVisitProductInfoConnectionQueryBuilder SetArguments(Action<CustomerVisitProductInfoConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerVisitProductInfoConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitProductInfoEdgeQueryBuilder> build)

@@ -20,6 +20,5 @@ public record OrderStagedChange : GraphQLObject<OrderStagedChange>, IGraphQLUnio
     public OrderStagedChangeAddVariant? AsOrderStagedChangeAddVariant() => this is OrderStagedChangeOrderStagedChangeAddVariant wrapper ? wrapper.Value : null;
     public OrderStagedChangeDecrementItem? AsOrderStagedChangeDecrementItem() => this is OrderStagedChangeOrderStagedChangeDecrementItem wrapper ? wrapper.Value : null;
     public OrderStagedChangeIncrementItem? AsOrderStagedChangeIncrementItem() => this is OrderStagedChangeOrderStagedChangeIncrementItem wrapper ? wrapper.Value : null;
-    public OrderStagedChangeRemoveDiscount? AsOrderStagedChangeRemoveDiscount() => this is OrderStagedChangeOrderStagedChangeRemoveDiscount wrapper ? wrapper.Value : null;
     public OrderStagedChangeRemoveShippingLine? AsOrderStagedChangeRemoveShippingLine() => this is OrderStagedChangeOrderStagedChangeRemoveShippingLine wrapper ? wrapper.Value : null;
 }

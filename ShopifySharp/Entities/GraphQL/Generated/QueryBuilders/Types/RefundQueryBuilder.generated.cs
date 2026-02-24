@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class RefundQueryBuilder : FieldsQueryBuilderBase<Refund, RefundQueryBuilder>
+    public sealed class RefundQueryBuilder : FieldsQueryBuilderBase<Refund, RefundQueryBuilder>, IHasArguments<RefundArgumentsBuilder>
     {
+        public RefundArgumentsBuilder Arguments { get; }
         protected override RefundQueryBuilder Self => this;
 
         public RefundQueryBuilder() : this("refund")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public RefundQueryBuilder(string name) : base(new Query<Refund>(name))
         {
+            Arguments = new RefundArgumentsBuilder(base.InnerQuery);
         }
 
         public RefundQueryBuilder(IQuery<Refund> query) : base(query)
         {
+            Arguments = new RefundArgumentsBuilder(base.InnerQuery);
+        }
+
+        public RefundQueryBuilder SetArguments(Action<RefundArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public RefundQueryBuilder CreatedAt()
@@ -78,12 +87,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderAdjustmentConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderAdjustmentConnection>(query);
-            return this;
-        }
-
-        public RefundQueryBuilder ProcessedAt()
-        {
-            base.InnerQuery.AddField("processedAt");
             return this;
         }
 

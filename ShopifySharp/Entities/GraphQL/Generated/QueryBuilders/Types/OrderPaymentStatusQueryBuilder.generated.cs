@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OrderPaymentStatusQueryBuilder : FieldsQueryBuilderBase<OrderPaymentStatus, OrderPaymentStatusQueryBuilder>
+    public sealed class OrderPaymentStatusQueryBuilder : FieldsQueryBuilderBase<OrderPaymentStatus, OrderPaymentStatusQueryBuilder>, IHasArguments<OrderPaymentStatusArgumentsBuilder>
     {
+        public OrderPaymentStatusArgumentsBuilder Arguments { get; }
         protected override OrderPaymentStatusQueryBuilder Self => this;
 
         public OrderPaymentStatusQueryBuilder() : this("orderPaymentStatus")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OrderPaymentStatusQueryBuilder(string name) : base(new Query<OrderPaymentStatus>(name))
         {
+            Arguments = new OrderPaymentStatusArgumentsBuilder(base.InnerQuery);
         }
 
         public OrderPaymentStatusQueryBuilder(IQuery<OrderPaymentStatus> query) : base(query)
         {
+            Arguments = new OrderPaymentStatusArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderPaymentStatusQueryBuilder SetArguments(Action<OrderPaymentStatusArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderPaymentStatusQueryBuilder ErrorMessage()

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class JobOperationQueryBuilder : FieldsQueryBuilderBase<Job, JobOperationQueryBuilder>, IGraphOperationQueryBuilder<Job>
+    public sealed class JobOperationQueryBuilder : FieldsQueryBuilderBase<Job, JobOperationQueryBuilder>, IGraphOperationQueryBuilder<Job>, IHasArguments<JobArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public JobArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public JobOperationQueryBuilder(IQuery<Job> query) : base(query)
         {
             Arguments = new JobArgumentsBuilder(base.InnerQuery);
+        }
+
+        public JobOperationQueryBuilder SetArguments(Action<JobArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public JobOperationQueryBuilder Done()

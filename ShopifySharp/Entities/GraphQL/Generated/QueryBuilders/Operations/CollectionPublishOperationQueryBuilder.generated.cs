@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `publishablePublish` instead.")]
-    public sealed class CollectionPublishOperationQueryBuilder : FieldsQueryBuilderBase<CollectionPublishPayload, CollectionPublishOperationQueryBuilder>, IGraphOperationQueryBuilder<CollectionPublishPayload>
+    public sealed class CollectionPublishOperationQueryBuilder : FieldsQueryBuilderBase<CollectionPublishPayload, CollectionPublishOperationQueryBuilder>, IGraphOperationQueryBuilder<CollectionPublishPayload>, IHasArguments<CollectionPublishArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CollectionPublishArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CollectionPublishOperationQueryBuilder(IQuery<CollectionPublishPayload> query) : base(query)
         {
             Arguments = new CollectionPublishArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CollectionPublishOperationQueryBuilder SetArguments(Action<CollectionPublishArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CollectionPublishOperationQueryBuilder Collection(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionQueryBuilder> build)

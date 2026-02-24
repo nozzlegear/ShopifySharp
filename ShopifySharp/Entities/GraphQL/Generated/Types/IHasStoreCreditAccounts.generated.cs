@@ -12,7 +12,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// Represents information about the store credit accounts associated to the specified owner.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
-[JsonDerivedType(typeof(CompanyLocation), typeDiscriminator: "CompanyLocation")]
 [JsonDerivedType(typeof(Customer), typeDiscriminator: "Customer")]
 public interface IHasStoreCreditAccounts : IGraphQLObject
 {

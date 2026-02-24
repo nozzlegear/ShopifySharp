@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class TenderTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<TenderTransactionConnection, TenderTransactionConnectionQueryBuilder>
+    public sealed class TenderTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<TenderTransactionConnection, TenderTransactionConnectionQueryBuilder>, IHasArguments<TenderTransactionConnectionArgumentsBuilder>
     {
+        public TenderTransactionConnectionArgumentsBuilder Arguments { get; }
         protected override TenderTransactionConnectionQueryBuilder Self => this;
 
         public TenderTransactionConnectionQueryBuilder() : this("tenderTransactionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public TenderTransactionConnectionQueryBuilder(string name) : base(new Query<TenderTransactionConnection>(name))
         {
+            Arguments = new TenderTransactionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public TenderTransactionConnectionQueryBuilder(IQuery<TenderTransactionConnection> query) : base(query)
         {
+            Arguments = new TenderTransactionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TenderTransactionConnectionQueryBuilder SetArguments(Action<TenderTransactionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TenderTransactionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TenderTransactionEdgeQueryBuilder> build)

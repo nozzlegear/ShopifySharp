@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PaymentCustomizationsOperationQueryBuilder : FieldsQueryBuilderBase<PaymentCustomizationConnection, PaymentCustomizationsOperationQueryBuilder>, IGraphOperationQueryBuilder<PaymentCustomizationConnection>
+    public sealed class PaymentCustomizationsOperationQueryBuilder : FieldsQueryBuilderBase<PaymentCustomizationConnection, PaymentCustomizationsOperationQueryBuilder>, IGraphOperationQueryBuilder<PaymentCustomizationConnection>, IHasArguments<PaymentCustomizationsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public PaymentCustomizationsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PaymentCustomizationsOperationQueryBuilder(IQuery<PaymentCustomizationConnection> query) : base(query)
         {
             Arguments = new PaymentCustomizationsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PaymentCustomizationsOperationQueryBuilder SetArguments(Action<PaymentCustomizationsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PaymentCustomizationsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaymentCustomizationEdgeQueryBuilder> build)

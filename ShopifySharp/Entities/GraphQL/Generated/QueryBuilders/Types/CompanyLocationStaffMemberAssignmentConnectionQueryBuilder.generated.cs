@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CompanyLocationStaffMemberAssignmentConnectionQueryBuilder : FieldsQueryBuilderBase<CompanyLocationStaffMemberAssignmentConnection, CompanyLocationStaffMemberAssignmentConnectionQueryBuilder>
+    public sealed class CompanyLocationStaffMemberAssignmentConnectionQueryBuilder : FieldsQueryBuilderBase<CompanyLocationStaffMemberAssignmentConnection, CompanyLocationStaffMemberAssignmentConnectionQueryBuilder>, IHasArguments<CompanyLocationStaffMemberAssignmentConnectionArgumentsBuilder>
     {
+        public CompanyLocationStaffMemberAssignmentConnectionArgumentsBuilder Arguments { get; }
         protected override CompanyLocationStaffMemberAssignmentConnectionQueryBuilder Self => this;
 
         public CompanyLocationStaffMemberAssignmentConnectionQueryBuilder() : this("companyLocationStaffMemberAssignmentConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CompanyLocationStaffMemberAssignmentConnectionQueryBuilder(string name) : base(new Query<CompanyLocationStaffMemberAssignmentConnection>(name))
         {
+            Arguments = new CompanyLocationStaffMemberAssignmentConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CompanyLocationStaffMemberAssignmentConnectionQueryBuilder(IQuery<CompanyLocationStaffMemberAssignmentConnection> query) : base(query)
         {
+            Arguments = new CompanyLocationStaffMemberAssignmentConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationStaffMemberAssignmentConnectionQueryBuilder SetArguments(Action<CompanyLocationStaffMemberAssignmentConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationStaffMemberAssignmentConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationStaffMemberAssignmentEdgeQueryBuilder> build)

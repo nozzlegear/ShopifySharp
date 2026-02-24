@@ -21,7 +21,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 public enum WebhookSubscriptionTopic
 {
-    TAX_SUMMARIES_CREATE,
     APP_UNINSTALLED,
     APP_SCOPES_UPDATE,
     CARTS_CREATE,
@@ -75,7 +74,6 @@ public enum WebhookSubscriptionTopic
     ORDERS_PAID,
     ORDERS_PARTIALLY_FULFILLED,
     ORDERS_UPDATED,
-    ORDERS_LINK_REQUESTED,
     FULFILLMENT_ORDERS_MOVED,
     FULFILLMENT_ORDERS_HOLD_RELEASED,
     FULFILLMENT_ORDERS_SCHEDULED_FULFILLMENT_ORDER_READY,
@@ -139,7 +137,6 @@ public enum WebhookSubscriptionTopic
     APP_SUBSCRIPTIONS_UPDATE,
     LOCALES_CREATE,
     LOCALES_UPDATE,
-    LOCALES_DESTROY,
     DOMAINS_CREATE,
     DOMAINS_UPDATE,
     DOMAINS_DESTROY,

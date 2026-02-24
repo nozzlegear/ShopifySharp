@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MailingAddressConnectionQueryBuilder : FieldsQueryBuilderBase<MailingAddressConnection, MailingAddressConnectionQueryBuilder>
+    public sealed class MailingAddressConnectionQueryBuilder : FieldsQueryBuilderBase<MailingAddressConnection, MailingAddressConnectionQueryBuilder>, IHasArguments<MailingAddressConnectionArgumentsBuilder>
     {
+        public MailingAddressConnectionArgumentsBuilder Arguments { get; }
         protected override MailingAddressConnectionQueryBuilder Self => this;
 
         public MailingAddressConnectionQueryBuilder() : this("mailingAddressConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MailingAddressConnectionQueryBuilder(string name) : base(new Query<MailingAddressConnection>(name))
         {
+            Arguments = new MailingAddressConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MailingAddressConnectionQueryBuilder(IQuery<MailingAddressConnection> query) : base(query)
         {
+            Arguments = new MailingAddressConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MailingAddressConnectionQueryBuilder SetArguments(Action<MailingAddressConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MailingAddressConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressEdgeQueryBuilder> build)

@@ -13,9 +13,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 public enum InventoryShipmentReceiveUserErrorCode
 {
-    LOCATION_NOT_FOUND,
-    IDEMPOTENCY_CONCURRENT_REQUEST,
-    IDEMPOTENCY_KEY_PARAMETER_MISMATCH,
     INTERNAL_ERROR,
     INVALID_SHIPMENT_STATUS,
     INVENTORY_STATE_NOT_ACTIVE,
@@ -23,4 +20,5 @@ public enum InventoryShipmentReceiveUserErrorCode
     INVALID_QUANTITY,
     ITEM_NOT_FOUND,
     LOCATION_NOT_ACTIVE,
+    LOCATION_NOT_FOUND,
 }

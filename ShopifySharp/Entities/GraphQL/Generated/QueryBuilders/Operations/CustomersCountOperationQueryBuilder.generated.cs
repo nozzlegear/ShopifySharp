@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomersCountOperationQueryBuilder : FieldsQueryBuilderBase<Count, CustomersCountOperationQueryBuilder>, IGraphOperationQueryBuilder<Count>
+    public sealed class CustomersCountOperationQueryBuilder : FieldsQueryBuilderBase<Count, CustomersCountOperationQueryBuilder>, IGraphOperationQueryBuilder<Count>, IHasArguments<CustomersCountArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CustomersCountArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomersCountOperationQueryBuilder(IQuery<Count> query) : base(query)
         {
             Arguments = new CustomersCountArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomersCountOperationQueryBuilder SetArguments(Action<CustomersCountArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomersCountOperationQueryBuilder Count()

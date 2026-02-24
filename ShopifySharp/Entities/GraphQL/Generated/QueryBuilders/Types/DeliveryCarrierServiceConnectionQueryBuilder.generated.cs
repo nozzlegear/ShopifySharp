@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryCarrierServiceConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryCarrierServiceConnection, DeliveryCarrierServiceConnectionQueryBuilder>
+    public sealed class DeliveryCarrierServiceConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryCarrierServiceConnection, DeliveryCarrierServiceConnectionQueryBuilder>, IHasArguments<DeliveryCarrierServiceConnectionArgumentsBuilder>
     {
+        public DeliveryCarrierServiceConnectionArgumentsBuilder Arguments { get; }
         protected override DeliveryCarrierServiceConnectionQueryBuilder Self => this;
 
         public DeliveryCarrierServiceConnectionQueryBuilder() : this("deliveryCarrierServiceConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryCarrierServiceConnectionQueryBuilder(string name) : base(new Query<DeliveryCarrierServiceConnection>(name))
         {
+            Arguments = new DeliveryCarrierServiceConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryCarrierServiceConnectionQueryBuilder(IQuery<DeliveryCarrierServiceConnection> query) : base(query)
         {
+            Arguments = new DeliveryCarrierServiceConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryCarrierServiceConnectionQueryBuilder SetArguments(Action<DeliveryCarrierServiceConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryCarrierServiceConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCarrierServiceEdgeQueryBuilder> build)

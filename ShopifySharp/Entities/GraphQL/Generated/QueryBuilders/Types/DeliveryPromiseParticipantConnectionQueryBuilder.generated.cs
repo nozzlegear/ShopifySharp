@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryPromiseParticipantConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseParticipantConnection, DeliveryPromiseParticipantConnectionQueryBuilder>
+    public sealed class DeliveryPromiseParticipantConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseParticipantConnection, DeliveryPromiseParticipantConnectionQueryBuilder>, IHasArguments<DeliveryPromiseParticipantConnectionArgumentsBuilder>
     {
+        public DeliveryPromiseParticipantConnectionArgumentsBuilder Arguments { get; }
         protected override DeliveryPromiseParticipantConnectionQueryBuilder Self => this;
 
         public DeliveryPromiseParticipantConnectionQueryBuilder() : this("deliveryPromiseParticipantConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryPromiseParticipantConnectionQueryBuilder(string name) : base(new Query<DeliveryPromiseParticipantConnection>(name))
         {
+            Arguments = new DeliveryPromiseParticipantConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryPromiseParticipantConnectionQueryBuilder(IQuery<DeliveryPromiseParticipantConnection> query) : base(query)
         {
+            Arguments = new DeliveryPromiseParticipantConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryPromiseParticipantConnectionQueryBuilder SetArguments(Action<DeliveryPromiseParticipantConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryPromiseParticipantConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryPromiseParticipantEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductVariantsBulkDeleteOperationQueryBuilder : FieldsQueryBuilderBase<ProductVariantsBulkDeletePayload, ProductVariantsBulkDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductVariantsBulkDeletePayload>
+    public sealed class ProductVariantsBulkDeleteOperationQueryBuilder : FieldsQueryBuilderBase<ProductVariantsBulkDeletePayload, ProductVariantsBulkDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductVariantsBulkDeletePayload>, IHasArguments<ProductVariantsBulkDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductVariantsBulkDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductVariantsBulkDeleteOperationQueryBuilder(IQuery<ProductVariantsBulkDeletePayload> query) : base(query)
         {
             Arguments = new ProductVariantsBulkDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductVariantsBulkDeleteOperationQueryBuilder SetArguments(Action<ProductVariantsBulkDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductVariantsBulkDeleteOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

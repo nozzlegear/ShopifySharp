@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentConstraintRuleDeleteOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentConstraintRuleDeletePayload, FulfillmentConstraintRuleDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentConstraintRuleDeletePayload>
+    public sealed class FulfillmentConstraintRuleDeleteOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentConstraintRuleDeletePayload, FulfillmentConstraintRuleDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentConstraintRuleDeletePayload>, IHasArguments<FulfillmentConstraintRuleDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentConstraintRuleDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentConstraintRuleDeleteOperationQueryBuilder(IQuery<FulfillmentConstraintRuleDeletePayload> query) : base(query)
         {
             Arguments = new FulfillmentConstraintRuleDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentConstraintRuleDeleteOperationQueryBuilder SetArguments(Action<FulfillmentConstraintRuleDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentConstraintRuleDeleteOperationQueryBuilder Success()

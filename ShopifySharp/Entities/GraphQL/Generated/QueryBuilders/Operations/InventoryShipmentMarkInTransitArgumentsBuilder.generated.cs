@@ -22,12 +22,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public InventoryShipmentMarkInTransitArgumentsBuilder DateShipped(DateTimeOffset? dateShipped)
-        {
-            base.InnerQuery.AddArgument("dateShipped", dateShipped);
-            return this;
-        }
-
         public InventoryShipmentMarkInTransitArgumentsBuilder Id(string? id)
         {
             base.InnerQuery.AddArgument("id", id);

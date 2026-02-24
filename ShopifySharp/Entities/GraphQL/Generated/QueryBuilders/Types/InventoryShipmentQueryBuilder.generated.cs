@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryShipmentQueryBuilder : FieldsQueryBuilderBase<InventoryShipment, InventoryShipmentQueryBuilder>
+    public sealed class InventoryShipmentQueryBuilder : FieldsQueryBuilderBase<InventoryShipment, InventoryShipmentQueryBuilder>, IHasArguments<InventoryShipmentArgumentsBuilder>
     {
+        public InventoryShipmentArgumentsBuilder Arguments { get; }
         protected override InventoryShipmentQueryBuilder Self => this;
 
         public InventoryShipmentQueryBuilder() : this("inventoryShipment")
@@ -24,27 +25,17 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryShipmentQueryBuilder(string name) : base(new Query<InventoryShipment>(name))
         {
+            Arguments = new InventoryShipmentArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryShipmentQueryBuilder(IQuery<InventoryShipment> query) : base(query)
         {
+            Arguments = new InventoryShipmentArgumentsBuilder(base.InnerQuery);
         }
 
-        public InventoryShipmentQueryBuilder DateCreated()
+        public InventoryShipmentQueryBuilder SetArguments(Action<InventoryShipmentArgumentsBuilder> configure)
         {
-            base.InnerQuery.AddField("dateCreated");
-            return this;
-        }
-
-        public InventoryShipmentQueryBuilder DateReceived()
-        {
-            base.InnerQuery.AddField("dateReceived");
-            return this;
-        }
-
-        public InventoryShipmentQueryBuilder DateShipped()
-        {
-            base.InnerQuery.AddField("dateShipped");
+            configure(this.Arguments);
             return this;
         }
 

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MarketsOperationQueryBuilder : FieldsQueryBuilderBase<MarketConnection, MarketsOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketConnection>
+    public sealed class MarketsOperationQueryBuilder : FieldsQueryBuilderBase<MarketConnection, MarketsOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketConnection>, IHasArguments<MarketsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public MarketsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketsOperationQueryBuilder(IQuery<MarketConnection> query) : base(query)
         {
             Arguments = new MarketsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketsOperationQueryBuilder SetArguments(Action<MarketsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketEdgeQueryBuilder> build)

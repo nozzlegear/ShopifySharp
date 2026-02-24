@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `productByIdentifier` instead.")]
-    public sealed class ProductByHandleOperationQueryBuilder : FieldsQueryBuilderBase<Product, ProductByHandleOperationQueryBuilder>, IGraphOperationQueryBuilder<Product>
+    public sealed class ProductByHandleOperationQueryBuilder : FieldsQueryBuilderBase<Product, ProductByHandleOperationQueryBuilder>, IGraphOperationQueryBuilder<Product>, IHasArguments<ProductByHandleArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ProductByHandleArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductByHandleOperationQueryBuilder(IQuery<Product> query) : base(query)
         {
             Arguments = new ProductByHandleArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductByHandleOperationQueryBuilder SetArguments(Action<ProductByHandleArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductByHandleOperationQueryBuilder AvailablePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
@@ -57,15 +63,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductBundleComponentConnection>(query);
-            return this;
-        }
-
-        public ProductByHandleOperationQueryBuilder BundleConsolidatedOptions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder> build)
-        {
-            var query = new Query<ComponentizedProductsBundleConsolidatedOption>("bundleConsolidatedOptions");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ComponentizedProductsBundleConsolidatedOption>(query);
             return this;
         }
 

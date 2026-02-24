@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `marketUpdate` instead.")]
-    public sealed class MarketRegionsDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MarketRegionsDeletePayload, MarketRegionsDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketRegionsDeletePayload>
+    public sealed class MarketRegionsDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MarketRegionsDeletePayload, MarketRegionsDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketRegionsDeletePayload>, IHasArguments<MarketRegionsDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketRegionsDeleteArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketRegionsDeleteOperationQueryBuilder(IQuery<MarketRegionsDeletePayload> query) : base(query)
         {
             Arguments = new MarketRegionsDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketRegionsDeleteOperationQueryBuilder SetArguments(Action<MarketRegionsDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketRegionsDeleteOperationQueryBuilder DeletedIds()

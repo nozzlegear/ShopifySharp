@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ExchangeV2ConnectionQueryBuilder : FieldsQueryBuilderBase<ExchangeV2Connection, ExchangeV2ConnectionQueryBuilder>
+    public sealed class ExchangeV2ConnectionQueryBuilder : FieldsQueryBuilderBase<ExchangeV2Connection, ExchangeV2ConnectionQueryBuilder>, IHasArguments<ExchangeV2ConnectionArgumentsBuilder>
     {
+        public ExchangeV2ConnectionArgumentsBuilder Arguments { get; }
         protected override ExchangeV2ConnectionQueryBuilder Self => this;
 
         public ExchangeV2ConnectionQueryBuilder() : this("exchangeV2Connection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ExchangeV2ConnectionQueryBuilder(string name) : base(new Query<ExchangeV2Connection>(name))
         {
+            Arguments = new ExchangeV2ConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ExchangeV2ConnectionQueryBuilder(IQuery<ExchangeV2Connection> query) : base(query)
         {
+            Arguments = new ExchangeV2ConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ExchangeV2ConnectionQueryBuilder SetArguments(Action<ExchangeV2ConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ExchangeV2ConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ExchangeV2EdgeQueryBuilder> build)

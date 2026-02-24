@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryLevelConnectionQueryBuilder : FieldsQueryBuilderBase<InventoryLevelConnection, InventoryLevelConnectionQueryBuilder>
+    public sealed class InventoryLevelConnectionQueryBuilder : FieldsQueryBuilderBase<InventoryLevelConnection, InventoryLevelConnectionQueryBuilder>, IHasArguments<InventoryLevelConnectionArgumentsBuilder>
     {
+        public InventoryLevelConnectionArgumentsBuilder Arguments { get; }
         protected override InventoryLevelConnectionQueryBuilder Self => this;
 
         public InventoryLevelConnectionQueryBuilder() : this("inventoryLevelConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryLevelConnectionQueryBuilder(string name) : base(new Query<InventoryLevelConnection>(name))
         {
+            Arguments = new InventoryLevelConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryLevelConnectionQueryBuilder(IQuery<InventoryLevelConnection> query) : base(query)
         {
+            Arguments = new InventoryLevelConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryLevelConnectionQueryBuilder SetArguments(Action<InventoryLevelConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryLevelConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryLevelEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrderSplitOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderSplitPayload, FulfillmentOrderSplitOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderSplitPayload>
+    public sealed class FulfillmentOrderSplitOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderSplitPayload, FulfillmentOrderSplitOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderSplitPayload>, IHasArguments<FulfillmentOrderSplitArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrderSplitArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderSplitOperationQueryBuilder(IQuery<FulfillmentOrderSplitPayload> query) : base(query)
         {
             Arguments = new FulfillmentOrderSplitArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderSplitOperationQueryBuilder SetArguments(Action<FulfillmentOrderSplitArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderSplitOperationQueryBuilder FulfillmentOrderSplits(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderSplitResultQueryBuilder> build)

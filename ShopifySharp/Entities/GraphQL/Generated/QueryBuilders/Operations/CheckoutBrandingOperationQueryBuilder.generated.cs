@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CheckoutBrandingOperationQueryBuilder : FieldsQueryBuilderBase<CheckoutBranding, CheckoutBrandingOperationQueryBuilder>, IGraphOperationQueryBuilder<CheckoutBranding>
+    public sealed class CheckoutBrandingOperationQueryBuilder : FieldsQueryBuilderBase<CheckoutBranding, CheckoutBrandingOperationQueryBuilder>, IGraphOperationQueryBuilder<CheckoutBranding>, IHasArguments<CheckoutBrandingArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CheckoutBrandingArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CheckoutBrandingOperationQueryBuilder(IQuery<CheckoutBranding> query) : base(query)
         {
             Arguments = new CheckoutBrandingArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CheckoutBrandingOperationQueryBuilder SetArguments(Action<CheckoutBrandingArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CheckoutBrandingOperationQueryBuilder Customizations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingCustomizationsQueryBuilder> build)

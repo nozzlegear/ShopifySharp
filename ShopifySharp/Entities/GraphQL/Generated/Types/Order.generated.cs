@@ -702,12 +702,6 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     public DateTimeOffset? processedAt { get; set; } = null;
 
     /// <summary>
-    /// Whether the customer also purchased items from other stores in the network.
-    /// </summary>
-    [JsonPropertyName("productNetwork")]
-    public bool? productNetwork { get; set; } = null;
-
-    /// <summary>
     /// The sales channel that the order was created from, such as the [Online
     /// Store](https://shopify.dev/docs/apps/build/app-surfaces#online-store) or
     /// [Shopify POS](https://shopify.dev/docs/apps/build/app-surfaces#point-of-sale).

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FileDeleteOperationQueryBuilder : FieldsQueryBuilderBase<FileDeletePayload, FileDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<FileDeletePayload>
+    public sealed class FileDeleteOperationQueryBuilder : FieldsQueryBuilderBase<FileDeletePayload, FileDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<FileDeletePayload>, IHasArguments<FileDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FileDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FileDeleteOperationQueryBuilder(IQuery<FileDeletePayload> query) : base(query)
         {
             Arguments = new FileDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FileDeleteOperationQueryBuilder SetArguments(Action<FileDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FileDeleteOperationQueryBuilder DeletedFileIds()

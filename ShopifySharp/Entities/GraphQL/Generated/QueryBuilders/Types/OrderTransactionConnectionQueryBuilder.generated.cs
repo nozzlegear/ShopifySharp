@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OrderTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<OrderTransactionConnection, OrderTransactionConnectionQueryBuilder>
+    public sealed class OrderTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<OrderTransactionConnection, OrderTransactionConnectionQueryBuilder>, IHasArguments<OrderTransactionConnectionArgumentsBuilder>
     {
+        public OrderTransactionConnectionArgumentsBuilder Arguments { get; }
         protected override OrderTransactionConnectionQueryBuilder Self => this;
 
         public OrderTransactionConnectionQueryBuilder() : this("orderTransactionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OrderTransactionConnectionQueryBuilder(string name) : base(new Query<OrderTransactionConnection>(name))
         {
+            Arguments = new OrderTransactionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public OrderTransactionConnectionQueryBuilder(IQuery<OrderTransactionConnection> query) : base(query)
         {
+            Arguments = new OrderTransactionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderTransactionConnectionQueryBuilder SetArguments(Action<OrderTransactionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderTransactionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionEdgeQueryBuilder> build)

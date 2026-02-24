@@ -20,12 +20,6 @@ public record OrderEditCommitPayload : IGraphQLObject
     public Order? order { get; set; } = null;
 
     /// <summary>
-    /// Messages to display to the user after the staged changes are commmitted.
-    /// </summary>
-    [JsonPropertyName("successMessages")]
-    public ICollection<string>? successMessages { get; set; } = null;
-
-    /// <summary>
     /// The list of errors that occurred from executing the mutation.
     /// </summary>
     [JsonPropertyName("userErrors")]

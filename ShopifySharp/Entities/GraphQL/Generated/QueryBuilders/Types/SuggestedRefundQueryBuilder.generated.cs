@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SuggestedRefundQueryBuilder : FieldsQueryBuilderBase<SuggestedRefund, SuggestedRefundQueryBuilder>
+    public sealed class SuggestedRefundQueryBuilder : FieldsQueryBuilderBase<SuggestedRefund, SuggestedRefundQueryBuilder>, IHasArguments<SuggestedRefundArgumentsBuilder>
     {
+        public SuggestedRefundArgumentsBuilder Arguments { get; }
         protected override SuggestedRefundQueryBuilder Self => this;
 
         public SuggestedRefundQueryBuilder() : this("suggestedRefund")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SuggestedRefundQueryBuilder(string name) : base(new Query<SuggestedRefund>(name))
         {
+            Arguments = new SuggestedRefundArgumentsBuilder(base.InnerQuery);
         }
 
         public SuggestedRefundQueryBuilder(IQuery<SuggestedRefund> query) : base(query)
         {
+            Arguments = new SuggestedRefundArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SuggestedRefundQueryBuilder SetArguments(Action<SuggestedRefundArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         [Obsolete("Use `amountSet` instead.")]

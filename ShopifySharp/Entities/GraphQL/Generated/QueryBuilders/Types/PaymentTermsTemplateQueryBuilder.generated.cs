@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PaymentTermsTemplateQueryBuilder : FieldsQueryBuilderBase<PaymentTermsTemplate, PaymentTermsTemplateQueryBuilder>
+    public sealed class PaymentTermsTemplateQueryBuilder : FieldsQueryBuilderBase<PaymentTermsTemplate, PaymentTermsTemplateQueryBuilder>, IHasArguments<PaymentTermsTemplateArgumentsBuilder>
     {
+        public PaymentTermsTemplateArgumentsBuilder Arguments { get; }
         protected override PaymentTermsTemplateQueryBuilder Self => this;
 
         public PaymentTermsTemplateQueryBuilder() : this("paymentTermsTemplate")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PaymentTermsTemplateQueryBuilder(string name) : base(new Query<PaymentTermsTemplate>(name))
         {
+            Arguments = new PaymentTermsTemplateArgumentsBuilder(base.InnerQuery);
         }
 
         public PaymentTermsTemplateQueryBuilder(IQuery<PaymentTermsTemplate> query) : base(query)
         {
+            Arguments = new PaymentTermsTemplateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PaymentTermsTemplateQueryBuilder SetArguments(Action<PaymentTermsTemplateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PaymentTermsTemplateQueryBuilder Description()

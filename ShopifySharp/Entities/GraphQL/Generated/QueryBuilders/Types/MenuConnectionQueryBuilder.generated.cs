@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MenuConnectionQueryBuilder : FieldsQueryBuilderBase<MenuConnection, MenuConnectionQueryBuilder>
+    public sealed class MenuConnectionQueryBuilder : FieldsQueryBuilderBase<MenuConnection, MenuConnectionQueryBuilder>, IHasArguments<MenuConnectionArgumentsBuilder>
     {
+        public MenuConnectionArgumentsBuilder Arguments { get; }
         protected override MenuConnectionQueryBuilder Self => this;
 
         public MenuConnectionQueryBuilder() : this("menuConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MenuConnectionQueryBuilder(string name) : base(new Query<MenuConnection>(name))
         {
+            Arguments = new MenuConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MenuConnectionQueryBuilder(IQuery<MenuConnection> query) : base(query)
         {
+            Arguments = new MenuConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MenuConnectionQueryBuilder SetArguments(Action<MenuConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MenuConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MenuEdgeQueryBuilder> build)

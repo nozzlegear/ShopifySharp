@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FulfillmentOrderLocationForMoveConnectionQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderLocationForMoveConnection, FulfillmentOrderLocationForMoveConnectionQueryBuilder>
+    public sealed class FulfillmentOrderLocationForMoveConnectionQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderLocationForMoveConnection, FulfillmentOrderLocationForMoveConnectionQueryBuilder>, IHasArguments<FulfillmentOrderLocationForMoveConnectionArgumentsBuilder>
     {
+        public FulfillmentOrderLocationForMoveConnectionArgumentsBuilder Arguments { get; }
         protected override FulfillmentOrderLocationForMoveConnectionQueryBuilder Self => this;
 
         public FulfillmentOrderLocationForMoveConnectionQueryBuilder() : this("fulfillmentOrderLocationForMoveConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FulfillmentOrderLocationForMoveConnectionQueryBuilder(string name) : base(new Query<FulfillmentOrderLocationForMoveConnection>(name))
         {
+            Arguments = new FulfillmentOrderLocationForMoveConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public FulfillmentOrderLocationForMoveConnectionQueryBuilder(IQuery<FulfillmentOrderLocationForMoveConnection> query) : base(query)
         {
+            Arguments = new FulfillmentOrderLocationForMoveConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderLocationForMoveConnectionQueryBuilder SetArguments(Action<FulfillmentOrderLocationForMoveConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderLocationForMoveConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderLocationForMoveEdgeQueryBuilder> build)

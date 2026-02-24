@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MetafieldDefinitionConstraintValueConnectionQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionConstraintValueConnection, MetafieldDefinitionConstraintValueConnectionQueryBuilder>
+    public sealed class MetafieldDefinitionConstraintValueConnectionQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionConstraintValueConnection, MetafieldDefinitionConstraintValueConnectionQueryBuilder>, IHasArguments<MetafieldDefinitionConstraintValueConnectionArgumentsBuilder>
     {
+        public MetafieldDefinitionConstraintValueConnectionArgumentsBuilder Arguments { get; }
         protected override MetafieldDefinitionConstraintValueConnectionQueryBuilder Self => this;
 
         public MetafieldDefinitionConstraintValueConnectionQueryBuilder() : this("metafieldDefinitionConstraintValueConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MetafieldDefinitionConstraintValueConnectionQueryBuilder(string name) : base(new Query<MetafieldDefinitionConstraintValueConnection>(name))
         {
+            Arguments = new MetafieldDefinitionConstraintValueConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MetafieldDefinitionConstraintValueConnectionQueryBuilder(IQuery<MetafieldDefinitionConstraintValueConnection> query) : base(query)
         {
+            Arguments = new MetafieldDefinitionConstraintValueConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetafieldDefinitionConstraintValueConnectionQueryBuilder SetArguments(Action<MetafieldDefinitionConstraintValueConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetafieldDefinitionConstraintValueConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionConstraintValueEdgeQueryBuilder> build)

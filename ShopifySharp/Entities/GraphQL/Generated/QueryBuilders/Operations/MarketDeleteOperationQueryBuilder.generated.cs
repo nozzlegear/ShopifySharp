@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MarketDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MarketDeletePayload, MarketDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketDeletePayload>
+    public sealed class MarketDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MarketDeletePayload, MarketDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketDeletePayload>, IHasArguments<MarketDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketDeleteOperationQueryBuilder(IQuery<MarketDeletePayload> query) : base(query)
         {
             Arguments = new MarketDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketDeleteOperationQueryBuilder SetArguments(Action<MarketDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketDeleteOperationQueryBuilder DeletedId()

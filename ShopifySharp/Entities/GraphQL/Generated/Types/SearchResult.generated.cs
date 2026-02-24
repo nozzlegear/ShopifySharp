@@ -26,7 +26,7 @@ public record SearchResult : IGraphQLObject
     public Image? image { get; set; } = null;
 
     /// <summary>
-    /// Returns the resource represented by the search result.
+    /// Returns the ID of the resource returned in the search result.
     /// </summary>
     [JsonPropertyName("reference")]
     public INode? reference { get; set; } = null;

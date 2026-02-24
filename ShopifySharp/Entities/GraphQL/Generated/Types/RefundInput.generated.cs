@@ -52,12 +52,6 @@ public record RefundInput : GraphQLInputObject<RefundInput>
     public string? orderId { get; set; } = null;
 
     /// <summary>
-    /// The date and time when the refund is being processed. If not provided, it will be set to the current time.
-    /// </summary>
-    [JsonPropertyName("processedAt")]
-    public DateTimeOffset? processedAt { get; set; } = null;
-
-    /// <summary>
     /// A list of duties to refund.
     /// </summary>
     [JsonPropertyName("refundDuties")]

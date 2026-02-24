@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DiscountRedeemCodeSavedSearchesOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchConnection, DiscountRedeemCodeSavedSearchesOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchConnection>
+    public sealed class DiscountRedeemCodeSavedSearchesOperationQueryBuilder : FieldsQueryBuilderBase<SavedSearchConnection, DiscountRedeemCodeSavedSearchesOperationQueryBuilder>, IGraphOperationQueryBuilder<SavedSearchConnection>, IHasArguments<DiscountRedeemCodeSavedSearchesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DiscountRedeemCodeSavedSearchesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DiscountRedeemCodeSavedSearchesOperationQueryBuilder(IQuery<SavedSearchConnection> query) : base(query)
         {
             Arguments = new DiscountRedeemCodeSavedSearchesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountRedeemCodeSavedSearchesOperationQueryBuilder SetArguments(Action<DiscountRedeemCodeSavedSearchesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountRedeemCodeSavedSearchesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SavedSearchEdgeQueryBuilder> build)

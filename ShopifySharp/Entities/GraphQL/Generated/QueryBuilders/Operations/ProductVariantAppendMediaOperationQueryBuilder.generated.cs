@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductVariantAppendMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductVariantAppendMediaPayload, ProductVariantAppendMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductVariantAppendMediaPayload>
+    public sealed class ProductVariantAppendMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductVariantAppendMediaPayload, ProductVariantAppendMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductVariantAppendMediaPayload>, IHasArguments<ProductVariantAppendMediaArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductVariantAppendMediaArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductVariantAppendMediaOperationQueryBuilder(IQuery<ProductVariantAppendMediaPayload> query) : base(query)
         {
             Arguments = new ProductVariantAppendMediaArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductVariantAppendMediaOperationQueryBuilder SetArguments(Action<ProductVariantAppendMediaArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductVariantAppendMediaOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

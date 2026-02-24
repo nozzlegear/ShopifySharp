@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventorySetQuantitiesInput : GraphQLInputObject<InventorySetQuantitiesInput>
 {
     /// <summary>
+    /// Skip the compare quantity check in the quantities field.
+    /// </summary>
+    [JsonPropertyName("ignoreCompareQuantity")]
+    public bool? ignoreCompareQuantity { get; set; } = null;
+
+    /// <summary>
     /// The name of quantities to be changed. The only accepted values are: `available` or `on_hand`.
     /// </summary>
     [JsonPropertyName("name")]

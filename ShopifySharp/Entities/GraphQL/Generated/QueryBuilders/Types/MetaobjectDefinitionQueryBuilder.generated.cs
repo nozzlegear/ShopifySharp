@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MetaobjectDefinitionQueryBuilder : FieldsQueryBuilderBase<MetaobjectDefinition, MetaobjectDefinitionQueryBuilder>
+    public sealed class MetaobjectDefinitionQueryBuilder : FieldsQueryBuilderBase<MetaobjectDefinition, MetaobjectDefinitionQueryBuilder>, IHasArguments<MetaobjectDefinitionArgumentsBuilder>
     {
+        public MetaobjectDefinitionArgumentsBuilder Arguments { get; }
         protected override MetaobjectDefinitionQueryBuilder Self => this;
 
         public MetaobjectDefinitionQueryBuilder() : this("metaobjectDefinition")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MetaobjectDefinitionQueryBuilder(string name) : base(new Query<MetaobjectDefinition>(name))
         {
+            Arguments = new MetaobjectDefinitionArgumentsBuilder(base.InnerQuery);
         }
 
         public MetaobjectDefinitionQueryBuilder(IQuery<MetaobjectDefinition> query) : base(query)
         {
+            Arguments = new MetaobjectDefinitionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetaobjectDefinitionQueryBuilder SetArguments(Action<MetaobjectDefinitionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetaobjectDefinitionQueryBuilder Access(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectAccessQueryBuilder> build)

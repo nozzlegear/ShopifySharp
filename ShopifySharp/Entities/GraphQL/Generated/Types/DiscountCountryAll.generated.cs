@@ -9,15 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Indicates that a shipping discount applies to all countries without restriction,
-/// enabling merchants to create truly global promotions. This object represents
-/// universal geographic eligibility for shipping discount offers.
-/// For example, an online store launching a "Worldwide Free Shipping" campaign
-/// would use this configuration to ensure customers from any country can benefit
-/// from the promotion.
-/// This setting simplifies international discount management by eliminating the
-/// need to manually select individual countries or regions, making it ideal for
-/// digital products or stores with comprehensive global shipping capabilities.
+/// The `DiscountCountryAll` object lets you target all countries as shipping destination for discount eligibility.
 /// </summary>
 public record DiscountCountryAll : IGraphQLUnionCase, IGraphQLObject
 {

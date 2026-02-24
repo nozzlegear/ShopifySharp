@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SellingPlanConnectionQueryBuilder : FieldsQueryBuilderBase<SellingPlanConnection, SellingPlanConnectionQueryBuilder>
+    public sealed class SellingPlanConnectionQueryBuilder : FieldsQueryBuilderBase<SellingPlanConnection, SellingPlanConnectionQueryBuilder>, IHasArguments<SellingPlanConnectionArgumentsBuilder>
     {
+        public SellingPlanConnectionArgumentsBuilder Arguments { get; }
         protected override SellingPlanConnectionQueryBuilder Self => this;
 
         public SellingPlanConnectionQueryBuilder() : this("sellingPlanConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SellingPlanConnectionQueryBuilder(string name) : base(new Query<SellingPlanConnection>(name))
         {
+            Arguments = new SellingPlanConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SellingPlanConnectionQueryBuilder(IQuery<SellingPlanConnection> query) : base(query)
         {
+            Arguments = new SellingPlanConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SellingPlanConnectionQueryBuilder SetArguments(Action<SellingPlanConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SellingPlanConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DeliveryProfileUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileUpdatePayload, DeliveryProfileUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryProfileUpdatePayload>
+    public sealed class DeliveryProfileUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryProfileUpdatePayload, DeliveryProfileUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryProfileUpdatePayload>, IHasArguments<DeliveryProfileUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DeliveryProfileUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DeliveryProfileUpdateOperationQueryBuilder(IQuery<DeliveryProfileUpdatePayload> query) : base(query)
         {
             Arguments = new DeliveryProfileUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryProfileUpdateOperationQueryBuilder SetArguments(Action<DeliveryProfileUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryProfileUpdateOperationQueryBuilder Profile(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryProfileQueryBuilder> build)

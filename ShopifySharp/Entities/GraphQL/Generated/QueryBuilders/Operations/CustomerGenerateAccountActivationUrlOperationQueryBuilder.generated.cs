@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerGenerateAccountActivationUrlOperationQueryBuilder : FieldsQueryBuilderBase<CustomerGenerateAccountActivationUrlPayload, CustomerGenerateAccountActivationUrlOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerGenerateAccountActivationUrlPayload>
+    public sealed class CustomerGenerateAccountActivationUrlOperationQueryBuilder : FieldsQueryBuilderBase<CustomerGenerateAccountActivationUrlPayload, CustomerGenerateAccountActivationUrlOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerGenerateAccountActivationUrlPayload>, IHasArguments<CustomerGenerateAccountActivationUrlArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerGenerateAccountActivationUrlArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerGenerateAccountActivationUrlOperationQueryBuilder(IQuery<CustomerGenerateAccountActivationUrlPayload> query) : base(query)
         {
             Arguments = new CustomerGenerateAccountActivationUrlArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerGenerateAccountActivationUrlOperationQueryBuilder SetArguments(Action<CustomerGenerateAccountActivationUrlArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerGenerateAccountActivationUrlOperationQueryBuilder AccountActivationUrl()

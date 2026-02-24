@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrdersCountOperationQueryBuilder : FieldsQueryBuilderBase<Count, OrdersCountOperationQueryBuilder>, IGraphOperationQueryBuilder<Count>
+    public sealed class OrdersCountOperationQueryBuilder : FieldsQueryBuilderBase<Count, OrdersCountOperationQueryBuilder>, IGraphOperationQueryBuilder<Count>, IHasArguments<OrdersCountArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public OrdersCountArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public OrdersCountOperationQueryBuilder(IQuery<Count> query) : base(query)
         {
             Arguments = new OrdersCountArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrdersCountOperationQueryBuilder SetArguments(Action<OrdersCountArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrdersCountOperationQueryBuilder Count()

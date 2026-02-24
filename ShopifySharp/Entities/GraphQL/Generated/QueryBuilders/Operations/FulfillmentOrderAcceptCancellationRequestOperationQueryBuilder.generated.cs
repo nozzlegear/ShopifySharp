@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderAcceptCancellationRequestPayload, FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderAcceptCancellationRequestPayload>
+    public sealed class FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderAcceptCancellationRequestPayload, FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderAcceptCancellationRequestPayload>, IHasArguments<FulfillmentOrderAcceptCancellationRequestArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrderAcceptCancellationRequestArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder(IQuery<FulfillmentOrderAcceptCancellationRequestPayload> query) : base(query)
         {
             Arguments = new FulfillmentOrderAcceptCancellationRequestArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder SetArguments(Action<FulfillmentOrderAcceptCancellationRequestArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderAcceptCancellationRequestOperationQueryBuilder FulfillmentOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderQueryBuilder> build)

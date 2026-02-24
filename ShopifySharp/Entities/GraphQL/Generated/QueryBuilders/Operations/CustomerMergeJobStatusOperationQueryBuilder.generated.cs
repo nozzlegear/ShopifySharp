@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerMergeJobStatusOperationQueryBuilder : FieldsQueryBuilderBase<CustomerMergeRequest, CustomerMergeJobStatusOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerMergeRequest>
+    public sealed class CustomerMergeJobStatusOperationQueryBuilder : FieldsQueryBuilderBase<CustomerMergeRequest, CustomerMergeJobStatusOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerMergeRequest>, IHasArguments<CustomerMergeJobStatusArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CustomerMergeJobStatusArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerMergeJobStatusOperationQueryBuilder(IQuery<CustomerMergeRequest> query) : base(query)
         {
             Arguments = new CustomerMergeJobStatusArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerMergeJobStatusOperationQueryBuilder SetArguments(Action<CustomerMergeJobStatusArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerMergeJobStatusOperationQueryBuilder CustomerMergeErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMergeErrorQueryBuilder> build)

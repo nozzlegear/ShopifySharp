@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductContextualPricingQueryBuilder : FieldsQueryBuilderBase<ProductContextualPricing, ProductContextualPricingQueryBuilder>
+    public sealed class ProductContextualPricingQueryBuilder : FieldsQueryBuilderBase<ProductContextualPricing, ProductContextualPricingQueryBuilder>, IHasArguments<ProductContextualPricingArgumentsBuilder>
     {
+        public ProductContextualPricingArgumentsBuilder Arguments { get; }
         protected override ProductContextualPricingQueryBuilder Self => this;
 
         public ProductContextualPricingQueryBuilder() : this("productContextualPricing")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductContextualPricingQueryBuilder(string name) : base(new Query<ProductContextualPricing>(name))
         {
+            Arguments = new ProductContextualPricingArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductContextualPricingQueryBuilder(IQuery<ProductContextualPricing> query) : base(query)
         {
+            Arguments = new ProductContextualPricingArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductContextualPricingQueryBuilder SetArguments(Action<ProductContextualPricingArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductContextualPricingQueryBuilder FixedQuantityRulesCount()

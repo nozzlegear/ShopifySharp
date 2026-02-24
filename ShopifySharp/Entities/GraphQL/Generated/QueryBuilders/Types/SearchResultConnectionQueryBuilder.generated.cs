@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SearchResultConnectionQueryBuilder : FieldsQueryBuilderBase<SearchResultConnection, SearchResultConnectionQueryBuilder>
+    public sealed class SearchResultConnectionQueryBuilder : FieldsQueryBuilderBase<SearchResultConnection, SearchResultConnectionQueryBuilder>, IHasArguments<SearchResultConnectionArgumentsBuilder>
     {
+        public SearchResultConnectionArgumentsBuilder Arguments { get; }
         protected override SearchResultConnectionQueryBuilder Self => this;
 
         public SearchResultConnectionQueryBuilder() : this("searchResultConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SearchResultConnectionQueryBuilder(string name) : base(new Query<SearchResultConnection>(name))
         {
+            Arguments = new SearchResultConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SearchResultConnectionQueryBuilder(IQuery<SearchResultConnection> query) : base(query)
         {
+            Arguments = new SearchResultConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SearchResultConnectionQueryBuilder SetArguments(Action<SearchResultConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SearchResultConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SearchResultEdgeQueryBuilder> build)

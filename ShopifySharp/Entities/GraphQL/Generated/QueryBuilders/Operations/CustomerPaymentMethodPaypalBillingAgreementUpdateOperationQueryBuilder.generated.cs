@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload, CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload>
+    public sealed class CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload, CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload>, IHasArguments<CustomerPaymentMethodPaypalBillingAgreementUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodPaypalBillingAgreementUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder(IQuery<CustomerPaymentMethodPaypalBillingAgreementUpdatePayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodPaypalBillingAgreementUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodPaypalBillingAgreementUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodPaypalBillingAgreementUpdateOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)

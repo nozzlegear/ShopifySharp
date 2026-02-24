@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderEditAddShippingLineOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditAddShippingLinePayload, OrderEditAddShippingLineOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditAddShippingLinePayload>
+    public sealed class OrderEditAddShippingLineOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditAddShippingLinePayload, OrderEditAddShippingLineOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditAddShippingLinePayload>, IHasArguments<OrderEditAddShippingLineArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderEditAddShippingLineArgumentsBuilder Arguments { get; }
@@ -34,6 +34,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new OrderEditAddShippingLineArgumentsBuilder(base.InnerQuery);
         }
 
+        public OrderEditAddShippingLineOperationQueryBuilder SetArguments(Action<OrderEditAddShippingLineArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public OrderEditAddShippingLineOperationQueryBuilder CalculatedOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedOrderQueryBuilder> build)
         {
             var query = new Query<CalculatedOrder>("calculatedOrder");
@@ -49,15 +55,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedShippingLineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CalculatedShippingLine>(query);
-            return this;
-        }
-
-        public OrderEditAddShippingLineOperationQueryBuilder OrderEditSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder> build)
-        {
-            var query = new Query<OrderEditSession>("orderEditSession");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<OrderEditSession>(query);
             return this;
         }
 

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryAvailableServiceQueryBuilder : FieldsQueryBuilderBase<DeliveryAvailableService, DeliveryAvailableServiceQueryBuilder>
+    public sealed class DeliveryAvailableServiceQueryBuilder : FieldsQueryBuilderBase<DeliveryAvailableService, DeliveryAvailableServiceQueryBuilder>, IHasArguments<DeliveryAvailableServiceArgumentsBuilder>
     {
+        public DeliveryAvailableServiceArgumentsBuilder Arguments { get; }
         protected override DeliveryAvailableServiceQueryBuilder Self => this;
 
         public DeliveryAvailableServiceQueryBuilder() : this("deliveryAvailableService")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryAvailableServiceQueryBuilder(string name) : base(new Query<DeliveryAvailableService>(name))
         {
+            Arguments = new DeliveryAvailableServiceArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryAvailableServiceQueryBuilder(IQuery<DeliveryAvailableService> query) : base(query)
         {
+            Arguments = new DeliveryAvailableServiceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryAvailableServiceQueryBuilder SetArguments(Action<DeliveryAvailableServiceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryAvailableServiceQueryBuilder Countries(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCountryCodesOrRestOfWorldQueryBuilder> build)

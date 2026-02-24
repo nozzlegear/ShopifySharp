@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class TranslatableResourceQueryBuilder : FieldsQueryBuilderBase<TranslatableResource, TranslatableResourceQueryBuilder>
+    public sealed class TranslatableResourceQueryBuilder : FieldsQueryBuilderBase<TranslatableResource, TranslatableResourceQueryBuilder>, IHasArguments<TranslatableResourceArgumentsBuilder>
     {
+        public TranslatableResourceArgumentsBuilder Arguments { get; }
         protected override TranslatableResourceQueryBuilder Self => this;
 
         public TranslatableResourceQueryBuilder() : this("translatableResource")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public TranslatableResourceQueryBuilder(string name) : base(new Query<TranslatableResource>(name))
         {
+            Arguments = new TranslatableResourceArgumentsBuilder(base.InnerQuery);
         }
 
         public TranslatableResourceQueryBuilder(IQuery<TranslatableResource> query) : base(query)
         {
+            Arguments = new TranslatableResourceArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TranslatableResourceQueryBuilder SetArguments(Action<TranslatableResourceArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TranslatableResourceQueryBuilder NestedTranslatableResources(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslatableResourceConnectionQueryBuilder> build)

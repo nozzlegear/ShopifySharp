@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryPromiseProviderQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseProvider, DeliveryPromiseProviderQueryBuilder>
+    public sealed class DeliveryPromiseProviderQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseProvider, DeliveryPromiseProviderQueryBuilder>, IHasArguments<DeliveryPromiseProviderArgumentsBuilder>
     {
+        public DeliveryPromiseProviderArgumentsBuilder Arguments { get; }
         protected override DeliveryPromiseProviderQueryBuilder Self => this;
 
         public DeliveryPromiseProviderQueryBuilder() : this("deliveryPromiseProvider")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryPromiseProviderQueryBuilder(string name) : base(new Query<DeliveryPromiseProvider>(name))
         {
+            Arguments = new DeliveryPromiseProviderArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryPromiseProviderQueryBuilder(IQuery<DeliveryPromiseProvider> query) : base(query)
         {
+            Arguments = new DeliveryPromiseProviderArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryPromiseProviderQueryBuilder SetArguments(Action<DeliveryPromiseProviderArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryPromiseProviderQueryBuilder Active()

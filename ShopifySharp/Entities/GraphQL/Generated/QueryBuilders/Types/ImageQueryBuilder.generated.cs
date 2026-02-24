@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ImageQueryBuilder : FieldsQueryBuilderBase<Image, ImageQueryBuilder>
+    public sealed class ImageQueryBuilder : FieldsQueryBuilderBase<Image, ImageQueryBuilder>, IHasArguments<ImageArgumentsBuilder>
     {
+        public ImageArgumentsBuilder Arguments { get; }
         protected override ImageQueryBuilder Self => this;
 
         public ImageQueryBuilder() : this("image")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ImageQueryBuilder(string name) : base(new Query<Image>(name))
         {
+            Arguments = new ImageArgumentsBuilder(base.InnerQuery);
         }
 
         public ImageQueryBuilder(IQuery<Image> query) : base(query)
         {
+            Arguments = new ImageArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ImageQueryBuilder SetArguments(Action<ImageArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ImageQueryBuilder AltText()
@@ -90,15 +99,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public ImageQueryBuilder TransformedSrc()
         {
             base.InnerQuery.AddField("transformedSrc");
-            return this;
-        }
-
-        public ImageQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
-        {
-            var query = new Query<Translation>("translations");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<Translation>(query);
             return this;
         }
 

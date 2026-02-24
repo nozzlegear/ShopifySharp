@@ -14,7 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public enum OrderSortKeys
 {
     CREATED_AT,
-    CURRENT_TOTAL_PRICE,
     CUSTOMER_NAME,
     DESTINATION,
     FINANCIAL_STATUS,

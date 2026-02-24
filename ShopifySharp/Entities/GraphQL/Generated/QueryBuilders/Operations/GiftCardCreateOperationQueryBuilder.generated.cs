@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class GiftCardCreateOperationQueryBuilder : FieldsQueryBuilderBase<GiftCardCreatePayload, GiftCardCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCardCreatePayload>
+    public sealed class GiftCardCreateOperationQueryBuilder : FieldsQueryBuilderBase<GiftCardCreatePayload, GiftCardCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<GiftCardCreatePayload>, IHasArguments<GiftCardCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public GiftCardCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public GiftCardCreateOperationQueryBuilder(IQuery<GiftCardCreatePayload> query) : base(query)
         {
             Arguments = new GiftCardCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public GiftCardCreateOperationQueryBuilder SetArguments(Action<GiftCardCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public GiftCardCreateOperationQueryBuilder GiftCard(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FlowTriggerReceiveOperationQueryBuilder : FieldsQueryBuilderBase<FlowTriggerReceivePayload, FlowTriggerReceiveOperationQueryBuilder>, IGraphOperationQueryBuilder<FlowTriggerReceivePayload>
+    public sealed class FlowTriggerReceiveOperationQueryBuilder : FieldsQueryBuilderBase<FlowTriggerReceivePayload, FlowTriggerReceiveOperationQueryBuilder>, IGraphOperationQueryBuilder<FlowTriggerReceivePayload>, IHasArguments<FlowTriggerReceiveArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FlowTriggerReceiveArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FlowTriggerReceiveOperationQueryBuilder(IQuery<FlowTriggerReceivePayload> query) : base(query)
         {
             Arguments = new FlowTriggerReceiveArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FlowTriggerReceiveOperationQueryBuilder SetArguments(Action<FlowTriggerReceiveArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FlowTriggerReceiveOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)

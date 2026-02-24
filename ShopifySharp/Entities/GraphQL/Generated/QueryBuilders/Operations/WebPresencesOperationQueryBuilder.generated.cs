@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class WebPresencesOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceConnection, WebPresencesOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceConnection>
+    public sealed class WebPresencesOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceConnection, WebPresencesOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceConnection>, IHasArguments<WebPresencesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public WebPresencesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebPresencesOperationQueryBuilder(IQuery<MarketWebPresenceConnection> query) : base(query)
         {
             Arguments = new WebPresencesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebPresencesOperationQueryBuilder SetArguments(Action<WebPresencesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebPresencesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketWebPresenceEdgeQueryBuilder> build)

@@ -9,10 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Controls spacing customization for the grouped variant of choice list components in checkout forms.
-/// The `ChoiceList` object contains settings specifically for the 'group' variant
-/// styling through the [`ChoiceListGroup`](https://shopify.dev/docs/api/admin-graphql/latest/objects/CheckoutBrandingChoiceListGroup)
-/// field, which determines the spacing between choice options.
+/// The choice list customizations.
 /// </summary>
 public record CheckoutBrandingChoiceList : IGraphQLObject
 {

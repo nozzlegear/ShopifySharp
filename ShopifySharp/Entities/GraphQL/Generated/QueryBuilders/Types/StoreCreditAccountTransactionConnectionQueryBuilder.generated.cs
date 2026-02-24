@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class StoreCreditAccountTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccountTransactionConnection, StoreCreditAccountTransactionConnectionQueryBuilder>
+    public sealed class StoreCreditAccountTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccountTransactionConnection, StoreCreditAccountTransactionConnectionQueryBuilder>, IHasArguments<StoreCreditAccountTransactionConnectionArgumentsBuilder>
     {
+        public StoreCreditAccountTransactionConnectionArgumentsBuilder Arguments { get; }
         protected override StoreCreditAccountTransactionConnectionQueryBuilder Self => this;
 
         public StoreCreditAccountTransactionConnectionQueryBuilder() : this("storeCreditAccountTransactionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public StoreCreditAccountTransactionConnectionQueryBuilder(string name) : base(new Query<StoreCreditAccountTransactionConnection>(name))
         {
+            Arguments = new StoreCreditAccountTransactionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public StoreCreditAccountTransactionConnectionQueryBuilder(IQuery<StoreCreditAccountTransactionConnection> query) : base(query)
         {
+            Arguments = new StoreCreditAccountTransactionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StoreCreditAccountTransactionConnectionQueryBuilder SetArguments(Action<StoreCreditAccountTransactionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StoreCreditAccountTransactionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionEdgeQueryBuilder> build)

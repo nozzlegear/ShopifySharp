@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CodeDiscountNodeByCodeOperationQueryBuilder : FieldsQueryBuilderBase<DiscountCodeNode, CodeDiscountNodeByCodeOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountCodeNode>
+    public sealed class CodeDiscountNodeByCodeOperationQueryBuilder : FieldsQueryBuilderBase<DiscountCodeNode, CodeDiscountNodeByCodeOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountCodeNode>, IHasArguments<CodeDiscountNodeByCodeArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CodeDiscountNodeByCodeArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CodeDiscountNodeByCodeOperationQueryBuilder(IQuery<DiscountCodeNode> query) : base(query)
         {
             Arguments = new CodeDiscountNodeByCodeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CodeDiscountNodeByCodeOperationQueryBuilder SetArguments(Action<CodeDiscountNodeByCodeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CodeDiscountNodeByCodeOperationQueryBuilder Events(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder> build)

@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `abandonmentUpdateActivitiesDeliveryStatuses` instead.")]
-    public sealed class AbandonmentEmailStateUpdateOperationQueryBuilder : FieldsQueryBuilderBase<AbandonmentEmailStateUpdatePayload, AbandonmentEmailStateUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<AbandonmentEmailStateUpdatePayload>
+    public sealed class AbandonmentEmailStateUpdateOperationQueryBuilder : FieldsQueryBuilderBase<AbandonmentEmailStateUpdatePayload, AbandonmentEmailStateUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<AbandonmentEmailStateUpdatePayload>, IHasArguments<AbandonmentEmailStateUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public AbandonmentEmailStateUpdateArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public AbandonmentEmailStateUpdateOperationQueryBuilder(IQuery<AbandonmentEmailStateUpdatePayload> query) : base(query)
         {
             Arguments = new AbandonmentEmailStateUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AbandonmentEmailStateUpdateOperationQueryBuilder SetArguments(Action<AbandonmentEmailStateUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AbandonmentEmailStateUpdateOperationQueryBuilder Abandonment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AbandonmentQueryBuilder> build)

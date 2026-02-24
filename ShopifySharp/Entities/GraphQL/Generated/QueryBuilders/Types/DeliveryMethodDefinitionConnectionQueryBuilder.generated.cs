@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DeliveryMethodDefinitionConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryMethodDefinitionConnection, DeliveryMethodDefinitionConnectionQueryBuilder>
+    public sealed class DeliveryMethodDefinitionConnectionQueryBuilder : FieldsQueryBuilderBase<DeliveryMethodDefinitionConnection, DeliveryMethodDefinitionConnectionQueryBuilder>, IHasArguments<DeliveryMethodDefinitionConnectionArgumentsBuilder>
     {
+        public DeliveryMethodDefinitionConnectionArgumentsBuilder Arguments { get; }
         protected override DeliveryMethodDefinitionConnectionQueryBuilder Self => this;
 
         public DeliveryMethodDefinitionConnectionQueryBuilder() : this("deliveryMethodDefinitionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DeliveryMethodDefinitionConnectionQueryBuilder(string name) : base(new Query<DeliveryMethodDefinitionConnection>(name))
         {
+            Arguments = new DeliveryMethodDefinitionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliveryMethodDefinitionConnectionQueryBuilder(IQuery<DeliveryMethodDefinitionConnection> query) : base(query)
         {
+            Arguments = new DeliveryMethodDefinitionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryMethodDefinitionConnectionQueryBuilder SetArguments(Action<DeliveryMethodDefinitionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryMethodDefinitionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryMethodDefinitionEdgeQueryBuilder> build)

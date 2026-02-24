@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketingActivityQueryBuilder : FieldsQueryBuilderBase<MarketingActivity, MarketingActivityQueryBuilder>
+    public sealed class MarketingActivityQueryBuilder : FieldsQueryBuilderBase<MarketingActivity, MarketingActivityQueryBuilder>, IHasArguments<MarketingActivityArgumentsBuilder>
     {
+        public MarketingActivityArgumentsBuilder Arguments { get; }
         protected override MarketingActivityQueryBuilder Self => this;
 
         public MarketingActivityQueryBuilder() : this("marketingActivity")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketingActivityQueryBuilder(string name) : base(new Query<MarketingActivity>(name))
         {
+            Arguments = new MarketingActivityArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketingActivityQueryBuilder(IQuery<MarketingActivity> query) : base(query)
         {
+            Arguments = new MarketingActivityArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketingActivityQueryBuilder SetArguments(Action<MarketingActivityArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketingActivityQueryBuilder ActivityListUrl()

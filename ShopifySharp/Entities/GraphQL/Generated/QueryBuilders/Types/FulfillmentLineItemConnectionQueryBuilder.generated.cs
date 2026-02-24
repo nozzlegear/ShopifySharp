@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FulfillmentLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<FulfillmentLineItemConnection, FulfillmentLineItemConnectionQueryBuilder>
+    public sealed class FulfillmentLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<FulfillmentLineItemConnection, FulfillmentLineItemConnectionQueryBuilder>, IHasArguments<FulfillmentLineItemConnectionArgumentsBuilder>
     {
+        public FulfillmentLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override FulfillmentLineItemConnectionQueryBuilder Self => this;
 
         public FulfillmentLineItemConnectionQueryBuilder() : this("fulfillmentLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FulfillmentLineItemConnectionQueryBuilder(string name) : base(new Query<FulfillmentLineItemConnection>(name))
         {
+            Arguments = new FulfillmentLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public FulfillmentLineItemConnectionQueryBuilder(IQuery<FulfillmentLineItemConnection> query) : base(query)
         {
+            Arguments = new FulfillmentLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentLineItemConnectionQueryBuilder SetArguments(Action<FulfillmentLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentLineItemEdgeQueryBuilder> build)

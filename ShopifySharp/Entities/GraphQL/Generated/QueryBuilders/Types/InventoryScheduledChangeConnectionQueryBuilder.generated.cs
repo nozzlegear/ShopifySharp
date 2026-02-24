@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryScheduledChangeConnectionQueryBuilder : FieldsQueryBuilderBase<InventoryScheduledChangeConnection, InventoryScheduledChangeConnectionQueryBuilder>
+    public sealed class InventoryScheduledChangeConnectionQueryBuilder : FieldsQueryBuilderBase<InventoryScheduledChangeConnection, InventoryScheduledChangeConnectionQueryBuilder>, IHasArguments<InventoryScheduledChangeConnectionArgumentsBuilder>
     {
+        public InventoryScheduledChangeConnectionArgumentsBuilder Arguments { get; }
         protected override InventoryScheduledChangeConnectionQueryBuilder Self => this;
 
         public InventoryScheduledChangeConnectionQueryBuilder() : this("inventoryScheduledChangeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryScheduledChangeConnectionQueryBuilder(string name) : base(new Query<InventoryScheduledChangeConnection>(name))
         {
+            Arguments = new InventoryScheduledChangeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryScheduledChangeConnectionQueryBuilder(IQuery<InventoryScheduledChangeConnection> query) : base(query)
         {
+            Arguments = new InventoryScheduledChangeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryScheduledChangeConnectionQueryBuilder SetArguments(Action<InventoryScheduledChangeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryScheduledChangeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryScheduledChangeEdgeQueryBuilder> build)

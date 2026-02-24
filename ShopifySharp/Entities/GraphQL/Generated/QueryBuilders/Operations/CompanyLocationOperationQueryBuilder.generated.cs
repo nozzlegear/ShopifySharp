@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyLocationOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocation, CompanyLocationOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocation>
+    public sealed class CompanyLocationOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocation, CompanyLocationOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocation>, IHasArguments<CompanyLocationArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CompanyLocationArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyLocationOperationQueryBuilder(IQuery<CompanyLocation> query) : base(query)
         {
             Arguments = new CompanyLocationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationOperationQueryBuilder SetArguments(Action<CompanyLocationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationOperationQueryBuilder BillingAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyAddressQueryBuilder> build)
@@ -248,15 +254,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationStaffMemberAssignmentConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CompanyLocationStaffMemberAssignmentConnection>(query);
-            return this;
-        }
-
-        public CompanyLocationOperationQueryBuilder StoreCreditAccounts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountConnectionQueryBuilder> build)
-        {
-            var query = new Query<StoreCreditAccountConnection>("storeCreditAccounts");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<StoreCreditAccountConnection>(query);
             return this;
         }
 

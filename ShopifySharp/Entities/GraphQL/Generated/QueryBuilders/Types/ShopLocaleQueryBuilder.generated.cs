@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopLocaleQueryBuilder : FieldsQueryBuilderBase<ShopLocale, ShopLocaleQueryBuilder>
+    public sealed class ShopLocaleQueryBuilder : FieldsQueryBuilderBase<ShopLocale, ShopLocaleQueryBuilder>, IHasArguments<ShopLocaleArgumentsBuilder>
     {
+        public ShopLocaleArgumentsBuilder Arguments { get; }
         protected override ShopLocaleQueryBuilder Self => this;
 
         public ShopLocaleQueryBuilder() : this("shopLocale")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopLocaleQueryBuilder(string name) : base(new Query<ShopLocale>(name))
         {
+            Arguments = new ShopLocaleArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopLocaleQueryBuilder(IQuery<ShopLocale> query) : base(query)
         {
+            Arguments = new ShopLocaleArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopLocaleQueryBuilder SetArguments(Action<ShopLocaleArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopLocaleQueryBuilder Locale()

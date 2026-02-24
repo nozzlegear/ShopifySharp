@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductQueryBuilder : FieldsQueryBuilderBase<Product, ProductQueryBuilder>
+    public sealed class ProductQueryBuilder : FieldsQueryBuilderBase<Product, ProductQueryBuilder>, IHasArguments<ProductArgumentsBuilder>
     {
+        public ProductArgumentsBuilder Arguments { get; }
         protected override ProductQueryBuilder Self => this;
 
         public ProductQueryBuilder() : this("product")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductQueryBuilder(string name) : base(new Query<Product>(name))
         {
+            Arguments = new ProductArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductQueryBuilder(IQuery<Product> query) : base(query)
         {
+            Arguments = new ProductArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductQueryBuilder SetArguments(Action<ProductArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductQueryBuilder AvailablePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
@@ -52,15 +61,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductBundleComponentConnection>(query);
-            return this;
-        }
-
-        public ProductQueryBuilder BundleConsolidatedOptions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder> build)
-        {
-            var query = new Query<ComponentizedProductsBundleConsolidatedOption>("bundleConsolidatedOptions");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ComponentizedProductsBundleConsolidatedOption>(query);
             return this;
         }
 

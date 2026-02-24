@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductFeedOperationQueryBuilder : FieldsQueryBuilderBase<ProductFeed, ProductFeedOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductFeed>
+    public sealed class ProductFeedOperationQueryBuilder : FieldsQueryBuilderBase<ProductFeed, ProductFeedOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductFeed>, IHasArguments<ProductFeedArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ProductFeedArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductFeedOperationQueryBuilder(IQuery<ProductFeed> query) : base(query)
         {
             Arguments = new ProductFeedArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductFeedOperationQueryBuilder SetArguments(Action<ProductFeedArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductFeedOperationQueryBuilder Country()

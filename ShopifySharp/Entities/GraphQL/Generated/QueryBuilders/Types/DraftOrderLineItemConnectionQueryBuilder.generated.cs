@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DraftOrderLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<DraftOrderLineItemConnection, DraftOrderLineItemConnectionQueryBuilder>
+    public sealed class DraftOrderLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<DraftOrderLineItemConnection, DraftOrderLineItemConnectionQueryBuilder>, IHasArguments<DraftOrderLineItemConnectionArgumentsBuilder>
     {
+        public DraftOrderLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override DraftOrderLineItemConnectionQueryBuilder Self => this;
 
         public DraftOrderLineItemConnectionQueryBuilder() : this("draftOrderLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DraftOrderLineItemConnectionQueryBuilder(string name) : base(new Query<DraftOrderLineItemConnection>(name))
         {
+            Arguments = new DraftOrderLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DraftOrderLineItemConnectionQueryBuilder(IQuery<DraftOrderLineItemConnection> query) : base(query)
         {
+            Arguments = new DraftOrderLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderLineItemConnectionQueryBuilder SetArguments(Action<DraftOrderLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrderLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderLineItemEdgeQueryBuilder> build)

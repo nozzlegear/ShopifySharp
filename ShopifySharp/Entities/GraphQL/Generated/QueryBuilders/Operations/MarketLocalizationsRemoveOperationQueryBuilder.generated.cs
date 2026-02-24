@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MarketLocalizationsRemoveOperationQueryBuilder : FieldsQueryBuilderBase<MarketLocalizationsRemovePayload, MarketLocalizationsRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketLocalizationsRemovePayload>
+    public sealed class MarketLocalizationsRemoveOperationQueryBuilder : FieldsQueryBuilderBase<MarketLocalizationsRemovePayload, MarketLocalizationsRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketLocalizationsRemovePayload>, IHasArguments<MarketLocalizationsRemoveArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketLocalizationsRemoveArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketLocalizationsRemoveOperationQueryBuilder(IQuery<MarketLocalizationsRemovePayload> query) : base(query)
         {
             Arguments = new MarketLocalizationsRemoveArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketLocalizationsRemoveOperationQueryBuilder SetArguments(Action<MarketLocalizationsRemoveArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketLocalizationsRemoveOperationQueryBuilder MarketLocalizations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketLocalizationQueryBuilder> build)

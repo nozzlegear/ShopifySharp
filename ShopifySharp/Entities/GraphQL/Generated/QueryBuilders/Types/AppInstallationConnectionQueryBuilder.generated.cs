@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AppInstallationConnectionQueryBuilder : FieldsQueryBuilderBase<AppInstallationConnection, AppInstallationConnectionQueryBuilder>
+    public sealed class AppInstallationConnectionQueryBuilder : FieldsQueryBuilderBase<AppInstallationConnection, AppInstallationConnectionQueryBuilder>, IHasArguments<AppInstallationConnectionArgumentsBuilder>
     {
+        public AppInstallationConnectionArgumentsBuilder Arguments { get; }
         protected override AppInstallationConnectionQueryBuilder Self => this;
 
         public AppInstallationConnectionQueryBuilder() : this("appInstallationConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AppInstallationConnectionQueryBuilder(string name) : base(new Query<AppInstallationConnection>(name))
         {
+            Arguments = new AppInstallationConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public AppInstallationConnectionQueryBuilder(IQuery<AppInstallationConnection> query) : base(query)
         {
+            Arguments = new AppInstallationConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppInstallationConnectionQueryBuilder SetArguments(Action<AppInstallationConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppInstallationConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppInstallationEdgeQueryBuilder> build)

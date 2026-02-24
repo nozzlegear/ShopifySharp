@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MenuDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MenuDeletePayload, MenuDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MenuDeletePayload>
+    public sealed class MenuDeleteOperationQueryBuilder : FieldsQueryBuilderBase<MenuDeletePayload, MenuDeleteOperationQueryBuilder>, IGraphOperationQueryBuilder<MenuDeletePayload>, IHasArguments<MenuDeleteArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MenuDeleteArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MenuDeleteOperationQueryBuilder(IQuery<MenuDeletePayload> query) : base(query)
         {
             Arguments = new MenuDeleteArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MenuDeleteOperationQueryBuilder SetArguments(Action<MenuDeleteArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MenuDeleteOperationQueryBuilder DeletedMenuId()

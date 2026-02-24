@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleContractDraftConcatenatePayload, SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleContractDraftConcatenatePayload>
+    public sealed class SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleContractDraftConcatenatePayload, SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleContractDraftConcatenatePayload>, IHasArguments<SubscriptionBillingCycleContractDraftConcatenateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SubscriptionBillingCycleContractDraftConcatenateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder(IQuery<SubscriptionBillingCycleContractDraftConcatenatePayload> query) : base(query)
         {
             Arguments = new SubscriptionBillingCycleContractDraftConcatenateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder SetArguments(Action<SubscriptionBillingCycleContractDraftConcatenateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingCycleContractDraftConcatenateOperationQueryBuilder Draft(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDraftQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DiscountRedeemCodeConnectionQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeConnection, DiscountRedeemCodeConnectionQueryBuilder>
+    public sealed class DiscountRedeemCodeConnectionQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeConnection, DiscountRedeemCodeConnectionQueryBuilder>, IHasArguments<DiscountRedeemCodeConnectionArgumentsBuilder>
     {
+        public DiscountRedeemCodeConnectionArgumentsBuilder Arguments { get; }
         protected override DiscountRedeemCodeConnectionQueryBuilder Self => this;
 
         public DiscountRedeemCodeConnectionQueryBuilder() : this("discountRedeemCodeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DiscountRedeemCodeConnectionQueryBuilder(string name) : base(new Query<DiscountRedeemCodeConnection>(name))
         {
+            Arguments = new DiscountRedeemCodeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public DiscountRedeemCodeConnectionQueryBuilder(IQuery<DiscountRedeemCodeConnection> query) : base(query)
         {
+            Arguments = new DiscountRedeemCodeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountRedeemCodeConnectionQueryBuilder SetArguments(Action<DiscountRedeemCodeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountRedeemCodeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeEdgeQueryBuilder> build)

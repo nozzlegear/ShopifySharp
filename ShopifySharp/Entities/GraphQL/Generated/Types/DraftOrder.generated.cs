@@ -173,7 +173,7 @@ public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubje
 
     /// <summary>
     /// A subtotal of the line items and corresponding discounts,
-    /// excluding shipping charges, shipping discounts, taxes, or order discounts.
+    /// excluding include shipping charges, shipping discounts, taxes, or order discounts.
     /// </summary>
     [JsonPropertyName("lineItemsSubtotalPrice")]
     public MoneyBag? lineItemsSubtotalPrice { get; set; } = null;
@@ -353,7 +353,7 @@ public record DraftOrder : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubje
     public MoneyBag? totalDiscountsSet { get; set; } = null;
 
     /// <summary>
-    /// Total price of line items, excluding discounts.
+    /// Total price of line items.
     /// </summary>
     [JsonPropertyName("totalLineItemsPriceSet")]
     public MoneyBag? totalLineItemsPriceSet { get; set; } = null;

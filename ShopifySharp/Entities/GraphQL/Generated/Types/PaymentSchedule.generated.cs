@@ -21,22 +21,10 @@ public record PaymentSchedule : IGraphQLObject, INode
     public MoneyV2? amount { get; set; } = null;
 
     /// <summary>
-    /// Remaining balance to be captured for this payment schedule.
-    /// </summary>
-    [JsonPropertyName("balanceDue")]
-    public MoneyV2? balanceDue { get; set; } = null;
-
-    /// <summary>
     /// Date and time when the payment schedule is paid or fulfilled.
     /// </summary>
     [JsonPropertyName("completedAt")]
     public DateTimeOffset? completedAt { get; set; } = null;
-
-    /// <summary>
-    /// Whether the payment schedule is due.
-    /// </summary>
-    [JsonPropertyName("due")]
-    public bool? due { get; set; } = null;
 
     /// <summary>
     /// Date and time when the payment schedule is due.
@@ -61,10 +49,4 @@ public record PaymentSchedule : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("paymentTerms")]
     public PaymentTerms? paymentTerms { get; set; } = null;
-
-    /// <summary>
-    /// Remaining balance to be paid or authorized by the customer for this payment schedule.
-    /// </summary>
-    [JsonPropertyName("totalBalance")]
-    public MoneyV2? totalBalance { get; set; } = null;
 }

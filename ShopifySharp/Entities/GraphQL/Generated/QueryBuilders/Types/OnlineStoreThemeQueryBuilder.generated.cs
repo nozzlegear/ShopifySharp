@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OnlineStoreThemeQueryBuilder : FieldsQueryBuilderBase<OnlineStoreTheme, OnlineStoreThemeQueryBuilder>
+    public sealed class OnlineStoreThemeQueryBuilder : FieldsQueryBuilderBase<OnlineStoreTheme, OnlineStoreThemeQueryBuilder>, IHasArguments<OnlineStoreThemeArgumentsBuilder>
     {
+        public OnlineStoreThemeArgumentsBuilder Arguments { get; }
         protected override OnlineStoreThemeQueryBuilder Self => this;
 
         public OnlineStoreThemeQueryBuilder() : this("onlineStoreTheme")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OnlineStoreThemeQueryBuilder(string name) : base(new Query<OnlineStoreTheme>(name))
         {
+            Arguments = new OnlineStoreThemeArgumentsBuilder(base.InnerQuery);
         }
 
         public OnlineStoreThemeQueryBuilder(IQuery<OnlineStoreTheme> query) : base(query)
         {
+            Arguments = new OnlineStoreThemeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OnlineStoreThemeQueryBuilder SetArguments(Action<OnlineStoreThemeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OnlineStoreThemeQueryBuilder CreatedAt()

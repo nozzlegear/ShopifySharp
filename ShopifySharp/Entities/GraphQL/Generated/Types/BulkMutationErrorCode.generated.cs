@@ -18,5 +18,4 @@ public enum BulkMutationErrorCode
     INVALID_STAGED_UPLOAD_FILE,
     NO_SUCH_FILE,
     INTERNAL_FILE_SERVER_ERROR,
-    LIMIT_REACHED,
 }

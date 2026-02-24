@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopPayPaymentRequestReceiptQueryBuilder : FieldsQueryBuilderBase<ShopPayPaymentRequestReceipt, ShopPayPaymentRequestReceiptQueryBuilder>
+    public sealed class ShopPayPaymentRequestReceiptQueryBuilder : FieldsQueryBuilderBase<ShopPayPaymentRequestReceipt, ShopPayPaymentRequestReceiptQueryBuilder>, IHasArguments<ShopPayPaymentRequestReceiptArgumentsBuilder>
     {
+        public ShopPayPaymentRequestReceiptArgumentsBuilder Arguments { get; }
         protected override ShopPayPaymentRequestReceiptQueryBuilder Self => this;
 
         public ShopPayPaymentRequestReceiptQueryBuilder() : this("shopPayPaymentRequestReceipt")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopPayPaymentRequestReceiptQueryBuilder(string name) : base(new Query<ShopPayPaymentRequestReceipt>(name))
         {
+            Arguments = new ShopPayPaymentRequestReceiptArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopPayPaymentRequestReceiptQueryBuilder(IQuery<ShopPayPaymentRequestReceipt> query) : base(query)
         {
+            Arguments = new ShopPayPaymentRequestReceiptArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopPayPaymentRequestReceiptQueryBuilder SetArguments(Action<ShopPayPaymentRequestReceiptArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopPayPaymentRequestReceiptQueryBuilder CreatedAt()

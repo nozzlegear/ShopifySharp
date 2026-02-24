@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class EventBridgeServerPixelUpdateOperationQueryBuilder : FieldsQueryBuilderBase<EventBridgeServerPixelUpdatePayload, EventBridgeServerPixelUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<EventBridgeServerPixelUpdatePayload>
+    public sealed class EventBridgeServerPixelUpdateOperationQueryBuilder : FieldsQueryBuilderBase<EventBridgeServerPixelUpdatePayload, EventBridgeServerPixelUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<EventBridgeServerPixelUpdatePayload>, IHasArguments<EventBridgeServerPixelUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public EventBridgeServerPixelUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public EventBridgeServerPixelUpdateOperationQueryBuilder(IQuery<EventBridgeServerPixelUpdatePayload> query) : base(query)
         {
             Arguments = new EventBridgeServerPixelUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public EventBridgeServerPixelUpdateOperationQueryBuilder SetArguments(Action<EventBridgeServerPixelUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public EventBridgeServerPixelUpdateOperationQueryBuilder ServerPixel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ServerPixelQueryBuilder> build)

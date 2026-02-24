@@ -36,12 +36,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public MetaobjectAccessQueryBuilder CustomerAccount()
-        {
-            base.InnerQuery.AddField("customerAccount");
-            return this;
-        }
-
         public MetaobjectAccessQueryBuilder Storefront()
         {
             base.InnerQuery.AddField("storefront");

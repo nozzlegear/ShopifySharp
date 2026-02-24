@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PaymentTermsUpdateOperationQueryBuilder : FieldsQueryBuilderBase<PaymentTermsUpdatePayload, PaymentTermsUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<PaymentTermsUpdatePayload>
+    public sealed class PaymentTermsUpdateOperationQueryBuilder : FieldsQueryBuilderBase<PaymentTermsUpdatePayload, PaymentTermsUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<PaymentTermsUpdatePayload>, IHasArguments<PaymentTermsUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PaymentTermsUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PaymentTermsUpdateOperationQueryBuilder(IQuery<PaymentTermsUpdatePayload> query) : base(query)
         {
             Arguments = new PaymentTermsUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PaymentTermsUpdateOperationQueryBuilder SetArguments(Action<PaymentTermsUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PaymentTermsUpdateOperationQueryBuilder PaymentTerms(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaymentTermsQueryBuilder> build)

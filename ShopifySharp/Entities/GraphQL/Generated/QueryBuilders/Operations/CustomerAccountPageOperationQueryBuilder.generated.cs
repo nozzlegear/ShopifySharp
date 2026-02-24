@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerAccountPageOperationQueryBuilder : FieldsQueryBuilderBase<ICustomerAccountPage, CustomerAccountPageOperationQueryBuilder>, IGraphOperationQueryBuilder<ICustomerAccountPage>
+    public sealed class CustomerAccountPageOperationQueryBuilder : FieldsQueryBuilderBase<ICustomerAccountPage, CustomerAccountPageOperationQueryBuilder>, IGraphOperationQueryBuilder<ICustomerAccountPage>, IHasArguments<CustomerAccountPageArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CustomerAccountPageArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerAccountPageOperationQueryBuilder(IQuery<ICustomerAccountPage> query) : base(query)
         {
             Arguments = new CustomerAccountPageArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerAccountPageOperationQueryBuilder SetArguments(Action<CustomerAccountPageArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerAccountPageOperationQueryBuilder DefaultCursor()

@@ -13,10 +13,10 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 public enum InventoryShipmentUpdateItemQuantitiesUserErrorCode
 {
-    LOCATION_NOT_FOUND,
     SHIPMENT_NOT_FOUND,
     ITEM_NOT_FOUND,
     INVALID_QUANTITY,
     INVALID_SHIPMENT_STATUS,
+    LOCATION_NOT_FOUND,
     LOCATION_NOT_ACTIVE,
 }

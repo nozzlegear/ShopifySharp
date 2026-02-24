@@ -14,7 +14,8 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ChannelOperationQueryBuilder : FieldsQueryBuilderBase<Channel, ChannelOperationQueryBuilder>, IGraphOperationQueryBuilder<Channel>
+    [Obsolete("Use `publication` instead.")]
+    public sealed class ChannelOperationQueryBuilder : FieldsQueryBuilderBase<Channel, ChannelOperationQueryBuilder>, IGraphOperationQueryBuilder<Channel>, IHasArguments<ChannelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ChannelArgumentsBuilder Arguments { get; }
@@ -32,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ChannelOperationQueryBuilder(IQuery<Channel> query) : base(query)
         {
             Arguments = new ChannelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ChannelOperationQueryBuilder SetArguments(Action<ChannelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ChannelOperationQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
@@ -61,6 +68,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        [Obsolete("Use `id` instead.")]
         public ChannelOperationQueryBuilder Handle()
         {
             base.InnerQuery.AddField("handle");

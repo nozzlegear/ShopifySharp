@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CollectionQueryBuilder : FieldsQueryBuilderBase<Collection, CollectionQueryBuilder>
+    public sealed class CollectionQueryBuilder : FieldsQueryBuilderBase<Collection, CollectionQueryBuilder>, IHasArguments<CollectionArgumentsBuilder>
     {
+        public CollectionArgumentsBuilder Arguments { get; }
         protected override CollectionQueryBuilder Self => this;
 
         public CollectionQueryBuilder() : this("collection")
@@ -24,18 +25,17 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CollectionQueryBuilder(string name) : base(new Query<Collection>(name))
         {
+            Arguments = new CollectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CollectionQueryBuilder(IQuery<Collection> query) : base(query)
         {
+            Arguments = new CollectionArgumentsBuilder(base.InnerQuery);
         }
 
-        public CollectionQueryBuilder ActiveOperations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionOperationsQueryBuilder> build)
+        public CollectionQueryBuilder SetArguments(Action<CollectionArgumentsBuilder> configure)
         {
-            var query = new Query<CollectionOperations>("activeOperations");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionOperationsQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<CollectionOperations>(query);
+            configure(this.Arguments);
             return this;
         }
 

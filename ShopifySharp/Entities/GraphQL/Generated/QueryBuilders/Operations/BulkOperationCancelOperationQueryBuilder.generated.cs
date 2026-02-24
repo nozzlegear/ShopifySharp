@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class BulkOperationCancelOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperationCancelPayload, BulkOperationCancelOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkOperationCancelPayload>
+    public sealed class BulkOperationCancelOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperationCancelPayload, BulkOperationCancelOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkOperationCancelPayload>, IHasArguments<BulkOperationCancelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public BulkOperationCancelArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public BulkOperationCancelOperationQueryBuilder(IQuery<BulkOperationCancelPayload> query) : base(query)
         {
             Arguments = new BulkOperationCancelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BulkOperationCancelOperationQueryBuilder SetArguments(Action<BulkOperationCancelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BulkOperationCancelOperationQueryBuilder BulkOperation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BulkOperationQueryBuilder> build)

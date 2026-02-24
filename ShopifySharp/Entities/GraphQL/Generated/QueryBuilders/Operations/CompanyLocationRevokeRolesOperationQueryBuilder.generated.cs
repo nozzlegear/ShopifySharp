@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyLocationRevokeRolesOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationRevokeRolesPayload, CompanyLocationRevokeRolesOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationRevokeRolesPayload>
+    public sealed class CompanyLocationRevokeRolesOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationRevokeRolesPayload, CompanyLocationRevokeRolesOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationRevokeRolesPayload>, IHasArguments<CompanyLocationRevokeRolesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyLocationRevokeRolesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyLocationRevokeRolesOperationQueryBuilder(IQuery<CompanyLocationRevokeRolesPayload> query) : base(query)
         {
             Arguments = new CompanyLocationRevokeRolesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationRevokeRolesOperationQueryBuilder SetArguments(Action<CompanyLocationRevokeRolesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationRevokeRolesOperationQueryBuilder RevokedRoleAssignmentIds()

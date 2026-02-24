@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class LocationEditOperationQueryBuilder : FieldsQueryBuilderBase<LocationEditPayload, LocationEditOperationQueryBuilder>, IGraphOperationQueryBuilder<LocationEditPayload>
+    public sealed class LocationEditOperationQueryBuilder : FieldsQueryBuilderBase<LocationEditPayload, LocationEditOperationQueryBuilder>, IGraphOperationQueryBuilder<LocationEditPayload>, IHasArguments<LocationEditArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public LocationEditArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public LocationEditOperationQueryBuilder(IQuery<LocationEditPayload> query) : base(query)
         {
             Arguments = new LocationEditArgumentsBuilder(base.InnerQuery);
+        }
+
+        public LocationEditOperationQueryBuilder SetArguments(Action<LocationEditArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public LocationEditOperationQueryBuilder Location(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder> build)

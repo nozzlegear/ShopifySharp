@@ -20,7 +20,6 @@ public enum FulfillmentDisplayStatus
     DELIVERED,
     FAILURE,
     FULFILLED,
-    CARRIER_PICKED_UP,
     IN_TRANSIT,
     LABEL_PRINTED,
     LABEL_PURCHASED,

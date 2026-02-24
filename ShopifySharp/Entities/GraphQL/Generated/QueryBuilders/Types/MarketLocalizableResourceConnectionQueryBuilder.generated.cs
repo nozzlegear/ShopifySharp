@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MarketLocalizableResourceConnectionQueryBuilder : FieldsQueryBuilderBase<MarketLocalizableResourceConnection, MarketLocalizableResourceConnectionQueryBuilder>
+    public sealed class MarketLocalizableResourceConnectionQueryBuilder : FieldsQueryBuilderBase<MarketLocalizableResourceConnection, MarketLocalizableResourceConnectionQueryBuilder>, IHasArguments<MarketLocalizableResourceConnectionArgumentsBuilder>
     {
+        public MarketLocalizableResourceConnectionArgumentsBuilder Arguments { get; }
         protected override MarketLocalizableResourceConnectionQueryBuilder Self => this;
 
         public MarketLocalizableResourceConnectionQueryBuilder() : this("marketLocalizableResourceConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MarketLocalizableResourceConnectionQueryBuilder(string name) : base(new Query<MarketLocalizableResourceConnection>(name))
         {
+            Arguments = new MarketLocalizableResourceConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public MarketLocalizableResourceConnectionQueryBuilder(IQuery<MarketLocalizableResourceConnection> query) : base(query)
         {
+            Arguments = new MarketLocalizableResourceConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketLocalizableResourceConnectionQueryBuilder SetArguments(Action<MarketLocalizableResourceConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketLocalizableResourceConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketLocalizableResourceEdgeQueryBuilder> build)

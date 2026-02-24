@@ -9,9 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The shop's billing plan and subscription details. Indicates the plan tier (such
-/// as Basic, Advanced, or Plus), whether the shop has a Shopify Plus subscription,
-/// and if it's a dev store for testing.
+/// The billing plan of the shop.
 /// </summary>
 public record ShopPlan : IGraphQLObject
 {
@@ -30,9 +28,8 @@ public record ShopPlan : IGraphQLObject
 
     /// <summary>
     /// The public display name of the shop's billing plan. Possible values are:
-    /// Advanced, Agentic, Basic, Development, Grow, Inactive, Lite, Other, Paused,
-    /// Plus, Plus Trial, Retail, Shop Component, Shopify Finance, Staff Business,
-    /// Starter, and Trial.
+    /// Advanced, Basic, Development, Grow, Inactive, Lite, Other, Paused, Plus, Plus
+    /// Trial, Retail, Shop Component, Staff Business, Starter, and Trial.
     /// </summary>
     [JsonPropertyName("publicDisplayName")]
     public string? publicDisplayName { get; set; } = null;

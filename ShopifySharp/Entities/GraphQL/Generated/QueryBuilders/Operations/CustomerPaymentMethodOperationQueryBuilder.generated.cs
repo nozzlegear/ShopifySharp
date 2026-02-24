@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethod, CustomerPaymentMethodOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethod>
+    public sealed class CustomerPaymentMethodOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethod, CustomerPaymentMethodOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethod>, IHasArguments<CustomerPaymentMethodArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CustomerPaymentMethodArgumentsBuilder Arguments { get; }
@@ -34,6 +34,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new CustomerPaymentMethodArgumentsBuilder(base.InnerQuery);
         }
 
+        public CustomerPaymentMethodOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public CustomerPaymentMethodOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("customer");
@@ -46,15 +52,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodOperationQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");
-            return this;
-        }
-
-        public CustomerPaymentMethodOperationQueryBuilder Mandates(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaymentMandateResourceConnectionQueryBuilder> build)
-        {
-            var query = new Query<PaymentMandateResourceConnection>("mandates");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PaymentMandateResourceConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<PaymentMandateResourceConnection>(query);
             return this;
         }
 

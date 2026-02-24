@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CheckoutBrandingQueryBuilder : FieldsQueryBuilderBase<CheckoutBranding, CheckoutBrandingQueryBuilder>
+    public sealed class CheckoutBrandingQueryBuilder : FieldsQueryBuilderBase<CheckoutBranding, CheckoutBrandingQueryBuilder>, IHasArguments<CheckoutBrandingArgumentsBuilder>
     {
+        public CheckoutBrandingArgumentsBuilder Arguments { get; }
         protected override CheckoutBrandingQueryBuilder Self => this;
 
         public CheckoutBrandingQueryBuilder() : this("checkoutBranding")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CheckoutBrandingQueryBuilder(string name) : base(new Query<CheckoutBranding>(name))
         {
+            Arguments = new CheckoutBrandingArgumentsBuilder(base.InnerQuery);
         }
 
         public CheckoutBrandingQueryBuilder(IQuery<CheckoutBranding> query) : base(query)
         {
+            Arguments = new CheckoutBrandingArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CheckoutBrandingQueryBuilder SetArguments(Action<CheckoutBrandingArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CheckoutBrandingQueryBuilder Customizations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingCustomizationsQueryBuilder> build)

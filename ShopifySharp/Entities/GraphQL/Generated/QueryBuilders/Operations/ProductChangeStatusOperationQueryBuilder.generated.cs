@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `productUpdate` instead.")]
-    public sealed class ProductChangeStatusOperationQueryBuilder : FieldsQueryBuilderBase<ProductChangeStatusPayload, ProductChangeStatusOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductChangeStatusPayload>
+    public sealed class ProductChangeStatusOperationQueryBuilder : FieldsQueryBuilderBase<ProductChangeStatusPayload, ProductChangeStatusOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductChangeStatusPayload>, IHasArguments<ProductChangeStatusArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductChangeStatusArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductChangeStatusOperationQueryBuilder(IQuery<ProductChangeStatusPayload> query) : base(query)
         {
             Arguments = new ProductChangeStatusArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductChangeStatusOperationQueryBuilder SetArguments(Action<ProductChangeStatusArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductChangeStatusOperationQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)

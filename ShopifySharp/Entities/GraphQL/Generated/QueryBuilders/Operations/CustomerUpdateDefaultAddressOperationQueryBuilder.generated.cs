@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerUpdateDefaultAddressOperationQueryBuilder : FieldsQueryBuilderBase<CustomerUpdateDefaultAddressPayload, CustomerUpdateDefaultAddressOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerUpdateDefaultAddressPayload>
+    public sealed class CustomerUpdateDefaultAddressOperationQueryBuilder : FieldsQueryBuilderBase<CustomerUpdateDefaultAddressPayload, CustomerUpdateDefaultAddressOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerUpdateDefaultAddressPayload>, IHasArguments<CustomerUpdateDefaultAddressArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerUpdateDefaultAddressArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerUpdateDefaultAddressOperationQueryBuilder(IQuery<CustomerUpdateDefaultAddressPayload> query) : base(query)
         {
             Arguments = new CustomerUpdateDefaultAddressArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerUpdateDefaultAddressOperationQueryBuilder SetArguments(Action<CustomerUpdateDefaultAddressArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerUpdateDefaultAddressOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)

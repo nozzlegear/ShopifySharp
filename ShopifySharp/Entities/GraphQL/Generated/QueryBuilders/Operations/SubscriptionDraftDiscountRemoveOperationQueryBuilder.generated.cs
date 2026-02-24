@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SubscriptionDraftDiscountRemoveOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionDraftDiscountRemovePayload, SubscriptionDraftDiscountRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionDraftDiscountRemovePayload>
+    public sealed class SubscriptionDraftDiscountRemoveOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionDraftDiscountRemovePayload, SubscriptionDraftDiscountRemoveOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionDraftDiscountRemovePayload>, IHasArguments<SubscriptionDraftDiscountRemoveArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SubscriptionDraftDiscountRemoveArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionDraftDiscountRemoveOperationQueryBuilder(IQuery<SubscriptionDraftDiscountRemovePayload> query) : base(query)
         {
             Arguments = new SubscriptionDraftDiscountRemoveArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionDraftDiscountRemoveOperationQueryBuilder SetArguments(Action<SubscriptionDraftDiscountRemoveArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionDraftDiscountRemoveOperationQueryBuilder Draft(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDraftQueryBuilder> build)

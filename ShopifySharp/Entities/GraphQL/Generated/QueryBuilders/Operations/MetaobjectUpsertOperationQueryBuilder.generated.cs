@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MetaobjectUpsertOperationQueryBuilder : FieldsQueryBuilderBase<MetaobjectUpsertPayload, MetaobjectUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<MetaobjectUpsertPayload>
+    public sealed class MetaobjectUpsertOperationQueryBuilder : FieldsQueryBuilderBase<MetaobjectUpsertPayload, MetaobjectUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<MetaobjectUpsertPayload>, IHasArguments<MetaobjectUpsertArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MetaobjectUpsertArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MetaobjectUpsertOperationQueryBuilder(IQuery<MetaobjectUpsertPayload> query) : base(query)
         {
             Arguments = new MetaobjectUpsertArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetaobjectUpsertOperationQueryBuilder SetArguments(Action<MetaobjectUpsertArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetaobjectUpsertOperationQueryBuilder Metaobject(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectQueryBuilder> build)

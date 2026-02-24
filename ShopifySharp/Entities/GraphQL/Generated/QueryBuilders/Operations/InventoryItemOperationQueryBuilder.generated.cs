@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryItemOperationQueryBuilder : FieldsQueryBuilderBase<InventoryItem, InventoryItemOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryItem>
+    public sealed class InventoryItemOperationQueryBuilder : FieldsQueryBuilderBase<InventoryItem, InventoryItemOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryItem>, IHasArguments<InventoryItemArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public InventoryItemArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryItemOperationQueryBuilder(IQuery<InventoryItem> query) : base(query)
         {
             Arguments = new InventoryItemArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryItemOperationQueryBuilder SetArguments(Action<InventoryItemArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryItemOperationQueryBuilder CountryCodeOfOrigin()
@@ -175,15 +181,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductVariant>(query);
-            return this;
-        }
-
-        public InventoryItemOperationQueryBuilder Variants(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
-        {
-            var query = new Query<ProductVariantConnection>("variants");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ProductVariantConnection>(query);
             return this;
         }
     }

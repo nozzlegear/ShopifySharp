@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class QuantityRuleConnectionQueryBuilder : FieldsQueryBuilderBase<QuantityRuleConnection, QuantityRuleConnectionQueryBuilder>
+    public sealed class QuantityRuleConnectionQueryBuilder : FieldsQueryBuilderBase<QuantityRuleConnection, QuantityRuleConnectionQueryBuilder>, IHasArguments<QuantityRuleConnectionArgumentsBuilder>
     {
+        public QuantityRuleConnectionArgumentsBuilder Arguments { get; }
         protected override QuantityRuleConnectionQueryBuilder Self => this;
 
         public QuantityRuleConnectionQueryBuilder() : this("quantityRuleConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public QuantityRuleConnectionQueryBuilder(string name) : base(new Query<QuantityRuleConnection>(name))
         {
+            Arguments = new QuantityRuleConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public QuantityRuleConnectionQueryBuilder(IQuery<QuantityRuleConnection> query) : base(query)
         {
+            Arguments = new QuantityRuleConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QuantityRuleConnectionQueryBuilder SetArguments(Action<QuantityRuleConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public QuantityRuleConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.QuantityRuleEdgeQueryBuilder> build)

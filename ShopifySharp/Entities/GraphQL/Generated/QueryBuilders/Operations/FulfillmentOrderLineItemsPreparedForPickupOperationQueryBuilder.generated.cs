@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderLineItemsPreparedForPickupPayload, FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderLineItemsPreparedForPickupPayload>
+    public sealed class FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderLineItemsPreparedForPickupPayload, FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderLineItemsPreparedForPickupPayload>, IHasArguments<FulfillmentOrderLineItemsPreparedForPickupArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrderLineItemsPreparedForPickupArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder(IQuery<FulfillmentOrderLineItemsPreparedForPickupPayload> query) : base(query)
         {
             Arguments = new FulfillmentOrderLineItemsPreparedForPickupArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder SetArguments(Action<FulfillmentOrderLineItemsPreparedForPickupArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderLineItemsPreparedForPickupOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderLineItemsPreparedForPickupUserErrorQueryBuilder> build)

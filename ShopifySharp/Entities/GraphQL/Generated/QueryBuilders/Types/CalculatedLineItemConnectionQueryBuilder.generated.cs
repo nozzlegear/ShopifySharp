@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CalculatedLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<CalculatedLineItemConnection, CalculatedLineItemConnectionQueryBuilder>
+    public sealed class CalculatedLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<CalculatedLineItemConnection, CalculatedLineItemConnectionQueryBuilder>, IHasArguments<CalculatedLineItemConnectionArgumentsBuilder>
     {
+        public CalculatedLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override CalculatedLineItemConnectionQueryBuilder Self => this;
 
         public CalculatedLineItemConnectionQueryBuilder() : this("calculatedLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CalculatedLineItemConnectionQueryBuilder(string name) : base(new Query<CalculatedLineItemConnection>(name))
         {
+            Arguments = new CalculatedLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CalculatedLineItemConnectionQueryBuilder(IQuery<CalculatedLineItemConnection> query) : base(query)
         {
+            Arguments = new CalculatedLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CalculatedLineItemConnectionQueryBuilder SetArguments(Action<CalculatedLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CalculatedLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedLineItemEdgeQueryBuilder> build)

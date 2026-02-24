@@ -9,13 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A transfer of funds between a merchant's Shopify Payments balance and their [`ShopifyPaymentsBankAccount`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShopifyPaymentsBankAccount).
-/// Provides the [net amount](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShopifyPaymentsPayout#field-ShopifyPaymentsPayout.fields.net), [issue date](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShopifyPaymentsPayout#field-ShopifyPaymentsPayout.fields.issuedAt), and current [`ShopifyPaymentsPayoutStatus`](https://shopify.dev/docs/api/admin-graphql/latest/enums/ShopifyPaymentsPayoutStatus).
-/// The payout includes a [`ShopifyPaymentsPayoutSummary`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShopifyPaymentsPayoutSummary)
-/// that breaks down fees and gross amounts by transaction type, such as charges,
-/// refunds, and adjustments. The [`ShopifyPaymentsPayoutTransactionType`](https://shopify.dev/docs/api/admin-graphql/latest/enums/ShopifyPaymentsPayoutTransactionType)
-/// indicates whether funds move into the bank account (deposit) or back to Shopify
-/// Payments (withdrawal).
+/// Payouts represent the movement of money between a merchant's Shopify
+/// Payments balance and their bank account.
 /// </summary>
 public record ShopifyPaymentsPayout : IGraphQLObject, ILegacyInteroperability, INode
 {
@@ -31,12 +26,6 @@ public record ShopifyPaymentsPayout : IGraphQLObject, ILegacyInteroperability, I
     /// </summary>
     [JsonPropertyName("businessEntity")]
     public BusinessEntity? businessEntity { get; set; } = null;
-
-    /// <summary>
-    /// A unique trace ID from the financial institution. Use this reference number to track the payout with your provider.
-    /// </summary>
-    [JsonPropertyName("externalTraceId")]
-    public string? externalTraceId { get; set; } = null;
 
     /// <summary>
     /// The total amount and currency of the payout.

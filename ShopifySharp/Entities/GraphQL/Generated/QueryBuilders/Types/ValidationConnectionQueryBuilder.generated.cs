@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ValidationConnectionQueryBuilder : FieldsQueryBuilderBase<ValidationConnection, ValidationConnectionQueryBuilder>
+    public sealed class ValidationConnectionQueryBuilder : FieldsQueryBuilderBase<ValidationConnection, ValidationConnectionQueryBuilder>, IHasArguments<ValidationConnectionArgumentsBuilder>
     {
+        public ValidationConnectionArgumentsBuilder Arguments { get; }
         protected override ValidationConnectionQueryBuilder Self => this;
 
         public ValidationConnectionQueryBuilder() : this("validationConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ValidationConnectionQueryBuilder(string name) : base(new Query<ValidationConnection>(name))
         {
+            Arguments = new ValidationConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ValidationConnectionQueryBuilder(IQuery<ValidationConnection> query) : base(query)
         {
+            Arguments = new ValidationConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ValidationConnectionQueryBuilder SetArguments(Action<ValidationConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ValidationConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ValidationEdgeQueryBuilder> build)

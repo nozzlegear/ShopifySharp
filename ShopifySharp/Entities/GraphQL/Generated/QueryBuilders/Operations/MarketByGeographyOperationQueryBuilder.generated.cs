@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("This `market_by_geography` field will be removed in a future version of the API.")]
-    public sealed class MarketByGeographyOperationQueryBuilder : FieldsQueryBuilderBase<Market, MarketByGeographyOperationQueryBuilder>, IGraphOperationQueryBuilder<Market>
+    public sealed class MarketByGeographyOperationQueryBuilder : FieldsQueryBuilderBase<Market, MarketByGeographyOperationQueryBuilder>, IGraphOperationQueryBuilder<Market>, IHasArguments<MarketByGeographyArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public MarketByGeographyArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketByGeographyOperationQueryBuilder(IQuery<Market> query) : base(query)
         {
             Arguments = new MarketByGeographyArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketByGeographyOperationQueryBuilder SetArguments(Action<MarketByGeographyArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketByGeographyOperationQueryBuilder AssignedCustomization()

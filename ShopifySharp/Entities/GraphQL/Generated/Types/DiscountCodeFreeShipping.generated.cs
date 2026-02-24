@@ -85,12 +85,6 @@ public record DiscountCodeFreeShipping : IGraphQLUnionCase, IGraphQLObject
     public DiscountCombinesWith? combinesWith { get; set; } = null;
 
     /// <summary>
-    /// The context defining which buyers can use the discount.
-    /// </summary>
-    [JsonPropertyName("context")]
-    public DiscountContext? context { get; set; } = null;
-
-    /// <summary>
     /// The date and time when the discount was created.
     /// </summary>
     [JsonPropertyName("createdAt")]

@@ -14,6 +14,4 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public enum InventoryTransferDuplicateUserErrorCode
 {
     TRANSFER_NOT_FOUND,
-    IDEMPOTENCY_CONCURRENT_REQUEST,
-    IDEMPOTENCY_KEY_PARAMETER_MISMATCH,
 }

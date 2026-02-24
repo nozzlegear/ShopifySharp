@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AppPurchaseOneTimeConnectionQueryBuilder : FieldsQueryBuilderBase<AppPurchaseOneTimeConnection, AppPurchaseOneTimeConnectionQueryBuilder>
+    public sealed class AppPurchaseOneTimeConnectionQueryBuilder : FieldsQueryBuilderBase<AppPurchaseOneTimeConnection, AppPurchaseOneTimeConnectionQueryBuilder>, IHasArguments<AppPurchaseOneTimeConnectionArgumentsBuilder>
     {
+        public AppPurchaseOneTimeConnectionArgumentsBuilder Arguments { get; }
         protected override AppPurchaseOneTimeConnectionQueryBuilder Self => this;
 
         public AppPurchaseOneTimeConnectionQueryBuilder() : this("appPurchaseOneTimeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AppPurchaseOneTimeConnectionQueryBuilder(string name) : base(new Query<AppPurchaseOneTimeConnection>(name))
         {
+            Arguments = new AppPurchaseOneTimeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public AppPurchaseOneTimeConnectionQueryBuilder(IQuery<AppPurchaseOneTimeConnection> query) : base(query)
         {
+            Arguments = new AppPurchaseOneTimeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppPurchaseOneTimeConnectionQueryBuilder SetArguments(Action<AppPurchaseOneTimeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppPurchaseOneTimeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppPurchaseOneTimeEdgeQueryBuilder> build)

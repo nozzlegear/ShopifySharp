@@ -20,10 +20,10 @@ public record PaymentCustomizationInput : GraphQLInputObject<PaymentCustomizatio
     public bool? enabled { get; set; } = null;
 
     /// <summary>
-    /// Function handle scoped to your app ID.
+    /// The ID of the function providing the payment customization.
     /// </summary>
-    [JsonPropertyName("functionHandle")]
-    public string? functionHandle { get; set; } = null;
+    [JsonPropertyName("functionId")]
+    public string? functionId { get; set; } = null;
 
     /// <summary>
     /// Additional metafields to associate to the payment customization.

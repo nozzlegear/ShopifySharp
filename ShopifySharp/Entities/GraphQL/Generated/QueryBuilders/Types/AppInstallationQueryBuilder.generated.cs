@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AppInstallationQueryBuilder : FieldsQueryBuilderBase<AppInstallation, AppInstallationQueryBuilder>
+    public sealed class AppInstallationQueryBuilder : FieldsQueryBuilderBase<AppInstallation, AppInstallationQueryBuilder>, IHasArguments<AppInstallationArgumentsBuilder>
     {
+        public AppInstallationArgumentsBuilder Arguments { get; }
         protected override AppInstallationQueryBuilder Self => this;
 
         public AppInstallationQueryBuilder() : this("appInstallation")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AppInstallationQueryBuilder(string name) : base(new Query<AppInstallation>(name))
         {
+            Arguments = new AppInstallationArgumentsBuilder(base.InnerQuery);
         }
 
         public AppInstallationQueryBuilder(IQuery<AppInstallation> query) : base(query)
         {
+            Arguments = new AppInstallationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppInstallationQueryBuilder SetArguments(Action<AppInstallationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppInstallationQueryBuilder AccessScopes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AccessScopeQueryBuilder> build)

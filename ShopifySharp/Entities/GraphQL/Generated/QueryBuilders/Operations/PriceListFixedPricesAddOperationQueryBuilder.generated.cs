@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class PriceListFixedPricesAddOperationQueryBuilder : FieldsQueryBuilderBase<PriceListFixedPricesAddPayload, PriceListFixedPricesAddOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListFixedPricesAddPayload>
+    public sealed class PriceListFixedPricesAddOperationQueryBuilder : FieldsQueryBuilderBase<PriceListFixedPricesAddPayload, PriceListFixedPricesAddOperationQueryBuilder>, IGraphOperationQueryBuilder<PriceListFixedPricesAddPayload>, IHasArguments<PriceListFixedPricesAddArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public PriceListFixedPricesAddArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public PriceListFixedPricesAddOperationQueryBuilder(IQuery<PriceListFixedPricesAddPayload> query) : base(query)
         {
             Arguments = new PriceListFixedPricesAddArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PriceListFixedPricesAddOperationQueryBuilder SetArguments(Action<PriceListFixedPricesAddArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PriceListFixedPricesAddOperationQueryBuilder Prices(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceQueryBuilder> build)

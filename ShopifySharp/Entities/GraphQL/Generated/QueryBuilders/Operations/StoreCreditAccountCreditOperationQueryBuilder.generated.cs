@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class StoreCreditAccountCreditOperationQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccountCreditPayload, StoreCreditAccountCreditOperationQueryBuilder>, IGraphOperationQueryBuilder<StoreCreditAccountCreditPayload>
+    public sealed class StoreCreditAccountCreditOperationQueryBuilder : FieldsQueryBuilderBase<StoreCreditAccountCreditPayload, StoreCreditAccountCreditOperationQueryBuilder>, IGraphOperationQueryBuilder<StoreCreditAccountCreditPayload>, IHasArguments<StoreCreditAccountCreditArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public StoreCreditAccountCreditArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public StoreCreditAccountCreditOperationQueryBuilder(IQuery<StoreCreditAccountCreditPayload> query) : base(query)
         {
             Arguments = new StoreCreditAccountCreditArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StoreCreditAccountCreditOperationQueryBuilder SetArguments(Action<StoreCreditAccountCreditArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StoreCreditAccountCreditOperationQueryBuilder StoreCreditAccountTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder> build)

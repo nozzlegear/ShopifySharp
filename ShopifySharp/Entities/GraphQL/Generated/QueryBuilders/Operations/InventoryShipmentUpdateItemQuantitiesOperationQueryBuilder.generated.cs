@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipmentUpdateItemQuantitiesPayload, InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipmentUpdateItemQuantitiesPayload>
+    public sealed class InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipmentUpdateItemQuantitiesPayload, InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipmentUpdateItemQuantitiesPayload>, IHasArguments<InventoryShipmentUpdateItemQuantitiesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventoryShipmentUpdateItemQuantitiesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder(IQuery<InventoryShipmentUpdateItemQuantitiesPayload> query) : base(query)
         {
             Arguments = new InventoryShipmentUpdateItemQuantitiesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder SetArguments(Action<InventoryShipmentUpdateItemQuantitiesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryShipmentUpdateItemQuantitiesOperationQueryBuilder Shipment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder> build)

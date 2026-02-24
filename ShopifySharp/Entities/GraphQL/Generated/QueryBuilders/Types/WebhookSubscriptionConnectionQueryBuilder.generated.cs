@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class WebhookSubscriptionConnectionQueryBuilder : FieldsQueryBuilderBase<WebhookSubscriptionConnection, WebhookSubscriptionConnectionQueryBuilder>
+    public sealed class WebhookSubscriptionConnectionQueryBuilder : FieldsQueryBuilderBase<WebhookSubscriptionConnection, WebhookSubscriptionConnectionQueryBuilder>, IHasArguments<WebhookSubscriptionConnectionArgumentsBuilder>
     {
+        public WebhookSubscriptionConnectionArgumentsBuilder Arguments { get; }
         protected override WebhookSubscriptionConnectionQueryBuilder Self => this;
 
         public WebhookSubscriptionConnectionQueryBuilder() : this("webhookSubscriptionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public WebhookSubscriptionConnectionQueryBuilder(string name) : base(new Query<WebhookSubscriptionConnection>(name))
         {
+            Arguments = new WebhookSubscriptionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public WebhookSubscriptionConnectionQueryBuilder(IQuery<WebhookSubscriptionConnection> query) : base(query)
         {
+            Arguments = new WebhookSubscriptionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebhookSubscriptionConnectionQueryBuilder SetArguments(Action<WebhookSubscriptionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebhookSubscriptionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WebhookSubscriptionEdgeQueryBuilder> build)

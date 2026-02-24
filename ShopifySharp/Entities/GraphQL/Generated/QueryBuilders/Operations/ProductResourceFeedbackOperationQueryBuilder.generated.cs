@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductResourceFeedbackOperationQueryBuilder : FieldsQueryBuilderBase<ProductResourceFeedback, ProductResourceFeedbackOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductResourceFeedback>
+    public sealed class ProductResourceFeedbackOperationQueryBuilder : FieldsQueryBuilderBase<ProductResourceFeedback, ProductResourceFeedbackOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductResourceFeedback>, IHasArguments<ProductResourceFeedbackArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ProductResourceFeedbackArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductResourceFeedbackOperationQueryBuilder(IQuery<ProductResourceFeedback> query) : base(query)
         {
             Arguments = new ProductResourceFeedbackArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductResourceFeedbackOperationQueryBuilder SetArguments(Action<ProductResourceFeedbackArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductResourceFeedbackOperationQueryBuilder FeedbackGeneratedAt()

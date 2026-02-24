@@ -1,0 +1,65 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class QueryRootCartTransformsQueryBuilder : FieldsQueryBuilderBase<CartTransformConnection, QueryRootCartTransformsQueryBuilder>, IHasArguments<QueryRootCartTransformsArgumentsBuilder>
+    {
+        public QueryRootCartTransformsArgumentsBuilder Arguments { get; }
+        protected override QueryRootCartTransformsQueryBuilder Self => this;
+
+        public QueryRootCartTransformsQueryBuilder(string name) : base(new Query<CartTransformConnection>(name))
+        {
+            Arguments = new QueryRootCartTransformsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QueryRootCartTransformsQueryBuilder(IQuery<CartTransformConnection> query) : base(query)
+        {
+            Arguments = new QueryRootCartTransformsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QueryRootCartTransformsQueryBuilder SetArguments(Action<QueryRootCartTransformsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
+        public QueryRootCartTransformsQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformEdgeQueryBuilder> build)
+        {
+            var query = new Query<CartTransformEdge>("edges");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformEdgeQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CartTransformEdge>(query);
+            return this;
+        }
+
+        public QueryRootCartTransformsQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformQueryBuilder> build)
+        {
+            var query = new Query<CartTransform>("nodes");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CartTransformQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CartTransform>(query);
+            return this;
+        }
+
+        public QueryRootCartTransformsQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
+        {
+            var query = new Query<PageInfo>("pageInfo");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PageInfo>(query);
+            return this;
+        }
+    }
+}

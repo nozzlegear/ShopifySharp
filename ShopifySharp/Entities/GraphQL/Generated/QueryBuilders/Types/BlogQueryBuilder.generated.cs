@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class BlogQueryBuilder : FieldsQueryBuilderBase<Blog, BlogQueryBuilder>
+    public sealed class BlogQueryBuilder : FieldsQueryBuilderBase<Blog, BlogQueryBuilder>, IHasArguments<BlogArgumentsBuilder>
     {
+        public BlogArgumentsBuilder Arguments { get; }
         protected override BlogQueryBuilder Self => this;
 
         public BlogQueryBuilder() : this("blog")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public BlogQueryBuilder(string name) : base(new Query<Blog>(name))
         {
+            Arguments = new BlogArgumentsBuilder(base.InnerQuery);
         }
 
         public BlogQueryBuilder(IQuery<Blog> query) : base(query)
         {
+            Arguments = new BlogArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BlogQueryBuilder SetArguments(Action<BlogArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BlogQueryBuilder Articles(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ArticleConnectionQueryBuilder> build)

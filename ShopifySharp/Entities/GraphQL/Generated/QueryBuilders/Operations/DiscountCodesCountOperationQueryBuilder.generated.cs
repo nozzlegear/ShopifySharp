@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DiscountCodesCountOperationQueryBuilder : FieldsQueryBuilderBase<Count, DiscountCodesCountOperationQueryBuilder>, IGraphOperationQueryBuilder<Count>
+    public sealed class DiscountCodesCountOperationQueryBuilder : FieldsQueryBuilderBase<Count, DiscountCodesCountOperationQueryBuilder>, IGraphOperationQueryBuilder<Count>, IHasArguments<DiscountCodesCountArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DiscountCodesCountArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DiscountCodesCountOperationQueryBuilder(IQuery<Count> query) : base(query)
         {
             Arguments = new DiscountCodesCountArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountCodesCountOperationQueryBuilder SetArguments(Action<DiscountCodesCountArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountCodesCountOperationQueryBuilder Count()

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryTransferQueryBuilder : FieldsQueryBuilderBase<InventoryTransfer, InventoryTransferQueryBuilder>
+    public sealed class InventoryTransferQueryBuilder : FieldsQueryBuilderBase<InventoryTransfer, InventoryTransferQueryBuilder>, IHasArguments<InventoryTransferArgumentsBuilder>
     {
+        public InventoryTransferArgumentsBuilder Arguments { get; }
         protected override InventoryTransferQueryBuilder Self => this;
 
         public InventoryTransferQueryBuilder() : this("inventoryTransfer")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryTransferQueryBuilder(string name) : base(new Query<InventoryTransfer>(name))
         {
+            Arguments = new InventoryTransferArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryTransferQueryBuilder(IQuery<InventoryTransfer> query) : base(query)
         {
+            Arguments = new InventoryTransferArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryTransferQueryBuilder SetArguments(Action<InventoryTransferArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryTransferQueryBuilder DateCreated()

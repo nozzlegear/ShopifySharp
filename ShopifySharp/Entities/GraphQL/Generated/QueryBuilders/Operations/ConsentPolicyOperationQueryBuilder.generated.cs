@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ConsentPolicyOperationQueryBuilder : FieldsQueryBuilderBase<ConsentPolicy, ConsentPolicyOperationQueryBuilder>, IGraphOperationQueryBuilder<ConsentPolicy>
+    public sealed class ConsentPolicyOperationQueryBuilder : FieldsQueryBuilderBase<ConsentPolicy, ConsentPolicyOperationQueryBuilder>, IGraphOperationQueryBuilder<ConsentPolicy>, IHasArguments<ConsentPolicyArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ConsentPolicyArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ConsentPolicyOperationQueryBuilder(IQuery<ConsentPolicy> query) : base(query)
         {
             Arguments = new ConsentPolicyArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ConsentPolicyOperationQueryBuilder SetArguments(Action<ConsentPolicyArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ConsentPolicyOperationQueryBuilder ConsentRequired()

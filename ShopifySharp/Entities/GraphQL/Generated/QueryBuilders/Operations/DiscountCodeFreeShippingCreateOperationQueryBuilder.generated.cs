@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DiscountCodeFreeShippingCreateOperationQueryBuilder : FieldsQueryBuilderBase<DiscountCodeFreeShippingCreatePayload, DiscountCodeFreeShippingCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountCodeFreeShippingCreatePayload>
+    public sealed class DiscountCodeFreeShippingCreateOperationQueryBuilder : FieldsQueryBuilderBase<DiscountCodeFreeShippingCreatePayload, DiscountCodeFreeShippingCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountCodeFreeShippingCreatePayload>, IHasArguments<DiscountCodeFreeShippingCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DiscountCodeFreeShippingCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DiscountCodeFreeShippingCreateOperationQueryBuilder(IQuery<DiscountCodeFreeShippingCreatePayload> query) : base(query)
         {
             Arguments = new DiscountCodeFreeShippingCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountCodeFreeShippingCreateOperationQueryBuilder SetArguments(Action<DiscountCodeFreeShippingCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountCodeFreeShippingCreateOperationQueryBuilder CodeDiscountNode(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeNodeQueryBuilder> build)

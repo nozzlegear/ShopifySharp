@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class LocationConnectionQueryBuilder : FieldsQueryBuilderBase<LocationConnection, LocationConnectionQueryBuilder>
+    public sealed class LocationConnectionQueryBuilder : FieldsQueryBuilderBase<LocationConnection, LocationConnectionQueryBuilder>, IHasArguments<LocationConnectionArgumentsBuilder>
     {
+        public LocationConnectionArgumentsBuilder Arguments { get; }
         protected override LocationConnectionQueryBuilder Self => this;
 
         public LocationConnectionQueryBuilder() : this("locationConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public LocationConnectionQueryBuilder(string name) : base(new Query<LocationConnection>(name))
         {
+            Arguments = new LocationConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public LocationConnectionQueryBuilder(IQuery<LocationConnection> query) : base(query)
         {
+            Arguments = new LocationConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public LocationConnectionQueryBuilder SetArguments(Action<LocationConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public LocationConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationEdgeQueryBuilder> build)

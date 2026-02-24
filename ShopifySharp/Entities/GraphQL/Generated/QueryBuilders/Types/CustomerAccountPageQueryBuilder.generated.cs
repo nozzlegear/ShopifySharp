@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerAccountPageQueryBuilder : FieldsQueryBuilderBase<ICustomerAccountPage, CustomerAccountPageQueryBuilder>
+    public sealed class CustomerAccountPageQueryBuilder : FieldsQueryBuilderBase<ICustomerAccountPage, CustomerAccountPageQueryBuilder>, IHasArguments<CustomerAccountPageArgumentsBuilder>
     {
+        public CustomerAccountPageArgumentsBuilder Arguments { get; }
         protected override CustomerAccountPageQueryBuilder Self => this;
 
         public CustomerAccountPageQueryBuilder() : this("customerAccountPage")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerAccountPageQueryBuilder(string name) : base(new Query<ICustomerAccountPage>(name))
         {
+            Arguments = new CustomerAccountPageArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerAccountPageQueryBuilder(IQuery<ICustomerAccountPage> query) : base(query)
         {
+            Arguments = new CustomerAccountPageArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerAccountPageQueryBuilder SetArguments(Action<CustomerAccountPageArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerAccountPageQueryBuilder DefaultCursor()

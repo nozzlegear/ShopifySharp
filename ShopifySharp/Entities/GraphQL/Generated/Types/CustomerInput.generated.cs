@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record CustomerInput : GraphQLInputObject<CustomerInput>
 {
     /// <summary>
+    /// The addresses for a customer.
+    /// </summary>
+    [JsonPropertyName("addresses")]
+    public ICollection<MailingAddressInput>? addresses { get; set; } = null;
+
+    /// <summary>
     /// The unique email address of the customer.
     /// </summary>
     [JsonPropertyName("email")]
@@ -56,12 +62,6 @@ public record CustomerInput : GraphQLInputObject<CustomerInput>
     /// </summary>
     [JsonPropertyName("metafields")]
     public ICollection<MetafieldInput>? metafields { get; set; } = null;
-
-    /// <summary>
-    /// A unique identifier for the customer that's used with Multipass login.
-    /// </summary>
-    [JsonPropertyName("multipassIdentifier")]
-    public string? multipassIdentifier { get; set; } = null;
 
     /// <summary>
     /// A note about the customer.

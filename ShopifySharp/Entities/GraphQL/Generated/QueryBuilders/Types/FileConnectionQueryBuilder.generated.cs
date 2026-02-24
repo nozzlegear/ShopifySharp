@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FileConnectionQueryBuilder : FieldsQueryBuilderBase<FileConnection, FileConnectionQueryBuilder>
+    public sealed class FileConnectionQueryBuilder : FieldsQueryBuilderBase<FileConnection, FileConnectionQueryBuilder>, IHasArguments<FileConnectionArgumentsBuilder>
     {
+        public FileConnectionArgumentsBuilder Arguments { get; }
         protected override FileConnectionQueryBuilder Self => this;
 
         public FileConnectionQueryBuilder() : this("fileConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FileConnectionQueryBuilder(string name) : base(new Query<FileConnection>(name))
         {
+            Arguments = new FileConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public FileConnectionQueryBuilder(IQuery<FileConnection> query) : base(query)
         {
+            Arguments = new FileConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FileConnectionQueryBuilder SetArguments(Action<FileConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FileConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileEdgeQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ReverseFulfillmentOrderQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrder, ReverseFulfillmentOrderQueryBuilder>
+    public sealed class ReverseFulfillmentOrderQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrder, ReverseFulfillmentOrderQueryBuilder>, IHasArguments<ReverseFulfillmentOrderArgumentsBuilder>
     {
+        public ReverseFulfillmentOrderArgumentsBuilder Arguments { get; }
         protected override ReverseFulfillmentOrderQueryBuilder Self => this;
 
         public ReverseFulfillmentOrderQueryBuilder() : this("reverseFulfillmentOrder")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ReverseFulfillmentOrderQueryBuilder(string name) : base(new Query<ReverseFulfillmentOrder>(name))
         {
+            Arguments = new ReverseFulfillmentOrderArgumentsBuilder(base.InnerQuery);
         }
 
         public ReverseFulfillmentOrderQueryBuilder(IQuery<ReverseFulfillmentOrder> query) : base(query)
         {
+            Arguments = new ReverseFulfillmentOrderArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReverseFulfillmentOrderQueryBuilder SetArguments(Action<ReverseFulfillmentOrderArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReverseFulfillmentOrderQueryBuilder Id()

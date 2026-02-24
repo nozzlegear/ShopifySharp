@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PageQueryBuilder : FieldsQueryBuilderBase<Page, PageQueryBuilder>
+    public sealed class PageQueryBuilder : FieldsQueryBuilderBase<Page, PageQueryBuilder>, IHasArguments<PageArgumentsBuilder>
     {
+        public PageArgumentsBuilder Arguments { get; }
         protected override PageQueryBuilder Self => this;
 
         public PageQueryBuilder() : this("page")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PageQueryBuilder(string name) : base(new Query<Page>(name))
         {
+            Arguments = new PageArgumentsBuilder(base.InnerQuery);
         }
 
         public PageQueryBuilder(IQuery<Page> query) : base(query)
         {
+            Arguments = new PageArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PageQueryBuilder SetArguments(Action<PageArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PageQueryBuilder Body()

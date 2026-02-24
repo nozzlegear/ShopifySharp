@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class BackupRegionUpdateOperationQueryBuilder : FieldsQueryBuilderBase<BackupRegionUpdatePayload, BackupRegionUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<BackupRegionUpdatePayload>
+    public sealed class BackupRegionUpdateOperationQueryBuilder : FieldsQueryBuilderBase<BackupRegionUpdatePayload, BackupRegionUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<BackupRegionUpdatePayload>, IHasArguments<BackupRegionUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public BackupRegionUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public BackupRegionUpdateOperationQueryBuilder(IQuery<BackupRegionUpdatePayload> query) : base(query)
         {
             Arguments = new BackupRegionUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public BackupRegionUpdateOperationQueryBuilder SetArguments(Action<BackupRegionUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public BackupRegionUpdateOperationQueryBuilder BackupRegion(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder> build)

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DraftOrderTagQueryBuilder : FieldsQueryBuilderBase<DraftOrderTag, DraftOrderTagQueryBuilder>
+    public sealed class DraftOrderTagQueryBuilder : FieldsQueryBuilderBase<DraftOrderTag, DraftOrderTagQueryBuilder>, IHasArguments<DraftOrderTagArgumentsBuilder>
     {
+        public DraftOrderTagArgumentsBuilder Arguments { get; }
         protected override DraftOrderTagQueryBuilder Self => this;
 
         public DraftOrderTagQueryBuilder() : this("draftOrderTag")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DraftOrderTagQueryBuilder(string name) : base(new Query<DraftOrderTag>(name))
         {
+            Arguments = new DraftOrderTagArgumentsBuilder(base.InnerQuery);
         }
 
         public DraftOrderTagQueryBuilder(IQuery<DraftOrderTag> query) : base(query)
         {
+            Arguments = new DraftOrderTagArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DraftOrderTagQueryBuilder SetArguments(Action<DraftOrderTagArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DraftOrderTagQueryBuilder Handle()

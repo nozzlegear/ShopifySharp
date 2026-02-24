@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `removeFromReturn` instead.")]
-    public sealed class ReturnLineItemRemoveFromReturnOperationQueryBuilder : FieldsQueryBuilderBase<ReturnLineItemRemoveFromReturnPayload, ReturnLineItemRemoveFromReturnOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnLineItemRemoveFromReturnPayload>
+    public sealed class ReturnLineItemRemoveFromReturnOperationQueryBuilder : FieldsQueryBuilderBase<ReturnLineItemRemoveFromReturnPayload, ReturnLineItemRemoveFromReturnOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnLineItemRemoveFromReturnPayload>, IHasArguments<ReturnLineItemRemoveFromReturnArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReturnLineItemRemoveFromReturnArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnLineItemRemoveFromReturnOperationQueryBuilder(IQuery<ReturnLineItemRemoveFromReturnPayload> query) : base(query)
         {
             Arguments = new ReturnLineItemRemoveFromReturnArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnLineItemRemoveFromReturnOperationQueryBuilder SetArguments(Action<ReturnLineItemRemoveFromReturnArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnLineItemRemoveFromReturnOperationQueryBuilder Return(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnQueryBuilder> build)

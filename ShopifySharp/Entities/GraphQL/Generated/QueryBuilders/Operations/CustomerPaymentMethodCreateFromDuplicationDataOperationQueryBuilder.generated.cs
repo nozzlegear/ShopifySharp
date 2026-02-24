@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodCreateFromDuplicationDataPayload, CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodCreateFromDuplicationDataPayload>
+    public sealed class CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodCreateFromDuplicationDataPayload, CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodCreateFromDuplicationDataPayload>, IHasArguments<CustomerPaymentMethodCreateFromDuplicationDataArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodCreateFromDuplicationDataArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder(IQuery<CustomerPaymentMethodCreateFromDuplicationDataPayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodCreateFromDuplicationDataArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodCreateFromDuplicationDataArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodCreateFromDuplicationDataOperationQueryBuilder CustomerPaymentMethod(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodQueryBuilder> build)

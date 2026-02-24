@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerMergePreviewQueryBuilder : FieldsQueryBuilderBase<CustomerMergePreview, CustomerMergePreviewQueryBuilder>
+    public sealed class CustomerMergePreviewQueryBuilder : FieldsQueryBuilderBase<CustomerMergePreview, CustomerMergePreviewQueryBuilder>, IHasArguments<CustomerMergePreviewArgumentsBuilder>
     {
+        public CustomerMergePreviewArgumentsBuilder Arguments { get; }
         protected override CustomerMergePreviewQueryBuilder Self => this;
 
         public CustomerMergePreviewQueryBuilder() : this("customerMergePreview")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerMergePreviewQueryBuilder(string name) : base(new Query<CustomerMergePreview>(name))
         {
+            Arguments = new CustomerMergePreviewArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerMergePreviewQueryBuilder(IQuery<CustomerMergePreview> query) : base(query)
         {
+            Arguments = new CustomerMergePreviewArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerMergePreviewQueryBuilder SetArguments(Action<CustomerMergePreviewArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerMergePreviewQueryBuilder AlternateFields(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMergePreviewAlternateFieldsQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductDuplicateJobOperationQueryBuilder : FieldsQueryBuilderBase<ProductDuplicateJob, ProductDuplicateJobOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductDuplicateJob>
+    public sealed class ProductDuplicateJobOperationQueryBuilder : FieldsQueryBuilderBase<ProductDuplicateJob, ProductDuplicateJobOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductDuplicateJob>, IHasArguments<ProductDuplicateJobArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ProductDuplicateJobArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductDuplicateJobOperationQueryBuilder(IQuery<ProductDuplicateJob> query) : base(query)
         {
             Arguments = new ProductDuplicateJobArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductDuplicateJobOperationQueryBuilder SetArguments(Action<ProductDuplicateJobArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductDuplicateJobOperationQueryBuilder Done()

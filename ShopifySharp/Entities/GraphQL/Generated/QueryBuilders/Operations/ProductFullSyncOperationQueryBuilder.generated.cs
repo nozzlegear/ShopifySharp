@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ProductFullSyncOperationQueryBuilder : FieldsQueryBuilderBase<ProductFullSyncPayload, ProductFullSyncOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductFullSyncPayload>
+    public sealed class ProductFullSyncOperationQueryBuilder : FieldsQueryBuilderBase<ProductFullSyncPayload, ProductFullSyncOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductFullSyncPayload>, IHasArguments<ProductFullSyncArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductFullSyncArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductFullSyncOperationQueryBuilder(IQuery<ProductFullSyncPayload> query) : base(query)
         {
             Arguments = new ProductFullSyncArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductFullSyncOperationQueryBuilder SetArguments(Action<ProductFullSyncArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductFullSyncOperationQueryBuilder Id()

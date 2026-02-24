@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class WebhookSubscriptionQueryBuilder : FieldsQueryBuilderBase<WebhookSubscription, WebhookSubscriptionQueryBuilder>
+    public sealed class WebhookSubscriptionQueryBuilder : FieldsQueryBuilderBase<WebhookSubscription, WebhookSubscriptionQueryBuilder>, IHasArguments<WebhookSubscriptionArgumentsBuilder>
     {
+        public WebhookSubscriptionArgumentsBuilder Arguments { get; }
         protected override WebhookSubscriptionQueryBuilder Self => this;
 
         public WebhookSubscriptionQueryBuilder() : this("webhookSubscription")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public WebhookSubscriptionQueryBuilder(string name) : base(new Query<WebhookSubscription>(name))
         {
+            Arguments = new WebhookSubscriptionArgumentsBuilder(base.InnerQuery);
         }
 
         public WebhookSubscriptionQueryBuilder(IQuery<WebhookSubscription> query) : base(query)
         {
+            Arguments = new WebhookSubscriptionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebhookSubscriptionQueryBuilder SetArguments(Action<WebhookSubscriptionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebhookSubscriptionQueryBuilder ApiVersion(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ApiVersionQueryBuilder> build)
@@ -106,12 +115,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public WebhookSubscriptionQueryBuilder UpdatedAt()
         {
             base.InnerQuery.AddField("updatedAt");
-            return this;
-        }
-
-        public WebhookSubscriptionQueryBuilder Uri()
-        {
-            base.InnerQuery.AddField("uri");
             return this;
         }
 

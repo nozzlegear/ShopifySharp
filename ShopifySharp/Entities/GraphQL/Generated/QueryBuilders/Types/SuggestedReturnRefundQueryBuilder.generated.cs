@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SuggestedReturnRefundQueryBuilder : FieldsQueryBuilderBase<SuggestedReturnRefund, SuggestedReturnRefundQueryBuilder>
+    public sealed class SuggestedReturnRefundQueryBuilder : FieldsQueryBuilderBase<SuggestedReturnRefund, SuggestedReturnRefundQueryBuilder>, IHasArguments<SuggestedReturnRefundArgumentsBuilder>
     {
+        public SuggestedReturnRefundArgumentsBuilder Arguments { get; }
         protected override SuggestedReturnRefundQueryBuilder Self => this;
 
         public SuggestedReturnRefundQueryBuilder() : this("suggestedReturnRefund")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SuggestedReturnRefundQueryBuilder(string name) : base(new Query<SuggestedReturnRefund>(name))
         {
+            Arguments = new SuggestedReturnRefundArgumentsBuilder(base.InnerQuery);
         }
 
         public SuggestedReturnRefundQueryBuilder(IQuery<SuggestedReturnRefund> query) : base(query)
         {
+            Arguments = new SuggestedReturnRefundArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SuggestedReturnRefundQueryBuilder SetArguments(Action<SuggestedReturnRefundArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SuggestedReturnRefundQueryBuilder Amount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)

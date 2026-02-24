@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CompanyQueryBuilder : FieldsQueryBuilderBase<Company, CompanyQueryBuilder>
+    public sealed class CompanyQueryBuilder : FieldsQueryBuilderBase<Company, CompanyQueryBuilder>, IHasArguments<CompanyArgumentsBuilder>
     {
+        public CompanyArgumentsBuilder Arguments { get; }
         protected override CompanyQueryBuilder Self => this;
 
         public CompanyQueryBuilder() : this("company")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CompanyQueryBuilder(string name) : base(new Query<Company>(name))
         {
+            Arguments = new CompanyArgumentsBuilder(base.InnerQuery);
         }
 
         public CompanyQueryBuilder(IQuery<Company> query) : base(query)
         {
+            Arguments = new CompanyArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyQueryBuilder SetArguments(Action<CompanyArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         [Obsolete("Use `contactsCount` instead.")]

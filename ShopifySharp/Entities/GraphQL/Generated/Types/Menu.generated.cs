@@ -9,25 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Navigation menus that organize links into logical structures to guide customers
-/// through a store. Menus serve as the backbone of store navigation, making it easy
-/// for customers to find products, pages, and other content through organized
-/// hierarchical links.
-/// For example, a merchant might create a main navigation menu with top-level
-/// categories like "Products," "About Us," and "Contact," where each category can
-/// contain nested menu items linking to specific collections, pages, or external resources.
-/// Use the `Menu` object to:
-/// - Build and customize store navigation structures
-/// - Organize hierarchical menu systems with nested items
-/// - Work with default menus that can't be deleted
-/// - Access menu items for building navigation
-/// Menus can be designated as default navigation elements (like main menu or
-/// footer), which can't be deleted and have restricted handle updates. The handle
-/// provides a unique identifier that themes can reference, while the items
-/// collection enables nested navigation structures.
-/// Each menu contains menu items that can link to various resource types. This
-/// flexibility lets merchants create navigation experiences that guide customers
-/// through their store.
+/// A menu for display on the storefront.
 /// </summary>
 public record Menu : IGraphQLObject, IHasPublishedTranslations, INode
 {

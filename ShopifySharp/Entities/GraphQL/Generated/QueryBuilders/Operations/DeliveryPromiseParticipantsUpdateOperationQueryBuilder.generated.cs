@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DeliveryPromiseParticipantsUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseParticipantsUpdatePayload, DeliveryPromiseParticipantsUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryPromiseParticipantsUpdatePayload>
+    public sealed class DeliveryPromiseParticipantsUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryPromiseParticipantsUpdatePayload, DeliveryPromiseParticipantsUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryPromiseParticipantsUpdatePayload>, IHasArguments<DeliveryPromiseParticipantsUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public DeliveryPromiseParticipantsUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DeliveryPromiseParticipantsUpdateOperationQueryBuilder(IQuery<DeliveryPromiseParticipantsUpdatePayload> query) : base(query)
         {
             Arguments = new DeliveryPromiseParticipantsUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DeliveryPromiseParticipantsUpdateOperationQueryBuilder SetArguments(Action<DeliveryPromiseParticipantsUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DeliveryPromiseParticipantsUpdateOperationQueryBuilder PromiseParticipants(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryPromiseParticipantQueryBuilder> build)

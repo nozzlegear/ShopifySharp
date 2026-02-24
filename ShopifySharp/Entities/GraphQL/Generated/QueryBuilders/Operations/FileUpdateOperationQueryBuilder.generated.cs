@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FileUpdateOperationQueryBuilder : FieldsQueryBuilderBase<FileUpdatePayload, FileUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<FileUpdatePayload>
+    public sealed class FileUpdateOperationQueryBuilder : FieldsQueryBuilderBase<FileUpdatePayload, FileUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<FileUpdatePayload>, IHasArguments<FileUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FileUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FileUpdateOperationQueryBuilder(IQuery<FileUpdatePayload> query) : base(query)
         {
             Arguments = new FileUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FileUpdateOperationQueryBuilder SetArguments(Action<FileUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FileUpdateOperationQueryBuilder Files(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder> build)

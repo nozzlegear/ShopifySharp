@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MetafieldDefinitionPinOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionPinPayload, MetafieldDefinitionPinOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionPinPayload>
+    public sealed class MetafieldDefinitionPinOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionPinPayload, MetafieldDefinitionPinOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionPinPayload>, IHasArguments<MetafieldDefinitionPinArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MetafieldDefinitionPinArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MetafieldDefinitionPinOperationQueryBuilder(IQuery<MetafieldDefinitionPinPayload> query) : base(query)
         {
             Arguments = new MetafieldDefinitionPinArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetafieldDefinitionPinOperationQueryBuilder SetArguments(Action<MetafieldDefinitionPinArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetafieldDefinitionPinOperationQueryBuilder PinnedDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)

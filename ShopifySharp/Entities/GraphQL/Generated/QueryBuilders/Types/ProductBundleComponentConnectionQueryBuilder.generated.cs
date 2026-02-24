@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductBundleComponentConnectionQueryBuilder : FieldsQueryBuilderBase<ProductBundleComponentConnection, ProductBundleComponentConnectionQueryBuilder>
+    public sealed class ProductBundleComponentConnectionQueryBuilder : FieldsQueryBuilderBase<ProductBundleComponentConnection, ProductBundleComponentConnectionQueryBuilder>, IHasArguments<ProductBundleComponentConnectionArgumentsBuilder>
     {
+        public ProductBundleComponentConnectionArgumentsBuilder Arguments { get; }
         protected override ProductBundleComponentConnectionQueryBuilder Self => this;
 
         public ProductBundleComponentConnectionQueryBuilder() : this("productBundleComponentConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductBundleComponentConnectionQueryBuilder(string name) : base(new Query<ProductBundleComponentConnection>(name))
         {
+            Arguments = new ProductBundleComponentConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductBundleComponentConnectionQueryBuilder(IQuery<ProductBundleComponentConnection> query) : base(query)
         {
+            Arguments = new ProductBundleComponentConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductBundleComponentConnectionQueryBuilder SetArguments(Action<ProductBundleComponentConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductBundleComponentConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductBundleComponentEdgeQueryBuilder> build)

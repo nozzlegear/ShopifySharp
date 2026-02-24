@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SuggestedReturnFinancialOutcomeQueryBuilder : FieldsQueryBuilderBase<SuggestedReturnFinancialOutcome, SuggestedReturnFinancialOutcomeQueryBuilder>
+    public sealed class SuggestedReturnFinancialOutcomeQueryBuilder : FieldsQueryBuilderBase<SuggestedReturnFinancialOutcome, SuggestedReturnFinancialOutcomeQueryBuilder>, IHasArguments<SuggestedReturnFinancialOutcomeArgumentsBuilder>
     {
+        public SuggestedReturnFinancialOutcomeArgumentsBuilder Arguments { get; }
         protected override SuggestedReturnFinancialOutcomeQueryBuilder Self => this;
 
         public SuggestedReturnFinancialOutcomeQueryBuilder() : this("suggestedReturnFinancialOutcome")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SuggestedReturnFinancialOutcomeQueryBuilder(string name) : base(new Query<SuggestedReturnFinancialOutcome>(name))
         {
+            Arguments = new SuggestedReturnFinancialOutcomeArgumentsBuilder(base.InnerQuery);
         }
 
         public SuggestedReturnFinancialOutcomeQueryBuilder(IQuery<SuggestedReturnFinancialOutcome> query) : base(query)
         {
+            Arguments = new SuggestedReturnFinancialOutcomeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SuggestedReturnFinancialOutcomeQueryBuilder SetArguments(Action<SuggestedReturnFinancialOutcomeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SuggestedReturnFinancialOutcomeQueryBuilder DiscountedSubtotal(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)

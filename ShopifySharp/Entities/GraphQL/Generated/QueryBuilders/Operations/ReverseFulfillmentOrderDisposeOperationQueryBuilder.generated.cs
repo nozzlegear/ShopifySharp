@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReverseFulfillmentOrderDisposeOperationQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrderDisposePayload, ReverseFulfillmentOrderDisposeOperationQueryBuilder>, IGraphOperationQueryBuilder<ReverseFulfillmentOrderDisposePayload>
+    public sealed class ReverseFulfillmentOrderDisposeOperationQueryBuilder : FieldsQueryBuilderBase<ReverseFulfillmentOrderDisposePayload, ReverseFulfillmentOrderDisposeOperationQueryBuilder>, IGraphOperationQueryBuilder<ReverseFulfillmentOrderDisposePayload>, IHasArguments<ReverseFulfillmentOrderDisposeArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReverseFulfillmentOrderDisposeArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReverseFulfillmentOrderDisposeOperationQueryBuilder(IQuery<ReverseFulfillmentOrderDisposePayload> query) : base(query)
         {
             Arguments = new ReverseFulfillmentOrderDisposeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReverseFulfillmentOrderDisposeOperationQueryBuilder SetArguments(Action<ReverseFulfillmentOrderDisposeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReverseFulfillmentOrderDisposeOperationQueryBuilder ReverseFulfillmentOrderLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseFulfillmentOrderLineItemQueryBuilder> build)

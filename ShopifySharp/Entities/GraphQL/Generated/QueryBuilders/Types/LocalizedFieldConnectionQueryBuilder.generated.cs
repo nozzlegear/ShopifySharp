@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class LocalizedFieldConnectionQueryBuilder : FieldsQueryBuilderBase<LocalizedFieldConnection, LocalizedFieldConnectionQueryBuilder>
+    public sealed class LocalizedFieldConnectionQueryBuilder : FieldsQueryBuilderBase<LocalizedFieldConnection, LocalizedFieldConnectionQueryBuilder>, IHasArguments<LocalizedFieldConnectionArgumentsBuilder>
     {
+        public LocalizedFieldConnectionArgumentsBuilder Arguments { get; }
         protected override LocalizedFieldConnectionQueryBuilder Self => this;
 
         public LocalizedFieldConnectionQueryBuilder() : this("localizedFieldConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public LocalizedFieldConnectionQueryBuilder(string name) : base(new Query<LocalizedFieldConnection>(name))
         {
+            Arguments = new LocalizedFieldConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public LocalizedFieldConnectionQueryBuilder(IQuery<LocalizedFieldConnection> query) : base(query)
         {
+            Arguments = new LocalizedFieldConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public LocalizedFieldConnectionQueryBuilder SetArguments(Action<LocalizedFieldConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public LocalizedFieldConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocalizedFieldEdgeQueryBuilder> build)

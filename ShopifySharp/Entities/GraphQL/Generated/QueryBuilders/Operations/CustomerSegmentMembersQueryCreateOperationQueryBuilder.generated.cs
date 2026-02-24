@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerSegmentMembersQueryCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSegmentMembersQueryCreatePayload, CustomerSegmentMembersQueryCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSegmentMembersQueryCreatePayload>
+    public sealed class CustomerSegmentMembersQueryCreateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSegmentMembersQueryCreatePayload, CustomerSegmentMembersQueryCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSegmentMembersQueryCreatePayload>, IHasArguments<CustomerSegmentMembersQueryCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerSegmentMembersQueryCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerSegmentMembersQueryCreateOperationQueryBuilder(IQuery<CustomerSegmentMembersQueryCreatePayload> query) : base(query)
         {
             Arguments = new CustomerSegmentMembersQueryCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerSegmentMembersQueryCreateOperationQueryBuilder SetArguments(Action<CustomerSegmentMembersQueryCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerSegmentMembersQueryCreateOperationQueryBuilder CustomerSegmentMembersQuery(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerSegmentMembersQueryQueryBuilder> build)

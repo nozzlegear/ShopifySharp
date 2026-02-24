@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class StaffMemberOperationQueryBuilder : FieldsQueryBuilderBase<StaffMember, StaffMemberOperationQueryBuilder>, IGraphOperationQueryBuilder<StaffMember>
+    public sealed class StaffMemberOperationQueryBuilder : FieldsQueryBuilderBase<StaffMember, StaffMemberOperationQueryBuilder>, IGraphOperationQueryBuilder<StaffMember>, IHasArguments<StaffMemberArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public StaffMemberArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public StaffMemberOperationQueryBuilder(IQuery<StaffMember> query) : base(query)
         {
             Arguments = new StaffMemberArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StaffMemberOperationQueryBuilder SetArguments(Action<StaffMemberArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StaffMemberOperationQueryBuilder AccountType()

@@ -80,15 +80,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeRemoveDiscount(Action<OrderStagedChangeRemoveDiscountQueryBuilder> build)
-        {
-            var query = new Query<OrderStagedChangeRemoveDiscount>("... on OrderStagedChangeRemoveDiscount");
-            var queryBuilder = new OrderStagedChangeRemoveDiscountQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField(query);
-            return this;
-        }
-
         public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeRemoveShippingLine(Action<OrderStagedChangeRemoveShippingLineQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeRemoveShippingLine>("... on OrderStagedChangeRemoveShippingLine");

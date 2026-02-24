@@ -1,0 +1,67 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class QueryRootMenusArgumentsBuilder : ArgumentsBuilderBase<MenuConnection?, QueryRootMenusArgumentsBuilder>
+    {
+        protected override QueryRootMenusArgumentsBuilder Self => this;
+
+        public QueryRootMenusArgumentsBuilder(IQuery<MenuConnection?> query) : base(query)
+        {
+        }
+
+        public QueryRootMenusArgumentsBuilder After(string? after)
+        {
+            base.InnerQuery.AddArgument("after", after);
+            return this;
+        }
+
+        public QueryRootMenusArgumentsBuilder Before(string? before)
+        {
+            base.InnerQuery.AddArgument("before", before);
+            return this;
+        }
+
+        public QueryRootMenusArgumentsBuilder First(int? first)
+        {
+            base.InnerQuery.AddArgument("first", first);
+            return this;
+        }
+
+        public QueryRootMenusArgumentsBuilder Last(int? last)
+        {
+            base.InnerQuery.AddArgument("last", last);
+            return this;
+        }
+
+        public QueryRootMenusArgumentsBuilder Query(string? query)
+        {
+            base.InnerQuery.AddArgument("query", query);
+            return this;
+        }
+
+        public QueryRootMenusArgumentsBuilder Reverse(bool? reverse)
+        {
+            base.InnerQuery.AddArgument("reverse", reverse);
+            return this;
+        }
+
+        public QueryRootMenusArgumentsBuilder SortKey(MenuSortKeys? sortKey)
+        {
+            base.InnerQuery.AddArgument("sortKey", sortKey);
+            return this;
+        }
+    }
+}

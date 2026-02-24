@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class AppPurchaseOneTimeCreateOperationQueryBuilder : FieldsQueryBuilderBase<AppPurchaseOneTimeCreatePayload, AppPurchaseOneTimeCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<AppPurchaseOneTimeCreatePayload>
+    public sealed class AppPurchaseOneTimeCreateOperationQueryBuilder : FieldsQueryBuilderBase<AppPurchaseOneTimeCreatePayload, AppPurchaseOneTimeCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<AppPurchaseOneTimeCreatePayload>, IHasArguments<AppPurchaseOneTimeCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public AppPurchaseOneTimeCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public AppPurchaseOneTimeCreateOperationQueryBuilder(IQuery<AppPurchaseOneTimeCreatePayload> query) : base(query)
         {
             Arguments = new AppPurchaseOneTimeCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppPurchaseOneTimeCreateOperationQueryBuilder SetArguments(Action<AppPurchaseOneTimeCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppPurchaseOneTimeCreateOperationQueryBuilder AppPurchaseOneTime(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppPurchaseOneTimeQueryBuilder> build)

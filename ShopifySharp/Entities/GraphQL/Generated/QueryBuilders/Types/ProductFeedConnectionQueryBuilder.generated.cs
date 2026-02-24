@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ProductFeedConnectionQueryBuilder : FieldsQueryBuilderBase<ProductFeedConnection, ProductFeedConnectionQueryBuilder>
+    public sealed class ProductFeedConnectionQueryBuilder : FieldsQueryBuilderBase<ProductFeedConnection, ProductFeedConnectionQueryBuilder>, IHasArguments<ProductFeedConnectionArgumentsBuilder>
     {
+        public ProductFeedConnectionArgumentsBuilder Arguments { get; }
         protected override ProductFeedConnectionQueryBuilder Self => this;
 
         public ProductFeedConnectionQueryBuilder() : this("productFeedConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ProductFeedConnectionQueryBuilder(string name) : base(new Query<ProductFeedConnection>(name))
         {
+            Arguments = new ProductFeedConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ProductFeedConnectionQueryBuilder(IQuery<ProductFeedConnection> query) : base(query)
         {
+            Arguments = new ProductFeedConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductFeedConnectionQueryBuilder SetArguments(Action<ProductFeedConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductFeedConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductFeedEdgeQueryBuilder> build)

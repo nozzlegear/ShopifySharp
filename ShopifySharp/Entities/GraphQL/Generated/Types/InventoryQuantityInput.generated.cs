@@ -15,14 +15,9 @@ public record InventoryQuantityInput : GraphQLInputObject<InventoryQuantityInput
 {
     /// <summary>
     /// The current quantity to be compared against the persisted quantity.
-    /// Explicitly passing in `null` to this field opts out of the quantity comparison check.
-    /// Explicitly passing in any value (be it `null` or an integer) to `changeFromQuantity` will cause the values
-    /// passed into the `compareQuantity` and `InventorySetQuantitiesInput.ignoreCompareQuantity` fields to be
-    /// ignored in favour of the `changeFromQuantity` value. For more information,
-    /// refer to the [Compare and Swap documentation](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#compare-and-swap).
     /// </summary>
-    [JsonPropertyName("changeFromQuantity")]
-    public int? changeFromQuantity { get; set; } = null;
+    [JsonPropertyName("compareQuantity")]
+    public int? compareQuantity { get; set; } = null;
 
     /// <summary>
     /// Specifies the inventory item to which the quantity will be set.

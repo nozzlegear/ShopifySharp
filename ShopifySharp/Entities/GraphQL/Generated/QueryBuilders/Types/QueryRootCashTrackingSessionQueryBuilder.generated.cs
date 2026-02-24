@@ -1,0 +1,215 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class QueryRootCashTrackingSessionQueryBuilder : FieldsQueryBuilderBase<CashTrackingSession, QueryRootCashTrackingSessionQueryBuilder>, IHasArguments<QueryRootCashTrackingSessionArgumentsBuilder>
+    {
+        public QueryRootCashTrackingSessionArgumentsBuilder Arguments { get; }
+        protected override QueryRootCashTrackingSessionQueryBuilder Self => this;
+
+        public QueryRootCashTrackingSessionQueryBuilder(string name) : base(new Query<CashTrackingSession>(name))
+        {
+            Arguments = new QueryRootCashTrackingSessionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder(IQuery<CashTrackingSession> query) : base(query)
+        {
+            Arguments = new QueryRootCashTrackingSessionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder SetArguments(Action<QueryRootCashTrackingSessionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder Adjustments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingAdjustmentConnectionQueryBuilder> build)
+        {
+            var query = new Query<CashTrackingAdjustmentConnection>("adjustments");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingAdjustmentConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashTrackingAdjustmentConnection>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder CashTrackingEnabled()
+        {
+            base.InnerQuery.AddField("cashTrackingEnabled");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder CashTransactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
+        {
+            var query = new Query<OrderTransactionConnection>("cashTransactions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderTransactionConnection>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ClosingBalance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("closingBalance");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ClosingNote()
+        {
+            base.InnerQuery.AddField("closingNote");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ClosingStaffMember(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder> build)
+        {
+            var query = new Query<StaffMember>("closingStaffMember");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StaffMember>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ClosingTime()
+        {
+            base.InnerQuery.AddField("closingTime");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ExpectedBalance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("expectedBalance");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ExpectedClosingBalance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("expectedClosingBalance");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder ExpectedOpeningBalance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("expectedOpeningBalance");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder Id()
+        {
+            base.InnerQuery.AddField("id");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder Location(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder> build)
+        {
+            var query = new Query<Location>("location");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Location>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder NetCashSales(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("netCashSales");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder OpeningBalance(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("openingBalance");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder OpeningNote()
+        {
+            base.InnerQuery.AddField("openingNote");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder OpeningStaffMember(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder> build)
+        {
+            var query = new Query<StaffMember>("openingStaffMember");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StaffMember>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder OpeningTime()
+        {
+            base.InnerQuery.AddField("openingTime");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder RegisterName()
+        {
+            base.InnerQuery.AddField("registerName");
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder TotalAdjustments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("totalAdjustments");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder TotalCashRefunds(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("totalCashRefunds");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder TotalCashSales(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("totalCashSales");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+
+        public QueryRootCashTrackingSessionQueryBuilder TotalDiscrepancy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("totalDiscrepancy");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
+    }
+}

@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AppDiscountTypeQueryBuilder : FieldsQueryBuilderBase<AppDiscountType, AppDiscountTypeQueryBuilder>
+    public sealed class AppDiscountTypeQueryBuilder : FieldsQueryBuilderBase<AppDiscountType, AppDiscountTypeQueryBuilder>, IHasArguments<AppDiscountTypeArgumentsBuilder>
     {
+        public AppDiscountTypeArgumentsBuilder Arguments { get; }
         protected override AppDiscountTypeQueryBuilder Self => this;
 
         public AppDiscountTypeQueryBuilder() : this("appDiscountType")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AppDiscountTypeQueryBuilder(string name) : base(new Query<AppDiscountType>(name))
         {
+            Arguments = new AppDiscountTypeArgumentsBuilder(base.InnerQuery);
         }
 
         public AppDiscountTypeQueryBuilder(IQuery<AppDiscountType> query) : base(query)
         {
+            Arguments = new AppDiscountTypeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppDiscountTypeQueryBuilder SetArguments(Action<AppDiscountTypeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppDiscountTypeQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)

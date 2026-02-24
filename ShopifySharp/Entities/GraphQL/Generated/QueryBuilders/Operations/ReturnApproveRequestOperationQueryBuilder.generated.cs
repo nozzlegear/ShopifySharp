@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnApproveRequestOperationQueryBuilder : FieldsQueryBuilderBase<ReturnApproveRequestPayload, ReturnApproveRequestOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnApproveRequestPayload>
+    public sealed class ReturnApproveRequestOperationQueryBuilder : FieldsQueryBuilderBase<ReturnApproveRequestPayload, ReturnApproveRequestOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnApproveRequestPayload>, IHasArguments<ReturnApproveRequestArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReturnApproveRequestArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnApproveRequestOperationQueryBuilder(IQuery<ReturnApproveRequestPayload> query) : base(query)
         {
             Arguments = new ReturnApproveRequestArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnApproveRequestOperationQueryBuilder SetArguments(Action<ReturnApproveRequestArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnApproveRequestOperationQueryBuilder Return(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnQueryBuilder> build)

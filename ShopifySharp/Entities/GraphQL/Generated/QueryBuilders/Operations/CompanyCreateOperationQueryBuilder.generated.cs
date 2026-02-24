@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyCreateOperationQueryBuilder : FieldsQueryBuilderBase<CompanyCreatePayload, CompanyCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyCreatePayload>
+    public sealed class CompanyCreateOperationQueryBuilder : FieldsQueryBuilderBase<CompanyCreatePayload, CompanyCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyCreatePayload>, IHasArguments<CompanyCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyCreateOperationQueryBuilder(IQuery<CompanyCreatePayload> query) : base(query)
         {
             Arguments = new CompanyCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyCreateOperationQueryBuilder SetArguments(Action<CompanyCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyCreateOperationQueryBuilder Company(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CashTrackingSessionOperationQueryBuilder : FieldsQueryBuilderBase<CashTrackingSession, CashTrackingSessionOperationQueryBuilder>, IGraphOperationQueryBuilder<CashTrackingSession>
+    public sealed class CashTrackingSessionOperationQueryBuilder : FieldsQueryBuilderBase<CashTrackingSession, CashTrackingSessionOperationQueryBuilder>, IGraphOperationQueryBuilder<CashTrackingSession>, IHasArguments<CashTrackingSessionArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CashTrackingSessionArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CashTrackingSessionOperationQueryBuilder(IQuery<CashTrackingSession> query) : base(query)
         {
             Arguments = new CashTrackingSessionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CashTrackingSessionOperationQueryBuilder SetArguments(Action<CashTrackingSessionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CashTrackingSessionOperationQueryBuilder Adjustments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingAdjustmentConnectionQueryBuilder> build)

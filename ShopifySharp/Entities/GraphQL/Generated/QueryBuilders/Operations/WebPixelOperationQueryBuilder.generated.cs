@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class WebPixelOperationQueryBuilder : FieldsQueryBuilderBase<WebPixel, WebPixelOperationQueryBuilder>, IGraphOperationQueryBuilder<WebPixel>
+    public sealed class WebPixelOperationQueryBuilder : FieldsQueryBuilderBase<WebPixel, WebPixelOperationQueryBuilder>, IGraphOperationQueryBuilder<WebPixel>, IHasArguments<WebPixelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public WebPixelArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebPixelOperationQueryBuilder(IQuery<WebPixel> query) : base(query)
         {
             Arguments = new WebPixelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public WebPixelOperationQueryBuilder SetArguments(Action<WebPixelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public WebPixelOperationQueryBuilder Id()

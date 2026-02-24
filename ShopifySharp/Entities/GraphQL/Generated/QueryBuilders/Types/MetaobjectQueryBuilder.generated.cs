@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class MetaobjectQueryBuilder : FieldsQueryBuilderBase<Metaobject, MetaobjectQueryBuilder>
+    public sealed class MetaobjectQueryBuilder : FieldsQueryBuilderBase<Metaobject, MetaobjectQueryBuilder>, IHasArguments<MetaobjectArgumentsBuilder>
     {
+        public MetaobjectArgumentsBuilder Arguments { get; }
         protected override MetaobjectQueryBuilder Self => this;
 
         public MetaobjectQueryBuilder() : this("metaobject")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public MetaobjectQueryBuilder(string name) : base(new Query<Metaobject>(name))
         {
+            Arguments = new MetaobjectArgumentsBuilder(base.InnerQuery);
         }
 
         public MetaobjectQueryBuilder(IQuery<Metaobject> query) : base(query)
         {
+            Arguments = new MetaobjectArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetaobjectQueryBuilder SetArguments(Action<MetaobjectArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetaobjectQueryBuilder Capabilities(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectCapabilityDataQueryBuilder> build)
@@ -36,12 +45,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectCapabilityDataQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetaobjectCapabilityData>(query);
-            return this;
-        }
-
-        public MetaobjectQueryBuilder CreatedAt()
-        {
-            base.InnerQuery.AddField("createdAt");
             return this;
         }
 

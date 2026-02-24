@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyLocationAssignAddressOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationAssignAddressPayload, CompanyLocationAssignAddressOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationAssignAddressPayload>
+    public sealed class CompanyLocationAssignAddressOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationAssignAddressPayload, CompanyLocationAssignAddressOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationAssignAddressPayload>, IHasArguments<CompanyLocationAssignAddressArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyLocationAssignAddressArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyLocationAssignAddressOperationQueryBuilder(IQuery<CompanyLocationAssignAddressPayload> query) : base(query)
         {
             Arguments = new CompanyLocationAssignAddressArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationAssignAddressOperationQueryBuilder SetArguments(Action<CompanyLocationAssignAddressArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationAssignAddressOperationQueryBuilder Addresses(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyAddressQueryBuilder> build)

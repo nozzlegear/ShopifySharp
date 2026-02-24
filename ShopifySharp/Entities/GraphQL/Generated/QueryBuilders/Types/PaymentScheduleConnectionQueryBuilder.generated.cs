@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PaymentScheduleConnectionQueryBuilder : FieldsQueryBuilderBase<PaymentScheduleConnection, PaymentScheduleConnectionQueryBuilder>
+    public sealed class PaymentScheduleConnectionQueryBuilder : FieldsQueryBuilderBase<PaymentScheduleConnection, PaymentScheduleConnectionQueryBuilder>, IHasArguments<PaymentScheduleConnectionArgumentsBuilder>
     {
+        public PaymentScheduleConnectionArgumentsBuilder Arguments { get; }
         protected override PaymentScheduleConnectionQueryBuilder Self => this;
 
         public PaymentScheduleConnectionQueryBuilder() : this("paymentScheduleConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PaymentScheduleConnectionQueryBuilder(string name) : base(new Query<PaymentScheduleConnection>(name))
         {
+            Arguments = new PaymentScheduleConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public PaymentScheduleConnectionQueryBuilder(IQuery<PaymentScheduleConnection> query) : base(query)
         {
+            Arguments = new PaymentScheduleConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PaymentScheduleConnectionQueryBuilder SetArguments(Action<PaymentScheduleConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PaymentScheduleConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaymentScheduleEdgeQueryBuilder> build)

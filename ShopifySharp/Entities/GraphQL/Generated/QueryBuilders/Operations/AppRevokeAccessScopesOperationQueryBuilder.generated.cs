@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class AppRevokeAccessScopesOperationQueryBuilder : FieldsQueryBuilderBase<AppRevokeAccessScopesPayload, AppRevokeAccessScopesOperationQueryBuilder>, IGraphOperationQueryBuilder<AppRevokeAccessScopesPayload>
+    public sealed class AppRevokeAccessScopesOperationQueryBuilder : FieldsQueryBuilderBase<AppRevokeAccessScopesPayload, AppRevokeAccessScopesOperationQueryBuilder>, IGraphOperationQueryBuilder<AppRevokeAccessScopesPayload>, IHasArguments<AppRevokeAccessScopesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public AppRevokeAccessScopesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public AppRevokeAccessScopesOperationQueryBuilder(IQuery<AppRevokeAccessScopesPayload> query) : base(query)
         {
             Arguments = new AppRevokeAccessScopesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppRevokeAccessScopesOperationQueryBuilder SetArguments(Action<AppRevokeAccessScopesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppRevokeAccessScopesOperationQueryBuilder Revoked(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AccessScopeQueryBuilder> build)

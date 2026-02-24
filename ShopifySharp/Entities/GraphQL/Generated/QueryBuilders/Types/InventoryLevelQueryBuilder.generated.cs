@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryLevelQueryBuilder : FieldsQueryBuilderBase<InventoryLevel, InventoryLevelQueryBuilder>
+    public sealed class InventoryLevelQueryBuilder : FieldsQueryBuilderBase<InventoryLevel, InventoryLevelQueryBuilder>, IHasArguments<InventoryLevelArgumentsBuilder>
     {
+        public InventoryLevelArgumentsBuilder Arguments { get; }
         protected override InventoryLevelQueryBuilder Self => this;
 
         public InventoryLevelQueryBuilder() : this("inventoryLevel")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryLevelQueryBuilder(string name) : base(new Query<InventoryLevel>(name))
         {
+            Arguments = new InventoryLevelArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryLevelQueryBuilder(IQuery<InventoryLevel> query) : base(query)
         {
+            Arguments = new InventoryLevelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryLevelQueryBuilder SetArguments(Action<InventoryLevelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryLevelQueryBuilder CanDeactivate()

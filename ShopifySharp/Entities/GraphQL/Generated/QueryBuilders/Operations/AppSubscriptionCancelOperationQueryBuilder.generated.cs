@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class AppSubscriptionCancelOperationQueryBuilder : FieldsQueryBuilderBase<AppSubscriptionCancelPayload, AppSubscriptionCancelOperationQueryBuilder>, IGraphOperationQueryBuilder<AppSubscriptionCancelPayload>
+    public sealed class AppSubscriptionCancelOperationQueryBuilder : FieldsQueryBuilderBase<AppSubscriptionCancelPayload, AppSubscriptionCancelOperationQueryBuilder>, IGraphOperationQueryBuilder<AppSubscriptionCancelPayload>, IHasArguments<AppSubscriptionCancelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public AppSubscriptionCancelArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public AppSubscriptionCancelOperationQueryBuilder(IQuery<AppSubscriptionCancelPayload> query) : base(query)
         {
             Arguments = new AppSubscriptionCancelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppSubscriptionCancelOperationQueryBuilder SetArguments(Action<AppSubscriptionCancelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppSubscriptionCancelOperationQueryBuilder AppSubscription(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppSubscriptionQueryBuilder> build)

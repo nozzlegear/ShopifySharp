@@ -9,18 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Defines the global color roles for checkout branding. These semantic colors
-/// maintain consistency across all checkout elements and provide the foundation for
-/// the checkout's visual design system.
-/// Use global colors to:
-/// - Set brand colors for primary actions and buttons
-/// - Define accent colors for links and interactive elements
-/// - Configure semantic colors for success, warning, and error states
-/// - Apply decorative colors for visual highlights
-/// For example, a merchant might set their brand blue for primary buttons, green
-/// for success messages, amber for warnings, and red for critical errors, creating
-/// a consistent color language throughout checkout.
-/// Learn more about [checkout customization](https://shopify.dev/docs/api/admin-graphql/latest/objects/CheckoutBranding).
+/// A set of colors for customizing the overall look and feel of the checkout.
 /// </summary>
 public record CheckoutBrandingColorGlobal : IGraphQLObject
 {

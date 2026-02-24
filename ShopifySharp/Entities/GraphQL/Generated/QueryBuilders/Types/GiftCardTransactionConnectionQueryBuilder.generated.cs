@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class GiftCardTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<GiftCardTransactionConnection, GiftCardTransactionConnectionQueryBuilder>
+    public sealed class GiftCardTransactionConnectionQueryBuilder : FieldsQueryBuilderBase<GiftCardTransactionConnection, GiftCardTransactionConnectionQueryBuilder>, IHasArguments<GiftCardTransactionConnectionArgumentsBuilder>
     {
+        public GiftCardTransactionConnectionArgumentsBuilder Arguments { get; }
         protected override GiftCardTransactionConnectionQueryBuilder Self => this;
 
         public GiftCardTransactionConnectionQueryBuilder() : this("giftCardTransactionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public GiftCardTransactionConnectionQueryBuilder(string name) : base(new Query<GiftCardTransactionConnection>(name))
         {
+            Arguments = new GiftCardTransactionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public GiftCardTransactionConnectionQueryBuilder(IQuery<GiftCardTransactionConnection> query) : base(query)
         {
+            Arguments = new GiftCardTransactionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public GiftCardTransactionConnectionQueryBuilder SetArguments(Action<GiftCardTransactionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public GiftCardTransactionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardTransactionEdgeQueryBuilder> build)

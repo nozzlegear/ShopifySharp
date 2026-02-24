@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OrderRiskQueryBuilder : FieldsQueryBuilderBase<OrderRisk, OrderRiskQueryBuilder>
+    public sealed class OrderRiskQueryBuilder : FieldsQueryBuilderBase<OrderRisk, OrderRiskQueryBuilder>, IHasArguments<OrderRiskArgumentsBuilder>
     {
+        public OrderRiskArgumentsBuilder Arguments { get; }
         protected override OrderRiskQueryBuilder Self => this;
 
         public OrderRiskQueryBuilder() : this("orderRisk")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OrderRiskQueryBuilder(string name) : base(new Query<OrderRisk>(name))
         {
+            Arguments = new OrderRiskArgumentsBuilder(base.InnerQuery);
         }
 
         public OrderRiskQueryBuilder(IQuery<OrderRisk> query) : base(query)
         {
+            Arguments = new OrderRiskArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderRiskQueryBuilder SetArguments(Action<OrderRiskArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         [Obsolete("This field is deprecated in favor of OrderRiskAssessment.facts.")]

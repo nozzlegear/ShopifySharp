@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderEditCommitOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditCommitPayload, OrderEditCommitOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditCommitPayload>
+    public sealed class OrderEditCommitOperationQueryBuilder : FieldsQueryBuilderBase<OrderEditCommitPayload, OrderEditCommitOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderEditCommitPayload>, IHasArguments<OrderEditCommitArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderEditCommitArgumentsBuilder Arguments { get; }
@@ -34,18 +34,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             Arguments = new OrderEditCommitArgumentsBuilder(base.InnerQuery);
         }
 
+        public OrderEditCommitOperationQueryBuilder SetArguments(Action<OrderEditCommitArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
+        }
+
         public OrderEditCommitOperationQueryBuilder Order(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)
         {
             var query = new Query<Order>("order");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Order>(query);
-            return this;
-        }
-
-        public OrderEditCommitOperationQueryBuilder SuccessMessages()
-        {
-            base.InnerQuery.AddField("successMessages");
             return this;
         }
 

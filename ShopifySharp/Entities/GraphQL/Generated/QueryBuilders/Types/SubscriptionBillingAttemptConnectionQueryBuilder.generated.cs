@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SubscriptionBillingAttemptConnectionQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingAttemptConnection, SubscriptionBillingAttemptConnectionQueryBuilder>
+    public sealed class SubscriptionBillingAttemptConnectionQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingAttemptConnection, SubscriptionBillingAttemptConnectionQueryBuilder>, IHasArguments<SubscriptionBillingAttemptConnectionArgumentsBuilder>
     {
+        public SubscriptionBillingAttemptConnectionArgumentsBuilder Arguments { get; }
         protected override SubscriptionBillingAttemptConnectionQueryBuilder Self => this;
 
         public SubscriptionBillingAttemptConnectionQueryBuilder() : this("subscriptionBillingAttemptConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SubscriptionBillingAttemptConnectionQueryBuilder(string name) : base(new Query<SubscriptionBillingAttemptConnection>(name))
         {
+            Arguments = new SubscriptionBillingAttemptConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SubscriptionBillingAttemptConnectionQueryBuilder(IQuery<SubscriptionBillingAttemptConnection> query) : base(query)
         {
+            Arguments = new SubscriptionBillingAttemptConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingAttemptConnectionQueryBuilder SetArguments(Action<SubscriptionBillingAttemptConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingAttemptConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptEdgeQueryBuilder> build)

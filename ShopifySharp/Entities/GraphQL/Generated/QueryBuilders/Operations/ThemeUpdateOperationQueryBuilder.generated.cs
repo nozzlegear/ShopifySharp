@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ThemeUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ThemeUpdatePayload, ThemeUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeUpdatePayload>
+    public sealed class ThemeUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ThemeUpdatePayload, ThemeUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeUpdatePayload>, IHasArguments<ThemeUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ThemeUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ThemeUpdateOperationQueryBuilder(IQuery<ThemeUpdatePayload> query) : base(query)
         {
             Arguments = new ThemeUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ThemeUpdateOperationQueryBuilder SetArguments(Action<ThemeUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ThemeUpdateOperationQueryBuilder Theme(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeQueryBuilder> build)

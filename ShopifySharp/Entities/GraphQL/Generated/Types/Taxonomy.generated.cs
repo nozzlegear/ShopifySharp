@@ -9,11 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents Shopify's [standardized product taxonomy](https://shopify.github.io/product-taxonomy/releases/unstable/?categoryId=sg-4-17-2-17)
-/// tree. Provides categories that you can filter by search criteria or hierarchical relationships.
-/// You can search categories globally, retrieve children of a specific category,
-/// find siblings, or get descendants. When you specify no filter arguments, you get
-/// all top-level categories in the taxonomy.
+/// The Taxonomy resource lets you access the categories, attributes and values of a taxonomy tree.
 /// </summary>
 public record Taxonomy : IGraphQLObject
 {

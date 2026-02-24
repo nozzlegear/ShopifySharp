@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class OrderRiskAssessmentCreateOperationQueryBuilder : FieldsQueryBuilderBase<OrderRiskAssessmentCreatePayload, OrderRiskAssessmentCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderRiskAssessmentCreatePayload>
+    public sealed class OrderRiskAssessmentCreateOperationQueryBuilder : FieldsQueryBuilderBase<OrderRiskAssessmentCreatePayload, OrderRiskAssessmentCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<OrderRiskAssessmentCreatePayload>, IHasArguments<OrderRiskAssessmentCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public OrderRiskAssessmentCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public OrderRiskAssessmentCreateOperationQueryBuilder(IQuery<OrderRiskAssessmentCreatePayload> query) : base(query)
         {
             Arguments = new OrderRiskAssessmentCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OrderRiskAssessmentCreateOperationQueryBuilder SetArguments(Action<OrderRiskAssessmentCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OrderRiskAssessmentCreateOperationQueryBuilder OrderRiskAssessment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderRiskAssessmentQueryBuilder> build)

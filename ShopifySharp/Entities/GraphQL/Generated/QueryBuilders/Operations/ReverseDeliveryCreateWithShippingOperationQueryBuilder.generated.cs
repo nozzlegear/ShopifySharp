@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReverseDeliveryCreateWithShippingOperationQueryBuilder : FieldsQueryBuilderBase<ReverseDeliveryCreateWithShippingPayload, ReverseDeliveryCreateWithShippingOperationQueryBuilder>, IGraphOperationQueryBuilder<ReverseDeliveryCreateWithShippingPayload>
+    public sealed class ReverseDeliveryCreateWithShippingOperationQueryBuilder : FieldsQueryBuilderBase<ReverseDeliveryCreateWithShippingPayload, ReverseDeliveryCreateWithShippingOperationQueryBuilder>, IGraphOperationQueryBuilder<ReverseDeliveryCreateWithShippingPayload>, IHasArguments<ReverseDeliveryCreateWithShippingArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ReverseDeliveryCreateWithShippingArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReverseDeliveryCreateWithShippingOperationQueryBuilder(IQuery<ReverseDeliveryCreateWithShippingPayload> query) : base(query)
         {
             Arguments = new ReverseDeliveryCreateWithShippingArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReverseDeliveryCreateWithShippingOperationQueryBuilder SetArguments(Action<ReverseDeliveryCreateWithShippingArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReverseDeliveryCreateWithShippingOperationQueryBuilder ReverseDelivery(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryQueryBuilder> build)

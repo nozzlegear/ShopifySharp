@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DiscountRedeemCodeBulkCreationQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeBulkCreation, DiscountRedeemCodeBulkCreationQueryBuilder>
+    public sealed class DiscountRedeemCodeBulkCreationQueryBuilder : FieldsQueryBuilderBase<DiscountRedeemCodeBulkCreation, DiscountRedeemCodeBulkCreationQueryBuilder>, IHasArguments<DiscountRedeemCodeBulkCreationArgumentsBuilder>
     {
+        public DiscountRedeemCodeBulkCreationArgumentsBuilder Arguments { get; }
         protected override DiscountRedeemCodeBulkCreationQueryBuilder Self => this;
 
         public DiscountRedeemCodeBulkCreationQueryBuilder() : this("discountRedeemCodeBulkCreation")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DiscountRedeemCodeBulkCreationQueryBuilder(string name) : base(new Query<DiscountRedeemCodeBulkCreation>(name))
         {
+            Arguments = new DiscountRedeemCodeBulkCreationArgumentsBuilder(base.InnerQuery);
         }
 
         public DiscountRedeemCodeBulkCreationQueryBuilder(IQuery<DiscountRedeemCodeBulkCreation> query) : base(query)
         {
+            Arguments = new DiscountRedeemCodeBulkCreationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountRedeemCodeBulkCreationQueryBuilder SetArguments(Action<DiscountRedeemCodeBulkCreationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountRedeemCodeBulkCreationQueryBuilder Codes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountRedeemCodeBulkCreationCodeConnectionQueryBuilder> build)

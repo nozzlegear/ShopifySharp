@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `webPresenceCreate` instead.")]
-    public sealed class MarketWebPresenceCreateOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceCreatePayload, MarketWebPresenceCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceCreatePayload>
+    public sealed class MarketWebPresenceCreateOperationQueryBuilder : FieldsQueryBuilderBase<MarketWebPresenceCreatePayload, MarketWebPresenceCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketWebPresenceCreatePayload>, IHasArguments<MarketWebPresenceCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketWebPresenceCreateArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketWebPresenceCreateOperationQueryBuilder(IQuery<MarketWebPresenceCreatePayload> query) : base(query)
         {
             Arguments = new MarketWebPresenceCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketWebPresenceCreateOperationQueryBuilder SetArguments(Action<MarketWebPresenceCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketWebPresenceCreateOperationQueryBuilder Market(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketQueryBuilder> build)

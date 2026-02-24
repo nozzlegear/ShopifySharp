@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerRemoveTaxExemptionsOperationQueryBuilder : FieldsQueryBuilderBase<CustomerRemoveTaxExemptionsPayload, CustomerRemoveTaxExemptionsOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerRemoveTaxExemptionsPayload>
+    public sealed class CustomerRemoveTaxExemptionsOperationQueryBuilder : FieldsQueryBuilderBase<CustomerRemoveTaxExemptionsPayload, CustomerRemoveTaxExemptionsOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerRemoveTaxExemptionsPayload>, IHasArguments<CustomerRemoveTaxExemptionsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerRemoveTaxExemptionsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerRemoveTaxExemptionsOperationQueryBuilder(IQuery<CustomerRemoveTaxExemptionsPayload> query) : base(query)
         {
             Arguments = new CustomerRemoveTaxExemptionsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerRemoveTaxExemptionsOperationQueryBuilder SetArguments(Action<CustomerRemoveTaxExemptionsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerRemoveTaxExemptionsOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)

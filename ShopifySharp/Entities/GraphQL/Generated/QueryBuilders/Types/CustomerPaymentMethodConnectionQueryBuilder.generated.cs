@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerPaymentMethodConnectionQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodConnection, CustomerPaymentMethodConnectionQueryBuilder>
+    public sealed class CustomerPaymentMethodConnectionQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodConnection, CustomerPaymentMethodConnectionQueryBuilder>, IHasArguments<CustomerPaymentMethodConnectionArgumentsBuilder>
     {
+        public CustomerPaymentMethodConnectionArgumentsBuilder Arguments { get; }
         protected override CustomerPaymentMethodConnectionQueryBuilder Self => this;
 
         public CustomerPaymentMethodConnectionQueryBuilder() : this("customerPaymentMethodConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerPaymentMethodConnectionQueryBuilder(string name) : base(new Query<CustomerPaymentMethodConnection>(name))
         {
+            Arguments = new CustomerPaymentMethodConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerPaymentMethodConnectionQueryBuilder(IQuery<CustomerPaymentMethodConnection> query) : base(query)
         {
+            Arguments = new CustomerPaymentMethodConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodConnectionQueryBuilder SetArguments(Action<CustomerPaymentMethodConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaymentMethodEdgeQueryBuilder> build)

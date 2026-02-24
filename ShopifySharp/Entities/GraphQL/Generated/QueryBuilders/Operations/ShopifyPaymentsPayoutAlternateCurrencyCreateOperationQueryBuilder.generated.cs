@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload, ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload>
+    public sealed class ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload, ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload>, IHasArguments<ShopifyPaymentsPayoutAlternateCurrencyCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ShopifyPaymentsPayoutAlternateCurrencyCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder(IQuery<ShopifyPaymentsPayoutAlternateCurrencyCreatePayload> query) : base(query)
         {
             Arguments = new ShopifyPaymentsPayoutAlternateCurrencyCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder SetArguments(Action<ShopifyPaymentsPayoutAlternateCurrencyCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsPayoutAlternateCurrencyCreateOperationQueryBuilder Payout(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsToolingProviderPayoutQueryBuilder> build)

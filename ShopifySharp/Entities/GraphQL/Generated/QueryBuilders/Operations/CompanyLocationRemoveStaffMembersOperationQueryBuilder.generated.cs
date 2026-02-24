@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CompanyLocationRemoveStaffMembersOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationRemoveStaffMembersPayload, CompanyLocationRemoveStaffMembersOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationRemoveStaffMembersPayload>
+    public sealed class CompanyLocationRemoveStaffMembersOperationQueryBuilder : FieldsQueryBuilderBase<CompanyLocationRemoveStaffMembersPayload, CompanyLocationRemoveStaffMembersOperationQueryBuilder>, IGraphOperationQueryBuilder<CompanyLocationRemoveStaffMembersPayload>, IHasArguments<CompanyLocationRemoveStaffMembersArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CompanyLocationRemoveStaffMembersArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CompanyLocationRemoveStaffMembersOperationQueryBuilder(IQuery<CompanyLocationRemoveStaffMembersPayload> query) : base(query)
         {
             Arguments = new CompanyLocationRemoveStaffMembersArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CompanyLocationRemoveStaffMembersOperationQueryBuilder SetArguments(Action<CompanyLocationRemoveStaffMembersArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CompanyLocationRemoveStaffMembersOperationQueryBuilder DeletedCompanyLocationStaffMemberAssignmentIds()

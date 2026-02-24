@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerMergeRequestQueryBuilder : FieldsQueryBuilderBase<CustomerMergeRequest, CustomerMergeRequestQueryBuilder>
+    public sealed class CustomerMergeRequestQueryBuilder : FieldsQueryBuilderBase<CustomerMergeRequest, CustomerMergeRequestQueryBuilder>, IHasArguments<CustomerMergeRequestArgumentsBuilder>
     {
+        public CustomerMergeRequestArgumentsBuilder Arguments { get; }
         protected override CustomerMergeRequestQueryBuilder Self => this;
 
         public CustomerMergeRequestQueryBuilder() : this("customerMergeRequest")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerMergeRequestQueryBuilder(string name) : base(new Query<CustomerMergeRequest>(name))
         {
+            Arguments = new CustomerMergeRequestArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerMergeRequestQueryBuilder(IQuery<CustomerMergeRequest> query) : base(query)
         {
+            Arguments = new CustomerMergeRequestArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerMergeRequestQueryBuilder SetArguments(Action<CustomerMergeRequestArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerMergeRequestQueryBuilder CustomerMergeErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMergeErrorQueryBuilder> build)

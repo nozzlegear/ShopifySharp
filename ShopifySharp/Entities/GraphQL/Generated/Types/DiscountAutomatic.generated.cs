@@ -9,12 +9,11 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The types of automatic discounts applied in the cart and at checkout when an order meets specific criteria.
-/// Includes [`DiscountAutomaticApp`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DiscountAutomaticApp) for custom logic using the [Discount Function
-/// API](https://shopify.dev/docs/api/functions/latest/discount), [`DiscountAutomaticBasic`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DiscountAutomaticBasic)
-/// for percentage or fixed amount reductions, [`DiscountAutomaticBxgy`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DiscountAutomaticBxgy)
-/// for Buy X Get Y promotions, and [`DiscountAutomaticFreeShipping`](https://shopify.dev/docs/api/admin-graphql/latest/objects/DiscountAutomaticFreeShipping)
-/// for delivery incentives.
+/// The type of discount associated to the automatic discount. For example, the
+/// automatic discount might offer a basic discount using a fixed percentage, or a
+/// fixed amount, on specific products from the order. The automatic discount may
+/// also be a BXGY discount, which offers customer discounts on select products if
+/// they add a specific product to their order.
 /// </summary>
 [JsonConverter(typeof(GraphUnionTypeConverter<DiscountAutomatic>))]
 public record DiscountAutomatic : GraphQLObject<DiscountAutomatic>, IGraphQLUnionType

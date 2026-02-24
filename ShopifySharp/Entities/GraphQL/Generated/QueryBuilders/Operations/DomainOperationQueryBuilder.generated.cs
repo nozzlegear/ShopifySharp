@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DomainOperationQueryBuilder : FieldsQueryBuilderBase<Domain, DomainOperationQueryBuilder>, IGraphOperationQueryBuilder<Domain>
+    public sealed class DomainOperationQueryBuilder : FieldsQueryBuilderBase<Domain, DomainOperationQueryBuilder>, IGraphOperationQueryBuilder<Domain>, IHasArguments<DomainArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public DomainArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DomainOperationQueryBuilder(IQuery<Domain> query) : base(query)
         {
             Arguments = new DomainArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DomainOperationQueryBuilder SetArguments(Action<DomainArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DomainOperationQueryBuilder Host()

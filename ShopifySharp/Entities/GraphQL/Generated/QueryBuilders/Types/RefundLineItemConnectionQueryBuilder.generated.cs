@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class RefundLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<RefundLineItemConnection, RefundLineItemConnectionQueryBuilder>
+    public sealed class RefundLineItemConnectionQueryBuilder : FieldsQueryBuilderBase<RefundLineItemConnection, RefundLineItemConnectionQueryBuilder>, IHasArguments<RefundLineItemConnectionArgumentsBuilder>
     {
+        public RefundLineItemConnectionArgumentsBuilder Arguments { get; }
         protected override RefundLineItemConnectionQueryBuilder Self => this;
 
         public RefundLineItemConnectionQueryBuilder() : this("refundLineItemConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public RefundLineItemConnectionQueryBuilder(string name) : base(new Query<RefundLineItemConnection>(name))
         {
+            Arguments = new RefundLineItemConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public RefundLineItemConnectionQueryBuilder(IQuery<RefundLineItemConnection> query) : base(query)
         {
+            Arguments = new RefundLineItemConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public RefundLineItemConnectionQueryBuilder SetArguments(Action<RefundLineItemConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public RefundLineItemConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RefundLineItemEdgeQueryBuilder> build)

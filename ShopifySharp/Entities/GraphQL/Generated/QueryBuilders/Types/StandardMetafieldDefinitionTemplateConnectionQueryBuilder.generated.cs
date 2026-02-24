@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class StandardMetafieldDefinitionTemplateConnectionQueryBuilder : FieldsQueryBuilderBase<StandardMetafieldDefinitionTemplateConnection, StandardMetafieldDefinitionTemplateConnectionQueryBuilder>
+    public sealed class StandardMetafieldDefinitionTemplateConnectionQueryBuilder : FieldsQueryBuilderBase<StandardMetafieldDefinitionTemplateConnection, StandardMetafieldDefinitionTemplateConnectionQueryBuilder>, IHasArguments<StandardMetafieldDefinitionTemplateConnectionArgumentsBuilder>
     {
+        public StandardMetafieldDefinitionTemplateConnectionArgumentsBuilder Arguments { get; }
         protected override StandardMetafieldDefinitionTemplateConnectionQueryBuilder Self => this;
 
         public StandardMetafieldDefinitionTemplateConnectionQueryBuilder() : this("standardMetafieldDefinitionTemplateConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public StandardMetafieldDefinitionTemplateConnectionQueryBuilder(string name) : base(new Query<StandardMetafieldDefinitionTemplateConnection>(name))
         {
+            Arguments = new StandardMetafieldDefinitionTemplateConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public StandardMetafieldDefinitionTemplateConnectionQueryBuilder(IQuery<StandardMetafieldDefinitionTemplateConnection> query) : base(query)
         {
+            Arguments = new StandardMetafieldDefinitionTemplateConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StandardMetafieldDefinitionTemplateConnectionQueryBuilder SetArguments(Action<StandardMetafieldDefinitionTemplateConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StandardMetafieldDefinitionTemplateConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StandardMetafieldDefinitionTemplateEdgeQueryBuilder> build)

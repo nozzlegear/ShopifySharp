@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CustomerSegmentMembersQueryQueryBuilder : FieldsQueryBuilderBase<CustomerSegmentMembersQuery, CustomerSegmentMembersQueryQueryBuilder>
+    public sealed class CustomerSegmentMembersQueryQueryBuilder : FieldsQueryBuilderBase<CustomerSegmentMembersQuery, CustomerSegmentMembersQueryQueryBuilder>, IHasArguments<CustomerSegmentMembersQueryArgumentsBuilder>
     {
+        public CustomerSegmentMembersQueryArgumentsBuilder Arguments { get; }
         protected override CustomerSegmentMembersQueryQueryBuilder Self => this;
 
         public CustomerSegmentMembersQueryQueryBuilder() : this("customerSegmentMembersQuery")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CustomerSegmentMembersQueryQueryBuilder(string name) : base(new Query<CustomerSegmentMembersQuery>(name))
         {
+            Arguments = new CustomerSegmentMembersQueryArgumentsBuilder(base.InnerQuery);
         }
 
         public CustomerSegmentMembersQueryQueryBuilder(IQuery<CustomerSegmentMembersQuery> query) : base(query)
         {
+            Arguments = new CustomerSegmentMembersQueryArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerSegmentMembersQueryQueryBuilder SetArguments(Action<CustomerSegmentMembersQueryArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerSegmentMembersQueryQueryBuilder CurrentCount()

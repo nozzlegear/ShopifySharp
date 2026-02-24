@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopifyPaymentsDisputeConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeConnection, ShopifyPaymentsDisputeConnectionQueryBuilder>
+    public sealed class ShopifyPaymentsDisputeConnectionQueryBuilder : FieldsQueryBuilderBase<ShopifyPaymentsDisputeConnection, ShopifyPaymentsDisputeConnectionQueryBuilder>, IHasArguments<ShopifyPaymentsDisputeConnectionArgumentsBuilder>
     {
+        public ShopifyPaymentsDisputeConnectionArgumentsBuilder Arguments { get; }
         protected override ShopifyPaymentsDisputeConnectionQueryBuilder Self => this;
 
         public ShopifyPaymentsDisputeConnectionQueryBuilder() : this("shopifyPaymentsDisputeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ShopifyPaymentsDisputeConnectionQueryBuilder(string name) : base(new Query<ShopifyPaymentsDisputeConnection>(name))
         {
+            Arguments = new ShopifyPaymentsDisputeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ShopifyPaymentsDisputeConnectionQueryBuilder(IQuery<ShopifyPaymentsDisputeConnection> query) : base(query)
         {
+            Arguments = new ShopifyPaymentsDisputeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShopifyPaymentsDisputeConnectionQueryBuilder SetArguments(Action<ShopifyPaymentsDisputeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShopifyPaymentsDisputeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEdgeQueryBuilder> build)

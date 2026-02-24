@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SubscriptionBillingCycleOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycle, SubscriptionBillingCycleOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycle>
+    public sealed class SubscriptionBillingCycleOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycle, SubscriptionBillingCycleOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycle>, IHasArguments<SubscriptionBillingCycleArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public SubscriptionBillingCycleArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionBillingCycleOperationQueryBuilder(IQuery<SubscriptionBillingCycle> query) : base(query)
         {
             Arguments = new SubscriptionBillingCycleArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingCycleOperationQueryBuilder SetArguments(Action<SubscriptionBillingCycleArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingCycleOperationQueryBuilder BillingAttemptExpectedDate()

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ReturnableFulfillmentsOperationQueryBuilder : FieldsQueryBuilderBase<ReturnableFulfillmentConnection, ReturnableFulfillmentsOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnableFulfillmentConnection>
+    public sealed class ReturnableFulfillmentsOperationQueryBuilder : FieldsQueryBuilderBase<ReturnableFulfillmentConnection, ReturnableFulfillmentsOperationQueryBuilder>, IGraphOperationQueryBuilder<ReturnableFulfillmentConnection>, IHasArguments<ReturnableFulfillmentsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public ReturnableFulfillmentsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ReturnableFulfillmentsOperationQueryBuilder(IQuery<ReturnableFulfillmentConnection> query) : base(query)
         {
             Arguments = new ReturnableFulfillmentsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnableFulfillmentsOperationQueryBuilder SetArguments(Action<ReturnableFulfillmentsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnableFulfillmentsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnableFulfillmentEdgeQueryBuilder> build)

@@ -9,12 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Defines the structure, validation rules, and permissions for [`Metafield`](https://shopify.dev/docs/api/admin-graphql/current/objects/Metafield)
-/// objects attached to a specific owner type. Each definition establishes a schema
-/// that metafields must follow, including the data type and validation constraints.
-/// The definition controls access permissions across different APIs, determines
-/// whether the metafield can be used for filtering or as a collection condition,
-/// and can be constrained to specific resource subtypes.
+/// Metafield definitions enable you to define additional validation constraints for metafields, and enable the
+/// merchant to edit metafield values in context.
 /// </summary>
 public record MetafieldDefinition : IGraphQLObject, INode
 {

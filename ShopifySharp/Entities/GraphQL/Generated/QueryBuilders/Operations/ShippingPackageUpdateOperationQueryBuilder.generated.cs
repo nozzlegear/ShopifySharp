@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ShippingPackageUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ShippingPackageUpdatePayload, ShippingPackageUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShippingPackageUpdatePayload>
+    public sealed class ShippingPackageUpdateOperationQueryBuilder : FieldsQueryBuilderBase<ShippingPackageUpdatePayload, ShippingPackageUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<ShippingPackageUpdatePayload>, IHasArguments<ShippingPackageUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ShippingPackageUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ShippingPackageUpdateOperationQueryBuilder(IQuery<ShippingPackageUpdatePayload> query) : base(query)
         {
             Arguments = new ShippingPackageUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ShippingPackageUpdateOperationQueryBuilder SetArguments(Action<ShippingPackageUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ShippingPackageUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)

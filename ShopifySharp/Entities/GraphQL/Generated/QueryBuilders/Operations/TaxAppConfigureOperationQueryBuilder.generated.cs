@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class TaxAppConfigureOperationQueryBuilder : FieldsQueryBuilderBase<TaxAppConfigurePayload, TaxAppConfigureOperationQueryBuilder>, IGraphOperationQueryBuilder<TaxAppConfigurePayload>
+    public sealed class TaxAppConfigureOperationQueryBuilder : FieldsQueryBuilderBase<TaxAppConfigurePayload, TaxAppConfigureOperationQueryBuilder>, IGraphOperationQueryBuilder<TaxAppConfigurePayload>, IHasArguments<TaxAppConfigureArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public TaxAppConfigureArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public TaxAppConfigureOperationQueryBuilder(IQuery<TaxAppConfigurePayload> query) : base(query)
         {
             Arguments = new TaxAppConfigureArgumentsBuilder(base.InnerQuery);
+        }
+
+        public TaxAppConfigureOperationQueryBuilder SetArguments(Action<TaxAppConfigureArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public TaxAppConfigureOperationQueryBuilder TaxAppConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxAppConfigurationQueryBuilder> build)

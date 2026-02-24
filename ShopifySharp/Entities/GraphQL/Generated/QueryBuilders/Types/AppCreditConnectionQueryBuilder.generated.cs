@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class AppCreditConnectionQueryBuilder : FieldsQueryBuilderBase<AppCreditConnection, AppCreditConnectionQueryBuilder>
+    public sealed class AppCreditConnectionQueryBuilder : FieldsQueryBuilderBase<AppCreditConnection, AppCreditConnectionQueryBuilder>, IHasArguments<AppCreditConnectionArgumentsBuilder>
     {
+        public AppCreditConnectionArgumentsBuilder Arguments { get; }
         protected override AppCreditConnectionQueryBuilder Self => this;
 
         public AppCreditConnectionQueryBuilder() : this("appCreditConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public AppCreditConnectionQueryBuilder(string name) : base(new Query<AppCreditConnection>(name))
         {
+            Arguments = new AppCreditConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public AppCreditConnectionQueryBuilder(IQuery<AppCreditConnection> query) : base(query)
         {
+            Arguments = new AppCreditConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public AppCreditConnectionQueryBuilder SetArguments(Action<AppCreditConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public AppCreditConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppCreditEdgeQueryBuilder> build)

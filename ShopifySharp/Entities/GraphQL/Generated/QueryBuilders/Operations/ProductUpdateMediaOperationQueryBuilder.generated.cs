@@ -15,7 +15,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
     [Obsolete("Use `fileUpdate` instead.")]
-    public sealed class ProductUpdateMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductUpdateMediaPayload, ProductUpdateMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductUpdateMediaPayload>
+    public sealed class ProductUpdateMediaOperationQueryBuilder : FieldsQueryBuilderBase<ProductUpdateMediaPayload, ProductUpdateMediaOperationQueryBuilder>, IGraphOperationQueryBuilder<ProductUpdateMediaPayload>, IHasArguments<ProductUpdateMediaArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ProductUpdateMediaArgumentsBuilder Arguments { get; }
@@ -33,6 +33,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductUpdateMediaOperationQueryBuilder(IQuery<ProductUpdateMediaPayload> query) : base(query)
         {
             Arguments = new ProductUpdateMediaArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ProductUpdateMediaOperationQueryBuilder SetArguments(Action<ProductUpdateMediaArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ProductUpdateMediaOperationQueryBuilder Media(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder> build)

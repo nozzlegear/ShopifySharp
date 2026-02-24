@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class NodesOperationQueryBuilder : FieldsQueryBuilderBase<INode, NodesOperationQueryBuilder>, IGraphOperationQueryBuilder<INode>
+    public sealed class NodesOperationQueryBuilder : FieldsQueryBuilderBase<INode, NodesOperationQueryBuilder>, IGraphOperationQueryBuilder<INode>, IHasArguments<NodesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public NodesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public NodesOperationQueryBuilder(IQuery<INode> query) : base(query)
         {
             Arguments = new NodesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public NodesOperationQueryBuilder SetArguments(Action<NodesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public NodesOperationQueryBuilder Id()

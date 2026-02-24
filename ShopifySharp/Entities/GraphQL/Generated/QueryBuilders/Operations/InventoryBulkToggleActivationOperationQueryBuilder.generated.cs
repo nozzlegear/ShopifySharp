@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryBulkToggleActivationOperationQueryBuilder : FieldsQueryBuilderBase<InventoryBulkToggleActivationPayload, InventoryBulkToggleActivationOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryBulkToggleActivationPayload>
+    public sealed class InventoryBulkToggleActivationOperationQueryBuilder : FieldsQueryBuilderBase<InventoryBulkToggleActivationPayload, InventoryBulkToggleActivationOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryBulkToggleActivationPayload>, IHasArguments<InventoryBulkToggleActivationArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventoryBulkToggleActivationArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryBulkToggleActivationOperationQueryBuilder(IQuery<InventoryBulkToggleActivationPayload> query) : base(query)
         {
             Arguments = new InventoryBulkToggleActivationArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryBulkToggleActivationOperationQueryBuilder SetArguments(Action<InventoryBulkToggleActivationArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryBulkToggleActivationOperationQueryBuilder InventoryItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryItemQueryBuilder> build)

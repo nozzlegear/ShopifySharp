@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MarketingActivityUpsertExternalOperationQueryBuilder : FieldsQueryBuilderBase<MarketingActivityUpsertExternalPayload, MarketingActivityUpsertExternalOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingActivityUpsertExternalPayload>
+    public sealed class MarketingActivityUpsertExternalOperationQueryBuilder : FieldsQueryBuilderBase<MarketingActivityUpsertExternalPayload, MarketingActivityUpsertExternalOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingActivityUpsertExternalPayload>, IHasArguments<MarketingActivityUpsertExternalArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MarketingActivityUpsertExternalArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MarketingActivityUpsertExternalOperationQueryBuilder(IQuery<MarketingActivityUpsertExternalPayload> query) : base(query)
         {
             Arguments = new MarketingActivityUpsertExternalArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MarketingActivityUpsertExternalOperationQueryBuilder SetArguments(Action<MarketingActivityUpsertExternalArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MarketingActivityUpsertExternalOperationQueryBuilder MarketingActivity(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketingActivityQueryBuilder> build)

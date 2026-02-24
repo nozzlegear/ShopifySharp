@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodGetDuplicationDataPayload, CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodGetDuplicationDataPayload>
+    public sealed class CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder : FieldsQueryBuilderBase<CustomerPaymentMethodGetDuplicationDataPayload, CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerPaymentMethodGetDuplicationDataPayload>, IHasArguments<CustomerPaymentMethodGetDuplicationDataArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerPaymentMethodGetDuplicationDataArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder(IQuery<CustomerPaymentMethodGetDuplicationDataPayload> query) : base(query)
         {
             Arguments = new CustomerPaymentMethodGetDuplicationDataArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder SetArguments(Action<CustomerPaymentMethodGetDuplicationDataArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerPaymentMethodGetDuplicationDataOperationQueryBuilder EncryptedDuplicationData()

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryShipmentSetTrackingOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipmentSetTrackingPayload, InventoryShipmentSetTrackingOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipmentSetTrackingPayload>
+    public sealed class InventoryShipmentSetTrackingOperationQueryBuilder : FieldsQueryBuilderBase<InventoryShipmentSetTrackingPayload, InventoryShipmentSetTrackingOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryShipmentSetTrackingPayload>, IHasArguments<InventoryShipmentSetTrackingArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventoryShipmentSetTrackingArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryShipmentSetTrackingOperationQueryBuilder(IQuery<InventoryShipmentSetTrackingPayload> query) : base(query)
         {
             Arguments = new InventoryShipmentSetTrackingArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryShipmentSetTrackingOperationQueryBuilder SetArguments(Action<InventoryShipmentSetTrackingArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryShipmentSetTrackingOperationQueryBuilder InventoryShipment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder> build)

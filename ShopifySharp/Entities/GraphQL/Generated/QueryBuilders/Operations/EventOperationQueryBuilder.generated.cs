@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class EventOperationQueryBuilder : FieldsQueryBuilderBase<IEvent, EventOperationQueryBuilder>, IGraphOperationQueryBuilder<IEvent>
+    public sealed class EventOperationQueryBuilder : FieldsQueryBuilderBase<IEvent, EventOperationQueryBuilder>, IGraphOperationQueryBuilder<IEvent>, IHasArguments<EventArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public EventArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public EventOperationQueryBuilder(IQuery<IEvent> query) : base(query)
         {
             Arguments = new EventArgumentsBuilder(base.InnerQuery);
+        }
+
+        public EventOperationQueryBuilder SetArguments(Action<EventArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public EventOperationQueryBuilder Action()

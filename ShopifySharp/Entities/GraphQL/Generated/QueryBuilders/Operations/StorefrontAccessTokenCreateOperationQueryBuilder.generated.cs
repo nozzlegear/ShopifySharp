@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class StorefrontAccessTokenCreateOperationQueryBuilder : FieldsQueryBuilderBase<StorefrontAccessTokenCreatePayload, StorefrontAccessTokenCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<StorefrontAccessTokenCreatePayload>
+    public sealed class StorefrontAccessTokenCreateOperationQueryBuilder : FieldsQueryBuilderBase<StorefrontAccessTokenCreatePayload, StorefrontAccessTokenCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<StorefrontAccessTokenCreatePayload>, IHasArguments<StorefrontAccessTokenCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public StorefrontAccessTokenCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public StorefrontAccessTokenCreateOperationQueryBuilder(IQuery<StorefrontAccessTokenCreatePayload> query) : base(query)
         {
             Arguments = new StorefrontAccessTokenCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public StorefrontAccessTokenCreateOperationQueryBuilder SetArguments(Action<StorefrontAccessTokenCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public StorefrontAccessTokenCreateOperationQueryBuilder Shop(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopQueryBuilder> build)

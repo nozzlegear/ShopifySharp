@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class PriceListPriceConnectionQueryBuilder : FieldsQueryBuilderBase<PriceListPriceConnection, PriceListPriceConnectionQueryBuilder>
+    public sealed class PriceListPriceConnectionQueryBuilder : FieldsQueryBuilderBase<PriceListPriceConnection, PriceListPriceConnectionQueryBuilder>, IHasArguments<PriceListPriceConnectionArgumentsBuilder>
     {
+        public PriceListPriceConnectionArgumentsBuilder Arguments { get; }
         protected override PriceListPriceConnectionQueryBuilder Self => this;
 
         public PriceListPriceConnectionQueryBuilder() : this("priceListPriceConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public PriceListPriceConnectionQueryBuilder(string name) : base(new Query<PriceListPriceConnection>(name))
         {
+            Arguments = new PriceListPriceConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public PriceListPriceConnectionQueryBuilder(IQuery<PriceListPriceConnection> query) : base(query)
         {
+            Arguments = new PriceListPriceConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public PriceListPriceConnectionQueryBuilder SetArguments(Action<PriceListPriceConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public PriceListPriceConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListPriceEdgeQueryBuilder> build)

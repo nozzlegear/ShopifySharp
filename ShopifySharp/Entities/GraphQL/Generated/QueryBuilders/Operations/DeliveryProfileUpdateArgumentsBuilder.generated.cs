@@ -28,6 +28,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public DeliveryProfileUpdateArgumentsBuilder LeaveLegacyModeProfiles(bool? leaveLegacyModeProfiles)
+        {
+            base.InnerQuery.AddArgument("leaveLegacyModeProfiles", leaveLegacyModeProfiles);
+            return this;
+        }
+
         public DeliveryProfileUpdateArgumentsBuilder Profile(DeliveryProfileInput? profile)
         {
             base.InnerQuery.AddArgument("profile", profile);

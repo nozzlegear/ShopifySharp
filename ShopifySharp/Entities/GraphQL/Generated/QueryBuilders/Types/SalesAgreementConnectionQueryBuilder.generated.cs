@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class SalesAgreementConnectionQueryBuilder : FieldsQueryBuilderBase<SalesAgreementConnection, SalesAgreementConnectionQueryBuilder>
+    public sealed class SalesAgreementConnectionQueryBuilder : FieldsQueryBuilderBase<SalesAgreementConnection, SalesAgreementConnectionQueryBuilder>, IHasArguments<SalesAgreementConnectionArgumentsBuilder>
     {
+        public SalesAgreementConnectionArgumentsBuilder Arguments { get; }
         protected override SalesAgreementConnectionQueryBuilder Self => this;
 
         public SalesAgreementConnectionQueryBuilder() : this("salesAgreementConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public SalesAgreementConnectionQueryBuilder(string name) : base(new Query<SalesAgreementConnection>(name))
         {
+            Arguments = new SalesAgreementConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public SalesAgreementConnectionQueryBuilder(IQuery<SalesAgreementConnection> query) : base(query)
         {
+            Arguments = new SalesAgreementConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SalesAgreementConnectionQueryBuilder SetArguments(Action<SalesAgreementConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SalesAgreementConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SalesAgreementEdgeQueryBuilder> build)

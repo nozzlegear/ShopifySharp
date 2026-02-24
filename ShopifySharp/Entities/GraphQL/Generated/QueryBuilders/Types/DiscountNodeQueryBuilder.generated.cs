@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class DiscountNodeQueryBuilder : FieldsQueryBuilderBase<DiscountNode, DiscountNodeQueryBuilder>
+    public sealed class DiscountNodeQueryBuilder : FieldsQueryBuilderBase<DiscountNode, DiscountNodeQueryBuilder>, IHasArguments<DiscountNodeArgumentsBuilder>
     {
+        public DiscountNodeArgumentsBuilder Arguments { get; }
         protected override DiscountNodeQueryBuilder Self => this;
 
         public DiscountNodeQueryBuilder() : this("discountNode")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public DiscountNodeQueryBuilder(string name) : base(new Query<DiscountNode>(name))
         {
+            Arguments = new DiscountNodeArgumentsBuilder(base.InnerQuery);
         }
 
         public DiscountNodeQueryBuilder(IQuery<DiscountNode> query) : base(query)
         {
+            Arguments = new DiscountNodeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public DiscountNodeQueryBuilder SetArguments(Action<DiscountNodeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public DiscountNodeQueryBuilder Events(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventConnectionQueryBuilder> build)

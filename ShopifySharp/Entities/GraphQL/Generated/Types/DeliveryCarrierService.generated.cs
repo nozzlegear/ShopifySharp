@@ -86,16 +86,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 ///       "variant_id": 258644705304
 ///     }],
 ///     "currency": "USD",
-///     "locale": "en",
-///     "order_totals": {
-///       "subtotal_price": "1999",
-///       "total_price": "2199",
-///       "discount_amount": "150"
-///     },
-///     "customer": {
-///       "id": 207119551,
-///       "tags": ["VIP", "wholesale"]
-///     }
+///     "locale": "en"
 ///   }
 /// }
 /// ```
@@ -126,15 +117,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 ///            "total_price": "3587",
 ///            "currency": "USD",
 ///            "min_delivery_date": "2013-04-12 14:48:45 -0400",
-///            "max_delivery_date": "2013-04-12 14:48:45 -0400",
-///            "metafields": [
-///                {
-///                    "key": "tracking_url",
-///                    "value": "abc123",
-///                    "namespace": "carrier_service_metadata",
-///                    "type": "single_line_text_field"
-///                }
-///            ]
+///            "max_delivery_date": "2013-04-12 14:48:45 -0400"
 ///        }
 ///    ]
 /// }
@@ -165,9 +148,9 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// | `description`           | Yes      | A description of the rate, which
 /// customers see at checkout. For example: `Includes tracking and insurance`.      
 ///                                                                                            |
-/// | `service_code`          | Yes      | A unique code associated with the rate
-/// that must be consistent across requests. For example: `expedited_mail`.         
-///                                                                                      |
+/// | `service_code`          | Yes      | A unique code associated with the rate.
+/// For example: `expedited_mail`.                                                  
+///                                                                                     |
 /// | `currency`              | Yes      | The currency of the shipping rate.       
 ///                                                                                 
 ///                                                                                   |
@@ -183,9 +166,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// | `max_delivery_date`     | No       | The latest delivery date for the
 /// displayed rate to still be valid.                                               
 ///                                                                                            |
-/// | `metafields`            | No       | An array of metafield objects to attach
-/// custom metadata to the shipping rate.                                           
-///                                                                                     |
 /// ### Special conditions
 /// * To indicate that this carrier service cannot handle this shipping request,
 /// return an empty array and any successful (20x) HTTP code.
@@ -195,10 +175,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// original callback URL. Attempting to redirect to a different domain will trigger backup rates.
 /// * There is no retry mechanism. The response must be successful on the first try,
 /// within the time budget listed below. Timeouts or errors will trigger backup rates.
-/// * The `service_code` must be stable and consistent across requests for the same
-/// shipping option. It should not contain dynamic values like session IDs,
-/// timestamps, or request-specific identifiers. Use metafields for passing dynamic
-/// or session-specific data.
 /// ## Response Timeouts
 /// The read timeout for rate requests are dynamic, based on the number of requests
 /// per minute (RPM). These limits are applied to each shop-app pair. The timeout

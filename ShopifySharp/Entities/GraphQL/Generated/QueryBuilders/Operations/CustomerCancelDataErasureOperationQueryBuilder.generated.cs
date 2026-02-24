@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerCancelDataErasureOperationQueryBuilder : FieldsQueryBuilderBase<CustomerCancelDataErasurePayload, CustomerCancelDataErasureOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerCancelDataErasurePayload>
+    public sealed class CustomerCancelDataErasureOperationQueryBuilder : FieldsQueryBuilderBase<CustomerCancelDataErasurePayload, CustomerCancelDataErasureOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerCancelDataErasurePayload>, IHasArguments<CustomerCancelDataErasureArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerCancelDataErasureArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerCancelDataErasureOperationQueryBuilder(IQuery<CustomerCancelDataErasurePayload> query) : base(query)
         {
             Arguments = new CustomerCancelDataErasureArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerCancelDataErasureOperationQueryBuilder SetArguments(Action<CustomerCancelDataErasureArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerCancelDataErasureOperationQueryBuilder CustomerId()

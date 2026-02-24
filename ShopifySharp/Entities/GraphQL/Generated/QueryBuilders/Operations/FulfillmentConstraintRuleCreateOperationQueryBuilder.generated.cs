@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentConstraintRuleCreateOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentConstraintRuleCreatePayload, FulfillmentConstraintRuleCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentConstraintRuleCreatePayload>
+    public sealed class FulfillmentConstraintRuleCreateOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentConstraintRuleCreatePayload, FulfillmentConstraintRuleCreateOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentConstraintRuleCreatePayload>, IHasArguments<FulfillmentConstraintRuleCreateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentConstraintRuleCreateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentConstraintRuleCreateOperationQueryBuilder(IQuery<FulfillmentConstraintRuleCreatePayload> query) : base(query)
         {
             Arguments = new FulfillmentConstraintRuleCreateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentConstraintRuleCreateOperationQueryBuilder SetArguments(Action<FulfillmentConstraintRuleCreateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentConstraintRuleCreateOperationQueryBuilder FulfillmentConstraintRule(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentConstraintRuleQueryBuilder> build)

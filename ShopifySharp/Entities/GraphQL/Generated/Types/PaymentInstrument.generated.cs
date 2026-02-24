@@ -14,7 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 [JsonConverter(typeof(GraphUnionTypeConverter<PaymentInstrument>))]
 public record PaymentInstrument : GraphQLObject<PaymentInstrument>, IGraphQLUnionType
 {
-    public BankAccount? AsBankAccount() => this is PaymentInstrumentBankAccount wrapper ? wrapper.Value : null;
     public VaultCreditCard? AsVaultCreditCard() => this is PaymentInstrumentVaultCreditCard wrapper ? wrapper.Value : null;
     public VaultPaypalBillingAgreement? AsVaultPaypalBillingAgreement() => this is PaymentInstrumentVaultPaypalBillingAgreement wrapper ? wrapper.Value : null;
 }

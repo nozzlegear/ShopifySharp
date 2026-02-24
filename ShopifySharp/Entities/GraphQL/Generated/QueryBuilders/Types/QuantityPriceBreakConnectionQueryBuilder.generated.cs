@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class QuantityPriceBreakConnectionQueryBuilder : FieldsQueryBuilderBase<QuantityPriceBreakConnection, QuantityPriceBreakConnectionQueryBuilder>
+    public sealed class QuantityPriceBreakConnectionQueryBuilder : FieldsQueryBuilderBase<QuantityPriceBreakConnection, QuantityPriceBreakConnectionQueryBuilder>, IHasArguments<QuantityPriceBreakConnectionArgumentsBuilder>
     {
+        public QuantityPriceBreakConnectionArgumentsBuilder Arguments { get; }
         protected override QuantityPriceBreakConnectionQueryBuilder Self => this;
 
         public QuantityPriceBreakConnectionQueryBuilder() : this("quantityPriceBreakConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public QuantityPriceBreakConnectionQueryBuilder(string name) : base(new Query<QuantityPriceBreakConnection>(name))
         {
+            Arguments = new QuantityPriceBreakConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public QuantityPriceBreakConnectionQueryBuilder(IQuery<QuantityPriceBreakConnection> query) : base(query)
         {
+            Arguments = new QuantityPriceBreakConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public QuantityPriceBreakConnectionQueryBuilder SetArguments(Action<QuantityPriceBreakConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public QuantityPriceBreakConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.QuantityPriceBreakEdgeQueryBuilder> build)

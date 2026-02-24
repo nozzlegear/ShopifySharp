@@ -20,10 +20,10 @@ public record DeliveryCustomizationInput : GraphQLInputObject<DeliveryCustomizat
     public bool? enabled { get; set; } = null;
 
     /// <summary>
-    /// Function handle scoped to your current app ID. Only finds functions within your app.
+    /// The ID of the function providing the delivery customization.
     /// </summary>
-    [JsonPropertyName("functionHandle")]
-    public string? functionHandle { get; set; } = null;
+    [JsonPropertyName("functionId")]
+    public string? functionId { get; set; } = null;
 
     /// <summary>
     /// Additional metafields to associate to the delivery customization.

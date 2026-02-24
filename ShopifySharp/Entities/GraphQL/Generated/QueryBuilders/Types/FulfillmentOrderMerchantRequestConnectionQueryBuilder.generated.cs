@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class FulfillmentOrderMerchantRequestConnectionQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderMerchantRequestConnection, FulfillmentOrderMerchantRequestConnectionQueryBuilder>
+    public sealed class FulfillmentOrderMerchantRequestConnectionQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderMerchantRequestConnection, FulfillmentOrderMerchantRequestConnectionQueryBuilder>, IHasArguments<FulfillmentOrderMerchantRequestConnectionArgumentsBuilder>
     {
+        public FulfillmentOrderMerchantRequestConnectionArgumentsBuilder Arguments { get; }
         protected override FulfillmentOrderMerchantRequestConnectionQueryBuilder Self => this;
 
         public FulfillmentOrderMerchantRequestConnectionQueryBuilder() : this("fulfillmentOrderMerchantRequestConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public FulfillmentOrderMerchantRequestConnectionQueryBuilder(string name) : base(new Query<FulfillmentOrderMerchantRequestConnection>(name))
         {
+            Arguments = new FulfillmentOrderMerchantRequestConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public FulfillmentOrderMerchantRequestConnectionQueryBuilder(IQuery<FulfillmentOrderMerchantRequestConnection> query) : base(query)
         {
+            Arguments = new FulfillmentOrderMerchantRequestConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderMerchantRequestConnectionQueryBuilder SetArguments(Action<FulfillmentOrderMerchantRequestConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderMerchantRequestConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMerchantRequestEdgeQueryBuilder> build)

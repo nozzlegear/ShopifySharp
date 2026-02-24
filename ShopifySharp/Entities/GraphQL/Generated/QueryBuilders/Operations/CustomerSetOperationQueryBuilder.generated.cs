@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerSetOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSetPayload, CustomerSetOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSetPayload>
+    public sealed class CustomerSetOperationQueryBuilder : FieldsQueryBuilderBase<CustomerSetPayload, CustomerSetOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerSetPayload>, IHasArguments<CustomerSetArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerSetArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerSetOperationQueryBuilder(IQuery<CustomerSetPayload> query) : base(query)
         {
             Arguments = new CustomerSetArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerSetOperationQueryBuilder SetArguments(Action<CustomerSetArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerSetOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)

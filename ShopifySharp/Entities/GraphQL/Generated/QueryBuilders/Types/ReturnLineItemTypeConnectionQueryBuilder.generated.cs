@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ReturnLineItemTypeConnectionQueryBuilder : FieldsQueryBuilderBase<ReturnLineItemTypeConnection, ReturnLineItemTypeConnectionQueryBuilder>
+    public sealed class ReturnLineItemTypeConnectionQueryBuilder : FieldsQueryBuilderBase<ReturnLineItemTypeConnection, ReturnLineItemTypeConnectionQueryBuilder>, IHasArguments<ReturnLineItemTypeConnectionArgumentsBuilder>
     {
+        public ReturnLineItemTypeConnectionArgumentsBuilder Arguments { get; }
         protected override ReturnLineItemTypeConnectionQueryBuilder Self => this;
 
         public ReturnLineItemTypeConnectionQueryBuilder() : this("returnLineItemTypeConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public ReturnLineItemTypeConnectionQueryBuilder(string name) : base(new Query<ReturnLineItemTypeConnection>(name))
         {
+            Arguments = new ReturnLineItemTypeConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public ReturnLineItemTypeConnectionQueryBuilder(IQuery<ReturnLineItemTypeConnection> query) : base(query)
         {
+            Arguments = new ReturnLineItemTypeConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ReturnLineItemTypeConnectionQueryBuilder SetArguments(Action<ReturnLineItemTypeConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ReturnLineItemTypeConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeEdgeQueryBuilder> build)

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CustomerEmailMarketingConsentUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerEmailMarketingConsentUpdatePayload, CustomerEmailMarketingConsentUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerEmailMarketingConsentUpdatePayload>
+    public sealed class CustomerEmailMarketingConsentUpdateOperationQueryBuilder : FieldsQueryBuilderBase<CustomerEmailMarketingConsentUpdatePayload, CustomerEmailMarketingConsentUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<CustomerEmailMarketingConsentUpdatePayload>, IHasArguments<CustomerEmailMarketingConsentUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CustomerEmailMarketingConsentUpdateArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CustomerEmailMarketingConsentUpdateOperationQueryBuilder(IQuery<CustomerEmailMarketingConsentUpdatePayload> query) : base(query)
         {
             Arguments = new CustomerEmailMarketingConsentUpdateArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CustomerEmailMarketingConsentUpdateOperationQueryBuilder SetArguments(Action<CustomerEmailMarketingConsentUpdateArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CustomerEmailMarketingConsentUpdateOperationQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)

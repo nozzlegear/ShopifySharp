@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MobilePlatformApplicationsOperationQueryBuilder : FieldsQueryBuilderBase<MobilePlatformApplicationConnection, MobilePlatformApplicationsOperationQueryBuilder>, IGraphOperationQueryBuilder<MobilePlatformApplicationConnection>
+    public sealed class MobilePlatformApplicationsOperationQueryBuilder : FieldsQueryBuilderBase<MobilePlatformApplicationConnection, MobilePlatformApplicationsOperationQueryBuilder>, IGraphOperationQueryBuilder<MobilePlatformApplicationConnection>, IHasArguments<MobilePlatformApplicationsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public MobilePlatformApplicationsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MobilePlatformApplicationsOperationQueryBuilder(IQuery<MobilePlatformApplicationConnection> query) : base(query)
         {
             Arguments = new MobilePlatformApplicationsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MobilePlatformApplicationsOperationQueryBuilder SetArguments(Action<MobilePlatformApplicationsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MobilePlatformApplicationsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MobilePlatformApplicationEdgeQueryBuilder> build)

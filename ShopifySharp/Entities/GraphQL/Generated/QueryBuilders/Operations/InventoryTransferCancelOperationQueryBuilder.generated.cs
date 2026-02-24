@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class InventoryTransferCancelOperationQueryBuilder : FieldsQueryBuilderBase<InventoryTransferCancelPayload, InventoryTransferCancelOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryTransferCancelPayload>
+    public sealed class InventoryTransferCancelOperationQueryBuilder : FieldsQueryBuilderBase<InventoryTransferCancelPayload, InventoryTransferCancelOperationQueryBuilder>, IGraphOperationQueryBuilder<InventoryTransferCancelPayload>, IHasArguments<InventoryTransferCancelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public InventoryTransferCancelArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public InventoryTransferCancelOperationQueryBuilder(IQuery<InventoryTransferCancelPayload> query) : base(query)
         {
             Arguments = new InventoryTransferCancelArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryTransferCancelOperationQueryBuilder SetArguments(Action<InventoryTransferCancelArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryTransferCancelOperationQueryBuilder InventoryTransfer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryTransferQueryBuilder> build)

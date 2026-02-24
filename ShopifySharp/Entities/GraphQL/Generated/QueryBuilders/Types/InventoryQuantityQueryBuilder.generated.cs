@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class InventoryQuantityQueryBuilder : FieldsQueryBuilderBase<InventoryQuantity, InventoryQuantityQueryBuilder>
+    public sealed class InventoryQuantityQueryBuilder : FieldsQueryBuilderBase<InventoryQuantity, InventoryQuantityQueryBuilder>, IHasArguments<InventoryQuantityArgumentsBuilder>
     {
+        public InventoryQuantityArgumentsBuilder Arguments { get; }
         protected override InventoryQuantityQueryBuilder Self => this;
 
         public InventoryQuantityQueryBuilder() : this("inventoryQuantity")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public InventoryQuantityQueryBuilder(string name) : base(new Query<InventoryQuantity>(name))
         {
+            Arguments = new InventoryQuantityArgumentsBuilder(base.InnerQuery);
         }
 
         public InventoryQuantityQueryBuilder(IQuery<InventoryQuantity> query) : base(query)
         {
+            Arguments = new InventoryQuantityArgumentsBuilder(base.InnerQuery);
+        }
+
+        public InventoryQuantityQueryBuilder SetArguments(Action<InventoryQuantityArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public InventoryQuantityQueryBuilder Id()

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CommentsOperationQueryBuilder : FieldsQueryBuilderBase<CommentConnection, CommentsOperationQueryBuilder>, IGraphOperationQueryBuilder<CommentConnection>
+    public sealed class CommentsOperationQueryBuilder : FieldsQueryBuilderBase<CommentConnection, CommentsOperationQueryBuilder>, IGraphOperationQueryBuilder<CommentConnection>, IHasArguments<CommentsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public CommentsArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CommentsOperationQueryBuilder(IQuery<CommentConnection> query) : base(query)
         {
             Arguments = new CommentsArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CommentsOperationQueryBuilder SetArguments(Action<CommentsArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CommentsOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CommentEdgeQueryBuilder> build)

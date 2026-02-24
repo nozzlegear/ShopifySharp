@@ -9,10 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// An interface representing asynchronous operations on products. Tracks the status
-/// and details of background product mutations like `productSet`, `productDelete`,
-/// `productDuplicate`, and `productBundle` operations. Provides status field
-/// (CREATED, ACTIVE, COMPLETE) and product field to monitor long-running product operations.
+/// An entity that represents details of an asynchronous operation on a product.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
 [JsonDerivedType(typeof(ProductBundleOperation), typeDiscriminator: "ProductBundleOperation")]

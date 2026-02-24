@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CashTrackingSessionConnectionQueryBuilder : FieldsQueryBuilderBase<CashTrackingSessionConnection, CashTrackingSessionConnectionQueryBuilder>
+    public sealed class CashTrackingSessionConnectionQueryBuilder : FieldsQueryBuilderBase<CashTrackingSessionConnection, CashTrackingSessionConnectionQueryBuilder>, IHasArguments<CashTrackingSessionConnectionArgumentsBuilder>
     {
+        public CashTrackingSessionConnectionArgumentsBuilder Arguments { get; }
         protected override CashTrackingSessionConnectionQueryBuilder Self => this;
 
         public CashTrackingSessionConnectionQueryBuilder() : this("cashTrackingSessionConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CashTrackingSessionConnectionQueryBuilder(string name) : base(new Query<CashTrackingSessionConnection>(name))
         {
+            Arguments = new CashTrackingSessionConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CashTrackingSessionConnectionQueryBuilder(IQuery<CashTrackingSessionConnection> query) : base(query)
         {
+            Arguments = new CashTrackingSessionConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CashTrackingSessionConnectionQueryBuilder SetArguments(Action<CashTrackingSessionConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CashTrackingSessionConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingSessionEdgeQueryBuilder> build)

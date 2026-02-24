@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class OnlineStoreThemeFileConnectionQueryBuilder : FieldsQueryBuilderBase<OnlineStoreThemeFileConnection, OnlineStoreThemeFileConnectionQueryBuilder>
+    public sealed class OnlineStoreThemeFileConnectionQueryBuilder : FieldsQueryBuilderBase<OnlineStoreThemeFileConnection, OnlineStoreThemeFileConnectionQueryBuilder>, IHasArguments<OnlineStoreThemeFileConnectionArgumentsBuilder>
     {
+        public OnlineStoreThemeFileConnectionArgumentsBuilder Arguments { get; }
         protected override OnlineStoreThemeFileConnectionQueryBuilder Self => this;
 
         public OnlineStoreThemeFileConnectionQueryBuilder() : this("onlineStoreThemeFileConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public OnlineStoreThemeFileConnectionQueryBuilder(string name) : base(new Query<OnlineStoreThemeFileConnection>(name))
         {
+            Arguments = new OnlineStoreThemeFileConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public OnlineStoreThemeFileConnectionQueryBuilder(IQuery<OnlineStoreThemeFileConnection> query) : base(query)
         {
+            Arguments = new OnlineStoreThemeFileConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public OnlineStoreThemeFileConnectionQueryBuilder SetArguments(Action<OnlineStoreThemeFileConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public OnlineStoreThemeFileConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileEdgeQueryBuilder> build)

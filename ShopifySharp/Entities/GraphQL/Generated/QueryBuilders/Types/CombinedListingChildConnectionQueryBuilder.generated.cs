@@ -14,8 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class CombinedListingChildConnectionQueryBuilder : FieldsQueryBuilderBase<CombinedListingChildConnection, CombinedListingChildConnectionQueryBuilder>
+    public sealed class CombinedListingChildConnectionQueryBuilder : FieldsQueryBuilderBase<CombinedListingChildConnection, CombinedListingChildConnectionQueryBuilder>, IHasArguments<CombinedListingChildConnectionArgumentsBuilder>
     {
+        public CombinedListingChildConnectionArgumentsBuilder Arguments { get; }
         protected override CombinedListingChildConnectionQueryBuilder Self => this;
 
         public CombinedListingChildConnectionQueryBuilder() : this("combinedListingChildConnection")
@@ -24,10 +25,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
 
         public CombinedListingChildConnectionQueryBuilder(string name) : base(new Query<CombinedListingChildConnection>(name))
         {
+            Arguments = new CombinedListingChildConnectionArgumentsBuilder(base.InnerQuery);
         }
 
         public CombinedListingChildConnectionQueryBuilder(IQuery<CombinedListingChildConnection> query) : base(query)
         {
+            Arguments = new CombinedListingChildConnectionArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CombinedListingChildConnectionQueryBuilder SetArguments(Action<CombinedListingChildConnectionArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CombinedListingChildConnectionQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CombinedListingChildEdgeQueryBuilder> build)

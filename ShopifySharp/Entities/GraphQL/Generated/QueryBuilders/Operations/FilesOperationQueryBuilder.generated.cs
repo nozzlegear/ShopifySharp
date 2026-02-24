@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FilesOperationQueryBuilder : FieldsQueryBuilderBase<FileConnection, FilesOperationQueryBuilder>, IGraphOperationQueryBuilder<FileConnection>
+    public sealed class FilesOperationQueryBuilder : FieldsQueryBuilderBase<FileConnection, FilesOperationQueryBuilder>, IGraphOperationQueryBuilder<FileConnection>, IHasArguments<FilesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
         public FilesArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FilesOperationQueryBuilder(IQuery<FileConnection> query) : base(query)
         {
             Arguments = new FilesArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FilesOperationQueryBuilder SetArguments(Action<FilesArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FilesOperationQueryBuilder Edges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileEdgeQueryBuilder> build)

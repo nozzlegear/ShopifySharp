@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrderMergeOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderMergePayload, FulfillmentOrderMergeOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderMergePayload>
+    public sealed class FulfillmentOrderMergeOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderMergePayload, FulfillmentOrderMergeOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderMergePayload>, IHasArguments<FulfillmentOrderMergeArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrderMergeArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderMergeOperationQueryBuilder(IQuery<FulfillmentOrderMergePayload> query) : base(query)
         {
             Arguments = new FulfillmentOrderMergeArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderMergeOperationQueryBuilder SetArguments(Action<FulfillmentOrderMergeArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderMergeOperationQueryBuilder FulfillmentOrderMerges(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMergeResultQueryBuilder> build)

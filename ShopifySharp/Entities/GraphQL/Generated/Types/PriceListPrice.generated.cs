@@ -9,12 +9,10 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Pricing for a [`ProductVariant`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant) on a [`PriceList`](https://shopify.dev/docs/api/admin-graphql/latest/objects/PriceList). Represents the variant's price, compare-at price, and whether the price is fixed
-/// or calculated using percentage-based adjustments. The [`PriceListPriceOriginType`](https://shopify.dev/docs/api/admin-graphql/latest/enums/PriceListPriceOriginType)
-/// distinguishes between prices set directly on the price list (fixed) and prices
-/// calculated using the price list's adjustment configuration (relative).
-/// Learn more about [building catalogs with different pricing
-/// models](https://shopify.dev/docs/apps/build/markets/build-catalog).
+/// Represents information about pricing for a product variant
+///         as defined on a price list, such as the price, compare at price, and
+/// origin type. You can use a `PriceListPrice` to specify a fixed price for a
+/// specific product variant. For examples, refer to [PriceListFixedPricesAdd](https://shopify.dev/api/admin-graphql/latest/mutations/priceListFixedPricesAdd) and [PriceList](https://shopify.dev/api/admin-graphql/latest/queries/priceList#section-examples).
 /// </summary>
 public record PriceListPrice : IGraphQLObject
 {

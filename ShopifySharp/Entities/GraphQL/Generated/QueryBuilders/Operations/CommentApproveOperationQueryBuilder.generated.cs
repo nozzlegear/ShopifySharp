@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class CommentApproveOperationQueryBuilder : FieldsQueryBuilderBase<CommentApprovePayload, CommentApproveOperationQueryBuilder>, IGraphOperationQueryBuilder<CommentApprovePayload>
+    public sealed class CommentApproveOperationQueryBuilder : FieldsQueryBuilderBase<CommentApprovePayload, CommentApproveOperationQueryBuilder>, IGraphOperationQueryBuilder<CommentApprovePayload>, IHasArguments<CommentApproveArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public CommentApproveArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CommentApproveOperationQueryBuilder(IQuery<CommentApprovePayload> query) : base(query)
         {
             Arguments = new CommentApproveArgumentsBuilder(base.InnerQuery);
+        }
+
+        public CommentApproveOperationQueryBuilder SetArguments(Action<CommentApproveArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public CommentApproveOperationQueryBuilder Comment(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CommentQueryBuilder> build)

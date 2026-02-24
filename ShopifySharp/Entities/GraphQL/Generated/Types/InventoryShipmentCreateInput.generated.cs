@@ -14,12 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryShipmentCreateInput : GraphQLInputObject<InventoryShipmentCreateInput>
 {
     /// <summary>
-    /// The date the shipment was created.
-    /// </summary>
-    [JsonPropertyName("dateCreated")]
-    public DateTimeOffset? dateCreated { get; set; } = null;
-
-    /// <summary>
     /// The list of line items for the inventory shipment.
     /// </summary>
     [JsonPropertyName("lineItems")]

@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class SubscriptionBillingCycleBulkSearchOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleBulkSearchPayload, SubscriptionBillingCycleBulkSearchOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleBulkSearchPayload>
+    public sealed class SubscriptionBillingCycleBulkSearchOperationQueryBuilder : FieldsQueryBuilderBase<SubscriptionBillingCycleBulkSearchPayload, SubscriptionBillingCycleBulkSearchOperationQueryBuilder>, IGraphOperationQueryBuilder<SubscriptionBillingCycleBulkSearchPayload>, IHasArguments<SubscriptionBillingCycleBulkSearchArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public SubscriptionBillingCycleBulkSearchArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionBillingCycleBulkSearchOperationQueryBuilder(IQuery<SubscriptionBillingCycleBulkSearchPayload> query) : base(query)
         {
             Arguments = new SubscriptionBillingCycleBulkSearchArgumentsBuilder(base.InnerQuery);
+        }
+
+        public SubscriptionBillingCycleBulkSearchOperationQueryBuilder SetArguments(Action<SubscriptionBillingCycleBulkSearchArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public SubscriptionBillingCycleBulkSearchOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)

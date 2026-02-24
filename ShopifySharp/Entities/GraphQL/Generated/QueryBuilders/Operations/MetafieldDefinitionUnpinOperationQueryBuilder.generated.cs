@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class MetafieldDefinitionUnpinOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionUnpinPayload, MetafieldDefinitionUnpinOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionUnpinPayload>
+    public sealed class MetafieldDefinitionUnpinOperationQueryBuilder : FieldsQueryBuilderBase<MetafieldDefinitionUnpinPayload, MetafieldDefinitionUnpinOperationQueryBuilder>, IGraphOperationQueryBuilder<MetafieldDefinitionUnpinPayload>, IHasArguments<MetafieldDefinitionUnpinArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public MetafieldDefinitionUnpinArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MetafieldDefinitionUnpinOperationQueryBuilder(IQuery<MetafieldDefinitionUnpinPayload> query) : base(query)
         {
             Arguments = new MetafieldDefinitionUnpinArgumentsBuilder(base.InnerQuery);
+        }
+
+        public MetafieldDefinitionUnpinOperationQueryBuilder SetArguments(Action<MetafieldDefinitionUnpinArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public MetafieldDefinitionUnpinOperationQueryBuilder UnpinnedDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)

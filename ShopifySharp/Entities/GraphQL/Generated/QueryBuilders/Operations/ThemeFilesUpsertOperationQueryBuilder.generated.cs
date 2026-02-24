@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class ThemeFilesUpsertOperationQueryBuilder : FieldsQueryBuilderBase<ThemeFilesUpsertPayload, ThemeFilesUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeFilesUpsertPayload>
+    public sealed class ThemeFilesUpsertOperationQueryBuilder : FieldsQueryBuilderBase<ThemeFilesUpsertPayload, ThemeFilesUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<ThemeFilesUpsertPayload>, IHasArguments<ThemeFilesUpsertArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public ThemeFilesUpsertArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ThemeFilesUpsertOperationQueryBuilder(IQuery<ThemeFilesUpsertPayload> query) : base(query)
         {
             Arguments = new ThemeFilesUpsertArgumentsBuilder(base.InnerQuery);
+        }
+
+        public ThemeFilesUpsertOperationQueryBuilder SetArguments(Action<ThemeFilesUpsertArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public ThemeFilesUpsertOperationQueryBuilder Job(Action<ShopifySharp.GraphQL.QueryBuilders.Types.JobQueryBuilder> build)

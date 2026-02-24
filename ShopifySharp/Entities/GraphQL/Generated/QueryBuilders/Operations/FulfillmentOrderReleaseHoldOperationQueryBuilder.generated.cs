@@ -14,7 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class FulfillmentOrderReleaseHoldOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderReleaseHoldPayload, FulfillmentOrderReleaseHoldOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderReleaseHoldPayload>
+    public sealed class FulfillmentOrderReleaseHoldOperationQueryBuilder : FieldsQueryBuilderBase<FulfillmentOrderReleaseHoldPayload, FulfillmentOrderReleaseHoldOperationQueryBuilder>, IGraphOperationQueryBuilder<FulfillmentOrderReleaseHoldPayload>, IHasArguments<FulfillmentOrderReleaseHoldArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
         public FulfillmentOrderReleaseHoldArgumentsBuilder Arguments { get; }
@@ -32,6 +32,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderReleaseHoldOperationQueryBuilder(IQuery<FulfillmentOrderReleaseHoldPayload> query) : base(query)
         {
             Arguments = new FulfillmentOrderReleaseHoldArgumentsBuilder(base.InnerQuery);
+        }
+
+        public FulfillmentOrderReleaseHoldOperationQueryBuilder SetArguments(Action<FulfillmentOrderReleaseHoldArgumentsBuilder> configure)
+        {
+            configure(this.Arguments);
+            return this;
         }
 
         public FulfillmentOrderReleaseHoldOperationQueryBuilder FulfillmentOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderQueryBuilder> build)
