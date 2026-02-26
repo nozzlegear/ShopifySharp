@@ -14,8 +14,9 @@ jobs:
     environment: "Unit test environment"
 
     env:
-      SCHEMA_JSON_FILE: "${{ github.event.inputs.schema_version }}.schema.json"
-      SCHEMA_GRAPHQL_FILE: "graphql.schema.graphql"
+      SCHEMA_JSON_FILE: "graphql-schemas/${{ github.event.inputs.schema_version }}.schema.json"
+      SCHEMA_GRAPHQL_FILE: "graphql-schemas/${{ github.event.inputs.schema_version }}.schema.graphql"
+      DEFAULT_GRAPHQL_SCHEMA_FILE: "graphql.schema.graphql"
 
     steps:
     - name: Checkout code
@@ -41,6 +42,9 @@ jobs:
     - name: Convert JSON schema to GraphQL
       run: just convert-graphql-schema --input "${{ env.SCHEMA_JSON_FILE }}" --output "${{ env.SCHEMA_GRAPHQL_FILE }}"
 
+    - name: Copy the GraphQL schema to the repo's default schema file
+      run: cp "${{ env.SCHEMA_GRAPHQL_FILE }}" "${{ env.DEFAULT_GRAPHQL_SCHEMA_FILE }}"
+
     - name: Clean output directory
       run: just clean
 
@@ -51,4 +55,4 @@ jobs:
       run: just test-query-builders
 
     - name: Create pull request
-      run: just create-graphql-pr --schema-file "${{ env.SCHEMA_GRAPHQL_FILE }}" --token "${{ secrets.GITHUB_TOKEN }}"
+      run: just create-graphql-pr --graph-schema-file "${{ env.SCHEMA_GRAPHQL_FILE }}" --json-schema-file "${{ env.SCHEMA_JSON_FILE }}" --token "${{ secrets.GITHUB_TOKEN }}"

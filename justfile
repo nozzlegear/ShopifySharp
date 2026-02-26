@@ -101,8 +101,9 @@ convert-graphql-schema jsonSchemaFile graphqlSchemaFile:
 [group("graphql")]
 [script]
 [arg("token", long)]
-[arg("graphqlSchemaFile", long="schema-file")]
-create-graphql-pr token graphqlSchemaFile:
+[arg("graphqlSchemaFile", long="graph-schema-file")]
+[arg("jsonSchemaFile", long="json-schema-file")]
+create-graphql-pr token graphqlSchemaFile jsonSchemaFile:
     branch_name="graphql-types-update-$(date +%Y%m%d-%H%M%S)"
 
     echo "Creating branch: $branch_name"
@@ -114,8 +115,10 @@ create-graphql-pr token graphqlSchemaFile:
     fi
 
     git switch -C "$branch_name"
-    git add ShopifySharp/Entities/GraphQL/Generated/ "{{graphqlSchemaFile}}"
+    git add ShopifySharp/Entities/GraphQL/Generated/
+    git add graphql.schema.graphql
     git add "{{graphqlSchemaFile}}"
+    git add "{{jsonSchemaFile}}"
 
     if [ git diff --staged --quiet ]; then
         echo "No changes to commit"
