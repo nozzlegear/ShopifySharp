@@ -63,7 +63,7 @@ regenerate schemaFile="graphql.schema.graphql" noBuild="false": clean _cleanGrap
         --casing camel \
         -t "{{graph_entities}}/Types" \
         -b "{{graph_entities}}/QueryBuilders" \
-        graphql.schema.graphql
+        "{{ schemaFile }}"
 
 # Regenerates GraphQL types and then builds the ShopifySharp project to ensure they're valid
 [group("graphql")]
