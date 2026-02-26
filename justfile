@@ -52,9 +52,9 @@ clean:
 
 # Regenerates GraphQL types from the graphql.schema.graphql file
 [group("graphql")]
-[arg("build", long="build", value="true")]
-regenerate build="false": clean _cleanGraphEntities _buildCliProject
-    dotnet run {{if build != "true" {"--no-build"} else { "" } }} \
+[arg("noBuild", long="no-build", value="1")]
+regenerate schemaFile="graphql.schema.graphql" noBuild="false": clean _cleanGraphEntities _buildCliProject
+    dotnet run {{if noBuild == "1" {"--no-build"} else { "" } }} \
         --configuration Release \
         --project "{{cli_project}}" \
         -- \
@@ -67,7 +67,8 @@ regenerate build="false": clean _cleanGraphEntities _buildCliProject
 
 # Regenerates GraphQL types and then builds the ShopifySharp project to ensure they're valid
 [group("graphql")]
-regenerate-and-build: clean regenerate
+[arg("noBuild", long="no-build", value="1")]
+regenerate-and-build schemaFile="graphql.schema.graphql" noBuild="false": clean (regenerate schemaFile noBuild)
     dotnet build --configuration Release "./ShopifySharp/"
 
 [group("graphql")]
