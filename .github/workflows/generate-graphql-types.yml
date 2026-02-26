@@ -45,7 +45,10 @@ jobs:
       run: just clean
 
     - name: Regenerate types from new schema
-      run: just regenerate-and-build
+      run: just regenerate-and-build "${{ env.SCHEMA_GRAPHQL_FILE }}"
+
+    - name: Run tests using the regenerated types
+      run: just test-query-builders
 
     - name: Create pull request
       run: just create-graphql-pr --schema-file "${{ env.SCHEMA_GRAPHQL_FILE }}" --token "${{ secrets.GITHUB_TOKEN }}"
