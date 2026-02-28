@@ -119,7 +119,7 @@ create-graphql-pr token graphqlSchemaFile jsonSchemaFile:
     git add "{{graphqlSchemaFile}}"
     git add "{{jsonSchemaFile}}"
 
-    if [ git diff --staged --quiet ]; then
+    if git diff --staged --quiet; then
         echo "No changes to commit"
         exit 0
     fi
@@ -130,10 +130,13 @@ create-graphql-pr token graphqlSchemaFile jsonSchemaFile:
 
     git push origin "$branch_name"
 
+    # Extract API version from schema filename (e.g., "graphql-schemas/2026-01.schema.graphql" -> "2026-01")
+    api_version=$(basename "$graphqlSchemaFile" | sed 's/\.schema\.graphql$//')
+
     gh pr create \
-        --title "Update GraphQL schema and generated types to API version $_flag_schema_file" \
+        --title "Update GraphQL schema and generated types to API version $api_version" \
         --body "## Summary
-    - Added/updated GraphQL schema `$schema_name`
+    - Added/updated GraphQL schema \`$graphqlSchemaFile\`
     - Cleaned output directory before generation
     - Updated GraphQL types generated from schema using ShopifySharp.GraphQL.Parser.CLI
 
