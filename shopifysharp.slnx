@@ -7,7 +7,7 @@
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">
     <File Path=".github/workflows/build-and-test.yml" />
-    <File Path=".github/workflows/generate-graphql-types.yml" />
+    <File Path=".github/workflows/regenerate-graphql-types.yaml" />
     <File Path=".github/workflows/release.yml" />
   </Folder>
   <Folder Name="/Solution Items/">

@@ -1,10 +1,11 @@
-name: Generate GraphQL Types
+name: Regenerate GraphQL Types
+run-name: Regenerate GraphQL types for schema version ${{ inputs.schema_version }}
 
 on:
   workflow_dispatch:
     inputs:
       schema_version:
-        description: 'Shopify API version (e.g., 2025-07)'
+        description: 'Shopify API version (e.g., 2026-01)'
         required: true
         type: string
 

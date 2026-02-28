@@ -140,7 +140,7 @@ create-graphql-pr token graphqlSchemaFile jsonSchemaFile:
     - Cleaned output directory before generation
     - Updated GraphQL types generated from schema using ShopifySharp.GraphQL.Parser.CLI
 
-    🤖 Generated via the [Generate GraphQL Types](https://github.com/nozzlegear/ShopifySharp/blob/master/.github/workflows/generate-graphql-types.yml) workflow." \
+    🤖 Generated via the [Regenerate GraphQL Types](https://github.com/nozzlegear/ShopifySharp/blob/master/.github/workflows/regenerate-graphql-types.yaml) workflow." \
         --base master \
         --head "$branch_name"
 
