@@ -98,6 +98,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public StaffMemberAvatarQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
+        {
+            var query = new Query<Translation>("translations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Translation>(query);
+            return this;
+        }
+
         public StaffMemberAvatarQueryBuilder Url()
         {
             base.InnerQuery.AddField("url");

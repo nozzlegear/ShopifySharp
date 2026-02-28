@@ -9,7 +9,11 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// An amount that's allocated to a line based on an associated discount application.
+/// The actual amount discounted on a line item or shipping line. While [`DiscountApplication`](https://shopify.dev/docs/api/admin-graphql/latest/interfaces/DiscountApplication)
+/// captures the discount's intentions and rules, The `DiscountAllocation` object
+/// shows the final calculated discount amount applied to each line.
+/// The allocation includes the discounted amount in both shop and presentment
+/// currencies, with a reference to the originating discount application.
 /// </summary>
 public record DiscountAllocation : IGraphQLObject
 {

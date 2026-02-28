@@ -148,6 +148,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public DiscountAutomaticFreeShippingQueryBuilder Context(Action<DiscountContextUnionCasesBuilder> build)
+        {
+            var query = new Query<DiscountContext>("context");
+            var unionBuilder = new DiscountContextUnionCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
         public DiscountAutomaticFreeShippingQueryBuilder DestinationSelection(Action<DiscountShippingDestinationSelectionUnionCasesBuilder> build)
         {
             var query = new Query<DiscountShippingDestinationSelection>("destinationSelection");

@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `discountNodes` instead.")]
     public sealed class CodeDiscountNodesOperationQueryBuilder : FieldsQueryBuilderBase<DiscountCodeNodeConnection, CodeDiscountNodesOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountCodeNodeConnection>, IHasArguments<CodeDiscountNodesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;

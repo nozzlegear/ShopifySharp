@@ -9,7 +9,13 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Associates an order line item with quantities requiring fulfillment from the respective fulfillment order.
+/// Associates an order line item with the quantities that require fulfillment as
+/// part of a fulfillment order. Each Fulfillment Order Line Item object tracks the
+/// total quantity to fulfill and the remaining quantity yet to be fulfilled, along
+/// with details about the line item being fulfilled and pricing information.
+/// The line item provides additional fulfillment data including whether the item
+/// requires shipping. Financial summaries show pricing details with discounts
+/// applied, while warning messages alert merchants to any issues that might affect fulfillment.
 /// </summary>
 public record FulfillmentOrderLineItem : IGraphQLObject, INode
 {

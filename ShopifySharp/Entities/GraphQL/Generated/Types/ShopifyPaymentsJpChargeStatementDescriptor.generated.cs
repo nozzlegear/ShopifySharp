@@ -23,12 +23,14 @@ public record ShopifyPaymentsJpChargeStatementDescriptor : IGraphQLObject, IShop
     /// The charge statement descriptor in kana.
     /// </summary>
     [JsonPropertyName("kana")]
+    [Obsolete("This field is deprecated and will be removed in a future release.")]
     public string? kana { get; set; } = null;
 
     /// <summary>
     /// The charge statement descriptor in kanji.
     /// </summary>
     [JsonPropertyName("kanji")]
+    [Obsolete("This field is deprecated and will be removed in a future release.")]
     public string? kanji { get; set; } = null;
 
     /// <summary>

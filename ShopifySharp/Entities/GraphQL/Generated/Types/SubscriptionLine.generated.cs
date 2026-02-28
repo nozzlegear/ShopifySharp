@@ -9,7 +9,14 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents a Subscription Line.
+/// A product line item within a [`SubscriptionContract`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SubscriptionContract).
+/// Each line represents a specific product variant that the customer subscribes to,
+/// including its quantity, pricing, and whether shipping is required.
+/// The line maintains references to the [`ProductVariant`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant), [`SellingPlan`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SellingPlan), and custom [`Attribute`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Attribute)
+/// objects. It tracks the current price and any scheduled price changes through its [`pricingPolicy`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SubscriptionPricingPolicy).
+/// You can modify lines through [`SubscriptionDraft`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SubscriptionDraft)
+/// objects without affecting the original contract until you commit changes.
+/// Learn more about [subscription contracts](https://shopify.dev/docs/apps/build/purchase-options/subscriptions/contracts) and [selling plans](https://shopify.dev/docs/apps/build/purchase-options/subscriptions/selling-plans).
 /// </summary>
 public record SubscriptionLine : IGraphQLObject
 {

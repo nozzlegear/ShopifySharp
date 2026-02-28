@@ -26,10 +26,10 @@ public record ValidationCreateInput : GraphQLInputObject<ValidationCreateInput>
     public bool? enable { get; set; } = null;
 
     /// <summary>
-    /// The function ID representing the extension to install.
+    /// The function handle representing the extension to install.
     /// </summary>
-    [JsonPropertyName("functionId")]
-    public string? functionId { get; set; } = null;
+    [JsonPropertyName("functionHandle")]
+    public string? functionHandle { get; set; } = null;
 
     /// <summary>
     /// Additional metafields to associate to the validation.

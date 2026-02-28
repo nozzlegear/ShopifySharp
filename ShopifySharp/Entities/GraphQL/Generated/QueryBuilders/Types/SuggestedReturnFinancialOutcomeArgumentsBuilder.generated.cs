@@ -51,5 +51,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddArgument("returnLineItems", returnLineItems);
             return this;
         }
+
+        public SuggestedReturnFinancialOutcomeArgumentsBuilder TipLineId(string? tipLineId)
+        {
+            base.InnerQuery.AddArgument("tipLineId", tipLineId);
+            return this;
+        }
     }
 }

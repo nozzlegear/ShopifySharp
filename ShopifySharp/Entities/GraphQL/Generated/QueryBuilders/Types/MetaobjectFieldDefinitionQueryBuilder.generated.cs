@@ -30,6 +30,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public MetaobjectFieldDefinitionQueryBuilder Capabilities(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectFieldDefinitionCapabilitiesQueryBuilder> build)
+        {
+            var query = new Query<MetaobjectFieldDefinitionCapabilities>("capabilities");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectFieldDefinitionCapabilitiesQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetaobjectFieldDefinitionCapabilities>(query);
+            return this;
+        }
+
         public MetaobjectFieldDefinitionQueryBuilder Description()
         {
             base.InnerQuery.AddField("description");

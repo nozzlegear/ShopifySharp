@@ -9,7 +9,13 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A return line item.
+/// An item that a customer returns from a fulfilled order. Links to the original [`FulfillmentLineItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/FulfillmentLineItem)
+/// and tracks quantities through the return process.
+/// The line item includes the customer's reason for returning the item and any
+/// additional notes. It also tracks processing status with separate quantities for
+/// items that are processable, processed, refundable, and refunded. You can apply
+/// optional restocking fees to cover handling costs.
+/// Learn more about [creating a return](https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnCreate).
 /// </summary>
 public record ReturnLineItem : IGraphQLObject, INode, IReturnLineItemType
 {
@@ -71,7 +77,14 @@ public record ReturnLineItem : IGraphQLObject, INode, IReturnLineItemType
     /// The reason for returning the item.
     /// </summary>
     [JsonPropertyName("returnReason")]
+    [Obsolete("Use `returnReasonDefinition` instead. This field will be removed in the future.")]
     public ReturnReason? returnReason { get; set; } = null;
+
+    /// <summary>
+    /// The standardized reason for why the item is being returned.
+    /// </summary>
+    [JsonPropertyName("returnReasonDefinition")]
+    public ReturnReasonDefinition? returnReasonDefinition { get; set; } = null;
 
     /// <summary>
     /// Additional information about the reason for the return. Maximum length: 255 characters.

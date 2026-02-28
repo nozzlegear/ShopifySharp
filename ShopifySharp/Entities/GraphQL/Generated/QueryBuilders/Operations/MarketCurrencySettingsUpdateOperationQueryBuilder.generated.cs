@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("This will be removed in a future version. Use `marketCreate` and `marketUpdate` for creating and updating market currency settings, respectively. ")]
     public sealed class MarketCurrencySettingsUpdateOperationQueryBuilder : FieldsQueryBuilderBase<MarketCurrencySettingsUpdatePayload, MarketCurrencySettingsUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketCurrencySettingsUpdatePayload>, IHasArguments<MarketCurrencySettingsUpdateArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;

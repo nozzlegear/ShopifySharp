@@ -119,6 +119,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public WebhookSubscriptionOperationQueryBuilder Uri()
+        {
+            base.InnerQuery.AddField("uri");
+            return this;
+        }
+
         [Obsolete("Use `uri` instead.")]
         public WebhookSubscriptionOperationQueryBuilder Endpoint(Action<WebhookSubscriptionEndpointUnionCasesBuilder> build)
         {

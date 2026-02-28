@@ -23,4 +23,5 @@ public enum FulfillmentEventStatus
     DELAYED,
     DELIVERED,
     FAILURE,
+    CARRIER_PICKED_UP,
 }

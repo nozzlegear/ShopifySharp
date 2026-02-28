@@ -26,7 +26,9 @@ public record CatalogCreateInput : GraphQLInputObject<CatalogCreateInput>
     public string? priceListId { get; set; } = null;
 
     /// <summary>
-    /// The ID of the publication to associate to the catalog.
+    /// The ID of the publication to associate to the catalog. Only include this if
+    /// you need to control which products are visible in the catalog. When omitted,
+    /// product availability is determined by the sales channel.
     /// </summary>
     [JsonPropertyName("publicationId")]
     public string? publicationId { get; set; } = null;

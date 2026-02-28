@@ -51,6 +51,7 @@ public record ProductSetInput : GraphQLInputObject<ProductSetInput>
 
     /// <summary>
     /// The files to associate with the product.
+    /// Complexity cost: 1.9 per file.
     /// </summary>
     [JsonPropertyName("files")]
     public ICollection<FileSetInput>? files { get; set; } = null;
@@ -81,6 +82,7 @@ public record ProductSetInput : GraphQLInputObject<ProductSetInput>
 
     /// <summary>
     /// The metafields to associate with this product.
+    /// Complexity cost: 0.4 per metafield.
     /// </summary>
     [JsonPropertyName("metafields")]
     public ICollection<MetafieldInput>? metafields { get; set; } = null;
@@ -157,6 +159,7 @@ public record ProductSetInput : GraphQLInputObject<ProductSetInput>
 
     /// <summary>
     /// A list of variants associated with the product.
+    /// Complexity cost: 0.2 per variant.
     /// </summary>
     [JsonPropertyName("variants")]
     public ICollection<ProductVariantSetInput>? variants { get; set; } = null;

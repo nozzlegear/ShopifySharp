@@ -49,6 +49,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public DisputeOperationQueryBuilder DisputeEvidence(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder> build)
+        {
+            var query = new Query<ShopifyPaymentsDisputeEvidence>("disputeEvidence");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDisputeEvidenceQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ShopifyPaymentsDisputeEvidence>(query);
+            return this;
+        }
+
         public DisputeOperationQueryBuilder EvidenceDueBy()
         {
             base.InnerQuery.AddField("evidenceDueBy");

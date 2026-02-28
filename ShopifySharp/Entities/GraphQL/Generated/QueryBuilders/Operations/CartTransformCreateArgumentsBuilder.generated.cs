@@ -28,9 +28,9 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public CartTransformCreateArgumentsBuilder FunctionId(string? functionId)
+        public CartTransformCreateArgumentsBuilder FunctionHandle(string? functionHandle)
         {
-            base.InnerQuery.AddArgument("functionId", functionId);
+            base.InnerQuery.AddArgument("functionHandle", functionHandle);
             return this;
         }
 

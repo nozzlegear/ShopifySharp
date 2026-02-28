@@ -85,4 +85,10 @@ public record ShopifyPaymentsPayoutSummary : IGraphQLObject
     /// </summary>
     [JsonPropertyName("retriedPayoutsGross")]
     public MoneyV2? retriedPayoutsGross { get; set; } = null;
+
+    /// <summary>
+    /// Total amount for all usdc rebate credit balance adjustments.
+    /// </summary>
+    [JsonPropertyName("usdcRebateCreditAmount")]
+    public MoneyV2? usdcRebateCreditAmount { get; set; } = null;
 }

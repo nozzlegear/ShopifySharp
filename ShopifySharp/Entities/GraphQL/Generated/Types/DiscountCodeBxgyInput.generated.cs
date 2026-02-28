@@ -12,6 +12,13 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// The input fields for creating or updating a
 /// [buy X get Y discount (BXGY)](https://help.shopify.com/manual/discounts/discount-types/buy-x-get-y)
 /// that's applied on a cart and at checkout when a customer enters a code.
+/// When creating, required fields are:
+///   - `code`
+///   - `context` (or deprecated `customerSelection`)
+///   - `customerBuys`
+///   - `customerGets`
+///   - `startsAt`
+///   - `title`
 /// </summary>
 public record DiscountCodeBxgyInput : GraphQLInputObject<DiscountCodeBxgyInput>
 {
@@ -35,6 +42,13 @@ public record DiscountCodeBxgyInput : GraphQLInputObject<DiscountCodeBxgyInput>
     /// </summary>
     [JsonPropertyName("combinesWith")]
     public DiscountCombinesWithInput? combinesWith { get; set; } = null;
+
+    /// <summary>
+    /// The context defining which buyers can use the discount.
+    /// You can target specific customer IDs, customer segments, or make the discount available to all buyers.
+    /// </summary>
+    [JsonPropertyName("context")]
+    public DiscountContextInput? context { get; set; } = null;
 
     /// <summary>
     /// The items eligible for the discount and the required quantity of each to receive the discount.
@@ -68,8 +82,8 @@ public record DiscountCodeBxgyInput : GraphQLInputObject<DiscountCodeBxgyInput>
     public string? title { get; set; } = null;
 
     /// <summary>
-    /// The maximum number of times that a customer can use the discount.
-    /// For discounts with unlimited usage, specify `null`.
+    /// The maximum number of times the discount can be redeemed.
+    /// For unlimited usage, specify `null`.
     /// </summary>
     [JsonPropertyName("usageLimit")]
     public int? usageLimit { get; set; } = null;

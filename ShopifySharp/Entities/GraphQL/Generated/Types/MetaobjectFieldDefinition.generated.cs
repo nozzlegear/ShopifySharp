@@ -15,6 +15,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MetaobjectFieldDefinition : IGraphQLObject
 {
     /// <summary>
+    /// Capabilities available for this metaobject field definition.
+    /// </summary>
+    [JsonPropertyName("capabilities")]
+    public MetaobjectFieldDefinitionCapabilities? capabilities { get; set; } = null;
+
+    /// <summary>
     /// The administrative description.
     /// </summary>
     [JsonPropertyName("description")]

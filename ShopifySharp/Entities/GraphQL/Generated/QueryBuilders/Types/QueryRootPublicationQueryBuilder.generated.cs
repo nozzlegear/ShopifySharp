@@ -98,6 +98,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootPublicationQueryBuilder IncludedProductsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
+        {
+            var query = new Query<Count>("includedProductsCount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
         [Obsolete("Use [Catalog.title](https://shopify.dev/api/admin-graphql/unstable/interfaces/Catalog#field-catalog-title) instead.")]
         public QueryRootPublicationQueryBuilder Name()
         {

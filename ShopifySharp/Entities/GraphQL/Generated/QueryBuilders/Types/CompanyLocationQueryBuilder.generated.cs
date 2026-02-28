@@ -256,6 +256,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public CompanyLocationQueryBuilder StoreCreditAccounts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountConnectionQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditAccountConnection>("storeCreditAccounts");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StoreCreditAccountConnection>(query);
+            return this;
+        }
+
         [Obsolete("Use `taxSettings` instead.")]
         public CompanyLocationQueryBuilder TaxExemptions()
         {

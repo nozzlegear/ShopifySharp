@@ -183,5 +183,14 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<ProductVariant>(query);
             return this;
         }
+
+        public InventoryItemOperationQueryBuilder Variants(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
+        {
+            var query = new Query<ProductVariantConnection>("variants");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ProductVariantConnection>(query);
+            return this;
+        }
     }
 }

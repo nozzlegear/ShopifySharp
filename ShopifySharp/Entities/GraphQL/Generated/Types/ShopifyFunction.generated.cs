@@ -50,6 +50,12 @@ public record ShopifyFunction : IGraphQLObject
     public string? description { get; set; } = null;
 
     /// <summary>
+    /// The handle of the Shopify Function.
+    /// </summary>
+    [JsonPropertyName("handle")]
+    public string? handle { get; set; } = null;
+
+    /// <summary>
     /// The ID of the Shopify Function.
     /// </summary>
     [JsonPropertyName("id")]

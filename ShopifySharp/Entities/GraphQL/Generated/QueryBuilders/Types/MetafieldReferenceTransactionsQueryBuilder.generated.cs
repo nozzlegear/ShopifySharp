@@ -75,6 +75,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use `paymentId` instead.")]
         public MetafieldReferenceTransactionsQueryBuilder AuthorizationCode()
         {
             base.InnerQuery.AddField("authorizationCode");

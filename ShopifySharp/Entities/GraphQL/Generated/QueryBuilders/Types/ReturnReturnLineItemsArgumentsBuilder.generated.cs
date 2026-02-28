@@ -46,6 +46,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ReturnReturnLineItemsArgumentsBuilder ProcessingStatus(ReturnProcessingStatusFilterInput? processingStatus)
+        {
+            base.InnerQuery.AddArgument("processingStatus", processingStatus);
+            return this;
+        }
+
         public ReturnReturnLineItemsArgumentsBuilder Reverse(bool? reverse)
         {
             base.InnerQuery.AddArgument("reverse", reverse);

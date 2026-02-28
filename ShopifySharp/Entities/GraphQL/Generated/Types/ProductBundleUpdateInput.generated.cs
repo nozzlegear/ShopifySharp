@@ -21,6 +21,12 @@ public record ProductBundleUpdateInput : GraphQLInputObject<ProductBundleUpdateI
     public ICollection<ProductBundleComponentInput>? components { get; set; } = null;
 
     /// <summary>
+    /// The consolidated options of the componentized product to update, if provided.
+    /// </summary>
+    [JsonPropertyName("consolidatedOptions")]
+    public ICollection<ProductBundleConsolidatedOptionInput>? consolidatedOptions { get; set; } = null;
+
+    /// <summary>
     /// The ID of the componentized product to update.
     /// </summary>
     [JsonPropertyName("productId")]

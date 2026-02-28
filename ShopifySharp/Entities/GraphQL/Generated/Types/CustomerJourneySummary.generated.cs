@@ -9,7 +9,14 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents a customer's visiting activities on a shop's online store.
+/// A [`CustomerJourney`](https://shopify.dev/docs/api/admin-graphql/latest/objects/CustomerJourney) through the online store leading up to an
+/// [`Order`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order).
+/// Tracks session data, attribution sources, and the timeline from first visit to
+/// purchase conversion.
+/// The summary includes the customer's position in their order history, days
+/// between first visit and order creation, and details about their first and last
+/// sessions. Use the [`moments`](https://shopify.dev/docs/api/admin-graphql/latest/objects/CustomerJourneySummary#field-moments)
+/// connection to access the complete timeline of customer interactions before the purchase.
 /// </summary>
 public record CustomerJourneySummary : IGraphQLObject
 {

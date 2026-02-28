@@ -9,7 +9,15 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents the intention to move inventory between locations.
+/// Tracks the movement of [`InventoryItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem)
+/// objects between
+/// [`Location`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Location)
+/// objects. A transfer includes origin and destination information, [`InventoryTransferLineItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryTransferLineItem)
+/// objects with quantities, and shipment details.
+/// Transfers progress through multiple [`statuses`](https://shopify.dev/docs/api/admin-graphql/latest/enums/InventoryTransferStatus).
+/// The transfer maintains [`LocationSnapshot`](https://shopify.dev/docs/api/admin-graphql/latest/objects/LocationSnapshot)
+/// objects of location details to preserve historical data even if locations change
+/// or are deleted later.
 /// </summary>
 public record InventoryTransfer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INode
 {

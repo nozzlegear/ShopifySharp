@@ -52,6 +52,13 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     public DiscountCombinesWithInput? combinesWith { get; set; } = null;
 
     /// <summary>
+    /// The context defining which buyers can use the discount.
+    /// You can target specific customer IDs, customer segments, or make the discount available to all buyers.
+    /// </summary>
+    [JsonPropertyName("context")]
+    public DiscountContextInput? context { get; set; } = null;
+
+    /// <summary>
     /// Determines which discount effects the discount can apply.
     /// </summary>
     [JsonPropertyName("discountClasses")]
@@ -65,11 +72,10 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     public DateTimeOffset? endsAt { get; set; } = null;
 
     /// <summary>
-    /// The [function ID](https://shopify.dev/docs/apps/build/functions/input-output/metafields-for-input-queries) associated with the app extension that's providing the [discount
-    /// type](https://help.shopify.com/manual/discounts/discount-types).
+    /// The handle of the function providing the discount.
     /// </summary>
-    [JsonPropertyName("functionId")]
-    public string? functionId { get; set; } = null;
+    [JsonPropertyName("functionHandle")]
+    public string? functionHandle { get; set; } = null;
 
     /// <summary>
     /// Additional metafields to associate to the discount.
@@ -101,8 +107,8 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     public string? title { get; set; } = null;
 
     /// <summary>
-    /// The maximum number of times that a customer can use the discount.
-    /// For discounts with unlimited usage, specify `null`.
+    /// The maximum number of times the discount can be redeemed.
+    /// For unlimited usage, specify `null`.
     /// </summary>
     [JsonPropertyName("usageLimit")]
     public int? usageLimit { get; set; } = null;

@@ -39,6 +39,14 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode, IPublishable
 {
     /// <summary>
+    /// Collection duplicate operations involving this collection, either as a source
+    /// (copying products from this collection to another) or a target (copying
+    /// products to this collection from another).
+    /// </summary>
+    [JsonPropertyName("activeOperations")]
+    public CollectionOperations? activeOperations { get; set; } = null;
+
+    /// <summary>
     /// The number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
     /// that a resource is published to, without
@@ -184,6 +192,7 @@ public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMe
     /// For example, the resource might be published to the app's online store channel.
     /// </summary>
     [JsonPropertyName("publishedOnCurrentPublication")]
+    [Obsolete("Use `publishedOnPublication` instead.")]
     public bool? publishedOnCurrentPublication { get; set; } = null;
 
     /// <summary>

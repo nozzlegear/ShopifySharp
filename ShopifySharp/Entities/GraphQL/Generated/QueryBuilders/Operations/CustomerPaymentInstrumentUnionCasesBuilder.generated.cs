@@ -26,6 +26,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
+        public CustomerPaymentInstrumentUnionCasesBuilder OnBankAccount(Action<BankAccountQueryBuilder> build)
+        {
+            var query = new Query<BankAccount>("... on BankAccount");
+            var queryBuilder = new BankAccountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField(query);
+            return this;
+        }
+
         public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerCreditCard(Action<CustomerCreditCardQueryBuilder> build)
         {
             var query = new Query<CustomerCreditCard>("... on CustomerCreditCard");

@@ -44,6 +44,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootMetaobjectQueryBuilder CreatedAt()
+        {
+            base.InnerQuery.AddField("createdAt");
+            return this;
+        }
+
         public QueryRootMetaobjectQueryBuilder CreatedBy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("createdBy");

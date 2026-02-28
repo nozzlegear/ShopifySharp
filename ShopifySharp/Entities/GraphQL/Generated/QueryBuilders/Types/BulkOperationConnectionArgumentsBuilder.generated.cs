@@ -14,51 +14,51 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Types
 {
-    public sealed class ShopDraftOrdersArgumentsBuilder : ArgumentsBuilderBase<DraftOrderConnection?, ShopDraftOrdersArgumentsBuilder>
+    public sealed class BulkOperationConnectionArgumentsBuilder : ArgumentsBuilderBase<BulkOperationConnection, BulkOperationConnectionArgumentsBuilder>
     {
-        protected override ShopDraftOrdersArgumentsBuilder Self => this;
+        protected override BulkOperationConnectionArgumentsBuilder Self => this;
 
-        public ShopDraftOrdersArgumentsBuilder(IQuery<DraftOrderConnection?> query) : base(query)
+        public BulkOperationConnectionArgumentsBuilder(IQuery<BulkOperationConnection> query) : base(query)
         {
         }
 
-        public ShopDraftOrdersArgumentsBuilder After(string? after)
+        public BulkOperationConnectionArgumentsBuilder After(string? after)
         {
             base.InnerQuery.AddArgument("after", after);
             return this;
         }
 
-        public ShopDraftOrdersArgumentsBuilder Before(string? before)
+        public BulkOperationConnectionArgumentsBuilder Before(string? before)
         {
             base.InnerQuery.AddArgument("before", before);
             return this;
         }
 
-        public ShopDraftOrdersArgumentsBuilder First(int? first)
+        public BulkOperationConnectionArgumentsBuilder First(int? first)
         {
             base.InnerQuery.AddArgument("first", first);
             return this;
         }
 
-        public ShopDraftOrdersArgumentsBuilder Last(int? last)
+        public BulkOperationConnectionArgumentsBuilder Last(int? last)
         {
             base.InnerQuery.AddArgument("last", last);
             return this;
         }
 
-        public ShopDraftOrdersArgumentsBuilder Query(string? query)
+        public BulkOperationConnectionArgumentsBuilder Query(string? query)
         {
             base.InnerQuery.AddArgument("query", query);
             return this;
         }
 
-        public ShopDraftOrdersArgumentsBuilder Reverse(bool? reverse)
+        public BulkOperationConnectionArgumentsBuilder Reverse(bool? reverse)
         {
             base.InnerQuery.AddArgument("reverse", reverse);
             return this;
         }
 
-        public ShopDraftOrdersArgumentsBuilder SortKey(DraftOrderSortKeys? sortKey)
+        public BulkOperationConnectionArgumentsBuilder SortKey(BulkOperationsSortKeys? sortKey)
         {
             base.InnerQuery.AddArgument("sortKey", sortKey);
             return this;

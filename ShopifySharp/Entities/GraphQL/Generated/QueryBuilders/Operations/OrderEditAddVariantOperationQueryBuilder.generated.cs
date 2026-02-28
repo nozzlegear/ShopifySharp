@@ -58,6 +58,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public OrderEditAddVariantOperationQueryBuilder OrderEditSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder> build)
+        {
+            var query = new Query<OrderEditSession>("orderEditSession");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditSessionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderEditSession>(query);
+            return this;
+        }
+
         public OrderEditAddVariantOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
             var query = new Query<UserError>("userErrors");

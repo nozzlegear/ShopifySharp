@@ -20,6 +20,12 @@ public record ProductBundleCreateInput : GraphQLInputObject<ProductBundleCreateI
     public ICollection<ProductBundleComponentInput>? components { get; set; } = null;
 
     /// <summary>
+    /// The consolidated options of the componentized product to create, if provided.
+    /// </summary>
+    [JsonPropertyName("consolidatedOptions")]
+    public ICollection<ProductBundleConsolidatedOptionInput>? consolidatedOptions { get; set; } = null;
+
+    /// <summary>
     /// The title of the product to create.
     /// </summary>
     [JsonPropertyName("title")]

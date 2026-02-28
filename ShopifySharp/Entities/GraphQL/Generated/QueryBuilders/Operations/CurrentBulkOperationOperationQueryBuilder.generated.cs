@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `bulkOperations` with status filter instead.")]
     public sealed class CurrentBulkOperationOperationQueryBuilder : FieldsQueryBuilderBase<BulkOperation, CurrentBulkOperationOperationQueryBuilder>, IGraphOperationQueryBuilder<BulkOperation>, IHasArguments<CurrentBulkOperationArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;

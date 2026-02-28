@@ -9,9 +9,13 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A record of an execution of the subscription billing process. Billing attempts use
-/// idempotency keys to avoid duplicate order creation. A successful billing attempt
-/// will create an order.
+/// A record of an execution of the subscription billing process. Billing attempts
+/// use idempotency keys to avoid duplicate order creation.
+/// When a billing attempt completes successfully, it creates an
+/// [`Order`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order). The
+/// attempt includes associated payment transactions and any errors that occur
+/// during billing. If 3D Secure authentication is required, the `nextActionUrl`
+/// field provides the redirect URL for customer verification.
 /// </summary>
 public record SubscriptionBillingAttempt : IGraphQLObject, INode
 {
@@ -31,14 +35,14 @@ public record SubscriptionBillingAttempt : IGraphQLObject, INode
     /// A code corresponding to a payment error during processing.
     /// </summary>
     [JsonPropertyName("errorCode")]
-    [Obsolete("Use `processingError.code` instead to get the errorCode")]
+    [Obsolete("Use `state` instead.")]
     public SubscriptionBillingAttemptErrorCode? errorCode { get; set; } = null;
 
     /// <summary>
     /// A message describing a payment error during processing.
     /// </summary>
     [JsonPropertyName("errorMessage")]
-    [Obsolete("Use `processingError.message` instead to get the errorMessage")]
+    [Obsolete("Use `state` instead.")]
     public string? errorMessage { get; set; } = null;
 
     /// <summary>
@@ -57,12 +61,14 @@ public record SubscriptionBillingAttempt : IGraphQLObject, INode
     /// The URL where the customer needs to be redirected so they can complete the 3D Secure payment flow.
     /// </summary>
     [JsonPropertyName("nextActionUrl")]
+    [Obsolete("Use `state` instead.")]
     public string? nextActionUrl { get; set; } = null;
 
     /// <summary>
     /// The result of this billing attempt if completed successfully.
     /// </summary>
     [JsonPropertyName("order")]
+    [Obsolete("Use `state` instead.")]
     public Order? order { get; set; } = null;
 
     /// <summary>
@@ -89,12 +95,14 @@ public record SubscriptionBillingAttempt : IGraphQLObject, INode
     /// Error information from processing the billing attempt.
     /// </summary>
     [JsonPropertyName("processingError")]
+    [Obsolete("Use `state` instead.")]
     public ISubscriptionBillingAttemptProcessingError? processingError { get; set; } = null;
 
     /// <summary>
     /// Whether the billing attempt is still processing.
     /// </summary>
     [JsonPropertyName("ready")]
+    [Obsolete("Use `state` instead.")]
     public bool? ready { get; set; } = null;
 
     /// <summary>

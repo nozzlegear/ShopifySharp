@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Scheduled changes will be phased out in a future version.")]
     public sealed class InventorySetScheduledChangesOperationQueryBuilder : FieldsQueryBuilderBase<InventorySetScheduledChangesPayload, InventorySetScheduledChangesOperationQueryBuilder>, IGraphOperationQueryBuilder<InventorySetScheduledChangesPayload>, IHasArguments<InventorySetScheduledChangesArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;

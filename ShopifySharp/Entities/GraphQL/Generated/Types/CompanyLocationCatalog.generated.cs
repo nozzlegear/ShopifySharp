@@ -10,6 +10,9 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// A list of products with publishing and pricing information associated with company locations.
+/// Company location catalogs can include an optional publication to control product
+/// visibility and a price list to customize pricing. When a publication isn't
+/// associated with the catalog, product availability is determined by the sales channel.
 /// </summary>
 public record CompanyLocationCatalog : IGraphQLObject, ICatalog, INode
 {

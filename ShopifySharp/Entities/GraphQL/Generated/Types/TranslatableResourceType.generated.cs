@@ -14,12 +14,15 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public enum TranslatableResourceType
 {
     ARTICLE,
+    ARTICLE_IMAGE,
     BLOG,
     COLLECTION,
+    COLLECTION_IMAGE,
     DELIVERY_METHOD_DEFINITION,
     EMAIL_TEMPLATE,
     FILTER,
     LINK,
+    MEDIA_IMAGE,
     MENU,
     METAFIELD,
     METAOBJECT,

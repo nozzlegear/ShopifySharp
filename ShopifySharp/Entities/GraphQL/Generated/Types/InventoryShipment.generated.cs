@@ -14,6 +14,24 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryShipment : IGraphQLObject, INode
 {
     /// <summary>
+    /// The date the shipment was created in UTC.
+    /// </summary>
+    [JsonPropertyName("dateCreated")]
+    public DateTimeOffset? dateCreated { get; set; } = null;
+
+    /// <summary>
+    /// The date the shipment was initially received in UTC.
+    /// </summary>
+    [JsonPropertyName("dateReceived")]
+    public DateTimeOffset? dateReceived { get; set; } = null;
+
+    /// <summary>
+    /// The date the shipment was shipped in UTC.
+    /// </summary>
+    [JsonPropertyName("dateShipped")]
+    public DateTimeOffset? dateShipped { get; set; } = null;
+
+    /// <summary>
     /// A globally-unique ID.
     /// </summary>
     [JsonPropertyName("id")]

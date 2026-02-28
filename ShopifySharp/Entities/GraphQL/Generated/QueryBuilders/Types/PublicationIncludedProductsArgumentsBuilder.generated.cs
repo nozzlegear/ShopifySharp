@@ -46,9 +46,27 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public PublicationIncludedProductsArgumentsBuilder Query(string? query)
+        {
+            base.InnerQuery.AddArgument("query", query);
+            return this;
+        }
+
         public PublicationIncludedProductsArgumentsBuilder Reverse(bool? reverse)
         {
             base.InnerQuery.AddArgument("reverse", reverse);
+            return this;
+        }
+
+        public PublicationIncludedProductsArgumentsBuilder SavedSearchId(string? savedSearchId)
+        {
+            base.InnerQuery.AddArgument("savedSearchId", savedSearchId);
+            return this;
+        }
+
+        public PublicationIncludedProductsArgumentsBuilder SortKey(ProductSortKeys? sortKey)
+        {
+            base.InnerQuery.AddArgument("sortKey", sortKey);
             return this;
         }
     }

@@ -14,7 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record DepositInput : GraphQLInputObject<DepositInput>
 {
     /// <summary>
-    /// The percentage of the order total that should be paid as a deposit.
+    /// The percentage of the order total that should be paid as a deposit. Must be between 1 and 99, inclusive.
     /// </summary>
     [JsonPropertyName("percentage")]
     public decimal? percentage { get; set; } = null;

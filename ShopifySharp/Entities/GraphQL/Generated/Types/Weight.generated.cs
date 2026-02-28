@@ -9,7 +9,11 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A weight, which includes a numeric value and a unit of measurement.
+/// A weight measurement with its numeric value and unit. Used throughout the API,
+/// for example in shipping calculations, delivery conditions, order line items, and
+/// inventory measurements.
+/// The weight combines a decimal value with a standard unit of measurement to
+/// ensure consistent weight handling across different regional systems.
 /// </summary>
 public record Weight : IGraphQLUnionCase, IGraphQLObject
 {

@@ -58,6 +58,7 @@ public interface IPublishable : IGraphQLObject
     /// For example, the resource might be published to the app's online store channel.
     /// </summary>
     [JsonPropertyName("publishedOnCurrentPublication")]
+    [Obsolete("Use `publishedOnPublication` instead.")]
     public bool? publishedOnCurrentPublication { get; set; }
 
     /// <summary>

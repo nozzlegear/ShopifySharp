@@ -9,12 +9,20 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A location or branch of a [company that's a
-/// customer](https://shopify.dev/api/admin-graphql/latest/objects/company) of the
-/// shop. Configuration of B2B relationship, for example prices lists and checkout
-/// settings, may be done for a location.
+/// A location or branch of a
+/// [`Company`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Company)
+/// that's a customer of the shop. Company locations enable B2B customers to manage
+/// multiple branches with distinct billing and shipping addresses, tax settings,
+/// and checkout configurations.
+/// Each location can have its own [`Catalog`](https://shopify.dev/docs/api/admin-graphql/latest/interfaces/Catalog)
+/// objects that determine which products are published and their pricing. The [`BuyerExperienceConfiguration`](https://shopify.dev/docs/api/admin-graphql/latest/objects/BuyerExperienceConfiguration)
+/// determines checkout behavior including [`PaymentTerms`](https://shopify.dev/docs/api/admin-graphql/latest/objects/PaymentTerms),
+/// and whether orders require merchant review. B2B customers select which location
+/// they're purchasing for, which determines the applicable catalogs, pricing, [`TaxExemption`](https://shopify.dev/docs/api/admin-graphql/latest/enums/TaxExemption)
+/// values, and checkout settings for their
+/// [`Order`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order) objects.
 /// </summary>
-public record CompanyLocation : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, INavigable, INode
+public record CompanyLocation : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasStoreCreditAccounts, INavigable, INode
 {
     /// <summary>
     /// The address used as billing address for the location.
@@ -193,6 +201,13 @@ public record CompanyLocation : IGraphQLUnionCase, IGraphQLObject, ICommentEvent
     /// </summary>
     [JsonPropertyName("staffMemberAssignments")]
     public CompanyLocationStaffMemberAssignmentConnection? staffMemberAssignments { get; set; } = null;
+
+    /// <summary>
+    /// Returns a list of store credit accounts that belong to the owner resource.
+    /// A store credit account owner can hold multiple accounts each with a different currency.
+    /// </summary>
+    [JsonPropertyName("storeCreditAccounts")]
+    public StoreCreditAccountConnection? storeCreditAccounts { get; set; } = null;
 
     /// <summary>
     /// The list of tax exemptions applied to the location.

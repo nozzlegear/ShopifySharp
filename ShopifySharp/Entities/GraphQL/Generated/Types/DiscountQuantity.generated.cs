@@ -9,9 +9,14 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A quantity of items in the context of a discount. This object can be used to
-/// define the minimum quantity of items required to apply a discount.
-/// Alternatively, it can be used to define the quantity of items that can be discounted.
+/// Defines a quantity threshold for discount eligibility or application. This
+/// simple object specifies the number of items required to trigger or calculate
+/// discount benefits.
+/// For example, a "Buy 3, Get 1 Free" promotion would use DiscountQuantity to
+/// define the minimum purchase quantity of 3 items, or a bulk discount might
+/// specify quantity tiers like 10+ items for wholesale pricing.
+/// The quantity value determines how discounts interact with cart contents, whether
+/// setting minimum purchase requirements or defining quantity-based discount calculations.
 /// </summary>
 public record DiscountQuantity : IGraphQLUnionCase, IGraphQLObject
 {

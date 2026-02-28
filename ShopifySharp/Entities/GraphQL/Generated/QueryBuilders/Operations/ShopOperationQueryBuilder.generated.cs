@@ -227,15 +227,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public ShopOperationQueryBuilder DraftOrders(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderConnectionQueryBuilder> build)
-        {
-            var query = new Query<DraftOrderConnection>("draftOrders");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderConnectionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<DraftOrderConnection>(query);
-            return this;
-        }
-
         public ShopOperationQueryBuilder DraftOrderTags(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StringConnectionQueryBuilder> build)
         {
             var query = new Query<StringConnection>("draftOrderTags");
@@ -555,6 +546,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ShopOperationQueryBuilder ShipsToCountries()
         {
             base.InnerQuery.AddField("shipsToCountries");
+            return this;
+        }
+
+        public ShopOperationQueryBuilder ShopAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopAddressQueryBuilder> build)
+        {
+            var query = new Query<ShopAddress>("shopAddress");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopAddressQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ShopAddress>(query);
             return this;
         }
 

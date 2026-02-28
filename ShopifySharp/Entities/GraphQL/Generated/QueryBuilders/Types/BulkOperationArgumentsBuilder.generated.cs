@@ -22,6 +22,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public BulkOperationArgumentsBuilder Id(string? id)
+        {
+            base.InnerQuery.AddArgument("id", id);
+            return this;
+        }
+
         public BulkOperationArgumentsBuilder Type(BulkOperationType? type)
         {
             base.InnerQuery.AddArgument("type", type);

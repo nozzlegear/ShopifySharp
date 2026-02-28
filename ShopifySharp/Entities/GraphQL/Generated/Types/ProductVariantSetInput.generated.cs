@@ -27,6 +27,7 @@ public record ProductVariantSetInput : GraphQLInputObject<ProductVariantSetInput
 
     /// <summary>
     /// The file to associate with the variant.
+    /// Complexity cost: 0.6 per variant file.
     /// Any file specified here must also be specified in the `files` input for the product.
     /// </summary>
     [JsonPropertyName("file")]
@@ -54,12 +55,14 @@ public record ProductVariantSetInput : GraphQLInputObject<ProductVariantSetInput
     /// The inventory quantities at each location where the variant is stocked.
     /// If you're updating an existing variant, then you can only update the
     /// quantities at locations where the variant is already stocked.
+    /// The total number of inventory quantities across all variants in the mutation can't exceed 50000.
     /// </summary>
     [JsonPropertyName("inventoryQuantities")]
     public ICollection<ProductSetInventoryInput>? inventoryQuantities { get; set; } = null;
 
     /// <summary>
     /// Additional customizable information about the product variant.
+    /// Complexity cost: 0.4 per variant metafield.
     /// </summary>
     [JsonPropertyName("metafields")]
     public ICollection<MetafieldInput>? metafields { get; set; } = null;

@@ -9,8 +9,16 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The permission required to access a Shopify Admin API or Storefront API resource
-/// for a shop. Merchants grant access scopes that are requested by applications.
+/// A permission that controls access to [GraphQL Admin API](https://shopify.dev/docs/api/usage/access-scopes#authenticated-access-scopes) or [Storefront API](https://shopify.dev/docs/api/usage/access-scopes#unauthenticated-access-scopes)
+/// types. Each scope defines what data an
+/// [`App`](https://shopify.dev/docs/api/admin-graphql/latest/objects/App) can read
+/// or write, following the format `{action}_{resource}` where action is typically
+/// "read" or "write".
+/// Apps declare required and optional access scopes in their configuration. During
+/// installation, merchants review and grant these permissions, determining what
+/// shop data the app can access. The granted scopes remain active until the
+/// merchant uninstalls the app or revokes them. Apps can programmatically revoke
+/// their own dynamically granted optional scopes using [`appRevokeAccessScopes`](https://shopify.dev/docs/api/admin-graphql/latest/mutations/appRevokeAccessScopes).
 /// </summary>
 public record AccessScope : IGraphQLObject
 {

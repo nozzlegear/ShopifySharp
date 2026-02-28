@@ -20,6 +20,12 @@ public record OrderEditBeginPayload : IGraphQLObject
     public CalculatedOrder? calculatedOrder { get; set; } = null;
 
     /// <summary>
+    /// The order edit session that was created.
+    /// </summary>
+    [JsonPropertyName("orderEditSession")]
+    public OrderEditSession? orderEditSession { get; set; } = null;
+
+    /// <summary>
     /// The list of errors that occurred from executing the mutation.
     /// </summary>
     [JsonPropertyName("userErrors")]

@@ -9,8 +9,9 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The quantities of an inventory item that are related to a specific location.
-/// Learn [more about the relationships between inventory objects](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#inventory-object-relationships).
+/// The quantities of an inventory item at a specific location. Each inventory level connects one [`InventoryItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem) to one [`Location`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Location),
+/// tracking multiple quantity states like available, on-hand, incoming, and committed.
+/// The [`quantities`](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel#field-InventoryLevel.fields.quantities) field provides access to different inventory states. Learn [more about inventory states and relationships](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#inventory-object-relationships).
 /// </summary>
 public record InventoryLevel : IGraphQLObject, INode
 {
@@ -51,7 +52,8 @@ public record InventoryLevel : IGraphQLObject, INode
     public Location? location { get; set; } = null;
 
     /// <summary>
-    /// Quantities for the requested names.
+    /// The quantity of an inventory item at a specific location, for a quantity
+    /// [name](https://shopify.dev/docs/apps/fulfillment/inventory-management-apps#inventory-states).
     /// </summary>
     [JsonPropertyName("quantities")]
     public ICollection<InventoryQuantity>? quantities { get; set; } = null;

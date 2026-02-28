@@ -53,6 +53,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
         public QueryRootDeliveryProfileQueryBuilder LegacyMode()
         {
             base.InnerQuery.AddField("legacyMode");
@@ -137,6 +138,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<LocationConnection>(query);
+            return this;
+        }
+
+        public QueryRootDeliveryProfileQueryBuilder Version()
+        {
+            base.InnerQuery.AddField("version");
             return this;
         }
 

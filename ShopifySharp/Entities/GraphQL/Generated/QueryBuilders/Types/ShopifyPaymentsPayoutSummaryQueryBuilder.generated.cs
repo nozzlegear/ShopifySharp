@@ -137,5 +137,14 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField<MoneyV2>(query);
             return this;
         }
+
+        public ShopifyPaymentsPayoutSummaryQueryBuilder UsdcRebateCreditAmount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
+        {
+            var query = new Query<MoneyV2>("usdcRebateCreditAmount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyV2>(query);
+            return this;
+        }
     }
 }

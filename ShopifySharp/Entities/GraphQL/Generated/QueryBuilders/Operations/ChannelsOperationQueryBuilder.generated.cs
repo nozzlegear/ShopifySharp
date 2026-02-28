@@ -14,7 +14,6 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    [Obsolete("Use `publications` instead.")]
     public sealed class ChannelsOperationQueryBuilder : FieldsQueryBuilderBase<ChannelConnection, ChannelsOperationQueryBuilder>, IGraphOperationQueryBuilder<ChannelConnection>, IHasArguments<ChannelsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;

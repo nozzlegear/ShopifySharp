@@ -12,6 +12,9 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// The input fields for creating or updating a
 /// [free shipping discount](https://help.shopify.com/manual/discounts/discount-types/free-shipping)
 /// that's automatically applied on a cart and at checkout.
+/// When creating, required fields are:
+/// - `startsAt`
+/// - `title`
 /// </summary>
 public record DiscountAutomaticFreeShippingInput : GraphQLInputObject<DiscountAutomaticFreeShippingInput>
 {
@@ -37,6 +40,14 @@ public record DiscountAutomaticFreeShippingInput : GraphQLInputObject<DiscountAu
     /// </summary>
     [JsonPropertyName("combinesWith")]
     public DiscountCombinesWithInput? combinesWith { get; set; } = null;
+
+    /// <summary>
+    /// The context defining which buyers can use the discount.
+    /// You can target specific customer IDs, customer segments, or make the discount available to all buyers.
+    /// Discounts automatically apply on Point of Sale (POS) for Pro locations when the context is not set to ALL.
+    /// </summary>
+    [JsonPropertyName("context")]
+    public DiscountContextInput? context { get; set; } = null;
 
     /// <summary>
     /// A list of destinations where the discount will apply.

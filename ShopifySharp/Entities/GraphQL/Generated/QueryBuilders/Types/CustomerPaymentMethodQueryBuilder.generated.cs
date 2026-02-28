@@ -54,6 +54,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public CustomerPaymentMethodQueryBuilder Mandates(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaymentMandateResourceConnectionQueryBuilder> build)
+        {
+            var query = new Query<PaymentMandateResourceConnection>("mandates");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PaymentMandateResourceConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PaymentMandateResourceConnection>(query);
+            return this;
+        }
+
         public CustomerPaymentMethodQueryBuilder RevokedAt()
         {
             base.InnerQuery.AddField("revokedAt");
