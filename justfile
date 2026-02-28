@@ -22,7 +22,7 @@ default:
 [script]
 _buildCliProject:
     if [ ! -d "{{cli_project}}/bin/Release" ]; then
-        dotnet build --configuration Release
+        dotnet build --configuration Release ./ShopifySharp.GraphQL.Parser.CLI/
     fi
 
 # Builds and packages the project for both prerelease and release configurations.
