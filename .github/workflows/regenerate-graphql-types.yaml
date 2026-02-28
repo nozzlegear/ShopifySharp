@@ -53,4 +53,6 @@ jobs:
       run: just regenerate-and-build "${{ env.SCHEMA_GRAPHQL_FILE }}"
 
     - name: Create pull request
-      run: just create-graphql-pr --graph-schema-file "${{ env.SCHEMA_GRAPHQL_FILE }}" --json-schema-file "${{ env.SCHEMA_JSON_FILE }}" --token "${{ secrets.GITHUB_TOKEN }}"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: just create-graphql-pr --graph-schema-file "${{ env.SCHEMA_GRAPHQL_FILE }}" --json-schema-file "${{ env.SCHEMA_JSON_FILE }}"
