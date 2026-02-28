@@ -9,9 +9,16 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A channel definition represents channels surfaces on the platform.
-/// A channel definition can be a platform or a subsegment of it such as Facebook
-/// Home, Instagram Live, Instagram Shops, or WhatsApp chat.
+/// A specific selling surface within a [sales
+/// channel](https://shopify.dev/docs/apps/build/sales-channels) platform. A channel
+/// definition identifies where products can be sold. Definitions can represent
+/// entire platforms (like Facebook or TikTok) or specific sales channels within
+/// those platforms, such as Instagram Shops, Instagram Shopping, or TikTok Live.
+/// Each definition includes the parent
+/// [`Channel`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Channel)
+/// name and subchannel name to indicate the selling surface hierarchy. The
+/// marketplace flag identifies whether this surface represents a marketplace
+/// channel such as shops on Facebook, Instagram, or Buy on Google.
 /// </summary>
 public record ChannelDefinition : IGraphQLObject, INode
 {

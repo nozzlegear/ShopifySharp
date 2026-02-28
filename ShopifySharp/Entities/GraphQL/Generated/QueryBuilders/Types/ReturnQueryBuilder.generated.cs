@@ -132,6 +132,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ReturnQueryBuilder StaffMember(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder> build)
+        {
+            var query = new Query<StaffMember>("staffMember");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StaffMemberQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StaffMember>(query);
+            return this;
+        }
+
         public ReturnQueryBuilder Status()
         {
             base.InnerQuery.AddField("status");
@@ -159,6 +168,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public ReturnQueryBuilder TotalQuantity()
         {
             base.InnerQuery.AddField("totalQuantity");
+            return this;
+        }
+
+        public ReturnQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder> build)
+        {
+            var query = new Query<OrderTransactionConnection>("transactions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderTransactionConnection>(query);
             return this;
         }
     }

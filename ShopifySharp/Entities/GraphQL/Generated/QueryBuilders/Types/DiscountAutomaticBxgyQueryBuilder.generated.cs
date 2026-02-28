@@ -146,5 +146,14 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("usesPerOrderLimit");
             return this;
         }
+
+        public DiscountAutomaticBxgyQueryBuilder Context(Action<DiscountContextUnionCasesBuilder> build)
+        {
+            var query = new Query<DiscountContext>("context");
+            var unionBuilder = new DiscountContextUnionCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
     }
 }

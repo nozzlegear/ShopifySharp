@@ -82,6 +82,12 @@ public record AbandonedCheckoutLineItem : IGraphQLObject, INode
     public MoneyBag? originalUnitPriceSet { get; set; } = null;
 
     /// <summary>
+    /// The parent relationship for this line item.
+    /// </summary>
+    [JsonPropertyName("parentRelationship")]
+    public AbandonedCheckoutLineItemParentRelationship? parentRelationship { get; set; } = null;
+
+    /// <summary>
     /// Product for this line item.
     /// NULL for custom line items and products that were deleted after checkout began.
     /// </summary>

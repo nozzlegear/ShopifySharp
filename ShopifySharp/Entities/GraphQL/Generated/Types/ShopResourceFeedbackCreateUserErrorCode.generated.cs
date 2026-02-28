@@ -18,4 +18,5 @@ public enum ShopResourceFeedbackCreateUserErrorCode
     INVALID,
     BLANK,
     PRESENT,
+    NOT_FOUND,
 }

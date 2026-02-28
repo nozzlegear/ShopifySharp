@@ -15,4 +15,5 @@ public enum BulkOperationUserErrorCode
 {
     OPERATION_IN_PROGRESS,
     INVALID,
+    LIMIT_REACHED,
 }

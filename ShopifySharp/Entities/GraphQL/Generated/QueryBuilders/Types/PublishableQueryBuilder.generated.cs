@@ -60,6 +60,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use `publishedOnPublication` instead.")]
         public PublishableQueryBuilder PublishedOnCurrentPublication()
         {
             base.InnerQuery.AddField("publishedOnCurrentPublication");

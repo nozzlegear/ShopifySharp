@@ -14,7 +14,6 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    [Obsolete("Use `publication` instead.")]
     public sealed class ChannelOperationQueryBuilder : FieldsQueryBuilderBase<Channel, ChannelOperationQueryBuilder>, IGraphOperationQueryBuilder<Channel>, IHasArguments<ChannelArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
@@ -68,7 +67,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        [Obsolete("Use `id` instead.")]
         public ChannelOperationQueryBuilder Handle()
         {
             base.InnerQuery.AddField("handle");

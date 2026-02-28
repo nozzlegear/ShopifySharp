@@ -9,7 +9,13 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents a customer's visiting activities on a shop's online store.
+/// Tracks a customer's path to purchase through their online store visits. The
+/// journey captures key moments like shop sessions that led to the order, helping
+/// merchants understand customer behavior and marketing attribution within a 30-day
+/// window. Includes the first and last sessions before an
+/// [`Order`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order), the
+/// time between initial visit and conversion, and the customer's order position in
+/// their purchase history.
 /// </summary>
 public record CustomerJourney : IGraphQLObject
 {

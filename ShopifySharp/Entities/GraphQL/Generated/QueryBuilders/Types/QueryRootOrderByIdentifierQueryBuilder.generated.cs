@@ -717,6 +717,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootOrderByIdentifierQueryBuilder ProductNetwork()
+        {
+            base.InnerQuery.AddField("productNetwork");
+            return this;
+        }
+
         public QueryRootOrderByIdentifierQueryBuilder Publication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublicationQueryBuilder> build)
         {
             var query = new Query<Publication>("publication");

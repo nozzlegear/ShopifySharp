@@ -66,6 +66,7 @@ public record OrderTransaction : IGraphQLUnionCase, IGraphQLObject, INode
     /// Authorization code associated with the transaction.
     /// </summary>
     [JsonPropertyName("authorizationCode")]
+    [Obsolete("Use `paymentId` instead.")]
     public string? authorizationCode { get; set; } = null;
 
     /// <summary>
@@ -212,7 +213,10 @@ public record OrderTransaction : IGraphQLUnionCase, IGraphQLObject, INode
 
     /// <summary>
     /// The transaction receipt that the payment gateway attaches to the transaction.
-    /// The value of this field depends on which payment gateway processed the transaction.
+    /// > **Note:** This field is **gateway-specific** and **not a stable contract**.
+    /// > Its structure and contents can vary by payment gateway and may change without notice.
+    /// > Apps **shouldn't parse or rely on this field for business logic**; prefer
+    /// typed fields on `OrderTransaction` and related objects.
     /// </summary>
     [JsonPropertyName("receiptJson")]
     public string? receiptJson { get; set; } = null;

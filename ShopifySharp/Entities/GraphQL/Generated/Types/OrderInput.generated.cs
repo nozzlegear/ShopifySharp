@@ -52,6 +52,12 @@ public record OrderInput : GraphQLInputObject<OrderInput>
     public string? note { get; set; } = null;
 
     /// <summary>
+    /// A new customer phone number for the order. Overwrites the existing phone number.
+    /// </summary>
+    [JsonPropertyName("phone")]
+    public string? phone { get; set; } = null;
+
+    /// <summary>
     /// The new purchase order number for the order.
     /// </summary>
     [JsonPropertyName("poNumber")]

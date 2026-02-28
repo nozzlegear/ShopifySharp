@@ -41,8 +41,9 @@ public record ReturnRequestLineItemInput : GraphQLInputObject<ReturnRequestLineI
     public RestockingFeeInput? restockingFee { get; set; } = null;
 
     /// <summary>
-    /// The reason why the line item is being returned.
+    /// The ID of a [`ReturnReasonDefinition`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ReturnReasonDefinition). Accepts any ID from the full library of reasons available via [`returnReasonDefinitions`](https://shopify.dev/docs/api/admin-graphql/latest/queries/returnReasonDefinitions),
+    /// not limited to the suggested reasons for the line item.
     /// </summary>
-    [JsonPropertyName("returnReason")]
-    public ReturnReason? returnReason { get; set; } = null;
+    [JsonPropertyName("returnReasonDefinitionId")]
+    public string? returnReasonDefinitionId { get; set; } = null;
 }

@@ -72,9 +72,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use `returnReasonDefinition` instead. This field will be removed in the future.")]
         public ReturnLineItemTypeQueryBuilder ReturnReason()
         {
             base.InnerQuery.AddField("returnReason");
+            return this;
+        }
+
+        public ReturnLineItemTypeQueryBuilder ReturnReasonDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnReasonDefinitionQueryBuilder> build)
+        {
+            var query = new Query<ReturnReasonDefinition>("returnReasonDefinition");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnReasonDefinitionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ReturnReasonDefinition>(query);
             return this;
         }
 

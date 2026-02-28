@@ -280,6 +280,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public LineItemQueryBuilder SuggestedReturnReasonDefinitions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnReasonDefinitionConnectionQueryBuilder> build)
+        {
+            var query = new Query<ReturnReasonDefinitionConnection>("suggestedReturnReasonDefinitions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnReasonDefinitionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ReturnReasonDefinitionConnection>(query);
+            return this;
+        }
+
         public LineItemQueryBuilder Taxable()
         {
             base.InnerQuery.AddField("taxable");

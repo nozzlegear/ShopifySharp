@@ -52,14 +52,14 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        [Obsolete("Use `processingError.code` instead to get the errorCode")]
+        [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptOperationQueryBuilder ErrorCode()
         {
             base.InnerQuery.AddField("errorCode");
             return this;
         }
 
-        [Obsolete("Use `processingError.message` instead to get the errorMessage")]
+        [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptOperationQueryBuilder ErrorMessage()
         {
             base.InnerQuery.AddField("errorMessage");
@@ -78,6 +78,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptOperationQueryBuilder NextActionUrl()
         {
             base.InnerQuery.AddField("nextActionUrl");
@@ -120,6 +121,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptOperationQueryBuilder Ready()
         {
             base.InnerQuery.AddField("ready");

@@ -22,6 +22,7 @@ public record FulfillmentOrderLineItemsInput : GraphQLInputObject<FulfillmentOrd
     /// <summary>
     /// The fulfillment order line items to be fulfilled.
     /// If left blank, all line items of the fulfillment order will be fulfilled.
+    /// Accepts a maximum of 512 line items.
     /// </summary>
     [JsonPropertyName("fulfillmentOrderLineItems")]
     public ICollection<FulfillmentOrderLineItemInput>? fulfillmentOrderLineItems { get; set; } = null;

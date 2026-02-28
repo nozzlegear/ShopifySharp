@@ -49,6 +49,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public OrderEditCommitOperationQueryBuilder SuccessMessages()
+        {
+            base.InnerQuery.AddField("successMessages");
+            return this;
+        }
+
         public OrderEditCommitOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
             var query = new Query<UserError>("userErrors");

@@ -13,9 +13,10 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 public enum InventoryShipmentRemoveItemsUserErrorCode
 {
+    LOCATION_NOT_FOUND,
     INTERNAL_ERROR,
     SHIPMENT_NOT_FOUND,
     ITEM_NOT_FOUND,
     INVALID_SHIPMENT_STATUS,
-    LOCATION_NOT_FOUND,
+    LOCATION_NOT_ACTIVE,
 }

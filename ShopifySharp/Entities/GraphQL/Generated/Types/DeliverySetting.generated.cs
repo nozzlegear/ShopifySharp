@@ -10,20 +10,22 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// The `DeliverySetting` object enables you to manage shop-wide shipping settings.
-/// You can enable legacy compatibility mode for the multi-location delivery profiles feature
-/// if the legacy mode isn't blocked.
 /// </summary>
 public record DeliverySetting : IGraphQLObject
 {
     /// <summary>
     /// Whether the shop is blocked from converting to full multi-location delivery
-    /// profiles mode. If the shop is blocked, then the blocking reasons are also returned.
+    /// profiles mode. If the shop is blocked, then the blocking reasons are also
+    /// returned. Note: this field is effectively deprecated and will be removed in a
+    /// future version of the API.
     /// </summary>
     [JsonPropertyName("legacyModeBlocked")]
     public DeliveryLegacyModeBlocked? legacyModeBlocked { get; set; } = null;
 
     /// <summary>
-    /// Enables legacy compatability mode for the multi-location delivery profiles feature.
+    /// Enables legacy compatability mode for the multi-location delivery profiles
+    /// feature. Note: this field is effectively deprecated and will be removed in a
+    /// future version of the API.
     /// </summary>
     [JsonPropertyName("legacyModeProfiles")]
     public bool? legacyModeProfiles { get; set; } = null;

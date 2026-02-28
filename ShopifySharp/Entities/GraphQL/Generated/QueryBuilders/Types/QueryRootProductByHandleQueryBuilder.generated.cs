@@ -60,6 +60,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootProductByHandleQueryBuilder BundleConsolidatedOptions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder> build)
+        {
+            var query = new Query<ComponentizedProductsBundleConsolidatedOption>("bundleConsolidatedOptions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ComponentizedProductsBundleConsolidatedOptionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ComponentizedProductsBundleConsolidatedOption>(query);
+            return this;
+        }
+
         public QueryRootProductByHandleQueryBuilder Category(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyCategoryQueryBuilder> build)
         {
             var query = new Query<TaxonomyCategory>("category");
@@ -425,6 +434,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use `publishedOnPublication` instead.")]
         public QueryRootProductByHandleQueryBuilder PublishedOnCurrentPublication()
         {
             base.InnerQuery.AddField("publishedOnCurrentPublication");

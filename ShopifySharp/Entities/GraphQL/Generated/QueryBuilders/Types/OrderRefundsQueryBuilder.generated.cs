@@ -86,6 +86,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public OrderRefundsQueryBuilder ProcessedAt()
+        {
+            base.InnerQuery.AddField("processedAt");
+            return this;
+        }
+
         public OrderRefundsQueryBuilder RefundLineItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RefundLineItemConnectionQueryBuilder> build)
         {
             var query = new Query<RefundLineItemConnection>("refundLineItems");

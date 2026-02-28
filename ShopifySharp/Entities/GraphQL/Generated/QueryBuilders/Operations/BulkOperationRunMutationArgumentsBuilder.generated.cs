@@ -28,12 +28,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public BulkOperationRunMutationArgumentsBuilder GroupObjects(bool? groupObjects)
-        {
-            base.InnerQuery.AddArgument("groupObjects", groupObjects);
-            return this;
-        }
-
         public BulkOperationRunMutationArgumentsBuilder Mutation(string? mutation)
         {
             base.InnerQuery.AddArgument("mutation", mutation);

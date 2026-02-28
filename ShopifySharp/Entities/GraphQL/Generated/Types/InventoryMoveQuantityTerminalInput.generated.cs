@@ -14,6 +14,13 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryMoveQuantityTerminalInput : GraphQLInputObject<InventoryMoveQuantityTerminalInput>
 {
     /// <summary>
+    /// The quantity to compare against before applying the move. For more
+    /// information, refer to the [Compare and Swap documentation](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#compare-and-swap).
+    /// </summary>
+    [JsonPropertyName("changeFromQuantity")]
+    public int? changeFromQuantity { get; set; } = null;
+
+    /// <summary>
     /// A non-Shopify URI that identifies what specific inventory transaction or
     /// ledger entry was changed. Represents the exact inventory movement being
     /// referenced, distinct from the business reason for the change.

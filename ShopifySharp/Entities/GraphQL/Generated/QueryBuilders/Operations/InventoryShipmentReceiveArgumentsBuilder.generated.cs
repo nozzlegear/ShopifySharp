@@ -28,6 +28,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public InventoryShipmentReceiveArgumentsBuilder DateReceived(DateTimeOffset? dateReceived)
+        {
+            base.InnerQuery.AddArgument("dateReceived", dateReceived);
+            return this;
+        }
+
         public InventoryShipmentReceiveArgumentsBuilder Id(string? id)
         {
             base.InnerQuery.AddArgument("id", id);

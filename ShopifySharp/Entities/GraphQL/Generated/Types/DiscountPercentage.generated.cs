@@ -9,7 +9,12 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A discount effect that gives customers a percentage off of specified items on their order.
+/// Creates percentage-based discounts that reduce item prices by a specified
+/// percentage amount. This gives merchants a flexible way to offer proportional
+/// savings that automatically scale with order value.
+/// For example, a "20% off all winter clothing" promotion would use this object to
+/// apply consistent percentage savings across different price points.
+/// Learn more about [discount types](https://help.shopify.com/manual/discounts/).
 /// </summary>
 public record DiscountPercentage : IGraphQLUnionCase, IGraphQLObject
 {

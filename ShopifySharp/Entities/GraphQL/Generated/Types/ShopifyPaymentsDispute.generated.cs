@@ -20,6 +20,12 @@ public record ShopifyPaymentsDispute : IGraphQLObject, ILegacyInteroperability, 
     public MoneyV2? amount { get; set; } = null;
 
     /// <summary>
+    /// The evidence associated with the dispute.
+    /// </summary>
+    [JsonPropertyName("disputeEvidence")]
+    public ShopifyPaymentsDisputeEvidence? disputeEvidence { get; set; } = null;
+
+    /// <summary>
     /// The deadline for evidence submission.
     /// </summary>
     [JsonPropertyName("evidenceDueBy")]

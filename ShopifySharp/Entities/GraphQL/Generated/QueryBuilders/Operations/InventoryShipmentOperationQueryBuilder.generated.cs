@@ -40,6 +40,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public InventoryShipmentOperationQueryBuilder DateCreated()
+        {
+            base.InnerQuery.AddField("dateCreated");
+            return this;
+        }
+
+        public InventoryShipmentOperationQueryBuilder DateReceived()
+        {
+            base.InnerQuery.AddField("dateReceived");
+            return this;
+        }
+
+        public InventoryShipmentOperationQueryBuilder DateShipped()
+        {
+            base.InnerQuery.AddField("dateShipped");
+            return this;
+        }
+
         public InventoryShipmentOperationQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");

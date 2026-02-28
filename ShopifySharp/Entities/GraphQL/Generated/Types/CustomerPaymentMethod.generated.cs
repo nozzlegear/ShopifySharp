@@ -9,7 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A customer's payment method.
+/// A customer's saved payment method. Stores the payment instrument details and billing information for recurring charges.
+/// The payment method supports types included in the [`CustomerPaymentInstrument`](https://shopify.dev/docs/api/admin-graphql/latest/unions/CustomerPaymentInstrument) union.
 /// </summary>
 public record CustomerPaymentMethod : IGraphQLObject, INode
 {
@@ -30,6 +31,12 @@ public record CustomerPaymentMethod : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("instrument")]
     public CustomerPaymentInstrument? instrument { get; set; } = null;
+
+    /// <summary>
+    /// The mandates associated with the payment method.
+    /// </summary>
+    [JsonPropertyName("mandates")]
+    public PaymentMandateResourceConnection? mandates { get; set; } = null;
 
     /// <summary>
     /// The time that the payment method was revoked.

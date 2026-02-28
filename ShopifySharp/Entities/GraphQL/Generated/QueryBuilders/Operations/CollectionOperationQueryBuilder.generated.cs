@@ -40,6 +40,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public CollectionOperationQueryBuilder ActiveOperations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionOperationsQueryBuilder> build)
+        {
+            var query = new Query<CollectionOperations>("activeOperations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionOperationsQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CollectionOperations>(query);
+            return this;
+        }
+
         public CollectionOperationQueryBuilder AvailablePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("availablePublicationsCount");
@@ -187,6 +196,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        [Obsolete("Use `publishedOnPublication` instead.")]
         public CollectionOperationQueryBuilder PublishedOnCurrentPublication()
         {
             base.InnerQuery.AddField("publishedOnCurrentPublication");

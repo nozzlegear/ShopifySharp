@@ -75,5 +75,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddArgument("topics", topics);
             return this;
         }
+
+        public WebhookSubscriptionConnectionArgumentsBuilder Uri(string? uri)
+        {
+            base.InnerQuery.AddArgument("uri", uri);
+            return this;
+        }
     }
 }

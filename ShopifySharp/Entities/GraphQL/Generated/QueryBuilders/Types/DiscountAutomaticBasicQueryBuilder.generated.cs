@@ -128,6 +128,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public DiscountAutomaticBasicQueryBuilder Context(Action<DiscountContextUnionCasesBuilder> build)
+        {
+            var query = new Query<DiscountContext>("context");
+            var unionBuilder = new DiscountContextUnionCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
         public DiscountAutomaticBasicQueryBuilder MinimumRequirement(Action<DiscountMinimumRequirementUnionCasesBuilder> build)
         {
             var query = new Query<DiscountMinimumRequirement>("minimumRequirement");

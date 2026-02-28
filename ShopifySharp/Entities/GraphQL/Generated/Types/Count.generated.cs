@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Details for count of elements.
+/// A numeric count with precision information indicating whether the count is exact or an estimate.
 /// </summary>
 public record Count : IGraphQLObject
 {

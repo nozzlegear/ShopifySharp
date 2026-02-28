@@ -9,7 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Card payment details related to a transaction.
+/// Credit card payment information captured during a transaction. Includes
+/// cardholder details, card metadata, verification response codes, and the [`DigitalWallet`](https://shopify.dev/docs/api/admin-graphql/latest/enums/DigitalWallet#valid-values) when used.
 /// </summary>
 public record CardPaymentDetails : IGraphQLUnionCase, IGraphQLObject, IBasePaymentDetails
 {

@@ -48,6 +48,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ShopifyPaymentsPayoutQueryBuilder ExternalTraceId()
+        {
+            base.InnerQuery.AddField("externalTraceId");
+            return this;
+        }
+
         public ShopifyPaymentsPayoutQueryBuilder Gross(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("gross");

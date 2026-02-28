@@ -67,7 +67,7 @@ public record WebhookSubscription : IGraphQLObject, ILegacyInteroperability, INo
     /// <summary>
     /// The list of fields to be included in the webhook subscription. Only the fields
     /// specified will be included in the webhook payload. If null, then all fields
-    /// will be included. Learn more about [modifying webhook payloads](https://shopify.dev/docs/apps/build/webhooks/customize/modify_payloads).
+    /// will be included. Learn more about [modifying webhook payloads](https://shopify.dev/docs/apps/build/webhooks/customize/modify-payloads).
     /// </summary>
     [JsonPropertyName("includeFields")]
     public ICollection<string>? includeFields { get; set; } = null;
@@ -103,4 +103,10 @@ public record WebhookSubscription : IGraphQLObject, ILegacyInteroperability, INo
     /// </summary>
     [JsonPropertyName("updatedAt")]
     public DateTimeOffset? updatedAt { get; set; } = null;
+
+    /// <summary>
+    /// The URI to which the webhook subscription will send events.
+    /// </summary>
+    [JsonPropertyName("uri")]
+    public string? uri { get; set; } = null;
 }

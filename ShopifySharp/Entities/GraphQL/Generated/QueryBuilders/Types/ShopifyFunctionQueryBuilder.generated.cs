@@ -81,6 +81,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ShopifyFunctionQueryBuilder Handle()
+        {
+            base.InnerQuery.AddField("handle");
+            return this;
+        }
+
         public ShopifyFunctionQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");

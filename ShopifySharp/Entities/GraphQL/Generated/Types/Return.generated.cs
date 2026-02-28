@@ -100,6 +100,12 @@ public record Return : IGraphQLObject, INode
     public ReverseFulfillmentOrderConnection? reverseFulfillmentOrders { get; set; } = null;
 
     /// <summary>
+    /// The staff member that created the return.
+    /// </summary>
+    [JsonPropertyName("staffMember")]
+    public StaffMember? staffMember { get; set; } = null;
+
+    /// <summary>
     /// The status of the return.
     /// </summary>
     [JsonPropertyName("status")]
@@ -123,4 +129,10 @@ public record Return : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("totalQuantity")]
     public int? totalQuantity { get; set; } = null;
+
+    /// <summary>
+    /// The order transactions created from the return.
+    /// </summary>
+    [JsonPropertyName("transactions")]
+    public OrderTransactionConnection? transactions { get; set; } = null;
 }

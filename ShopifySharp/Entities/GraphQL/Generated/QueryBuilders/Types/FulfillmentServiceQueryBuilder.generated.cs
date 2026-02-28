@@ -79,6 +79,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Fulfillment services are all migrating to permit SKU sharing. Setting permits SKU sharing to false [is no longer supported](https://shopify.dev/changelog/setting-permitsskusharing-argument-to-false-when-creating-a-fulfillment-service-returns-an-error). As of API version `2026-04` this field will be removed. ")]
         public FulfillmentServiceQueryBuilder PermitsSkuSharing()
         {
             base.InnerQuery.AddField("permitsSkuSharing");

@@ -9,7 +9,13 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents a single tax applied to the associated line item.
+/// A tax applied to a
+/// [`LineItem`](https://shopify.dev/docs/api/admin-graphql/latest/objects/LineItem) or [`ShippingLine`](https://shopify.dev/docs/api/admin-graphql/latest/objects/ShippingLine).
+/// Includes the tax amount, rate, title, and whether the channel that submitted the
+/// tax is liable for remitting it.
+/// The tax amount in both shop and presentment currencies after applying discounts.
+/// Includes information about the tax rate, whether the channel is liable for
+/// remitting the tax, and other tax-related details.
 /// </summary>
 public record TaxLine : IGraphQLObject
 {

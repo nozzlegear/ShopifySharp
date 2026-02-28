@@ -49,12 +49,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public CollectionReorderProductsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        public CollectionReorderProductsOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionReorderProductsUserErrorQueryBuilder> build)
         {
-            var query = new Query<UserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            var query = new Query<CollectionReorderProductsUserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionReorderProductsUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<UserError>(query);
+            base.InnerQuery.AddField<CollectionReorderProductsUserError>(query);
             return this;
         }
     }

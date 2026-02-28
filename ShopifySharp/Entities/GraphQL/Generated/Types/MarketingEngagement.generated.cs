@@ -21,6 +21,15 @@ public record MarketingEngagement : IGraphQLObject
     public MoneyV2? adSpend { get; set; } = null;
 
     /// <summary>
+    /// The number of all conversions from the marketing content. This field supports
+    /// ad platforms that track conversions beyond traditional sales metrics. All
+    /// conversions include both primary and secondary conversion goals as defined by
+    /// the ad platform, such as purchases, add-to-carts, page views, and sign-ups.
+    /// </summary>
+    [JsonPropertyName("allConversions")]
+    public decimal? allConversions { get; set; } = null;
+
+    /// <summary>
     /// The unique string identifier of the channel to which the engagement metrics
     /// are being provided. This should be set when and only when providing
     /// channel-level engagements. This should be nil when providing activity-level
@@ -115,6 +124,15 @@ public record MarketingEngagement : IGraphQLObject
     /// </summary>
     [JsonPropertyName("orders")]
     public decimal? orders { get; set; } = null;
+
+    /// <summary>
+    /// The number of primary conversions from the marketing content. This field
+    /// supports ad platforms that track conversions beyond traditional sales metrics.
+    /// Primary conversions represent the main conversion goal defined by the ad
+    /// platform, such as purchases, sign-ups, or add-to-carts.
+    /// </summary>
+    [JsonPropertyName("primaryConversions")]
+    public decimal? primaryConversions { get; set; } = null;
 
     /// <summary>
     /// The number of returning customers that have placed an order. Doesn't include

@@ -14,6 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 [JsonConverter(typeof(GraphUnionTypeConverter<MetafieldReference>))]
 public record MetafieldReference : GraphQLObject<MetafieldReference>, IGraphQLUnionType
 {
+    public Article? AsArticle() => this is MetafieldReferenceArticle wrapper ? wrapper.Value : null;
     public Collection? AsCollection() => this is MetafieldReferenceCollection wrapper ? wrapper.Value : null;
     public Company? AsCompany() => this is MetafieldReferenceCompany wrapper ? wrapper.Value : null;
     public Customer? AsCustomer() => this is MetafieldReferenceCustomer wrapper ? wrapper.Value : null;

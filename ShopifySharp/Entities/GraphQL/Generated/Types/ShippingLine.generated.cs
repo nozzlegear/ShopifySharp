@@ -9,7 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Represents the shipping details that the customer chose for their order.
+/// The shipping method that customers select for an order. Includes pricing
+/// details, carrier information, and any applied discounts or taxes.
 /// </summary>
 public record ShippingLine : IGraphQLUnionCase, IGraphQLObject
 {

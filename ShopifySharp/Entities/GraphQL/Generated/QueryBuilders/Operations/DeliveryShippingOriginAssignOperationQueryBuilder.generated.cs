@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Single origin shipping mode is no longer supported.")]
     public sealed class DeliveryShippingOriginAssignOperationQueryBuilder : FieldsQueryBuilderBase<DeliveryShippingOriginAssignPayload, DeliveryShippingOriginAssignOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliveryShippingOriginAssignPayload>, IHasArguments<DeliveryShippingOriginAssignArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;

@@ -39,6 +39,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public MarketingEngagementQueryBuilder AllConversions()
+        {
+            base.InnerQuery.AddField("allConversions");
+            return this;
+        }
+
         public MarketingEngagementQueryBuilder ChannelHandle()
         {
             base.InnerQuery.AddField("channelHandle");
@@ -111,6 +117,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public MarketingEngagementQueryBuilder Orders()
         {
             base.InnerQuery.AddField("orders");
+            return this;
+        }
+
+        public MarketingEngagementQueryBuilder PrimaryConversions()
+        {
+            base.InnerQuery.AddField("primaryConversions");
             return this;
         }
 

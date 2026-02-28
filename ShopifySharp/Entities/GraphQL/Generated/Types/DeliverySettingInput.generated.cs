@@ -14,7 +14,9 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record DeliverySettingInput : GraphQLInputObject<DeliverySettingInput>
 {
     /// <summary>
-    /// Whether legacy compatability mode is enabled for the multi-location delivery profiles feature.
+    /// Whether legacy compatability mode is enabled for the multi-location delivery
+    /// profiles feature. Note: this field is effectively deprecated and will be
+    /// removed in a future version of the API.
     /// </summary>
     [JsonPropertyName("legacyModeProfiles")]
     public bool? legacyModeProfiles { get; set; } = null;

@@ -89,6 +89,12 @@ public record DiscountCodeApp : IGraphQLUnionCase, IGraphQLObject
     public DiscountCombinesWith? combinesWith { get; set; } = null;
 
     /// <summary>
+    /// The context defining which buyers can use the discount.
+    /// </summary>
+    [JsonPropertyName("context")]
+    public DiscountContext? context { get; set; } = null;
+
+    /// <summary>
     /// The date and time when the discount was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
@@ -192,8 +198,8 @@ public record DiscountCodeApp : IGraphQLUnionCase, IGraphQLObject
     public DateTimeOffset? updatedAt { get; set; } = null;
 
     /// <summary>
-    /// The maximum number of times that a customer can use the discount.
-    /// For discounts with unlimited usage, specify `null`.
+    /// The maximum number of times the discount can be redeemed.
+    /// For unlimited usage, specify `null`.
     /// </summary>
     [JsonPropertyName("usageLimit")]
     public int? usageLimit { get; set; } = null;

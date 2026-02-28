@@ -66,7 +66,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        [Obsolete("Use `id` instead.")]
         public ChannelQueryBuilder Handle()
         {
             base.InnerQuery.AddField("handle");

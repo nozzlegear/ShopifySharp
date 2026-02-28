@@ -9,11 +9,11 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Price rules are a set of conditions, including entitlements and prerequisites,
-/// that must be met in order for a discount code to apply.
-/// We recommend using the types and queries detailed at [Getting started with discounts](https://shopify.dev/docs/apps/selling-strategies/discounts/getting-started)
-/// instead. These will replace the GraphQL `PriceRule` object and REST Admin
-/// `PriceRule` and `DiscountCode` resources.
+/// A set of conditions, including entitlements and prerequisites, that must be met for a discount code to apply.
+/// > Note:
+/// > Use the types and queries included our [discount tutorials](https://shopify.dev/docs/apps/selling-strategies/discounts/getting-started)
+/// instead. These will replace the GraphQL Admin API's [`PriceRule`](https://shopify.dev/docs/api/admin-graphql/latest/objects/PriceRule) object and [`DiscountCode`](https://shopify.dev/docs/api/admin-graphql/latest/unions/DiscountCode)
+/// union, and the REST Admin API's deprecated[`PriceRule`](https://shopify.dev/docs/api/admin-rest/unstable/resources/pricerule) resource.
 /// </summary>
 public record PriceRule : IGraphQLObject, ICommentEventSubject, IHasEvents, ILegacyInteroperability, INode
 {

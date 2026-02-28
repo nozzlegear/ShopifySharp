@@ -24,4 +24,11 @@ public record StoreCreditAccountCreditInput : GraphQLInputObject<StoreCreditAcco
     /// </summary>
     [JsonPropertyName("expiresAt")]
     public DateTimeOffset? expiresAt { get; set; } = null;
+
+    /// <summary>
+    /// Whether to send a notification to the account owner when the store credit is issued.
+    /// Defaults to `false`.
+    /// </summary>
+    [JsonPropertyName("notify")]
+    public bool? notify { get; set; } = null;
 }

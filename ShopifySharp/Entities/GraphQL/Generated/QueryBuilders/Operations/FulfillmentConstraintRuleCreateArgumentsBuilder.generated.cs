@@ -28,9 +28,9 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public FulfillmentConstraintRuleCreateArgumentsBuilder FunctionId(string? functionId)
+        public FulfillmentConstraintRuleCreateArgumentsBuilder FunctionHandle(string? functionHandle)
         {
-            base.InnerQuery.AddArgument("functionId", functionId);
+            base.InnerQuery.AddArgument("functionHandle", functionHandle);
             return this;
         }
 
