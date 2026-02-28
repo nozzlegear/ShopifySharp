@@ -6,8 +6,8 @@ on:
     paths-ignore:
       - 'docs/wiki'
       - '.gitmodules'
-      - '.github'
-      - '.graphql-schemas'
+      - '.github/**'
+      - '.graphql-schemas/**'
       - 'graphql.config.yml'
       - 'graphql.schema.json'
       - 'graphql.schema.graphql'
