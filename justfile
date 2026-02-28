@@ -116,7 +116,6 @@ create-graphql-pr token graphqlSchemaFile jsonSchemaFile:
 
     git switch -C "$branch_name"
     git add ShopifySharp/Entities/GraphQL/Generated/
-    git add graphql.schema.graphql
     git add "{{graphqlSchemaFile}}"
     git add "{{jsonSchemaFile}}"
 
