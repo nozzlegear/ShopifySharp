@@ -103,7 +103,15 @@ convert-graphql-schema jsonSchemaFile graphqlSchemaFile:
 [arg("token", long)]
 [arg("graphqlSchemaFile", long="graph-schema-file")]
 [arg("jsonSchemaFile", long="json-schema-file")]
-create-graphql-pr token graphqlSchemaFile jsonSchemaFile:
+create-graphql-pr graphqlSchemaFile jsonSchemaFile token="":
+    # Use --token if provided, otherwise fall back to GH_TOKEN from environment
+    if [ -n "{{token}}" ]; then
+        export GH_TOKEN="{{token}}"
+    elif [ -z "${GH_TOKEN:-}" ]; then
+        echo "Error: GitHub token not provided. Either pass --token or set GH_TOKEN environment variable."
+        exit 1
+    fi
+
     branch_name="graphql-types-update-$(date +%Y%m%d-%H%M%S)"
 
     echo "Creating branch: $branch_name"
