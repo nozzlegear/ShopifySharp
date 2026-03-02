@@ -17,7 +17,7 @@ jobs:
     env:
       SCHEMA_JSON_FILE: "graphql-schemas/${{ github.event.inputs.schema_version }}.schema.json"
       SCHEMA_GRAPHQL_FILE: "graphql-schemas/${{ github.event.inputs.schema_version }}.schema.graphql"
-      DEFAULT_GRAPHQL_SCHEMA_FILE: "graphql.schema.graphql"
+      DEFAULT_SCHEMA_FILE: "graphql.schema.json"
 
     steps:
     - name: Checkout code
@@ -44,7 +44,7 @@ jobs:
       run: just convert-graphql-schema --input "${{ env.SCHEMA_JSON_FILE }}" --output "${{ env.SCHEMA_GRAPHQL_FILE }}"
 
     - name: Copy the GraphQL schema to the repo's default schema file
-      run: cp "${{ env.SCHEMA_GRAPHQL_FILE }}" "${{ env.DEFAULT_GRAPHQL_SCHEMA_FILE }}"
+      run: cp "${{ env.SCHEMA_JSON_FILE }}" "${{ env.DEFAULT_SCHEMA_FILE }}"
 
     - name: Clean output directory
       run: just clean
