@@ -41,8 +41,17 @@ jobs:
       run: |
         dotnet tool install -g dotnet-setversion
 
+    - name: Generate app token
+      id: app-token
+      uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+      with:
+        app-id: ${{ vars.DIJON_BOT_APP_ID }}
+        private-key: ${{ secrets.DIJON_BOT_PRIVATE_KEY }}
+
     - name: Clone repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        token: ${{ steps.app-token.outputs.token }}
 
     - name: Set package version
       run: just set-package-version "${{ inputs.package_version }}" "${{ inputs.package_id }}"
@@ -69,6 +78,8 @@ jobs:
         message: "Bump version to ${{ inputs.package_version }}"
         pathspec_error_handling: exitAtEnd
         default_author: github_actions
+        author_name: '${{ steps.app-token.outputs.app-slug }}[bot]'
+        author_email: '${{ vars.DIJON_BOT_USER_ID }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
         push: true
 
     - name: Publish ${{ inputs.package_id }} package to Nuget
