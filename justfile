@@ -283,13 +283,14 @@ publish-to-nuget releaseType nugetToken artifactsDir:
         echo "Publishing full release packages to NuGet..."
         # Full release packages don't have a suffix (i.e. exclude -b*.nupkg)
         for package in "{{artifactsDir}}"/*.nupkg; do
-            if [[ ! "$package" =~ -b[0-9]+\.nupkg$ ]]; then
-                dotnet nuget push \
-                    --skip-duplicate \
-                    -k "{{nugetToken}}" \
-                    -s "https://api.nuget.org/v3/index.json" \
-                    "$package"
-            fi
+            case "$package" in
+                *-b[0-9]*.nupkg) continue ;;
+            esac
+            dotnet nuget push \
+                --skip-duplicate \
+                -k "{{nugetToken}}" \
+                -s "https://api.nuget.org/v3/index.json" \
+                "$package"
         done
     else
         echo "Error: Invalid release type. Use --prerelease or --full-release"
