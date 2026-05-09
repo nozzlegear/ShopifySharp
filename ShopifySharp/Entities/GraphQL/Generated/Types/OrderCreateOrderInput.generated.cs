@@ -150,7 +150,9 @@ public record OrderCreateOrderInput : GraphQLInputObject<OrderCreateOrderInput>
     /// when an order was processed. This value is the date that appears on your
     /// orders and that's used in the analytic reports. If you're importing orders
     /// from an app or another platform, then you can set processed_at to a date and
-    /// time in the past to match when the original order was created.
+    /// time in the past to match when the original order was created. As of API
+    /// version 2026-07, values in the future are clamped to the current time. In
+    /// earlier versions, future values return a `PROCESSED_AT_INVALID` error.
     /// </summary>
     [JsonPropertyName("processedAt")]
     public DateTimeOffset? processedAt { get; set; } = null;
@@ -238,7 +240,7 @@ public record OrderCreateOrderInput : GraphQLInputObject<OrderCreateOrderInput>
     public ICollection<OrderCreateOrderTransactionInput>? transactions { get; set; } = null;
 
     /// <summary>
-    /// The ID of the user logged into Shopify POS who processed the order, if applicable.
+    /// The ID of the user who processed the order, if applicable.
     /// </summary>
     [JsonPropertyName("userId")]
     public string? userId { get; set; } = null;

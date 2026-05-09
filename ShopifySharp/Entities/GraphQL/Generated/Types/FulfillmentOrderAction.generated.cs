@@ -24,4 +24,5 @@ public enum FulfillmentOrderAction
     EXTERNAL,
     SPLIT,
     MERGE,
+    REPORT_PROGRESS,
 }

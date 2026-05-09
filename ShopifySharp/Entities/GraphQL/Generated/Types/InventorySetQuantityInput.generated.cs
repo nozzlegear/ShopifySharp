@@ -14,8 +14,9 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventorySetQuantityInput : GraphQLInputObject<InventorySetQuantityInput>
 {
     /// <summary>
-    /// The current quantity to be compared against the persisted quantity. For more
-    /// information, refer to the [Compare and Swap documentation](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#compare-and-swap).
+    /// The current quantity to be compared against the persisted quantity. This field
+    /// is mandatory- you must explicitly pass in a value (even if it's `null`), or
+    /// else you will get an error. For more information, refer to the [Compare and Swap documentation](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#compare-and-swap).
     /// </summary>
     [JsonPropertyName("changeFromQuantity")]
     public int? changeFromQuantity { get; set; } = null;

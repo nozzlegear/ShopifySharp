@@ -16,6 +16,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record ProductResourceFeedback : IGraphQLObject
 {
     /// <summary>
+    /// The channel this feedback is for.
+    /// </summary>
+    [JsonPropertyName("channel")]
+    public Channel? channel { get; set; } = null;
+
+    /// <summary>
     /// The time when the feedback was generated. Used to help determine whether
     /// incoming feedback is outdated compared to existing feedback.
     /// </summary>

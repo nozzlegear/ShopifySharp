@@ -151,5 +151,14 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<OrderTransactionConnection>(query);
             return this;
         }
+
+        public SubscriptionBillingAttemptOperationQueryBuilder State(Action<SubscriptionBillingAttemptStateUnionCasesBuilder> build)
+        {
+            var query = new Query<SubscriptionBillingAttemptState>("state");
+            var unionBuilder = new SubscriptionBillingAttemptStateUnionCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
     }
 }

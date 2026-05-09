@@ -48,6 +48,12 @@ public record WebhookSubscriptionInput : GraphQLInputObject<WebhookSubscriptionI
     public ICollection<HasMetafieldsMetafieldIdentifierInput>? metafields { get; set; } = null;
 
     /// <summary>
+    /// A human-readable name for the webhook subscription.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string? name { get; set; } = null;
+
+    /// <summary>
     /// The URI where the webhook subscription should send events. Supports an HTTPS
     /// URL, a Google Pub/Sub URI (pubsub://{project-id}:{topic-id}) or an Amazon
     /// EventBridge event source ARN.

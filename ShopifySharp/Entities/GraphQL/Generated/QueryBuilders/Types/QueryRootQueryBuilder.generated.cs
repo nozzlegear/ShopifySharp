@@ -342,6 +342,51 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootQueryBuilder CashDrawer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerQueryBuilder> build)
+        {
+            var query = new Query<CashDrawer>("cashDrawer");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashDrawer>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashDrawers(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerConnectionQueryBuilder> build)
+        {
+            var query = new Query<CashDrawerConnection>("cashDrawers");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashDrawerConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashManagementLocationSummary(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder> build)
+        {
+            var query = new Query<CashManagementSummary>("cashManagementLocationSummary");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashManagementSummary>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashManagementReasonCodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementReasonCodeConnectionQueryBuilder> build)
+        {
+            var query = new Query<CashManagementReasonCodeConnection>("cashManagementReasonCodes");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementReasonCodeConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashManagementReasonCodeConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashManagementShopSummary(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder> build)
+        {
+            var query = new Query<CashManagementSummary>("cashManagementShopSummary");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashManagementSummary>(query);
+            return this;
+        }
+
         public QueryRootQueryBuilder CashTrackingSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingSessionQueryBuilder> build)
         {
             var query = new Query<CashTrackingSession>("cashTrackingSession");
@@ -405,12 +450,39 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootQueryBuilder ChannelByHandle(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder> build)
+        {
+            var query = new Query<Channel>("channelByHandle");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Channel>(query);
+            return this;
+        }
+
         public QueryRootQueryBuilder Channels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
         {
             var query = new Query<ChannelConnection>("channels");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ChannelConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CheckoutAndAccountsConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationQueryBuilder> build)
+        {
+            var query = new Query<CheckoutAndAccountsConfiguration>("checkoutAndAccountsConfiguration");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CheckoutAndAccountsConfiguration>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CheckoutAndAccountsConfigurations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationConnectionQueryBuilder> build)
+        {
+            var query = new Query<CheckoutAndAccountsConfigurationConnection>("checkoutAndAccountsConfigurations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CheckoutAndAccountsConfigurationConnection>(query);
             return this;
         }
 
@@ -855,15 +927,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootQueryBuilder DeliverySettings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliverySettingQueryBuilder> build)
-        {
-            var query = new Query<DeliverySetting>("deliverySettings");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliverySettingQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<DeliverySetting>(query);
-            return this;
-        }
-
         public QueryRootQueryBuilder DiscountCodesCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("discountCodesCount");
@@ -915,6 +978,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SavedSearchConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SavedSearchConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder DiscountTags(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StringConnectionQueryBuilder> build)
+        {
+            var query = new Query<StringConnection>("discountTags");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StringConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StringConnection>(query);
             return this;
         }
 
@@ -1194,6 +1266,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipment>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder InventoryShipments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentConnectionQueryBuilder> build)
+        {
+            var query = new Query<InventoryShipmentConnection>("inventoryShipments");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<InventoryShipmentConnection>(query);
             return this;
         }
 
@@ -1653,6 +1734,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDeviceQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PointOfSaleDevice>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder PointOfSaleDevicePaymentSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionQueryBuilder> build)
+        {
+            var query = new Query<PointOfSaleDevicePaymentSession>("pointOfSaleDevicePaymentSession");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PointOfSaleDevicePaymentSession>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder PointOfSaleDevicePaymentSessions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionConnectionQueryBuilder> build)
+        {
+            var query = new Query<PointOfSaleDevicePaymentSessionConnection>("pointOfSaleDevicePaymentSessions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PointOfSaleDevicePaymentSessionConnection>(query);
             return this;
         }
 
@@ -2193,6 +2292,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StoreCreditAccount>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder StoreCreditConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditConfigurationQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditConfiguration>("storeCreditConfiguration");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditConfigurationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StoreCreditConfiguration>(query);
             return this;
         }
 

@@ -35,6 +35,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootProductResourceFeedbackQueryBuilder Channel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder> build)
+        {
+            var query = new Query<Channel>("channel");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Channel>(query);
+            return this;
+        }
+
         public QueryRootProductResourceFeedbackQueryBuilder FeedbackGeneratedAt()
         {
             base.InnerQuery.AddField("feedbackGeneratedAt");

@@ -26,6 +26,12 @@ public record MetafieldDefinitionUpdateUserError : IGraphQLObject, IDisplayableE
     public int? elementIndex { get; set; } = null;
 
     /// <summary>
+    /// The key of the failing validation element.
+    /// </summary>
+    [JsonPropertyName("elementKey")]
+    public string? elementKey { get; set; } = null;
+
+    /// <summary>
     /// The path to the input field that caused the error.
     /// </summary>
     [JsonPropertyName("field")]

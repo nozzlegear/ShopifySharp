@@ -316,6 +316,36 @@ public record QueryRoot : IGraphQLObject
     public CartTransformConnection? cartTransforms { get; set; } = null;
 
     /// <summary>
+    /// Returns a `CashDrawer` resource by ID.
+    /// </summary>
+    [JsonPropertyName("cashDrawer")]
+    public CashDrawer? cashDrawer { get; set; } = null;
+
+    /// <summary>
+    /// A list of cash drawers in the shop.
+    /// </summary>
+    [JsonPropertyName("cashDrawers")]
+    public CashDrawerConnection? cashDrawers { get; set; } = null;
+
+    /// <summary>
+    /// Summary of cash management data for a location.
+    /// </summary>
+    [JsonPropertyName("cashManagementLocationSummary")]
+    public CashManagementSummary? cashManagementLocationSummary { get; set; } = null;
+
+    /// <summary>
+    /// Returns the cash management reason codes for the shop.
+    /// </summary>
+    [JsonPropertyName("cashManagementReasonCodes")]
+    public CashManagementReasonCodeConnection? cashManagementReasonCodes { get; set; } = null;
+
+    /// <summary>
+    /// Summary of cash management data across all locations with a POS Pro subscription for a shop, filtered by currency.
+    /// </summary>
+    [JsonPropertyName("cashManagementShopSummary")]
+    public CashManagementSummary? cashManagementShopSummary { get; set; } = null;
+
+    /// <summary>
     /// Returns a `CashTrackingSession` resource by ID.
     /// </summary>
     [JsonPropertyName("cashTrackingSession")]
@@ -373,19 +403,42 @@ public record QueryRoot : IGraphQLObject
     public Count? catalogsCount { get; set; } = null;
 
     /// <summary>
-    /// Returns a `Channel` resource by ID.
+    /// Returns a [`Channel`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Channel)
+    /// by ID. The channel must belong to the calling application.
     /// </summary>
     [JsonPropertyName("channel")]
     public Channel? channel { get; set; } = null;
 
     /// <summary>
-    /// Returns active [channels](https://shopify.dev/docs/api/admin-graphql/latest/objects/Channel)
-    /// where merchants sell products and collections. Each channel is an
-    /// authenticated link to an external platform such as marketplaces, social media
-    /// platforms, online stores, or point-of-sale systems.
+    /// Returns a [`Channel`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Channel)
+    /// by its unique string handle. The handle is either set explicitly during [`channelCreate`](https://shopify.dev/docs/api/admin-graphql/latest/mutations/channelCreate)
+    /// or auto-generated from the specification handle and account ID. The channel
+    /// must belong to the calling application.
+    /// </summary>
+    [JsonPropertyName("channelByHandle")]
+    public Channel? channelByHandle { get; set; } = null;
+
+    /// <summary>
+    /// The list of [`Channel`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Channel)
+    /// objects on the shop. When the calling application supports multi-channel, only
+    /// channels established by the calling application are returned. Each channel
+    /// represents an authenticated connection to an external selling platform such as
+    /// a marketplace, social media platform, online store, or point-of-sale system.
     /// </summary>
     [JsonPropertyName("channels")]
     public ChannelConnection? channels { get; set; } = null;
+
+    /// <summary>
+    /// A checkout and accounts configuration for a shop.
+    /// </summary>
+    [JsonPropertyName("checkoutAndAccountsConfiguration")]
+    public CheckoutAndAccountsConfiguration? checkoutAndAccountsConfiguration { get; set; } = null;
+
+    /// <summary>
+    /// List of checkout and accounts configurations on a shop.
+    /// </summary>
+    [JsonPropertyName("checkoutAndAccountsConfigurations")]
+    public CheckoutAndAccountsConfigurationConnection? checkoutAndAccountsConfigurations { get; set; } = null;
 
     /// <summary>
     /// Returns the visual customizations for checkout for a given [checkout profile](https://shopify.dev/docs/api/admin-graphql/latest/objects/CheckoutProfile).
@@ -394,6 +447,7 @@ public record QueryRoot : IGraphQLObject
     /// appearance](https://shopify.dev/docs/apps/build/checkout/styling).
     /// </summary>
     [JsonPropertyName("checkoutBranding")]
+    [Obsolete("Use `checkoutAndAccountsConfiguration` instead.")]
     public CheckoutBranding? checkoutBranding { get; set; } = null;
 
     /// <summary>
@@ -403,12 +457,14 @@ public record QueryRoot : IGraphQLObject
     /// the checkout editor.
     /// </summary>
     [JsonPropertyName("checkoutProfile")]
+    [Obsolete("Use `checkoutAndAccountsConfiguration` instead.")]
     public CheckoutProfile? checkoutProfile { get; set; } = null;
 
     /// <summary>
     /// List of checkout profiles on a shop.
     /// </summary>
     [JsonPropertyName("checkoutProfiles")]
+    [Obsolete("Use `checkoutAndAccountsConfigurations` instead.")]
     public CheckoutProfileConnection? checkoutProfiles { get; set; } = null;
 
     /// <summary>
@@ -675,7 +731,11 @@ public record QueryRoot : IGraphQLObject
     public CustomerMergePreview? customerMergePreview { get; set; } = null;
 
     /// <summary>
-    /// Returns a CustomerPaymentMethod resource by its ID.
+    /// Returns a vaulted customer payment method by its ID, including the instrument
+    /// type (credit card, PayPal, etc.), billing address, and current status.
+    /// Optionally includes revoked payment methods. Use this to look up a specific
+    /// saved payment method for a customer — for example, to check whether a
+    /// subscription's payment method is still valid or to display stored payment details.
     /// </summary>
     [JsonPropertyName("customerPaymentMethod")]
     public CustomerPaymentMethod? customerPaymentMethod { get; set; } = null;
@@ -794,12 +854,6 @@ public record QueryRoot : IGraphQLObject
     public DeliveryPromiseSetting? deliveryPromiseSettings { get; set; } = null;
 
     /// <summary>
-    /// Returns the shop-wide shipping settings.
-    /// </summary>
-    [JsonPropertyName("deliverySettings")]
-    public DeliverySetting? deliverySettings { get; set; } = null;
-
-    /// <summary>
     /// The total number of discount codes for the shop. Limited to a maximum of 10000 by default.
     /// </summary>
     [JsonPropertyName("discountCodesCount")]
@@ -836,6 +890,12 @@ public record QueryRoot : IGraphQLObject
     public SavedSearchConnection? discountRedeemCodeSavedSearches { get; set; } = null;
 
     /// <summary>
+    /// List of tags associated to discounts.
+    /// </summary>
+    [JsonPropertyName("discountTags")]
+    public StringConnection? discountTags { get; set; } = null;
+
+    /// <summary>
     /// Returns a `ShopifyPaymentsDispute` resource by ID.
     /// </summary>
     [JsonPropertyName("dispute")]
@@ -848,7 +908,11 @@ public record QueryRoot : IGraphQLObject
     public ShopifyPaymentsDisputeEvidence? disputeEvidence { get; set; } = null;
 
     /// <summary>
-    /// All disputes related to the Shop.
+    /// Returns a paginated list of all Shopify Payments disputes for the shop.
+    /// Disputes occur when a buyer files a complaint with their payments provider,
+    /// and the merchant must provide evidence to contest it. Each dispute includes
+    /// the status, amount, reason, and associated order. Use this to monitor and
+    /// manage open chargebacks and track dispute resolution outcomes.
     /// </summary>
     [JsonPropertyName("disputes")]
     public ShopifyPaymentsDisputeConnection? disputes { get; set; } = null;
@@ -978,7 +1042,11 @@ public record QueryRoot : IGraphQLObject
     public FinanceAppAccessPolicy? financeAppAccessPolicy { get; set; } = null;
 
     /// <summary>
-    /// Returns the KYC information for the shop's Shopify Payments account, used in embedded finance apps.
+    /// Returns Know Your Customer (KYC) information for the shop's Shopify Payments
+    /// account. KYC data includes verified identity and business details collected
+    /// during onboarding. This is primarily used by embedded finance apps (e.g.,
+    /// Shopify Balance, Bill Pay) that need to verify the merchant's identity without
+    /// requiring a separate KYC process.
     /// </summary>
     [JsonPropertyName("financeKycInformation")]
     public FinanceKycInformation? financeKycInformation { get; set; } = null;
@@ -1104,6 +1172,15 @@ public record QueryRoot : IGraphQLObject
     /// </summary>
     [JsonPropertyName("inventoryShipment")]
     public InventoryShipment? inventoryShipment { get; set; } = null;
+
+    /// <summary>
+    /// Returns a paginated list of [`InventoryShipment`](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryShipment) objects.
+    /// Supports filtering by barcode (e.g. `barcode:"12345"`), status (e.g.
+    /// `status:"draft"` or `status:"in_transit"`), and destination (e.g.
+    /// `destination_id:12345`).
+    /// </summary>
+    [JsonPropertyName("inventoryShipments")]
+    public InventoryShipmentConnection? inventoryShipments { get; set; } = null;
 
     /// <summary>
     /// Returns an [`InventoryTransfer`](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryTransfer) by ID. Inventory transfers track the movement of inventory between locations,
@@ -1536,6 +1613,18 @@ public record QueryRoot : IGraphQLObject
     /// </summary>
     [JsonPropertyName("pointOfSaleDevice")]
     public PointOfSaleDevice? pointOfSaleDevice { get; set; } = null;
+
+    /// <summary>
+    /// Lookup a point of sale device payment session by ID.
+    /// </summary>
+    [JsonPropertyName("pointOfSaleDevicePaymentSession")]
+    public PointOfSaleDevicePaymentSession? pointOfSaleDevicePaymentSession { get; set; } = null;
+
+    /// <summary>
+    /// A list of point of sale device payment sessions in the shop.
+    /// </summary>
+    [JsonPropertyName("pointOfSaleDevicePaymentSessions")]
+    public PointOfSaleDevicePaymentSessionConnection? pointOfSaleDevicePaymentSessions { get; set; } = null;
 
     /// <summary>
     /// Returns a [`PriceList`](https://shopify.dev/docs/api/admin-graphql/latest/objects/PriceList) by ID. You can use price lists to specify either fixed prices or adjusted
@@ -2095,13 +2184,18 @@ public record QueryRoot : IGraphQLObject
     public ICollection<ShopLocale>? shopLocales { get; set; } = null;
 
     /// <summary>
-    /// Returns a Shop Pay payment request receipt.
+    /// Returns a single Shop Pay payment request receipt by its ID. Payment request
+    /// receipts document completed Shop Pay transactions, including the amount,
+    /// customer details, and payment status. Use this to look up a specific Shop Pay
+    /// transaction for order reconciliation or customer support.
     /// </summary>
     [JsonPropertyName("shopPayPaymentRequestReceipt")]
     public ShopPayPaymentRequestReceipt? shopPayPaymentRequestReceipt { get; set; } = null;
 
     /// <summary>
-    /// Returns a list of Shop Pay payment request receipts.
+    /// Returns a paginated list of Shop Pay payment request receipts for the shop.
+    /// Each receipt documents a completed Shop Pay transaction. Use this to review
+    /// Shop Pay transaction history, generate reports, or audit Shop Pay payment activity.
     /// </summary>
     [JsonPropertyName("shopPayPaymentRequestReceipts")]
     public ShopPayPaymentRequestReceiptConnection? shopPayPaymentRequestReceipts { get; set; } = null;
@@ -2149,6 +2243,12 @@ public record QueryRoot : IGraphQLObject
     /// </summary>
     [JsonPropertyName("storeCreditAccount")]
     public StoreCreditAccount? storeCreditAccount { get; set; } = null;
+
+    /// <summary>
+    /// Returns the store credit configuration for a shop.
+    /// </summary>
+    [JsonPropertyName("storeCreditConfiguration")]
+    public StoreCreditConfiguration? storeCreditConfiguration { get; set; } = null;
 
     /// <summary>
     /// Returns a `SubscriptionBillingAttempt` resource by ID.

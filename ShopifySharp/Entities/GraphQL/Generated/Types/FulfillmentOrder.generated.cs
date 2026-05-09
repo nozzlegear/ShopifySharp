@@ -267,6 +267,12 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     public DateTimeOffset? orderProcessedAt { get; set; } = null;
 
     /// <summary>
+    /// The total weight of all line items in the fulfillment order that aren't yet fulfilled.
+    /// </summary>
+    [JsonPropertyName("remainingLineItemsWeight")]
+    public Weight? remainingLineItemsWeight { get; set; } = null;
+
+    /// <summary>
     /// The request status of the fulfillment order.
     /// </summary>
     [JsonPropertyName("requestStatus")]

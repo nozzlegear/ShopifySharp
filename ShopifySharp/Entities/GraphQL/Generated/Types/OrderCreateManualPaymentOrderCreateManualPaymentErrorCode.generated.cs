@@ -19,4 +19,5 @@ public enum OrderCreateManualPaymentOrderCreateManualPaymentErrorCode
     AMOUNT_EXCEEDS_BALANCE,
     ORDER_IS_TEMPORARILY_UNAVAILABLE,
     PROCESSED_AT_INVALID,
+    CURRENCY_MISMATCH,
 }

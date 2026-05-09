@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record ProductFeedInput : GraphQLInputObject<ProductFeedInput>
 {
     /// <summary>
+    /// The ID of the channel to associate with the product feed.
+    /// </summary>
+    [JsonPropertyName("channelId")]
+    public string? channelId { get; set; } = null;
+
+    /// <summary>
     /// The country of the product feed.
     /// </summary>
     [JsonPropertyName("country")]

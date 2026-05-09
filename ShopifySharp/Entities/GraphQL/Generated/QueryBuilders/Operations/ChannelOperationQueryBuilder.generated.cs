@@ -40,6 +40,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public ChannelOperationQueryBuilder AccountId()
+        {
+            base.InnerQuery.AddField("accountId");
+            return this;
+        }
+
+        public ChannelOperationQueryBuilder AccountName()
+        {
+            base.InnerQuery.AddField("accountName");
+            return this;
+        }
+
         public ChannelOperationQueryBuilder App(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("app");
@@ -140,6 +152,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
+        public ChannelOperationQueryBuilder ResourceFeedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppFeedbackQueryBuilder> build)
+        {
+            var query = new Query<AppFeedback>("resourceFeedback");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppFeedbackQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<AppFeedback>(query);
+            return this;
+        }
+
+        public ChannelOperationQueryBuilder SpecificationHandle()
+        {
+            base.InnerQuery.AddField("specificationHandle");
             return this;
         }
 

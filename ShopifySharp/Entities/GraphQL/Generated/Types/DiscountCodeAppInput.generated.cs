@@ -46,7 +46,9 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     /// The
     /// [discount classes](https://help.shopify.com/manual/discounts/combining-discounts/discount-combinations)
     /// that you can use in combination with
-    /// [Shopify discount types](https://help.shopify.com/manual/discounts/discount-types).
+    /// [Shopify discount types](https://help.shopify.com/manual/discounts/discount-types),
+    /// and the product discount tags that determine which product discounts can apply
+    /// together on the same cart line.
     /// </summary>
     [JsonPropertyName("combinesWith")]
     public DiscountCombinesWithInput? combinesWith { get; set; } = null;
@@ -99,6 +101,18 @@ public record DiscountCodeAppInput : GraphQLInputObject<DiscountCodeAppInput>
     /// </summary>
     [JsonPropertyName("startsAt")]
     public DateTimeOffset? startsAt { get; set; } = null;
+
+    /// <summary>
+    /// A list of searchable keywords that are associated with the discount.
+    /// For example, a `loyalty` tag could be applied to discounts
+    /// that are associated with a loyalty program.
+    /// Updating `tags` overwrites any existing tags that were previously added to the discount.
+    /// To add new tags without overwriting existing tags, use the
+    /// [`tagsAdd`](https://shopify.dev/api/admin-graphql/latest/mutations/tagsadd)
+    /// mutation.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public ICollection<string>? tags { get; set; } = null;
 
     /// <summary>
     /// The discount's name that displays to merchants in the Shopify admin and to customers.

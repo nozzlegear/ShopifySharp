@@ -127,6 +127,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public DiscountAutomaticFreeShippingQueryBuilder Tags()
+        {
+            base.InnerQuery.AddField("tags");
+            return this;
+        }
+
         public DiscountAutomaticFreeShippingQueryBuilder Title()
         {
             base.InnerQuery.AddField("title");

@@ -20,6 +20,19 @@ public record MetafieldCapabilities : IGraphQLObject
     public MetafieldCapabilityAdminFilterable? adminFilterable { get; set; } = null;
 
     /// <summary>
+    /// Indicate whether a metafield definition can be queried in analytics.
+    /// </summary>
+    [JsonPropertyName("analyticsQueryable")]
+    public MetafieldCapabilityAnalyticsQueryable? analyticsQueryable { get; set; } = null;
+
+    /// <summary>
+    /// The capability configuration for automatically copying values from a cart
+    /// metafield to the corresponding order metafield when an order is created.
+    /// </summary>
+    [JsonPropertyName("cartToOrderCopyable")]
+    public MetafieldCapabilityCartToOrderCopyable? cartToOrderCopyable { get; set; } = null;
+
+    /// <summary>
     /// Indicate whether a metafield definition can be used as a smart collection condition.
     /// </summary>
     [JsonPropertyName("smartCollectionCondition")]

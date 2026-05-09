@@ -22,6 +22,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public MetafieldReferencerInventoryLevelArgumentsBuilder IncludeInactive(bool? includeInactive)
+        {
+            base.InnerQuery.AddArgument("includeInactive", includeInactive);
+            return this;
+        }
+
         public MetafieldReferencerInventoryLevelArgumentsBuilder InventoryItemId(string? inventoryItemId)
         {
             base.InnerQuery.AddArgument("inventoryItemId", inventoryItemId);

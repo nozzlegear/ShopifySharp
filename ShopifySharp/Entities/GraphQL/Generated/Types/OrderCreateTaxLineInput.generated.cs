@@ -21,7 +21,7 @@ public record OrderCreateTaxLineInput : GraphQLInputObject<OrderCreateTaxLineInp
     public bool? channelLiable { get; set; } = null;
 
     /// <summary>
-    /// The amount of tax to be charged on the item.
+    /// The amount added to the order for this tax in shop and presentment currencies after discounts are applied.
     /// </summary>
     [JsonPropertyName("priceSet")]
     public MoneyBagInput? priceSet { get; set; } = null;

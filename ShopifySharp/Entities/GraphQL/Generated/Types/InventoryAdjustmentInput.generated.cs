@@ -21,7 +21,9 @@ public record InventoryAdjustmentInput : GraphQLInputObject<InventoryAdjustmentI
     public int? adjustment { get; set; } = null;
 
     /// <summary>
-    /// The quantity to compare against before applying the delta.
+    /// The quantity to compare against before applying the delta. This field is
+    /// mandatory- you must explicitly pass in a value (even if it's `null`), or else
+    /// you will get an error.
     /// </summary>
     [JsonPropertyName("changeFromQuantity")]
     public int? changeFromQuantity { get; set; } = null;

@@ -14,12 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record DeliverySettingUpdatePayload : IGraphQLObject
 {
     /// <summary>
-    /// The updated delivery shop level settings.
-    /// </summary>
-    [JsonPropertyName("setting")]
-    public DeliverySetting? setting { get; set; } = null;
-
-    /// <summary>
     /// The list of errors that occurred from executing the mutation.
     /// </summary>
     [JsonPropertyName("userErrors")]

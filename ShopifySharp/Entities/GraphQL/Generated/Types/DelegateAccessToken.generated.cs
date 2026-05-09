@@ -32,4 +32,10 @@ public record DelegateAccessToken : IGraphQLObject
     /// </summary>
     [JsonPropertyName("createdAt")]
     public DateTimeOffset? createdAt { get; set; } = null;
+
+    /// <summary>
+    /// The number of seconds until the delegate access token expires.
+    /// </summary>
+    [JsonPropertyName("expiresIn")]
+    public int? expiresIn { get; set; } = null;
 }

@@ -117,6 +117,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public MediaImageMetafieldQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
+        {
+            var query = new Query<Translation>("translations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Translation>(query);
+            return this;
+        }
+
         public MediaImageMetafieldQueryBuilder Type()
         {
             base.InnerQuery.AddField("type");

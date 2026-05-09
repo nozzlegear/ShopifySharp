@@ -40,6 +40,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public ProductFeedOperationQueryBuilder ChannelId()
+        {
+            base.InnerQuery.AddField("channelId");
+            return this;
+        }
+
         public ProductFeedOperationQueryBuilder Country()
         {
             base.InnerQuery.AddField("country");

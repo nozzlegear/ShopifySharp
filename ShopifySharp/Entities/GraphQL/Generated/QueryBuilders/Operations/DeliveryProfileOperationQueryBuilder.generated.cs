@@ -58,13 +58,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
-        public DeliveryProfileOperationQueryBuilder LegacyMode()
-        {
-            base.InnerQuery.AddField("legacyMode");
-            return this;
-        }
-
         public DeliveryProfileOperationQueryBuilder LocationsWithoutRatesCount()
         {
             base.InnerQuery.AddField("locationsWithoutRatesCount");

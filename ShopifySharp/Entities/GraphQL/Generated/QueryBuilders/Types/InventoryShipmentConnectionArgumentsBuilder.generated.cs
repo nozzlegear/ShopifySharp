@@ -51,5 +51,17 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddArgument("reverse", reverse);
             return this;
         }
+
+        public InventoryShipmentConnectionArgumentsBuilder Query(string? query)
+        {
+            base.InnerQuery.AddArgument("query", query);
+            return this;
+        }
+
+        public InventoryShipmentConnectionArgumentsBuilder SortKey(InventoryShipmentSortKeys? sortKey)
+        {
+            base.InnerQuery.AddArgument("sortKey", sortKey);
+            return this;
+        }
     }
 }

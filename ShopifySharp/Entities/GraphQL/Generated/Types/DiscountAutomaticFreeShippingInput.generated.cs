@@ -90,6 +90,18 @@ public record DiscountAutomaticFreeShippingInput : GraphQLInputObject<DiscountAu
     public DateTimeOffset? startsAt { get; set; } = null;
 
     /// <summary>
+    /// A list of searchable keywords that are associated with the discount.
+    /// For example, a `loyalty` tag could be applied to discounts
+    /// that are associated with a loyalty program.
+    /// Updating `tags` overwrites any existing tags that were previously added to the discount.
+    /// To add new tags without overwriting existing tags, use the
+    /// [`tagsAdd`](https://shopify.dev/api/admin-graphql/latest/mutations/tagsadd)
+    /// mutation.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public ICollection<string>? tags { get; set; } = null;
+
+    /// <summary>
     /// The discount's name that displays to merchants in the Shopify admin and to customers.
     /// </summary>
     [JsonPropertyName("title")]

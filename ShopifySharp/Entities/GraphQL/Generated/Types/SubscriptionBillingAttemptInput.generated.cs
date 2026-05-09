@@ -42,4 +42,10 @@ public record SubscriptionBillingAttemptInput : GraphQLInputObject<SubscriptionB
     /// </summary>
     [JsonPropertyName("originTime")]
     public DateTimeOffset? originTime { get; set; } = null;
+
+    /// <summary>
+    /// Select payment processing policy for the billing attempt. Defaults to FAIL_UNLESS_VALID_PAYMENT_METHOD.
+    /// </summary>
+    [JsonPropertyName("paymentProcessingPolicy")]
+    public SubscriptionBillingAttemptPaymentProcessingPolicy? paymentProcessingPolicy { get; set; } = null;
 }

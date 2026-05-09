@@ -148,6 +148,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public DiscountCodeBasicQueryBuilder Tags()
+        {
+            base.InnerQuery.AddField("tags");
+            return this;
+        }
+
         public DiscountCodeBasicQueryBuilder Title()
         {
             base.InnerQuery.AddField("title");

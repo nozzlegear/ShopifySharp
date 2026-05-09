@@ -42,6 +42,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public DiscountCombinesWithQueryBuilder ProductDiscountsWithTagsOnSameCartLine()
+        {
+            base.InnerQuery.AddField("productDiscountsWithTagsOnSameCartLine");
+            return this;
+        }
+
         public DiscountCombinesWithQueryBuilder ShippingDiscounts()
         {
             base.InnerQuery.AddField("shippingDiscounts");

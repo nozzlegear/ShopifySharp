@@ -20,7 +20,9 @@ public record InventoryTransferRemoveItemsInput : GraphQLInputObject<InventoryTr
     public string? id { get; set; } = null;
 
     /// <summary>
-    /// The IDs of the transfer line items to be removed from the transfer.
+    /// The IDs of the [`InventoryTransferLineItem`s](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryTransferLineItem)
+    /// to be removed from the transfer. Passing an empty array is a no-op and returns
+    /// the transfer unchanged.
     /// </summary>
     [JsonPropertyName("transferLineItemIds")]
     public ICollection<string>? transferLineItemIds { get; set; } = null;

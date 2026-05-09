@@ -31,6 +31,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
+        public GiftCardConfigurationOperationQueryBuilder ExpirationConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardExpirationConfigurationQueryBuilder> build)
+        {
+            var query = new Query<GiftCardExpirationConfiguration>("expirationConfiguration");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardExpirationConfigurationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<GiftCardExpirationConfiguration>(query);
+            return this;
+        }
+
         public GiftCardConfigurationOperationQueryBuilder IssueLimit(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("issueLimit");
