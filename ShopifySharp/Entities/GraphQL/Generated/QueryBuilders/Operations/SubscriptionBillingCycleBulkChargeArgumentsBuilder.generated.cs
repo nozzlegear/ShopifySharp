@@ -39,5 +39,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddArgument("inventoryPolicy", inventoryPolicy);
             return this;
         }
+
+        public SubscriptionBillingCycleBulkChargeArgumentsBuilder PaymentProcessingPolicy(SubscriptionBillingAttemptPaymentProcessingPolicy? paymentProcessingPolicy)
+        {
+            base.InnerQuery.AddArgument("paymentProcessingPolicy", paymentProcessingPolicy);
+            return this;
+        }
     }
 }

@@ -15,6 +15,7 @@ public enum SearchResultType
 {
     CUSTOMER,
     DRAFT_ORDER,
+    INVENTORY_TRANSFER,
     PRODUCT,
     COLLECTION,
     FILE,

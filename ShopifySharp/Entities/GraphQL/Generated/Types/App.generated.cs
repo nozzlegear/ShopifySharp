@@ -50,6 +50,12 @@ public record App : IGraphQLObject, INode
     public Image? banner { get; set; } = null;
 
     /// <summary>
+    /// The sales channels associated with this app.
+    /// </summary>
+    [JsonPropertyName("channels")]
+    public ChannelConnection? channels { get; set; } = null;
+
+    /// <summary>
     /// Description of the app.
     /// </summary>
     [JsonPropertyName("description")]

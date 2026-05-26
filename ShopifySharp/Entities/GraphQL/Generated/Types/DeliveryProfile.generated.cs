@@ -41,13 +41,6 @@ public record DeliveryProfile : IGraphQLObject, INode
     public string? id { get; set; } = null;
 
     /// <summary>
-    /// Whether this shop has enabled legacy compatibility mode for delivery profiles.
-    /// </summary>
-    [JsonPropertyName("legacyMode")]
-    [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
-    public bool? legacyMode { get; set; } = null;
-
-    /// <summary>
     /// The number of locations without rates defined.
     /// </summary>
     [JsonPropertyName("locationsWithoutRatesCount")]

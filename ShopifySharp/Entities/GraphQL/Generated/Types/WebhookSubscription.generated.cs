@@ -91,6 +91,12 @@ public record WebhookSubscription : IGraphQLObject, ILegacyInteroperability, INo
     public ICollection<WebhookSubscriptionMetafieldIdentifier>? metafields { get; set; } = null;
 
     /// <summary>
+    /// A human-readable name for the webhook subscription.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string? name { get; set; } = null;
+
+    /// <summary>
     /// The type of event that triggers the webhook. The topic determines when the
     /// webhook subscription sends a webhook, as well as what class of data object
     /// that webhook contains.

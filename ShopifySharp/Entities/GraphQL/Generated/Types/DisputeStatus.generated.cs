@@ -16,6 +16,7 @@ public enum DisputeStatus
     ACCEPTED,
     LOST,
     NEEDS_RESPONSE,
+    PREVENTED,
     UNDER_REVIEW,
     WON,
     [Obsolete("CHARGE_REFUNDED is no longer supported.")]

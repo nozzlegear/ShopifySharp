@@ -85,8 +85,7 @@ public record MarketingEngagementInput : GraphQLInputObject<MarketingEngagementI
     /// `occuredOn`. Non-cumulative metrics are aggregated over the single day
     /// indicated in `occuredOn`. Cumulative metrics will monotonically increase in
     /// time as each record includes the previous day's values, and so on.
-    /// Non-cumulative is strongly preferred, and support for cumulative metrics may
-    /// be deprecated in the future.
+    /// Non-cumulative metrics are required going forward; cumulative metrics are deprecated.
     /// </summary>
     [JsonPropertyName("isCumulative")]
     public bool? isCumulative { get; set; } = null;

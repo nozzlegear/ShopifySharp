@@ -29,28 +29,19 @@ public record ShopifyPaymentsDispute : IGraphQLObject, ILegacyInteroperability, 
     /// The deadline for evidence submission.
     /// </summary>
     [JsonPropertyName("evidenceDueBy")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
-    public DateOnly? evidenceDueBy { get; set; } = null;
+    public DateTimeOffset? evidenceDueBy { get; set; } = null;
 
     /// <summary>
     /// The date when evidence was sent. Returns null if evidence hasn't yet been sent.
     /// </summary>
     [JsonPropertyName("evidenceSentOn")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
-    public DateOnly? evidenceSentOn { get; set; } = null;
+    public DateTimeOffset? evidenceSentOn { get; set; } = null;
 
     /// <summary>
     /// The date when this dispute was resolved. Returns null if the dispute isn't yet resolved.
     /// </summary>
     [JsonPropertyName("finalizedOn")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
-    public DateOnly? finalizedOn { get; set; } = null;
+    public DateTimeOffset? finalizedOn { get; set; } = null;
 
     /// <summary>
     /// A globally-unique ID.

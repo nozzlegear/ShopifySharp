@@ -22,6 +22,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public QueryRootProductResourceFeedbackArgumentsBuilder ChannelId(string? channelId)
+        {
+            base.InnerQuery.AddArgument("channelId", channelId);
+            return this;
+        }
+
         public QueryRootProductResourceFeedbackArgumentsBuilder Id(string? id)
         {
             base.InnerQuery.AddArgument("id", id);

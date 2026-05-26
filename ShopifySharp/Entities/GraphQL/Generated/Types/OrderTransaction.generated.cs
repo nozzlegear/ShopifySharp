@@ -253,23 +253,29 @@ public record OrderTransaction : IGraphQLUnionCase, IGraphQLObject, INode
     public bool? test { get; set; } = null;
 
     /// <summary>
-    /// Specifies the available amount to capture on the gateway.
-    /// Only available when an amount is capturable or manually mark as paid.
+    /// The amount of the original authorization that remains unsettled.
+    /// During a pending capture, this reflects the full outstanding balance including the pending amount.
+    /// When no capture is pending, this equals the capturable amount.
+    /// Only available when an amount is capturable or manually marked as paid.
     /// </summary>
     [JsonPropertyName("totalUnsettled")]
     [Obsolete("Use `totalUnsettledSet` instead.")]
     public decimal? totalUnsettled { get; set; } = null;
 
     /// <summary>
-    /// Specifies the available amount with currency to capture on the gateway in shop and presentment currencies.
-    /// Only available when an amount is capturable or manually mark as paid.
+    /// The amount of the original authorization that remains unsettled, in shop and presentment currencies.
+    /// During a pending capture, this reflects the full outstanding balance including the pending amount.
+    /// When no capture is pending, this equals the capturable amount.
+    /// Only available when an amount is capturable or manually marked as paid.
     /// </summary>
     [JsonPropertyName("totalUnsettledSet")]
     public MoneyBag? totalUnsettledSet { get; set; } = null;
 
     /// <summary>
-    /// Specifies the available amount with currency to capture on the gateway.
-    /// Only available when an amount is capturable or manually mark as paid.
+    /// The amount with currency of the original authorization that remains unsettled.
+    /// During a pending capture, this reflects the full outstanding balance including the pending amount.
+    /// When no capture is pending, this equals the capturable amount.
+    /// Only available when an amount is capturable or manually marked as paid.
     /// </summary>
     [JsonPropertyName("totalUnsettledV2")]
     [Obsolete("Use `totalUnsettledSet` instead.")]

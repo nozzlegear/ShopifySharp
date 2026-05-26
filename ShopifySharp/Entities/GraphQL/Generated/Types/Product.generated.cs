@@ -354,10 +354,11 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     public string? productType { get; set; } = null;
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("publicationCount")]
     [Obsolete("Use `resourcePublicationsCount` instead.")]
@@ -441,10 +442,11 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     public ResourcePublicationConnection? resourcePublications { get; set; } = null;
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("resourcePublicationsCount")]
     public Count? resourcePublicationsCount { get; set; } = null;

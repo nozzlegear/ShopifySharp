@@ -18,7 +18,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// Metafields are identified by an owner resource, namespace, and key. and store a
 /// value along with type information for that value.
 /// </summary>
-public record Metafield : IGraphQLObject, IHasCompareDigest, ILegacyInteroperability, INode
+public record Metafield : IGraphQLObject, IHasCompareDigest, IHasPublishedTranslations, ILegacyInteroperability, INode
 {
     /// <summary>
     /// The data stored in the resource, represented as a digest.
@@ -98,6 +98,12 @@ public record Metafield : IGraphQLObject, IHasCompareDigest, ILegacyInteroperabi
     /// </summary>
     [JsonPropertyName("references")]
     public MetafieldReferenceConnection? references { get; set; } = null;
+
+    /// <summary>
+    /// The published translations associated with the resource.
+    /// </summary>
+    [JsonPropertyName("translations")]
+    public ICollection<Translation>? translations { get; set; } = null;
 
     /// <summary>
     /// The type of data that's stored in the metafield.

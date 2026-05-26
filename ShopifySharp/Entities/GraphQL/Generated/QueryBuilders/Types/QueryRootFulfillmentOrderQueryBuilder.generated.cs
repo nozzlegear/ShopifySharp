@@ -182,6 +182,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootFulfillmentOrderQueryBuilder RemainingLineItemsWeight(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder> build)
+        {
+            var query = new Query<Weight>("remainingLineItemsWeight");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Weight>(query);
+            return this;
+        }
+
         public QueryRootFulfillmentOrderQueryBuilder RequestStatus()
         {
             base.InnerQuery.AddField("requestStatus");

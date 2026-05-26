@@ -14,6 +14,13 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record GiftCardConfiguration : IGraphQLObject
 {
     /// <summary>
+    /// The default expiration configuration of gift cards on the shop. This field is
+    /// null if the shop hasn't set a default expiration for gift cards.
+    /// </summary>
+    [JsonPropertyName("expirationConfiguration")]
+    public GiftCardExpirationConfiguration? expirationConfiguration { get; set; } = null;
+
+    /// <summary>
     /// The issue limit for gift cards in the default shop currency.
     /// </summary>
     [JsonPropertyName("issueLimit")]

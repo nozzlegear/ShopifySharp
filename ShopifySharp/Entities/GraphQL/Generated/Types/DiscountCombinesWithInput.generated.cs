@@ -30,6 +30,24 @@ public record DiscountCombinesWithInput : GraphQLInputObject<DiscountCombinesWit
     public bool? productDiscounts { get; set; } = null;
 
     /// <summary>
+    /// Controls which product discounts can apply together on the same cart line. By
+    /// default, only one product discount applies per line. Available only on a Shopify
+    /// Plus plan and requires the `productDiscounts` field to be set to `true`.
+    /// For discounts to apply together, they must match tags in both directions. Each
+    /// discount has two tag sets: the tags that identify the discount, and the tags that
+    /// it agrees to apply with. Use the `tags` field on the discount input to set the
+    /// discount's own tags. Use this field to set the tags that the discount can apply
+    /// with. Two discounts apply together only if each one allows at least one tag that
+    /// the other is tagged with. Any number of product discounts can apply to the same
+    /// line if this two-way match holds for every pair in the group.
+    /// Example: Discount A is tagged with `LOYALTY` and allows `SEASONAL`, and Discount B
+    /// is tagged with `SEASONAL` and allows `LOYALTY`. They apply together. To add a
+    /// third discount, it must meet the same mutual-match rule with both A and B.
+    /// </summary>
+    [JsonPropertyName("productDiscountsWithTagsOnSameCartLine")]
+    public ProductDiscountsWithTagsOnSameCartLineInput? productDiscountsWithTagsOnSameCartLine { get; set; } = null;
+
+    /// <summary>
     /// Whether the discount combines
     /// with the
     /// [shipping discount](https://help.shopify.com/manual/discounts/combining-discounts/discount-combinations)

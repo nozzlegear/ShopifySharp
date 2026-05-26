@@ -34,6 +34,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public SubscriptionBillingCycleChargeArgumentsBuilder PaymentProcessingPolicy(SubscriptionBillingAttemptPaymentProcessingPolicy? paymentProcessingPolicy)
+        {
+            base.InnerQuery.AddArgument("paymentProcessingPolicy", paymentProcessingPolicy);
+            return this;
+        }
+
         public SubscriptionBillingCycleChargeArgumentsBuilder SubscriptionContractId(string? subscriptionContractId)
         {
             base.InnerQuery.AddArgument("subscriptionContractId", subscriptionContractId);

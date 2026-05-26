@@ -23,10 +23,7 @@ public record ShopPolicy : IGraphQLObject, IHasPublishedTranslations, INode
     /// The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) when the policy was created.
     /// </summary>
     [JsonPropertyName("createdAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
-    public DateOnly? createdAt { get; set; } = null;
+    public DateTimeOffset? createdAt { get; set; } = null;
 
     /// <summary>
     /// A globally-unique ID.
@@ -56,10 +53,7 @@ public record ShopPolicy : IGraphQLObject, IHasPublishedTranslations, INode
     /// The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) when the policy was last modified.
     /// </summary>
     [JsonPropertyName("updatedAt")]
-#if NETSTANDARD2_0
-	[System.Text.Json.DateOnlyConverter]
-#endif
-    public DateOnly? updatedAt { get; set; } = null;
+    public DateTimeOffset? updatedAt { get; set; } = null;
 
     /// <summary>
     /// The public URL of the policy.

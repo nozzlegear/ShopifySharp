@@ -14,12 +14,17 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryQuantityInput : GraphQLInputObject<InventoryQuantityInput>
 {
     /// <summary>
-    /// The current quantity to be compared against the persisted quantity.
-    /// Explicitly passing in `null` to this field opts out of the quantity comparison check.
-    /// Explicitly passing in any value (be it `null` or an integer) to `changeFromQuantity` will cause the values
-    /// passed into the `compareQuantity` and `InventorySetQuantitiesInput.ignoreCompareQuantity` fields to be
-    /// ignored in favour of the `changeFromQuantity` value. For more information,
-    /// refer to the [Compare and Swap documentation](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#compare-and-swap).
+    /// The quantity currently expected at this location, before setting the new quantity.
+    /// This field enables a compare-and-swap (CAS) safety check. If the location’s
+    /// current quantity doesn't match the value you provide, then the mutation fails
+    /// with a `CHANGE_FROM_QUANTITY_STALE` error. This helps prevent unintended
+    /// overwrites when the request is based on stale inventory data.
+    /// To skip the CAS check, pass `null`. Use this only when your system is the
+    /// source of truth for this inventory and you don’t need to protect against
+    /// concurrent updates.
+    /// This field is mandatory: you must explicitly pass in a value, even if that
+    /// value is `null`, or the mutation returns an error.
+    /// For more information, refer to the [compare and swap documentation](https://shopify.dev/docs/apps/build/orders-fulfillment/inventory-management-apps/manage-quantities-states#compare-and-swap).
     /// </summary>
     [JsonPropertyName("changeFromQuantity")]
     public int? changeFromQuantity { get; set; } = null;

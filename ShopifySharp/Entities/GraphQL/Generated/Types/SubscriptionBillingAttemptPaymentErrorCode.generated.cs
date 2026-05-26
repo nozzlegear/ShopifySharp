@@ -1,0 +1,57 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Error codes for payment-related billing attempt failures.
+/// </summary>
+public enum SubscriptionBillingAttemptPaymentErrorCode
+{
+    PAYMENT_METHOD_DECLINED,
+    EXPIRED_PAYMENT_METHOD,
+    INSUFFICIENT_FUNDS,
+    AUTHENTICATION_ERROR,
+    INVALID_PAYMENT_METHOD,
+    BUYER_CANCELED_PAYMENT_METHOD,
+    INVALID_CUSTOMER_BILLING_AGREEMENT,
+    AMOUNT_TOO_SMALL,
+    AMOUNT_TOO_LARGE,
+    CARD_NUMBER_INCORRECT,
+    FRAUD_SUSPECTED,
+    INVOICE_ALREADY_PAID,
+    TEST_MODE,
+    PAYPAL_ERROR_GENERAL,
+    INVALID_SHIPPING_ADDRESS,
+    TRANSIENT_ERROR,
+    PURCHASE_TYPE_NOT_SUPPORTED,
+    AUTHENTICATION_FAILED,
+    AUTHENTICATION_REQUIRED,
+    CALL_ISSUER,
+    CARD_DECLINED,
+    CONFIRMATION_REJECTED,
+    DO_NOT_HONOR,
+    MERCHANT_RULE,
+    OFF_SESSION_REJECTED,
+    RETRY_DECLINED,
+    TRANSACTION_LIMIT_EXCEEDED,
+    INCORRECT_ZIP,
+    INVALID_CURRENCY,
+    INVALID_NUMBER,
+    PAYMENT_METHOD_UNSUPPORTED,
+    PAYMENT_PROVIDER_ERROR,
+    INCORRECT_ADDRESS,
+    INCORRECT_NUMBER,
+    EXPIRED_CARD,
+    INVALID_EXPIRY_DATE,
+    EXPIRED_BUYER_ACTION,
+    PROCESSING_ERROR,
+    GENERIC_ERROR,
+    CANCELLED_PAYMENT,
+    INVALID_PURCHASE_TYPE,
+}

@@ -58,12 +58,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public FulfillmentOrderCancelOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        public FulfillmentOrderCancelOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderCancelErrorQueryBuilder> build)
         {
-            var query = new Query<UserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            var query = new Query<FulfillmentOrderCancelError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderCancelErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<UserError>(query);
+            base.InnerQuery.AddField<FulfillmentOrderCancelError>(query);
             return this;
         }
     }

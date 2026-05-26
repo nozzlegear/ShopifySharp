@@ -41,4 +41,7 @@ public enum ColumnDataType
     MINUTE_DURATION,
     HOUR_DURATION,
     DAY_DURATION,
+    COLOR,
+    STRING_IDENTITY,
+    RATING,
 }

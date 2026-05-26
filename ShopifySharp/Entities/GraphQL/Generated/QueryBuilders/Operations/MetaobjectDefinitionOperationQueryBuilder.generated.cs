@@ -58,6 +58,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public MetaobjectDefinitionOperationQueryBuilder CreatedAt()
+        {
+            base.InnerQuery.AddField("createdAt");
+            return this;
+        }
+
         public MetaobjectDefinitionOperationQueryBuilder CreatedByApp(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppQueryBuilder> build)
         {
             var query = new Query<App>("createdByApp");
@@ -142,6 +148,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public MetaobjectDefinitionOperationQueryBuilder Type()
         {
             base.InnerQuery.AddField("type");
+            return this;
+        }
+
+        public MetaobjectDefinitionOperationQueryBuilder UpdatedAt()
+        {
+            base.InnerQuery.AddField("updatedAt");
             return this;
         }
     }

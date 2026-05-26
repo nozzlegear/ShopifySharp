@@ -9,12 +9,14 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A market is a group of one or more regions that you want to target for international sales.
-/// By creating a market, you can configure a distinct, localized shopping experience for
-/// customers from a specific area of the world. For example, you can
-/// [change currency](https://shopify.dev/api/admin-graphql/current/mutations/marketCurrencySettingsUpdate),
-/// [configure international pricing](https://shopify.dev/apps/internationalization/product-price-lists),
-/// or [add market-specific domains or subfolders](https://shopify.dev/api/admin-graphql/current/objects/MarketWebPresence).
+/// A merchant-defined group of buyers identified by conditions such as their
+/// region, retail location, or company location. Each market allows configuration
+/// of a distinct, localized buyer experience. Customizations include, but are
+/// not limited to,
+/// [currency](https://shopify.dev/api/admin-graphql/current/mutations/marketCurrencySettingsUpdate),
+/// [pricing and product availability](https://shopify.dev/apps/internationalization/product-price-lists),
+/// [web presence](https://shopify.dev/api/admin-graphql/current/objects/MarketWebPresence),
+/// and content translations.
 /// </summary>
 public record Market : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions, IHasMetafields, INode
 {

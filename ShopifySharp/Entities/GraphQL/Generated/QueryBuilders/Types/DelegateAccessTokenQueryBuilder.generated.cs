@@ -47,5 +47,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("createdAt");
             return this;
         }
+
+        public DelegateAccessTokenQueryBuilder ExpiresIn()
+        {
+            base.InnerQuery.AddField("expiresIn");
+            return this;
+        }
     }
 }

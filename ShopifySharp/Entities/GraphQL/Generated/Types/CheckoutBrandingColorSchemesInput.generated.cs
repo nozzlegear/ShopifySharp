@@ -36,4 +36,16 @@ public record CheckoutBrandingColorSchemesInput : GraphQLInputObject<CheckoutBra
     /// </summary>
     [JsonPropertyName("scheme4")]
     public CheckoutBrandingColorSchemeInput? scheme4 { get; set; } = null;
+
+    /// <summary>
+    /// An extra scheme available to customize more surfaces, components or specific states of the user interface.
+    /// </summary>
+    [JsonPropertyName("scheme5")]
+    public CheckoutBrandingColorSchemeInput? scheme5 { get; set; } = null;
+
+    /// <summary>
+    /// An extra scheme available to customize more surfaces, components or specific states of the user interface.
+    /// </summary>
+    [JsonPropertyName("scheme6")]
+    public CheckoutBrandingColorSchemeInput? scheme6 { get; set; } = null;
 }

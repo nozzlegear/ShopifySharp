@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `checkoutAndAccountsConfigurationUpdate` instead.")]
     public sealed class CheckoutBrandingUpsertOperationQueryBuilder : FieldsQueryBuilderBase<CheckoutBrandingUpsertPayload, CheckoutBrandingUpsertOperationQueryBuilder>, IGraphOperationQueryBuilder<CheckoutBrandingUpsertPayload>, IHasArguments<CheckoutBrandingUpsertArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
