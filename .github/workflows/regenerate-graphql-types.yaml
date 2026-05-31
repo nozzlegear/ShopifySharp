@@ -16,8 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: "Unit test environment"
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
 
     env:
       SCHEMA_VERSION: ${{ github.event.inputs.schema_version }}
@@ -26,9 +25,20 @@ jobs:
       DEFAULT_SCHEMA_FILE: "graphql.schema.json"
 
     steps:
+    - name: Generate app token
+      id: app-token
+      uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+      with:
+        app-id: ${{ vars.DIJON_BOT_APP_ID }}
+        private-key: ${{ secrets.DIJON_BOT_PRIVATE_KEY }}
+        permission-contents: write
+        permission-pull-requests: write
+
     - name: Checkout code
       # zizmor: ignore[artipacked] -- credentials intentionally persisted for `git push` in create-graphql-pr; no artifact uploads in this workflow.
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        token: ${{ steps.app-token.outputs.token }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
@@ -40,6 +50,14 @@ jobs:
       uses: taiki-e/install-action@f176c07a0a40cbfdd08ee9aa8bf1655701d11e69 # v2.67.25
       with:
         tool: just@1.46.0
+
+    - name: Configure git for Dijon Bot
+      env:
+        APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        DIJON_BOT_USER_ID: ${{ vars.DIJON_BOT_USER_ID }}
+      run: |
+        git config --local user.name "Dijon Bot"
+        git config --local user.email "${DIJON_BOT_USER_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
 
     - name: Restore dependencies
       run: dotnet restore
@@ -61,5 +79,5 @@ jobs:
 
     - name: Create pull request
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: just create-graphql-pr --graph-schema-file "$SCHEMA_GRAPHQL_FILE" --json-schema-file "$SCHEMA_JSON_FILE"
