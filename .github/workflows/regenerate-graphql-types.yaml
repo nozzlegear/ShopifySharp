@@ -9,18 +9,25 @@ on:
         required: true
         type: string
 
+permissions: {}
+
 jobs:
   generate-types:
     runs-on: ubuntu-latest
     environment: "Unit test environment"
+    permissions:
+      contents: write
+      pull-requests: write
 
     env:
+      SCHEMA_VERSION: ${{ github.event.inputs.schema_version }}
       SCHEMA_JSON_FILE: "graphql-schemas/${{ github.event.inputs.schema_version }}.schema.json"
       SCHEMA_GRAPHQL_FILE: "graphql-schemas/${{ github.event.inputs.schema_version }}.schema.graphql"
       DEFAULT_SCHEMA_FILE: "graphql.schema.json"
 
     steps:
     - name: Checkout code
+      # zizmor: ignore[artipacked] -- credentials intentionally persisted for `git push` in create-graphql-pr; no artifact uploads in this workflow.
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
     - name: Setup .NET
@@ -38,21 +45,21 @@ jobs:
       run: dotnet restore
 
     - name: Download GraphQL schema
-      run: just download-graphql-schema --api-version ${{ github.event.inputs.schema_version }} --domain "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}" --token "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}" --output "${{ env.SCHEMA_JSON_FILE }}"
+      run: just download-graphql-schema --api-version "$SCHEMA_VERSION" --domain "${{ secrets.SHOPIFYSHARP_MY_SHOPIFY_URL }}" --token "${{ secrets.SHOPIFYSHARP_ACCESS_TOKEN }}" --output "$SCHEMA_JSON_FILE"
 
     - name: Convert JSON schema to GraphQL
-      run: just convert-graphql-schema --input "${{ env.SCHEMA_JSON_FILE }}" --output "${{ env.SCHEMA_GRAPHQL_FILE }}"
+      run: just convert-graphql-schema --input "$SCHEMA_JSON_FILE" --output "$SCHEMA_GRAPHQL_FILE"
 
     - name: Copy the GraphQL schema to the repo's default schema file
-      run: cp "${{ env.SCHEMA_JSON_FILE }}" "${{ env.DEFAULT_SCHEMA_FILE }}"
+      run: cp "$SCHEMA_JSON_FILE" "$DEFAULT_SCHEMA_FILE"
 
     - name: Clean output directory
       run: just clean
 
     - name: Regenerate types from new schema
-      run: just regenerate-and-build "${{ env.SCHEMA_GRAPHQL_FILE }}"
+      run: just regenerate-and-build "$SCHEMA_GRAPHQL_FILE"
 
     - name: Create pull request
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: just create-graphql-pr --graph-schema-file "${{ env.SCHEMA_GRAPHQL_FILE }}" --json-schema-file "${{ env.SCHEMA_JSON_FILE }}"
+      run: just create-graphql-pr --graph-schema-file "$SCHEMA_GRAPHQL_FILE" --json-schema-file "$SCHEMA_JSON_FILE"
