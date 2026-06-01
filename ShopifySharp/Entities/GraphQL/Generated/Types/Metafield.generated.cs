@@ -55,7 +55,7 @@ public record Metafield : IGraphQLObject, IHasCompareDigest, ILegacyInteroperabi
     /// The data stored in the metafield in JSON format.
     /// </summary>
     [JsonPropertyName("jsonValue")]
-    public string? jsonValue { get; set; } = null;
+    public System.Text.Json.JsonDocument? jsonValue { get; set; } = null;
 
     /// <summary>
     /// The unique identifier for the metafield within its namespace.
