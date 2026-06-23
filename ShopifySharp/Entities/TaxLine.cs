@@ -7,7 +7,7 @@ public class TaxLine
     /// <summary>
     /// Whether the channel that submitted the tax line is responsible for remitting it.
     /// </summary>
-    [JsonProperty("channelLiable")]
+    [JsonProperty("channel_liable")]
     public bool? ChannelLiable { get; set; }
 
     /// <summary>
