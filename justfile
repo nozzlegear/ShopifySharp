@@ -48,7 +48,8 @@ _cleanGraphEntities:
 [group("graphql")]
 clean:
     git clean -df "{{graph_entities}}"
-    git checkout "{{graph_entities}}"
+    # git checkout doesn't work in jj changesets, so we use jj restore if jj is present, falling back to git checkout
+    jj restore "{{graph_entities}}" 2>/dev/null || git checkout "{{graph_entities}}"
 
 # Regenerates GraphQL types from the graphql.schema.graphql file
 [group("graphql")]
