@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using ShopifySharp.Entities;
 
 // TODO: migrate this to the ShopifySharp.Entities namespace
@@ -29,6 +30,42 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     public OnlineAccessInfo? OnlineAccess { get; set; }
 
     /// <summary>
+    /// The duration for which the access token remains valid. This is returned for Shopify's
+    /// online access tokens and expiring offline access tokens.
+    /// </summary>
+    public TimeSpan? ExpiresIn { get; set; }
+
+    /// <summary>
+    /// The refresh token returned by Shopify for expiring offline access tokens.
+    /// </summary>
+    public string? RefreshToken { get; set; }
+
+    /// <summary>
+    /// The duration for which the refresh token remains valid.
+    /// </summary>
+    public TimeSpan? RefreshTokenExpiresIn { get; set; }
+
+    /// <summary>
+    /// The UTC timestamp at which this authorization result was issued or refreshed.
+    /// </summary>
+    public DateTimeOffset IssuedAtUtc { get; set; } = DateTimeOffset.UtcNow;
+
+    /// <summary>
+    /// The UTC timestamp at which the access token expires, if Shopify returned an expiry.
+    /// </summary>
+    public DateTimeOffset? AccessTokenExpiresAtUtc => IssuedAtUtc + ExpiresIn;
+
+    /// <summary>
+    /// The UTC timestamp at which the refresh token expires, if Shopify returned an expiry.
+    /// </summary>
+    public DateTimeOffset? RefreshTokenExpiresAtUtc => IssuedAtUtc + RefreshTokenExpiresIn;
+
+    /// <summary>
+    /// Indicates whether this authorization result includes a refresh token.
+    /// </summary>
+    public bool HasRefreshToken => !string.IsNullOrWhiteSpace(RefreshToken);
+
+    /// <summary>
     /// Indicates whether the authorization result was obtained using Shopify's
     /// "online access" (per-user) OAuth flow.
     /// </summary>
@@ -36,4 +73,46 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(OnlineAccess))]
     #endif
     public bool IsOnlineAccess => OnlineAccess != null;
+
+    /// <summary>
+    /// Returns <c>true</c> when the access token has already expired.
+    /// </summary>
+    public bool AccessTokenHasExpired(DateTimeOffset? utcNow = null)
+    {
+        var expiresAtUtc = AccessTokenExpiresAtUtc;
+
+        if (expiresAtUtc is null)
+            return false;
+
+        return (utcNow ?? DateTimeOffset.UtcNow) >= expiresAtUtc.Value;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when the refresh token has already expired.
+    /// </summary>
+    public bool RefreshTokenHasExpired(DateTimeOffset? utcNow = null)
+    {
+        var expiresAtUtc = RefreshTokenExpiresAtUtc;
+
+        if (expiresAtUtc is null)
+            return false;
+
+        return (utcNow ?? DateTimeOffset.UtcNow) >= expiresAtUtc.Value;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> when the access token is expired or will expire within the given buffer.
+    /// </summary>
+    public bool ShouldRefreshAccessToken(TimeSpan? refreshBeforeExpiry = null, DateTimeOffset? utcNow = null)
+    {
+        var expiresAtUtc = AccessTokenExpiresAtUtc;
+
+        if (expiresAtUtc is null)
+            return false;
+
+        var now = utcNow ?? DateTimeOffset.UtcNow;
+        var refreshBuffer = refreshBeforeExpiry ?? TimeSpan.Zero;
+
+        return now >= expiresAtUtc.Value - refreshBuffer;
+    }
 }
