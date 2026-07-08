@@ -240,7 +240,7 @@ public class ShopifyOauthUtilityTests
 
     #endregion
 
-    [Fact(DisplayName = "AuthorizeAsync(AuthorizeOptions) should call the base AuthorizeAsync(string, string, string, string) method")]
+    [Fact(DisplayName = "AuthorizeAsync(AuthorizeOptions) should call the core authorization flow and pass its options through")]
     public async Task AuthorizeAsync_WithAuthorizeOptionsParameters_ShouldCallBaseAuthorizeAsyncMethodAndPassOptionsToMethod()
     {
         // Setup
@@ -263,6 +263,56 @@ public class ShopifyOauthUtilityTests
         // Assert
         await act.Should().ThrowAsync<TestException>();
         callToDomainUtil.MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task AuthorizeAsync_WhenExpiringOfflineTokensAreRequested_ShouldSendTheExpiringFlagAndParseTokenMetadata()
+    {
+        // Setup
+        const int expiresIn = 120;
+        const int refreshTokenExpiresIn = 3600;
+        const string accessToken = "some-access-token";
+        const string refreshToken = "some-refresh-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{accessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}},
+                "refresh_token": "{{refreshToken}}",
+                "refresh_token_expires_in": {{refreshTokenExpiresIn}}
+              }
+              """;
+        var result = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .Invokes(call => capturedRequest = call.GetArgument<HttpRequestMessage>(0))
+            .Returns(result);
+
+        // Act
+        var authorizationResult = await _sut.AuthorizeAsync(new AuthorizeOptions
+        {
+            Code = "some-code",
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret",
+            Expiring = true
+        });
+
+        // Assert
+        capturedRequest.Should().NotBeNull();
+        capturedRequest!.RequestUri.Should().Be(new Uri("https://example.myshopify.com/admin/oauth/access_token"));
+        var requestContent = await capturedRequest.Content!.ReadAsStringAsync();
+        requestContent.Should().Contain("\"expiring\":1");
+
+        authorizationResult.AccessToken.Should().Be(accessToken);
+        authorizationResult.ExpiresIn.Should().Be(TimeSpan.FromSeconds(expiresIn));
+        authorizationResult.RefreshToken.Should().Be(refreshToken);
+        authorizationResult.RefreshTokenExpiresIn.Should().Be(TimeSpan.FromSeconds(refreshTokenExpiresIn));
+        authorizationResult.AccessTokenExpiresAtUtc.Should().BeAfter(authorizationResult.IssuedAtUtc);
+        authorizationResult.RefreshTokenExpiresAtUtc.Should().BeAfter(authorizationResult.IssuedAtUtc);
     }
 
     [Fact]
@@ -481,6 +531,7 @@ public class ShopifyOauthUtilityTests
         // Assert
         authorizationResult.IsOnlineAccess.Should().BeTrue();
         authorizationResult.OnlineAccess.Should().NotBeNull();
+        authorizationResult.ExpiresIn.Should().Be(TimeSpan.FromSeconds(expiresIn));
 
         var onlineAccess = authorizationResult.OnlineAccess!;
         onlineAccess.ExpiresIn.Should().BeCloseTo(TimeSpan.FromSeconds(expiresIn), TimeSpan.FromSeconds(3), "expiration should be within 3 seconds of test value");
@@ -638,6 +689,47 @@ public class ShopifyOauthUtilityTests
         authorizationResult.GrantedScopes.Should().BeEmpty();
         authorizationResult.OnlineAccess.Should().BeNull();
         authorizationResult.IsOnlineAccess.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task RefreshAccessTokenAsync_WhenExpiringOfflineTokenMetadataIsReturned_ShouldParseIt()
+    {
+        // Setup
+        const int expiresIn = 180;
+        const int refreshTokenExpiresIn = 7200;
+        const string accessToken = "some-access-token";
+        const string refreshToken = "some-refresh-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{accessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}},
+                "refresh_token": "{{refreshToken}}",
+                "refresh_token_expires_in": {{refreshTokenExpiresIn}}
+              }
+              """;
+        var result = Utils.MakeHttpResponseMessage(json);
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .Returns(result);
+
+        // Act
+        var authorizationResult = await _sut.RefreshAccessTokenAsync(
+            ShopDomain,
+            ClientId,
+            "some-client-secret",
+            "existing-refresh-token",
+            "existing-access-token"
+        );
+
+        // Assert
+        authorizationResult.AccessToken.Should().Be(accessToken);
+        authorizationResult.ExpiresIn.Should().Be(TimeSpan.FromSeconds(expiresIn));
+        authorizationResult.RefreshToken.Should().Be(refreshToken);
+        authorizationResult.RefreshTokenExpiresIn.Should().Be(TimeSpan.FromSeconds(refreshTokenExpiresIn));
+        authorizationResult.OnlineAccess.Should().BeNull();
     }
 
     [Fact]
@@ -835,6 +927,118 @@ public class ShopifyOauthUtilityTests
             onlineAccess.AssociatedUserScopes.Should().BeEmpty();
         else
             onlineAccess.AssociatedUserScopes.Should().BeEquivalentTo(scopes);
+    }
+
+    [Fact]
+    public async Task RefreshAccessTokenIfNeededAsync_WhenTheCurrentTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
+    {
+        // Setup
+        var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
+        {
+            ExpiresIn = TimeSpan.FromMinutes(10),
+            RefreshToken = "some-refresh-token",
+            RefreshTokenExpiresIn = TimeSpan.FromDays(30),
+            IssuedAtUtc = DateTimeOffset.UtcNow
+        };
+
+        // Act
+        var authorizationResult = await _sut.RefreshAccessTokenIfNeededAsync(new RefreshAccessTokenIfNeededOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AuthorizationResult = currentAuthorizationResult,
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(1)
+        });
+
+        // Assert
+        authorizationResult.Should().BeSameAs(currentAuthorizationResult);
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task RefreshAccessTokenIfNeededAsync_WhenTheCurrentTokenIsExpired_ShouldRefreshIt()
+    {
+        // Setup
+        const int expiresIn = 180;
+        const int refreshTokenExpiresIn = 7200;
+        const string refreshedAccessToken = "refreshed-access-token";
+        const string refreshedRefreshToken = "refreshed-refresh-token";
+        const string existingAccessToken = "existing-access-token";
+        const string existingRefreshToken = "existing-refresh-token";
+        var currentAuthorizationResult = new AuthorizationResult(existingAccessToken, [])
+        {
+            ExpiresIn = TimeSpan.FromMinutes(5),
+            RefreshToken = existingRefreshToken,
+            RefreshTokenExpiresIn = TimeSpan.FromDays(30),
+            IssuedAtUtc = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(10))
+        };
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{refreshedAccessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}},
+                "refresh_token": "{{refreshedRefreshToken}}",
+                "refresh_token_expires_in": {{refreshTokenExpiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .Invokes(call => capturedRequest = call.GetArgument<HttpRequestMessage>(0))
+            .Returns(response);
+
+        // Act
+        var authorizationResult = await _sut.RefreshAccessTokenIfNeededAsync(new RefreshAccessTokenIfNeededOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AuthorizationResult = currentAuthorizationResult
+        });
+
+        // Assert
+        authorizationResult.AccessToken.Should().Be(refreshedAccessToken);
+        authorizationResult.RefreshToken.Should().Be(refreshedRefreshToken);
+        authorizationResult.ExpiresIn.Should().Be(TimeSpan.FromSeconds(expiresIn));
+        authorizationResult.RefreshTokenExpiresIn.Should().Be(TimeSpan.FromSeconds(refreshTokenExpiresIn));
+
+        capturedRequest.Should().NotBeNull();
+        var requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
+        requestContent.Should().Contain($"\"refresh_token\":\"{existingRefreshToken}\"");
+        requestContent.Should().Contain($"\"access_token\":\"{existingAccessToken}\"");
+    }
+
+    [Fact]
+    public async Task RefreshAccessTokenIfNeededAsync_WhenTheRefreshTokenIsExpired_ShouldThrow()
+    {
+        // Setup
+        var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
+        {
+            ExpiresIn = TimeSpan.FromMinutes(5),
+            RefreshToken = "some-refresh-token",
+            RefreshTokenExpiresIn = TimeSpan.FromMinutes(10),
+            IssuedAtUtc = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromHours(1))
+        };
+
+        // Act
+        var act = async () => await _sut.RefreshAccessTokenIfNeededAsync(new RefreshAccessTokenIfNeededOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AuthorizationResult = currentAuthorizationResult
+        });
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("*refresh token has expired*");
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .MustNotHaveHappened();
     }
 
     [Theory]

@@ -111,6 +111,8 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
 {
     private const string AccessTokenPropertyName = "access_token";
     private const string ExpiresInPropertyName = "expires_in";
+    private const string RefreshTokenPropertyName = "refresh_token";
+    private const string RefreshTokenExpiresInPropertyName = "refresh_token_expires_in";
     private const string AssociatedUserPropertyName = "associated_user";
     private const string AssociatedUserScopePropertyName = "associated_user_scope";
     private const string ScopePropertyName = "scope";
@@ -227,7 +229,8 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             options.Code,
             options.ShopDomain,
             options.ClientId,
-            options.ClientSecret
+            options.ClientSecret,
+            options.Expiring
         );
 
     /// <inheritdoc />
@@ -236,13 +239,26 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         string shopDomain,
         string clientId,
         string clientSecret
+    ) => await AuthorizeAsync(code, shopDomain, clientId, clientSecret, expiring: false);
+
+    /// <summary>
+    /// Authorizes an application installation, optionally requesting Shopify's expiring offline access token flow.
+    /// </summary>
+    public async Task<AuthorizationResult> AuthorizeAsync(
+        string code,
+        string shopDomain,
+        string clientId,
+        string clientSecret,
+        bool expiring
     )
     {
         var ub = new UriBuilder(_domainUtility.BuildShopDomainUri(shopDomain))
         {
             Path = "admin/oauth/access_token"
         };
-        using var content = new JsonContent(new { client_id = clientId, client_secret = clientSecret, code });
+        using var content = expiring
+            ? new JsonContent(new { client_id = clientId, client_secret = clientSecret, code, expiring = 1 })
+            : new JsonContent(new { client_id = clientId, client_secret = clientSecret, code });
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
 
         return await SendRequestAndParseAuthorizationResultAsync(request);
@@ -257,7 +273,11 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         ShopifyService.CheckResponseExceptions(await requestMessage.GetRequestInfo(), response, json);
 
         var jsonEl = _jsonSerializer.Parse(json);
+        var issuedAtUtc = DateTimeOffset.UtcNow;
         var accessToken = await ReadAccessTokenAsync(jsonEl);
+        var expiresIn = await ReadOptionalTimeSpanAsync(jsonEl, ExpiresInPropertyName);
+        var refreshToken = await ReadOptionalStringAsync(jsonEl, RefreshTokenPropertyName);
+        var refreshTokenExpiresIn = await ReadOptionalTimeSpanAsync(jsonEl, RefreshTokenExpiresInPropertyName);
 
         OnlineAccessInfo? onlineAccessInfo = null;
 
@@ -269,14 +289,18 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
                     AssociatedUserPropertyName
                 );
 
-            var expiresInElem = GetRequiredProperty(jsonEl, ExpiresInPropertyName, JsonValueType.Number);
-            var expiresInSec = await _jsonSerializer.DeserializeAsync<int>(expiresInElem);
+            if (expiresIn is null)
+                throw new ShopifyJsonParseException(
+                    $"The JSON response from Shopify does not contain a valid '{ExpiresInPropertyName}' property. The property was null or missing.",
+                    ExpiresInPropertyName
+                );
+
             var userScopes = await ReadScopesToArrayAsync(jsonEl, AssociatedUserScopePropertyName);
             var associatedUser = await _jsonSerializer.DeserializeAsync<AssociatedUser>(user);
 
             onlineAccessInfo = new OnlineAccessInfo
             {
-                ExpiresIn = TimeSpan.FromSeconds(expiresInSec),
+                ExpiresIn = expiresIn.Value,
                 AssociatedUserScopes = userScopes,
                 AssociatedUser = associatedUser!
             };
@@ -285,7 +309,11 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         var scopes = await ReadScopesToArrayAsync(jsonEl, ScopePropertyName);
         return new AuthorizationResult(accessToken, scopes)
         {
-            OnlineAccess = onlineAccessInfo
+            OnlineAccess = onlineAccessInfo,
+            ExpiresIn = expiresIn,
+            RefreshToken = refreshToken,
+            RefreshTokenExpiresIn = refreshTokenExpiresIn,
+            IssuedAtUtc = issuedAtUtc
         };
     }
 
@@ -315,6 +343,43 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             );
 
         return accessTokenStr;
+    }
+
+    private async ValueTask<string?> ReadOptionalStringAsync(IJsonElement json, string propertyName)
+    {
+        if (!json.TryGetProperty(propertyName, out var property) || property.ValueType == JsonValueType.Null)
+            return null;
+
+        if (property.ValueType != JsonValueType.String)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{propertyName}' property. The property type was {property.ValueType}, which is invalid.",
+                propertyName
+            );
+
+        var value = await _jsonSerializer.DeserializeAsync<string>(property);
+
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{propertyName}' property. The property was null or empty.",
+                propertyName
+            );
+
+        return value;
+    }
+
+    private async ValueTask<TimeSpan?> ReadOptionalTimeSpanAsync(IJsonElement json, string propertyName)
+    {
+        if (!json.TryGetProperty(propertyName, out var property) || property.ValueType == JsonValueType.Null)
+            return null;
+
+        if (property.ValueType != JsonValueType.Number)
+            throw new ShopifyJsonParseException(
+                $"The JSON response from Shopify does not contain a valid '{propertyName}' property. The property type was {property.ValueType}, which is invalid.",
+                propertyName
+            );
+
+        var value = await _jsonSerializer.DeserializeAsync<int>(property);
+        return TimeSpan.FromSeconds(value);
     }
 
     private async ValueTask<string[]> ReadScopesToArrayAsync(IJsonElement json, string propertyName)
