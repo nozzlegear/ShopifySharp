@@ -79,3 +79,26 @@ type UnionCasesBuilderWriter(
 
             do! "}"
         }
+
+    static member WriteDirectUnionCaseMethods (targetBuilderClassName: string) (unionCaseNames: string array) writer: ValueTask =
+        pipeWriter writer {
+            for unionCaseName in unionCaseNames do
+                let pascalUnionCaseName = toCasing Pascal unionCaseName
+                let unionCaseQueryBuilderName = qualifiedBuilderTypeName (QueryBuilder unionCaseName)
+                do! Indented + $$"""public {{targetBuilderClassName}} On{{pascalUnionCaseName}}(Action<{{unionCaseQueryBuilderName}}> build)"""
+                do! NewLine
+                do! Indented + "{"
+                do! NewLine
+                do! DoubleIndented + $$"""var query = new Query<{{pascalUnionCaseName}}>("... on {{pascalUnionCaseName}}");"""
+                do! NewLine
+                do! DoubleIndented + $$"""var queryBuilder = new {{unionCaseQueryBuilderName}}(query);"""
+                do! NewLine + NewLine
+                do! DoubleIndented + "build.Invoke(queryBuilder);"
+                do! NewLine
+                do! DoubleIndented + "base.InnerQuery.AddUnionCase(query);"
+                do! NewLine + NewLine
+                do! DoubleIndented + "return this;"
+                do! NewLine
+                do! Indented + "}"
+                do! NewLine + NewLine
+        }

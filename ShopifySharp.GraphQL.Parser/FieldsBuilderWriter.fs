@@ -168,9 +168,9 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 | ReturnType.VisitedType visitedType ->
                     // Write the field methods for this type
                     match visitedType with
-                    | VisitedTypes.UnionType _ ->
-                        // Union cases will be added below
-                        ()
+                    | VisitedTypes.UnionType unionType ->
+                        let unionCaseNames = Array.map (fun (x: VisitedTypes) -> x.Name) unionType.Cases
+                        yield! UnionCasesBuilderWriter.WriteDirectUnionCaseMethods builderClassName unionCaseNames
                     | visitedType ->
                         let fields =
                             match visitedType with
@@ -197,6 +197,7 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                     for field in fields do
                         yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
 
-            // Add union case methods
-            yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
+            // Add union case methods (only for non-operations, since operations write them directly)
+            if not type'.IsOperation then
+                yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
         }
