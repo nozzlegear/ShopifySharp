@@ -364,7 +364,7 @@ let private writeUnionType (unionType: UnionType) (_: IParsedContext) (writer: W
 
 let private shouldSkipType (visitedType: VisitedTypes): bool =
     let typeNamesToSkip = Set.ofList [
-        "Node"; "INode"
+        "INode"
         "PageInfo"
     ]
 
