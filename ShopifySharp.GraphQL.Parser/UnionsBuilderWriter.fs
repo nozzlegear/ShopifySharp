@@ -5,7 +5,7 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let rec collectUnionFields (visitedType: VisitedTypes): UnionCasesBuilderWriter array =
+    let collectUnionFields (visitedType: VisitedTypes): UnionCasesBuilderWriter array =
         let fields =
             match visitedType with
             | Class class' -> class'.Fields
@@ -35,16 +35,28 @@ type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         | VisitedTypes.Operation operation ->
             match operation.ReturnType with
             | ReturnType.VisitedType visitedType ->
-                collectUnionFields visitedType
-            | ReturnType.FieldType (FieldType.ValueType (FieldValueType.GraphObjectType fieldValueType) as fieldType) ->
+                // If the visited type is an interface, create union builders from its implementations
+                match visitedType with
+                | VisitedTypes.Interface interfaceRecord ->
+                    let implTypeNames = context.GetInterfaceImplementationTypeNames interfaceRecord.Name
+                    if Array.length implTypeNames > 0 then
+                        [| UnionCasesBuilderWriter(type', interfaceRecord.Name, implTypeNames, None, context)|]
+                    else
+                        Array.empty
+                | _ ->
+                    collectUnionFields visitedType
+            | ReturnType.FieldType fieldType ->
                 match AstNodeMapper.unwrapFieldType fieldType with
-                | FieldValueType.GraphObjectType (NamedType.UnionType (_, unionCaseNames)) ->
-                    // TODO: naming is probably janky here
-                    [| UnionCasesBuilderWriter(type', fieldValueType.Name, unionCaseNames, None, context)|]
+                | FieldValueType.GraphObjectType (NamedType.UnionType (unionTypeName, unionCaseNames)) ->
+                    [| UnionCasesBuilderWriter(type', unionTypeName, unionCaseNames, operation.Deprecation, context)|]
+                | FieldValueType.GraphObjectType (NamedType.Interface interfaceName) ->
+                    let implTypeNames = context.GetInterfaceImplementationTypeNames interfaceName
+                    if Array.length implTypeNames > 0 then
+                        [| UnionCasesBuilderWriter(type', interfaceName, implTypeNames, None, context)|]
+                    else
+                        Array.empty
                 | _ ->
                     Array.empty
-            | _ ->
-                Array.empty
         | VisitedTypes.UnionType unionType ->
             // TODO: naming is probably janky here
             [| UnionCasesBuilderWriter(type', unionType.Name, Array.map (fun (x: VisitedTypes) -> x.Name) unionType.Cases, unionType.Deprecation, context)|]
@@ -61,7 +73,10 @@ type UnionsBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         | Enum _ -> false
         | Operation operation->
             match operation.ReturnType with
-            | ReturnType.FieldType _ -> false
+            | ReturnType.FieldType fieldType ->
+                match AstNodeMapper.unwrapFieldType fieldType with
+                | FieldValueType.GraphObjectType (NamedType.Interface _) -> true
+                | _ -> false
             | ReturnType.VisitedType type' -> UnionsBuilderWriter.CanAddUnions type'
 
     member _.UnionFieldBuilders = unionFieldBuilders
