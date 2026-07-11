@@ -66,8 +66,8 @@ module ReachabilityAnalyzer =
             | None -> ()
         }
 
-    /// Extracts type names referenced by an Interface
-    let extractTypeNamesFromInterface (interface': Interface): string seq =
+    /// Extracts type names from an Interface, including its concrete implementations
+    let extractTypeNamesFromInterface (parsedContext: IParsedContext) (interface': Interface): string seq =
         seq {
             // Extract from fields
             for field in interface'.Fields do
@@ -76,6 +76,13 @@ module ReachabilityAnalyzer =
             // Extract from inherited types
             for inheritedTypeName in interface'.InheritedTypeNames do
                 yield inheritedTypeName
+
+            // If an interface is reachable, all of its concrete implementations are reachable too.
+            // We assume this because GraphQL fields returning an interface should resolve to an
+            // implementation at runtime (e.g. the Node or Event interfaces can resolve to one of
+            // dozens of concrete types).
+            for implementationName in parsedContext.GetInterfaceImplementationTypeNames interface'.Name do
+                yield implementationName
         }
 
     /// Extracts type names referenced by a UnionType
@@ -86,12 +93,12 @@ module ReachabilityAnalyzer =
         }
 
     /// Extracts type names referenced by any VisitedType
-    let extractTypeNamesFromVisitedType (visitedType: VisitedTypes): string seq =
+    let extractTypeNamesFromVisitedType (parsedContext: IParsedContext) (visitedType: VisitedTypes): string seq =
         match visitedType with
         | VisitedTypes.Class class' ->
             extractTypeNamesFromClass class'
         | VisitedTypes.Interface interface' ->
-            extractTypeNamesFromInterface interface'
+            extractTypeNamesFromInterface parsedContext interface'
         | VisitedTypes.UnionType unionType ->
             extractTypeNamesFromUnion unionType
         | VisitedTypes.Operation operation ->
@@ -116,7 +123,7 @@ module ReachabilityAnalyzer =
                     // For each referenced type, find the types *they* reference and add them to a plain string list
                     for typeName in typesToCheckThisPass do
                         match parsedContext.TryFindGraphObjectType typeName with
-                        | Some visitedType -> yield! extractTypeNamesFromVisitedType visitedType
+                        | Some visitedType -> yield! extractTypeNamesFromVisitedType parsedContext visitedType
                         | None -> ()
                 }
                 |> Set.ofSeq

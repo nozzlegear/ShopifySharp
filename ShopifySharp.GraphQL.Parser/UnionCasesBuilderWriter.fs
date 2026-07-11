@@ -18,7 +18,7 @@ type UnionCasesBuilderWriter(
 
     let writeOnUnionCaseMethod (unionCaseName: string) writer: ValueTask =
         let pascalUnionCaseName = toCasing Pascal unionCaseName
-        let unionCaseQueryBuilderName = $"{pascalUnionCaseName}QueryBuilder"
+        let unionCaseQueryBuilderName = qualifiedBuilderTypeName (QueryBuilder unionCaseName)
 
         pipeWriter writer {
             do! Indented + $"public {builderClassName} On{pascalUnionCaseName}(Action<{unionCaseQueryBuilderName}> build)"
