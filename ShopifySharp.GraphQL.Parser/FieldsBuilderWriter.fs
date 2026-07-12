@@ -109,6 +109,28 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                 do! NewLine + NewLine
         }
 
+    let writeQueryBuilderInterfaceConcreteCaseMethods (builders: InterfaceCasesBuilderWriter array) writer: ValueTask =
+        pipeWriter writer {
+            for builder in builders do
+                yield! writeDeprecationAttribute Indented builder.DeprecationWarning
+                do! Indented + $$"""public {{builderClassName}} {{builder.PascalFieldName}}(Action<{{builder.BuilderClassName}}> build)"""
+                do! NewLine
+                do! Indented + "{"
+                do! NewLine
+                do! DoubleIndented + $$"""var query = new Query<{{builder.GenericTypeName}}>("{{builder.CamelFieldName}}");"""
+                do! NewLine
+                do! DoubleIndented + $$"""var unionBuilder = new {{builder.BuilderClassName}}(query);"""
+                do! NewLine + NewLine
+                do! DoubleIndented + "build.Invoke(unionBuilder);"
+                do! NewLine
+                do! DoubleIndented + "base.InnerQuery.AddInterfaceCase(query);"
+                do! NewLine + NewLine
+                do! DoubleIndented + "return this;"
+                do! NewLine
+                do! Indented + "}"
+                do! NewLine + NewLine
+        }
+
     static member CanAddFields type' =
         // TODO: improve this by checking if the type actually has fields available
         match type' with
@@ -152,9 +174,36 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
         //         }
         //     | _ -> ()
 
-    /// Writes the field methods for the writer's type to the <paramref name="writer"/> and returns a list of
-    /// <see cref="FieldArgumentsBuilderInfo" /> for fields that have arguments.
-    member _.WriteFieldMethodsForQueryBuilder (unionFieldBuilders: UnionCasesBuilderWriter array) writer: ValueTask =
+    member _.WriteFieldMethodsForQueryBuilder (unionFieldBuilders: UnionCasesBuilderWriter array)
+                                              (interfaceFieldBuilders: InterfaceCasesBuilderWriter array)
+                                              writer: ValueTask =
+
+        let writeInterfaceTypeMethods (interfaceType: Interface) writer =
+            pipeWriter writer {
+                // First, write interface fields (like Id())
+                for field in interfaceType.Fields do
+                    yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
+
+                // Then, write the concrete case selector methods directly to the query builder
+                let concreteTypeNames = _context.GetInterfaceImplementationTypeNames interfaceType.Name
+
+                if not (Array.isEmpty concreteTypeNames) then
+                    yield! InterfaceCasesBuilderWriter.WriteDirectConcreteCaseMethods builderClassName concreteTypeNames
+            }
+
+        let writeClassOrInputObjectMethods visitedType writer =
+            pipeWriter writer {
+                // Write the field methods for this type
+                let fields =
+                    match visitedType with
+                    | VisitedTypes.Class class' -> class'.Fields
+                    | VisitedTypes.InputObject inputObject -> inputObject.Fields
+                    | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
+
+                for field in fields do
+                    yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
+            }
+
         pipeWriter writer {
             match type' with
             | VisitedTypes.Operation operation ->
@@ -165,39 +214,25 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
                     yield! writeQueryBuilderFieldMethod fieldName fieldType Array.empty None
                 | ReturnType.FieldType _ ->
                     yield! writeQueryBuilderReturnValueMethod
+                | ReturnType.VisitedType (VisitedTypes.UnionType unionType)->
+                    let unionCaseNames = Array.map (fun (x: VisitedTypes) -> x.Name) unionType.Cases
+                    yield! UnionCasesBuilderWriter.WriteDirectUnionCaseMethods builderClassName unionCaseNames
+                | ReturnType.VisitedType (VisitedTypes.Interface interfaceType) ->
+                    yield! writeInterfaceTypeMethods interfaceType
                 | ReturnType.VisitedType visitedType ->
-                    // Write the field methods for this type
-                    match visitedType with
-                    | VisitedTypes.UnionType unionType ->
-                        let unionCaseNames = Array.map (fun (x: VisitedTypes) -> x.Name) unionType.Cases
-                        yield! UnionCasesBuilderWriter.WriteDirectUnionCaseMethods builderClassName unionCaseNames
-                    | visitedType ->
-                        let fields =
-                            match visitedType with
-                            | VisitedTypes.Class class' -> class'.Fields
-                            | VisitedTypes.Interface interface' -> interface'.Fields
-                            | VisitedTypes.InputObject inputObject -> inputObject.Fields
-                            | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
-
-                        for field in fields do
-                            yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
+                    yield! writeClassOrInputObjectMethods visitedType
             | visitedType ->
                 match visitedType with
                 | VisitedTypes.UnionType _ ->
                     // Union cases will be added below
                     ()
+                | VisitedTypes.Interface interfaceType ->
+                    yield! writeInterfaceTypeMethods interfaceType
                 | visitedType ->
-                    let fields =
-                        match visitedType with
-                        | VisitedTypes.Class class' -> class'.Fields
-                        | VisitedTypes.Interface interface' -> interface'.Fields
-                        | VisitedTypes.InputObject inputObject -> inputObject.Fields
-                        | _ -> failwith $"The VisitedType %A{visitedType.Name} is not supported here."
+                    yield! writeClassOrInputObjectMethods visitedType
 
-                    for field in fields do
-                        yield! writeQueryBuilderFieldMethod field.Name field.ValueType field.Arguments field.Deprecation
-
-            // Add union case methods (only for non-operations, since operations write them directly)
+            // Add union case and concrete case methods (only for non-operations, as operations write them directly to the builder above)
             if not type'.IsOperation then
                 yield! writeQueryBuilderUnionCaseMethods unionFieldBuilders
+                yield! writeQueryBuilderInterfaceConcreteCaseMethods interfaceFieldBuilders
         }

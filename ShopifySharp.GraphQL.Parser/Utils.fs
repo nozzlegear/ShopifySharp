@@ -44,6 +44,7 @@ module Utils =
         | ArgumentBuilder str -> toCasing Pascal $"{str}ArgumentsBuilder"
         | FieldsArgumentBuilder (parentTypeName, fieldName) -> $"{toCasing Pascal parentTypeName}{toCasing Pascal fieldName}ArgumentsBuilder"
         | UnionCasesBuilder str -> toCasing Pascal $"{str}UnionCasesBuilder"
+        | InterfaceCasesBuilder str -> toCasing Pascal $"{str}InterfaceCasesBuilder"
 
     /// Fully qualifies builder class names which might collide with each other
     let qualifiedBuilderTypeName (builderType: QueryBuilderTypes) =

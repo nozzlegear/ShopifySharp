@@ -20,7 +20,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
     let writeClassNameAndInheritedType writer: ValueTask =
         let baseBuilderClassName =
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' || InterfacesBuilderWriter.CanAddInterfacesConcreteCases type' then
                 "FieldsQueryBuilderBase"
             else
                 "QueryBuilderBase"
@@ -231,11 +231,12 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             | Some visitedType ->
                 let fieldsWriter = FieldsBuilderWriter(visitedType, wrapperClassName, context)
                 let unionsWriter = UnionsBuilderWriter(visitedType, context)
+                let interfacesWriter = InterfacesBuilderWriter(visitedType, context)
 
-                if FieldsBuilderWriter.CanAddFields visitedType || UnionsBuilderWriter.CanAddUnions visitedType then
+                if FieldsBuilderWriter.CanAddFields visitedType || UnionsBuilderWriter.CanAddUnions visitedType || InterfacesBuilderWriter.CanAddInterfacesConcreteCases visitedType then
                     // Generate field methods but ignore the returned FieldArgumentsBuilderInfo
                     // (nested wrappers are already generated from the base type's generation)
-                    let! _ = fieldsWriter.WriteFieldMethodsForQueryBuilder unionsWriter.UnionFieldBuilders writer
+                    let! _ = fieldsWriter.WriteFieldMethodsForQueryBuilder unionsWriter.UnionFieldBuilders interfacesWriter.InterfaceFieldBuilders writer
                     ()
             | None ->
                 printfn $"Warning: Could not find return type {baseTypeName} for field-specific QueryBuilder {wrapperClassName}"
@@ -252,6 +253,7 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
 
         let argumentsBuilder = ArgumentsBuilderWriter(type', context)
         let unionsBuilder = UnionsBuilderWriter(type', context)
+        let interfacesBuilder = InterfacesBuilderWriter(type', context)
         let namespaceName = getQueryBuilderNamespace type'.IsOperation
 
         ValueTask(task {
@@ -286,8 +288,8 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             }
 
             // Add field methods directly to QueryBuilder and collect field-specific ArgumentsBuilder info
-            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' then
-                do! fieldsWriter.WriteFieldMethodsForQueryBuilder unionsBuilder.UnionFieldBuilders writer
+            if FieldsBuilderWriter.CanAddFields type' || UnionsBuilderWriter.CanAddUnions type' || InterfacesBuilderWriter.CanAddInterfacesConcreteCases type' then
+                do! fieldsWriter.WriteFieldMethodsForQueryBuilder unionsBuilder.UnionFieldBuilders interfacesBuilder.InterfaceFieldBuilders writer
 
             let mappedFieldArgumentsInfo = FieldsBuilderWriter.MapFieldArgumentsToArgumentBuildersInfo type'
 
@@ -295,9 +297,10 @@ type QueryBuilderWriter(type': VisitedTypes, context: IParsedContext) =
                 do! "}"
                 do! NewLine
 
-                // Keep ArgumentsBuilder and UnionCasesBuilder as separate classes
+                // Keep ArgumentsBuilder, UnionCasesBuilder and InterfaceCasesBuilder as separate classes
                 yield! argumentsBuilder.WriteToPipewriter
                 yield! unionsBuilder.WriteToPipewriter
+                yield! interfacesBuilder.WriteToPipewriter
 
                 // Generate field-specific ArgumentsBuilders and QueryBuilders only for non-Operation types
                 // Operations already have their own unique query builders, so we don't need field-specific ones

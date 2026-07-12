@@ -41,7 +41,16 @@ public interface IUnionCasesBuilder<out TSelf> where TSelf : IUnionCasesBuilder<
 }
 
 [PublicAPI]
-public interface IFieldsBuilder<out TSelf> : IUnionCasesBuilder<TSelf> where TSelf : IFieldsBuilder<TSelf>
+public interface IInterfaceCasesBuilder<out TSelf> where TSelf : IInterfaceCasesBuilder<TSelf>
+{
+    /// <summary>Adds a query fragment for a concrete type implementing the GraphQL interface.</summary>
+    /// <typeparam name="TConcreteType">The type which implements the GraphQL interface.</typeparam>
+    TSelf AddInterfaceCase<TConcreteType>(IQuery<TConcreteType> concreteTypeQuery)
+        where TConcreteType : class?;
+}
+
+[PublicAPI]
+public interface IFieldsBuilder<out TSelf> : IUnionCasesBuilder<TSelf>, IInterfaceCasesBuilder<TSelf> where TSelf : IFieldsBuilder<TSelf>
 {
     TSelf AddField(string field);
     TSelf AddField(IQuery subQuery);
@@ -124,6 +133,17 @@ public class Query<TSource> : IQuery<TSource>
         // Ensure we also select the __typename polymorphic discriminator key, which is required for deserializing union cases
         if (!unionCaseQuery.SelectList.Contains(PolymorphicDiscriminatorKey))
             SelectList.Add(unionCaseQuery.AddField(PolymorphicDiscriminatorKey));
+
+        return this;
+    }
+
+    public IQuery<TSource> AddInterfaceCase<TConcreteType>(IQuery<TConcreteType> concreteTypeQuery) where TConcreteType : class?
+    {
+        RequiredArgument.NotNull(concreteTypeQuery, nameof(concreteTypeQuery));
+
+        // Ensure we also select the __typename polymorphic discriminator key, which is required for deserializing interface cases
+        if (!concreteTypeQuery.SelectList.Contains(PolymorphicDiscriminatorKey))
+            SelectList.Add(concreteTypeQuery.AddField(PolymorphicDiscriminatorKey));
 
         return this;
     }
