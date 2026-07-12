@@ -33,5 +33,13 @@
         <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     </ItemGroup>
+    <ItemGroup>
+       <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+           <_Parameter1>ShopifySharp.Tests</_Parameter1>
+       </AssemblyAttribute>
+       <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+           <_Parameter1>ShopifySharp.GraphQL.Parser.Tests</_Parameter1>
+       </AssemblyAttribute>
+    </ItemGroup>
 
 </Project>
