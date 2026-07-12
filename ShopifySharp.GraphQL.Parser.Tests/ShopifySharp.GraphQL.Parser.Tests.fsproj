@@ -30,6 +30,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="UnionsBuilderWriterTests.fs" />
+        <Compile Include="InterfacesBuilderWriterTests.fs" />
+        <Compile Include="TestHelpers.fs" />
+        <Compile Include="ParserPipelineTests.fs" />
     </ItemGroup>
 
 </Project>
