@@ -231,6 +231,21 @@ test-query-builders skipIntegrationTests="false":
     @echo ""
     @echo "Query builder tests passed."
 
+# Run unit tests on the ShopifySharp.GraphQL.Parser project.
+[group("test")]
+test-graphql-parser:
+    @echo "Testing ShopifySharp.GraphQL.Parser..."
+    dotnet test \
+        -c "{{config}}" \
+        -f "{{netCoreApp}}" \
+        --verbosity "{{verbosity}}" \
+        --logger "trx;LogFileName=ShopifySharp.GraphQL.Parser.Tests.trx" \
+        --results-directory "TestResults" \
+        --filter "Category!=DotNetFramework" \
+        "ShopifySharp.GraphQL.Parser.Tests/ShopifySharp.GraphQL.Parser.Tests.fsproj"
+    @echo ""
+    @echo "ShopifySharp.GraphQL.Parser tests passed."
+
 # Run unit tests on the main ShopifySharp project.
 [group("test")]
 test-main-project:
@@ -248,7 +263,7 @@ test-main-project:
 
 # Run all tests (DI, integration, and unit tests)
 [group("test")]
-test-everything: test-di test-integration test-main-project
+test-everything: test-di test-graphql-parser test-integration test-main-project
     @echo "All tests passed."
 
 # Set package version for a project (used in release workflow)
