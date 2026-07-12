@@ -17,6 +17,8 @@
         <Compile Include="ArgumentsBuilderWriter.fs" />
         <Compile Include="UnionCasesBuilderWriter.fs" />
         <Compile Include="UnionsBuilderWriter.fs" />
+        <Compile Include="InterfaceCasesBuilderWriter.fs" />
+        <Compile Include="InterfacesBuilderWriter.fs" />
         <Compile Include="FieldsBuilderWriter.fs" />
         <Compile Include="QueryBuilderWriter.fs" />
         <Compile Include="Visitor.fs" />

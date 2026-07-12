@@ -42,4 +42,11 @@ public abstract class FieldsQueryBuilderBase<T, TSelf> : QueryBuilderBase<T, TSe
         InnerQuery.AddUnionCase(unionCaseQuery);
         return Self;
     }
+
+    public TSelf AddInterfaceCase<TConcreteType>(IQuery<TConcreteType> concreteTypeQuery)
+        where TConcreteType : class?
+    {
+        InnerQuery.AddInterfaceCase(concreteTypeQuery);
+        return Self;
+    }
 }

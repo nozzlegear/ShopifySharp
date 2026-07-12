@@ -1,4 +1,4 @@
-﻿namespace ShopifySharp.GraphQL.Parser
+namespace ShopifySharp.GraphQL.Parser
 
 open System.Collections.Generic
 open GraphQLParser
@@ -200,6 +200,7 @@ type QueryBuilderTypes =
     | ArgumentBuilder of str: string
     | FieldsArgumentBuilder of parentTypeName: string * fieldName: string
     | UnionCasesBuilder of str: string
+    | InterfaceCasesBuilder of str: string
 
 type IParsedContext =
     abstract member CasingType: Casing with get
