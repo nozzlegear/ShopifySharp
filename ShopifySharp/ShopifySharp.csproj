@@ -9,6 +9,10 @@
     <LangVersion>Latest</LangVersion>
     <NoWarn>CS0618</NoWarn>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(BuildingFromParser)' == 'true'">
+    <IntermediateOutputPath>obj/ParserTemp/</IntermediateOutputPath>
+    <OutputPath>bin/ParserTemp/</OutputPath>
+  </PropertyGroup>
   <PropertyGroup>
     <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
     <Authors>Nozzlegear</Authors>
@@ -34,5 +38,10 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Portable.System.DateTimeOnly" />
     <PackageReference Include="Portable.System.DateTimeOnly.Json" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(BuildingFromParser)' == 'true'">
+    <Compile Remove="Entities/GraphQL/Generated/**/*.cs" />
+    <Compile Remove="Entities/GraphQL/Node.cs" />
   </ItemGroup>
 </Project>
