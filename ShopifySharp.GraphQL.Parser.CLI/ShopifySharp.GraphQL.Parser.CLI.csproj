@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -14,7 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ShopifySharp.GraphQL.Parser\ShopifySharp.GraphQL.Parser.fsproj" />
-      <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" />
+      <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" AdditionalProperties="BuildingFromParser=true" />
     </ItemGroup>
 
 </Project>
