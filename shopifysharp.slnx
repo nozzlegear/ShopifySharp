@@ -22,6 +22,7 @@
   <Project Path="ShopifySharp.Extensions.DependencyInjection.Tests/ShopifySharp.Extensions.DependencyInjection.Tests.csproj" />
   <Project Path="ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" />
   <Project Path="ShopifySharp.GraphQL.Parser.CLI/ShopifySharp.GraphQL.Parser.CLI.csproj" />
+  <Project Path="ShopifySharp.GraphQL.Parser.Tests.Stubs/ShopifySharp.GraphQL.Parser.Tests.Stubs.csproj" />
   <Project Path="ShopifySharp.GraphQL.Parser.Tests/ShopifySharp.GraphQL.Parser.Tests.fsproj" />
   <Project Path="ShopifySharp.GraphQL.Parser/ShopifySharp.GraphQL.Parser.fsproj" />
   <Project Path="ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj" />
