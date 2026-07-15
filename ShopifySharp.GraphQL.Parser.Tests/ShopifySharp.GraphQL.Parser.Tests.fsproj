@@ -26,6 +26,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ShopifySharp.GraphQL.Parser\ShopifySharp.GraphQL.Parser.fsproj" />
+        <ProjectReference Include="..\ShopifySharp.GraphQL.Parser.Tests.Stubs\ShopifySharp.GraphQL.Parser.Tests.Stubs.csproj" />
     </ItemGroup>
 
     <ItemGroup>
