@@ -6,6 +6,9 @@
 
 - [ShopifySharp/GraphQL/QueryBuilders/Query.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/Query.cs)
 - [ShopifySharp/GraphQL/QueryBuilders/QueryBuilderBase.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/QueryBuilderBase.cs)
+- [ShopifySharp/GraphQL/QueryBuilders/FieldsQueryBuilderBase.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/FieldsQueryBuilderBase.cs)
+- [ShopifySharp/GraphQL/QueryBuilders/InterfaceCasesBuilderBase.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/InterfaceCasesBuilderBase.cs)
+- [ShopifySharp/GraphQL/QueryBuilders/UnionCasesBuilderBase.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/UnionCasesBuilderBase.cs)
 - [ShopifySharp/GraphQL/QueryBuilders/QueryStringBuilder.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/GraphQL/QueryBuilders/QueryStringBuilder.cs)
 - [ShopifySharp/Infrastructure/RequiredArgument.cs](https://github.com/nozzlegear/shopifysharp/tree/master/ShopifySharp/Infrastructure/RequiredArgument.cs)
 
