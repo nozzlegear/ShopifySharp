@@ -13,6 +13,14 @@ public class QueryStringBuilderTests
 {
     private readonly QueryStringBuilder _sut = new();
 
+    public enum DateTimeTestType
+    {
+        DateTime = 0,
+        DateTimeOffset = 1,
+        DateOnly = 2,
+        TimeOnly = 3
+    }
+
     #region Build Tests
 
     [Fact]
@@ -367,6 +375,50 @@ public class QueryStringBuilderTests
 
         // Assert
         result.Should().Be("\"2024-06-15T13:45:30.0000000Z\"", "DateTime should be ISO 8601 format and quoted");
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(6)]
+    [InlineData(12)]
+    public void FormatQueryParam_WithDateTimeOffset_ShouldConvertToIso8601String(int timespanOffset)
+    {
+        // Setup
+        var dateTime = new DateTimeOffset(2024, 6, 15, 13, 45, 30, TimeSpan.FromHours(timespanOffset));
+
+        // Act
+        var result = _sut.FormatQueryParam(dateTime);
+
+        // Assert
+        result.Should().Be($"\"2024-06-15T13:45:30.0000000+{timespanOffset.ToString("00")}:00\"", "DateTimeOffset should be ISO 8601 format and quoted");
+    }
+    [Theory]
+    [InlineData(1)]
+    [InlineData(15)]
+    [InlineData(28)]
+    public void FormatQueryParam_WithDateOnly_ShouldConvertToIso8601String(int day)
+    {
+        // Setup
+        var dateOnly = new DateOnly(2024, 6, day);
+
+        // Act
+        var result = _sut.FormatQueryParam(dateOnly);
+
+        // Assert
+        result.Should().Be($"\"2024-06-{day.ToString("00")}\"", "DateOnly should be ISO 8601 format and quoted");
+    }
+
+    [Fact]
+    public void FormatQueryParam_WithTimeOnly_ShouldConvertToIso8601String()
+    {
+        // Setup
+        var timeOnly = new TimeOnly(13, 45, 30);
+
+        // Act
+        var result = _sut.FormatQueryParam(timeOnly);
+
+        // Assert
+        result.Should().StartWith("\"", "TimeOnly should be formatted as a string");
     }
 
     #endregion
@@ -747,23 +799,53 @@ public class QueryStringBuilderTests
         }
     }
 
-    [Fact]
-    public void FormatQueryParam_RecursionTest_DateTimeToString_ShouldNotCauseInfiniteLoop()
+    [Theory]
+    [CombinatorialData]
+    public void FormatQueryParam_WithDateTimeTypes_ShouldProduceExpectedIso8601Strings(DateTimeTestType dateTimeTestType)
     {
+        // Bug report: https://github.com/nozzlegear/ShopifySharp/issues/1260
+        // DateTimeOffset, DateOnly and TimeOnly (and DateTime before them) were not being handled by
+        // FormatQueryParam, so they would fall through to the ObjectToDictionary method. That method enumerates static
+        // properties (UtcNow, Now, etc.), and DateTimeOffset has several static properties that return fresh instances
+        // of DateTime on every call, causing infinite recursion and a StackOverflowException. In the case of other
+        // instances on every call (e.g. DateTime.Now returns a new DateTime). This caused infinite recursion
+        // and threw a StackOverflowException.
+        //
+        // For the other date/time types, they were dropping into that ObjectToDictionary method and coming out as
+        // objects that look like { date: 5, hour: 7, minute: 33, second: 10, ... }, which is obviously invalid when
+        // you're using them as GraphQL parameters.
+
         // Setup
-        var dateTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+        object inputValue = dateTimeTestType switch
+        {
+            DateTimeTestType.DateTime => new DateTime(2024, 6, 15, 13, 45, 30, DateTimeKind.Utc),
+            DateTimeTestType.DateTimeOffset => new DateTimeOffset(2024, 6, 15, 13, 45, 30, TimeSpan.Zero),
+            DateTimeTestType.DateOnly => new DateOnly(2024, 6, 15),
+            DateTimeTestType.TimeOnly => new TimeOnly(13, 45, 30),
+            _ => throw new InvalidOperationException($"Unhandled {nameof(DateTimeTestType)} value: {dateTimeTestType}")
+        };
+
+        var expectedValue = dateTimeTestType switch
+        {
+            DateTimeTestType.DateTime => "2024-06-15T13:45:30.0000000Z",
+            DateTimeTestType.DateTimeOffset => "2024-06-15T13:45:30.0000000+00:00",
+            DateTimeTestType.DateOnly => "2024-06-15",
+            DateTimeTestType.TimeOnly => "13:45:30.0000000",
+            _ => throw new InvalidOperationException($"Unhandled {nameof(DateTimeTestType)} value: {dateTimeTestType}")
+        };
 
         // Act
-        // This would cause infinite loop if DateTime recursion isn't handled correctly
-        var act = () => _sut.FormatQueryParam(dateTime);
+        var act = () => _sut.FormatQueryParam(inputValue);
 
-        // Assert
-        act.Should().NotThrow("DateTime should convert to string and then format as string");
+        // Act and Assert
+        act.Should().NotThrow("{0} should convert to string and then format as string", inputValue.GetType().Name);
 
         var result = act();
-        result.Should().StartWith("\"");
-        result.Should().EndWith("\"");
+        result.Should().StartWith("\"", "{0} should start with a quotation mark when formatted to a query param", inputValue.GetType().Name);
+        result.Should().EndWith("\"", "{0} should end with a quotation mark when formatted to a query param", inputValue.GetType().Name);
+        result.Should().Be($"\"{expectedValue}\"");
     }
+
 
     #endregion
 

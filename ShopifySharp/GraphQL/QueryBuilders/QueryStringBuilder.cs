@@ -111,6 +111,10 @@ public class QueryStringBuilder : IQueryStringBuilder
     ///       <description><c>"2024-06-15T13:45:30.0000000Z"</c></description>
     ///     </item>
     ///     <item>
+    ///       <term>DateTimeOffset</term>
+    ///       <description><c>"2024-06-15T13:45:30.0000000+00:00"</c></description>
+    ///     </item>
+    ///     <item>
     ///       <term>Key value pair</term>
     ///       <description><c>foo:"bar"</c> or <c>foo:10</c> ...</description>
     ///     </item>
@@ -188,6 +192,18 @@ public class QueryStringBuilder : IQueryStringBuilder
 
                 case DateTime dateTimeValue:
                     value = dateTimeValue.ToString("o");
+                    continue;
+
+                case DateTimeOffset dateTimeOffsetValue:
+                    value = dateTimeOffsetValue.ToString("o");
+                    continue;
+
+                case DateOnly dateOnlyValue:
+                    value = dateOnlyValue.ToString("o");
+                    continue;
+
+                case TimeOnly timeOnlyValue:
+                    value = timeOnlyValue.ToString("o");
                     continue;
 
                 case KeyValuePair<string, object> kvValue:
