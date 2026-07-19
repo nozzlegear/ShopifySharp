@@ -286,9 +286,13 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
         HttpRequestMessage? capturedRequest = null;
+        string? requestContent = null;
 
         A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
-            .Invokes(call => capturedRequest = call.GetArgument<HttpRequestMessage>(0))
+            .Invokes(async call => {
+                capturedRequest = call.GetArgument<HttpRequestMessage>(0);
+                requestContent = await capturedRequest.Content!.ReadAsStringAsync();
+            })
             .Returns(result);
 
         // Act
@@ -298,13 +302,12 @@ public class ShopifyOauthUtilityTests
             ShopDomain = ShopDomain,
             ClientId = ClientId,
             ClientSecret = "some-secret",
-            Expiring = true
+            RequestExpiringOfflineToken = true
         });
 
         // Assert
         capturedRequest.Should().NotBeNull();
         capturedRequest!.RequestUri.Should().Be(new Uri("https://example.myshopify.com/admin/oauth/access_token"));
-        var requestContent = await capturedRequest.Content!.ReadAsStringAsync();
         requestContent.Should().Contain("\"expiring\":1");
 
         authorizationResult.AccessToken.Should().Be(accessToken);
@@ -930,7 +933,7 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshAccessTokenIfNeededAsync_WhenTheCurrentTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTheCurrentTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
     {
         // Setup
         var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
@@ -942,7 +945,7 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var authorizationResult = await _sut.RefreshAccessTokenIfNeededAsync(new RefreshAccessTokenIfNeededOptions
+        var authorizationResult = await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
@@ -958,7 +961,7 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshAccessTokenIfNeededAsync_WhenTheCurrentTokenIsExpired_ShouldRefreshIt()
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTheCurrentTokenIsExpired_ShouldRefreshIt()
     {
         // Setup
         const int expiresIn = 180;
@@ -987,13 +990,17 @@ public class ShopifyOauthUtilityTests
               """;
         var response = Utils.MakeHttpResponseMessage(json);
         HttpRequestMessage? capturedRequest = null;
+        string? requestContent = null;
 
         A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
-            .Invokes(call => capturedRequest = call.GetArgument<HttpRequestMessage>(0))
+            .Invokes(async call => {
+                capturedRequest = call.GetArgument<HttpRequestMessage>(0);
+                requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
+            })
             .Returns(response);
 
         // Act
-        var authorizationResult = await _sut.RefreshAccessTokenIfNeededAsync(new RefreshAccessTokenIfNeededOptions
+        var authorizationResult = await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
@@ -1008,13 +1015,12 @@ public class ShopifyOauthUtilityTests
         authorizationResult.RefreshTokenExpiresIn.Should().Be(TimeSpan.FromSeconds(refreshTokenExpiresIn));
 
         capturedRequest.Should().NotBeNull();
-        var requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
         requestContent.Should().Contain($"\"refresh_token\":\"{existingRefreshToken}\"");
         requestContent.Should().Contain($"\"access_token\":\"{existingAccessToken}\"");
     }
 
     [Fact]
-    public async Task RefreshAccessTokenIfNeededAsync_WhenTheRefreshTokenIsExpired_ShouldThrow()
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTheRefreshTokenIsExpired_ShouldThrow()
     {
         // Setup
         var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
@@ -1026,7 +1032,7 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var act = async () => await _sut.RefreshAccessTokenIfNeededAsync(new RefreshAccessTokenIfNeededOptions
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
@@ -1263,6 +1269,88 @@ public class ShopifyOauthUtilityTests
         var exn = await act.Should().ThrowAsync<ShopifyJsonParseException>()
             .WithMessage("The JSON response from Shopify does not contain a valid 'associated_user_scope' property. The property type was *, which is invalid.");
         exn.Which.JsonPropertyName.Should().Be("associated_user_scope");
+    }
+
+    #endregion
+
+    #region Refactored token type and guard tests
+
+    [Fact]
+    public void ShopifyAccessTokenType_ShouldResolveCorrectly()
+    {
+        // Online access token
+        var onlineToken = new AuthorizationResult("token", [])
+        {
+            OnlineAccess = new OnlineAccessInfo()
+        };
+        onlineToken.Type.Should().Be(ShopifyAccessTokenType.Online);
+
+        // Expiring offline access token
+        var expiringOfflineToken = new AuthorizationResult("token", [])
+        {
+            RefreshToken = "some-refresh-token"
+        };
+        expiringOfflineToken.Type.Should().Be(ShopifyAccessTokenType.ExpiringOffline);
+
+        // Legacy permanent offline access token
+        var permanentOfflineToken = new AuthorizationResult("token", []);
+        permanentOfflineToken.Type.Should().Be(ShopifyAccessTokenType.LegacyPermanentOffline);
+    }
+
+    [Fact]
+    public void AuthorizationResult_ExpiresIn_ShouldFallbackToOnlineAccessExpiresIn()
+    {
+        var result = new AuthorizationResult("token", [])
+        {
+            OnlineAccess = new OnlineAccessInfo
+            {
+                ExpiresIn = TimeSpan.FromHours(5)
+            }
+        };
+
+        // ExpiresIn is not set on the result itself, but OnlineAccess has it
+        result.ExpiresIn.Should().Be(TimeSpan.FromHours(5));
+
+        // When root ExpiresIn is set, it overrides the fallback
+        result.ExpiresIn = TimeSpan.FromHours(2);
+        result.ExpiresIn.Should().Be(TimeSpan.FromHours(2));
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTokenIsOnline_ShouldThrowImmediately()
+    {
+        var onlineToken = new AuthorizationResult("token", [])
+        {
+            OnlineAccess = new OnlineAccessInfo()
+        };
+
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret",
+            AuthorizationResult = onlineToken
+        });
+
+        await act.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("Online access tokens cannot be refreshed programmatically*");
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTokenIsLegacyPermanent_ShouldThrowImmediately()
+    {
+        var legacyToken = new AuthorizationResult("token", []);
+
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret",
+            AuthorizationResult = legacyToken
+        });
+
+        await act.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("Legacy permanent offline access tokens do not expire*");
     }
 
     #endregion

@@ -3,7 +3,7 @@ using System;
 
 namespace ShopifySharp.Utilities;
 
-public record RefreshAccessTokenIfNeededOptions
+public record RefreshOfflineAccessTokenIfNeededOptions
 {
     /// <summary>
     /// The store's *.myshopify.com url.
@@ -46,4 +46,3 @@ public record RefreshAccessTokenIfNeededOptions
     /// </summary>
     public TimeSpan RefreshBeforeExpiry { get; set; } = TimeSpan.Zero;
 }
-

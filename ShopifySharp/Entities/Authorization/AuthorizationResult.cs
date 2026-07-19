@@ -30,10 +30,28 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     public OnlineAccessInfo? OnlineAccess { get; set; }
 
     /// <summary>
+    /// Identifies whether this is a legacy permanent offline, expiring offline, or online access token.
+    /// </summary>
+    public ShopifyAccessTokenType Type =>
+        OnlineAccess != null ? ShopifyAccessTokenType.Online :
+        HasRefreshToken ? ShopifyAccessTokenType.ExpiringOffline :
+        ShopifyAccessTokenType.LegacyPermanentOffline;
+
+    private TimeSpan? _expiresIn;
+
+    /// <summary>
     /// The duration for which the access token remains valid. This is returned for Shopify's
     /// online access tokens and expiring offline access tokens.
     /// </summary>
-    public TimeSpan? ExpiresIn { get; set; }
+    /// <remarks>
+    /// Note: The getter falls back to <c>OnlineAccess.ExpiresIn</c> to maintain backward compatibility with 
+    /// legacy online access tokens that were serialized/stored in databases prior to PR 1257.
+    /// </remarks>
+    public TimeSpan? ExpiresIn
+    {
+        get => _expiresIn ?? OnlineAccess?.ExpiresIn;
+        set => _expiresIn = value;
+    }
 
     /// <summary>
     /// The refresh token returned by Shopify for expiring offline access tokens.
