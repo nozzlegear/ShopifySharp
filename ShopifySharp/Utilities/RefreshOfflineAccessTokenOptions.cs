@@ -1,10 +1,7 @@
 #nullable enable
-using System;
-
 namespace ShopifySharp.Utilities;
 
-[Obsolete("Use " + nameof(RefreshOfflineAccessTokenOptions) + " instead.")]
-public record RefreshAccessTokenOptions
+public record RefreshOfflineAccessTokenOptions
 {
     /// The store's *.myshopify.com url
     public

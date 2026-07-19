@@ -33,5 +33,5 @@ public record AuthorizeOptions
 
     /// Set to <c>true</c> to request Shopify's expiring offline access token flow, which returns
     /// an access token expiry and refresh token.
-    public bool Expiring { get; set; }
+    public bool RequestExpiringOfflineToken { get; set; }
 }
