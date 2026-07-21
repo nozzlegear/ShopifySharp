@@ -1015,8 +1015,8 @@ public class ShopifyOauthUtilityTests
         authorizationResult.RefreshTokenExpiresIn.Should().Be(TimeSpan.FromSeconds(refreshTokenExpiresIn));
 
         capturedRequest.Should().NotBeNull();
+        requestContent.Should().Contain("\"grant_type\":\"refresh_token\"");
         requestContent.Should().Contain($"\"refresh_token\":\"{existingRefreshToken}\"");
-        requestContent.Should().Contain($"\"access_token\":\"{existingAccessToken}\"");
     }
 
     [Fact]
