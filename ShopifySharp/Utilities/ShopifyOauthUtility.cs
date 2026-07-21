@@ -272,6 +272,94 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         ClientSecret = clientSecret
     });
 
+    /// <inheritdoc />
+    [Obsolete("Use " + nameof(RefreshOfflineAccessTokenAsync) + "(" + nameof(RefreshOfflineAccessTokenOptions) + ", CancellationToken) instead. This method will be removed in a future version of ShopifySharp.")]
+    public Task<AuthorizationResult> RefreshAccessTokenAsync(RefreshAccessTokenOptions options) =>
+        RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
+        {
+            ShopDomain = options.ShopDomain,
+            ClientId = options.ClientId,
+            ClientSecret = options.ClientSecret,
+            RefreshToken = options.RefreshToken,
+            ExistingStoreAccessToken = options.ExistingStoreAccessToken
+        });
+
+    /// <inheritdoc />
+    [Obsolete("Use " + nameof(RefreshOfflineAccessTokenAsync) + "(" + nameof(RefreshOfflineAccessTokenOptions) + ", CancellationToken) instead. This method will be removed in a future version of ShopifySharp.")]
+    public Task<AuthorizationResult> RefreshAccessTokenAsync(
+        string shopDomain,
+        string clientId,
+        string clientSecret,
+        string refreshToken,
+        string existingStoreAccessToken
+    ) => RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
+    {
+        ShopDomain = shopDomain,
+        ClientId = clientId,
+        ClientSecret = clientSecret,
+        RefreshToken = refreshToken,
+        ExistingStoreAccessToken = existingStoreAccessToken
+    });
+
+    /// <inheritdoc />
+    public async Task<AuthorizationResult> RefreshOfflineAccessTokenAsync(
+        RefreshOfflineAccessTokenOptions options,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var ub = new UriBuilder(_domainUtility.BuildShopDomainUri(options.ShopDomain))
+        {
+            Path = "admin/oauth/access_token"
+        };
+        using var content = new JsonContent(new
+        {
+            client_id = options.ClientId,
+            client_secret = options.ClientSecret,
+            grant_type = "refresh_token",
+            refresh_token = options.RefreshToken
+        });
+        using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
+
+        return await SendRequestAndParseAuthorizationResultAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<AuthorizationResult> RefreshOfflineAccessTokenIfNeededAsync(
+        RefreshOfflineAccessTokenIfNeededOptions options,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (options == null)
+            throw new ArgumentNullException(nameof(options));
+
+        if (options.AuthorizationResult == null)
+            throw new ArgumentNullException(nameof(options.AuthorizationResult));
+
+        var authResult = options.AuthorizationResult;
+
+        // Throw when given non-refreshable tokens
+        if (authResult.Type == ShopifyAccessTokenType.Online)
+            throw new InvalidOperationException("Online access tokens cannot be refreshed programmatically; the user must be redirected to Shopify's OAuth flow again to obtain a new token.");
+
+        if (authResult.Type == ShopifyAccessTokenType.LegacyPermanentOffline)
+            throw new InvalidOperationException("Legacy permanent offline access tokens do not expire and cannot be refreshed.");
+
+        if (!authResult.ShouldRefreshAccessToken(options.RefreshBeforeExpiry))
+            return Task.FromResult(authResult);
+
+        if (authResult.RefreshTokenHasExpired())
+            throw new InvalidOperationException("The authorization result's refresh token has expired and can no longer be used to refresh the access token.");
+
+        return RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
+        {
+            ShopDomain = options.ShopDomain,
+            ClientId = options.ClientId,
+            ClientSecret = options.ClientSecret,
+            RefreshToken = authResult.RefreshToken!,
+            ExistingStoreAccessToken = authResult.AccessToken
+        }, cancellationToken);
+    }
+
     private async Task<AuthorizationResult> SendRequestAndParseAuthorizationResultAsync(
         CloneableRequestMessage requestMessage,
         CancellationToken cancellationToken = default
@@ -411,93 +499,5 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
             .Select(s => s.Trim())
             .Where(s => s.Length > 0)
             .ToArray() ?? [];
-    }
-
-    /// <inheritdoc />
-    [Obsolete("Use " + nameof(RefreshOfflineAccessTokenAsync) + "(" + nameof(RefreshOfflineAccessTokenOptions) + ", CancellationToken) instead. This method will be removed in a future version of ShopifySharp.")]
-    public Task<AuthorizationResult> RefreshAccessTokenAsync(RefreshAccessTokenOptions options) =>
-        RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
-        {
-            ShopDomain = options.ShopDomain,
-            ClientId = options.ClientId,
-            ClientSecret = options.ClientSecret,
-            RefreshToken = options.RefreshToken,
-            ExistingStoreAccessToken = options.ExistingStoreAccessToken
-        });
-
-    /// <inheritdoc />
-    [Obsolete("Use " + nameof(RefreshOfflineAccessTokenAsync) + "(" + nameof(RefreshOfflineAccessTokenOptions) + ", CancellationToken) instead. This method will be removed in a future version of ShopifySharp.")]
-    public Task<AuthorizationResult> RefreshAccessTokenAsync(
-        string shopDomain,
-        string clientId,
-        string clientSecret,
-        string refreshToken,
-        string existingStoreAccessToken
-    ) => RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
-    {
-        ShopDomain = shopDomain,
-        ClientId = clientId,
-        ClientSecret = clientSecret,
-        RefreshToken = refreshToken,
-        ExistingStoreAccessToken = existingStoreAccessToken
-    });
-
-    /// <inheritdoc />
-    public async Task<AuthorizationResult> RefreshOfflineAccessTokenAsync(
-        RefreshOfflineAccessTokenOptions options,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var ub = new UriBuilder(_domainUtility.BuildShopDomainUri(options.ShopDomain))
-        {
-            Path = "admin/oauth/access_token"
-        };
-        using var content = new JsonContent(new
-        {
-            client_id = options.ClientId,
-            client_secret = options.ClientSecret,
-            grant_type = "refresh_token",
-            refresh_token = options.RefreshToken
-        });
-        using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
-
-        return await SendRequestAndParseAuthorizationResultAsync(request, cancellationToken);
-    }
-
-    /// <inheritdoc />
-    public Task<AuthorizationResult> RefreshOfflineAccessTokenIfNeededAsync(
-        RefreshOfflineAccessTokenIfNeededOptions options,
-        CancellationToken cancellationToken = default
-    )
-    {
-        if (options == null)
-            throw new ArgumentNullException(nameof(options));
-
-        if (options.AuthorizationResult == null)
-            throw new ArgumentNullException(nameof(options.AuthorizationResult));
-
-        var authResult = options.AuthorizationResult;
-
-        // Throw when given non-refreshable tokens
-        if (authResult.Type == ShopifyAccessTokenType.Online)
-            throw new InvalidOperationException("Online access tokens cannot be refreshed programmatically; the user must be redirected to Shopify's OAuth flow again to obtain a new token.");
-
-        if (authResult.Type == ShopifyAccessTokenType.LegacyPermanentOffline)
-            throw new InvalidOperationException("Legacy permanent offline access tokens do not expire and cannot be refreshed.");
-
-        if (!authResult.ShouldRefreshAccessToken(options.RefreshBeforeExpiry))
-            return Task.FromResult(authResult);
-
-        if (authResult.RefreshTokenHasExpired())
-            throw new InvalidOperationException("The authorization result's refresh token has expired and can no longer be used to refresh the access token.");
-
-        return RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
-        {
-            ShopDomain = options.ShopDomain,
-            ClientId = options.ClientId,
-            ClientSecret = options.ClientSecret,
-            RefreshToken = authResult.RefreshToken!,
-            ExistingStoreAccessToken = authResult.AccessToken
-        }, cancellationToken);
     }
 }
