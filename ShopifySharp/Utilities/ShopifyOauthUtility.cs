@@ -456,8 +456,8 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         {
             client_id = options.ClientId,
             client_secret = options.ClientSecret,
-            refresh_token = options.RefreshToken,
-            access_token = options.ExistingStoreAccessToken
+            grant_type = "refresh_token",
+            refresh_token = options.RefreshToken
         });
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
 
