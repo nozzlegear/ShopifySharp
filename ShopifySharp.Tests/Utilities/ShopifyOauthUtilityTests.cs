@@ -1047,7 +1047,7 @@ public class ShopifyOauthUtilityTests
         });
 
         // Assert
-        await act.Should().ThrowAsync<InvalidOperationException>()
+        await act.Should().ThrowAsync<ShopifyInvalidRefreshTokenException>()
             .WithMessage("*refresh token has expired*");
         A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
             .MustNotHaveHappened();
