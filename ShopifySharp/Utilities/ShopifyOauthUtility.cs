@@ -398,7 +398,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         ShopifyService.CheckResponseExceptions(await requestMessage.GetRequestInfo(), response, json);
 
         var jsonEl = _jsonSerializer.Parse(json);
-        var issuedAtUtc = DateTimeOffset.UtcNow;
+        var issuedAtUtc = _timeProvider.GetUtcNow();
         var accessToken = await ReadAccessTokenAsync(jsonEl);
         var expiresIn = await ReadOptionalTimeSpanAsync(jsonEl, ExpiresInPropertyName);
         var refreshToken = await ReadOptionalStringAsync(jsonEl, RefreshTokenPropertyName);

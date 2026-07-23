@@ -13,9 +13,11 @@ namespace ShopifySharp;
 /// <summary>
 /// Represents the result of a successful OAuth authorization request to Shopify.
 /// </summary>
-public class AuthorizationResult(string accessToken, string[]? grantedScopes)
 [PublicAPI]
+public class AuthorizationResult(string accessToken, string[]? grantedScopes, TimeProvider? timeProvider = null)
 {
+    private readonly TimeProvider _timeProvider = timeProvider ?? TimeProvider.System;
+
     /// <summary>
     /// The access token issued by Shopify. This token should be used in API calls to authenticate your app. You can
     /// pass it to most ShopifySharp service classes in their constructors.
@@ -69,7 +71,7 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     /// <summary>
     /// The UTC timestamp at which this authorization result was issued or refreshed.
     /// </summary>
-    public DateTimeOffset IssuedAtUtc { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset IssuedAtUtc { get; set; } = timeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
 
     /// <summary>
     /// The UTC timestamp at which the access token expires, if Shopify returned an expiry.
@@ -104,7 +106,7 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
         if (expiresAtUtc is null)
             return false;
 
-        return (utcNow ?? DateTimeOffset.UtcNow) >= expiresAtUtc.Value;
+        return _timeProvider.GetUtcNow() >= expiresAtUtc.Value;
     }
 
     public bool RefreshTokenHasExpired()
@@ -116,7 +118,7 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
         if (expiresAtUtc is null)
             return false;
 
-        return (utcNow ?? DateTimeOffset.UtcNow) >= expiresAtUtc.Value;
+        return _timeProvider.GetUtcNow() >= expiresAtUtc.Value;
     }
 
     public bool ShouldRefreshAccessToken(TimeSpan? refreshBeforeExpiry = null)
@@ -128,10 +130,9 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
         if (expiresAtUtc is null)
             return false;
 
-        var now = utcNow ?? DateTimeOffset.UtcNow;
         var refreshBuffer = refreshBeforeExpiry ?? TimeSpan.Zero;
 
-        return now >= expiresAtUtc.Value - refreshBuffer;
+        return _timeProvider.GetUtcNow() >= expiresAtUtc.Value - refreshBuffer;
     }
 
     private void AssertIsRefreshTokenType()

@@ -10,6 +10,7 @@ using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Time.Testing;
 using ShopifySharp.Entities;
 using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
@@ -32,6 +33,7 @@ public class ShopifyOauthUtilityTests
     private readonly IJsonSerializer _jsonSerializer = new SystemJsonSerializer(Serializer.RestSerializerOptions);
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>(x => x.Strict());
     private readonly FakeHttpClient _httpClient = A.Fake<FakeHttpClient>(x => x.Strict());
+    private readonly FakeTimeProvider _fakeTimeProvider = new();
 
     private readonly ShopifyOauthUtility _sut;
 
@@ -45,6 +47,8 @@ public class ShopifyOauthUtilityTests
             .Returns(httpClientFactory);
         A.CallTo(() => _serviceProvider.GetService(typeof(IJsonSerializer)))
             .Returns(_jsonSerializer);
+        A.CallTo(() => _serviceProvider.GetService(typeof(TimeProvider)))
+            .Returns(_fakeTimeProvider);
 
         _sut = new ShopifyOauthUtility(_serviceProvider);
     }
@@ -929,12 +933,13 @@ public class ShopifyOauthUtilityTests
     public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTheCurrentTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
     {
         // Setup
+        var now = _fakeTimeProvider.GetUtcNow();
         var currentAuthorizationResult = new AuthorizationResult("some-access-token", [], _fakeTimeProvider)
         {
             ExpiresIn = TimeSpan.FromMinutes(10),
             RefreshToken = "some-refresh-token",
             RefreshTokenExpiresIn = TimeSpan.FromDays(30),
-            IssuedAtUtc = DateTimeOffset.UtcNow
+            IssuedAtUtc = now
         };
 
         // Act
@@ -965,12 +970,13 @@ public class ShopifyOauthUtilityTests
         const string refreshedRefreshToken = "refreshed-refresh-token";
         const string existingAccessToken = "existing-access-token";
         const string existingRefreshToken = "existing-refresh-token";
-        var currentAuthorizationResult = new AuthorizationResult(existingAccessToken, [])
+        var now = _fakeTimeProvider.GetUtcNow();
+        var currentAuthorizationResult = new AuthorizationResult(existingAccessToken, [], _fakeTimeProvider)
         {
             ExpiresIn = TimeSpan.FromMinutes(5),
             RefreshToken = existingRefreshToken,
             RefreshTokenExpiresIn = TimeSpan.FromDays(30),
-            IssuedAtUtc = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(10))
+            IssuedAtUtc = now.AddMinutes(-10)
         };
         var json =
             //lang=json
@@ -1020,12 +1026,13 @@ public class ShopifyOauthUtilityTests
     public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTheRefreshTokenIsExpired_ShouldThrow()
     {
         // Setup
+        var now = _fakeTimeProvider.GetUtcNow();
         var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
         {
             ExpiresIn = TimeSpan.FromMinutes(5),
             RefreshToken = "some-refresh-token",
             RefreshTokenExpiresIn = TimeSpan.FromMinutes(10),
-            IssuedAtUtc = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromHours(1))
+            IssuedAtUtc = now.AddHours(-1)
         };
 
         // Act
@@ -1363,7 +1370,7 @@ public class ShopifyOauthUtilityTests
     public async Task RefreshOfflineAccessTokenIfStaleAsync_BareData_WhenAccessTokenIsNotNearExpiry_ShouldReturnNull()
     {
         // Setup
-        var now = DateTimeOffset.UtcNow();
+        var now = _fakeTimeProvider.GetUtcNow();
         var options = new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
@@ -1415,7 +1422,7 @@ public class ShopifyOauthUtilityTests
             })
             .Returns(response);
 
-        var now = DateTimeOffset.UtcNow();
+        var now = _fakeTimeProvider.GetUtcNow();
         var options = new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
@@ -1446,7 +1453,7 @@ public class ShopifyOauthUtilityTests
     public async Task RefreshOfflineAccessTokenIfNeededAsync_BareData_WhenRefreshTokenIsExpired_ShouldThrow()
     {
         // Setup
-        var now = DateTimeOffset.UtcNow();
+        var now = _fakeTimeProvider.GetUtcNow();
         var options = new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
@@ -1472,7 +1479,7 @@ public class ShopifyOauthUtilityTests
     public async Task RefreshOfflineAccessTokenIfNeededAsync_BareData_WhenAccessTokenExpiryIsNull_ShouldReturnNull()
     {
         // Setup
-        var now = DateTimeOffset.UtcNow();
+        var now = _fakeTimeProvider.GetUtcNow();
         var options = new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
@@ -1518,7 +1525,7 @@ public class ShopifyOauthUtilityTests
         A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
             .Returns(response);
 
-        var now = DateTimeOffset.UtcNow();
+        var now = _fakeTimeProvider.GetUtcNow();
         var options = new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
@@ -1540,7 +1547,6 @@ public class ShopifyOauthUtilityTests
     }
 
     #endregion
-
     public class FakeHttpClient : HttpClient, IDisposable
     {
         public new virtual void Dispose()
