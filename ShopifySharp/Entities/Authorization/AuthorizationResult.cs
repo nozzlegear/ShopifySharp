@@ -1,7 +1,11 @@
 #nullable enable
 
 using System;
+using JetBrains.Annotations;
 using ShopifySharp.Entities;
+#if NETSTANDARD2_0
+using ShopifySharp.Extensions;
+#endif
 
 // TODO: migrate this to the ShopifySharp.Entities namespace
 namespace ShopifySharp;
@@ -9,8 +13,11 @@ namespace ShopifySharp;
 /// <summary>
 /// Represents the result of a successful OAuth authorization request to Shopify.
 /// </summary>
-public class AuthorizationResult(string accessToken, string[]? grantedScopes)
+[PublicAPI]
+public class AuthorizationResult(string accessToken, string[]? grantedScopes, TimeProvider? timeProvider = null)
 {
+    private readonly TimeProvider _timeProvider = timeProvider ?? TimeProvider.System;
+
     /// <summary>
     /// The access token issued by Shopify. This token should be used in API calls to authenticate your app. You can
     /// pass it to most ShopifySharp service classes in their constructors.
@@ -37,20 +44,18 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
         HasRefreshToken ? ShopifyAccessTokenType.ExpiringOffline :
         ShopifyAccessTokenType.LegacyPermanentOffline;
 
-    private TimeSpan? _expiresIn;
-
     /// <summary>
     /// The duration for which the access token remains valid. This is returned for Shopify's
     /// online access tokens and expiring offline access tokens.
     /// </summary>
     /// <remarks>
-    /// Note: The getter falls back to <c>OnlineAccess.ExpiresIn</c> to maintain backward compatibility with 
+    /// Note: The getter falls back to <c>OnlineAccess.ExpiresIn</c> to maintain backward compatibility with
     /// legacy online access tokens that were serialized/stored in databases prior to PR 1257.
     /// </remarks>
     public TimeSpan? ExpiresIn
     {
-        get => _expiresIn ?? OnlineAccess?.ExpiresIn;
-        set => _expiresIn = value;
+        get => field ?? OnlineAccess?.ExpiresIn;
+        set;
     }
 
     /// <summary>
@@ -66,7 +71,7 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     /// <summary>
     /// The UTC timestamp at which this authorization result was issued or refreshed.
     /// </summary>
-    public DateTimeOffset IssuedAtUtc { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset IssuedAtUtc { get; set; } = timeProvider?.GetUtcNow() ?? DateTimeOffset.UtcNow;
 
     /// <summary>
     /// The UTC timestamp at which the access token expires, if Shopify returned an expiry.
@@ -92,45 +97,51 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes)
     #endif
     public bool IsOnlineAccess => OnlineAccess != null;
 
-    /// <summary>
-    /// Returns <c>true</c> when the access token has already expired.
-    /// </summary>
-    public bool AccessTokenHasExpired(DateTimeOffset? utcNow = null)
+    public bool AccessTokenHasExpired()
     {
+        AssertIsRefreshTokenType();
+
         var expiresAtUtc = AccessTokenExpiresAtUtc;
 
         if (expiresAtUtc is null)
             return false;
 
-        return (utcNow ?? DateTimeOffset.UtcNow) >= expiresAtUtc.Value;
+        return _timeProvider.GetUtcNow() >= expiresAtUtc.Value;
     }
 
-    /// <summary>
-    /// Returns <c>true</c> when the refresh token has already expired.
-    /// </summary>
-    public bool RefreshTokenHasExpired(DateTimeOffset? utcNow = null)
+    public bool RefreshTokenHasExpired()
     {
+        AssertIsRefreshTokenType();
+
         var expiresAtUtc = RefreshTokenExpiresAtUtc;
 
         if (expiresAtUtc is null)
             return false;
 
-        return (utcNow ?? DateTimeOffset.UtcNow) >= expiresAtUtc.Value;
+        return _timeProvider.GetUtcNow() >= expiresAtUtc.Value;
     }
 
-    /// <summary>
-    /// Returns <c>true</c> when the access token is expired or will expire within the given buffer.
-    /// </summary>
-    public bool ShouldRefreshAccessToken(TimeSpan? refreshBeforeExpiry = null, DateTimeOffset? utcNow = null)
+    public bool ShouldRefreshAccessToken(TimeSpan? refreshBeforeExpiry = null)
     {
+        AssertIsRefreshTokenType();
+
         var expiresAtUtc = AccessTokenExpiresAtUtc;
 
         if (expiresAtUtc is null)
             return false;
 
-        var now = utcNow ?? DateTimeOffset.UtcNow;
         var refreshBuffer = refreshBeforeExpiry ?? TimeSpan.Zero;
 
-        return now >= expiresAtUtc.Value - refreshBuffer;
+        return _timeProvider.GetUtcNow() >= expiresAtUtc.Value - refreshBuffer;
+    }
+
+    private void AssertIsRefreshTokenType()
+    {
+        // Throw when given non-refreshable tokens
+        if (Type == ShopifyAccessTokenType.Online)
+            throw new InvalidOperationException("Online access tokens cannot be refreshed programmatically.");
+
+        if (Type == ShopifyAccessTokenType.LegacyPermanentOffline)
+            throw new InvalidOperationException("Legacy permanent offline access tokens do not expire and cannot be refreshed.");
     }
 }

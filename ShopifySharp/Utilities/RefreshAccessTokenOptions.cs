@@ -1,9 +1,7 @@
 #nullable enable
-using System;
 
 namespace ShopifySharp.Utilities;
 
-[Obsolete("Use " + nameof(RefreshOfflineAccessTokenOptions) + " instead.")]
 public record RefreshAccessTokenOptions
 {
     /// The store's *.myshopify.com url
@@ -33,11 +31,4 @@ public record RefreshAccessTokenOptions
     required
 #endif
 	string RefreshToken { get; set; } = null!;
-
-    /// The existing store access token
-    public
-#if NET6_0_OR_GREATER
-    required
-#endif
-	string ExistingStoreAccessToken { get; set; } = null!;
 }

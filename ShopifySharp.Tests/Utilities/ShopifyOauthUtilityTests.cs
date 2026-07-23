@@ -44,6 +44,8 @@ public class ShopifyOauthUtilityTests
             .Returns(httpClientFactory);
         A.CallTo(() => _serviceProvider.GetService(typeof(IJsonSerializer)))
             .Returns(_jsonSerializer);
+        A.CallTo(() => _serviceProvider.GetService(typeof(TimeProvider)))
+            .Returns(TimeProvider.System);
 
         _sut = new ShopifyOauthUtility(_serviceProvider);
     }
@@ -933,7 +935,7 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTheCurrentTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTheCurrentTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
     {
         // Setup
         var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
@@ -945,12 +947,14 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var authorizationResult = await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        var authorizationResult = await _sut.RefreshOfflineAccessTokenIfStaleAsync(currentAuthorizationResult, new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
             ClientSecret = "some-client-secret",
-            AuthorizationResult = currentAuthorizationResult,
+            RefreshToken = currentAuthorizationResult.RefreshToken!,
+            AccessTokenExpiresAtUtc = currentAuthorizationResult.AccessTokenExpiresAtUtc,
+            RefreshTokenExpiresAtUtc = currentAuthorizationResult.RefreshTokenExpiresAtUtc,
             RefreshBeforeExpiry = TimeSpan.FromMinutes(1)
         });
 
@@ -961,7 +965,7 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTheCurrentTokenIsExpired_ShouldRefreshIt()
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTheCurrentTokenIsExpired_ShouldRefreshIt()
     {
         // Setup
         const int expiresIn = 180;
@@ -1000,12 +1004,14 @@ public class ShopifyOauthUtilityTests
             .Returns(response);
 
         // Act
-        var authorizationResult = await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        var authorizationResult = await _sut.RefreshOfflineAccessTokenIfStaleAsync(currentAuthorizationResult, new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
             ClientSecret = "some-client-secret",
-            AuthorizationResult = currentAuthorizationResult
+            RefreshToken = currentAuthorizationResult.RefreshToken!,
+            AccessTokenExpiresAtUtc = currentAuthorizationResult.AccessTokenExpiresAtUtc,
+            RefreshTokenExpiresAtUtc = currentAuthorizationResult.RefreshTokenExpiresAtUtc
         });
 
         // Assert
@@ -1020,7 +1026,7 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTheRefreshTokenIsExpired_ShouldThrow()
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTheRefreshTokenIsExpired_ShouldThrow()
     {
         // Setup
         var currentAuthorizationResult = new AuthorizationResult("some-access-token", [])
@@ -1032,12 +1038,14 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var act = async () => await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfStaleAsync(currentAuthorizationResult, new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
             ClientSecret = "some-client-secret",
-            AuthorizationResult = currentAuthorizationResult
+            RefreshToken = currentAuthorizationResult.RefreshToken!,
+            AccessTokenExpiresAtUtc = currentAuthorizationResult.AccessTokenExpiresAtUtc,
+            RefreshTokenExpiresAtUtc = currentAuthorizationResult.RefreshTokenExpiresAtUtc
         });
 
         // Assert
@@ -1085,11 +1093,10 @@ public class ShopifyOauthUtilityTests
                 }
                 else
                 {
-                    await _sut.RefreshAccessTokenAsync(new RefreshAccessTokenOptions
+                    await _sut.RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
                     {
                         ClientId = ShopDomain,
                         ClientSecret = "some-client-secret",
-                        ExistingStoreAccessToken = "some-existing-store-access-token",
                         RefreshToken = "some-refresh-token",
                         ShopDomain = ShopDomain
                     });
@@ -1317,19 +1324,21 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTokenIsOnline_ShouldThrowImmediately()
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTokenIsOnline_ShouldThrowImmediately()
     {
         var onlineToken = new AuthorizationResult("token", [])
         {
             OnlineAccess = new OnlineAccessInfo()
         };
 
-        var act = async () => await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfStaleAsync(onlineToken, new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
             ClientSecret = "some-secret",
-            AuthorizationResult = onlineToken
+            RefreshToken = onlineToken.RefreshToken ?? string.Empty,
+            AccessTokenExpiresAtUtc = onlineToken.AccessTokenExpiresAtUtc,
+            RefreshTokenExpiresAtUtc = onlineToken.RefreshTokenExpiresAtUtc
         });
 
         await act.Should().ThrowAsync<InvalidOperationException>()
@@ -1337,20 +1346,201 @@ public class ShopifyOauthUtilityTests
     }
 
     [Fact]
-    public async Task RefreshOfflineAccessTokenIfNeededAsync_WhenTokenIsLegacyPermanent_ShouldThrowImmediately()
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTokenIsLegacyPermanent_ShouldThrowImmediately()
     {
         var legacyToken = new AuthorizationResult("token", []);
 
-        var act = async () => await _sut.RefreshOfflineAccessTokenIfNeededAsync(new RefreshOfflineAccessTokenIfNeededOptions
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfStaleAsync(legacyToken, new RefreshOfflineAccessTokenIfStaleOptions
         {
             ShopDomain = ShopDomain,
             ClientId = ClientId,
             ClientSecret = "some-secret",
-            AuthorizationResult = legacyToken
+            RefreshToken = legacyToken.RefreshToken ?? string.Empty,
+            AccessTokenExpiresAtUtc = legacyToken.AccessTokenExpiresAtUtc,
+            RefreshTokenExpiresAtUtc = legacyToken.RefreshTokenExpiresAtUtc
         });
 
         await act.Should().ThrowAsync<InvalidOperationException>()
             .WithMessage("Legacy permanent offline access tokens do not expire*");
+    }
+
+    #endregion
+
+    #region RefreshOfflineAccessTokenIfStaleAsync – Bare data overload tests
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_BareData_WhenAccessTokenIsNotNearExpiry_ShouldReturnNull()
+    {
+        // Setup
+        var options = new RefreshOfflineAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            RefreshToken = "some-refresh-token",
+            AccessTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddHours(1),
+            RefreshTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddDays(30),
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(5)
+        };
+
+        // Act
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+
+        // Assert
+        result.Should().BeNull();
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_BareData_WhenAccessTokenIsNearExpiry_ShouldRefreshAndReturnNewResult()
+    {
+        // Setup
+        const int expiresIn = 180;
+        const int refreshTokenExpiresIn = 7200;
+        const string refreshedAccessToken = "refreshed-access-token";
+        const string refreshedRefreshToken = "refreshed-refresh-token";
+        const string existingRefreshToken = "existing-refresh-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{refreshedAccessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}},
+                "refresh_token": "{{refreshedRefreshToken}}",
+                "refresh_token_expires_in": {{refreshTokenExpiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+        string? requestContent = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .Invokes(async call => {
+                capturedRequest = call.GetArgument<HttpRequestMessage>(0);
+                requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
+            })
+            .Returns(response);
+
+        var options = new RefreshOfflineAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            RefreshToken = existingRefreshToken,
+            AccessTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddMinutes(5),
+            RefreshTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddDays(30),
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(10)
+        };
+
+        // Act
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.AccessToken.Should().Be(refreshedAccessToken);
+        result.RefreshToken.Should().Be(refreshedRefreshToken);
+        result.ExpiresIn.Should().Be(TimeSpan.FromSeconds(expiresIn));
+        result.RefreshTokenExpiresIn.Should().Be(TimeSpan.FromSeconds(refreshTokenExpiresIn));
+
+        capturedRequest.Should().NotBeNull();
+        requestContent.Should().Contain("\"grant_type\":\"refresh_token\"");
+        requestContent.Should().Contain($"\"refresh_token\":\"{existingRefreshToken}\"");
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_BareData_WhenRefreshTokenIsExpired_ShouldThrow()
+    {
+        // Setup
+        var options = new RefreshOfflineAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            RefreshToken = "some-refresh-token",
+            AccessTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddHours(1),
+            RefreshTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddMinutes(-10),
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(5)
+        };
+
+        // Act
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("*refresh token has expired*");
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_BareData_WhenAccessTokenExpiryIsNull_ShouldReturnNull()
+    {
+        // Setup
+        var options = new RefreshOfflineAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            RefreshToken = "some-refresh-token",
+            AccessTokenExpiresAtUtc = null,
+            RefreshTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddDays(30),
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(5)
+        };
+
+        // Act
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+
+        // Assert
+        result.Should().BeNull();
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfNeededAsync_BareData_WhenAccessTokenIsExpired_ShouldRefresh()
+    {
+        // Setup
+        const int expiresIn = 180;
+        const int refreshTokenExpiresIn = 7200;
+        const string refreshedAccessToken = "refreshed-access-token";
+        const string refreshedRefreshToken = "refreshed-refresh-token";
+        const string existingRefreshToken = "existing-refresh-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{refreshedAccessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}},
+                "refresh_token": "{{refreshedRefreshToken}}",
+                "refresh_token_expires_in": {{refreshTokenExpiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+            .Returns(response);
+
+        var options = new RefreshOfflineAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            RefreshToken = existingRefreshToken,
+            AccessTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddMinutes(-5),
+            RefreshTokenExpiresAtUtc = DateTimeOffset.UtcNow.AddDays(30),
+            RefreshBeforeExpiry = TimeSpan.Zero
+        };
+
+        // Act
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.AccessToken.Should().Be(refreshedAccessToken);
+        result.RefreshToken.Should().Be(refreshedRefreshToken);
     }
 
     #endregion

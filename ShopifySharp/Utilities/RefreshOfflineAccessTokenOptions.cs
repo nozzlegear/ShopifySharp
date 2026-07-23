@@ -30,11 +30,4 @@ public record RefreshOfflineAccessTokenOptions
     required
 #endif
 	string RefreshToken { get; set; } = null!;
-
-    /// The existing store access token
-    public
-#if NET6_0_OR_GREATER
-    required
-#endif
-	string ExistingStoreAccessToken { get; set; } = null!;
 }
