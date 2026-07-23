@@ -97,6 +97,10 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes, Ti
     #endif
     public bool IsOnlineAccess => OnlineAccess != null;
 
+    /// <summary>
+    /// Determines whether the access token has expired.
+    /// </summary>
+    /// <exception cref="ShopifyInvalidRefreshTokenException">Thrown when the token type is not refreshable (online or legacy permanent offline).</exception>
     public bool AccessTokenHasExpired()
     {
         AssertIsRefreshTokenType();
@@ -109,6 +113,10 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes, Ti
         return _timeProvider.GetUtcNow() >= expiresAtUtc.Value;
     }
 
+    /// <summary>
+    /// Determines whether the refresh token has expired.
+    /// </summary>
+    /// <exception cref="ShopifyInvalidRefreshTokenException">Thrown when the token type is not refreshable (online or legacy permanent offline).</exception>
     public bool RefreshTokenHasExpired()
     {
         AssertIsRefreshTokenType();
@@ -121,6 +129,11 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes, Ti
         return _timeProvider.GetUtcNow() >= expiresAtUtc.Value;
     }
 
+    /// <summary>
+    /// Determines whether the access token should be refreshed based on the provided expiry threshold.
+    /// </summary>
+    /// <param name="refreshBeforeExpiry">Optional time span to trigger a refresh before the access token actually expires.</param>
+    /// <exception cref="ShopifyInvalidRefreshTokenException">Thrown when the token type is not refreshable (online or legacy permanent offline).</exception>
     public bool ShouldRefreshAccessToken(TimeSpan? refreshBeforeExpiry = null)
     {
         AssertIsRefreshTokenType();
@@ -139,9 +152,9 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes, Ti
     {
         // Throw when given non-refreshable tokens
         if (Type == ShopifyAccessTokenType.Online)
-            throw new InvalidOperationException("Online access tokens cannot be refreshed programmatically.");
+            throw new ShopifyInvalidRefreshTokenException("Online access tokens cannot be refreshed programmatically.");
 
         if (Type == ShopifyAccessTokenType.LegacyPermanentOffline)
-            throw new InvalidOperationException("Legacy permanent offline access tokens do not expire and cannot be refreshed.");
+            throw new ShopifyInvalidRefreshTokenException("Legacy permanent offline access tokens do not expire and cannot be refreshed.");
     }
 }

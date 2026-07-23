@@ -3,7 +3,7 @@ namespace ShopifySharp.Utilities;
 
 public record RefreshOfflineAccessTokenOptions
 {
-    /// The store's *.myshopify.com url
+    /// The store's *.myshopify.com url.
     public
 #if NET6_0_OR_GREATER
     required
@@ -24,7 +24,7 @@ public record RefreshOfflineAccessTokenOptions
 #endif
 	string ClientSecret { get; set; } = null!;
 
-    /// The app's refresh token
+    /// The app's refresh token.
     public
 #if NET6_0_OR_GREATER
     required

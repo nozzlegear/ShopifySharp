@@ -128,6 +128,7 @@ public interface IShopifyOauthUtility
     /// </summary>
     /// <param name="options">Options for refreshing the access token.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
+    /// <exception cref="ShopifyInvalidRefreshTokenException">Thrown when the refresh token has expired and can no longer be used to refresh the access token.</exception>
     Task<AuthorizationResult?> RefreshOfflineAccessTokenIfStaleAsync(RefreshOfflineAccessTokenIfStaleOptions options, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -137,6 +138,7 @@ public interface IShopifyOauthUtility
     /// <param name="currentResult">The current authorization result to evaluate for staleness.</param>
     /// <param name="options">Options for refreshing the access token.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
+    /// <exception cref="ShopifyInvalidRefreshTokenException">Thrown when the authorization result's refresh token has expired or does not contain a refresh token.</exception>
     Task<AuthorizationResult> RefreshOfflineAccessTokenIfStaleAsync(AuthorizationResult currentResult, RefreshOfflineAccessTokenIfStaleOptions options, CancellationToken cancellationToken = default);
 }
 
@@ -341,7 +343,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         ArgumentNullException.ThrowIfNull(options);
 
         if (options.RefreshTokenExpiresAtUtc.HasValue && _timeProvider.GetUtcNow() >= options.RefreshTokenExpiresAtUtc.Value)
-            throw new InvalidOperationException("The refresh token has expired and can no longer be used to refresh the access token.");
+            throw new ShopifyInvalidRefreshTokenException("The refresh token has expired and can no longer be used to refresh the access token.");
 
         var shouldRefresh = options.AccessTokenExpiresAtUtc.HasValue &&
             _timeProvider.GetUtcNow() >= options.AccessTokenExpiresAtUtc.Value - options.RefreshBeforeExpiry;
@@ -369,13 +371,13 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         ArgumentNullException.ThrowIfNull(options);
 
         if (currentResult.RefreshTokenHasExpired())
-            throw new InvalidOperationException("The authorization result's refresh token has expired and can no longer be used to refresh the access token.");
+            throw new ShopifyInvalidRefreshTokenException("The authorization result's refresh token has expired and can no longer be used to refresh the access token.");
 
         if (!currentResult.ShouldRefreshAccessToken(options.RefreshBeforeExpiry))
             return currentResult;
 
         if (!currentResult.HasRefreshToken)
-            throw new InvalidOperationException("The authorization result does not contain a refresh token. Only Shopify expiring offline access tokens can be refreshed automatically.");
+            throw new ShopifyInvalidRefreshTokenException("The authorization result does not contain a refresh token. Only Shopify expiring offline access tokens can be refreshed automatically.");
 
         return await RefreshOfflineAccessTokenAsync(new RefreshOfflineAccessTokenOptions
         {
@@ -421,7 +423,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
                 );
 
             var userScopes = await ReadScopesToArrayAsync(jsonEl, AssociatedUserScopePropertyName);
-            var associatedUser = await _jsonSerializer.DeserializeAsync<AssociatedUser>(user);
+            var associatedUser = await _jsonSerializer.DeserializeAsync<AssociatedUser>(user, cancellationToken);
 
             onlineAccessInfo = new OnlineAccessInfo
             {
