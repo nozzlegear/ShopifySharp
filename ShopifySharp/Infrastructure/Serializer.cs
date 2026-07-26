@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using JsonConverter = Newtonsoft.Json.JsonConverter;
 using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
@@ -29,9 +30,24 @@ public static class Serializer
     }
 
     // TODO: investigate standardizing the ShopifySharp.GraphQL.Serializer.Options defaults with these defaults
+    private static readonly DefaultJsonTypeInfoResolver _graphTypeInfoResolver = new()
+    {
+        Modifiers =
+        {
+            typeInfo =>
+            {
+                // Suppress polymorphic discriminator (e.g. __typename) during serialization.
+                // This prevents GraphQL interface/union types from emitting discriminator
+                // properties when serialized as variables in HTTP requests.
+                typeInfo.PolymorphismOptions = null;
+            }
+        }
+    };
+
     internal static readonly JsonSerializerOptions GraphSerializerOptions = new()
     {
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        TypeInfoResolver = _graphTypeInfoResolver,
         Converters =
         {
             new JsonStringEnumConverter()
