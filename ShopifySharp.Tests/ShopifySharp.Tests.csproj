@@ -3,6 +3,8 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <TargetFrameworks>net10.0;net472</TargetFrameworks>
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotenvfile" />

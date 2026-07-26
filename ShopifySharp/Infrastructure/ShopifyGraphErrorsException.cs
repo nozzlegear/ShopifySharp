@@ -35,10 +35,13 @@ public class ShopifyGraphErrorsException(
     {
         var firstError = graphErrors.Count == 0 ? null : graphErrors[0];
 
-        if (firstError?.Extensions is { Code: not null and not "" } ext)
+        if (firstError is null)
+            return "GraphQL operation returned one or more errors.";
+
+        if (firstError.Extensions is { Code: not null and not "" } ext)
             return $"{ext.Code}: {firstError.Message}";
 
-        return string.IsNullOrWhiteSpace(firstError?.Message)
+        return string.IsNullOrWhiteSpace(firstError.Message)
             ? "GraphQL operation returned one or more errors."
             : firstError.Message;
     }

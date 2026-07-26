@@ -48,8 +48,11 @@ public class ShopifyGraphqlUtilityTest
         var callToGetDomainUtility = A.CallTo(() => serviceProvider.GetService(typeof(IShopifyDomainUtility)));
         var callToGetClientFactory = A.CallTo(() => serviceProvider.GetService(typeof(IHttpClientFactory)));
 
+        // #pragma warning fix: Moq Returns(null) on object-configured fakes triggers CS8620 across TFMs
+#pragma warning disable CS8620
         callToGetDomainUtility.Returns(null);
         callToGetClientFactory.Returns(null);
+#pragma warning restore CS8620
 
         // Act
         var act = () => new ShopifyGraphqlUtility(serviceProvider);

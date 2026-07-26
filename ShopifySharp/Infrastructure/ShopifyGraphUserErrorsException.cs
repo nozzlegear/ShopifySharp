@@ -36,10 +36,13 @@ public class ShopifyGraphUserErrorsException(
     {
         var firstError = graphUserErrors.Count == 0 ? null : graphUserErrors[0];
 
-        if (!string.IsNullOrWhiteSpace(firstError?.Code))
+        if (firstError is null)
+            return "GraphQL operation returned one or more user errors.";
+
+        if (!string.IsNullOrWhiteSpace(firstError.Code))
             return $"{firstError.Code}: {firstError.Message}";
 
-        return string.IsNullOrWhiteSpace(firstError?.Message)
+        return string.IsNullOrWhiteSpace(firstError.Message)
             ? "GraphQL operation returned one or more user errors."
             : firstError.Message;
     }

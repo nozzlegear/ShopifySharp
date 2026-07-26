@@ -22,11 +22,11 @@ public class RequestResult<T>
     public string? RawLinkHeaderValue { get; }
 
     public RequestResult(
-        string requestInfo,
+        string? requestInfo,
         HttpResponseHeaders httpResponseHeaders,
         T result,
         string rawResult,
-        string rawLinkHeaderValue,
+        string? rawLinkHeaderValue,
         HttpStatusCode statusCode)
     {
         RequestInfo = requestInfo;

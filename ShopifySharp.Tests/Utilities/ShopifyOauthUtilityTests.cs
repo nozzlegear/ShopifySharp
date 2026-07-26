@@ -288,7 +288,7 @@ public class ShopifyOauthUtilityTests
         A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
             .Invokes(async call => {
                 capturedRequest = call.GetArgument<HttpRequestMessage>(0);
-                requestContent = await capturedRequest.Content!.ReadAsStringAsync();
+                requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
             })
             .Returns(result);
 
