@@ -17,7 +17,7 @@ public class GraphHttpContentSerializerTests
     private const string Query = "some-query";
     private readonly RequestUri _requestUri = new (new Uri("https://example.com"));
 
-    private readonly GraphHttpContentSerializer _sut = new(Serializer.GraphSerializerOptions);
+    private readonly GraphHttpContentSerializer _sut = new(Serializer.GraphRequestSerializerOptions);
 
     [Fact]
     public async Task SerializeGraphRequest_ShouldSerializeDataToJson()

@@ -62,10 +62,10 @@ public class GraphServiceTests
     public GraphServiceTests()
     {
         _httpContentSerializer = A.Fake<IHttpContentSerializer>(x =>
-            x.Wrapping(new GraphHttpContentSerializer(_jsonSerializerOptions)));
+            x.Wrapping(new GraphHttpContentSerializer(Serializer.GraphRequestSerializerOptions)));
 
         A.CallTo(() => _serviceProvider.GetService(typeof(JsonSerializerOptions)))
-            .Returns(_jsonSerializerOptions);
+            .Returns(null!);
         A.CallTo(() => _serviceProvider.GetService(typeof(IHttpContentSerializer)))
             .Returns(_httpContentSerializer);
 

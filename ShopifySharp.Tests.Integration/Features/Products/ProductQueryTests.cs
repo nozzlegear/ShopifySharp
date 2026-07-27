@@ -56,7 +56,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
             Query =
                 """
                 query getProducts($first: Int) {
-                    products(first: $first) {
+                    products(first: $first, sortKey: ID, query:"published_at:<now") {
                         pageInfo {
                             startCursor
                             endCursor

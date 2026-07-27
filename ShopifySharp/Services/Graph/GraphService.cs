@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -74,11 +74,11 @@ public class GraphService : ShopifyService, IGraphService
     {
         var httpContentSerializer = InternalServiceResolver.GetServiceOrDefault<IHttpContentSerializer>(
             serviceProvider,
-            () => new GraphHttpContentSerializer(GetJsonSerializerOptions())
+            () => new GraphHttpContentSerializer(GetGraphRequestSerializerOptions())
         );
         var jsonSerializer = InternalServiceResolver.GetServiceOrDefault<IJsonSerializer>(
             serviceProvider,
-            () => new SystemJsonSerializer(GetJsonSerializerOptions())
+            () => new SystemJsonSerializer(GetGraphSerializerOptions())
         );
         var shopifyApiVersion = InternalServiceResolver.GetServiceOrDefault<IShopifyApiVersion>(
             serviceProvider,
@@ -87,7 +87,8 @@ public class GraphService : ShopifyService, IGraphService
 
         return (httpContentSerializer, jsonSerializer, shopifyApiVersion);
 
-        System.Text.Json.JsonSerializerOptions GetJsonSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
+        System.Text.Json.JsonSerializerOptions GetGraphRequestSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphRequestSerializerOptions);
+        System.Text.Json.JsonSerializerOptions GetGraphSerializerOptions() => InternalServiceResolver.GetServiceOrDefault(serviceProvider, () => Serializer.GraphSerializerOptions);
     }
 
     /// <inheritdoc/>

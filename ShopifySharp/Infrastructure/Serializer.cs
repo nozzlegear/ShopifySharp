@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Converters;
+using ShopifySharp.Converters.SystemTextJson;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -29,31 +30,50 @@ public static class Serializer
         };
     }
 
-    // TODO: investigate standardizing the ShopifySharp.GraphQL.Serializer.Options defaults with these defaults
-    private static readonly DefaultJsonTypeInfoResolver _graphTypeInfoResolver = new()
-    {
-        Modifiers =
-        {
-            typeInfo =>
-            {
-                // Suppress polymorphic discriminator (e.g. __typename) during serialization.
-                // This prevents GraphQL interface/union types from emitting discriminator
-                // properties when serialized as variables in HTTP requests.
-                typeInfo.PolymorphismOptions = null;
-            }
-        }
-    };
-
-    internal static readonly JsonSerializerOptions GraphSerializerOptions = new()
+    /// <summary>
+    /// JSON serializer options specifically for serializing GraphQL request bodies (variables, query, etc.)
+    /// sent to the Shopify API. These options suppress polymorphism (<c>__typename</c>) for all types,
+    /// because Shopify's API rejects <c>__typename</c> in request payloads.
+    /// </summary>
+    internal static readonly JsonSerializerOptions GraphRequestSerializerOptions = new()
     {
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
-        TypeInfoResolver = _graphTypeInfoResolver,
+        TypeInfoResolver = new DefaultJsonTypeInfoResolver
+        {
+            Modifiers =
+            {
+                typeInfo =>
+                {
+                    // Suppress polymorphic discriminator (e.g. __typename) during serialization.
+                    // This prevents any type from emitting __typename when serialized as part of
+                    // a GraphQL request (e.g. variables).
+                    typeInfo.PolymorphismOptions = null;
+                }
+            }
+        },
         Converters =
         {
             new JsonStringEnumConverter()
         },
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
+    /// <summary>
+    /// JSON serializer options for deserializing GraphQL API responses. These options preserve
+    /// polymorphism (<c>__typename</c>) so that polymorphic response types (e.g. interfaces, unions)
+    /// can be correctly deserialized.
+    /// </summary>
+    internal static readonly JsonSerializerOptions GraphSerializerOptions = new()
+    {
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        Converters =
+        {
+            new JsonStringEnumConverter()
+        },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        // Note: No TypeInfoResolver modifier here, so __typename is preserved for polymorphic types
     };
 
     internal static readonly JsonSerializerOptions RestSerializerOptions = new()
