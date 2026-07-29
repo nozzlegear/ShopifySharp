@@ -56,7 +56,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
             Query =
                 """
                 query getProducts($first: Int) {
-                    products(first: $first, sortKey: ID, query:"published_at:<now") {
+                    products(first: $first, sortKey: ID, reverse: true, query:"published_at:<now") {
                         pageInfo {
                             startCursor
                             endCursor
@@ -125,8 +125,8 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
        var graphRequest = new GraphRequest
        {
            Query = """
-           query ($first: Int!, $after: String) {
-               products(first: $first, after: $after, query: "status:active AND published_status:published") {
+           query ($last: Int!, $before: String) {
+               products(last: $last, sortKey: ID, reverse: true, before: $before, query: "status:active AND published_status:published") {
                    edges {
                        node {
                            id
@@ -179,8 +179,8 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
            """,
            Variables = new Dictionary<string, object>
            {
-               {"first", 3},
-               {"after", cursor}
+               {"last", 3},
+               {"before", cursor}
            }
        };
 

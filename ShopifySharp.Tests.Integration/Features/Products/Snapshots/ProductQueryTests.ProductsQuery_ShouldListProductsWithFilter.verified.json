@@ -99,7 +99,7 @@
               }
             ]
           },
-          "vendor": "Auntie Dot"
+          "vendor": "{Scrubbed}"
         }
       },
       {
@@ -200,77 +200,14 @@
               }
             ]
           },
-          "vendor": "Auntie Dot"
+          "vendor": "{Scrubbed}"
         }
       },
       {
         "node": {
-          "collections": {
-            "edges": [
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              },
-              {
-                "node": {
-                  "id": "{Scrubbed}",
-                  "legacyResourceId": "{Scrubbed}"
-                }
-              }
-            ]
-          },
+          "collections": {},
           "createdAt": "DateTimeOffset_4",
-          "handle": "Guid_3",
+          "handle": "jackson-2",
           "id": "{Scrubbed}",
           "legacyResourceId": "{Scrubbed}",
           "media": {
@@ -283,11 +220,47 @@
                     "url": "{Scrubbed}"
                   }
                 }
+              },
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
+              },
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
+              },
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
+              },
+              {
+                "id": "{Scrubbed}",
+                "preview": {
+                  "image": {
+                    "id": "{Scrubbed}",
+                    "url": "{Scrubbed}"
+                  }
+                }
               }
             ]
           },
-          "productType": "Snowboard",
-          "title": "Burton Custom Freestlye 151",
+          "productType": "Jeans",
+          "title": "Jackson",
           "updatedAt": "DateTimeOffset_5",
           "variants": {
             "edges": [
@@ -298,10 +271,42 @@
                   "inventoryQuantity": 0,
                   "legacyResourceId": "{Scrubbed}"
                 }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 0,
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 0,
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 0,
+                  "legacyResourceId": "{Scrubbed}"
+                }
+              },
+              {
+                "node": {
+                  "id": "{Scrubbed}",
+                  "inventoryPolicy": "DENY",
+                  "inventoryQuantity": 1,
+                  "legacyResourceId": "{Scrubbed}"
+                }
               }
             ]
           },
-          "vendor": "Burton"
+          "vendor": "{Scrubbed}"
         }
       }
     ],
