@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Bogus" />
         <PackageReference Include="coverlet.collector"/>
         <PackageReference Include="FakeItEasy"/>
         <PackageReference Include="FluentAssertions"/>

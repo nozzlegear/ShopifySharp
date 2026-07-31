@@ -31,5 +31,5 @@
       }
     ]
   },
-  "Vendor": "{Scrubbed}"
+  "Vendor": "some-expected-vendor"
 }

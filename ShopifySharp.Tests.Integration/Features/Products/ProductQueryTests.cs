@@ -1,15 +1,18 @@
+using Bogus;
 using ShopifySharp.Services.Graph;
 using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
 using ShopifySharp.Tests.Integration.Features.Products.Models;
 
 namespace ShopifySharp.Tests.Integration.Features.Products;
 
 [Collection("Product Queries")]
-public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture graphServiceFixture)
-    : IClassFixture<VerifyFixture>, IClassFixture<GraphServiceFixture>
+public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture graphServiceFixture, ProductCleanupFixture productCleanupFixture)
+    : IClassFixture<VerifyFixture>, IClassFixture<GraphServiceFixture>, IClassFixture<ProductCleanupFixture>
 {
     private readonly VerifySettings _verifySettings = verifyFixture.Settings;
     private readonly IGraphService _sut = graphServiceFixture.Service;
+    private readonly Faker _bogus = new();
 
     private static OptionCreateInput MakeOptionCreationInput(string optionName, string[] optionValues)
     {
@@ -19,7 +22,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
             values = optionValues.Select(value => new OptionValueCreateInput
             {
                 name = value
-            }).ToArray(),
+            }).ToArray()
         };
     }
 
@@ -50,13 +53,32 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
     [Fact]
     public async Task ProductsQuery_ShouldListProducts()
     {
-        // Setup
+        // Setup - use a unique vendor to identify test products
+        // Use deterministic unique value based on test class name
+        var testVendor = "shopifysharp_ProductQueryTests";
+
+        // Create two products with a unique vendor we can query
+        var createdProduct1 = await CreateProductAsync(
+            "Test Product One", 
+            [], 
+            ProductStatus.ACTIVE,
+            vendor: testVendor
+        );
+        var createdProduct2 = await CreateProductAsync(
+            "Test Product Two", 
+            [], 
+            ProductStatus.ACTIVE,
+            vendor: testVendor
+        );
+
+        // Query for products by vendor (this is a supported filter)
+        var query = $"vendor:{testVendor}";
         var request = new GraphRequest
         {
             Query =
                 """
-                query getProducts($first: Int) {
-                    products(first: $first, sortKey: ID, reverse: true, query:"published_at:<now") {
+                query getProducts($first: Int, $query: String!) {
+                    products(first: $first, sortKey: ID, reverse: true, query: $query) {
                         pageInfo {
                             startCursor
                             endCursor
@@ -71,6 +93,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
                             legacyResourceId
                             publishedAt
                             status
+                            vendor
                             variants(first: 3) {
                                 pageInfo {
                                     startCursor
@@ -105,7 +128,8 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
                 """,
             Variables = new Dictionary<string, object>
             {
-                { "first", 3 }
+                { "first", 3 },
+                { "query", query }
             },
             UserErrorHandling = GraphRequestUserErrorHandling.Throw
         };
@@ -113,20 +137,32 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         // Act
         var products = await _sut.PostAsync<GetProductsQueryResponse>(request);
 
-        // Assert
+        // Assert - vendor filter should return exactly the 2 products we created
+        products.Data.Products.Nodes.Should().HaveCount(2);
+        products.Data.Products.Nodes.Should().AllSatisfy(product =>
+        {
+            product.id.Should().BeOneOf(createdProduct1.Id, createdProduct2.Id);
+            product.vendor.Should().Be(testVendor);
+        });
+
         await Verify(products.Data.Products, _verifySettings);
     }
 
     [Fact]
     public async Task ProductsQuery_ShouldListProductsWithFilter()
     {
-       // Setup
-       var cursor = await GetProductsCursorAsync();
+       // Setup - create a product with a unique vendor to filter on
+       const string testVendor = "shopifysharpPaginationTest";
+       var createdProduct = await CreateProductAsync(
+           "ShopifySharp Pagination Test Product",
+           vendor: testVendor
+       );
+
        var graphRequest = new GraphRequest
        {
            Query = """
-           query ($last: Int!, $before: String) {
-               products(last: $last, sortKey: ID, reverse: true, before: $before, query: "status:active AND published_status:published") {
+           query ($query: String!) {
+               products(first: 10, sortKey: ID, query: $query) {
                    edges {
                        node {
                            id
@@ -169,7 +205,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
                        }
                    }
                    pageInfo {
-                       hasPreviousPage 
+                       hasPreviousPage
                        hasNextPage
                        startCursor
                        endCursor
@@ -179,15 +215,18 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
            """,
            Variables = new Dictionary<string, object>
            {
-               {"last", 3},
-               {"before", cursor}
-           }
+               {"query", $"vendor:{testVendor}"}
+           },
+           UserErrorHandling = GraphRequestUserErrorHandling.Throw
        };
 
        // Act
        var result = await _sut.PostAsync<ListProductsResult>(graphRequest);
 
-       // Assert
+       // Assert - our product should be the only one returned
+       result.Data.Products.edges.Should().ContainSingle();
+       result.Data.Products.edges[0].node!.id.Should().Be(createdProduct.Id);
+
        await Verify(result.Data, _verifySettings);
     }
 
@@ -731,69 +770,94 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         return result.Data.Result.Nodes.FirstOrDefault(publication => publication.SupportsFuturePublishing);
     }
 
-    private async Task<CreatedProduct> CreateProductAsync(string title, OptionCreateInput[]? productOptions = null,
-        ProductStatus status = ProductStatus.DRAFT)
+    private async Task<CreatedProduct> CreateProductAsync(
+        string title,
+        OptionCreateInput[]? productOptions = null,
+        ProductStatus status = ProductStatus.DRAFT,
+        MetafieldInput[]? metafields = null,
+        string? vendor = null,
+        string[]? tags = null
+    )
     {
-        var request = new GraphRequest
+        var productInputArgs = new ProductCreateInput
         {
-            Query =
-                """
-                mutation createProduct($title: String!, $productOptions: [OptionCreateInput!], $status: ProductStatus) {
-                    result: productCreate(product: {
-                        title: $title
-                        status: $status
-                        descriptionHtml: "some-description-html"
-                        vendor: "shopifysharp",
-                        productOptions: $productOptions
-                    }) {
-                        product {
-                            description
-                            hasOnlyDefaultVariant
-                            id
-                            options {
-                                name
-                                id
-                                optionValues {
-                                    id
-                                    name
-                                    hasVariants
-                                }
-                                values
-                            }
-                            status
-                            title
-                            variantsCount {
-                                count
-                            }
-                            vendor
-                            variants(first: 10) {
-                                nodes {
-                                    id
-                                    displayName
-                                    title
-                                    selectedOptions {
-                                        name
-                                        value
-                                    }
-                                }
-                            }
-                        }
-                        userErrors {
-                            field
-                            message
-                        }
-                    }
-                }
-                """,
-            Variables = new Dictionary<string, object>
-            {
-                { "title", title },
-                { "productOptions", productOptions! },
-                { "status", status }
-            },
-            UserErrorHandling = GraphRequestUserErrorHandling.Throw
+            title = title,
+            status = status,
+            descriptionHtml = "some-description-html",
+            vendor = vendor ?? "shopifysharp",
+            productOptions = productOptions,
+            metafields = metafields,
+            tags = tags
         };
-        var result = await _sut.PostAsync<CreateProductResponse>(request);
-        return result.Data.Result.Product;
+
+        var operation = new ProductCreateOperationQueryBuilder()
+            .SetArguments(x => x.Product(productInputArgs))
+            .UserErrors(errors =>
+            {
+                errors.Field()
+                    .Message();
+            })
+            .Product(product =>
+            {
+                product.Description()
+                    .HasOnlyDefaultVariant()
+                    .Id()
+                    .Options(option =>
+                    {
+                        option.Name()
+                            .Id()
+                            .Values()
+                            .OptionValues(optionValue =>
+                            {
+                                optionValue.Id()
+                                    .Name()
+                                    .HasVariants();
+                            });
+                    })
+                    .Status()
+                    .Title()
+                    .VariantsCount(c => c.Count_())
+                    .Vendor()
+                    .Variants(variants =>
+                    {
+                        variants.SetArguments(args => args.First(10))
+                            .Nodes(variant =>
+                            {
+                                variant.Id()
+                                    .DisplayName()
+                                    .Title()
+                                    .SelectedOptions(option =>
+                                    {
+                                        option.Name()
+                                            .Value();
+                                    });
+                            });
+                    });
+            });
+
+        var result = await _sut.PostAsync(GraphRequest.FromQueryBuilder(operation));
+        var product = result.Data.product;
+
+        ArgumentNullException.ThrowIfNull(product);
+
+        if (product.id is not null)
+        {
+            // Add the new product to the fixture's cleanup queue
+            productCleanupFixture.RegisterTestProduct(product.id);
+        }
+
+        return new CreatedProduct(
+            product.description ?? "",
+            product.id ?? "",
+            product.hasOnlyDefaultVariant ?? false,
+            product.title ?? "",
+            // If the status doesn't have a value, set it to a bogus value that will be caught if checked
+            product.status ?? status - 1,
+            product.options?.Select(Models.ProductOption.FromGraph).ToArray() ?? [],
+            new VariantsCount(product.variantsCount?.count_ ?? -1),
+            new NodeCollection<CreatedVariant>(product.variants?.nodes.Select(CreatedVariant.FromGraph).ToArray() ?? []),
+            product.vendor ?? "",
+            product.metafields?.nodes.Select(CreatedMetafield.FromGraph).ToArray() ?? []
+        );
     }
 }

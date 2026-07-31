@@ -11,5 +11,6 @@ public record CreatedProduct(
     ProductOption[] Options,
     VariantsCount VariantsCount,
     NodeCollection<CreatedVariant> Variants,
-    string Vendor
+    string Vendor,
+    CreatedMetafield[] MetaFields
 );
