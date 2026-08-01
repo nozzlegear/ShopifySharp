@@ -10,7 +10,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Services.Graph;
 using Xunit;
 
-namespace ShopifySharp.Tests.Services.Graph;
+namespace ShopifySharp.Tests.Integration.Graph;
 
 [Trait("Category", "Graph"), TestSubject(typeof(GraphService))]
 public class GraphServiceParseGraphExtensionsTests
@@ -27,7 +27,8 @@ public class GraphServiceParseGraphExtensionsTests
 
     public GraphServiceParseGraphExtensionsTests()
     {
-        _sut = new GraphServiceWithExposedExtensionsParserFunction(Utils.Credentials, _jsonSerializer);
+        var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+        _sut = new GraphServiceWithExposedExtensionsParserFunction(credentials, _jsonSerializer);
     }
 
     public static string[] GetJsonForNullExtensionsPropertyTest() =>

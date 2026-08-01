@@ -1,7 +1,7 @@
 using System.Net.Http;
 using JetBrains.Annotations;
-using ShopifySharp.Utilities;
 using ShopifySharp.Tests.TestClasses;
+using ShopifySharp.Utilities;
 
 namespace ShopifySharp.Tests.Utilities;
 

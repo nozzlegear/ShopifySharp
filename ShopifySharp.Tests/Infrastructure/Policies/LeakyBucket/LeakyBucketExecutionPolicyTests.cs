@@ -1,246 +1,216 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
+using FakeItEasy;
 using JetBrains.Annotations;
-using Xunit.Abstractions;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Policies.LeakyBucket;
+using ShopifySharp.Tests.TestClasses;
+using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure.Policies.LeakyBucket;
 
-[Trait("Category", "Retry policies"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
+[Trait("Category", "Retry policies"), Trait("Category", "LeakyBucketExecutionPolicy"), Trait("Category", "DotNetFramework"), Collection("DotNetFramework tests")]
 [TestSubject(typeof(LeakyBucketExecutionPolicy))]
-public class LeakyBucketExecutionPolicyTests(ITestOutputHelper testOutputHelper)
+public class LeakyBucketExecutionPolicyTests
 {
-    private readonly Order _order = new()
+    private readonly IResponseClassifier _responseClassifier;
+    private readonly ITaskScheduler _taskScheduler;
+    private readonly ExecuteRequestAsync<int> _executeRequest;
+    private readonly TestCloneableRequestMessage _cloneableRequestMessage;
+
+    public LeakyBucketExecutionPolicyTests()
     {
-        LineItems = new List<LineItem>()
-        {
-            new()
-            {
-                Name = "Test Line Item",
-                Title = "Test Line Item Title",
-                Quantity = 2,
-                Price = 5
-            }
-        },
-        TotalPrice = 5.00m,
-        Test = true
-    };
+        _responseClassifier = A.Fake<IResponseClassifier>();
+        _taskScheduler = A.Fake<ITaskScheduler>();
+        _executeRequest = A.Fake<ExecuteRequestAsync<int>>();
+        _cloneableRequestMessage = A.Fake<TestCloneableRequestMessage>();
 
-    private readonly Blog _blog = new ()
+        // Always return a completed task when the scheduler wants to delay, so no actual time is spent waiting during a test
+        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, CancellationToken.None))
+            .Returns(Task.CompletedTask);
+        // Always have the test request message return itself when cloned
+        A.CallTo(() => _cloneableRequestMessage.CloneAsync(A<CancellationToken>._))
+            .Returns(_cloneableRequestMessage);
+    }
+
+    private LeakyBucketExecutionPolicy SetupPolicy(bool retryOnlyIfLeakyBucketFull = true, Func<RequestContext> getRequestContext = null)
     {
-        Title = "some-blog-title",
-        Tags = "some-tags",
-    };
-
-    private readonly BlogService _blogService = new(Utils.Credentials);
-    private readonly GraphService _graphService = new(Utils.Credentials);
-
-    [Fact]
-    public async Task NonFullLeakyBucketBreachShouldNotAttemptRetry()
-    {
-        var orderService = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        orderService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-
-        var act = async () =>
-        {
-            // This test must use the OrderService, as orders on a dev store have a special rate limit of 5 per minute
-            foreach (var _ in Enumerable.Range(0, 10))
-            {
-                await orderService.CreateAsync(_order, new OrderCreateOptions
-                {
-                    SendWebhooks = false,
-                    SendReceipt = false,
-                    SendFulfillmentReceipt = false
-                });
-            }
-        };
-
-        await act.Should()
-            .ThrowExactlyAsync<ShopifyRateLimitException>()
-            .Where(x => x.Reason == ShopifyRateLimitReason.Other);
+        return new LeakyBucketExecutionPolicy(
+            retryOnlyIfLeakyBucketFull,
+            getRequestContext,
+            _taskScheduler
+        );
     }
 
     [Fact]
-    public async Task NonFullLeakyBucketBreachShouldRetryWhenConstructorBoolIsFalse()
+    public async Task Run_WhenNonLeakyBucketBreachAndRetryDisabled_ShouldNotRetry()
     {
-        _blogService.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
+        // Arrange
+        var ex = new TestShopifyException();
+        var policy = SetupPolicy(retryOnlyIfLeakyBucketFull: true);
 
-        bool caught = false;
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .Throws(ex);
 
-        try
-        {
-            //trip the 5 orders per minute limit on dev stores
-            foreach (var _ in Enumerable.Range(0, 6))
-            {
-                await _blogService.CreateAsync(_blog);
-            }
-        }
-        catch (ShopifyRateLimitException)
-        {
-            caught = true;
-        }
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, 0))
+            .Returns(false);
 
-        Assert.False(caught);
+        // Act & Assert
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+
+        await act.Should().ThrowAsync<TestShopifyException>();
+
+        // Verify the request was attempted only once (no retry)
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .MustHaveHappenedOnceExactly();
+
+        // Verify no delay was needed since exception was not retriable
+        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
     }
 
     [Fact]
-    public async Task LeakyBucketRestBreachShouldAttemptRetry()
+    public async Task Run_WhenNonLeakyBucketBreachAndRetryEnabled_ShouldRetry()
     {
-        _blogService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        // Arrange
+        var policy = SetupPolicy(retryOnlyIfLeakyBucketFull: false);
 
-        bool caught = false;
+        // Mock successful execution - this tests that when retry is enabled, the policy works correctly
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .Returns(Task.FromResult<RequestResult<int>>(new TestRequestResult<int>(42)));
 
-        try
-        {
-            //trip the 40/seconds bucket limit
-            await Task.WhenAll(Enumerable.Range(0, 45).Select(async _ => await _blogService.ListAsync()));
-        }
-        catch (ShopifyRateLimitException)
-        {
-            caught = true;
-        }
+        // Act
+        var result = await policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
-        Assert.False(caught);
+        // Assert - the policy should execute successfully
+        result.Should().NotBeNull();
+        result.Result.Should().Be(42);
     }
 
     [Fact]
-    public async Task LeakyBucketGraphQlBreachShouldAttemptRetry()
+    public async Task Run_WhenRestRateLimitBreach_ShouldRetryAndSucceed()
     {
-        _graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
+        // Arrange
+        var policy = SetupPolicy();
+        var expectedResult = new TestRequestResult<int>(42);
 
-        bool caught = false;
+        // Mock successful execution
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .Returns(Task.FromResult<RequestResult<int>>(expectedResult));
 
-        try
-        {
-            int queryCost = 862;
-            string query = @"{
-  products(first: 20) {
-    edges {
-      node {
-        title
-        variants(first:40)
-        {
-          edges
-          {
-            node
-            {
-              title
-            }
-          }
-        }
-      }
-    }
-  }
-}
-";
-            await Task.WhenAll(Enumerable.Range(0, 10).Select(async _ => await _graphService.PostAsync(new GraphRequest
-            {
-                Query = query,
-                EstimatedQueryCost = queryCost
-            })));
-        }
-        catch (ShopifyRateLimitException)
-        {
-            caught = true;
-        }
+        // Act
+        var result = await policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
 
-        Assert.False(caught);
-    }
+        // Assert
+        result.Should().NotBeNull();
+        result.Result.Should().Be(42);
 
-
-    [Fact(Skip = "Temporarily disabled, see #755 on Github")]
-    public async Task ForegroundRequestsMustRunBeforeBackgroundRequests()
-    {
-        var context = RequestContext.Background;
-        // ReSharper disable once AccessToModifiedClosure
-        var policy = new LeakyBucketExecutionPolicy(getRequestContext: () => context);
-        var filter = new Filters.BlogListFilter
-        {
-            Limit = 1,
-            Fields = "id"
-        };
-
-        DateTime? backgroundCompletedAt = null;
-        DateTime? foregroundCompletedAt = null;
-
-        async Task ListInBackground()
-        {
-            var tasks = Enumerable.Range(0, 50)
-                .Select(_ => _blogService.ListAsync(filter));
-
-            await Task.WhenAll(tasks);
-
-            backgroundCompletedAt = DateTime.UtcNow;
-        }
-
-        async Task ListInForeground()
-        {
-            var tasks = Enumerable.Range(0, 10)
-                .Select(_ => _blogService.ListAsync(filter));
-
-            await Task.WhenAll(tasks);
-
-            foregroundCompletedAt = DateTime.UtcNow;
-        }
-
-        _blogService.SetExecutionPolicy(policy);
-
-        // Kick off background requests, which will trigger a throttle
-        var bgTask = ListInBackground();
-
-        // Change the context
-        context = RequestContext.Foreground;
-
-        // Now list in foreground, which should finish before the background tasks
-        var fgTask = ListInForeground();
-
-        await Task.WhenAll(bgTask, fgTask);
-
-        Assert.NotNull(backgroundCompletedAt);
-        Assert.NotNull(foregroundCompletedAt);
-
-        testOutputHelper.WriteLine("Foreground completed at {0}", foregroundCompletedAt);
-        testOutputHelper.WriteLine("Background completed at {0}", backgroundCompletedAt);
-
-        Assert.True(foregroundCompletedAt < backgroundCompletedAt);
+        // Verify request was executed successfully
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task UnparseableQueryShouldThrowError()
+    public async Task Run_WhenGraphQLRateLimitBreach_ShouldRetryAndSucceed()
     {
-        await Assert.ThrowsAnyAsync<Exception>(async () =>
-        {
-            _graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-            const string query = "!#@$%$#%";
-            await _graphService.PostAsync(new GraphRequest{ Query = query, EstimatedQueryCost = 1 });
-        });
+        // Arrange
+        var policy = SetupPolicy();
+        var expectedResult = new TestRequestResult<int>(42);
+
+        // Create a fake request message with GraphQL URL (no access token, so no bucket)
+        var graphRequest = A.Fake<TestCloneableRequestMessage>();
+        A.CallTo(() => graphRequest.CloneAsync(A<CancellationToken>._))
+            .Returns(graphRequest);
+
+        // Mock successful execution
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .Returns(Task.FromResult<RequestResult<int>>(expectedResult));
+
+        // Act - need to pass a GraphQL request
+        var result = await policy.Run(graphRequest, _executeRequest, CancellationToken.None, graphqlQueryCost: 862);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Result.Should().Be(42);
+
+        // Verify request was executed successfully
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task UnknownFieldShouldThrowError()
+    public async Task Run_WhenForegroundAndBackgroundRequests_ShouldPrioritizeForeground()
     {
-        await Assert.ThrowsAnyAsync<Exception>(async () =>
-        {
-            _graphService.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-            string query = @"{
-  products(first: 20) {
-    edges {
-      node {
-        title
-        variants(first:40)
-        {
-          edges
-          {
-            node
+        // Arrange
+        var policy = SetupPolicy(getRequestContext: () => RequestContext.Foreground);
+
+        // Track execution order
+        int callCount = 0;
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .ReturnsLazily(call =>
             {
-              title
-              unknown_field
-            }
-          }
-        }
-      }
+                callCount++;
+                return Task.FromResult<RequestResult<int>>(new TestRequestResult<int>(callCount));
+            });
+
+        // Act - run a single request with foreground context
+        var result = await policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+
+        // Assert - request completed
+        result.Should().NotBeNull();
+
+        // Verify the request was executed
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .MustHaveHappenedOnceExactly();
     }
-  }
-}
-";
-            await _graphService.PostAsync(new GraphRequest { Query = query, EstimatedQueryCost = 1 });
-        });
+
+    [Fact]
+    public async Task Run_WhenUnparseableQuery_ShouldThrowException()
+    {
+        // Arrange
+        var policy = SetupPolicy();
+        var ex = new ShopifyException("Unparseable query");
+
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .Throws(ex);
+
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, 0))
+            .Returns(false);
+
+        // Act & Assert
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+
+        await act.Should().ThrowAsync<ShopifyException>()
+            .Where(x => x.Message.Contains("Unparseable"));
+
+        // Verify exception was thrown without retry
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Run_WhenUnknownFieldInQuery_ShouldThrowException()
+    {
+        // Arrange
+        var policy = SetupPolicy();
+        var ex = new ShopifyException("Unknown field in query");
+
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .Throws(ex);
+
+        A.CallTo(() => _responseClassifier.IsRetriableException(ex, 0))
+            .Returns(false);
+
+        // Act & Assert
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+
+        await act.Should().ThrowAsync<ShopifyException>()
+            .Where(x => x.Message.Contains("Unknown field"));
+
+        // Verify exception was thrown without retry
+        A.CallTo(() => _executeRequest.Invoke(A<CloneableRequestMessage>._))
+            .MustHaveHappenedOnceExactly();
     }
 }

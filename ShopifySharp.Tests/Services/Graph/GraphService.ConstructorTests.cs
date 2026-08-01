@@ -19,7 +19,7 @@ public class GraphServiceConstructorTests
     private const string ExpectedJsonSerializerFieldName = "_jsonSerializer";
     private const string ExpectedHttpContentSerializerFieldName = "_httpContentSerializer";
 
-    private readonly ShopifyApiCredentials _credentials = new(Utils.MyShopifyUrl, Utils.AccessToken);
+    private readonly ShopifyApiCredentials _credentials = new("example.myshopify.com", "some-access-token");
     private readonly IShopifyDomainUtility _shopifyDomainUtility = A.Fake<IShopifyDomainUtility>();
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>();
 

@@ -13,7 +13,7 @@ namespace ShopifySharp.Tests.Utilities;
 [Trait("Category", "ShopifyRequestValidationUtility")]
 public class ShopifyRequestValidationUtilityTests
 {
-    private readonly string _secretKey = Utils.SecretKey;
+    private readonly string _secretKey = "some-secret-key";
     private readonly ShopifyRequestValidationUtility _utility = new();
 
     #region IsAuthenticProxyRequest

@@ -9,6 +9,8 @@ using ShopifySharp.Infrastructure;
 using Newtonsoft.Json.Linq;
 using ShopifySharp.Infrastructure.Policies.LeakyBucket;
 
+using TaskScheduler = ShopifySharp.Infrastructure.TaskScheduler;
+
 // ReSharper disable once CheckNamespace
 namespace ShopifySharp;
 
@@ -26,7 +28,8 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
 
     private static readonly TimeSpan DefaultRetryDelay = TimeSpan.FromSeconds(1);
 
-    private readonly ResponseClassifier _responseClassifier;
+    private readonly IResponseClassifier _responseClassifier;
+    private readonly ITaskScheduler _taskScheduler;
 
     /// <summary>
     /// Creates a new LeakyBucketExecutionPolicy.
@@ -47,6 +50,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
     {
         _responseClassifier = new ResponseClassifier(!retryOnlyIfLeakyBucketFull, 0);
         _getRequestContext = getRequestContext ?? (() => RequestContext.Foreground);
+        _taskScheduler = new TaskScheduler();
     }
 
     /// <summary>
@@ -73,6 +77,23 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
     {
         _responseClassifier = new ResponseClassifier(retryUnexpectedRateLimitResponse, maxRetriesPerNonLimitedRequest);
         _getRequestContext = getRequestContext ?? (() => RequestContext.Foreground);
+        _taskScheduler = new TaskScheduler();
+    }
+
+    // Internal constructor for testing with mocked task scheduler
+    internal LeakyBucketExecutionPolicy(bool retryOnlyIfLeakyBucketFull, Func<RequestContext> getRequestContext, ITaskScheduler taskScheduler)
+    {
+        _responseClassifier = new ResponseClassifier(!retryOnlyIfLeakyBucketFull, 0);
+        _getRequestContext = getRequestContext ?? (() => RequestContext.Foreground);
+        _taskScheduler = taskScheduler;
+    }
+
+    // Internal constructor for testing with mocked task scheduler and response classifier
+    internal LeakyBucketExecutionPolicy(int maxRetriesPerNonLimitedRequest, bool retryUnexpectedRateLimitResponse, Func<RequestContext> getRequestContext, ITaskScheduler taskScheduler, IResponseClassifier responseClassifier)
+    {
+        _responseClassifier = responseClassifier ?? new ResponseClassifier(retryUnexpectedRateLimitResponse, maxRetriesPerNonLimitedRequest);
+        _getRequestContext = getRequestContext ?? (() => RequestContext.Foreground);
+        _taskScheduler = taskScheduler;
     }
 
     public async Task<RequestResult<T>> Run<T>(CloneableRequestMessage baseRequestMessage, ExecuteRequestAsync<T> executeRequestAsync, CancellationToken cancellationToken, int? graphqlQueryCost = null)
@@ -138,7 +159,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
                 }
 
                 totalRetriesDueToServiceUnavailableResponse++;
-                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                await _taskScheduler.DelayAsync(DefaultRetryDelay, cancellationToken);
             }
         }
     }
@@ -177,7 +198,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
                 }
 
                 totalRetriesDueToServiceUnavailableResponse++;
-                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                await _taskScheduler.DelayAsync(DefaultRetryDelay, cancellationToken);
                 continue;
             }
 
@@ -210,7 +231,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
                                                      code.GetString() == "THROTTLED"))
             {
                 // The graph response's error code indicates the request was throttled. Retry the request.
-                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                await _taskScheduler.DelayAsync(DefaultRetryDelay, cancellationToken);
             }
             else
             {
@@ -252,7 +273,7 @@ public class LeakyBucketExecutionPolicy : IRequestExecutionPolicy
                 }
 
                 totalRetriesDueToServiceUnavailableResponse++;
-                await Task.Delay(DefaultRetryDelay, cancellationToken);
+                await _taskScheduler.DelayAsync(DefaultRetryDelay, cancellationToken);
                 continue;
             }
 

@@ -28,11 +28,12 @@ public class GraphServicePostAsyncTests
     public GraphServicePostAsyncTests()
     {
         var sp = A.Fake<IServiceProvider>();
+        var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
 
         A.CallTo(() => sp.GetService(typeof(IJsonSerializer)))
             .Returns(_jsonSerializer);
 
-        _sut = new GraphService(Utils.Credentials, sp);
+        _sut = new GraphService(credentials, sp);
         _sut.SetExecutionPolicy(_policy);
     }
 
@@ -391,12 +392,12 @@ public class GraphServicePostAsyncTests
     {
         const string responseJson =
               """
-              { 
-                  "data": { 
-                        "fooOperation": { 
-                            "foo": this is an invalid json string 
-                        } 
-                  } 
+              {
+                  "data": {
+                        "fooOperation": {
+                            "foo": this is an invalid json string
+                        }
+                  }
               }
               """;
         const string expectedRequestId = "some-expected-request-id";
@@ -876,12 +877,12 @@ public class GraphServicePostAsyncTests
     {
         const string responseJson =
               """
-              { 
-                  "data": { 
-                        "fooOperation": { 
-                            "foo": this is an invalid json string 
-                        } 
-                  } 
+              {
+                  "data": {
+                        "fooOperation": {
+                            "foo": this is an invalid json string
+                        }
+                  }
               }
               """;
         const string expectedRequestId = "some-expected-request-id";

@@ -4,18 +4,41 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using FakeItEasy;
-using Microsoft.Extensions.Configuration;
 using ShopifySharp.Credentials;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Policies.ExponentialRetry;
 
-namespace ShopifySharp.Tests;
+namespace ShopifySharp.Tests.Integration.Rest;
 
 /// <summary>
 /// A utility class for running tests.
 /// </summary>
 public static class Utils
 {
+    /// <summary>
+    /// Attempts to get an environment variable first by the key, then from configuration.
+    /// All keys must be uppercased!
+    /// </summary>
+    private static string Get(string key) => ConfigurationHelper.Get(key);
+
+    public static string ApiKey => Get("API_KEY");
+
+    public static string SecretKey => Get("SECRET_KEY");
+
+    public static string AccessToken => Get("ACCESS_TOKEN");
+
+    public static string MultipassSecret => Get("MULTIPASS_SECRET");
+
+    public static string MyShopifyUrl => Get("MY_SHOPIFY_URL");
+
+    public static ShopifyApiCredentials Credentials => new(MyShopifyUrl, AccessToken);
+
+    public static long OrganizationId => long.Parse(Get("ORG_ID"));
+
+    public static string OrganizationToken => Get("ORG_TOKEN");
+
+    public static ShopifyPartnerApiCredentials PartnerCredentials  => new(OrganizationId, OrganizationToken);
+
     #nullable enable
 
     /// <summary>
