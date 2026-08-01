@@ -1,6 +1,9 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Primitives;
@@ -16,19 +19,75 @@ public class ShopifyRequestValidationUtilityTests
     private readonly string _secretKey = "some-secret-key";
     private readonly ShopifyRequestValidationUtility _utility = new();
 
+    private static string ComputeShopifyRequestHmac(IDictionary<string, string> queryParams, string secretKey)
+    {
+        // Per Shopify docs: remove hmac/signature, sort keys, join as "key=value&key=value", HMAC-SHA256 -> lowercase hex
+        var filtered = queryParams
+            .Where(kvp => kvp.Key != "hmac" && kvp.Key != "signature")
+            .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
+            .Select(kvp => $"{kvp.Key}={kvp.Value}");
+
+        var message = string.Join("&", filtered);
+        var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+        var messageBytes = Encoding.UTF8.GetBytes(message);
+        using (var hmac = new HMACSHA256(keyBytes))
+        {
+            var hash = hmac.ComputeHash(messageBytes);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+        }
+    }
+
+    private static string ComputeShopifyProxySignature(IDictionary<string, string> queryParams, string secretKey)
+    {
+        // Per Shopify proxy docs: remove signature/hmac, sort keys, concat as "key=valuekey=value" (no separator), HMAC-SHA256 -> lowercase hex
+        var filtered = queryParams
+            .Where(kvp => kvp.Key != "signature" && kvp.Key != "hmac")
+            .OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
+            .Select(kvp => $"{kvp.Key}={kvp.Value}");
+
+        var message = string.Concat(filtered);
+        var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+        var messageBytes = Encoding.UTF8.GetBytes(message);
+        using (var hmac = new HMACSHA256(keyBytes))
+        {
+            var hash = hmac.ComputeHash(messageBytes);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+        }
+    }
+
+    private static string ComputeShopifyWebhookHmac(string requestBody, string secretKey)
+    {
+        // Per Shopify docs: HMAC-SHA256 of raw request body with client secret -> base64
+        var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+        var bodyBytes = Encoding.UTF8.GetBytes(requestBody);
+        using (var hmac = new HMACSHA256(keyBytes))
+        {
+            var hash = hmac.ComputeHash(bodyBytes);
+            return Convert.ToBase64String(hash);
+        }
+    }
+
     #region IsAuthenticProxyRequest
 
     [Fact]
     public void IsAuthenticProxyRequest_WhenGivenADictionary_ReturnsTrue()
     {
         // Setup
+        var expectedSig = ComputeShopifyProxySignature(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"path_prefix", "/apps/stages-order-tracker"},
+            {"timestamp", "1459781841"},
+            {"logged_in_customer_id", "123456789"},
+        }, _secretKey);
+
         var qs = new Dictionary<string, string>()
         {
             {"shop", "stages-test-shop-2.myshopify.com"},
             {"path_prefix", "/apps/stages-order-tracker"},
             {"timestamp", "1459781841"},
             {"logged_in_customer_id", "123456789"},
-            {"signature", "4d67f9147404a4ac61ec5ca82c3fe6015497564d0c6aea7075cf23257c9b2400"},
+            {"signature", expectedSig},
         };
 
         // Act
@@ -62,13 +121,21 @@ public class ShopifyRequestValidationUtilityTests
     public void IsAuthenticProxyRequest_WhenGivenDictionaryWithStringValues_ReturnsTrue()
     {
         // Setup
+        var expectedSig = ComputeShopifyProxySignature(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"path_prefix", "/apps/stages-order-tracker"},
+            {"timestamp", "1459781841"},
+            {"logged_in_customer_id", ""},
+        }, _secretKey);
+
         var qs = new Dictionary<string, StringValues>()
         {
             {"shop", "stages-test-shop-2.myshopify.com"},
             {"path_prefix", "/apps/stages-order-tracker"},
             {"timestamp", "1459781841"},
             {"logged_in_customer_id", string.Empty},
-            {"signature", "c79b2e8038b24d9f12dbb6a1308f490a7c81c2d0089fb5f81a13bb4fdef230c9"},
+            {"signature", expectedSig},
         };
 
         // Act
@@ -101,12 +168,56 @@ public class ShopifyRequestValidationUtilityTests
         isValid.Should().BeFalse();
     }
 
-    [Theory]
-    [InlineData("shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&logged_in_customer_id=123456789&signature=4d67f9147404a4ac61ec5ca82c3fe6015497564d0c6aea7075cf23257c9b2400")]
-    [InlineData("shop=stages-test-shop-2.myshopify.com&logged_in_customer_id=&path_prefix=%2Fapps%2Fstages-tracking-widget-1&timestamp=1661887935&signature=4876ab17e7af88772fb3f020925a98fbce10b9276db7637d285155c6c8f64e7c")]
-    [InlineData("?shop=stages-test-shop-2.myshopify.com&logged_in_customer_id=&path_prefix=%2Fapps%2Fstages-tracking-widget-1&timestamp=1661887935&signature=4876ab17e7af88772fb3f020925a98fbce10b9276db7637d285155c6c8f64e7c")]
-    public void IsAuthenticProxyRequest_WhenGivenAQueryString_ReturnsTrue(string queryString)
+    [Fact]
+    public void IsAuthenticProxyRequest_WhenGivenAQueryString_ReturnsTrue()
     {
+        var expectedSig = ComputeShopifyProxySignature(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"path_prefix", "/apps/stages-order-tracker"},
+            {"timestamp", "1459781841"},
+            {"logged_in_customer_id", "123456789"},
+        }, _secretKey);
+        var queryString = $"shop=stages-test-shop-2.myshopify.com&path_prefix=/apps/stages-order-tracker&timestamp=1459781841&logged_in_customer_id=123456789&signature={expectedSig}";
+
+        // Act
+        var isValid = _utility.IsAuthenticProxyRequest(queryString, _secretKey);
+
+        // Assert
+        isValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsAuthenticProxyRequest_WhenGivenAQueryString_WithUrlEncodedPath_ReturnsTrue()
+    {
+        var expectedSig = ComputeShopifyProxySignature(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"logged_in_customer_id", ""},
+            {"path_prefix", "/apps/stages-tracking-widget-1"},
+            {"timestamp", "1661887935"},
+        }, _secretKey);
+        var queryString = $"shop=stages-test-shop-2.myshopify.com&logged_in_customer_id=&path_prefix=%2Fapps%2Fstages-tracking-widget-1&timestamp=1661887935&signature={expectedSig}";
+
+        // Act
+        var isValid = _utility.IsAuthenticProxyRequest(queryString, _secretKey);
+
+        // Assert
+        isValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsAuthenticProxyRequest_WhenGivenAQueryString_WithLeadingQuestionMark_ReturnsTrue()
+    {
+        var expectedSig = ComputeShopifyProxySignature(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"logged_in_customer_id", ""},
+            {"path_prefix", "/apps/stages-tracking-widget-1"},
+            {"timestamp", "1661887935"},
+        }, _secretKey);
+        var queryString = $"?shop=stages-test-shop-2.myshopify.com&logged_in_customer_id=&path_prefix=%2Fapps%2Fstages-tracking-widget-1&timestamp=1661887935&signature={expectedSig}";
+
         // Act
         var isValid = _utility.IsAuthenticProxyRequest(queryString, _secretKey);
 
@@ -135,9 +246,15 @@ public class ShopifyRequestValidationUtilityTests
     public void IsAuthenticRequest_WhenGivenADictionaryWithStringValues_ReturnsTrue()
     {
         // Setup
+        var expectedHmac = ComputeShopifyRequestHmac(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"timestamp", "1459779785"},
+        }, _secretKey);
+
         var qs = new Dictionary<string, StringValues>()
         {
-            {"hmac", "134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746"},
+            {"hmac", expectedHmac},
             {"shop", "stages-test-shop-2.myshopify.com"},
             {"timestamp", "1459779785"},
         };
@@ -174,9 +291,15 @@ public class ShopifyRequestValidationUtilityTests
     public void IsAuthenticRequest_WhenGivenADictionary_ReturnsTrue()
     {
         // Setup
+        var expectedHmac = ComputeShopifyRequestHmac(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"timestamp", "1459779785"},
+        }, _secretKey);
+
         var qs = new Dictionary<string, string>()
         {
-            {"hmac", "134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746"},
+            {"hmac", expectedHmac},
             {"shop", "stages-test-shop-2.myshopify.com"},
             {"timestamp", "1459779785"},
         };
@@ -206,11 +329,33 @@ public class ShopifyRequestValidationUtilityTests
         isValid.Should().BeFalse();
     }
 
-    [Theory]
-    [InlineData("hmac=134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746&shop=stages-test-shop-2.myshopify.com&timestamp=1459779785")]
-    [InlineData("?hmac=134298b94779fc1be04851ed8f972c827d9a3b4fdf6725fe97369ef422cc5746&shop=stages-test-shop-2.myshopify.com&timestamp=1459779785")]
-    public void IsAuthenticRequest_WhenGivenAQueryString_ReturnsTrue(string queryString)
+    [Fact]
+    public void IsAuthenticRequest_WhenGivenAQueryString_ReturnsTrue()
     {
+        var expectedHmac = ComputeShopifyRequestHmac(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"timestamp", "1459779785"},
+        }, _secretKey);
+        var queryString = $"hmac={expectedHmac}&shop=stages-test-shop-2.myshopify.com&timestamp=1459779785";
+
+        // Act
+        var isValid = _utility.IsAuthenticRequest(queryString, _secretKey);
+
+        // Assert
+        isValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsAuthenticRequest_WhenGivenAQueryString_WithLeadingQuestionMark_ReturnsTrue()
+    {
+        var expectedHmac = ComputeShopifyRequestHmac(new Dictionary<string, string>
+        {
+            {"shop", "stages-test-shop-2.myshopify.com"},
+            {"timestamp", "1459779785"},
+        }, _secretKey);
+        var queryString = $"?hmac={expectedHmac}&shop=stages-test-shop-2.myshopify.com&timestamp=1459779785";
+
         // Act
         var isValid = _utility.IsAuthenticRequest(queryString, _secretKey);
 
@@ -252,7 +397,7 @@ public class ShopifyRequestValidationUtilityTests
     public void IsAuthenticWebhook_CanValidateHeader()
     {
         // Setup
-        const string shopifyHMacHeader = "3X6clrsy+C8mmzR/MeTh6b/EcLr46WLZaU+24GrPXOM=";
+        var shopifyHMacHeader = ComputeShopifyWebhookHmac("Bf", "some-secret");
         const string secretBytes = "some-secret";
         const string rawBody = "Bf";
 
@@ -288,7 +433,7 @@ public class ShopifyRequestValidationUtilityTests
     public void IsAuthenticWebhook_UsingBytes_CanValidateHeader()
     {
         // Setup
-        const string shopifyHMacHeader = "3X6clrsy+C8mmzR/MeTh6b/EcLr46WLZaU+24GrPXOM=";
+        var shopifyHMacHeader = ComputeShopifyWebhookHmac("Bf", "some-secret");
         var secretBytes = "some-secret"u8.ToArray();
         var rawBody = "Bf"u8.ToArray();
 
@@ -307,7 +452,7 @@ public class ShopifyRequestValidationUtilityTests
     public void IsAuthenticWebhook_UsingBytes_WhenHeaderIsInvalid_ReturnFalse()
     {
         // Setup
-        const string shopifyHMacHeader = "3X6clrsy+C8mmzR/MeTh6b/EcLr46WLZaU+24GrPXOM=";
+        const string shopifyHMacHeader = "some-invalid-header";
         var secretBytes = "some-secret-2"u8.ToArray();
         var rawBody = "Bf"u8.ToArray();
 
