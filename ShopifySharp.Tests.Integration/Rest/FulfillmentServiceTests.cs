@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ShopifySharp.Filters;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
 [Trait("Category", "FulfillmentService")]
+[Collection("FulfillmentService")]
 public class FulfillmentServiceTests : IClassFixture<FulfillmentServiceTestsFixture>
 {
     private FulfillmentServiceTestsFixture Fixture { get; }
@@ -16,7 +12,6 @@ public class FulfillmentServiceTests : IClassFixture<FulfillmentServiceTestsFixt
     {
         this.Fixture = fixture;
     }
-
 
     [Fact]
     public async Task Lists_FulfillmentServices()
@@ -59,21 +54,22 @@ public class FulfillmentServiceTests : IClassFixture<FulfillmentServiceTestsFixt
     [Fact]
     public async Task Updates_FulfillmentServices()
     {
-        string name = "Auntie Dot's Fulfillment Company";
+        // Setup
+        var name = $"Auntie Dot's Fulfillment Company – {DateTime.Now.Ticks}";
         var created = await Fixture.Create();
-        long id = created.Id.Value;
+        var id = created.Id.Value;
 
         created.Name = name;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
-
+        // Act
+        var updated = await Fixture.Service.UpdateAsync(id, created, TestContext.Current.CancellationToken);
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
 
-        Assert.Equal(name, updated.Name);
+        // Assert
+        updated.Name.Should().Be(name);
     }
-
 }
 
 public class FulfillmentServiceTestsFixture : IAsyncLifetime

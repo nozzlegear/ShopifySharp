@@ -1,22 +1,14 @@
 #nullable enable
-using System;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using FakeItEasy;
-using FluentAssertions;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
-using ShopifySharp.Credentials;
-using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Utilities;
-using Xunit;
 
 namespace ShopifySharp.Tests.Utilities;
 
 [TestSubject(typeof(ShopifyGraphqlUtility))]
-[Trait("Category", "ShopifyGraphqlUtilityTest")]
+[Trait("Category", "ShopifyGraphqlUtility")]
+[Collection("ShopifyGraphqlUtility")]
 public class ShopifyGraphqlUtilityTest
 {
     private const string ApiVersion = "2025-07";

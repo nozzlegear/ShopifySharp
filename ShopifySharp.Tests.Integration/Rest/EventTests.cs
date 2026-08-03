@@ -1,88 +1,94 @@
-using System.Linq;
-using System.Threading.Tasks;
 using ShopifySharp.Filters;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
 [Trait("Category", "Event")]
-public class EventTests : IClassFixture<EventTestsFixture>
+public class EventTests(EventTestsFixture fixture) : IClassFixture<EventTestsFixture>
 {
-    private EventTestsFixture Fixture { get; }
-
-    public EventTests(EventTestsFixture fixture)
-    {
-        this.Fixture = fixture;
-    }
+    private EventTestsFixture Fixture { get; } = fixture;
 
     [Fact]
     public async Task Counts_Events()
     {
-        var count = await Fixture.Service.CountAsync();
+        // Act
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(count > 0);
+        // Assert
+        count.Should().BeGreaterThan(0);
     }
 
     [Fact]
     public async Task Lists_Events()
     {
-        var list = await Fixture.Service.ListAsync();
+        // Act
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(list.Items.Count() > 0);
+        // Assert
+        list.Items.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Lists_Events_For_Subjects()
     {
-        // Get an order id
-        var orderId = (await this.Fixture.OrderService.ListAsync(new OrderListFilter()
+        // Setup
+        const string subject = "Order";
+        var orders = await Fixture.OrderService.ListAsync(new OrderListFilter
         {
             Limit = 1
-        })).Items.First().Id.Value;
-        var subject = "Order";
-        var list = await Fixture.Service.ListAsync(orderId, subject);
+        }, TestContext.Current.CancellationToken);
+        var orderId = orders.Items.First().Id!.Value;
 
-        Assert.NotNull(list);
-        Assert.All(list.Items, e => Assert.Equal(subject, e.SubjectType));
+        // Act
+        var list = await Fixture.Service.ListAsync(orderId, subject, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        list.Should().NotBeNull();
+        list.Items.Should().AllSatisfy(e => e.SubjectType.Should().Be(subject));
     }
 
     [Fact]
     public async Task Gets_Events()
     {
+        // Setup
         var list = await Fixture.Service.ListAsync(filter: new EventListFilter()
         {
             Limit = 1
-        });
-        var evt = await Fixture.Service.GetAsync(list.Items.First().Id.Value);
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.NotNull(evt);
-        Assert.NotNull(evt.Author);
-        Assert.True(evt.CreatedAt.HasValue);
-        Assert.NotNull(evt.Message);
-        Assert.True(evt.SubjectId > 0);
-        Assert.NotNull(evt.SubjectType);
-        Assert.NotNull(evt.Verb);
+        // Act
+        var evt = await Fixture.Service.GetAsync(list.Items.First().Id!.Value, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        evt.Should().NotBeNull();
+        evt.Author.Should().NotBeNullOrEmpty();
+        evt.CreatedAt.Should().HaveValue().And.NotBe(DateTimeOffset.MinValue);
+        evt.SubjectId.Should().BeGreaterThan(0);
+        evt.SubjectType.Should().NotBeNullOrEmpty();
+        evt.Verb.Should().NotBeNullOrEmpty();
+
+        // Depending on the type, events may not always have a message
+        // Assert.NotNull(evt.Message);
     }
 }
 
 public class EventTestsFixture : IAsyncLifetime
 {
-    public EventService Service { get; } = new EventService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public EventService Service { get; } = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public OrderService OrderService { get; } = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public System.Threading.Tasks.ValueTask InitializeAsync()
+    public ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
         Service.SetExecutionPolicy(policy);
         OrderService.SetExecutionPolicy(policy);
 
-        return default;
+        return ValueTask.CompletedTask;
     }
 
-    public System.Threading.Tasks.ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        return default;
+        return ValueTask.CompletedTask;
     }
 }

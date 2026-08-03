@@ -1,132 +1,131 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Xunit;
 using EmptyAssert = ShopifySharp.Tests.Integration.Rest.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
 [Trait("Category", "Article")]
-public class ArticleTests : IClassFixture<ArticleTestsFixture>
+public class ArticleTests(ArticleTestsFixture fixture, VerifyFixture verifyFixture)
+    : IClassFixture<ArticleTestsFixture>, IClassFixture<VerifyFixture>
 {
-    private ArticleTestsFixture Fixture { get; }
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public ArticleTests(ArticleTestsFixture fixture, ITestOutputHelper testOutputHelper)
-    {
-        this.Fixture = fixture;
-        _testOutputHelper = testOutputHelper;
-    }
+    private ArticleTestsFixture Fixture { get; } = fixture;
 
     [Fact]
     public async Task Counts_Articles()
     {
-        var count = await Fixture.Service.CountAsync(Fixture.BlogId.Value);
+        // Act
+        var count = await Fixture.Service.CountAsync(Fixture.BlogId!.Value, cancellationToken: TestContext.Current.CancellationToken);
 
+        // Assert
         Assert.True(count > 0);
     }
 
     [Fact]
     public async Task Creates_Articles()
     {
+        // Act
         var article = await Fixture.Create();
 
-        Assert.True(article.Id.HasValue);
-        Assert.Equal(Fixture.Author, article.Author);
-        Assert.Equal(Fixture.BodyHtml, article.BodyHtml);
-        Assert.Equal(Fixture.BlogId, article.BlogId);
-        Assert.StartsWith(Fixture.Title, article.Title);
-        EmptyAssert.NotNullOrEmpty(article.Handle);
-        EmptyAssert.NotNullOrEmpty(article.Tags);
+        // Assert
+        await Verify(article, verifyFixture.Settings)
+            .ScrubMember<ArticleImage>(a => a.Src)
+            .ScrubMembers<Article>(
+                a => a.Title,
+                a => a.Handle
+            );
+
+        article.Handle.Should().NotBeEmpty();
+        article.Tags.Should().NotBeEmpty();
+        article.BlogId.Should().Be(Fixture.BlogId);
     }
 
     [Fact]
     public async Task Deletes_Articles()
     {
+        // Setup
         var article = await Fixture.Create(true);
-        bool threw = false;
 
-        try
-        {
-            await Fixture.Service.DeleteAsync(Fixture.BlogId.Value, article.Id.Value);
-        }
-        catch (ShopifyException ex)
-        {
-            _testOutputHelper.WriteLine($"{nameof(Deletes_Articles)} threw exception. {ex.Message}");
+        // Act
+        var act = async () => await Fixture.Service.DeleteAsync(Fixture.BlogId!.Value, article.Id!.Value, TestContext.Current.CancellationToken);
 
-            threw = true;
-        }
-
-        Assert.False(threw);
+        // Assert
+        await act.Should().NotThrowAsync();
     }
 
     [Fact]
     public async Task Lists_Articles()
     {
-        var articles = await Fixture.Service.ListAsync(Fixture.BlogId.Value);
+        // Act
+        var articles = await Fixture.Service.ListAsync(Fixture.BlogId!.Value, cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(articles.Items.Count() > 0);
+        // Assert
+        articles.Items.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Lists_Authors()
     {
-        var authors = await Fixture.Service.ListAuthorsAsync();
-        authors = authors.ToArray();
+        // Act
+        var authors = await Fixture.Service.ListAuthorsAsync(TestContext.Current.CancellationToken);
 
-        Assert.Contains(authors, a => a == Fixture.Author);
+        // Assert
+        authors.Should().Contain(ArticleTestsFixture.Author);
     }
 
     [Fact]
     public async Task Lists_Tags()
     {
-        var tags = await Fixture.Service.ListTagsAsync();
+        // Act
+        var tags = await Fixture.Service.ListTagsAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.NotEmpty(tags);
+        // Assert
+        tags.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Lists_Tags_For_Blog()
     {
-        var tags = await Fixture.Service.ListTagsForBlogAsync(Fixture.BlogId.Value);
+        // Act
+        var tags = await Fixture.Service.ListTagsForBlogAsync(Fixture.BlogId!.Value, cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.NotEmpty(tags);
+        // Assert
+        tags.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Updates_Articles()
     {
+        // Setup
         var html = "<h1>Updated!</h1>";
         var article = await Fixture.Create();
-
         article.BodyHtml = html;
-        article = await Fixture.Service.UpdateAsync(Fixture.BlogId.Value, article.Id.Value, article);
 
-        Assert.Equal(html, article.BodyHtml);
+        // Act
+        article = await Fixture.Service.UpdateAsync(Fixture.BlogId!.Value, article.Id!.Value, article, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        article.BodyHtml.Should().Be(html, "article's BodyHtml should have been updated to the given html");
     }
 }
 
 public class ArticleTestsFixture : IAsyncLifetime
 {
-    public ArticleService Service { get; } = new ArticleService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public ArticleService Service { get; } = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public BlogService BlogService { get; } = new BlogService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public BlogService BlogService { get; } = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public string Title => "My new Article title - ";
+    public static string Title => "My new Article title - ";
 
-    public string Author => "John Smith";
+    public static string Author => "John Smith";
 
-    public string Tags => "This Post, Has Been Tagged";
+    public static string Tags => "This Post, Has Been Tagged";
 
-    public string BodyHtml => "<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>";
+    public static string BodyHtml => "<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>";
 
     public long? BlogId { get; set; }
 
-    public List<Article> Created { get; } = new List<Article>();
+    public List<Article> Created { get; } = [];
 
-    public async System.Threading.Tasks.ValueTask InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -141,13 +140,16 @@ public class ArticleTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async System.Threading.Tasks.ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         foreach (var article in Created)
         {
+            if (article.Id is null || BlogId is null)
+                continue;
+
             try
             {
-                await Service.DeleteAsync(BlogId.Value, article.Id.Value);
+                await Service.DeleteAsync(BlogId!.Value, article.Id!.Value);
             }
             catch (ShopifyHttpException ex)
             {

@@ -1,141 +1,137 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using ShopifySharp.Filters;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
 [Trait("Category", "SmartCollection")]
-public class SmartCollectionTests : IClassFixture<SmartCollectionTestsFixture>
+[Collection("SmartCollection")]
+public class SmartCollectionTests(SmartCollectionTestsFixture fixture) : IClassFixture<SmartCollectionTestsFixture>
 {
-    private SmartCollectionTestsFixture Fixture { get; }
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public SmartCollectionTests(SmartCollectionTestsFixture fixture, ITestOutputHelper testOutputHelper)
-    {
-        this.Fixture = fixture;
-        _testOutputHelper = testOutputHelper;
-    }
+    private SmartCollectionTestsFixture Fixture { get; } = fixture;
 
     [Fact]
     public async Task Counts_SmartCollections()
     {
-        var count = await Fixture.Service.CountAsync();
+        // Act
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(count > 0);
+        // Assert
+        count.Should().BeGreaterThan(0);
     }
 
     [Fact]
     public async Task Lists_SmartCollections()
     {
-        var list = await Fixture.Service.ListAsync();
+        // Act
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        Assert.True(list.Items.Count() > 0);
+        // Assert
+        list.Items.Should().NotBeEmpty();
     }
 
     [Fact]
     public async Task Deletes_SmartCollections()
     {
+        // Setup
         var created = await Fixture.Create(true, true);
-        bool threw = false;
 
-        try
-        {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
-        }
-        catch (ShopifyException ex)
-        {
-            _testOutputHelper.WriteLine($"{nameof(Deletes_SmartCollections)} failed. {ex.Message}");
+        // Act
+        var act = async () => await Fixture.Service.DeleteAsync(created.Id!.Value, TestContext.Current.CancellationToken);
 
-            threw = true;
-        }
-
-        Assert.False(threw);
+        // Assert
+        await act.Should().NotThrowAsync();
     }
 
     [Fact]
     public async Task Gets_SmartCollections()
     {
+        // Setup
         var created = await Fixture.Create();
-        var obj = await Fixture.Service.GetAsync(created.Id.Value);
 
-        Assert.NotNull(obj);
-        Assert.True(obj.Id.HasValue);
-        Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
-        Assert.Equal(Fixture.Title, obj.Title);
-        Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
+        // Act
+        var obj = await Fixture.Service.GetAsync(created.Id!.Value, TestContext.Current.CancellationToken);
+
+        // Assert
+        obj.Should().NotBeNull();
+        obj.Id.Should().HaveValue().And.Be(created.Id);
+        obj.BodyHtml.Should().Be(SmartCollectionTestsFixture.BodyHtml);
+        obj.Title.Should().Be(SmartCollectionTestsFixture.Title);
+        obj.Handle.Should().StartWithEquivalentOf(SmartCollectionTestsFixture.HandlePrefix, x => x.IgnoringCase());
     }
 
     [Fact]
     public async Task Creates_SmartCollections()
     {
+        // Act
         var obj = await Fixture.Create();
 
-        Assert.NotNull(obj);
-        Assert.True(obj.Id.HasValue);
-        Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
-        Assert.Equal(Fixture.Title, obj.Title);
-        Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
-        Assert.NotNull(obj.PublishedAt);
-        Assert.NotNull(obj.PublishedScope);
+        // Assert
+        obj.Should().NotBeNull();
+        obj.Id.Should().HaveValue().And.BeGreaterThan(0);
+        obj.BodyHtml.Should().Be(SmartCollectionTestsFixture.BodyHtml);
+        obj.Title.Should().Be(SmartCollectionTestsFixture.Title);
+        obj.Handle.Should().StartWithEquivalentOf(SmartCollectionTestsFixture.HandlePrefix, x => x.IgnoringCase());
+        obj.PublishedAt.Should().NotBeNull();
+        obj.PublishedScope.Should().NotBeNull();
     }
 
     [Fact]
     public async Task Creates_Unpublished_SmartCollections()
     {
+        // Act
         var obj = await Fixture.Create(false);
 
-        Assert.NotNull(obj);
-        Assert.True(obj.Id.HasValue);
-        Assert.Equal(Fixture.BodyHtml, obj.BodyHtml);
-        Assert.Equal(Fixture.Title, obj.Title);
-        Assert.StartsWith(Fixture.Handle, obj.Handle, StringComparison.OrdinalIgnoreCase);
-        Assert.Null(obj.PublishedAt);
+        // Assert
+        obj.PublishedAt.Should().BeNull();
+        obj.PublishedScope.Should().Be("web");
     }
 
     [Fact]
     public async Task Updates_SmartCollections()
     {
-        string newValue = "New Title";
+        // Setup
+        const string newValue = "New Title";
         var created = await Fixture.Create();
-        long id = created.Id.Value;
+        var id = created.Id!.Value;
 
         created.Title = newValue;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
-
+        // Act
+        var updated = await Fixture.Service.UpdateAsync(id, created, TestContext.Current.CancellationToken);
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
 
-        Assert.Equal(newValue, updated.Title);
+        // Assert
+        updated.Title.Should().Be(newValue);
     }
 
     [Fact]
     public async Task Publishes_SmartCollections()
     {
+        // Setup
         var created = await Fixture.Create(false);
 
-        Assert.Null(created.PublishedAt);
+        // Act
+        var updated = await Fixture.Service.PublishAsync(created.Id!.Value, TestContext.Current.CancellationToken);
 
-        var updated = await Fixture.Service.PublishAsync(created.Id.Value);
-
-        Assert.NotNull(updated.PublishedAt);
+        // Assert
+        updated.PublishedAt.Should().NotBeNull();
+        created.PublishedAt.Should().BeNull("collection should have been created in an unpublished state");
     }
 
     [Fact]
     public async Task Unpublishes_SmartCollections()
     {
-        var created = await Fixture.Create(true);
+        // Setup
+        var created = await Fixture.Create();
 
-        Assert.NotNull(created.PublishedAt);
+        // Act
+        var updated = await Fixture.Service.UnpublishAsync(created.Id!.Value, TestContext.Current.CancellationToken);
 
-        var updated = await Fixture.Service.UnpublishAsync(created.Id.Value);
-
-        Assert.Null(updated.PublishedAt);
+        // Assert
+        updated.PublishedAt.Should().BeNull();
+        created.PublishedAt.Should().NotBeNull("collection should have been created in a published state");
     }
 
     [Fact(Skip = "This test has a bit of a time delay that ShopifySharp isn't equipped to handle yet (Retry-After header).")]
@@ -145,21 +141,21 @@ public class SmartCollectionTests : IClassFixture<SmartCollectionTestsFixture>
         var tag = Guid.NewGuid().ToString();
 
         //create collection
-        var collection = await Fixture.Service.CreateAsync(new SmartCollection()
+        var collection = await Fixture.Service.CreateAsync(new SmartCollection
         {
-            BodyHtml = Fixture.BodyHtml,
-            Handle = Fixture.Handle,
-            Title = Fixture.Title,
+            BodyHtml = SmartCollectionTestsFixture.BodyHtml,
+            Handle = SmartCollectionTestsFixture.HandlePrefix,
+            Title = SmartCollectionTestsFixture.Title,
             Rules = new List<SmartCollectionRules>
             {
-                new SmartCollectionRules
+                new()
                 {
                     Column = "tag",
                     Condition = tag,
                     Relation = "equals"
                 }
             }
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         //create 4 products with unique tag
         var products = new List<Product>();
@@ -169,50 +165,53 @@ public class SmartCollectionTests : IClassFixture<SmartCollectionTestsFixture>
             {
                 Title = Guid.NewGuid().ToString(),
                 Tags = tag
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
             products.Add(product);
         }
 
         //reorder items
         products.Reverse();
-        var productIds = products.Select(p => p.Id.Value).ToArray();
-        await Fixture.Service.UpdateProductOrderAsync(collection.Id.Value, "manual", productIds);
+        var productIds = products.Select(p => p.Id!.Value).ToArray();
+        await Fixture.Service.UpdateProductOrderAsync(collection.Id!.Value, "manual", productIds);
 
 
         //get collection
-        collection = await Fixture.Service.GetAsync(collection.Id.Value);
+        collection = await Fixture.Service.GetAsync(collection.Id.Value, TestContext.Current.CancellationToken);
 
         //get products  - use collect service to get products so they are returned in order
-        var collects = (await Fixture.CollectService.ListAsync(new CollectListFilter { CollectionId = collection.Id })).Items.ToList();
+        var collects = (await Fixture.CollectService.ListAsync(new CollectListFilter { CollectionId = collection.Id }, TestContext.Current.CancellationToken)).Items.ToList();
 
-        //check
+        // Assert
         Assert.Equal("manual", collection.SortOrder);
-        collects.ForEach(c => Assert.Contains(c.ProductId.Value, productIds));
+        collects.ForEach(c => Assert.Contains(c.ProductId!.Value, productIds));
 
-        //delete the objects
-        await Fixture.Service.DeleteAsync(collection.Id.Value);
-        products.ForEach(async x => await Fixture.ProductService.DeleteAsync(x.Id.Value));
+        // Delete the objects
+        await Fixture.Service.DeleteAsync(collection.Id!.Value, TestContext.Current.CancellationToken);
 
+        foreach (var product in products)
+        {
+            await Fixture.ProductService.DeleteAsync(product.Id!.Value, TestContext.Current.CancellationToken);
+        }
     }
 }
 
 public class SmartCollectionTestsFixture : IAsyncLifetime
 {
-    public readonly SmartCollectionService Service = new SmartCollectionService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public readonly SmartCollectionService Service = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public readonly ProductService ProductService = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public readonly ProductService ProductService = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public readonly CollectService CollectService = new CollectService(Utils.MyShopifyUrl, Utils.AccessToken);
+    public readonly CollectService CollectService = new(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public List<SmartCollection> Created { get; } = new List<SmartCollection>();
+    public List<SmartCollection> Created { get; } = [];
 
-    public string BodyHtml => "<h1>Hello world!</h1>";
+    public static string BodyHtml => "<h1>Hello world!</h1>";
 
-    public string Handle => "ShopifySharp-Handle";
+    public static string HandlePrefix => "shopifysharp-handle-";
 
-    public string Title => "ShopifySharp Test Smart Collection";
+    public static string Title => "ShopifySharp Test Smart Collection";
 
-    public async System.Threading.Tasks.ValueTask InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -224,19 +223,19 @@ public class SmartCollectionTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async System.Threading.Tasks.ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {
             try
             {
-                await Service.DeleteAsync(obj.Id.Value);
+                await Service.DeleteAsync(obj.Id!.Value);
             }
             catch (ShopifyHttpException ex)
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {
-                    Console.WriteLine($"Failed to delete created SmartCollection with id {obj.Id.Value}. {ex.Message}");
+                    Console.WriteLine($"Failed to delete created SmartCollection with id {obj.Id!.Value}. {ex.Message}");
                 }
             }
         }
@@ -250,11 +249,11 @@ public class SmartCollectionTestsFixture : IAsyncLifetime
         var obj = await Service.CreateAsync(new SmartCollection()
         {
             BodyHtml = BodyHtml,
-            Handle = Handle,
+            Handle = HandlePrefix + Guid.NewGuid(),
             Title = Title,
             Rules = new List<SmartCollectionRules>
             {
-                new SmartCollectionRules
+                new()
                 {
                     Column = "variant_price",
                     Condition = "20",

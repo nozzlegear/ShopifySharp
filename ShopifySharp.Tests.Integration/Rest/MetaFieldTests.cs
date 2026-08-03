@@ -251,13 +251,15 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
 
 public class MetaFieldTestsFixture : IAsyncLifetime
 {
+    private static readonly string _uniqueId = Guid.NewGuid().ToString("N").Substring(0, 12);
+
     public MetaFieldService Service { get; } = new MetaFieldService(Utils.MyShopifyUrl, Utils.AccessToken);
 
     public ProductService ProductService { get; } = new ProductService(Utils.MyShopifyUrl, Utils.AccessToken);
 
     public List<MetaField> Created { get; } = new List<MetaField>();
 
-    public string Namespace => "testing";
+    public string Namespace => $"metafield-{_uniqueId}";
     public string Description => "This is a test meta field. It is an integer value.";
     public string ResourceType => "products";
     public string ChildResourceType => "variants";
@@ -271,10 +273,25 @@ public class MetaFieldTestsFixture : IAsyncLifetime
         Service.SetExecutionPolicy(policy);
         ProductService.SetExecutionPolicy(policy);
 
-        // Get a product to add metafields to.
+        // Get or create a product to add metafields to.
         var products = await ProductService.ListAsync();
-        ResourceId = products.Items.First().Id.Value;
-        ChildResourceId = products.Items.First().Variants.First().Id.Value;
+        if (products.Items.Any())
+        {
+            ResourceId = products.Items.First().Id.Value;
+            ChildResourceId = products.Items.First().Variants.First().Id.Value;
+        }
+        else
+        {
+            // Create a product for metafield tests.
+            var product = await ProductService.CreateAsync(new Product()
+            {
+                Title = $"MetaField Test Product - {_uniqueId}",
+                BodyHtml = "<strong>Created for MetaFieldTests</strong>",
+                Handle = Guid.NewGuid().ToString(),
+            });
+            ResourceId = product.Id.Value;
+            ChildResourceId = product.Variants.First().Id.Value;
+        }
 
         // Create a metafield for use in count, list, get, etc. tests.
         await Create();

@@ -30,8 +30,8 @@
 
     <ItemGroup>
         <None Remove="appsettings.local.json"/>
-        <Content Include="appsettings.local.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Content Include="appsettings.local.json" Condition="Exists('appsettings.local.json')">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

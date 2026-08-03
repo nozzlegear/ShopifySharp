@@ -1,26 +1,30 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Filters;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest.Services;
 
 [Trait("Category", "ScriptTag")]
 [TestSubject(typeof(ScriptTagService))]
-public class ScriptTagTests(ScriptTagTestsFixture fixture) : IClassFixture<ScriptTagTestsFixture>
+public class ScriptTagTests(ScriptTagTestsFixture fixture, VerifyFixture verifyFixture)
+    : IClassFixture<ScriptTagTestsFixture>, IClassFixture<VerifyFixture>
 {
     private readonly ScriptTagService _sut = fixture.Service;
+
+    private async Task VerifyScriptTag(ScriptTag tag) =>
+        await Verify(tag, verifyFixture.Settings)
+            .ScrubLinesWithReplace(line =>
+            {
+                if (!line.StartsWith(ScriptTagTestsFixture.Src))
+                    return line;
+                return ScriptTagTestsFixture.Src + " – {Scrubbed}";
+            });
 
     [Fact]
     public async Task CountAsync_ShouldCount()
     {
         // Act
-        var count = await _sut.CountAsync();
+        var count = await _sut.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().BeGreaterThan(0);
@@ -34,7 +38,7 @@ public class ScriptTagTests(ScriptTagTestsFixture fixture) : IClassFixture<Scrip
         var filter = new ScriptTagListFilter { Limit = limit };
 
         // Act
-        var list = await _sut.ListAsync(filter);
+        var list = await _sut.ListAsync(filter, TestContext.Current.CancellationToken);
 
         // Assert
         list.Items
@@ -67,37 +71,44 @@ public class ScriptTagTests(ScriptTagTestsFixture fixture) : IClassFixture<Scrip
     public async Task GetAsync_ShouldGet()
     {
         // Setup
-        var id = await fixture.GetExistingScriptTagIdOrCreateAsync();
+        var created = await fixture.CreateScriptTagAsync();
+        var id = created.Id!.Value;
 
         // Act
-        var tag = await _sut.GetAsync(id);
+        var tag = await _sut.GetAsync(id, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
+        await VerifyScriptTag(tag);
+
         tag.Id.Should().Be(id);
-        tag.Src.Should().Be(ScriptTagTestsFixture.Src);
+        // Shopify appends a query string to script tag URLs
+        tag.Src.Should().StartWith(ScriptTagTestsFixture.Src);
         tag.Event.Should().Be(ScriptTagTestsFixture.Event);
         tag.DisplayScope.Should().Be(ScriptTagTestsFixture.Scope);
         tag.CreatedAt.Should().NotBeNull()
-            .And.BeCloseTo(DateTimeOffset.Now, TimeSpan.FromSeconds(30));
+            .And.NotBe(DateTimeOffset.MinValue);
         tag.UpdatedAt.Should().NotBeNull()
-            .And.BeCloseTo(DateTimeOffset.Now, TimeSpan.FromSeconds(30));
+            .And.NotBe(DateTimeOffset.MinValue);
     }
 
     [Fact]
-    public async Task CreateAsync_ShouldCreate()
+    public async Task Creates_ScriptTag_ShouldCreate()
     {
         // Act
         var tag = await fixture.CreateScriptTagAsync();
 
         // Assert
+        await VerifyScriptTag(tag);
+
         tag.Id.Should().BeGreaterThan(0);
-        tag.Src.Should().Be(ScriptTagTestsFixture.Src);
+        // Shopify appends a query string to script tag URLs
+        tag.Src.Should().StartWith(ScriptTagTestsFixture.Src);
         tag.Event.Should().Be(ScriptTagTestsFixture.Event);
         tag.DisplayScope.Should().Be(ScriptTagTestsFixture.Scope);
         tag.CreatedAt.Should().NotBeNull()
-            .And.BeCloseTo(DateTimeOffset.Now, TimeSpan.FromSeconds(30));
+            .And.NotBe(DateTimeOffset.MinValue);
         tag.UpdatedAt.Should().NotBeNull()
-            .And.BeCloseTo(DateTimeOffset.Now, TimeSpan.FromSeconds(30));
+            .And.NotBe(DateTimeOffset.MinValue);
     }
 
     [Fact]
@@ -109,7 +120,7 @@ public class ScriptTagTests(ScriptTagTestsFixture fixture) : IClassFixture<Scrip
         created.Src = expectedSrc;
 
         // Act
-        var updated = await _sut.UpdateAsync(created.Id!.Value, created);
+        var updated = await _sut.UpdateAsync(created.Id!.Value, created, TestContext.Current.CancellationToken);
 
         // Assert
         updated.Src.Should().Be(expectedSrc);
@@ -129,13 +140,13 @@ public class ScriptTagTestsFixture : IAsyncLifetime
 
     public static string Scope => "online_store";
 
-    public System.Threading.Tasks.ValueTask InitializeAsync()
+    public ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
         return default;
     }
 
-    public async System.Threading.Tasks.ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

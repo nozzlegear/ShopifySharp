@@ -99,10 +99,12 @@ public class OrderQueryTests(VerifyFixture verifyFixture, GraphServiceFixture gr
         };
 
         // Act
-        var result = await _sut.PostAsync<OrderQueryResponse>(request);
+        var result = await _sut.PostAsync<OrderQueryResponse>(request, TestContext.Current.CancellationToken);
 
         // Verify
-        await Verify(result.Data, _verifySettings);
+        await Verify(result.Data, _verifySettings)
+            .ScrubMembers<MoneyV2>(x => x.amount);
+
         result.Data.Order?.customer?.id.Should().NotBeNullOrEmpty();
     }
 

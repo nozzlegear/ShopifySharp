@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using ShopifySharp.Credentials;
@@ -20,10 +22,45 @@ public class TestConfigurationFixture : IDisposable
     {
         Current = this;
 
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: false)
-            .AddEnvironmentVariables();
+        // Reset the global HTTP client factory to ensure no pollution from other test classes
+        // that set a fake factory (e.g., ShopifyServiceTests.Allows_Setting_Global_HttpClientFactory)
+        ShopifySharp.ShopifyService.SetGlobalHttpClientFactory(null);
+
+        var builder = new ConfigurationBuilder();
+
+        // If SOPS_ENV_FILE is set, decrypt it and load as JSON stream.
+        var sopsEnvFile = Environment.GetEnvironmentVariable("SOPS_ENV_FILE");
+        if (!string.IsNullOrEmpty(sopsEnvFile))
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "sops",
+                Arguments = $"decrypt {sopsEnvFile}",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+            };
+
+            using var process = Process.Start(startInfo) ?? throw new InvalidOperationException("Failed to start sops process.");
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+            {
+                var stderr = process.StandardError.ReadToEnd();
+                throw new InvalidOperationException(
+                    $"sops decrypt failed (exit code {process.ExitCode}): {stderr}");
+            }
+
+            var decryptedStream = process.StandardOutput.BaseStream;
+            builder.AddJsonStream(decryptedStream);
+        }
+        else
+        {
+            builder.SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: false);
+        }
+
+        builder.AddEnvironmentVariables();
 
         _configuration = builder.Build();
     }

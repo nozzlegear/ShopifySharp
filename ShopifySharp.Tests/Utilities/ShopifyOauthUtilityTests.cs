@@ -1,13 +1,7 @@
 #nullable enable
 #pragma warning disable CS0618 // Type or member is obsolete
-using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
-using FakeItEasy;
-using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Time.Testing;
@@ -17,12 +11,12 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Utilities;
-using Xunit;
 
 namespace ShopifySharp.Tests.Utilities;
 
 [TestSubject(typeof(ShopifyOauthUtility))]
 [Trait("Category", "ShopifyOauthUtility")]
+[Collection("ShopifyOauthUtility")]
 public class ShopifyOauthUtilityTests
 {
     private const string ShopDomain = "example.myshopify.com";

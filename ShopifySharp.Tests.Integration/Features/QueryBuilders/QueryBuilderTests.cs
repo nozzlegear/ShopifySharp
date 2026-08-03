@@ -47,7 +47,7 @@ public class QueryBuilderTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var request = GraphRequest.FromQueryBuilder(query);
 
         // Act
-        var result = await _sut.PostAsync(request);
+        var result = await _sut.PostAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();

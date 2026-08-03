@@ -1,0 +1,9 @@
+﻿{
+  "CreatedAt": "DateTimeOffset_1",
+  "DisplayScope": "online_store",
+  "Event": "onload",
+  "Src": "https://unpkg.com/davenport@2.1.0/bin/browser.js – {Scrubbed}",
+  "UpdatedAt": "DateTimeOffset_1",
+  "Id": "{Scrubbed}",
+  "AdminGraphQLAPIId": "{Scrubbed}"
+}

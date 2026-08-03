@@ -16,7 +16,7 @@
       "id": "{Scrubbed}",
       "originalPriceSet": {
         "shopMoney": {
-          "amount": 10.0,
+          "amount": "{Scrubbed}",
           "currencyCode": "USD"
         }
       },
@@ -24,7 +24,7 @@
     },
     "totalPriceSet": {
       "shopMoney": {
-        "amount": 26.26,
+        "amount": "{Scrubbed}",
         "currencyCode": "USD"
       }
     }

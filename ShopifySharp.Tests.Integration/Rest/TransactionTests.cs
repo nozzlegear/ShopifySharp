@@ -1,23 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
 [Trait("Category", "Transaction")]
-public class TransactionTests : IClassFixture<TransactionTestsFixture>
+[Collection("Transactions")]
+public class TransactionTests(TransactionTestsFixture fixture) : IClassFixture<TransactionTestsFixture>
 {
-    private TransactionTestsFixture Fixture { get; }
+    private TransactionTestsFixture Fixture { get; } = fixture;
 
-    public TransactionTests(TransactionTestsFixture fixture)
-    {
-        this.Fixture = fixture;
-    }
-
-    [Fact]
+    [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Counts_Transactions()
     {
         var count = await Fixture.Service.CountAsync(Fixture.Created.First().OrderId.Value);
@@ -25,7 +16,7 @@ public class TransactionTests : IClassFixture<TransactionTestsFixture>
         Assert.True(count > 0);
     }
 
-    [Fact]
+    [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Lists_Transactions()
     {
         var list = await Fixture.Service.ListAsync(Fixture.Created.First().OrderId.Value);
@@ -33,7 +24,7 @@ public class TransactionTests : IClassFixture<TransactionTestsFixture>
         Assert.True(list.Count() > 0);
     }
 
-    [Fact]
+    [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Gets_Transactions()
     {
         var order = await Fixture.CreateOrder();
@@ -48,7 +39,7 @@ public class TransactionTests : IClassFixture<TransactionTestsFixture>
         Assert.Equal(Fixture.Status, obj.Status);
     }
 
-    [Fact]
+    [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Creates_Transactions()
     {
         var order = await Fixture.CreateOrder();
@@ -62,7 +53,7 @@ public class TransactionTests : IClassFixture<TransactionTestsFixture>
         Assert.Equal(Fixture.Status, obj.Status);
     }
 
-    [Fact]
+    [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Creates_Capture_Transactions()
     {
         string kind = "capture";

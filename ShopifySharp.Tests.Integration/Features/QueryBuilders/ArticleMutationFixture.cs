@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShopifySharp.Extensions.DependencyInjection;
 using ShopifySharp.Factories;
@@ -12,20 +11,14 @@ public class ArticleMutationFixture : IAsyncLifetime
 
     public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
-        var config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.local.json", false)
-            .Build();
-
-        var credentials = config.GetRequiredSection("ShopifySharp")
-            .GetRequiredSection("Credentials")
-            .Get<CredentialsRecord>() ?? throw new InvalidOperationException("Missing credentials");
+        var credentials = TestConfigurationFixture.Current.Credentials;
 
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddShopifySharp<LeakyBucketExecutionPolicy>();
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
         var factory = serviceProvider.GetRequiredService<IGraphServiceFactory>();
-        var service = factory.Create(new ShopifyApiCredentials(credentials.ShopDomain, credentials.AccessToken));
+        var service = factory.Create(credentials);
 
         // Query for a blog ID
         var blogsQuery = new BlogsOperationQueryBuilder();
@@ -40,10 +33,4 @@ public class ArticleMutationFixture : IAsyncLifetime
     }
 
     public System.Threading.Tasks.ValueTask DisposeAsync() => default;
-
-    private record CredentialsRecord
-    {
-        public required string ShopDomain { get; init; }
-        public required string AccessToken { get; init; }
-    }
 }

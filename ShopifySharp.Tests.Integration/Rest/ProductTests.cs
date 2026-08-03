@@ -1,14 +1,10 @@
 using ShopifySharp.Filters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
 [Trait("Category", "Product")]
+[Collection("Product")]
 public class ProductTests : IClassFixture<ProductTestsFixture>
 {
     private ProductTestsFixture Fixture { get; }

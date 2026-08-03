@@ -9,8 +9,11 @@ public class VerifyFixture
     public VerifyFixture()
     {
         Settings.UseStrictJson();
+        Settings.ScrubEmptyLines();
         Settings.ScrubMembers(info => info.Name is "LegacyResourceId" or "legacyResourceId");
-       	Settings.ScrubMembers(info => info.Name is "Id" or "id");
+        Settings.ScrubMembers(info => info.Name is "Id" or "id");
+        Settings.ScrubMembers(info => info.Name is "AdminGraphQLAPIId" or "adminGraphQLAPIId");
+        Settings.ScrubMembers(info => info.Name.EndsWith("Id"));
         Settings.ScrubMembers(info => info.Name is "RequestId" or "requestId");
         Settings.ScrubMembers(info => info.Name is "ShippingAddress" or "shippingAddress");
         Settings.ScrubMembers(info => info.Name is "BillingAddress" or "billingAddress");
@@ -20,7 +23,6 @@ public class VerifyFixture
         // Settings.ScrubMember<Metafield>(nameof(Metafield.@namespace));
         // Settings.ScrubMember<Metafield>(nameof(Metafield.key));
         // Settings.ScrubMember<Metafield>(nameof(Metafield.value));
-
         Settings.UseDirectory("Snapshots");
     }
 }

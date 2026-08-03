@@ -19,10 +19,28 @@ public class FulfillmentEventsTests : IClassFixture<FulfillmentEventsTestsFixtur
     [Fact]
     public async Task Lists_FulfillmentEvents()
     {
+        // Use the order and fulfillment from the fixture, but create our own event
+        // to avoid relying on shared fixture state that may have been modified by other tests.
         long orderId = Fixture.CreatedFulfillments.First().OrderId.Value;
         long fulfillmentId = Fixture.CreatedFulfillments.First().Id.Value;
-        var list = await Fixture.FulfillmentEventService.ListAsync(orderId, fulfillmentId);
-        Assert.True(list.Count() > 0);
+
+        var @event = new FulfillmentEvent()
+        {
+            OrderId = orderId,
+            FulfillmentId = fulfillmentId,
+            Status = "confirmed"
+        };
+        @event = await Fixture.FulfillmentEventService.CreateAsync(orderId, fulfillmentId, @event);
+
+        try
+        {
+            var list = await Fixture.FulfillmentEventService.ListAsync(orderId, fulfillmentId);
+            Assert.True(list.Any(e => e.Id == @event.Id));
+        }
+        finally
+        {
+            await Fixture.FulfillmentEventService.DeleteAsync(orderId, fulfillmentId, @event.Id.Value);
+        }
     }
 
     [Fact]
