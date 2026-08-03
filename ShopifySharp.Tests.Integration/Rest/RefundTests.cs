@@ -139,7 +139,7 @@ public class RefundTestsFixture : IAsyncLifetime
 
     public List<Order> Created { get; } = new List<Order>();
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
             
@@ -153,7 +153,7 @@ public class RefundTestsFixture : IAsyncLifetime
         await Retrieve(OrderId.Value);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

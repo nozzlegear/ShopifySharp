@@ -71,18 +71,18 @@ public class EventTestsFixture : IAsyncLifetime
 
     public OrderService OrderService { get; } = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
         Service.SetExecutionPolicy(policy);
         OrderService.SetExecutionPolicy(policy);
 
-        return Task.CompletedTask;
+        return default;
     }
 
-    public Task DisposeAsync()
+    public System.Threading.Tasks.ValueTask DisposeAsync()
     {
-        return Task.CompletedTask;
+        return default;
     }
 }

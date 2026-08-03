@@ -65,7 +65,7 @@ public class InventoryItemTestsFixture : IAsyncLifetime
 
     public long ProductId { get; set; }
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -83,7 +83,7 @@ public class InventoryItemTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

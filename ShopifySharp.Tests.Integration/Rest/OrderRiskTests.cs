@@ -127,17 +127,17 @@ public class OrderRiskTestsFixture : IAsyncLifetime
 
     private readonly ConcurrentBag<long> _orderIds = [];
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
         Service.SetExecutionPolicy(policy);
         OrderService.SetExecutionPolicy(policy);
 
-        return Task.CompletedTask;
+        return default;
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

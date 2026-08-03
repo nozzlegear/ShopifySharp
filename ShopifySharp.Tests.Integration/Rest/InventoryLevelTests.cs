@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -153,7 +152,7 @@ public class InventoryLevelTestsFixture : IAsyncLifetime
 
     public List<InventoryLevel> Created { get; } = new List<InventoryLevel>();
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -179,7 +178,7 @@ public class InventoryLevelTestsFixture : IAsyncLifetime
         await VariantService.UpdateAsync(VariantId, variant);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         try
         {

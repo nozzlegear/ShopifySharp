@@ -129,13 +129,13 @@ public class ScriptTagTestsFixture : IAsyncLifetime
 
     public static string Scope => "online_store";
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
-        return Task.CompletedTask;
+        return default;
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

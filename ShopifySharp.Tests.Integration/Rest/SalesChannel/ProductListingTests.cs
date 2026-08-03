@@ -55,7 +55,7 @@ public class ProductListingTestsFixture : IAsyncLifetime
 
     public string ProductType => "Foobars";
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
             
@@ -63,7 +63,7 @@ public class ProductListingTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

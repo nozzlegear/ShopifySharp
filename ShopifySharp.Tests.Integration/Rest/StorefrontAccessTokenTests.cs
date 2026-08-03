@@ -56,14 +56,14 @@ public class StorefrontAccessTokenTestsFixture : IAsyncLifetime
 
     public List<StorefrontAccessToken> Created { get; } = new List<StorefrontAccessToken>();
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
         Service.SetExecutionPolicy(policy);
-        return Task.CompletedTask;
+        return default;
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

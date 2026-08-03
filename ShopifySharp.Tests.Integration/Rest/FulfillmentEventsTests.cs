@@ -61,7 +61,7 @@ public class FulfillmentEventsTestsFixture : IAsyncLifetime
 
     public List<FulfillmentEvent> CreatedFulfillmentEvents { get; } = new List<FulfillmentEvent>();
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
@@ -77,7 +77,7 @@ public class FulfillmentEventsTestsFixture : IAsyncLifetime
         await CreateFulfillmentEvent(order.Id.Value, fulfillment.Id.Value);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in CreatedOrders)
         {

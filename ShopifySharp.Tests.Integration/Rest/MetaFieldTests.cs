@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Integration.Rest.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
@@ -265,7 +264,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
     public long ResourceId { get; set; }
     public long ChildResourceId { get; set; }
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -283,7 +282,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
         await Create(ChildResourceId, ChildResourceType, ResourceId, ResourceType);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

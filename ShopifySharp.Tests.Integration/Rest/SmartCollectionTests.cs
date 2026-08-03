@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -213,7 +212,7 @@ public class SmartCollectionTestsFixture : IAsyncLifetime
 
     public string Title => "ShopifySharp Test Smart Collection";
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -225,7 +224,7 @@ public class SmartCollectionTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

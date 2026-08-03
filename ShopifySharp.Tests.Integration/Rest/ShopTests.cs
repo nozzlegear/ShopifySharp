@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Integration.Rest.Extensions.EmptyExtensions;
 
 namespace ShopifySharp.Tests.Integration.Rest;

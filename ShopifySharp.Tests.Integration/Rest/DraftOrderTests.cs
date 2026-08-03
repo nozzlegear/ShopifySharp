@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -166,7 +165,7 @@ public class DraftOrderTestsFixture : IAsyncLifetime
 
     public string Note = "A note for the draft order.";
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
@@ -174,7 +173,7 @@ public class DraftOrderTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

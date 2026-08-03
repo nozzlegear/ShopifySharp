@@ -148,7 +148,7 @@ public class GiftCardTestsFixture : IAsyncLifetime
 
     public List<GiftCard> Created { get; } = new List<GiftCard>();
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
@@ -156,7 +156,7 @@ public class GiftCardTestsFixture : IAsyncLifetime
         var giftCard = await Create(GiftCardTests.GiftCardValue);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

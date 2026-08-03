@@ -96,16 +96,16 @@ public class CheckoutSalesChannelFixture : IAsyncLifetime
 
     public List<CheckoutSalesChannel> Created { get; } = new List<CheckoutSalesChannel>();
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(false));
 
-        return Task.CompletedTask;
+        return default;
     }
 
-    public Task DisposeAsync()
+    public System.Threading.Tasks.ValueTask DisposeAsync()
     {
-        return Task.CompletedTask;
+        return default;
     }
 
     /// <summary>

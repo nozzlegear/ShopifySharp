@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <OutputType>Exe</OutputType>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
@@ -17,10 +18,10 @@
         <PackageReference Include="GraphQL-Parser" />
         <PackageReference Include="JetBrains.Annotations"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-        <PackageReference Include="Verify.Xunit"/>
+        <PackageReference Include="Verify.XunitV3" />
         <PackageReference Include="Xunit.Combinatorial"/>
         <PackageReference Include="coverlet.collector"/>
-        <PackageReference Include="xunit"/>
+        <PackageReference Include="xunit.v3" />
         <PackageReference Include="xunit.runner.visualstudio"/>
     </ItemGroup>
 

@@ -10,7 +10,7 @@ public class ArticleMutationFixture : IAsyncLifetime
 {
     public string BlogId { get; private set; } = null!;
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.local.json", false)
@@ -39,7 +39,7 @@ public class ArticleMutationFixture : IAsyncLifetime
                  ?? throw new InvalidOperationException("No blog found - a blog must exist to run article mutation tests");
     }
 
-    public Task DisposeAsync() => Task.CompletedTask;
+    public System.Threading.Tasks.ValueTask DisposeAsync() => default;
 
     private record CredentialsRecord
     {

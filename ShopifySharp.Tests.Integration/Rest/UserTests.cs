@@ -60,12 +60,12 @@ public class UserTestsFixture : IAsyncLifetime
 {
     public UserService Service => new UserService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
-        return Task.CompletedTask;
+        return default;
     }
 
-    public Task DisposeAsync() => Task.CompletedTask;
+    public System.Threading.Tasks.ValueTask DisposeAsync() => default;
 }

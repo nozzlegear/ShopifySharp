@@ -59,7 +59,7 @@ public class AssignedFulfillmentOrderTests : IClassFixture<AssignedFulfillmentOr
 
     public List<Fulfillment> CreatedFulfillments { get; } = new List<Fulfillment>();
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         // Fulfillment API has a stricter rate limit when on a non-paid store.
         var policy = new LeakyBucketExecutionPolicy();
@@ -71,10 +71,10 @@ public class AssignedFulfillmentOrderTests : IClassFixture<AssignedFulfillmentOr
         // Create an order and fulfillment for count, list, get, etc. tests.
         //var order = await CreateOrder();
         //var fulfillment = await CreateFulfillment(order.Id.Value);
-        return Task.CompletedTask;
+        return default;
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in CreatedFulfillments)
         {

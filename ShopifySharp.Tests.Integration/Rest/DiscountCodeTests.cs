@@ -93,13 +93,13 @@ public class DiscountCodesTestsFixture : IAsyncLifetime
 
     public List<PriceRule> CreatedPriceRules { get; } = new List<PriceRule>();
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
         DiscountCodeService.SetExecutionPolicy(policy);
         PriceRuleService.SetExecutionPolicy(policy);
-        return Task.CompletedTask;
+        return default;
     }
 
     /// <summary>
@@ -160,7 +160,7 @@ public class DiscountCodesTestsFixture : IAsyncLifetime
         return obj;
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         await DeleteDiscountCodes();
         await DeletePriceRules();

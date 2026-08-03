@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using ShopifySharp.Filters;
 using Xunit;
-using Xunit.Abstractions;
 using EmptyAssert = ShopifySharp.Tests.Integration.Rest.Extensions.EmptyExtensions;
 // ReSharper disable PossibleInvalidOperationException
 
@@ -281,7 +280,7 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
 
     public string Note => "Test note about this customer.";
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         // Retry on any rate limit failure (creating orders is heavily rate limited on test stores)
         var policy = new LeakyBucketExecutionPolicy(retryOnlyIfLeakyBucketFull: false);
@@ -292,7 +291,7 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

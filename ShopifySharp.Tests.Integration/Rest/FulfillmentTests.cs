@@ -196,7 +196,7 @@ public class FulfillmentTestsFixture : IAsyncLifetime
 
     public List<Fulfillment> Created { get; } = new List<Fulfillment>();
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         // Fulfillment API has a stricter rate limit when on a non-paid store.
         var policy = new LeakyBucketExecutionPolicy(false);
@@ -210,7 +210,7 @@ public class FulfillmentTestsFixture : IAsyncLifetime
         var fulfillment = await Create(order.Id.Value);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {

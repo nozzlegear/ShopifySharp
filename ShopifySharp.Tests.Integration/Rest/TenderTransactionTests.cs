@@ -40,15 +40,15 @@ public class TenderTransactionTestsFixture : IAsyncLifetime
 {
     public TenderTransactionService Service { get; } = new TenderTransactionService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    public Task InitializeAsync()
+    public System.Threading.Tasks.ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
-        return Task.CompletedTask;
+        return default;
     }
 
-    public Task DisposeAsync()
+    public System.Threading.Tasks.ValueTask DisposeAsync()
     {
-        return Task.CompletedTask;
+        return default;
     }
 }

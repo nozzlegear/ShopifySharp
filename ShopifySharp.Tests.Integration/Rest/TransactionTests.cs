@@ -119,7 +119,7 @@ public class TransactionTestsFixture : IAsyncLifetime
 
     public long OrderId { get; set; }
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
@@ -131,7 +131,7 @@ public class TransactionTestsFixture : IAsyncLifetime
         await Create(order.Id.Value, currency: order.Currency);
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in CreatedOrders)
         {

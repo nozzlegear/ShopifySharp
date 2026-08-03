@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -125,7 +124,7 @@ public class AssetTestsFixture : IAsyncLifetime
 
     public long ThemeId { get; set; }
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy();
 
@@ -137,7 +136,7 @@ public class AssetTestsFixture : IAsyncLifetime
         ThemeId = themes.First().Id.Value;
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var asset in Created)
         {

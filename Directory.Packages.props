@@ -26,14 +26,14 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.301" />
     <PackageVersion Include="System.Text.Json" Version="10.0.10" />
-    <PackageVersion Include="Verify.Xunit" Version="31.12.5" />
-    <PackageVersion Include="Xunit.Combinatorial" Version="1.6.24" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.28.0" />
+    <PackageVersion Include="Xunit.Combinatorial" Version="2.0.24" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="dotenvfile" Version="2.1.0" />
     <PackageVersion Include="microsoft.extensions.dependencyinjection" Version="10.0.10" />
     <PackageVersion Include="newtonsoft.json" Version="13.0.4" />
-    <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>

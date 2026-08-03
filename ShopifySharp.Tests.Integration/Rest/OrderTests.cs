@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -233,7 +232,7 @@ public class OrderTestsFixture : IAsyncLifetime
 
     public List<Order> Created { get; } = new List<Order>();
 
-    public async Task InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         // Retry on any rate limit failure (creating orders is heavily rate limited on test stores)
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy(retryOnlyIfLeakyBucketFull: false));
@@ -242,7 +241,7 @@ public class OrderTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async Task DisposeAsync()
+    public async System.Threading.Tasks.ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {
