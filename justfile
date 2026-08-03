@@ -4,6 +4,8 @@
 cli_project := "ShopifySharp.GraphQL.Parser.CLI"
 # Path to the generated GraphQL entitites folder
 graph_entities := "ShopifySharp/Entities/GraphQL/Generated"
+# Path to the sops-encrypted environment file used for unit tests in ci/cd
+sops_env_file := justfile_directory() + "/env.encrypted.json"
 # Space-separated list of class names that test the GraphQL query builders
 query_builder_tests := "ProductQueryTests QueryBuilderTests QueryBuilderMutationTests GraphHttpContentSerializerTests GraphQueryBuilderTests GraphUnionTypeConverterTests UnionCasesBuilderBaseTests"
 # Build configuration
@@ -167,8 +169,7 @@ test-dnf:
         --verbosity "{{verbosity}}" \
         --logger "trx;LogFileName=DotNetFramework.trx" \
         --results-directory "TestResults" \
-        --filter "Category=DotNetFramework" \
-        "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+        --filter "Category=DotNetFramework"
     @echo ""
     @echo ".NET Framework tests passed."
 
@@ -188,7 +189,9 @@ test-di:
 
 # Run integration tests.
 [group("test")]
-test-integration:
+[arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+[arg("testFilter", long="test-filter")]
+test-integration useSopsEnvFile="false" testFilter="":
     @echo "Testing integration project..."
     dotnet test \
         -c "{{config}}" \
@@ -196,25 +199,32 @@ test-integration:
         --verbosity "{{verbosity}}" \
         --logger "trx;LogFileName=ShopifySharp.Integration.Tests.trx" \
         --results-directory "TestResults" \
+        {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
+        {{ if testFilter != "" { "--filter '" + testFilter + "'" } else { "" } }} \
         "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
     @echo ""
     @echo "Integration tests passed."
 
 [private]
 _test-query-builder-integrations:
+
+# Run integration tests on the GraphQL query builders.
+[arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+test-query-builder-integration useSopsEnvFile="false":
+    @echo "Testing GraphQL query builder integrations..."
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
         --verbosity "{{verbosity}}" \
         --logger "trx;LogFileName=ShopifySharp.GraphQL.QueryBuilders.Integrations.Tests.trx" \
         --results-directory "TestResults" \
+        {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
         --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}" \
         "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
 
 # Run tests on the GraphQL query builders.
 [group("test")]
-[arg("skipIntegrationTests", long="skip-integration-tests", value="true")]
-test-query-builders skipIntegrationTests="false":
+test-query-builders:
     @echo "Testing GraphQL query builders..."
 
     dotnet test \
@@ -225,8 +235,6 @@ test-query-builders skipIntegrationTests="false":
         --results-directory "TestResults" \
         --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}" \
         "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
-
-    {{ if skipIntegrationTests != "true" { "just _test-query-builder-integrations" } else { "" } }}
 
     @echo ""
     @echo "Query builder tests passed."
@@ -263,7 +271,7 @@ test-main-project:
 
 # Run all tests (DI, integration, and unit tests)
 [group("test")]
-test-everything: test-di test-graphql-parser test-integration test-main-project
+test-everything: test-di test-graphql-parser (test-integration "true") test-main-project
     @echo "All tests passed."
 
 # Set package version for a project (used in release workflow)
@@ -334,3 +342,8 @@ generate-factories:
     done
 
     echo "Factory generation complete."
+
+# Decrypts the env.encrypted.json file to stdout.
+[group("encryption")]
+decrypt:
+    sops decrypt env.encrypted.json

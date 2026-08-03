@@ -30,7 +30,6 @@
     <PackageVersion Include="Verify.XunitV3" Version="31.28.0" />
     <PackageVersion Include="Xunit.Combinatorial" Version="2.0.24" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
-    <PackageVersion Include="dotenvfile" Version="2.1.0" />
     <PackageVersion Include="microsoft.extensions.dependencyinjection" Version="10.0.10" />
     <PackageVersion Include="newtonsoft.json" Version="13.0.4" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
