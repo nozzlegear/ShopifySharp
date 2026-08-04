@@ -15,29 +15,17 @@ namespace ShopifySharp.Tests.Integration.Rest;
 /// </summary>
 public static class Utils
 {
-    /// <summary>
-    /// Attempts to get an environment variable first by the key, then from configuration.
-    /// All keys must be uppercased!
-    /// </summary>
-    private static string Get(string key) => ConfigurationHelper.Get(key);
+    private static TestConfigurationFixture Config => TestConfigurationFixture.Current;
 
-    public static string ApiKey => Get("API_KEY");
-
-    public static string SecretKey => Get("SECRET_KEY");
-
-    public static string AccessToken => Get("ACCESS_TOKEN");
-
-    public static string MultipassSecret => Get("MULTIPASS_SECRET");
-
-    public static string MyShopifyUrl => Get("MY_SHOPIFY_URL");
-
-    public static ShopifyApiCredentials Credentials => new(MyShopifyUrl, AccessToken);
-
-    public static long OrganizationId => long.Parse(Get("ORG_ID"));
-
-    public static string OrganizationToken => Get("ORG_TOKEN");
-
-    public static ShopifyPartnerApiCredentials PartnerCredentials  => new(OrganizationId, OrganizationToken);
+    public static string ApiKey => Config.ApiKey;
+    public static string SecretKey => Config.SecretKey;
+    public static string AccessToken => Config.AccessToken;
+    public static string MultipassSecret => Config.MultipassSecret;
+    public static string MyShopifyUrl => Config.MyShopifyUrl;
+    public static ShopifyApiCredentials Credentials => Config.Credentials;
+    public static long OrganizationId => Config.OrganizationId;
+    public static string OrganizationToken => Config.OrganizationToken;
+    public static ShopifyPartnerApiCredentials PartnerCredentials => Config.PartnerCredentials;
 
     #nullable enable
 
