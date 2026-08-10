@@ -1,10 +1,9 @@
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using JetBrains.Annotations;
 using ShopifySharp.Filters;
 using Xunit.Sdk;
-
-// TODO: move the tests in this file to the ShopifySharp.Tests.Services.ShopifyServiceTests file
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -47,7 +46,7 @@ public class ShopifyServiceTests
     {
         var json = "{}";
         var res = BadResponse(HttpStatusCode.InternalServerError, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -69,7 +68,7 @@ public class ShopifyServiceTests
         var json = "<p>testing</p>";
         var res = BadResponse(HttpStatusCode.InternalServerError, json);
         res.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -91,7 +90,7 @@ public class ShopifyServiceTests
         var json = "{\"errors\":\"foo error message\"}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -113,7 +112,7 @@ public class ShopifyServiceTests
         var json = "{\"errors\":{\"order\":\"foo error message\"}}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -135,7 +134,7 @@ public class ShopifyServiceTests
         var json = "{\"errors\":{\"order\":[\"foo error message\"]}}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -157,7 +156,7 @@ public class ShopifyServiceTests
         var json = "{\"errors\":{\"order\":[\"foo error message\",\"bar error message\"]}}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -180,7 +179,7 @@ public class ShopifyServiceTests
         var json = "{\"error\":\"foo\",\"error_description\":\"bar\"}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -202,7 +201,7 @@ public class ShopifyServiceTests
         var json = "{\"error\":\"location_id must be specified when creating fulfillments.\"}";
         var code = HttpStatusCode.BadRequest;
         var res = BadResponse(code, json);
-        ShopifyHttpException ex = null;
+        ShopifyHttpException? ex = null;
 
         try
         {
@@ -348,14 +347,14 @@ public class ShopifyServiceTests
         var client = new FakeHttpClient();
         service.SetHttpClient(client);
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => service.GetAsync());
+        var ex = await Assert.ThrowsAsync<Exception>(() => service.GetAsync(TestContext.Current.CancellationToken));
 
         Assert.Equal("This is an exception thrown by the FakeHttpClient", ex.Message);
 
         // Remove the client
         service.SetHttpClient(null);
 
-        var shop = await service.GetAsync();
+        var shop = await service.GetAsync(TestContext.Current.CancellationToken);
 
         Assert.NotNull(shop);
     }
@@ -383,8 +382,8 @@ public class ShopifyServiceTests
             shopService.SetExecutionPolicy(policy);
             orderService.SetExecutionPolicy(policy);
 
-            var ex1 = await Assert.ThrowsAsync<Exception>(() => shopService.GetAsync());
-            var ex2 = await Assert.ThrowsAsync<Exception>(() => orderService.ListAsync(orderFilter));
+            var ex1 = await Assert.ThrowsAsync<Exception>(() => shopService.GetAsync(TestContext.Current.CancellationToken));
+            var ex2 = await Assert.ThrowsAsync<Exception>(() => orderService.ListAsync(orderFilter, TestContext.Current.CancellationToken));
 
             Assert.Equal("This is an exception thrown by the FakeHttpClient", ex1.Message);
             Assert.Equal("This is an exception thrown by the FakeHttpClient", ex2.Message);
@@ -392,8 +391,8 @@ public class ShopifyServiceTests
             // Removing the factory should only remove it for future instances
             ShopifyService.SetGlobalHttpClientFactory(null);
 
-            ex1 = await Assert.ThrowsAsync<Exception>(() => shopService.GetAsync());
-            ex2 = await Assert.ThrowsAsync<Exception>(() => orderService.ListAsync(orderFilter));
+            ex1 = await Assert.ThrowsAsync<Exception>(() => shopService.GetAsync(TestContext.Current.CancellationToken));
+            ex2 = await Assert.ThrowsAsync<Exception>(() => orderService.ListAsync(orderFilter, TestContext.Current.CancellationToken));
 
             Assert.Equal("This is an exception thrown by the FakeHttpClient", ex1.Message);
             Assert.Equal("This is an exception thrown by the FakeHttpClient", ex2.Message);
@@ -405,8 +404,8 @@ public class ShopifyServiceTests
             shopService.SetExecutionPolicy(policy);
             orderService.SetExecutionPolicy(policy);
 
-            var shop = await shopService.GetAsync();
-            var orders = await orderService.ListAsync(orderFilter);
+            var shop = await shopService.GetAsync(TestContext.Current.CancellationToken);
+            var orders = await orderService.ListAsync(orderFilter, TestContext.Current.CancellationToken);
 
             Assert.NotNull(shop);
             Assert.NotNull(orders);

@@ -28,7 +28,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
 
     public record ListProductsResult
     {
-        public required ProductConnection Products { get; set; }
+        public ProductConnection Products { get; set; } = null!;
     }
 
     private async Task<string> GetProductsCursorAsync()
@@ -830,9 +830,9 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var result = await _sut.PostAsync(GraphRequest.FromQueryBuilder(operation));
         var product = result.Data.product;
 
-        ArgumentNullException.ThrowIfNull(product);
+        ArgumentNullException.ThrowIfNull(product, nameof(product));
 
-        if (product.id is not null)
+        if (product!.id is not null)
         {
             // Add the new product to the fixture's cleanup queue
             productCleanupFixture.RegisterTestProduct(product.id);

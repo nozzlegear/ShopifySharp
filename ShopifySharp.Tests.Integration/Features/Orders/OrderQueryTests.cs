@@ -133,26 +133,26 @@ public class OrderQueryTests(VerifyFixture verifyFixture, GraphServiceFixture gr
 
         // Assert
         result.Should().NotBeNull("Deserialized MetafieldReference should not be null");
-        result?.GetType().Name.Should().Be("MetafieldReferenceCustomer", "Should deserialize to MetafieldReferenceCustomer wrapper type");
+        result.GetType().Name.Should().Be("MetafieldReferenceCustomer", "Should deserialize to MetafieldReferenceCustomer wrapper type");
     }
 }
 
 public record OrderQueryResponse
 {
-    public required GraphQL.Order? Order { get; init; }
+    public GraphQL.Order? Order { get; init; }
 }
 
 public record ListOrderIdsResponse
 {
-    public required OrderIdsQueryData Orders { get; init; }
+    public OrderIdsQueryData Orders { get; init; } = null!;
 }
 
 public record OrderIdsQueryData
 {
-    public required OrderNodes[] Nodes { get; init; }
+    public OrderNodes[] Nodes { get; init; } = null!;
 }
 
 public record OrderNodes
 {
-    public required string Id { get; init; }
+    public string Id { get; init; } = null!;
 }

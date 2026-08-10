@@ -1,3 +1,5 @@
+using System;
+
 namespace ShopifySharp.Tests.Integration.Features.Products.Models;
 
 public record SelectedOption(
@@ -7,7 +9,7 @@ public record SelectedOption(
 {
     public static SelectedOption FromGraph(GraphQL.SelectedOption? option)
     {
-        ArgumentNullException.ThrowIfNull(option);
+        ArgumentNullException.ThrowIfNull(option, nameof(option));
 
         return new SelectedOption(option.name ?? "", option.value ?? "");
     }

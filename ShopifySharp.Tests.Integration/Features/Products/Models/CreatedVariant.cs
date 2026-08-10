@@ -1,3 +1,5 @@
+using System;
+
 namespace ShopifySharp.Tests.Integration.Features.Products.Models;
 
 public record CreatedVariant(
@@ -9,7 +11,7 @@ public record CreatedVariant(
 {
     public static CreatedVariant FromGraph(GraphQL.ProductVariant? variant)
     {
-        ArgumentNullException.ThrowIfNull(variant);
+        ArgumentNullException.ThrowIfNull(variant, nameof(variant));
 
         return new CreatedVariant(
             variant.id ?? "",
