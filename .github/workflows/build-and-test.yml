@@ -86,6 +86,9 @@ jobs:
       with:
         persist-credentials: false
 
+    - name: Install sops
+      uses: mdgreenwald/mozilla-sops-action@55177c1ff20a2b396280e4c5f53c32b69f0c1e40 # v2.1.1
+
     - name: Execute .NET Framework unit tests
       env:
         SOPS_AGE_KEY: "${{ secrets.SOPS_AGE_KEY }}"
@@ -123,6 +126,9 @@ jobs:
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
+
+    - name: Install sops
+      uses: mdgreenwald/mozilla-sops-action@55177c1ff20a2b396280e4c5f53c32b69f0c1e40 # v2.1.1
 
     - name: Execute unit test script
       env:
