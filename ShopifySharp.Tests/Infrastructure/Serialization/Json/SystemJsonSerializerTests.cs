@@ -1,14 +1,8 @@
 #nullable enable
-using System;
-using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
-using FakeItEasy;
-using FluentAssertions;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
-using Xunit;
 
 namespace ShopifySharp.Tests.Infrastructure.Serialization.Json;
 

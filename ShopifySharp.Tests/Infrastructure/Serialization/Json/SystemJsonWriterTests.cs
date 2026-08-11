@@ -1,4 +1,3 @@
-using System.Buffers;
 using System.Text.Json;
 using JetBrains.Annotations;
 using ShopifySharp.Infrastructure.Serialization.Json;
